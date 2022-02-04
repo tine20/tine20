@@ -184,6 +184,37 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         if (isset($options['field'])) {
             unset($options['field']);
         }
+        while (isset($options[Tinebase_Record_Abstract::SPECIAL_TYPE]) &&
+                Tinebase_Record_Abstract::TYPE_LOCALIZED_STRING === $options[Tinebase_Record_Abstract::SPECIAL_TYPE] &&
+                isset($this->_clientOptions['language'])) {
+            foreach ($this->_value as $val) {
+                if (Tinebase_Record_PropertyLocalization::FLD_LANGUAGE === $val['field']) {
+                    break 2;
+                }
+            }
+            $this->_value[] = [
+                'field' => Tinebase_Record_PropertyLocalization::FLD_LANGUAGE,
+                'operator' => 'equals',
+                'value' => $this->_clientOptions['language']
+            ];
+            $modelName = $options[Tinebase_Record_Abstract::APP_NAME] . '_Model_' .
+                $options[Tinebase_Record_Abstract::MODEL_NAME];
+            $context = Tinebase_Model_Pagination::getContext();
+            if (isset($context[Tinebase_Record_Abstract::TYPE_LOCALIZED_STRING][$modelName]['language'])) {
+                $context[Tinebase_Record_Abstract::TYPE_LOCALIZED_STRING][$modelName]['language'] =
+                    $this->_clientOptions['language'];
+                Tinebase_Model_Pagination::setContext($context);
+            } else {
+                Tinebase_Model_Pagination::setContext(array_merge_recursive($context, [
+                    Tinebase_Record_Abstract::TYPE_LOCALIZED_STRING => [
+                        $modelName => [
+                            'language' => $this->_clientOptions['language'],
+                        ],
+                    ],
+                ]));
+            }
+            break;
+        }
         $this->_filterGroup = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             $this->_options['filtergroup'],
             $this->_value,

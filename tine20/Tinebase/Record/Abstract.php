@@ -271,6 +271,11 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         }
         
         if (! static::$_configurationObject) {
+            if (static::class !== (new ReflectionProperty(static::class, '_configurationObject'))->getDeclaringClass()
+                    ->getName()) {
+                throw new Tinebase_Exception_Record_DefinitionFailure(static::class
+                    . ' doesn\'t declare _configurationObject');
+            }
             static::$_configurationObject = new Tinebase_ModelConfiguration(static::$_modelConfiguration, static::class);
         }
     

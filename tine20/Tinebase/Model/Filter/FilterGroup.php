@@ -652,6 +652,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                     $data['value'] = [
                         ['field' => 'query', 'operator' => $data['operator'], 'value' => $data['value']]
                     ];
+                    if (isset($definition['options']['addFilters'])) {
+                        $data['value'] = array_merge($data['value'], $definition['options']['addFilters']);
+                    }
                     $data['operator'] = self::CONDITION_AND;
                 }
             }

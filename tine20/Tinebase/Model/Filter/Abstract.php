@@ -57,6 +57,8 @@ abstract class Tinebase_Model_Filter_Abstract
      */
     protected $_options = NULL;
 
+    protected $_clientOptions = null;
+
     /**
      * @var Tinebase_Backend_Sql_Command_Interface
      */
@@ -120,7 +122,8 @@ abstract class Tinebase_Model_Filter_Abstract
                 throw new Tinebase_Exception_InvalidArgument('Filter object needs ' . $requiredKey);
             }
         }
-        
+
+        $this->setClientOptions(isset($data['clientOptions']) ? $data['clientOptions'] : null);
         $this->_setOptions((isset($data['options'])) ? $data['options'] : array());
         $this->setField($data['field']);
         $this->setOperator($data['operator']);
@@ -191,7 +194,12 @@ abstract class Tinebase_Model_Filter_Abstract
         
         $this->_options = $_options;
     }
-    
+
+    public function setClientOptions(array $_options = null)
+    {
+        $this->_clientOptions = $_options;
+    }
+
     /**
      * set field 
      *

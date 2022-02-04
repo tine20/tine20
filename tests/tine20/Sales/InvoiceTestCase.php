@@ -465,10 +465,22 @@ class Sales_InvoiceTestCase extends TestCase
         $this->_productRecords = new Tinebase_Record_RecordSet('Sales_Model_Product');
         
         foreach($productArray as $product) {
+            if (!is_array($product['name'])) {
+                $product['name'] = [['language' => 'en', 'text' => $product['name']]];
+            }
+            if (!is_array($product['description'])) {
+                $product['description'] = [['language' => 'en', 'text' => $product['description']]];
+            }
             $p = new Sales_Model_Product(array_merge($product, $default));
             $p->setTimezone('UTC');
             $this->_productRecords->addRecord($productController->create($p));
         }
+        (new Tinebase_Record_Expander(Sales_Model_Product::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                Sales_Model_Product::FLD_NAME => [],
+                Sales_Model_Product::FLD_DESCRIPTION => [],
+            ],
+        ]))->expand($this->_productRecords);
     }
     
     /**
@@ -505,7 +517,11 @@ class Sales_InvoiceTestCase extends TestCase
             if (! $this->_timesheetRecords) {
                 $this->_createTimesheets();
             }
-            
+
+            $hoursId = $this->_productRecords->find(function($val) {
+                return null !== $val->name->find('text', 'Hours');
+            }, null)->getId();
+
             $contractData = array(
                 // 1 invoice should be created from 1.2.2013 - 28.2.2013
                 array(
@@ -521,8 +537,7 @@ class Sales_InvoiceTestCase extends TestCase
                     'start_date' => clone $startDate,
                     'end_date' => NULL,
                     'products' => array(
-                        array('start_date' => $startDate, 'end_date' => NULL, 'quantity' => 1, 'interval' => 1, 'billing_point' => 'begin', 
-                              'product_id' => $this->_productRecords->filter('name', 'Hours')->getFirstRecord()->getId()),
+                        array('start_date' => $startDate, 'end_date' => NULL, 'quantity' => 1, 'interval' => 1, 'billing_point' => 'begin', 'product_id' => $hoursId),
                     )
                 ),
             
@@ -536,7 +551,7 @@ class Sales_InvoiceTestCase extends TestCase
                     'start_date' => clone $startDate,
                     'end_date' => clone $endDate,
                     'products' => array(
-                        array('start_date' => clone $startDate, 'end_date' => clone $endDate, 'quantity' => 1, 'interval' => 4, 'billing_point' => 'end', 'product_id' => $this->_productRecords->filter('name', 'Hours')->getFirstRecord()->getId()),
+                        array('start_date' => clone $startDate, 'end_date' => clone $endDate, 'quantity' => 1, 'interval' => 4, 'billing_point' => 'end', 'product_id' => $hoursId),
                     )
                 ),
                 // 2 invoices should be created on 1.5.2013 and 1.10.2013
@@ -549,7 +564,7 @@ class Sales_InvoiceTestCase extends TestCase
                     'start_date' => clone $startDate,
                     'end_date' => NULL,
                     'products' => array(
-                            array('start_date' => clone $startDate, 'end_date' => NULL, 'quantity' => 1, 'interval' => 3, 'billing_point' => 'end', 'product_id' => $this->_productRecords->filter('name', 'Hours')->getFirstRecord()->getId()),
+                            array('start_date' => clone $startDate, 'end_date' => NULL, 'quantity' => 1, 'interval' => 3, 'billing_point' => 'end', 'product_id' => $hoursId),
                     )
                 ),
                 // 4 invoices should be created on 1.1.2013, 1.4.2013, 1.7.2013 and 1.12.2014
@@ -563,8 +578,12 @@ class Sales_InvoiceTestCase extends TestCase
                     'start_date' => clone $startDate,
                     'end_date' => NULL,
                     'products' => array(
-                        array('start_date' => clone $startDate, 'end_date' => NULL, 'quantity' => 1, 'interval' => 6, 'billing_point' => 'begin', 'product_id' => $this->_productRecords->filter('name', 'billhalfyearly')->getFirstRecord()->getId()),
-                        array('start_date' => clone $startDate, 'end_date' => NULL, 'quantity' => 1, 'interval' => 3, 'billing_point' => 'begin', 'product_id' => $this->_productRecords->filter('name', 'billeachquarter')->getFirstRecord()->getId()),
+                        array('start_date' => clone $startDate, 'end_date' => NULL, 'quantity' => 1, 'interval' => 6, 'billing_point' => 'begin', 'product_id' => $this->_productRecords->find(function($val) {
+                            return null !== $val->name->find('text', 'billhalfyearly');
+                        }, null)->getId()),
+                        array('start_date' => clone $startDate, 'end_date' => NULL, 'quantity' => 1, 'interval' => 3, 'billing_point' => 'begin', 'product_id' => $this->_productRecords->find(function($val) {
+                            return null !== $val->name->find('text', 'billeachquarter');
+                        }, null)->getId()),
 //                         array('quantity' => 1, 'interval' => 1, 'billing_point' => 'begin', 'product_id' => $this->_productRecords->filter('name', 'Hours')->getFirstRecord()->getId()),
                     )
                 )

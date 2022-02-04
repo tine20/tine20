@@ -123,20 +123,29 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         // renderer expose a hook and every loaded module (TT) can hook in there and then resolve such things by
         // making a search query. then it would really only be executed when needed and having the client do things
         // is great anyway
-        if (class_exists('Timetracker_Model_Timesheet') && $_records->getFirstRecord()->has('relations')) {
+        $tsExists = class_exists('Timetracker_Model_Timesheet');
+        $prodExists = class_exists('Sales_Model_Product');
+        if (($tsExists || $prodExists) && $_records->getFirstRecord()->has('relations')) {
             $ts = [];
+            $prods = [];
             foreach ($_records as $record) {
                 if (!empty($record->relations)) {
                     /** @var Tinebase_Model_Relation $relation */
                     foreach ($record->relations as $relation) {
-                        if (is_object($relation)
-                            && $relation->related_model === Timetracker_Model_Timesheet::class
-                            && $relation->related_record instanceof Tinebase_Record_Interface
-                        ) {
-                            if (isset($ts[$relation->related_record->getId()])) {
-                                $relation->related_record = $ts[$relation->related_record->getId()];
-                            } else {
-                                $ts[$relation->related_record->getId()] = $relation->related_record;
+                        if (is_object($relation) && $relation->related_record instanceof Tinebase_Record_Interface) {
+                            if ($tsExists && $relation->related_model === Timetracker_Model_Timesheet::class) {
+                                if (isset($ts[$relation->related_record->getId()])) {
+                                    $relation->related_record = $ts[$relation->related_record->getId()];
+                                } else {
+                                    $ts[$relation->related_record->getId()] = $relation->related_record;
+                                }
+                            }
+                            if ($prodExists && $relation->related_model === Sales_Model_Product::class) {
+                                if (isset($prods[$relation->related_record->getId()])) {
+                                    $relation->related_record = $prods[$relation->related_record->getId()];
+                                } else {
+                                    $prods[$relation->related_record->getId()] = $relation->related_record;
+                                }
                             }
                         }
                     }
@@ -151,6 +160,12 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     ],
                 ]);
                 $expander->expand($ts);
+            }
+            if (!empty($prods) && !empty($eDef = Sales_Model_Product::getConfiguration()->jsonExpander)) {
+                $prods = new Tinebase_Record_RecordSet(Sales_Model_Product::class, array_values($prods));
+                // expand required properties
+                $expander = new Tinebase_Record_Expander(Sales_Model_Product::class, $eDef);
+                $expander->expand($prods);
             }
         }
 

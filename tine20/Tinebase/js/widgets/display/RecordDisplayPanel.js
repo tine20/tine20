@@ -167,7 +167,7 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
                 fieldType = _.get(fieldDefinition, 'config.type', 'textfield');
             }
 
-            if (_.indexOf(['text', 'json', 'fulltext'], fieldType) >= 0) {
+            if (_.indexOf(['text', 'json', 'fulltext', 'localizedString'], fieldType) >= 0) {
                 Ext.apply(field, {
                     flex: 1,
                     cls: 'x-ux-display-background-border',
@@ -179,13 +179,10 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
                         type: 'code/json'
                     });
                 }
-                if (Tine.widgets.grid.RendererManager.has(this.appName, this.modelName,
-                    fieldDefinition.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL)) {
-                    field.renderer = Tine.widgets.grid.RendererManager.get(this.appName, this.modelName,
-                        fieldDefinition.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL);
-                    field.htmlEncode = false;
-                    field.nl2br = false;
-                }
+                field.renderer = Tine.widgets.grid.RendererManager.get(this.appName, this.modelName,
+                    fieldDefinition.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL);
+                field.htmlEncode = false;
+                field.nl2br = false;
                 textDisplayAreas.push(field);
             } else if (fieldType === 'image') {
                 // should be the first area

@@ -53,7 +53,7 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
         
         Ext.ux.form.NumberField.superclass.initComponent.call(this);
         
-        this.on('focus', this.selectText, this);
+        this.on('focus', this.selectText, this, {buffer: 10});
     },
 
     selectText: function() {

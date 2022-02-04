@@ -219,9 +219,9 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
                         . ' Create Product for ' . $accountable);
             }
             $product = Sales_Controller_Product::getInstance()->create(new Sales_Model_Product(array(
-                    'name' => $accountable,
+                    'name' => [['text' => $accountable, 'language' => 'en']],
                     'accountable' => $accountable,
-                    'description' => 'auto generated on invoicing',
+                    'description' => [['text' => 'auto generated on invoicing', 'language' => 'en']],
             )));
         }
         

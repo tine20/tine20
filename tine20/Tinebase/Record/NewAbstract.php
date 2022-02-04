@@ -168,7 +168,11 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
     public static function getConfiguration()
     {
         if (null === static::$_configurationObject) {
-            //$modelConfiguration = static::_mergeModelConfiguration();
+            if (static::class !== (new ReflectionProperty(static::class, '_configurationObject'))->getDeclaringClass()
+                    ->getName()) {
+                throw new Tinebase_Exception_Record_DefinitionFailure(static::class
+                    . ' doesn\'t declare _configurationObject');
+            }
             static::$_configurationObject = new Tinebase_NewModelConfiguration(static::$_modelConfiguration, static::class);
         }
 

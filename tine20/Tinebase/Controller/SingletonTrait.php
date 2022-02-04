@@ -38,7 +38,8 @@ trait Tinebase_Controller_SingletonTrait
     public static function getInstance()
     {
         if (null === self::$_instance) {
-            self::$_instance = new self();
+            /* @phpstan-ignore-next-line */
+            self::$_instance = new static();
         }
 
         return self::$_instance;

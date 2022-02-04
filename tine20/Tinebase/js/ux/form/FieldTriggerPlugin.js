@@ -24,8 +24,9 @@ class FieldTriggerPlugin {
         await field.afterIsRendered()
         const wrap = field.el.parent('.tw-relpickercombocmp') ||
             field.el.parent('.x-form-element') ||
-            field.el.parent('.x-grid-editor')
-        
+            field.el.parent('.x-grid-editor') ||
+            field.el.parent('.x-form-field-wrap')
+
         if (wrap) {
             this.#trigger = wrap.createChild(this.triggerConfig ||
                 {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger x-form-trigger-plugin " + this.triggerClass})
@@ -59,6 +60,12 @@ class FieldTriggerPlugin {
         this.qtip = qtip
         if (this.#trigger) {
             this.#trigger.set({ 'ext:qtip': Tine.Tinebase.common.doubleEncode(qtip) });
+        }
+    }
+
+    update(html) {
+        if (this.#trigger) {
+            this.#trigger.update(html);
         }
     }
 }

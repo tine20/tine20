@@ -410,6 +410,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Sales_Model_Product::class,
                 Sales_Model_ProductAggregate::class,
                 Sales_Model_ProductCategory::class,
+                Sales_Model_ProductLocalization::class,
                 Sales_Model_PurchaseInvoice::class,
                 Sales_Model_SubProductMapping::class,
                 Sales_Model_Supplier::class,

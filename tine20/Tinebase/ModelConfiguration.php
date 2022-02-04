@@ -96,6 +96,7 @@
  * @property array      $denormalizationConfig
  * @property string     $delegateAclField
  * @property array|null $grantProtectedFields
+ * @property array      $languagesAvailable
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
@@ -777,7 +778,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     protected $_frontendProperties = array(
         'containerProperty', 'extendsContainer', 'containersName', 'containerName', 'grantsModel', 'defaultSortInfo', 'fieldKeys', 'filterModel',
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
-        'multipleEdit', 'multipleEditRequiredRight',
+        'multipleEdit', 'multipleEditRequiredRight', 'languagesAvailable',
         'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'moduleName',
         'isDependent', 'hasCustomFields', 'hasSystemCustomFields', 'modlogActive', 'hasAttachments', 'hasAlarms',
         'idProperty', 'splitButton', 'attributeConfig', 'hasPersonalContainer', 'import', 'export', 'virtualFields',
@@ -941,6 +942,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     protected $_hasDeletedTimeUnique = false;
 
     protected $_jsonExpander;
+
+    protected $_languagesAvailable;
 
     protected static $createdModels = [];
 
@@ -1355,6 +1358,51 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 $fieldDef[self::CONFIG] = isset($fieldDef[self::CONFIG]) && is_array($fieldDef[self::CONFIG]) ? $fieldDef[self::CONFIG] : [];
                 $fieldDef[self::CONFIG][self::APP_NAME] = $this->_appName;
                 $fieldDef[self::CONFIG][self::MODEL_NAME] = $this->_modelName;
+            } elseif ($fieldDef[self::TYPE] === self::TYPE_LOCALIZED_STRING) {
+                $fieldDef[self::TYPE] = self::TYPE_RECORDS;
+                if (!isset($fieldDef[self::CONFIG])) {
+                    $fieldDef[self::CONFIG] = [];
+                }
+                $fieldDef[self::CONFIG][self::SPECIAL_TYPE] = self::TYPE_LOCALIZED_STRING;
+                if (!array_key_exists(self::APP_NAME, $fieldDef[self::CONFIG])) {
+                    $fieldDef[self::CONFIG][self::APP_NAME] = $this->_appName;
+                }
+                if (!array_key_exists(self::MODEL_NAME, $fieldDef[self::CONFIG])) {
+                    $fieldDef[self::CONFIG][self::MODEL_NAME] = $this->_modelName . 'Localization';
+                }
+                if (!array_key_exists(self::REF_ID_FIELD, $fieldDef[self::CONFIG])) {
+                    $fieldDef[self::CONFIG][self::REF_ID_FIELD] = Tinebase_Record_PropertyLocalization::FLD_RECORD_ID;
+                }
+                if (!array_key_exists(self::DEPENDENT_RECORDS, $fieldDef[self::CONFIG])) {
+                    $fieldDef[self::CONFIG][self::DEPENDENT_RECORDS] = true;
+                }
+                if (!array_key_exists(self::ADD_FILTERS, $fieldDef[self::CONFIG])) {
+                    $fieldDef[self::CONFIG][self::ADD_FILTERS] = [[
+                        'field' => Tinebase_Record_PropertyLocalization::FLD_TYPE,
+                        'operator' => 'equals',
+                        'value' => $fieldKey,
+                    ]];
+                }
+                if (!array_key_exists(self::FORCE_VALUES, $fieldDef[self::CONFIG])) {
+                    $fieldDef[self::CONFIG][self::FORCE_VALUES] = [
+                        Tinebase_Record_PropertyLocalization::FLD_TYPE => $fieldKey,
+                    ];
+                }
+                if (!array_key_exists(self::JSON_EXPANDER, $modelClassConfiguration) && !is_array($this->_jsonExpander)) {
+                    $this->_jsonExpander = [];
+                }
+                while (is_array($this->_jsonExpander)) {
+                    if (!array_key_exists(Tinebase_Record_Expander::EXPANDER_PROPERTIES, $this->_jsonExpander)) {
+                        $this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES] = [];
+                    }
+                    if (!is_array($this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES])) {
+                        break;
+                    }
+                    if (!array_key_exists($fieldKey, $this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES])) {
+                        $this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES][$fieldKey] = [];
+                    }
+                    break;
+                }
             }
 
             if (isset($fieldDef[self::IS_VIRTUAL])) {

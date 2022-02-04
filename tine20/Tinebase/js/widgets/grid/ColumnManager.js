@@ -70,14 +70,18 @@ Tine.widgets.grid.ColumnManager = function() {
             if (! app) { // e.g. no access to owningApp
                 return null;
             }
-            
-            if (fieldDefinition.type === 'virtual') {
-                fieldDefinition = fieldDefinition.config || {};
+
+            if (fieldDefinition.type == 'records') {
+                if (_.get(fieldDefinition, 'config.specialType') === 'localizedString') {
+                    fieldDefinition.type = 'localizedString';
+                } else {
+                    // don't show multiple record fields
+                    return null;
+                }
             }
 
-            // don't show multiple record fields
-            if (fieldDefinition.type == 'records') {
-                return null;
+            if (fieldDefinition.type === 'virtual') {
+                fieldDefinition = fieldDefinition.config || {};
             }
 
             if (fieldDefinition.disabled) {

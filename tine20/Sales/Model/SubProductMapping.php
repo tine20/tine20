@@ -81,8 +81,8 @@ class Sales_Model_SubProductMapping extends Tinebase_Record_NewAbstract
                     self::JOIN_COLUMNS          => [[
                         self::NAME                  => self::FLD_PARENT_ID,
                         self::REFERENCED_COLUMN_NAME=> 'id',
+                        self::ON_DELETE             => self::CASCADE,
                     ]],
-                    self::ON_DELETE             => self::CASCADE,
                 ],
                 self::FLD_PRODUCT_ID        => [
                     self::TARGET_ENTITY         => Sales_Model_Product::class,
@@ -90,8 +90,8 @@ class Sales_Model_SubProductMapping extends Tinebase_Record_NewAbstract
                     self::JOIN_COLUMNS          => [[
                         self::NAME                  => self::FLD_PRODUCT_ID,
                         self::REFERENCED_COLUMN_NAME=> 'id',
+                        self::ON_DELETE             => self::CASCADE,
                     ]],
-                    self::ON_DELETE             => self::CASCADE,
                 ],
             ],
         ],

@@ -35,12 +35,121 @@ class Sales_ProductControllerTest extends TestCase
     public function testCreateProduct()
     {
         $product = $this->getUit()->create(new Sales_Model_Product(array(
-            'name' => 'A new product'
+            'name' => [[
+                Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => 'en',
+                Tinebase_Record_PropertyLocalization::FLD_TEXT => 'A new product',
+            ], [
+                Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => 'de',
+                Tinebase_Record_PropertyLocalization::FLD_TEXT => 'Ein neues Produkt',
+            ]],
         )));
         
         $this->assertNotEmpty($product->number);
         
         return $product;
+    }
+
+    public function testOrderByName()
+    {
+        $product = $this->testCreateProduct();
+        $product1 = $this->getUit()->create(new Sales_Model_Product(array(
+            'name' => [[
+                Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => 'en',
+                Tinebase_Record_PropertyLocalization::FLD_TEXT => 'B rod',
+            ], [
+                Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => 'de',
+                Tinebase_Record_PropertyLocalization::FLD_TEXT => 'C rod',
+            ]],
+        )));
+
+        $result = $this->getUit()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Product::class, [
+                ['field' => 'query', 'operator' => 'contains', 'value' => 'product']
+            ]), new Tinebase_Model_Pagination(['sort' => 'name']));
+        $this->assertSame(1, $result->count());
+        $this->assertSame($product->getId(), $result->getFirstRecord()->getId());
+
+        $result = $this->getUit()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Product::class, [
+            ['field' => 'query', 'operator' => 'contains', 'value' => 'rod']
+        ]), new Tinebase_Model_Pagination(['sort' => 'name']));
+        $this->assertSame(2, $result->count());
+        $this->assertSame($product->getId(), $result->getFirstRecord()->getId());
+        $this->assertSame($product1->getId(), $result->getLastRecord()->getId());
+
+        $result = $this->getUit()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Product::class, [
+            ['field' => 'query', 'operator' => 'contains', 'value' => 'rod']
+        ]), new Tinebase_Model_Pagination(['sort' => 'name', 'dir' => 'desc']));
+        $this->assertSame(2, $result->count());
+        $this->assertSame($product1->getId(), $result->getFirstRecord()->getId());
+        $this->assertSame($product->getId(), $result->getLastRecord()->getId());
+
+        $result = $this->getUit()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Product::class, [
+            ['field' => 'query', 'operator' => 'contains', 'value' => 'rod', 'clientOptions' => ['language' => 'de']]
+        ]), new Tinebase_Model_Pagination(['sort' => 'name']));
+        $this->assertSame(2, $result->count());
+        $this->assertSame($product1->getId(), $result->getFirstRecord()->getId());
+        $this->assertSame($product->getId(), $result->getLastRecord()->getId());
+
+        $result = $this->getUit()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Product::class, [
+            ['field' => 'query', 'operator' => 'contains', 'value' => 'rod', 'clientOptions' => ['language' => 'de']]
+        ]), new Tinebase_Model_Pagination(['sort' => 'name', 'dir' => 'desc']));
+        $this->assertSame(2, $result->count());
+        $this->assertSame($product->getId(), $result->getFirstRecord()->getId());
+        $this->assertSame($product1->getId(), $result->getLastRecord()->getId());
+    }
+
+    public function testQueryFilterReLocalization()
+    {
+        $product = $this->testCreateProduct();
+        $result = $this->getUit()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Product::class, [
+                ['field' => 'query', 'operator' => 'contains', 'value' => 'product']
+            ]));
+        $this->assertSame(1, $result->count());
+        $this->assertSame($product->getId(), $result->getFirstRecord()->getId());
+
+        $result = $this->getUit()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Product::class, [
+                ['field' => 'query', 'operator' => 'contains', 'value' => 'Produkt']
+            ]));
+        $this->assertSame(1, $result->count());
+        $this->assertSame($product->getId(), $result->getFirstRecord()->getId());
+
+        $result = $this->getUit()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Product::class, [
+                ['field' => 'query', 'operator' => 'contains', 'value' => 'rod']
+            ]));
+        $this->assertSame(1, $result->count());
+        $this->assertSame($product->getId(), $result->getFirstRecord()->getId());
+    }
+
+    public function testNameFilterReLocalization()
+    {
+        $product = $this->testCreateProduct();
+        $result = $this->getUit()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Product::class, [
+                ['field' => 'name', 'operator' => 'contains', 'value' => 'product']
+            ]));
+        $this->assertSame(1, $result->count());
+        $this->assertSame($product->getId(), $result->getFirstRecord()->getId());
+
+        $result = $this->getUit()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Product::class, [
+                ['field' => 'name', 'operator' => 'contains', 'value' => 'Produkt']
+            ]));
+        $this->assertSame(1, $result->count());
+        $this->assertSame($product->getId(), $result->getFirstRecord()->getId());
+
+        $result = $this->getUit()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Product::class, [
+                ['field' => 'name', 'operator' => 'contains', 'value' => 'rod']
+            ]));
+        $this->assertSame(1, $result->count());
+        $this->assertSame($product->getId(), $result->getFirstRecord()->getId());
     }
     
     /**
