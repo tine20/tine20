@@ -913,7 +913,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _handleRecordCreateOrUpdateException(Exception $e)
     {
-        if ($e instanceof Tinebase_Exception_ProgramFlow) {
+        if ($e instanceof Tinebase_Exception_ProgramFlow || Tinebase_Exception::isDbDuplicate($e)) {
             // log as ERROR? or better INFO? NOTICE?
             Tinebase_Exception::logExceptionToLogger($e);
         } else {
