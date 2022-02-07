@@ -46,4 +46,21 @@ class SSO_Controller_RelyingParty extends Tinebase_Controller_Record_Abstract
         }
         parent::_checkRight($_action);
     }
+
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        if ($_record->{SSO_Model_RelyingParty::FLD_CONFIG} instanceof SSO_RPConfigInterface) {
+            $_record->{SSO_Model_RelyingParty::FLD_CONFIG}->beforeCreateUpdateHook();
+        }
+        parent::_inspectBeforeCreate($_record);
+    }
+
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        $_record->runConvertToRecord();
+        if ($_record->{SSO_Model_RelyingParty::FLD_CONFIG} instanceof SSO_RPConfigInterface) {
+            $_record->{SSO_Model_RelyingParty::FLD_CONFIG}->beforeCreateUpdateHook();
+        }
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+    }
 }
