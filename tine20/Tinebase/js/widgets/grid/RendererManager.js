@@ -251,7 +251,7 @@ Tine.widgets.grid.RendererManager = function() {
                     const translationList = Locale.getTranslationList('Language')
 
                     renderer = function renderer(value, metaData, record, rowIndex, colIndex, store) {
-                        const lang = store.localizedLang || keyFieldDef.default
+                        const lang = store?.localizedLang || keyFieldDef.default
                         const localized = _.find(value, { language: lang })
                         const text = Ext.util.Format.htmlEncode(_.get(localized, 'text', ''));
                         const langCode = lang.toUpperCase();
