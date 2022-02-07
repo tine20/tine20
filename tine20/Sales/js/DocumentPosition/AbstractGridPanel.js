@@ -75,7 +75,9 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             this.store.suspendEvents();
             // copy product properties to position
             let productData = position.get('title');
-            position.setFromProduct(productData);
+            const lang = this.editDialog.getForm().findField('document_language').getValue();
+
+            position.setFromProduct(productData, lang);
             position.setId(Tine.Tinebase.data.Record.generateUID());
             if (!position.get('grouping')) {
                 position.set('grouping', this.quickaddRecord.get('grouping'));
@@ -96,7 +98,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                     const subposition = new this.recordClass({}, Tine.Tinebase.data.Record.generateUID());
                     // NOTE: need to create record to do conversions (string -> int) here!
                     const product = Tine.Tinebase.data.Record.setFromJson(subproductMapping.product_id, Tine.Sales.Model.Product);
-                    subposition.setFromProduct(product.data);
+                    subposition.setFromProduct(product.data, lang);
                     subposition.set('parent_id', position.id);
                     // NOTE: sorting of subproductmapping sorts inside subpositions only (atm)
                     subposition.set('sorting', position.get('sorting') ? position.get('sorting') + 100 * idx : null);
@@ -322,7 +324,11 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
         return data;
     },
-
+    checkState(editDialog, record) {
+        if (!this.editDialog) {
+            this.editDialog = editDialog
+        }
+    },
     /* needed for isFormField cycle */
     markInvalid: Ext.form.Field.prototype.markInvalid,
     clearInvalid: Ext.form.Field.prototype.clearInvalid,

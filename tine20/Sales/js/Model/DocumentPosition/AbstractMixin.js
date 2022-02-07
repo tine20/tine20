@@ -14,18 +14,25 @@ const AbstractMixin = {
         console.error('parent');
     },
 
-    setFromProduct(product) {
+    setFromProduct(product, lang) {
+        const productClass = Tine.Sales.Model.Product;
         const productData = product.data || product;
-        [].red
+        if (!lang) {
+            const languagesAvailableDef = _.get(productClass.getModelConfiguration(), 'languagesAvailable')
+            const keyFieldDef = Tine.Tinebase.widgets.keyfield.getDefinition(_.get(languagesAvailableDef, 'config.appName', productClass.getMeta('appName')), languagesAvailableDef.name)
+            lang = keyFieldDef.default
+        }
         const genericFieldNames = Tine.Tinebase.Model.modlogFields.reduce((a, f) => {return a.concat(f.name);}, [this.constructor.getMeta('idProperty')]);
         Object.keys(productData).forEach((fieldName) => {
             if (genericFieldNames.indexOf(fieldName) < 0 && this.constructor.hasField(fieldName)) {
-                this.set(fieldName, productData[fieldName]);
+                const value = _.get(productClass.getField(fieldName), 'fieldDefinition.config.specialType') === 'localizedString' ?
+                    _.find(productData[fieldName], { language: lang })?.text || _.get(productData, `${fieldName}[0].text`) : productData[fieldName];
+                this.set(fieldName, value);
             }
         });
 
         this.set('type', 'PRODUCT');
-        this.set('title', productData.name);
+        this.set('title', _.find(productData['name'], { language: lang })?.text || _.get(productData, 'name[0].text'));
         this.set('product_id', productData);
         this.set('quantity', 1);
         this.set('position_discount_type', 'SUM');
