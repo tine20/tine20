@@ -13,7 +13,8 @@
   "license": "AGPL-3.0",
   "tine20": {
     "entryPoints": [
-      "login.js"
+      "login.js",
+      "logoutClient.js"
     ]
   }
 }

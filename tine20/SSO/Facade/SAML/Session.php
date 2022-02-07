@@ -14,6 +14,12 @@
 class SSO_Facade_SAML_Session
 {
     protected $data = [];
+    protected $spEntityId;
+
+    public function setSPEntityId($spEntityId)
+    {
+        $this->spEntityId = $spEntityId;
+    }
 
     protected function _getData()
     {
@@ -35,7 +41,7 @@ class SSO_Facade_SAML_Session
     public function getAuthState($authority)
     {
         $this->_getData();
-        return isset($this->data[$authority]) ? $this->data[$authority] : null;
+        return isset($this->data[$authority][$this->spEntityId]) ? $this->data[$authority][$this->spEntityId] : null;
     }
 
     public function __call($funcName, $params)
@@ -47,8 +53,37 @@ class SSO_Facade_SAML_Session
     public function doLogout($authority)
     {
         $this->_getData();
+
+        $requests = [];
+        if (isset($this->data[$authority]) && is_array($this->data[$authority])) {
+            foreach ($this->data[$authority] as $spEntityId => $data) {
+                if ($this->spEntityId === $spEntityId || !isset($data['SPMetadata']['SingleLogoutService']['Location']))
+                    continue;
+
+                try {
+                    $lr = \SimpleSAML\Module\saml\Message::buildLogoutRequest(
+                        \SimpleSAML\IdP::getById('saml2:tine20')->getConfig(),
+                        ($dstCfg = \SimpleSAML\Metadata\MetaDataStorageHandler::getMetadataHandler()
+                            ->getMetaDataConfig($spEntityId, 'saml20-sp-remote'))
+                    );
+                    if (is_object($dstCfg->getConfigItem('SingleLogoutService')) && !empty($dstCfg->getConfigItem('SingleLogoutService')->getString('Location'))) {
+                        $lr->setDestination($dstCfg->getConfigItem('SingleLogoutService')->getString('Location'));
+                        $nameId = new SAML2\XML\saml\NameID();
+                        $nameId->setValue(Tinebase_Core::getUser()->accountLoginName);
+                        $lr->setNameId($nameId);
+                        $requests[] = $lr;
+                    }
+
+                } catch (Exception $e) {
+                    Tinebase_Exception::log($e);
+                }
+            }
+        }
+
         unset($this->data[$authority]);
         Tinebase_Session::getSessionNamespace(self::class)->data = $this->data;
+
+        return $requests;
     }
 
     public function doLogin($authority, $data)
@@ -70,7 +105,7 @@ class SSO_Facade_SAML_Session
         }
 
         $this->_getData();
-        $this->data[$authority] = $data;
+        $this->data[$authority][$this->spEntityId] = $data;
         Tinebase_Session::getSessionNamespace(self::class)->data = $this->data;
     }
 
@@ -86,8 +121,8 @@ class SSO_Facade_SAML_Session
     public function getAuthData($authority, $index)
     {
         $this->_getData();
-        if (isset($this->data[$authority][$index])) {
-            return $this->data[$authority][$index];
+        if (isset($this->data[$authority][$this->spEntityId][$index])) {
+            return $this->data[$authority][$this->spEntityId][$index];
         }
         return null;
     }
