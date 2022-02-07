@@ -17,11 +17,12 @@
  * @package     SSO
  * @subpackage  Model
  */
-class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract
+class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract implements SSO_RPConfigInterface
 {
     public const MODEL_NAME_PART = 'Saml2RPConfig';
 
     public const FLD_NAME = 'name';
+    public const FLD_METADATA_URL = 'metaUrl';
     public const FLD_ASSERTION_CONSUMER_SERVICE_LOCATION = 'AssertionConsumerServiceLocation';
     public const FLD_ASSERTION_CONSUMER_SERVICE_BINDING = 'AssertionConsumerServiceBinding';
     public const FLD_ENTITYID = 'entityid';
@@ -61,17 +62,23 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract
                 self::TYPE                  => self::TYPE_STRING,
                 self::LENGTH                => 255,
                 self::VALIDATORS            => [
-                    Zend_Filter_Input::ALLOW_EMPTY  => false,
-                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
+                    Zend_Filter_Input::ALLOW_EMPTY  => true,
                 ],
                 self::LABEL                 => 'Entity ID', // _('Entity ID')
+            ],
+            self::FLD_METADATA_URL      => [
+                self::TYPE                  => self::TYPE_STRING,
+                self::LENGTH                => 255,
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY  => true,
+                ],
+                self::LABEL                 => 'Metadata URL', // _('Metadata URL')
             ],
             self::FLD_ASSERTION_CONSUMER_SERVICE_BINDING    => [
                 self::TYPE                  => self::TYPE_STRING,
                 self::LENGTH                => 255,
                 self::VALIDATORS            => [
-                    Zend_Filter_Input::ALLOW_EMPTY  => false,
-                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
+                    Zend_Filter_Input::ALLOW_EMPTY  => true,
                 ],
                 self::LABEL                 => 'Consumer Service Binding', // _('Consumer Service Binding')
             ],
@@ -79,8 +86,7 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract
                 self::TYPE                  => self::TYPE_STRING,
                 self::LENGTH                => 255,
                 self::VALIDATORS            => [
-                    Zend_Filter_Input::ALLOW_EMPTY  => false,
-                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
+                    Zend_Filter_Input::ALLOW_EMPTY  => true,
                 ],
                 self::LABEL                 => 'Consumer Service Location', // _('Consumer Service Location')
             ],
@@ -88,8 +94,7 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract
                 self::TYPE                  => self::TYPE_STRING,
                 self::LENGTH                => 255,
                 self::VALIDATORS            => [
-                    Zend_Filter_Input::ALLOW_EMPTY  => false,
-                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
+                    Zend_Filter_Input::ALLOW_EMPTY  => true,
                 ],
                 self::LABEL                 => 'Logout Service Location', // _('Logout Service Location')
             ],
@@ -118,4 +123,68 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract
             self::FLD_ATTRIBUTE_MAPPING => $this->{self::FLD_ATTRIBUTE_MAPPING},
         ];
     }
+
+    public function beforeCreateUpdateHook(): void
+    {
+        $this->fetchRemoteMetaData();
+    }
+
+    public function fetchRemoteMetaData(): void
+    {
+        $dtd = <<<DTD
+<!ELEMENT el (#PCDATA)>
+DTD;
+
+        libxml_set_external_entity_loader(function() use($dtd) {
+                $f = fopen("php://temp", "r+");
+                fwrite($f, $dtd);
+                rewind($f);
+                return $f;
+            }
+        );
+
+        libxml_use_internal_errors(true);
+        $dom = new DOMDocument();
+        if (!$this->{self::FLD_METADATA_URL} || stripos($this->{self::FLD_METADATA_URL}, 'http') !== 0 ||
+                ! $dom->load($this->{self::FLD_METADATA_URL})) {
+            return;
+        }
+
+        $rootNode = $dom->firstChild;
+        if ($rootNode->hasAttributes() && ($attr = $rootNode->attributes->getNamedItem('entityID'))) {
+            $this->{self::FLD_ENTITYID} = $attr->nodeValue;
+        }
+
+        foreach ($rootNode->childNodes as $node) {
+            if ('SPSSODescriptor' === $node->nodeName) {
+                $foundPostLocation = false;
+                foreach ($node->childNodes as $childNode) {
+                    switch($childNode->nodeName) {
+                        case 'SingleLogoutService':
+                            if ($childNode->hasAttributes() && ($attr = $childNode->attributes->getNamedItem('Binding'))
+                                    && $attr->nodeValue === 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect' &&
+                                    ($attr = $childNode->attributes->getNamedItem('Location'))) {
+                                $this->{self::FLD_SINGLE_LOGOUT_SERVICE_LOCATION} = $attr->nodeValue;
+                            }
+                            break;
+                        case 'AssertionConsumerService':
+                            if ($childNode->hasAttributes() && ($attr = $childNode->attributes->getNamedItem('Binding'))
+                                    && $attr->nodeValue === 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect' &&
+                                    ($attr = $childNode->attributes->getNamedItem('Location')) && !$foundPostLocation) {
+                                $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION} = $attr->nodeValue;
+                                $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_BINDING} = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect';
+                            } elseif ($childNode->hasAttributes() && ($attr = $childNode->attributes->getNamedItem('Binding'))
+                                    && $attr->nodeValue === 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST' &&
+                                    ($attr = $childNode->attributes->getNamedItem('Location'))) {
+                                $foundPostLocation = true;
+                                $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_BINDING} = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST';
+                                $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION} = $attr->nodeValue;
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
 }
