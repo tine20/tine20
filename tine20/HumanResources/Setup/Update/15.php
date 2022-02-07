@@ -48,6 +48,8 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update001()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . HumanResources_Model_Division::TABLE_NAME . ' SET deleted_time = "1970-01-01 00:00:00" WHERE deleted_time IS NULL');
         Setup_SchemaTool::updateSchema([
             HumanResources_Model_Division::class,
         ]);

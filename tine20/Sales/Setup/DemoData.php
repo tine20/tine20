@@ -115,27 +115,78 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _createSharedProducts()
     {
+        $l = Sales_Model_ProductLocalization::FLD_LANGUAGE;
+        $t = Sales_Model_ProductLocalization::FLD_TEXT;
+
         $products = array(
             array(
-                'name' => '10 Port 100 MBit Ethernet Switch',
-                'description' => '10 Port Fast Ethernet Switch, RJ45',
+                'name' => [[
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'de',
+                    Sales_Model_ProductLocalization::FLD_TEXT => '10 Port 100 MBit Ethernet Switch',
+                ], [
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
+                    Sales_Model_ProductLocalization::FLD_TEXT => '10 port 100 mbit ethernet switch',
+                ]],
+                'description' => [[
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'de',
+                    Sales_Model_ProductLocalization::FLD_TEXT => '10 Port 100 MBit Ethernet Switch RJ45 Stecker',
+                ], [
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
+                    Sales_Model_ProductLocalization::FLD_TEXT => '10 port 100 mbit ethernet switch, standard plug',
+                ]],
                 'salesprice' => 28.13,
             ),
             array(
-                'name' => '28 Port 100 MBit Ethernet Switch PoE',
-                'description' => '28 Port Fast Ethernet Switch, PoE, RJ45',
+                'name' => [[
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
+                    Sales_Model_ProductLocalization::FLD_TEXT => '28 port 100 mbit ethernet switch PoE',
+                ], [
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'de',
+                    Sales_Model_ProductLocalization::FLD_TEXT => '28 Port 100 MBit Ethernet Switch PoE',
+                ]],
+                'description' => [[
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
+                    Sales_Model_ProductLocalization::FLD_TEXT => '28 port 100 mbit ethernet switch, PoE, standard plug',
+                ], [
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'de',
+                    Sales_Model_ProductLocalization::FLD_TEXT => '28 Port Fast Ethernet Switch, PoE, RJ45',
+                ]],
                 'salesprice' => 1029.99,
             ),
             array(
-                'name' => '10 Port Gigabit Ethernet Switch',
-                'description' => '10 Port 1 Gigabit Switch, RJ45',
+                'name' => [[
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
+                    Sales_Model_ProductLocalization::FLD_TEXT => '10 Port gigabit ethernet switch',
+                ], [
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'de',
+                    Sales_Model_ProductLocalization::FLD_TEXT => '10 port 1 Gigabit ethernet switch',
+                ]],
+                'description' => [[
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'de',
+                    Sales_Model_ProductLocalization::FLD_TEXT => '10 Port 1 Gigabit Ethernet Switch RJ45 Stecker',
+                ], [
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
+                    Sales_Model_ProductLocalization::FLD_TEXT => '10 port gigabit ethernet switch, standard plug',
+                ]],
                 'salesprice' => 78.87,
             ),
             array(
-                'name' => '28 Port Gigabit Ethernet Switch PoE',
-                'description' => '28 Port 1 Gigabit Ethernet Switch PoE',
+                'name' => [[
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
+                    Sales_Model_ProductLocalization::FLD_TEXT => '28 Port gigabit ethernet switch PoE',
+                ], [
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'de',
+                    Sales_Model_ProductLocalization::FLD_TEXT => '28 port 1 Gigabit ethernet switch PoE',
+                ]],
+                'description' => [[
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'de',
+                    Sales_Model_ProductLocalization::FLD_TEXT => '28 Port 1 Gigabit Ethernet Switch PoE RJ45 Stecker',
+                ], [
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
+                    Sales_Model_ProductLocalization::FLD_TEXT => '28 port gigabit ethernet switch, PoE standard plug',
+                ]],
                 'salesprice' => 3496.45,
-            )
+            ),
         );
 
         $default = array(
@@ -144,36 +195,28 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         );
 
         foreach($products as $key => $product) {
-            $product['name'] = [[
-                Sales_Model_ProductLocalization::FLD_LANGUAGE => self::$_locale,
-                Sales_Model_ProductLocalization::FLD_TEXT => $product['name'],
-            ]];
-            $product['description'] = [[
-                Sales_Model_ProductLocalization::FLD_LANGUAGE => self::$_locale,
-                Sales_Model_ProductLocalization::FLD_TEXT => $product['description'],
-            ]];
             $switches[$key] = $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
         }
 
         $products = array(
             array(
-                'name' => self::$_en ? '10m Cat. 5a red' : '10m Kat. 5a rot',
-                'description' => self::$_en ? '10m Cat. 5a red cable up to 100MBit.' : '10m Kat. 5a rotes Kabel. Erlaubt Übertragungsraten von bis zu 100MBit.',
+                'name' => [[ $l => 'en', $t => '10m Cat. 5a red'], [$l => 'de', $t => '10m Kat. 5a rot']],
+                'description' => [[ $l => 'en', $t => '10m Cat. 5a red cable up to 100MBit.'], [$l => 'de', $t => '10m Kat. 5a rotes Kabel. Erlaubt Übertragungsraten von bis zu 100MBit.']],
                 'salesprice' => 5.99,
             ),
             array(
-                'name' => self::$_en ? '10m Cat. 5a blue' : '10m Kat. 5a blau',
-                'description' => self::$_en ? '10m Cat. 5a blue cable up to 100MBit.' : '10m Kat. 5a blaues Kabel. Erlaubt Übertragungsraten von bis zu 100MBit.',
+                'name' => [[ $l => 'en', $t => '10m Cat. 5a blue'], [$l => 'de', $t => '10m Kat. 5a blau']],
+                'description' => [[ $l => 'en', $t => '10m Cat. 5a blue cable up to 100MBit.'], [$l => 'de', $t => '10m Kat. 5a blaues Kabel. Erlaubt Übertragungsraten von bis zu 100MBit.']],
                 'salesprice' => 5.99,
             ),
             array(
-                'name' => self::$_en ? '10m Cat. 6 red' : '10m Kat. 6 rot',
-                'description' => self::$_en ? '10m Cat. 6 red cable up to 1000MBit.' : '10m Kat. 5a rotes Kabel. Erlaubt Übertragungsraten von bis zu 1000MBit.',
+                'name' => [[ $l => 'en', $t => '10m Cat. 6 red'], [$l => 'de', $t => '10m Kat. 6 rot']],
+                'description' => [[ $l => 'en', $t => '10m Cat. 6 red cable up to 1000MBit.'], [$l => 'de', $t => '10m Kat. 5a rotes Kabel. Erlaubt Übertragungsraten von bis zu 1000MBit.']],
                 'salesprice' => 9.99,
             ),
             array(
-                'name' => self::$_en ? '10m Cat. 6 blue' : '10m Kat. 6 blau',
-                'description' => self::$_en ? '10m Cat. 6 blue cable up to 1000MBit.' : '10m Kat. 5a blaues Kabel. Erlaubt Übertragungsraten von bis zu 1000MBit.',
+                'name' => [[ $l => 'en', $t => '10m Cat. 6 blue'], [$l => 'de', $t => '10m Kat. 6 blau']],
+                'description' => [[ $l => 'en', $t => '10m Cat. 6 blue cable up to 1000MBit.'], [$l => 'de', $t => '10m Kat. 5a blaues Kabel. Erlaubt Übertragungsraten von bis zu 1000MBit.']],
                 'salesprice' => 9.99,
             ),
         );
@@ -186,14 +229,6 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $subProductIds = [];
 
         foreach($products as $key => $product) {
-            $product['name'] = [[
-                Sales_Model_ProductLocalization::FLD_LANGUAGE => self::$_locale,
-                Sales_Model_ProductLocalization::FLD_TEXT => $product['name'],
-            ]];
-            $product['description'] = [[
-                Sales_Model_ProductLocalization::FLD_LANGUAGE => self::$_locale,
-                Sales_Model_ProductLocalization::FLD_TEXT => $product['description'],
-            ]];
             $subProductIds[$key] = $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
         }
 
@@ -201,8 +236,8 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             [
                 Sales_Model_Product::FLD_SHORTCUT => 'cable-set',
                 Sales_Model_Product::FLD_UNIT => Sales_Model_Product::UNIT_PIECE,
-                'name' => self::$_en ? 'Cable-set' : 'Kabelsatz',
-                'description' => self::$_en ? 'colorful networkcable set' : 'Farbiges Netzwerkkabelset',
+                'name' => [[ $l => 'en', $t => 'Cable-set'], [$l => 'de', $t => 'Kabelsatz']],
+                'description' => [[ $l => 'en', $t => 'colorful networkcable set'], [$l => 'de', $t => 'Farbiges Netzwerkkabelset']],
                 'salesprice' => 38.99,
                 Sales_Model_Product::FLD_UNFOLD_TYPE => Sales_Model_Product::UNFOLD_TYPE_SET,
                 Sales_Model_Product::FLD_SUBPRODUCTS => [
@@ -227,8 +262,8 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             ], [
                 Sales_Model_Product::FLD_SHORTCUT => 'net-starter',
                 Sales_Model_Product::FLD_UNIT => Sales_Model_Product::UNIT_PIECE,
-                'name' => self::$_en ? 'Net-Starter' : 'Netzstarter',
-                'description' => self::$_en ? 'network starter bundle' : 'Netzwerk Starter',
+                'name' => [[ $l => 'en', $t => 'Net-Starter'], [$l => 'de', $t => 'Netzstarter']],
+                'description' => [[ $l => 'en', $t => 'network starter bundle'], [$l => 'de', $t => 'Netzwerk Starter']],
                 'salesprice' => 99.99,
                 Sales_Model_Product::FLD_UNFOLD_TYPE => Sales_Model_Product::UNFOLD_TYPE_BUNDLE,
                 Sales_Model_Product::FLD_SUBPRODUCTS => [
@@ -250,14 +285,6 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         ];
 
         foreach($products as $product) {
-            $product['name'] = [[
-                Sales_Model_ProductLocalization::FLD_LANGUAGE => self::$_locale,
-                Sales_Model_ProductLocalization::FLD_TEXT => $product['name'],
-            ]];
-            $product['description'] = [[
-                Sales_Model_ProductLocalization::FLD_LANGUAGE => self::$_locale,
-                Sales_Model_ProductLocalization::FLD_TEXT => $product['description'],
-            ]];
             $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
         }
 
