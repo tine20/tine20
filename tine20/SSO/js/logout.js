@@ -1,34 +1,38 @@
-import waitFor from 'util/waitFor.es6';
+const ssoLogout = async (config) => {
+    const keyPrefix = `${window.location.pathname}-sso-logout-client`
+    let responses = []
 
-const ssoLogout = async (logoutUrls) => {
-    const logoutRequests = []
-    logoutUrls.forEach((logoutUrl, idx) => {
-        logoutRequests.push(new Promise(async (resolve, reject) => {
-            const frame = document.createElement('iframe')
-            frame.src = logoutUrl
-            frame.style.display = 'none'
-            document.body.append(frame)
-            try {
-                const logoutStatus = await waitFor(() => { return frame?.contentWindow?.logoutStatus }, 5000)
-                resolve(logoutStatus)
-            } catch (e) {
-                reject()
-            }
-        }))
-    })
+    if(!config.logoutUrls) {
+        // response from rp
+        responses = JSON.parse(sessionStorage.getItem(`${keyPrefix}-responses`)) || []
+        responses.push(config)
 
-    const results = await Promise.allSettled(logoutRequests);
-    const failures = results.reduce((failures, result, idx) => {
-        if (! String(result?.value?.Code).match(/Success/)) {
-            failures.push(new URL(logoutUrls[idx]).hostname)
+        config = JSON.parse(sessionStorage.getItem(`${keyPrefix}-config`))
+    }
+
+    if (config.logoutUrls.length) {
+        const logoutUrl = config.logoutUrls.pop()
+        sessionStorage.setItem(`${keyPrefix}-config`, JSON.stringify(config))
+        sessionStorage.setItem(`${keyPrefix}-responses`, JSON.stringify(responses))
+        window.location = logoutUrl
+        return
+    }
+    
+    const failures = responses.reduce((failures, response, idx) => {
+        if (! String(response.logoutStatus?.value?.Code).match(/Success/)) {
+            failures.push(response.relyingParty.label)
         }
         return failures
     }, [])
 
-    if (failures.length) {
+    if (errors.length) {
         alert('Failed to logout from ' + failures.join(' and ') + '')
     }
+
+    sessionStorage.removeItem(`${keyPrefix}-config`)
+    sessionStorage.removeItem(`${keyPrefix}-responses`)
+
+    window.location = config.finalLocation 
 }
 
 export { ssoLogout }
-

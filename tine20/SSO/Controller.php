@@ -454,7 +454,8 @@ class SSO_Controller extends Tinebase_Controller_Event
                     }
                 }
 
-                $result['SAML2RedirectURLs'] = $urls;
+                $result['logoutUrls'] = $urls;
+                $result['finalLocation'] = Tinebase_Config::getInstance()->{Tinebase_Config::REDIRECTURL};
             }
         }
 
@@ -548,10 +549,27 @@ class SSO_Controller extends Tinebase_Controller_Event
             return $response;
 
         } elseif ($message instanceof \SAML2\LogoutResponse) {
-            $response = (new \Laminas\Diactoros\Response())->withHeader('content-type', 'text/html');
-            $response->getBody()->write('<html><body><script type="application/javascript"> window.logoutStatus='
-                . json_encode($message->getStatus()). '</script></body></html>');
-            return $response;
+            $rp = SSO_Controller_RelyingParty::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                SSO_Model_RelyingParty::class, [
+                ['field' => 'name', 'operator' => 'equals', 'value' => $spEntityId]
+            ]))->getFirstRecord();
+            $locale = Tinebase_Core::getLocale();
+
+            $jsFiles = ['SSO/js/logoutClient.js'];
+            $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
+
+            return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
+                'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
+                'lang' => $locale,
+                'initialData' => json_encode([
+                    'logoutStatus' => $message->getStatus(),
+                    'relyingParty' => [
+                        SSO_Model_RelyingParty::FLD_LABEL => $rp ? $rp->{SSO_Model_RelyingParty::FLD_LABEL} : null,
+                        SSO_Model_RelyingParty::FLD_DESCRIPTION => $rp ? $rp->{SSO_Model_RelyingParty::FLD_DESCRIPTION} : null,
+                        SSO_Model_RelyingParty::FLD_LOGO => $rp ? $rp->{SSO_Model_RelyingParty::FLD_LOGO} : null,
+                    ],
+                ])
+            ]);
         } else {
             throw new \SimpleSAML\Error\BadRequest('Unknown message received on logout endpoint: ' . get_class($message));
         }

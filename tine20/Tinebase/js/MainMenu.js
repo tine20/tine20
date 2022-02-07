@@ -320,9 +320,9 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             window.crypto.logout();
         }
 
-        if (response.SAML2RedirectURLs) {
+        if (response.logoutUrls) {
             const { ssoLogout } = await import(/* webpackChunkName: "SSO/js/logout" */ 'SSO/js/logout');
-            await ssoLogout(response.SAML2RedirectURLs)
+            await ssoLogout(response)
         }
 
         return await Tine.Tinebase.common.reload({
