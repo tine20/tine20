@@ -120,27 +120,12 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
     /**
      * return container for given path
      * 
-     * @return Tinebase_Model_Container
+     * @return Tinebase_Model_Tree_Node
      */
     protected function _getContainer()
     {
-        if ($this->_container == null) {
-            $pathParts = explode('/', substr($this->_path, 1), 7);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' name: ' . print_r($pathParts, true));
-            
-
-            if ($this->_node instanceof Tinebase_Model_Tree_Node) {
-                $this->_container = Tinebase_FileSystem::getInstance()->get($this->_node->parent_id);
-            } else if ($this->_node instanceof Tinebase_Model_Container) {
-                if ($pathParts[2] == Tinebase_Model_Container::TYPE_SHARED) {
-                    $containerId = $pathParts[3];
-                } else {
-                    $containerId = $pathParts[4];
-                }
-                $this->_container = Tinebase_Container::getInstance()->get($containerId);
-            }
+        if (null === $this->_container) {
+            $this->_container = Tinebase_FileSystem::getInstance()->get($this->_node->parent_id);
         }
         
         return $this->_container;
@@ -227,6 +212,23 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
                     }
+                    break;
+                case '{DAV:}quota-available-bytes':
+                    $quotaData = Tinebase_FileSystem::getInstance()->getEffectiveAndLocalQuota($this->_node);
+                    // 200 GB limit in case no quota provided
+                    $response[$prop] = $quotaData['localQuota'] === null ? 200 * 1024 * 1024 * 1024 :
+                        $quotaData['localFree'];
+
+                    break;
+
+                case '{DAV:}quota-used-bytes':
+                    if (Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}
+                        ->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
+                        $size = $this->_node->size;
+                    } else {
+                        $size = $this->_node->revision_size;
+                    }
+                    $response[$prop] = $size;
                     break;
             }
         }

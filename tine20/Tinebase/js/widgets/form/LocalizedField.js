@@ -24,11 +24,12 @@ const mixin = {
         // open window with all langs?
     },
 
-    setValue(value, record) {
-        this.value = value || []
+    checkState(editDialog, record) {
+        this.configure(record.constructor)
+    },
 
-        if (! this.isConfigured) {
-            const recordClass = record.constructor
+    configure(recordClass) {
+        if (recordClass && !this.isConfigured) {
             const localizedLangPicker = this.findParentBy((c) => {return c.localizedLangPicker})?.localizedLangPicker
             if (localizedLangPicker) {
                 this.lang = localizedLangPicker.getValue()
@@ -42,9 +43,14 @@ const mixin = {
                 const keyFieldDef = Tine.Tinebase.widgets.keyfield.getDefinition(_.get(languagesAvailableDef, 'config.appName', recordClass.getMeta('appName')), languagesAvailableDef.name)
                 this.lang = keyFieldDef.default
             }
-
             this.isConfigured = true
+            this.setValue(this.getValue())
         }
+    },
+
+    setValue(value, record) {
+        this.value = value || []
+        this.configure(record?.constructor)
 
         this.localized = _.find(this.value, { language: this.lang })
         if (! this.localized) {

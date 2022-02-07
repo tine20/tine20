@@ -127,7 +127,7 @@ class HumanResources_Import_DemoData_Csv extends Tinebase_Import_Csv_Abstract
                 'bday' => $contact['bday'],
                 'profession' => $contact['title'],
                 'position' => $contact['org_unit'],
-                'dfcom_id' => ($result['dfcom_id']) ? $result['dfcom_id'] : Tinebase_Record_Abstract::generateUID(20),
+                'dfcom_id' => isset($result['dfcom_id']) && strlen($result['dfcom_id']) > 0 ? $result['dfcom_id'] : Tinebase_Record_Abstract::generateUID(20),
             );
             $result = array_merge($conctact_data, $result);
         }

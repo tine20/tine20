@@ -1279,3 +1279,10 @@ msgstr "Warnung"
 
 msgid "It is not allowed to delete email account type contact!"
 msgstr "Es ist nicht erlaubt, einen Kontakt vom Typ E-Mail-Konto zu löschen!"
+
+#: js/ListMemberRoleGridPanel.js:62
+msgid "Search for members ..."
+msgstr "Suche nach Mitgliedern ..."
+
+msgid "Maximum Members"
+msgstr "Max. Funktionsbeisitzer"
