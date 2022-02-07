@@ -35,6 +35,7 @@ DTEND;TZID=Europe/Berlin:20111004T120000
 CLASS:PRIVATE
 LOCATION:Hamburg
 DESCRIPTION:This is a descpription\nwith a linebreak and a \; \, and : a
+URL;VALUE=URI:https://www.test.com
 BEGIN:VALARM
 ACTION:DISPLAY
 TRIGGER;VALUE=DURATION:-PT1H15M
