@@ -26,6 +26,7 @@ class SSO_Config extends Tinebase_Config_Abstract
     public const SAML2 = 'saml2';
     public const SAML2_ENTITYID = 'entityid';
     public const SAML2_KEYS = 'keys';
+    public const SAML2_TINELOGOUT = 'tineLogout';
 
 
     /**
@@ -73,6 +74,10 @@ class SSO_Config extends Tinebase_Config_Abstract
                 self::SAML2_KEYS            => [
                     self::TYPE                  => self::TYPE_ARRAY,
                     self::DEFAULT_STR           => []
+                ],
+                self::SAML2_TINELOGOUT      => [
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
                 ]
             ],
             self::DEFAULT_STR           => [],

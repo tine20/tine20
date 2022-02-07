@@ -737,6 +737,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function logout()
     {
+        $result = array(
+            'success'=> true,
+        );
+
+        if ($data = SSO_Controller::logoutHandler()) {
+            $result = array_merge($result, $data);
+        }
+
         Tinebase_Controller::getInstance()->logout();
         
         Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->resetCache();
@@ -744,10 +752,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (Tinebase_Session::isStarted()) {
             Tinebase_Session::destroyAndRemoveCookie();
         }
-        
-        $result = array(
-            'success'=> true,
-        );
         
         return $result;
     }

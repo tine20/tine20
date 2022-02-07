@@ -10,6 +10,7 @@
  *
  */
 
+use SAML2\AuthnRequest;
 use SAML2\Binding;
 use SAML2\Constants;
 use SAML2\XML\saml\Issuer;
@@ -29,6 +30,8 @@ class SSO_Controller extends Tinebase_Controller_Event
     public const WEBFINGER_REL = 'http://openid.net/specs/connect/1.0/issuer';
 
     protected $_applicationName = SSO_Config::APP_NAME;
+
+    protected static $_logoutHandlerRecursion = false;
 
     public static function addFastRoutes(
         /** @noinspection PhpUnusedParameterInspection */
@@ -427,6 +430,38 @@ class SSO_Controller extends Tinebase_Controller_Event
         return $response;
     }
 
+    public static function logoutHandler(): array
+    {
+        $result = [];
+
+        if (static::$_logoutHandlerRecursion) {
+            return $result;
+        }
+
+        if (SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::ENABLED}) {
+            static::initSAMLServer();
+            $idp = \SimpleSAML\IdP::getById('saml2:tine20');
+
+            // @phpstan-ignore-next-line
+            if ($logoutRequests = \SimpleSAML\Session::getSessionFromRequest()->doLogout(substr($idp->getId(), 6))) {
+                $redirect = new \SAML2\HTTPRedirect();
+                $urls = [];
+                foreach ($logoutRequests as $request) {
+                    try {
+                        $redirect->send($request);
+                    } catch (SSO_Facade_SAML_RedirectException $e) {
+                        $urls[] = $e->redirectUrl;
+                    }
+                }
+
+                $result['logoutUrls'] = $urls;
+                $result['finalLocation'] = Tinebase_Config::getInstance()->{Tinebase_Config::REDIRECTURL};
+            }
+        }
+
+        return $result;
+    }
+
     public static function publicSaml2RedirectLogout(): \Psr\Http\Message\ResponseInterface
     {
         if (! SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::ENABLED}) {
@@ -460,6 +495,8 @@ class SSO_Controller extends Tinebase_Controller_Event
         } else {
             $spEntityId = $issuer;
         }
+        // @phpstan-ignore-next-line
+        \SimpleSAML\Session::getSessionFromRequest()->setSPEntityId($spEntityId);
 
         $metadata = MetaDataStorageHandler::getMetadataHandler();
         $idpMetadata = $idp->getConfig();
@@ -468,13 +505,71 @@ class SSO_Controller extends Tinebase_Controller_Event
         \SimpleSAML\Module\saml\Message::validateMessage($spMetadata, $idpMetadata, $message);
 
         if ($message instanceof \SAML2\LogoutRequest) {
-            \SimpleSAML\Session::getSessionFromRequest()->doLogout(substr($idp->getId(), 6));
+            // @phpstan-ignore-next-line
+            $logoutRequests = \SimpleSAML\Session::getSessionFromRequest()->doLogout(substr($idp->getId(), 6));
 
+            if (SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::SAML2_TINELOGOUT}) {
+                try {
+                    static::$_logoutHandlerRecursion = true;
+                    (new Tinebase_Frontend_Json)->logout();
+                } finally {
+                    static::$_logoutHandlerRecursion = false;
+                }
+            }
+
+            if (is_array($logoutRequests) && !empty($logoutRequests)) {
+                // render logout redirect page
+                $redirect = new \SAML2\HTTPRedirect();
+                $urls = [];
+                foreach ($logoutRequests as $request) {
+                    try {
+                        $redirect->send($request);
+                    } catch (SSO_Facade_SAML_RedirectException $e) {
+                        $urls[] = $e->redirectUrl;
+                    }
+                }
+
+                $locale = Tinebase_Core::getLocale();
+
+                $jsFiles = ['SSO/js/logoutClient.js'];
+                $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
+
+                return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
+                    'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
+                    'lang' => $locale,
+                    'initialData' => json_encode([
+                        'logoutUrls' => $urls,
+                        'finalLocation' => $spMetadata->getValue('SingleLogoutService')['Location']
+                    ])
+                ]);
+            }
             $response = new \Laminas\Diactoros\Response('php://memory', 302, [
                 'Location' => $spMetadata->getValue('SingleLogoutService')['Location']
             ]);
             return $response;
 
+        } elseif ($message instanceof \SAML2\LogoutResponse) {
+            $rp = SSO_Controller_RelyingParty::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                SSO_Model_RelyingParty::class, [
+                ['field' => 'name', 'operator' => 'equals', 'value' => $spEntityId]
+            ]))->getFirstRecord();
+            $locale = Tinebase_Core::getLocale();
+
+            $jsFiles = ['SSO/js/logoutClient.js'];
+            $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
+
+            return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
+                'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
+                'lang' => $locale,
+                'initialData' => json_encode([
+                    'logoutStatus' => $message->getStatus(),
+                    'relyingParty' => [
+                        SSO_Model_RelyingParty::FLD_LABEL => $rp ? $rp->{SSO_Model_RelyingParty::FLD_LABEL} : null,
+                        SSO_Model_RelyingParty::FLD_DESCRIPTION => $rp ? $rp->{SSO_Model_RelyingParty::FLD_DESCRIPTION} : null,
+                        SSO_Model_RelyingParty::FLD_LOGO => $rp ? $rp->{SSO_Model_RelyingParty::FLD_LOGO} : null,
+                    ],
+                ])
+            ]);
         } else {
             throw new \SimpleSAML\Error\BadRequest('Unknown message received on logout endpoint: ' . get_class($message));
         }
@@ -508,7 +603,21 @@ class SSO_Controller extends Tinebase_Controller_Event
             $newSimple = new SSO_Facade_SAML_AuthSimple($simpleSampleIsReallyGreat2->getValue($simpleSampleIsReallyGreat
                 ->getValue($idp)));
             $simpleSampleIsReallyGreat->setValue($idp, $newSimple);
+        } elseif (! $simpleSampleIsReallyGreat->getValue($idp) instanceof SSO_Facade_SAML_AuthSimple) {
+            throw new Tinebase_Exception('simple samle auth source config failure ');
         }
+
+        $binding = Binding::getCurrentBinding();
+        $authnRequest = $binding->receive();
+
+        if ($authnRequest instanceof AuthnRequest && ($issuer = $authnRequest->getIssuer()) instanceof Issuer &&
+                null !== ($spEntityId = $issuer->getValue())) {
+            // @phpstan-ignore-next-line
+            \SimpleSAML\Session::getSessionFromRequest()->setSPEntityId($spEntityId);
+        } else {
+            throw new Tinebase_Exception('can\'t resolve request issuer');
+        }
+
 
         try {
             \SimpleSAML\Module\saml\IdP\SAML2::receiveAuthnRequest($idp);
