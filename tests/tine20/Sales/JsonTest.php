@@ -492,6 +492,9 @@ class Sales_JsonTest extends TestCase
         $savedProduct = $this->_instance->saveProduct($product->toArray());
         $this->assertArrayHasKey(Sales_Model_Product::FLD_SUBPRODUCTS, $savedProduct);
         $this->assertCount(2, $savedProduct[Sales_Model_Product::FLD_SUBPRODUCTS]);
+        $this->assertArrayHasKey(Sales_Model_SubProductMapping::FLD_PRODUCT_ID, $savedProduct[Sales_Model_Product::FLD_SUBPRODUCTS][0]);
+        $this->assertArrayHasKey(Sales_Model_Product::FLD_NAME, $savedProduct[Sales_Model_Product::FLD_SUBPRODUCTS][0][Sales_Model_SubProductMapping::FLD_PRODUCT_ID]);
+        $this->assertCount(1, $savedProduct[Sales_Model_Product::FLD_SUBPRODUCTS][0][Sales_Model_SubProductMapping::FLD_PRODUCT_ID][Sales_Model_Product::FLD_NAME]);
     }
     
     /**

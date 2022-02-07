@@ -22,6 +22,8 @@ class Tinebase_Record_Expander_RecordProperty extends Tinebase_Record_Expander_P
                 $this->_prio, Tinebase_Core::getApplicationInstance($this->_model, '', true), $ids,
                 // workaround: [$this, '_setData'] doesn't work, even so it should!
                 function($_data) use($self) {$self->_setData($_data);}, $this->_getDeleted));
+        } elseif (!empty($_records->getIdFromProperty($this->_property))) {
+            $this->_setData(new Tinebase_Record_RecordSet($this->_model));
         }
     }
 

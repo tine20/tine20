@@ -10590,7 +10590,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:getIdFromProperty\\(\\)\\.$#"
-			count: 1
+			count: 2
 			path: tine20/Tinebase/Record/Expander/RecordProperty.php
 
 		-

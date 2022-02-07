@@ -74,6 +74,21 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
         self::EXPOSE_JSON_API => true,
         self::CREATE_MODULE => true,
 
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_SUBPRODUCTS => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_SubProductMapping::FLD_PRODUCT_ID  => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                self::FLD_NAME => [],
+                                self::FLD_DESCRIPTION => [],
+                            ]
+                        ],
+                    ],
+                ],
+            ]
+        ],
+
         self::DEFAULT_SORT_INFO => ['field' => 'number', 'direction' => 'DESC'],
 
         self::LANGUAGES_AVAILABLE => [
