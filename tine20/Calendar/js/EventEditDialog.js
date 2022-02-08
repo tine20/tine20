@@ -454,12 +454,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         
         Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
-
-        this.button_muteNotification.toggle(this.record.get('mute'));
-        this.button_muteNotification.setText(this.record.get('mute') ?
-            Tine.Tinebase.appMgr.get('Calendar').i18n._('Notifications are disabled') :
-            Tine.Tinebase.appMgr.get('Calendar').i18n._('Notifications are enabled'));
-
         this.addAttendee();
     },
 
@@ -621,6 +615,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.record.get('is_all_day_event')) {
             this.onAllDayChange(null, true);
         }
+        this.button_muteNotification.pressed = !!+this.record.get('mute');
+        this.button_muteNotification.setText(!!+this.record.get('mute') ?
+            Tine.Tinebase.appMgr.get('Calendar').i18n._('Notifications are disabled') :
+            Tine.Tinebase.appMgr.get('Calendar').i18n._('Notifications are enabled'));
     },
 
     /**
@@ -628,20 +626,21 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {Boolean} closeWindow
      */
     onApplyChanges: function(closeWindow) {
-        if (this.app.featureEnabled('featureEventNotificationConfirmation') && !this.record.get('mute')) {
+        if (this.app.featureEnabled('featureEventNotificationConfirmation') && !+this.record.get('mute')) {
             Ext.MessageBox.confirm(
                 this.app.i18n._('Send Notification?'),
                 this.app.i18n._('Changes to this event might send notifications. Press the button "Notifcation are enabled" to switch to "Notification are disabled"'),
                 function (button) {
                     if (button === 'yes') {
-                        Tine.Crm.LeadEditDialog.superclass.onApplyChanges.call(this,closeWindow);
+                        Tine.Calendar.EventEditDialog.superclass.onApplyChanges.call(this,closeWindow);
                     }
                 },
                 this
             );
             return;
+        } else {
+            Tine.Calendar.EventEditDialog.superclass.onApplyChanges.call(this, closeWindow);
         }
-        Tine.Calendar.EventEditDialog.superclass.onApplyChanges.call(this,closeWindow);
     },
 
     onRecordUpdate: function() {
