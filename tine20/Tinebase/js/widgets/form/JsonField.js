@@ -21,8 +21,9 @@ Tine.Tinebase.widgets.form.JsonField = Ext.extend(Ext.form.Field, {
                 fontFamily: 'monospace',
                 fontSize: 12
             });
-
-            this.setValue(this.getValue() || '');
+    
+            // prevent value override from empty ed.getValue()
+            this.setValue(this.value || '');
         });
     },
 
@@ -36,9 +37,9 @@ Tine.Tinebase.widgets.form.JsonField = Ext.extend(Ext.form.Field, {
 
     getValue: function() {
         let value = this.value;
-
+        
         if (this.ed) {
-            value = this.ed.getValue()
+            value = this.ed.getValue();
         }
         return value;
     }
