@@ -264,7 +264,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         Object.assign(this.columns.find((c) => c.dataIndex === 'type'),{ header: '', width: 15, renderer: _.bind(this.typeRenderer, this) });
         Object.assign(this.columns.find((c) => c.dataIndex === 'pos_number'),{ width: 40 });
         // @TODO product_id picker nur sales produkte die noch aktiv
-        Object.assign(this.columns.find((c) => c.dataIndex === 'title'),{ quickaddField: Ext.ComponentMgr.create(fieldMgr('product_id', {blurOnSelect: true})), renderer: _.bind(this.titleRenderer, this) });
+        Object.assign(this.columns.find((c) => c.dataIndex === 'title'),{ quickaddField: this.getProductPicker(), renderer: _.bind(this.titleRenderer, this) });
         Object.assign(this.columns.find((c) => c.dataIndex === 'unit_price'),{ header: i18n._('Price') });
         Object.assign(this.columns.find((c) => c.dataIndex === 'position_discount_sum'),{ header: i18n._('Discount') });
         Object.assign(this.columns.find((c) => c.dataIndex === 'gross_price'),{ header: i18n._('Total') });
@@ -280,6 +280,15 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         colModel.on('hiddenchange', checkDiscountFieldMode)
 
         return colModel;
+    },
+
+    getProductPicker() {
+        const fieldMgr = _.bind(Tine.widgets.form.FieldManager.getByModelConfig, Tine.widgets.form.FieldManager, this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), _, 'propertyGrid', _);
+
+        this.productPicker = this.productPicker || Ext.ComponentMgr.create(fieldMgr('product_id', {
+            blurOnSelect: true,
+        }))
+        return this.productPicker
     },
 
     titleRenderer(value, metadata, record) {
@@ -327,6 +336,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     checkState(editDialog, record) {
         if (!this.editDialog) {
             this.editDialog = editDialog
+            this.getProductPicker().localizedLangPicker = this.editDialog.getForm().findField('document_language')
         }
     },
     /* needed for isFormField cycle */
