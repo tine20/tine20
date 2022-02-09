@@ -303,7 +303,31 @@ class Tinebase_Helper
         
         return array_intersect_key($array, array_flip($result));
     }
-    
+
+    /**
+     * @param  array        $array
+     * @param  int|string   $key
+     * @param  mixed        $insert be careful, if you want to insert an array as a value, put your value array into an array as the only element!
+     * @return bool
+     */
+    public static function arrayInsertAfterKey(array &$array, $key, $insert): bool
+    {
+        if (is_int($key)) {
+            // -1 means after the last element => we transform it to count(), otherwise +1 would make it 0, not what we want
+            array_splice($array, -1 === $key ? count($array) : $key + 1, 0, $insert);
+        } else {
+            if (false === ($pos = array_search($key, array_keys($array)))) {
+                return false;
+            }
+            $array = array_merge(
+                array_slice($array, 0, $pos),
+                is_array($insert) ? $insert : [$insert],
+                array_slice($array, $pos)
+            );
+        }
+        return true;
+    }
+
     /**
      * checks if a string is valid json
      * 

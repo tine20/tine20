@@ -742,7 +742,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'success'=> true,
         );
 
-        if ($data = SSO_Controller::logoutHandler()) {
+        if (Tinebase_Application::getInstance()->isInstalled('SSO') && $data = SSO_Controller::logoutHandler()) {
             $result = array_merge($result, $data);
         }
 

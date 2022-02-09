@@ -12,6 +12,7 @@ Ext.ns('Tine.Tinebase.widgets.form');
 
 import { expandFilter } from 'util/filterSpec';
 import RecordEditFieldTriggerPlugin from './RecordEditFieldTriggerPlugin';
+import { getLocalizedLangPicker } from '../form/LocalizedLangPicker'
 
 /**
  * @namespace   Tine.Tinebase.widgets.form
@@ -176,6 +177,26 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.initComponent.call(this);
     },
 
+    initList() {
+        Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.initList.apply(this, arguments);
+        this.ownLangPicker = getLocalizedLangPicker(this.recordClass);
+        if (this.ownLangPicker && this.pageTb) {
+            const localizedLangPicker = this.localizedLangPicker || this.findParentBy((c) => {return c.localizedLangPicker})?.localizedLangPicker
+            if (localizedLangPicker) {
+                this.ownLangPicker.setValue(localizedLangPicker.getValue())
+                localizedLangPicker.on('change', (picker, lang) => { this.ownLangPicker.setValue(lang) })
+            }
+
+            this.ownLangPicker.on('select', (picker, lang) => {
+                this.pageTb.doRefresh()
+                this.hasFocus = true
+                this.expand()
+            })
+            this.pageTb.insert(10, this.ownLangPicker);
+            this.pageTb.doLayout();
+        }
+    },
+
     /**
      * respect record.getTitle method
      */
@@ -183,12 +204,17 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         if (! this.tpl) {
             this.tpl = new Ext.XTemplate('<tpl for="."><div class="x-combo-list-item" ext:qtip="{[this.doubleEncode(values.description)]}">{[this.getTitle(values.' + this.recordClass.getMeta('idProperty') + ')]}</div></tpl>', {
                 getTitle: (function(id) {
-                    var record = this.getStore().getById(id),
-                        title = record ? record.getTitle() : ' ';
+                    const record = this.getStore().getById(id)
 
-                    return Ext.util.Format.htmlEncode(title);
+                    const options = {}
+                    if (this.ownLangPicker) {
+                        options.language = this.ownLangPicker.getValue()
+                    }
+
+                    const title = record ? record.getTitle(options) : ' '
+                    return Ext.util.Format.htmlEncode(title)
                 }).createDelegate(this)
-            });
+            })
         }
     },
 
@@ -246,6 +272,11 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         if (this.additionalFilters !== null && this.additionalFilters.length > 0) {
             for (var i = 0; i < this.additionalFilters.length; i++) {
                 filter.push(this.additionalFilters[i]);
+            }
+        }
+        if (this.ownLangPicker) {
+            _.find(filter, {field: 'query'}).clientOptions = {
+                language: this.ownLangPicker.getValue()
             }
         }
         this.store.baseParams.filter = filter;

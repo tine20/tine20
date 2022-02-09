@@ -532,7 +532,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function resolveGroupMembers($attendee)
     {
-        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $attendee);
+        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $attendee, true);
         Calendar_Model_Attender::resolveGroupMembers($attendee);
         Calendar_Model_Attender::resolveAttendee($attendee,false);
 
