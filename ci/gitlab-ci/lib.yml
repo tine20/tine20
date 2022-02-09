@@ -238,7 +238,7 @@
       
           previous_tag=$(github_get_latest_release_tag_name "$owner" "$repo")
       
-          repo_release_notesh "$tag" "$previous_tag"
+          repo_release_notes "$tag" "$previous_tag"
       }
       
       github_release_add_asset() {
@@ -540,7 +540,7 @@
       release_to_gitlab() {
           tag="${CI_COMMIT_TAG}"
           customer="$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})"
-          previous_tag="$(git describe --abbrev=0 --tags HEAD~1)"
+          previous_tag="$(git describe --abbrev=0 --tags HEAD~1 2> /dev/null || git fetch --unshallow --quiet && git describe --abbrev=0 --tags HEAD~1)" # if describe fails unshallow repo and try again
       
           release-cli create --description "$(repo_release_notes "$tag" "$previous_tag")" --tag-name "$tag" --ref "$tag" --name "$tag" \
               --assets-link "{\"name\":\"all.tar\",\"url\":\"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${tag}/all.tar\"}"
