@@ -92,6 +92,8 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
     
     onAfterRecordLoad: function() {
+        // NOTE: cf's don't know employeeGrants
+        _.filter(this.getForm().items.items, {requiredGrant: 'editGrant'}).forEach((f) => {f.requiredGrant = 'updateEmployeeDataGrant'})
         Tine.HumanResources.EmployeeEditDialog.superclass.onAfterRecordLoad.call(this);
         const recordGrants = _.get(this.record, this.recordClass.getMeta('grantsPath'));
         this.showPrivateInformation = ['readEmployeeDataGrant', 'readOwnDataGrant'].some((requiredGrant) => { return recordGrants[requiredGrant] });
@@ -324,7 +326,8 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 'dfcom_id',
                                 Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
                                 {
-                                    columnWidth: 1
+                                    columnWidth: 1,
+                                    allowBlank: true
                                 }
                             )]
                         ]
