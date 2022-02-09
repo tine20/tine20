@@ -66,6 +66,7 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
 
     protected static $_statusField = self::FLD_DELIVERY_STATUS;
     protected static $_statusConfigKey = Sales_Config::DOCUMENT_DELIVERY_STATUS;
+    protected static $_documentNumberPrefix = 'PD-'; // _('PD-')
 
     /**
      * holds the configuration object (must be declared in the concrete class)

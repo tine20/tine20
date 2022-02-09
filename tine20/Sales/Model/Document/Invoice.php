@@ -76,6 +76,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
 
     protected static $_statusField = self::FLD_INVOICE_STATUS;
     protected static $_statusConfigKey = Sales_Config::DOCUMENT_INVOICE_STATUS;
+    protected static $_documentNumberPrefix = 'PI-'; // _('PI-')
 
     public function transitionFrom(Sales_Model_Document_Transition $transition)
     {

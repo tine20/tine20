@@ -125,11 +125,16 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         self::FIELDS                        => [
             self::FLD_DOCUMENT_NUMBER => [
-                self::TYPE                      => self::TYPE_NUMBERABLE_STRING, // @TODO nummerkreise sollen zentral confbar sein!!!
+                self::TYPE                      => self::TYPE_NUMBERABLE_STRING,
                 self::LABEL                     => 'Document Number', //_('Document Number')
                 self::QUERY_FILTER              => true,
                 self::CONFIG                    => [
-
+                    Tinebase_Numberable::STEPSIZE          => 1,
+                    //Tinebase_Numberable::BUCKETKEY         => self::class . '#' . self::FLD_DOCUMENT_NUMBER,
+                    //Tinebase_Numberable_String::PREFIX     => 'XX-',
+                    Tinebase_Numberable_String::ZEROFILL   => 7,
+                    //Tinebase_Numberable::CONFIG_OVERRIDE   => '',
+                    // these values will be set dynamically below in inheritModelConfigHook
                 ],
                 /*self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
@@ -353,6 +358,24 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     protected static $_statusField = '';
     protected static $_statusConfigKey = '';
+    protected static $_documentNumberPrefix = 'XX-';
+
+    /**
+     * @param array $_definition
+     */
+    public static function inheritModelConfigHook(array &$_definition)
+    {
+        parent::inheritModelConfigHook($_definition);
+
+        $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::BUCKETKEY] =
+            static::class . '#' . self::FLD_DOCUMENT_NUMBER;
+        $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE] =
+            str_replace('_Model_', '_Controller_', static::class) . '::documentNumberConfigOverride';
+        $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable_String::PREFIX] =
+            Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
+                new Zend_Locale(Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE})
+            )->_(static::$_documentNumberPrefix);
+    }
 
     public function isBooked(): bool
     {

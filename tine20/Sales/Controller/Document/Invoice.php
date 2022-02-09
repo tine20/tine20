@@ -55,4 +55,22 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
     }
+
+    /**
+     * @param Sales_Model_Document_Invoice $document
+     * @return array
+     */
+    public function documentNumberConfigOverride(Sales_Model_Document_Abstract $document)
+    {
+        if ($document->isBooked()) {
+            return [
+                Tinebase_Numberable_String::PREFIX => Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
+                        new Zend_Locale(Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE})
+                    )->_('IN-'), // _('IN-')
+                Tinebase_Numberable::BUCKETKEY => Sales_Model_Document_Invoice::class . '#'
+                    . Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER . 'booked',
+            ];
+        }
+        return parent::documentNumberConfigOverride($document);
+    }
 }
