@@ -319,9 +319,12 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
             ],
             Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_DRAFT,
             Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customer->toArray(),
+            Sales_Model_Document_Offer::FLD_RECIPIENT_ID => $customer->postal->toArray(),
         ]);
 
         $savedDocument = $this->_instance->saveDocument_Offer($document->toArray(true));
+        $savedDocument[Sales_Model_Document_Offer::FLD_OFFER_STATUS] = Sales_Model_Document_Offer::STATUS_RELEASED;
+        $savedDocument = $this->_instance->saveDocument_Offer($savedDocument);
 
         $result = $this->_instance->createFollowupDocument((new Sales_Model_Document_Transition([
             Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
@@ -341,6 +344,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
 
         $order = new Sales_Model_Document_Order([
             Sales_Model_Document_Order::FLD_CUSTOMER_ID => $offer[Sales_Model_Document_Offer::FLD_CUSTOMER_ID],
+            Sales_Model_Document_Order::FLD_ORDER_STATUS => Sales_Model_Document_Order::STATUS_RECEIVED,
             Sales_Model_Document_Order::FLD_PRECURSOR_DOCUMENTS => [
                 $offer
             ]
@@ -379,7 +383,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
                 ]
             ),
             Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer->toArray(),
-            Sales_Model_Document_Order::FLD_ORDER_STATUS => Sales_Model_Document_Order::STATUS_ACCEPTED,
+            Sales_Model_Document_Order::FLD_ORDER_STATUS => Sales_Model_Document_Order::STATUS_RECEIVED,
         ]));
         $testData[$order->getId()] = $order;
 
@@ -421,7 +425,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
                 ]
             ),
             Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer->toArray(),
-            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_BOOKED,
+            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_PROFORMA,
         ]));
         $testData[$invoice->getId()] = $invoice;
 
@@ -432,21 +436,36 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
     {
         $testData = $this->getTrackingTestData();
         $order = null;
+        $offer = null;
         foreach ($testData as $document) {
             if ($document instanceof Sales_Model_Document_Order) {
                 $order = $document;
-                break;
+            } elseif ($document instanceof Sales_Model_Document_Offer) {
+                $offer = $document;
             }
         }
         $documents = $this->_instance->trackDocument(Sales_Model_Document_Order::class, $order->getId());
         $this->assertSame(count($testData), count($documents));
 
+        $data = $testData;
         foreach ($documents as $wrapper) {
             $id = $wrapper[Tinebase_Model_DynamicRecordWrapper::FLD_RECORD]['id'];
-            $this->assertArrayHasKey($id, $testData);
-            $this->assertSame(get_class($testData[$id]), $wrapper[Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME]);
-            unset($testData[$id]);
+            $this->assertArrayHasKey($id, $data);
+            $this->assertSame(get_class($data[$id]), $wrapper[Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME]);
+            unset($data[$id]);
         }
-        $this->assertEmpty($testData);
+        $this->assertEmpty($data);
+
+        $documents = $this->_instance->trackDocument(Sales_Model_Document_Offer::class, $offer->getId());
+        $this->assertSame(count($testData), count($documents));
+
+        $data = $testData;
+        foreach ($documents as $wrapper) {
+            $id = $wrapper[Tinebase_Model_DynamicRecordWrapper::FLD_RECORD]['id'];
+            $this->assertArrayHasKey($id, $data);
+            $this->assertSame(get_class($data[$id]), $wrapper[Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME]);
+            unset($data[$id]);
+        }
+        $this->assertEmpty($data);
     }
 }

@@ -22,6 +22,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $offer = Sales_Controller_Document_Offer::getInstance()->create(new Sales_Model_Document_Offer([
             Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customer->toArray(),
             Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_DRAFT,
+            Sales_Model_Document_Offer::FLD_RECIPIENT_ID => $customer->postal->toArray(),
             Sales_Model_Document_Offer::FLD_POSITIONS => [
                 new Sales_Model_DocumentPosition_Offer([
                     Sales_Model_DocumentPosition_Offer::FLD_TITLE => 'pos 1',
@@ -37,6 +38,9 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                 ], true),
             ],
         ]));
+
+        $offer->{Sales_Model_Document_Offer::FLD_OFFER_STATUS} = Sales_Model_Document_Offer::STATUS_RELEASED;
+        $offer = Sales_Controller_Document_Offer::getInstance()->update($offer);
 
         Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
             Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => Sales_Model_Document_Order::class,

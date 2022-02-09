@@ -21,6 +21,22 @@ class Sales_Controller_Document_Delivery extends Sales_Controller_Document_Abstr
 {
     use Tinebase_Controller_SingletonTrait;
 
+    protected $_documentStatusConfig = Sales_Config::DOCUMENT_DELIVERY_STATUS;
+    protected $_documentStatusTransitionConfig = Sales_Config::DOCUMENT_DELIVERY_STATUS_TRANSITIONS;
+    protected $_documentStatusField = Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS;
+    protected $_oldRecordBookWriteableFields = [
+        Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS,
+        Sales_Model_Document_Delivery::FLD_COST_CENTER_ID,
+        Sales_Model_Document_Delivery::FLD_COST_BEARER_ID,
+        Sales_Model_Document_Delivery::FLD_DESCRIPTION,
+        'tags', 'attachments', 'relations',
+    ];
+
+    protected $_bookRecordRequiredFields = [
+        Sales_Model_Document_Delivery::FLD_CUSTOMER_ID,
+        Sales_Model_Document_Delivery::FLD_RECIPIENT_ID,
+    ];
+
     /**
      * the constructor
      *
@@ -37,27 +53,5 @@ class Sales_Controller_Document_Delivery extends Sales_Controller_Document_Abstr
         $this->_modelName = Sales_Model_Document_Delivery::class;
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
-    }
-
-    /**
-     * inspect creation of one record (before create)
-     *
-     * @param   Sales_Model_SubProductMapping $_record
-     * @return  void
-     */
-    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
-    {
-
-        parent::_inspectBeforeCreate($_record);
-    }
-
-    /**
-     * @param Sales_Model_SubProductMapping $_record
-     * @param Sales_Model_SubProductMapping $_oldRecord
-     */
-    protected function _inspectBeforeUpdate($_record, $_oldRecord)
-    {
-
-        parent::_inspectBeforeUpdate($_record, $_oldRecord);
     }
 }

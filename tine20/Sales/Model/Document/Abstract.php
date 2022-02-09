@@ -351,6 +351,15 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         ]
     ];
 
+    protected static $_statusField = '';
+    protected static $_statusConfigKey = '';
+
+    public function isBooked(): bool
+    {
+        return (bool)(Sales_Config::getInstance()->{static::$_statusConfigKey}->records->getById($this->{static::$_statusField})
+            ->{Sales_Model_Document_Status::FLD_BOOKED});
+    }
+
     public function transitionFrom(Sales_Model_Document_Transition $transition)
     {
         if (!preg_match('/^(Sales_Model_Document)(_.*)$/', static::class, $m)) {
@@ -366,6 +375,10 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         /** @var Sales_Model_Document_TransitionSource $record */
         foreach ($transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS} as $record) {
+            if (!$record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}->isBooked()) {
+                throw new Tinebase_Exception_Record_Validation('source document is not booked');
+            }
+
             $this->{self::FLD_PRECURSOR_DOCUMENTS}->addRecord(new Tinebase_Model_DynamicRecordWrapper([
                 Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME =>
                     $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL},
@@ -374,16 +387,39 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             ]));
 
             // if the positions for this document are not specified, we take all of them
-            if (empty($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS})) {
+            if (empty($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}) ||
+                    $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}->count() === 0) {
                 $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS} =
                     new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_TransitionSource::class, []);
                 foreach ($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
                              ->{Sales_Model_Document_Abstract::FLD_POSITIONS} as $position) {
-                    $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}->addRecord(
-                        new Sales_Model_DocumentPosition_TransitionSource([
-                            Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION_MODEL => get_class($position),
-                            Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION => $position,
-                        ]));
+
+                    // we need to check if there are follow up positions for this one already
+                    $filter = [
+                        ['field' => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION,
+                            'operator' => 'equals', 'value' => $position->getId()],
+                        ['field' => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION_MODEL,
+                            'operator' => 'equals', 'value' => get_class($position)],
+                    ];
+
+                    $count = 0;
+                    foreach (Sales_Controller_DocumentPosition_Abstract::getDocumentModels() as $docModel) {
+                        /** @var Tinebase_Controller_Record_Abstract $ctrl */
+                        $ctrl = Tinebase_Core::getApplicationInstance($docModel);
+                        foreach ($ctrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel($docModel, $filter)) as $existingFollowUp) {
+                            ++$count; // TODO probably we want to change this, if not, we could just do a searchCount
+                        }
+                    }
+                    if (0 === $count) {
+                        $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}->addRecord(
+                            new Sales_Model_DocumentPosition_TransitionSource([
+                                Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION_MODEL => get_class($position),
+                                Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION => $position,
+                            ]));
+                    }
+                }
+                if ($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}->count() === 0) {
+                    throw new Tinebase_Exception_Record_Validation('no source positions found that do not have a followup position yet');
                 }
             }
             foreach ($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS} as $sourcePosition) {
@@ -398,13 +434,31 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         // for the time being we keep this simple, this is a TODO FIXME!!!
         if ($transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->count() === 1) {
-            $sourceDocument = $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT};
+            $sourceDocument = $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->getFirstRecord()
+                ->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT};
             $this->{self::FLD_INVOICE_DISCOUNT_SUM} = $sourceDocument->{self::FLD_INVOICE_DISCOUNT_SUM};
             $this->{self::FLD_INVOICE_DISCOUNT_PERCENTAGE} = $sourceDocument->{self::FLD_INVOICE_DISCOUNT_PERCENTAGE};
             $this->{self::FLD_INVOICE_DISCOUNT_TYPE} = $sourceDocument->{self::FLD_INVOICE_DISCOUNT_TYPE};
             $this->{self::FLD_CUSTOMER_ID} = $sourceDocument->{self::FLD_CUSTOMER_ID};
+            $this->{self::FLD_RECIPIENT_ID} = $sourceDocument->{self::FLD_RECIPIENT_ID};
         }
 
+        $this->{static::$_statusField} = Sales_Config::getInstance()->{static::$_statusConfigKey}->default;
         $this->{self::FLD_DOCUMENT_DATE} = Tinebase_DateTime::now();
+    }
+
+    /**
+     * can be reimplemented by subclasses to modify values during setFromJson
+     * @param array $_data the json decoded values
+     * @return void
+     *
+     * @todo remove this
+     * @deprecated
+     */
+    protected function _setFromJson(array &$_data)
+    {
+        parent::_setFromJson($_data);
+
+        unset($_data[self::FLD_PRECURSOR_DOCUMENTS]);
     }
 }

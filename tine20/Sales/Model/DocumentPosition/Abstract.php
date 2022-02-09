@@ -403,6 +403,27 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION_MODEL};
         $this->{self::FLD_PRECURSOR_POSITION} =
             $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION};
+
+        // we need to check if there are follow up positions for this one already
+        $filter = [
+            ['field' => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION,
+                'operator' => 'equals', 'value' => $this->{self::FLD_PRECURSOR_POSITION}->getId()],
+            ['field' => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION_MODEL,
+                'operator' => 'equals', 'value' => $this->{self::FLD_PRECURSOR_POSITION_MODEL}],
+        ];
+
+        $count = 0;
+        foreach (Sales_Controller_DocumentPosition_Abstract::getDocumentModels() as $docModel) {
+            /** @var Tinebase_Controller_Record_Abstract $ctrl */
+            $ctrl = Tinebase_Core::getApplicationInstance($docModel);
+            foreach ($ctrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel($docModel, $filter)) as $existingFollowUp) {
+                ++$count; // TODO probably we want to change this, if not, we could just do a searchCount
+            }
+        }
+        if ($count > 0) {
+            throw new Tinebase_Exception_Record_Validation('positions already has a followup position');
+        }
+
         foreach ([
                     self::FLD_TITLE,
                     self::FLD_DESCRIPTION,
@@ -423,5 +444,21 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 $this->{$property} = $this->{self::FLD_PRECURSOR_POSITION}->{$property};
             }
         }
+    }
+
+    /**
+     * can be reimplemented by subclasses to modify values during setFromJson
+     * @param array $_data the json decoded values
+     * @return void
+     *
+     * @todo remove this
+     * @deprecated
+     */
+    protected function _setFromJson(array &$_data)
+    {
+        parent::_setFromJson($_data);
+
+        unset($_data[self::FLD_PRECURSOR_POSITION]);
+        unset($_data[self::FLD_PRECURSOR_POSITION_MODEL]);
     }
 }

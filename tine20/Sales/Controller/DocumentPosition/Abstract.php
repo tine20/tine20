@@ -21,13 +21,37 @@ abstract class Sales_Controller_DocumentPosition_Abstract extends Tinebase_Contr
 {
 
     /**
+     * @return array<string>
+     */
+    public static function getDocumentModels(): array
+    {
+        return [
+            Sales_Model_DocumentPosition_Delivery::class,
+            Sales_Model_DocumentPosition_Invoice::class,
+            Sales_Model_DocumentPosition_Offer::class,
+            Sales_Model_DocumentPosition_Order::class,
+        ];
+    }
+
+    /**
      * inspect creation of one record (before create)
      *
-     * @param   Sales_Model_DocumentPosition_Abstract $_record
+     * @param   Sales_Model_SubProductMapping $_record
      * @return  void
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+
         parent::_inspectBeforeCreate($_record);
+    }
+
+    /**
+     * @param Sales_Model_SubProductMapping $_record
+     * @param Sales_Model_SubProductMapping $_oldRecord
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
     }
 }
