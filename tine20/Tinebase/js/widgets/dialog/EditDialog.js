@@ -1054,7 +1054,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
                 // NOTE: requiredGrant is UI only property
                 if (f.isFormField && f.requiredGrant !== undefined) {
-                    hasRequiredGrants = hasRequiredGrants &&  _.get(this.record, this.recordClass.getMeta('grantsPath') + '.' + f.requiredGrant);
+                    const grantsPath = this.recordClass.getMeta('grantsPath');
+                    hasRequiredGrants = hasRequiredGrants &&
+                        (_.get(this.record, `${grantsPath}.${f.requiredGrant}`) || _.get(this.record, `${grantsPath}.adminGrant`));
                 }
 
                 f.setDisabled(!hasRequiredGrants);
