@@ -10740,14 +10740,9 @@ parameters:
 			path: tine20/Tinebase/Record/Expander/DataRequest/Relation.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:getIdFromProperty\\(\\)\\.$#"
+			message: "#^Method Tinebase_Record_RecordSet\\:\\:getIdFromProperty\\(\\) invoked with 1 parameter, 2 required\\.$#"
 			count: 1
 			path: tine20/Tinebase/Record/Expander/PropertyClass/User.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:getIdFromProperty\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Record/Expander/RecordProperty.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:search\\(\\)\\.$#"
