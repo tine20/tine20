@@ -36,6 +36,8 @@ class Sales_Document_ExportTest extends Sales_Document_Abstract
                 $boilerplate2->toArray(),
             ],
             Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_DRAFT,
+            Sales_Model_Document_Offer::FLD_INVOICE_DISCOUNT_SUM => 1,
+            Sales_Model_Document_Offer::FLD_INVOICE_DISCOUNT_TYPE => Sales_Config::INVOICE_DISCOUNT_SUM,
             Sales_Model_Document_Offer::FLD_POSITIONS => [
                 [
                     Sales_Model_DocumentPosition_Offer::FLD_TITLE => 'title',
@@ -45,6 +47,8 @@ class Sales_Document_ExportTest extends Sales_Document_Abstract
                     Sales_Model_DocumentPosition_Offer::FLD_TITLE => 'title 1',
                     Sales_Model_DocumentPosition_Offer::FLD_DESCRIPTION => 'desc 1',
                     Sales_Model_DocumentPosition_Offer::FLD_SORTING => 2,
+                    Sales_Model_DocumentPosition_Offer::FLD_POSITION_DISCOUNT_TYPE => Sales_Config::INVOICE_DISCOUNT_SUM,
+                    Sales_Model_DocumentPosition_Offer::FLD_POSITION_DISCOUNT_SUM => 1,
                 ]
             ],
             Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE => [
