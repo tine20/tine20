@@ -1,0 +1,14 @@
+# add custom / branch specific merge jobs here (merge2-x)
+.mergecustom2:
+  stage: merge2
+  extends: .abstract.merge
+  rules:
+    - if: $AUTO_MERGE == "never"
+      when: never
+
+.mergecustom3:
+  stage: merge3
+  extends: .abstract.merge
+  rules:
+    - if: $AUTO_MERGE == "never"
+      when: never
