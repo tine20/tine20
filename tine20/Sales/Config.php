@@ -648,6 +648,7 @@ class Sales_Config extends Tinebase_Config_Abstract
             /*self::OPTIONS               => [
                 self::RECORD_MODEL          => ....
             ],*/
+            self::SETBYADMINMODULE      => true,
             self::CLIENTREGISTRYINCLUDE => true,
             self::DEFAULT_STR           => [
                 self::RECORDS               => [
