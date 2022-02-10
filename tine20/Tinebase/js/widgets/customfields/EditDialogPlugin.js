@@ -79,7 +79,7 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
                 
                 if (field) {
                     if(field.isXType('combo') && Ext.isObject(this.customfieldsValue[name])) {
-                        var record = new field.recordClass(this.customfieldsValue[name]);
+                        var record = Tine.Tinebase.data.Record.setFromJson(this.customfieldsValue[name], field.recordClass);
                         field.setValue(record);
                     } else {
                         field.setValue(this.customfieldsValue[name]);
