@@ -85,5 +85,9 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         $this->{self::FLD_RECIPIENT_ID} = $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}
             ->getFirstRecord()->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
             ->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID};
+
+        if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_INVOICE_DISCOUNT_TYPE}) {
+            $this->_checkProductPrecursorPositionsComplete();
+        }
     }
 }
