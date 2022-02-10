@@ -47,17 +47,6 @@ class Sales_Model_DocumentPosition_TransitionSource extends Tinebase_Record_NewA
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
             ],
-            self::FLD_DIFF                      => [
-                self::TYPE                          => self::TYPE_RECORD,
-                self::CONFIG                        => [
-                    self::APP_NAME                      => Tinebase_Config::APP_NAME,
-                    self::MODEL_NAME                    => Tinebase_Model_Diff::MODEL_NAME_PART,
-                ],
-                /*self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => false,
-                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
-                ],*/
-            ],
         ],
     ];
 

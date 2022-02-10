@@ -379,11 +379,50 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
      *
      * @var Tinebase_ModelConfiguration
      */
-    protected static $_configurationObject = NULL;
+    protected static $_configurationObject = null;
+
+    protected static $_exportContextLocale = null;
+
+    public static function setExportContextLocale(?Zend_Locale $locale)
+    {
+        static::$_exportContextLocale = $locale;
+    }
+
+    public static function getExportContextLocale(): ?Zend_Locale
+    {
+        return static::$_exportContextLocale;
+    }
 
     public function getLocalizedDiscountString(): string
     {
+        // exports arrive here with resolved values, so the value of the keyfield, not its id
         switch ($this->{self::FLD_POSITION_DISCOUNT_TYPE}) {
+            // exports arrive here with resolved values, so the value of the keyfield, not its id
+            case 'Percentage':
+            case Sales_Config::INVOICE_DISCOUNT_PERCENTAGE:
+                $type = Sales_Config::INVOICE_DISCOUNT_PERCENTAGE;
+                break;
+
+            case 'Sum':
+            case Sales_Config::INVOICE_DISCOUNT_SUM:
+                $type = Sales_Config::INVOICE_DISCOUNT_SUM;
+                break;
+
+            default:
+                $locale = static::getExportContextLocale() ?: Tinebase_Core::getLocale();
+                switch (Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, $locale)->getMessageId($this->{self::FLD_POSITION_DISCOUNT_TYPE})) {
+                    case 'Percentage':
+                        $type = Sales_Config::INVOICE_DISCOUNT_PERCENTAGE;
+                        break;
+                    case 'Sum':
+                        $type = Sales_Config::INVOICE_DISCOUNT_SUM;
+                        break;
+                    default:
+                        return '';
+                }
+        }
+
+        switch ($type) {
             case Sales_Config::INVOICE_DISCOUNT_PERCENTAGE:
                 $value = $this->{self::FLD_POSITION_DISCOUNT_PERCENTAGE};
                 $value = round((float)$value, 2);

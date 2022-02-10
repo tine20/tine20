@@ -15,7 +15,8 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
 {
     //use Tinebase_Export_DocumentPdfTrait;
 
-    protected function _onBeforeExportRecords()
+    // we need to set locale etc before loading twig, so we overwrite _loadTwig
+    protected function _loadTwig()
     {
         $this->_records = $this->_controller->search($this->_filter);
         if ($this->_records->count() !== 1) {
@@ -39,6 +40,11 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
             ]
         ]))->expand($this->_records);
 
+        $this->_locale = new Zend_Locale($this->_records->getFirstRecord()
+            ->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE});
+        Sales_Model_DocumentPosition_Abstract::setExportContextLocale($this->_locale);
+        $this->_translate = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, $this->_locale);
+
         $vats = new Tinebase_Record_RecordSet(Tinebase_Config_KeyFieldRecord::class, []);
         foreach ($this->_records->getFirstRecord()->{Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE} as $vat) {
             $vats->addRecord(new Tinebase_Config_KeyFieldRecord([
@@ -55,7 +61,7 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
             'POSTVATS' => $this->_records,
         ];
 
-        parent::_onBeforeExportRecords();
+        parent::_loadTwig();
     }
 
     /**

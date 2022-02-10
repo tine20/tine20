@@ -125,11 +125,12 @@ class Tinebase_Translation
     /**
      * get list of translated country names
      *
+     * @param ?Zend_Locale $locale
      * @return array list of countrys
      */
-    public static function getCountryList()
+    public static function getCountryList(?Zend_Locale $locale = null)
     {
-        $locale = Tinebase_Core::get('locale');
+        $locale = $locale ?: Tinebase_Core::getLocale();
         $language = $locale->getLanguage();
         
         //try lazy loading of translated country list
@@ -153,11 +154,12 @@ class Tinebase_Translation
      * Get translated country name for a given ISO {@param $_regionCode}
      * 
      * @param String $regionCode [e.g. DE, US etc.]
+     * @param ?Zend_Locale $locale
      * @return String | null [e.g. Germany, United States etc.]
      */
-    public static function getCountryNameByRegionCode($_regionCode)
+    public static function getCountryNameByRegionCode($_regionCode, ?Zend_Locale $locale = null)
     {
-        $countries = self::getCountryList();
+        $countries = self::getCountryList($locale);
         foreach($countries['results'] as $country) {
             if ($country['shortName'] === $_regionCode) {
                 return $country['translatedName'];
