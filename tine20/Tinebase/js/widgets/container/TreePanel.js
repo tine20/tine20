@@ -131,6 +131,11 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     filtersToRemove: ['container_id', 'attender', 'path'],
 
+    /**
+     * remove all filter on filterPanel
+     */
+    removeAllFilters: false,
+
     useArrows: true,
     border: false,
     autoScroll: true,
@@ -799,7 +804,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 
     onFilterChange: function() {
         // get filterToolbar
-        var ftb = this.filterPlugin.getGridPanel().filterToolbar;
+        var ftb = this.filterPlugin.getGridPanel().filterToolbar,
+            removeFilter = Ext.EventObject.altKey ? !this.removeAllFilters : this.removeAllFilters;
 
         // in case of filterPanel
         ftb = ftb.activeFilterPanel ? ftb.activeFilterPanel : ftb;
@@ -808,7 +814,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         ftb.supressEvents = true;
         ftb.filterStore.each(function(filter) {
             var field = filter.get('field');
-            if (this.filtersToRemove.indexOf(field) > -1) {
+            if (removeFilter || this.filtersToRemove.indexOf(field) > -1) {
                 ftb.deleteFilter(filter, true);
             }
         }, this);
