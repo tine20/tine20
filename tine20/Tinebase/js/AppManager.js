@@ -262,6 +262,8 @@ Ext.apply(Tine.Tinebase.AppManager.prototype, {
         return record;
     },
 
+    // NOTE: mind cross window issues. app might be initialised in mainWindow but popup has not yet loaded all code/models
+    // @see Tine.Tinebase.ApplicationStarter.isInitialised()
     isInitialised: function(appName) {
         return this.getInitialisedRecord(appName).promise;
     }
