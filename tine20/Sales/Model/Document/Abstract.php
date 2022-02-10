@@ -402,12 +402,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 throw new Tinebase_Exception_Record_Validation('source document is not booked');
             }
 
-            $this->{self::FLD_PRECURSOR_DOCUMENTS}->addRecord(new Tinebase_Model_DynamicRecordWrapper([
-                Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME =>
-                    $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL},
-                Tinebase_Model_DynamicRecordWrapper::FLD_RECORD =>
-                    $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}->getId(),
-            ]));
+            $addedPositions = 0;
 
             // if the positions for this document are not specified, we take all of them
             if (empty($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}) ||
@@ -417,57 +412,132 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 foreach ($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
                              ->{Sales_Model_Document_Abstract::FLD_POSITIONS} as $position) {
 
-                    // we need to check if there are follow up positions for this one already
-                    $filter = [
-                        ['field' => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION,
-                            'operator' => 'equals', 'value' => $position->getId()],
-                        ['field' => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION_MODEL,
-                            'operator' => 'equals', 'value' => get_class($position)],
-                    ];
+                    $sourcePosition = new Sales_Model_DocumentPosition_TransitionSource([
+                        Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION => $position,
+                        Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION_MODEL => get_class($position)
+                    ]);
+                    /** @var Sales_Model_DocumentPosition_Abstract $position */
+                    $position = new $positionClass([], true);
+                    try {
+                        $position->transitionFrom($sourcePosition);
+                        $this->{self::FLD_POSITIONS}->addRecord($position);
+                        ++$addedPositions;
+                    } catch (Tinebase_Exception_Record_Validation $e) {
+                    }
+                }
 
-                    $count = 0;
-                    foreach (Sales_Controller_DocumentPosition_Abstract::getDocumentModels() as $docModel) {
-                        /** @var Tinebase_Controller_Record_Abstract $ctrl */
-                        $ctrl = Tinebase_Core::getApplicationInstance($docModel);
-                        foreach ($ctrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel($docModel, $filter)) as $existingFollowUp) {
-                            ++$count; // TODO probably we want to change this, if not, we could just do a searchCount
-                        }
-                    }
-                    if (0 === $count) {
-                        $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}->addRecord(
-                            new Sales_Model_DocumentPosition_TransitionSource([
-                                Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION_MODEL => get_class($position),
-                                Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION => $position,
-                            ]));
-                    }
-                }
-                if ($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}->count() === 0) {
-                    throw new Tinebase_Exception_Record_Validation('no source positions found that do not have a followup position yet');
+            } else {
+                foreach ($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS} as $sourcePosition) {
+                    /** @var Sales_Model_DocumentPosition_Abstract $position */
+                    $position = new $positionClass([], true);
+                    $position->transitionFrom($sourcePosition);
+                    $this->{self::FLD_POSITIONS}->addRecord($position);
+                    ++$addedPositions;
                 }
             }
-            foreach ($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS} as $sourcePosition) {
-                /** @var Sales_Model_DocumentPosition_Abstract $position */
-                $position = new $positionClass([], true);
-                $position->transitionFrom($sourcePosition);
-                $this->{self::FLD_POSITIONS}->addRecord($position);
+
+            if (0 === $addedPositions) {
+                throw new Tinebase_Exception_Record_Validation('no source positions found that could be transitioned');
             }
+
+            $this->{self::FLD_PRECURSOR_DOCUMENTS}->addRecord(new Tinebase_Model_DynamicRecordWrapper([
+                Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME =>
+                    $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL},
+                Tinebase_Model_DynamicRecordWrapper::FLD_RECORD =>
+                    $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT},
+            ]));
 
             //$this->{self::FLD_TAGS} = array_merge($this->{self::FLD_TAGS}, $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}->{self::FLD_TAGS});
         }
 
         // for the time being we keep this simple, this is a TODO FIXME!!!
-        if ($transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->count() === 1) {
-            $sourceDocument = $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->getFirstRecord()
-                ->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT};
-            $this->{self::FLD_INVOICE_DISCOUNT_SUM} = $sourceDocument->{self::FLD_INVOICE_DISCOUNT_SUM};
-            $this->{self::FLD_INVOICE_DISCOUNT_PERCENTAGE} = $sourceDocument->{self::FLD_INVOICE_DISCOUNT_PERCENTAGE};
-            $this->{self::FLD_INVOICE_DISCOUNT_TYPE} = $sourceDocument->{self::FLD_INVOICE_DISCOUNT_TYPE};
-            $this->{self::FLD_CUSTOMER_ID} = $sourceDocument->{self::FLD_CUSTOMER_ID};
-            $this->{self::FLD_RECIPIENT_ID} = $sourceDocument->{self::FLD_RECIPIENT_ID};
-        }
+        $sourceDocument = $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->getFirstRecord()
+            ->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT};
+        $this->{self::FLD_INVOICE_DISCOUNT_SUM} = $sourceDocument->{self::FLD_INVOICE_DISCOUNT_SUM};
+        $this->{self::FLD_INVOICE_DISCOUNT_PERCENTAGE} = $sourceDocument->{self::FLD_INVOICE_DISCOUNT_PERCENTAGE};
+        $this->{self::FLD_INVOICE_DISCOUNT_TYPE} = $sourceDocument->{self::FLD_INVOICE_DISCOUNT_TYPE};
+        $this->{self::FLD_CUSTOMER_ID} = $sourceDocument->{self::FLD_CUSTOMER_ID};
+        $this->{self::FLD_RECIPIENT_ID} = $sourceDocument->{self::FLD_RECIPIENT_ID};
+
 
         $this->{static::$_statusField} = Sales_Config::getInstance()->{static::$_statusConfigKey}->default;
         $this->{self::FLD_DOCUMENT_DATE} = Tinebase_DateTime::now();
+
+        $this->calculatePrices();
+    }
+
+    protected function _checkProductPrecursorPositionsComplete()
+    {
+        if (Sales_Config::INVOICE_DISCOUNT_SUM !== $this->{self::FLD_INVOICE_DISCOUNT_TYPE}) {
+            return;
+        }
+
+        foreach ($this->{self::FLD_PRECURSOR_DOCUMENTS} as $preDoc) {
+            /** @var Sales_Model_DocumentPosition_Abstract $position */
+            foreach ($preDoc->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD}->{self::FLD_POSITIONS} as $position) {
+                if (!$position->isProduct()) continue;
+                if (null === ($pos = $this->{self::FLD_POSITIONS}->find(
+                    function(Sales_Model_DocumentPosition_Abstract $val) use($position) {
+                        return $position->getId() ===
+                            $val->getIdFromProperty(Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION);
+                        }, null)) || $pos->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY} !== $position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY}) {
+                    throw new Tinebase_Exception_Record_Validation('partial facturation not supported');
+                }
+            }
+        }
+    }
+
+    public function calculatePrices()
+    {
+        // see AbstractMixin.computePrice
+        // Sales/js/Model/DocumentPosition/AbstractMixin.js
+
+        // see Tine.Sales.Document_AbstractEditDialog.checkStates
+        // Sales/js/Document/AbstractEditDialog.js
+
+        $this->{self::FLD_INVOICE_DISCOUNT_SUM} = floatval($this->{self::FLD_INVOICE_DISCOUNT_SUM});
+        $this->{self::FLD_POSITIONS_NET_SUM} = 0;
+        $this->{self::FLD_POSITIONS_DISCOUNT_SUM} = 0;
+        $this->{self::FLD_SALES_TAX_BY_RATE} = [];
+        $this->{self::FLD_NET_SUM} = 0;
+        $netSumByTaxRate = [];
+        $salesTaxByRate = [];
+        /** @var Sales_Model_DocumentPosition_Abstract $position */
+        foreach ($this->{self::FLD_POSITIONS} as $position) {
+            $this->{self::FLD_POSITIONS_NET_SUM} = $this->{self::FLD_POSITIONS_NET_SUM}
+                + floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_NET_PRICE});
+            $this->{self::FLD_POSITIONS_DISCOUNT_SUM} = $this->{self::FLD_POSITIONS_DISCOUNT_SUM}
+                + floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_POSITION_DISCOUNT_SUM});
+
+            $taxRate = $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE} || 0;
+            if (!isset($salesTaxByRate[$taxRate])) {
+                $salesTaxByRate[$taxRate] = 0;
+            }
+            $salesTaxByRate[$taxRate] += floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX});
+            if (!isset($netSumByTaxRate[$taxRate])) {
+                $netSumByTaxRate[$taxRate] = 0;
+            }
+            $netSumByTaxRate[$taxRate] += floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_NET_PRICE});
+        }
+
+        $this->{self::FLD_SALES_TAX} =
+            array_reduce(array_keys($netSumByTaxRate), function($carry, $taxRate) use($netSumByTaxRate) {
+                $this->xprops(Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE)[$taxRate] =
+                    ($netSumByTaxRate[$taxRate] - $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} *
+                        $netSumByTaxRate[$taxRate] / $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM})
+                    * $taxRate / 100;
+                return $carry + $netSumByTaxRate[$taxRate];
+            }, 0);
+
+        foreach ($salesTaxByRate as $rate => $tax) {
+            $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
+                'tax_rate' => $rate,
+                'tax_sum' => $tax,
+            ];
+        }
+
+        $this->{self::FLD_GROSS_SUM} = $this->{self::FLD_POSITIONS_NET_SUM} - $this->{self::FLD_INVOICE_DISCOUNT_SUM}
+            + $this->{self::FLD_SALES_TAX};
     }
 
     /**

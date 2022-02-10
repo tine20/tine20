@@ -399,51 +399,73 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
 
     public function transitionFrom(Sales_Model_DocumentPosition_TransitionSource $transition)
     {
+        $source = $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION};
+        foreach (static::getConfiguration()->fieldKeys as $property) {
+            if ($source->has($property)) {
+                $this->{$property} = $source->{$property};
+            }
+        }
+
         $this->{self::FLD_PRECURSOR_POSITION_MODEL} =
             $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION_MODEL};
         $this->{self::FLD_PRECURSOR_POSITION} =
             $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION};
+        $this->__unset($this->getIdProperty());
 
-        // we need to check if there are follow up positions for this one already
-        $filter = [
-            ['field' => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION,
-                'operator' => 'equals', 'value' => $this->{self::FLD_PRECURSOR_POSITION}->getId()],
-            ['field' => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION_MODEL,
-                'operator' => 'equals', 'value' => $this->{self::FLD_PRECURSOR_POSITION_MODEL}],
-        ];
+        if (!$this->isProduct()) {
+            return;
+        }
+        // we need to check if there are followup positions for our precursor position already
+        $existingQuantities = null;
+        /** @var Tinebase_Controller_Record_Abstract $ctrl */
+        $ctrl = Tinebase_Core::getApplicationInstance(static::class);
+        foreach ($ctrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(static::class, [
+                    ['field' => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION,
+                        'operator' => 'equals', 'value' => $this->{self::FLD_PRECURSOR_POSITION}->getId()],
+                    ['field' => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION_MODEL,
+                        'operator' => 'equals', 'value' => $this->{self::FLD_PRECURSOR_POSITION_MODEL}],
+                ])) as $existingFollowUp) {
+            $existingQuantities += $existingFollowUp->{self::FLD_QUANTITY};
+        }
 
-        $count = 0;
-        foreach (Sales_Controller_DocumentPosition_Abstract::getDocumentModels() as $docModel) {
-            /** @var Tinebase_Controller_Record_Abstract $ctrl */
-            $ctrl = Tinebase_Core::getApplicationInstance($docModel);
-            foreach ($ctrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel($docModel, $filter)) as $existingFollowUp) {
-                ++$count; // TODO probably we want to change this, if not, we could just do a searchCount
+        if (null !== $existingQuantities) {
+            $this->canCreatePartialFollowUp();
+
+            if ($existingQuantities >= $this->{self::FLD_QUANTITY}) {
+                throw new Tinebase_Exception_Record_Validation('no quantity left for partial followup position');
             }
-        }
-        if ($count > 0) {
-            throw new Tinebase_Exception_Record_Validation('positions already has a followup position');
-        }
 
-        foreach ([
-                    self::FLD_TITLE,
-                    self::FLD_DESCRIPTION,
-                    self::FLD_TYPE,
-                    self::FLD_QUANTITY,
-                    self::FLD_PRODUCT_ID,
-                    self::FLD_COST_BEARER_ID,
-                    self::FLD_COST_CENTER_ID,
-                    self::FLD_POSITION_DISCOUNT_PERCENTAGE,
-                    self::FLD_POSITION_DISCOUNT_TYPE,
-                    self::FLD_POSITION_DISCOUNT_SUM,
-                    self::FLD_POSITION_PRICE,
-                    self::FLD_GROSS_PRICE,
-                    self::FLD_NET_PRICE,
-                    self::FLD_UNIT_PRICE,
-                 ] as $property) {
-            if ($this->{self::FLD_PRECURSOR_POSITION}->has($property) && $this->has($property)) {
-                $this->{$property} = $this->{self::FLD_PRECURSOR_POSITION}->{$property};
-            }
+            $this->{self::FLD_QUANTITY} = $this->{self::FLD_QUANTITY} - $existingQuantities;
+
+            $this->computePrice();
         }
+    }
+
+    public function isProduct(): bool
+    {
+        return self::POS_TYPE_PRODUCT === $this->{self::FLD_TYPE};
+    }
+
+    protected function canCreatePartialFollowUp(): void
+    {
+    }
+
+    public function computePrice()
+    { // AbstractMixin.computePrice Zeile 62ff
+        if (self::POS_TYPE_PRODUCT !== $this->{self::FLD_TYPE}) {
+            return;
+        }
+        $this->{self::FLD_POSITION_PRICE} = $this->{self::FLD_UNIT_PRICE} * $this->{self::FLD_QUANTITY};
+        if ($this->{self::FLD_POSITION_DISCOUNT_TYPE}) {
+            $discount = Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_POSITION_DISCOUNT_TYPE} ?
+                $this->{self::FLD_POSITION_DISCOUNT_SUM} :
+                ($this->{self::FLD_POSITION_PRICE} / 100) * (float)$this->{self::FLD_POSITION_DISCOUNT_PERCENTAGE};
+        } else {
+            $discount = 0;
+        }
+        $this->{self::FLD_NET_PRICE} = $this->{self::FLD_POSITION_PRICE} - $discount;
+        $this->{self::FLD_SALES_TAX} = ($this->{self::FLD_NET_PRICE} / 100) * (float)$this->{self::FLD_SALES_TAX_RATE};
+        $this->{self::FLD_GROSS_PRICE} = $this->{self::FLD_NET_PRICE} + $this->{self::FLD_SALES_TAX};
     }
 
     /**
