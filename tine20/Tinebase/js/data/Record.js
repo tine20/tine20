@@ -599,7 +599,10 @@ Tine.Tinebase.data.Record.setFromJson = function(json, recordClass) {
         Tine.log.warn(e);
     }
 
-    var recordId = _.get(record, 'data.' + _.get(record, 'idProperty')) ?? Tine.Tinebase.data.Record.generateUID();
+    let recordId = _.get(record, 'data.' + _.get(record, 'idProperty'));
+    if (!recordId && [0, '0'].indexOf(recordId) < 0 ) {
+        recordId = Tine.Tinebase.data.Record.generateUID();
+    }
 
     if (! record) {
         record = new recordClass({}, recordId);
