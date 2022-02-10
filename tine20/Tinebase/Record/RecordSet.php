@@ -22,7 +22,7 @@
  * @method setId($_id) - see \Tinebase_Record_Abstract::setId
  * @method setConvertDates($_bool) - see \Tinebase_Record_Abstract::setConvertDates
  * @method runConvertToRecord() - see \Tinebase_Record_Abstract::runConvertToRecord
- * @method getIdFromProperty($_property, $_getIdFromRecord) - see \Tinebase_Record_Abstract::getIdFromProperty
+ * @method getIdFromProperty($_property, $_getIdFromRecord = true) - see \Tinebase_Record_Abstract::getIdFromProperty
  * @method applyFieldGrants(string $action, Tinebase_Record_Interface $oldRecord = null) - see \Tinebase_Record_Abstract::applyFieldGrants
  */
 class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAccess

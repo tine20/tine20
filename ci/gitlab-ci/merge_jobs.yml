@@ -28,6 +28,9 @@
   needs: 
     - docker_build_source
 
+include:
+  - local: '/ci/gitlab-ci/custom_merge_jobs.yml'
+
 merge:
   stage: merge1
   extends: .abstract.merge
