@@ -773,23 +773,23 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.fbar.push(this.action_cancel, this.action_saveAndClose);
 
         if (this.action_print) {
-            this.actionUpdater.addAction(this.action_print);
             this.tbarItems = this.tbarItems || [];
             this.tbarItems.push(this.action_print);
         }
 
         if (this.action_export) {
-            this.actionUpdater.addAction(this.action_export);
             this.tbarItems = this.tbarItems || [];
             this.tbarItems.push(this.action_export);
         }
 
-        if (this.tbarItems && this.tbarItems.length) {
-            this.actionUpdater.addActions(this.tbarItems);
-            this.tbar = new Ext.Toolbar({
-                items: this.tbarItems
-            });
-        }
+        this.tbar = new Ext.Toolbar({
+            items: this.tbarItems || [],
+            plugins: [].concat(this.recordClass ? [{
+                ptype: 'ux.itemregistry',
+                key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-editDialog-Toolbar'
+            }] : [])
+        });
+        this.actionUpdater.addActions(this.tbar.items);
     },
 
     /**

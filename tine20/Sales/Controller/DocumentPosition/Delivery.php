@@ -38,26 +38,4 @@ class Sales_Controller_DocumentPosition_Delivery extends Sales_Controller_Docume
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
     }
-
-    /**
-     * inspect creation of one record (before create)
-     *
-     * @param   Sales_Model_SubProductMapping $_record
-     * @return  void
-     */
-    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
-    {
-
-        parent::_inspectBeforeCreate($_record);
-    }
-
-    /**
-     * @param Sales_Model_SubProductMapping $_record
-     * @param Sales_Model_SubProductMapping $_oldRecord
-     */
-    protected function _inspectBeforeUpdate($_record, $_oldRecord)
-    {
-
-        parent::_inspectBeforeUpdate($_record, $_oldRecord);
-    }
 }

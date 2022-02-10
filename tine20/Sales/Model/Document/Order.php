@@ -109,5 +109,18 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    protected static $_statusField = self::FLD_ORDER_STATUS;
+    protected static $_statusConfigKey = Sales_Config::DOCUMENT_ORDER_STATUS;
+    protected static $_documentNumberPrefix = 'OR-'; // _('OR-')
+
+    public function transitionFrom(Sales_Model_Document_Transition $transition)
+    {
+        parent::transitionFrom($transition);
+
+        if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_INVOICE_DISCOUNT_TYPE}) {
+            $this->_checkProductPrecursorPositionsComplete();
+        }
+    }
 }
 

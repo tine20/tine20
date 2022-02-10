@@ -64,11 +64,24 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
         ];
     }
 
+    protected static $_statusField = self::FLD_DELIVERY_STATUS;
+    protected static $_statusConfigKey = Sales_Config::DOCUMENT_DELIVERY_STATUS;
+    protected static $_documentNumberPrefix = 'PD-'; // _('PD-')
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    public function transitionFrom(Sales_Model_Document_Transition $transition)
+    {
+        parent::transitionFrom($transition);
+
+        $this->{self::FLD_RECIPIENT_ID} = $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}
+            ->getFirstRecord()->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
+            ->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID};
+    }
 }
 

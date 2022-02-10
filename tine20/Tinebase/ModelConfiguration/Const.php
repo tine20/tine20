@@ -98,6 +98,7 @@ class Tinebase_ModelConfiguration_Const {
     const FLD_GRANTS = 'grants';
     const FLD_LOCALLY_CHANGED = 'locally_changed';
     const FLD_ORIGINAL_ID = 'original_id';
+    const FLD_TAGS = 'tags';
     const FORCE_VALUES = 'forceValues';
     const FUNCTION = 'function';
 

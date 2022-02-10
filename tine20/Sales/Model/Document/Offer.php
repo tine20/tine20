@@ -108,4 +108,8 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    protected static $_statusField = self::FLD_OFFER_STATUS;
+    protected static $_statusConfigKey = Sales_Config::DOCUMENT_OFFER_STATUS;
+    protected static $_documentNumberPrefix = 'OF-'; // _('OF-')
 }

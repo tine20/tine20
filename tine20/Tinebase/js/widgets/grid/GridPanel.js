@@ -2726,3 +2726,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         });
     }
 });
+
+/**
+ * find gridPanel instance by child component
+ * @param cmp
+ * @return {Tine.widgets.grid.GridPanel}
+ */
+Tine.widgets.grid.GridPanel.getByChildCmp = (cmp) => {
+    return cmp.findParentBy((c) => {return c instanceof Tine.widgets.grid.GridPanel}) ||
+        cmp.findParentBy((c) => {return c instanceof Tine.widgets.MainScreen})?.getCenterPanel()
+}

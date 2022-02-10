@@ -73,4 +73,21 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    protected static $_statusField = self::FLD_INVOICE_STATUS;
+    protected static $_statusConfigKey = Sales_Config::DOCUMENT_INVOICE_STATUS;
+    protected static $_documentNumberPrefix = 'PI-'; // _('PI-')
+
+    public function transitionFrom(Sales_Model_Document_Transition $transition)
+    {
+        parent::transitionFrom($transition);
+
+        $this->{self::FLD_RECIPIENT_ID} = $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}
+            ->getFirstRecord()->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
+            ->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID};
+
+        if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_INVOICE_DISCOUNT_TYPE}) {
+            $this->_checkProductPrecursorPositionsComplete();
+        }
+    }
 }
