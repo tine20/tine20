@@ -2691,6 +2691,8 @@ class Setup_Controller
      *
      * @return array
      * @throws Setup_Exception_NotFound
+     *
+     * TODO support <backupStructureOnly>true</backupStructureOnly> for MC models without a table defintion in setup.xml
      */
     public function getBackupStructureOnlyTables()
     {
