@@ -1273,7 +1273,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 $keyField = Tinebase_Config::factory($keyField['application'])->{$keyField['name']};
             }
             foreach ($_records as $record) {
-                $record->{$property} = $keyField->getTranslatedValue($record->{$property});
+                $record->{$property} = $keyField->getTranslatedValue($record->{$property}, $this->_locale);
             }
         }
 

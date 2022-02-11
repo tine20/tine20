@@ -19,6 +19,7 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE015_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE015_UPDATE005 = __CLASS__ . '::update005';
+    const RELEASE015_UPDATE006 = __CLASS__ . '::update006';
 
     static protected $_allUpdates = [
         // this needs to be executed before HR update, so we make it TB prio
@@ -26,6 +27,11 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            // this one also maybe rather earlier than later, so prio TB
+            self::RELEASE015_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
             ],
         ],
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -117,5 +123,43 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             Sales_Model_DocumentPosition_Delivery::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.5', self::RELEASE015_UPDATE005);
+    }
+
+    public function update006()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_ProductLocalization::class,
+        ]);
+
+        $lang = Sales_Config::getInstance()->{Sales_Config::LANGUAGES_AVAILABLE}->default;
+        $db = $this->getDb();
+        $tableName = SQL_TABLE_PREFIX . Sales_Model_ProductLocalization::getConfiguration()->getTableName();
+        foreach ($db->query('SELECT id, name, description, is_deleted FROM ' . SQL_TABLE_PREFIX .
+                Sales_Model_Product::TABLE_NAME)->fetchAll(Zend_Db::FETCH_NUM) as $row) {
+            $db->insert($tableName, [
+                'id' => Tinebase_Record_Abstract::generateUID(),
+                Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
+                Tinebase_Record_PropertyLocalization::FLD_TYPE => 'name',
+                Tinebase_Record_PropertyLocalization::FLD_TEXT => $row[1],
+                Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang,
+                'is_deleted' => $row[3],
+            ]);
+            $db->insert($tableName, [
+                'id' => Tinebase_Record_Abstract::generateUID(),
+                Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
+                Tinebase_Record_PropertyLocalization::FLD_TYPE => 'description',
+                Tinebase_Record_PropertyLocalization::FLD_TEXT => $row[2],
+                Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang,
+                'is_deleted' => $row[3],
+            ]);
+        }
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Product::class,
+        ]);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.6', self::RELEASE015_UPDATE006);
     }
 }

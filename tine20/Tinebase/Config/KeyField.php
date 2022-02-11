@@ -165,11 +165,11 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
      * @param $id
      * @return string
      */
-    public function getTranslatedValue($id)
+    public function getTranslatedValue($id, ?Zend_Locale $locale = null)
     {
         $value = $this->getValue($id);
         if ($value) {
-            $translate = Tinebase_Translation::getTranslation($this->_appName);
+            $translate = Tinebase_Translation::getTranslation($this->_appName, $locale);
             return $translate->_($value);
         }
 
