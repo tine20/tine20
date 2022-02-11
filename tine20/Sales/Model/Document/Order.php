@@ -70,7 +70,7 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
         Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], Sales_Model_Document_Abstract::FLD_RECIPIENT_ID, [
             self::FLD_INVOICE_RECIPIENT_ID => [
                 self::TYPE                  => self::TYPE_RECORD,
-                self::LABEL                 => 'Recipient', //_('Recipient')
+                self::LABEL                 => 'Invoice Recipient', //_('Invoice Recipient')
                 self::NULLABLE              => true,
                 self::CONFIG                => [
                     self::APP_NAME              => Sales_Config::APP_NAME,
@@ -81,7 +81,7 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
             ],
             self::FLD_DELIVERY_RECIPIENT_ID => [
                 self::TYPE                  => self::TYPE_RECORD,
-                self::LABEL                 => 'Recipient', //_('Recipient')
+                self::LABEL                 => 'Delivery Recipient', //_('Delivery Recipient')
                 self::NULLABLE              => true,
                 self::CONFIG                => [
                     self::APP_NAME              => Sales_Config::APP_NAME,

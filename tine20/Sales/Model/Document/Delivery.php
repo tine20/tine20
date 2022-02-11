@@ -50,6 +50,9 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
             ]*/
         ];
 
+        // delivery recipient type
+        $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::CONFIG][self::TYPE] = Sales_Model_Document_Address::TYPE_DELIVERY;
+
         // delivery positions
         $_definition[self::FIELDS][self::FLD_POSITIONS][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_DocumentPosition_Delivery::MODEL_NAME_PART;
