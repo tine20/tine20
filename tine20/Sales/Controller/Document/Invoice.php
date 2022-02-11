@@ -21,6 +21,23 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
 {
     use Tinebase_Controller_SingletonTrait;
 
+    protected $_documentStatusConfig = Sales_Config::DOCUMENT_INVOICE_STATUS;
+    protected $_documentStatusTransitionConfig = Sales_Config::DOCUMENT_INVOICE_STATUS_TRANSITIONS;
+    protected $_documentStatusField = Sales_Model_Document_Invoice::FLD_INVOICE_STATUS;
+    protected $_oldRecordBookWriteableFields = [
+        Sales_Model_Document_Invoice::FLD_INVOICE_STATUS,
+        Sales_Model_Document_Invoice::FLD_COST_CENTER_ID,
+        Sales_Model_Document_Invoice::FLD_COST_BEARER_ID,
+        Sales_Model_Document_Invoice::FLD_DESCRIPTION,
+        'tags', 'attachments', 'relations',
+    ];
+
+    protected $_bookRecordRequiredFields = [
+        Sales_Model_Document_Invoice::FLD_CUSTOMER_ID,
+        Sales_Model_Document_Invoice::FLD_RECIPIENT_ID,
+    ];
+
+
     /**
      * the constructor
      *
@@ -40,24 +57,20 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
     }
 
     /**
-     * inspect creation of one record (before create)
-     *
-     * @param   Sales_Model_SubProductMapping $_record
-     * @return  void
+     * @param Sales_Model_Document_Invoice $document
+     * @return array
      */
-    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    public function documentNumberConfigOverride(Sales_Model_Document_Abstract $document)
     {
-
-        parent::_inspectBeforeCreate($_record);
-    }
-
-    /**
-     * @param Sales_Model_SubProductMapping $_record
-     * @param Sales_Model_SubProductMapping $_oldRecord
-     */
-    protected function _inspectBeforeUpdate($_record, $_oldRecord)
-    {
-
-        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+        if ($document->isBooked()) {
+            return [
+                Tinebase_Numberable_String::PREFIX => Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
+                        new Zend_Locale(Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE})
+                    )->_('IN-'), // _('IN-')
+                Tinebase_Numberable::BUCKETKEY => Sales_Model_Document_Invoice::class . '#'
+                    . Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER . 'booked',
+            ];
+        }
+        return parent::documentNumberConfigOverride($document);
     }
 }

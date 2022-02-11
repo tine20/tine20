@@ -379,11 +379,50 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
      *
      * @var Tinebase_ModelConfiguration
      */
-    protected static $_configurationObject = NULL;
+    protected static $_configurationObject = null;
+
+    protected static $_exportContextLocale = null;
+
+    public static function setExportContextLocale(?Zend_Locale $locale)
+    {
+        static::$_exportContextLocale = $locale;
+    }
+
+    public static function getExportContextLocale(): ?Zend_Locale
+    {
+        return static::$_exportContextLocale;
+    }
 
     public function getLocalizedDiscountString(): string
     {
+        // exports arrive here with resolved values, so the value of the keyfield, not its id
         switch ($this->{self::FLD_POSITION_DISCOUNT_TYPE}) {
+            // exports arrive here with resolved values, so the value of the keyfield, not its id
+            case 'Percentage':
+            case Sales_Config::INVOICE_DISCOUNT_PERCENTAGE:
+                $type = Sales_Config::INVOICE_DISCOUNT_PERCENTAGE;
+                break;
+
+            case 'Sum':
+            case Sales_Config::INVOICE_DISCOUNT_SUM:
+                $type = Sales_Config::INVOICE_DISCOUNT_SUM;
+                break;
+
+            default:
+                $locale = static::getExportContextLocale() ?: Tinebase_Core::getLocale();
+                switch (Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, $locale)->getMessageId($this->{self::FLD_POSITION_DISCOUNT_TYPE})) {
+                    case 'Percentage':
+                        $type = Sales_Config::INVOICE_DISCOUNT_PERCENTAGE;
+                        break;
+                    case 'Sum':
+                        $type = Sales_Config::INVOICE_DISCOUNT_SUM;
+                        break;
+                    default:
+                        return '';
+                }
+        }
+
+        switch ($type) {
             case Sales_Config::INVOICE_DISCOUNT_PERCENTAGE:
                 $value = $this->{self::FLD_POSITION_DISCOUNT_PERCENTAGE};
                 $value = round((float)$value, 2);
@@ -395,5 +434,92 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 return sprintf('%01.2f ', $value) . Tinebase_Config::getInstance()->get(Tinebase_Config::CURRENCY_SYMBOL);
         }
         return '';
+    }
+
+    public function transitionFrom(Sales_Model_DocumentPosition_TransitionSource $transition)
+    {
+        $source = $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION};
+        foreach (static::getConfiguration()->fieldKeys as $property) {
+            if ($source->has($property)) {
+                $this->{$property} = $source->{$property};
+            }
+        }
+
+        $this->{self::FLD_PRECURSOR_POSITION_MODEL} =
+            $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION_MODEL};
+        $this->{self::FLD_PRECURSOR_POSITION} =
+            $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION};
+        $this->__unset($this->getIdProperty());
+
+        if (!$this->isProduct()) {
+            return;
+        }
+        // we need to check if there are followup positions for our precursor position already
+        $existingQuantities = null;
+        /** @var Tinebase_Controller_Record_Abstract $ctrl */
+        $ctrl = Tinebase_Core::getApplicationInstance(static::class);
+        foreach ($ctrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(static::class, [
+                    ['field' => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION,
+                        'operator' => 'equals', 'value' => $this->{self::FLD_PRECURSOR_POSITION}->getId()],
+                    ['field' => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION_MODEL,
+                        'operator' => 'equals', 'value' => $this->{self::FLD_PRECURSOR_POSITION_MODEL}],
+                ])) as $existingFollowUp) {
+            $existingQuantities += $existingFollowUp->{self::FLD_QUANTITY};
+        }
+
+        if (null !== $existingQuantities) {
+            $this->canCreatePartialFollowUp();
+
+            if ($existingQuantities >= $this->{self::FLD_QUANTITY}) {
+                throw new Tinebase_Exception_Record_Validation('no quantity left for partial followup position');
+            }
+
+            $this->{self::FLD_QUANTITY} = $this->{self::FLD_QUANTITY} - $existingQuantities;
+
+            $this->computePrice();
+        }
+    }
+
+    public function isProduct(): bool
+    {
+        return self::POS_TYPE_PRODUCT === $this->{self::FLD_TYPE};
+    }
+
+    protected function canCreatePartialFollowUp(): void
+    {
+    }
+
+    public function computePrice()
+    { // AbstractMixin.computePrice Zeile 62ff
+        if (self::POS_TYPE_PRODUCT !== $this->{self::FLD_TYPE}) {
+            return;
+        }
+        $this->{self::FLD_POSITION_PRICE} = $this->{self::FLD_UNIT_PRICE} * $this->{self::FLD_QUANTITY};
+        if ($this->{self::FLD_POSITION_DISCOUNT_TYPE}) {
+            $discount = Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_POSITION_DISCOUNT_TYPE} ?
+                $this->{self::FLD_POSITION_DISCOUNT_SUM} :
+                ($this->{self::FLD_POSITION_PRICE} / 100) * (float)$this->{self::FLD_POSITION_DISCOUNT_PERCENTAGE};
+        } else {
+            $discount = 0;
+        }
+        $this->{self::FLD_NET_PRICE} = $this->{self::FLD_POSITION_PRICE} - $discount;
+        $this->{self::FLD_SALES_TAX} = ($this->{self::FLD_NET_PRICE} / 100) * (float)$this->{self::FLD_SALES_TAX_RATE};
+        $this->{self::FLD_GROSS_PRICE} = $this->{self::FLD_NET_PRICE} + $this->{self::FLD_SALES_TAX};
+    }
+
+    /**
+     * can be reimplemented by subclasses to modify values during setFromJson
+     * @param array $_data the json decoded values
+     * @return void
+     *
+     * @todo remove this
+     * @deprecated
+     */
+    protected function _setFromJson(array &$_data)
+    {
+        parent::_setFromJson($_data);
+
+        unset($_data[self::FLD_PRECURSOR_POSITION]);
+        unset($_data[self::FLD_PRECURSOR_POSITION_MODEL]);
     }
 }

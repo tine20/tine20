@@ -50,5 +50,12 @@ class Sales_Model_DocumentPosition_Invoice extends Sales_Model_DocumentPosition_
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    protected function canCreatePartialFollowUp(): void
+    {
+        if ($this->{self::FLD_POSITION_DISCOUNT_TYPE} === Sales_Config::INVOICE_DISCOUNT_SUM) {
+            throw new Tinebase_Exception_Record_Validation('partial facturation of sum discounted positions is not possible');
+        }
+    }
 }
 

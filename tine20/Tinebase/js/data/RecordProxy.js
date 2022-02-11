@@ -6,7 +6,9 @@
  * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
- 
+
+import ServerError from './ServerError'
+
 Ext.ns('Tine.Tinebase.data');
 
 /**
@@ -255,7 +257,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                         fulfill(r);
                     },
                     failure: function (error) {
-                        reject(new Error(error));
+                        reject(new ServerError(error));
                     }
                 }), additionalArguments);
             } catch (error) {

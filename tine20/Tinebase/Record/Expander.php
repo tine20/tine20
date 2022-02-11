@@ -58,7 +58,11 @@ class Tinebase_Record_Expander extends Tinebase_Record_Expander_Abstract
 
     protected function _registerDataToFetch(Tinebase_Record_Expander_DataRequest $_dataRequest)
     {
-        $cClass = get_class($_dataRequest->controller);
+        if (null === $_dataRequest->controller) {
+            $cClass = 'null';
+        } else {
+            $cClass = get_class($_dataRequest->controller);
+        }
         if (!isset($this->_dataToFetch[$_dataRequest->prio])) {
             $this->_dataToFetch[$_dataRequest->prio] = [];
         }

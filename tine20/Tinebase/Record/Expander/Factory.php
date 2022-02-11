@@ -47,6 +47,10 @@ class Tinebase_Record_Expander_Factory
 
         $prio = null;
         switch ($fieldDef[MCC::TYPE]) {
+            case MCC::TYPE_DYNAMIC_RECORD:
+                $_definition['fieldDefConfig'] = $fieldDef[MCC::CONFIG];
+                return new Tinebase_Record_Expander_DynamicRecordProperty($propModel, $_property, $_definition,
+                    $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
             /** @noinspection PhpMissingBreakStatementInspection */
             case MCC::TYPE_USER:
                 $prio = Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_USER;

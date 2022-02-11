@@ -47,7 +47,11 @@ class Tinebase_Record_Expander_DataRequest
         }
 
         // get instances from datacache
-        $model = $this->controller->getModel();
+        if (null === $this->controller) {
+            $model = Tinebase_Model_DynamicRecordWrapper::class; // or just any, doesnt matter
+        } else {
+            $model = $this->controller->getModel();
+        }
         $data = static::_getInstancesFromCache($model, $model, $this->ids, $this->_getDeleted);
 
         if (!empty($this->ids)) {

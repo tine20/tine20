@@ -897,6 +897,7 @@ abstract class Tinebase_Controller_Record_Abstract
             if (method_exists($object, $method)) {
                 $configOverride = call_user_func_array([$object, $method], [$_record]);
                 $fieldConfig['config'] = array_merge($fieldConfig['config'], $configOverride);
+                $fieldName .= Tinebase_Helper::arrayHash($fieldConfig['config']);
             }
         }
 

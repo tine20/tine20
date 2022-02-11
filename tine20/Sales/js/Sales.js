@@ -18,6 +18,7 @@ import './Document/OfferEditDialog';
 import './Document/OrderEditDialog';
 import './Document/DeliveryEditDialog';
 import './Document/InvoiceEditDialog';
+import './Document/CreateFollowUpAction';
 
 /**
  * address renderer, not a default renderer
