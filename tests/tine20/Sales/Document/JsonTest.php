@@ -468,4 +468,30 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         }
         $this->assertEmpty($data);
     }
+
+    public function testDocumentPrecursorReadonly()
+    {
+        $testData = $this->getTrackingTestData();
+
+        /**
+         * @var string $id
+         * @var Sales_Model_Document_Abstract $document
+         */
+        foreach ($testData as $id => $document) {
+            if (!$document->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} ||
+                    $document->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS}->count() < 1) {
+                continue;
+            }
+            (new Tinebase_Record_Expander(get_class($document), $document::getConfiguration()->jsonExpander))
+                ->expand(new Tinebase_Record_RecordSet(get_class($document), [$document]));
+            $oldId = $document->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS}->getFirstRecord()
+                ->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD};
+            $document->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS}->getFirstRecord()
+                ->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD} = Tinebase_Record_Abstract::generateUID();
+            $data = $document->toArray();
+            $data = $this->_instance->{'save' . $document::getConfiguration()->getModelName()}($data);
+            $this->assertSame($oldId, $data[Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS][0]
+                [Tinebase_Model_DynamicRecordWrapper::FLD_RECORD]);
+        }
+    }
 }
