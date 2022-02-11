@@ -285,6 +285,13 @@ class Sales_JsonTest extends TestCase
         $search = $this->_instance->searchContracts($filter, $this->_getPaging());
         $this->assertEquals($contract->title, $search['results'][0]['title']);
         $this->assertEquals(1, $search['totalcount']);
+
+        $result = $this->_instance->searchProductAggregates([], null);
+        $this->assertGreaterThan(0, count($result['results']));
+        $this->assertArrayHasKey('product_id', $result['results'][0]);
+        $this->assertIsArray($result['results'][0]['product_id']);
+        $this->assertArrayHasKey('name', $result['results'][0]['product_id']);
+        $this->assertIsArray($result['results'][0]['product_id']['name']);
     }
 
     /**
