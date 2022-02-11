@@ -3,11 +3,48 @@
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiß <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Ching En Cheng <c.cheng@metaways.de>
+ * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
+
+/**
+ * @namespace   Tine.widgets.tags
+ * @class       Tine.widgets.tags.TagsMassDetachAction
+ * @extends     Ext.Action
+ */
+Tine.Felamimail.MessageFileAction = function(config) {
+    config.text = config.text ? config.text : i18n._('Save Message as');
+    config.iconCls = 'action_file';
+    config.app = Tine.Tinebase.appMgr.get('Felamimail');
+    config.i18n = config.app.i18n;
+    config.menu = new Ext.menu.Menu({});
+    
+    Ext.apply(this, config);
+
+    Tine.Felamimail.MessageFileAction.superclass.constructor.call(this, config);
+    
+    if (! this.initialConfig?.selectionModel && this.initialConfig?.record) {
+        _.assign(this.initialConfig, {
+            selections: [this.initialConfig.record],
+            selectionModel: {
+                getSelectionFilter: () => {
+                    return [{field: 'id', operator: 'equals', value: this.initialConfig.record.id }];
+                },
+                getCount: () => {
+                    return 1
+                }
+            }
+        });
+    }
+    
+    this.menu.on('beforeshow', this.showFileMenu, this);
+    this.selectionHandler = this.mode === 'fileInstant' ?
+        this.fileMessage.createDelegate(this) :
+        this.selectLocation.createDelegate(this);
+};
+
+Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
 
     /**
      * @cfg {String} fileInstant|selectOnly
@@ -26,103 +63,82 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
 
     requiredGrant: 'readGrant',
     allowMultiple: true,
-    iconCls: 'action_file',
     disabled: true,
-    suggestionsLoaded: false,
-
-    initComponent: function() {
-        var _ = window.lodash,
-            me = this;
-
-        this.app = Tine.Tinebase.appMgr.get('Felamimail');
-        this.i18n = this.app.i18n;
-
-        this.text = this.i18n._('Save Message as');
-
-        this.menu = [];
-
-        this.selectionHandler = this.mode === 'fileInstant' ?
-            this.fileMessage.createDelegate(this) :
-            this.selectLocation.createDelegate(this);
-
-        if (this.mode !== 'fileInstant') {
-            this.disabled = false;
-            this.enableToggle = true;
-            this.pressed = Tine.Felamimail.registry.get('preferences').get('autoAttachNote') === "1";
-
-            // check suggestions (file_location) for reply/forward
-            if (this.composeDialog) {
-                this.composeDialog.on('load', this.onMessageLoad, this);
-            }
-
-            me.on('toggle', me.onToggle, me);
-        }
-
-        // grid selection interface for DisplayPanel/Dialog
-        if (! this.initialConfig.selectionModel && this.initialConfig.record) {
-            _.assign(this.initialConfig, {
-                selections: [this.initialConfig.record],
-                selectionModel: {
-                    getSelectionFilter: function() {
-                        return [{field: 'id', operator: 'equals', value: me.initialConfig.record.id }];
-                    },
-                    getCount: function() {
-                        return 1
-                    }
-                }
-            });
-        }
-        this.supr().initComponent.call(this);
-    },
-
-    handler: function() {
-        if (this.mode != 'fileInstant') {
-            // just toggle
+    suggestionsLoaded: false, 
+    composeDialog: null,
+    splitButton: null,
+    
+    initSplitButton: function () {
+        if (this.mode === 'fileInstant') {
             return;
         }
+        
+        if (! this.splitButton) {
+            if (! this.items[0]) {
+                return;
+            }
+            this.splitButton = this.items[0];
+            
+            if (this.mode !== 'fileInstant') {
+                this.splitButton.disabled = false;
+                this.splitButton.enableToggle = true;
+                this.splitButton.pressed = Tine.Felamimail.registry.get('preferences').get('autoAttachNote') === "1";
+            
+                // check suggestions (file_location) for reply/forward
+                if (this.composeDialog) {
+                    this.composeDialog.on('load', this.onMessageLoad, this);
+                }
+            }
 
-        this.showFileMenu();
+            this.splitButton.on('toggle', this.onToggle, this);
+        }
+        
+        return this.splitButton;
     },
-
+    
     arrowHandler: function() {
-        if (this.mode == 'fileInstant') {
+        if (this.mode === 'fileInstant') {
             return this.showFileMenu();
         }
-
-        this.syncRecipents();
+        
+        this.syncRecipients();
     },
-
-    onToggle: function(btn, pressed) {
-        var _ = window.lodash,
-            me = this;
-
-        if (pressed) {
-            _.each(_.filter(this.menu.items.items, {isRecipientItem: true}), function(item) {
+    
+    
+    onToggle: function() {
+        if (! this.splitButton) {
+            this.splitButton = this.initSplitButton();
+        }
+        
+        if (this.splitButton.pressed) {
+            _.each(_.filter(this.menu?.items?.items, {isRecipientItem: true}), function(item) {
                 item.suspendEvents();
                 item.setChecked(true);
                 item.resumeEvents();
             });
         } else {
-            _.each(_.filter(this.menu.items.items, {checked: true}), function(item) {
+            _.each(_.filter(this.menu?.items?.items, {checked: true}), function(item) {
                 item.suspendEvents();
                 item.setChecked(false);
                 item.resumeEvents();
             });
         }
-
-        var selection = me.getSelected();
-        me.fireEvent('selectionchange', me, selection);
+    
+        const selection = this.getSelected();
+        this.splitButton.fireEvent('selectionchange', this.splitButton, selection);
     },
 
     showFileMenu: function () {
-        var _ = window.lodash,
-            selection = _.map(this.initialConfig.selections, 'data');
+        this.initSplitButton();
+        
+        const selection = _.map(this.initialConfig.selections, 'data');
 
         if (! this.suggestionsLoaded || this.mode === 'fileInstant') {
-            this.loadSuggestions(selection[0])
-                .then(this.showMenu.createDelegate(this));
-        } else {
-            this.showMenu();
+            this.loadSuggestions(selection);
+        }
+    
+        if (this.composeDialog) {
+            this.syncRecipients();
         }
     },
 
@@ -134,46 +150,37 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
      * @param ticketFn
      */
     onMessageLoad: function(dlg, message, ticketFn) {
-        var _ = window.lodash,
-            me = this;
-
         if (message.get('original_id')) {
-            me.loadSuggestions(message.data).then(function () {
+            this.loadSuggestions(message.data).then(() => {
                 // auto file if original_message (from forwared/reply) was filed
-                if (_.find(_.map(me.menu.items, 'suggestion'), { type : 'file_location' })) {
+                if (_.find(_.map(this.menu.items, 'suggestion'), { type : 'file_location' })) {
                     // @TODO: select this suggestion!
-                    var selection = me.getSelected();
-                    me.suspendEvents();
-                    me.toggle(selection.length);
-                    me.resumeEvents();
-                    me.fireEvent('selectionchange', me, selection);
+                    this.handleBtnSelectionEvent();
                 }
-            }).catch(function(error) {
+            }).catch((error) => {
                 Tine.log.notice('No file suggestions available for this message');
                 Tine.log.notice(error);
-                me.addStaticMenuItems();
+                this.addStaticMenuItems();
             })
         } else {
-            me.addStaticMenuItems();
+            this.addStaticMenuItems();
         }
 
-        me.composeDialog.recipientGrid.store.on('add', me.syncRecipents, me);
-        me.composeDialog.recipientGrid.store.on('update', me.syncRecipents, me);
+        this.composeDialog.recipientGrid.store.on('add', this.syncRecipients, this);
+        this.composeDialog.recipientGrid.store.on('update', this.syncRecipients, this);
     },
 
-    syncRecipents: function() {
-        var _ = window.lodash,
-            me = this,
-            emailsInRecipientGrid = [];
+    syncRecipients: function() {
+         const emailsInRecipientGrid = [];
 
-        _.each(me.composeDialog.recipientGrid.store.data.items, function(recipient) {
-            var full = recipient.get('address'),
+        _.each(this.composeDialog.recipientGrid.store.data.items, (recipient) => {
+            const full = recipient.get('address'),
                 parsed = addressparser.parse(String(full).replace(/,/g, '\\\\,')),
                 email = parsed.length ? parsed[0].address : '';
 
             if (email) {
                 emailsInRecipientGrid.push(email);
-                var fileTarget = {
+                const fileTarget = {
                     record_title: full,
                     model: Tine.Addressbook.Model.EmailAddress,
                     data: {
@@ -181,9 +188,9 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
                     },
                 };
 
-                if (! me.menu.getComponent(email)) {
-                    var checked = me.pressed && !me.isManualSelection;
-                    me.menu.insert(0, {
+                if (! this.menu.getComponent(email)) {
+                    const checked = this.splitButton?.pressed && !this.isManualSelection;
+                    this.menu.insert(0, {
                         itemId: email,
                         isRecipientItem: true,
                         xtype: 'menucheckitem',
@@ -191,62 +198,63 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
                         fileTarget: fileTarget,
                         // iconCls: fileTarget.model.getIconCls(),
                         text: Ext.util.Format.htmlEncode(fileTarget.record_title),
-                        checkHandler: function (item) {
-                            var selection = me.getSelected();
-                            me.suspendEvents();
-                            me.toggle(selection.length);
-                            me.resumeEvents();
-                            me.fireEvent('selectionchange', me, selection);
+                        checkHandler: (item) => {
+                            this.handleBtnSelectionEvent();
                         }
                     });
 
                     if (checked) {
-                        var selection = me.getSelected();
-                        me.suspendEvents();
-                        me.toggle(selection.length);
-                        me.resumeEvents();
-                        me.fireEvent('selectionchange', me, selection);
+                        this.handleBtnSelectionEvent();
                     }
                 }
             }
         });
 
         // remove all items no longer in recipient grid
-        _.each(me.menu.items.items, function(item) {
+        _.each(this.menu.items.items, (item) => {
             // check if in grid
             if (_.get(item, 'itemId') && emailsInRecipientGrid.indexOf(item.itemId) === -1) {
                 // item no longer in grid
-                me.menu.remove(item);
+                this.menu.remove(item);
             }
         });
     },
+    
+    handleBtnSelectionEvent: function () {
+        const selection = this.getSelected();
+        
+        this.splitButton.suspendEvents();
+        this.splitButton.toggle(selection.length);
+        this.splitButton.resumeEvents();
+        this.splitButton.fireEvent('selectionchange', this.splitButton, selection);
+    },
+    
+    loadSuggestions: function(messages) {
+        const suggestionIds = [];
 
+        this.setIconClass('x-btn-wait');
+        this.menu.hide();
+        this.menu.removeAll();
 
-
-    loadSuggestions: function(message) {
-        var _ = window.lodash,
-            me = this,
-            suggestionIds = [];
-
-        me.setIconClass('x-btn-wait');
-        me.hideMenu();
-        me.menu.removeAll();
-
-        return Tine.Felamimail.getFileSuggestions(message).then(function(suggestions) {
+        return Tine.Felamimail.getFileSuggestions(messages).then((suggestions) => {
             //sort by suggestion.type so file_location record survives deduplication
-            _.each(_.sortBy(suggestions, 'type'), function (suggestion) {
-                var model, record, id, suggestionId, fileTarget;
+            
+            _.each(_.sortBy(suggestions, 'type'), (suggestion) => {
+                let model = null;
+                let record = null;
+                let id;
+                let suggestionId;
+                let fileTarget;
 
                 // file_location means message reference is already filed (global registry)
-                if (suggestion.type == 'file_location') {
+                if (suggestion.type === 'file_location') {
                     id = suggestion.record.record_id;
                     fileTarget = {
                         record_title: suggestion.record.record_title,
                         model: Tine.Tinebase.data.RecordMgr.get(suggestion.record.model),
                         data: id
                     };
-
-
+                    
                 } else {
                     model = Tine.Tinebase.data.RecordMgr.get(suggestion.model);
                     record = Tine.Tinebase.data.Record.setFromJson(suggestion.record, model);
@@ -261,46 +269,42 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
                 suggestionId = fileTarget.model.getPhpClassName() + '-' + id;
 
                 if (suggestionIds.indexOf(suggestionId) < 0) {
-                    me.menu.addItem({
+                    this.menu.addItem({
                         itemId: suggestionId,
                         isSuggestedItem: true,
                         suggestion: suggestion,
                         fileTarget: fileTarget,
                         iconCls: fileTarget.model.getIconCls(),
                         text: Ext.util.Format.htmlEncode(fileTarget.record_title),
-                        handler: me.selectionHandler
+                        handler: this.selectionHandler
                     });
                     suggestionIds.push(suggestionId);
                 }
             });
 
-            me.addStaticMenuItems();
+            this.addStaticMenuItems();
+            this.addDownloadMenuItem();
 
-            me.addDownloadMenuItem();
-
-            me.suggestionsLoaded = true;
-            me.setIconClass('action_file');
+            this.suggestionsLoaded = true;
+            this.setIconClass('action_file');
         });
     },
 
     addStaticMenuItems: function() {
-        var _ = window.lodash,
-            me = this;
-
-        me.menu.addItem('-');
-        me.menu.addItem({
-            text: me.app.i18n._('File (in Filemanager) ...'),
+        this.menu.addItem('-');
+        this.menu.addItem({
+            text: this.app.i18n._('File (in Filemanager) ...'),
             hidden: ! Tine.Tinebase.common.hasRight('run', 'Filemanager'),
-            handler: me.selectFilemanagerFolder.createDelegate(me)
+            handler: this.selectFilemanagerFolder.createDelegate(this)
         });
-        me.menu.addItem({
-            text: me.app.i18n._('Attachment (of Record)'),
-            menu:_.reduce(Tine.Tinebase.data.RecordMgr.items, function(menu, model) {
+        this.menu.addItem({
+            text: this.app.i18n._('Attachment (of Record)'),
+            menu:_.reduce(Tine.Tinebase.data.RecordMgr.items, (menu, model) => {
                 if (model.hasField('attachments') && model.getMeta('appName') !== 'Felamimail') {
                     menu.push({
                         text: model.getRecordName() + ' ...',
                         iconCls: model.getIconCls(),
-                        handler: me.selectAttachRecord.createDelegate(me, [model], true)
+                        handler: this.selectAttachRecord.createDelegate(this, [model], true)
                     });
                 }
                 return menu;
@@ -311,61 +315,63 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
     addDownloadMenuItem: function() {
         if (! _.isFunction(_.get(this, 'initialConfig.selectionModel.getSelectionFilter'))) return;
 
-        var me = this,
-            messageFilter = this.initialConfig.selectionModel.getSelectionFilter(),
-            messageIds = messageFilter.length === 1 && messageFilter[0].field === 'id' ?
-                messageFilter[0].value : null,
-            messageCount = this.initialConfig.selectionModel.getCount();
+        const messageFilter = this.initialConfig.selectionModel.getSelectionFilter();
+        const messageIds = messageFilter.length === 1 && messageFilter[0].field === 'id' 
+            ? messageFilter[0].value 
+            : null;
+        const messageCount = this.initialConfig.selectionModel.getCount();
 
         if (messageCount === 1 && messageIds) {
-            me.menu.addItem('-');
-            me.menu.addItem({
-                text: me.app.i18n._('Download'),
+            this.menu.addItem('-');
+            this.menu.addItem({
+                text: this.app.i18n._('Download'),
                 iconCls: 'action_download',
-                handler: me.onMessageDownload.createDelegate(me, [messageIds])
+                handler: this.onMessageDownload.createDelegate(this, [messageIds])
             });
         }
     },
 
     onMessageDownload: function(messageId) {
-        var downloader = new Ext.ux.file.Download({
+        const downloader = new Ext.ux.file.Download({
             params: {
                 method: 'Felamimail.downloadMessage',
                 requestType: 'HTTP',
                 messageId: messageId
             }
-        }).start();
+        });
+        downloader.start();
     },
 
     /**
      * directly file a single message
+     * 
+     * TODO: support file multi messages?
      *
      * @param item
      * @param e
      */
     fileMessage: function(item, e) {
-        var me = this,
-            messageFilter = this.initialConfig.selectionModel.getSelectionFilter(),
-            messageCount = this.initialConfig.selectionModel.getCount(),
-            locations = [me.itemToLocation(item)];
+        const  messageFilter = this.initialConfig.selectionModel.getSelectionFilter();
+        const  messageCount = this.initialConfig.selectionModel.getCount();
+        const  locations = [this.itemToLocation(item)];
 
         this.setIconClass('x-btn-wait');
         Tine.Felamimail.fileMessages(messageFilter, locations)
-            .then(function() {
-                var msg = me.app.formatMessage('{messageCount, plural, one {Message was saved} other {# messages where saved}}',
+            .then(() => {
+                const msg = this.app.formatMessage('{messageCount, plural, one {Message was saved} other {# messages where saved}}',
                     {messageCount: messageCount });
-                Ext.ux.MessageBox.msg(me.app.formatMessage('Success'), msg);
+                Ext.ux.MessageBox.msg(this.app.formatMessage('Success'), msg);
             })
-            .catch(function(error) {
+            .catch((error) => {
                 Ext.Msg.show({
-                    title: me.app.formatMessage('Error'),
+                    title: this.app.formatMessage('Error'),
                     msg: error.message,
                     buttons: Ext.MessageBox.OK,
                     icon: Ext.MessageBox.ERROR
                 });
             })
-            .then(function() {
-                me.setIconClass('action_file');
+            .then(() => {
+                this.setIconClass('action_file');
 
                 window.postal.publish({
                     channel: "recordchange",
@@ -379,12 +385,9 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
      * returns currently selected locations
      */
     getSelected: function() {
-        var _ = window.lodash,
-        me = this;
-
-        return _.reduce(this.menu.items.items, function(selected, item) {
+        return _.reduce(this.menu.items.items, (selected, item) => {
             if (item.checked) {
-                selected.push(me.itemToLocation(item));
+                selected.push(this.itemToLocation(item));
             }
             return selected;
         }, []);
@@ -405,38 +408,25 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
     },
 
     selectLocation: function(item, e) {
-        var me = this,
-            selection;
-
         item.setVisible(!item.isSuggestedItem);
         item.selectItem = this.menu.insert(Math.max(0, this.menu.items.indexOf(item)), {
             text: item.fileTarget ? Ext.util.Format.htmlEncode(item.fileTarget.record_title) : item.text,
             checked: true,
             instantItem: item,
             fileTarget: item.fileTarget,
-            checkHandler: function(item) {
-                var selection = me.getSelected();
-
+            checkHandler: (item) => {
                 item.setVisible(!item.instantItem.isSuggestedItem);
                 item.instantItem.show();
-
-                me.suspendEvents();
-                me.toggle(selection.length);
-                me.resumeEvents();
-                me.fireEvent('selectionchange', me, selection);
+                this.handleBtnSelectionEvent();
             }
         });
 
         this.isManualSelection = true;
-        selection = this.getSelected();
-        me.suspendEvents();
-        this.toggle(selection.length);
-        me.resumeEvents();
-        this.fireEvent('selectionchange', this, selection);
+        this.handleBtnSelectionEvent();
     },
 
     selectFilemanagerFolder: function(item, e) {
-        var filePickerDialog = new Tine.Filemanager.FilePickerDialog({
+        const filePickerDialog = new Tine.Filemanager.FilePickerDialog({
             constraint: 'folder',
             singleSelect: true,
             requiredGrants: ['addGrant']
@@ -447,9 +437,8 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
     },
 
     onFilemanagerNodesSelected: function(item, e, nodes) {
-        var _ = window.lodash,
-            nodeData = _.get(nodes[0], 'nodeRecord', nodes[0]),
-            fakeItem = new Ext.menu.Item();
+        let nodeData = _.get(nodes[0], 'nodeRecord', nodes[0]);
+        const fakeItem = new Ext.menu.Item();
 
         nodeData = _.get(nodeData, 'data', nodeData);
 
@@ -462,7 +451,7 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
     },
 
     selectAttachRecord: function(item, e, model) {
-        var pickerDialog = Tine.WindowFactory.getWindow({
+        const pickerDialog = Tine.WindowFactory.getWindow({
             layout: 'fit',
             width: 250,
             height: 100,
@@ -477,9 +466,9 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
                         this.selectionHandler(item, e);
                     }
                 },
-                getEventData: function(eventName) {
+                getEventData: (eventName) => {
                     if (eventName === 'apply') {
-                        var attachRecord = this.getForm().findField('attachRecord').selectedRecord;
+                        const attachRecord = this.getForm().findField('attachRecord').selectedRecord;
                         return {
                             record_title: attachRecord.getTitle(),
                             model: model,
@@ -496,16 +485,16 @@ Tine.Felamimail.MessageFileButton = Ext.extend(Ext.SplitButton, {
     }
 });
 
-Tine.Felamimail.MessageFileButton.getFileLocationText = function(locations, glue='') {
-    var _ = window.lodash,
+Tine.Felamimail.MessageFileAction.getFileLocationText = function(locations, glue='') {
+    const _ = window.lodash,
         formatMessage = Tine.Tinebase.appMgr.get('Felamimail').formatMessage;
 
     return _.reduce(locations, function(text, location) {
-        var model = _.isString(location.model) ? Tine.Tinebase.data.RecordMgr.get(location.model) : location.model,
+        const model = _.isString(location.model) ? Tine.Tinebase.data.RecordMgr.get(location.model) : location.model,
             iconCls = model ? model.getIconCls() : '',
             icon = iconCls ? '<span class="felamimail-location-icon ' + iconCls +'"></span>' : '',
             span = model ? '<span class="felamimail-location" ' +
-                'onclick="Tine.Felamimail.MessageFileButton.locationClickHandler(\'' + model.getPhpClassName() +
+                'onclick="Tine.Felamimail.MessageFileAction.locationClickHandler(\'' + model.getPhpClassName() +
                 "','" + location.record_id + '\')">' + icon + '<span class="felamimail-location-text">'
                 + Ext.util.Format.htmlEncode(location.record_title) + '</span></span>' : '';
 
@@ -513,7 +502,7 @@ Tine.Felamimail.MessageFileButton.getFileLocationText = function(locations, glue
     }, []).join(glue);
 };
 
-Tine.Felamimail.MessageFileButton.locationClickHandler = function (recordClassName, recordId) {
+Tine.Felamimail.MessageFileAction.locationClickHandler = function (recordClassName, recordId) {
     let recordClass = Tine.Tinebase.data.RecordMgr.get(recordClassName);
     let recordData = {};
     let editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(recordClass);

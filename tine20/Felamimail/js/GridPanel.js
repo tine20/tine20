@@ -9,7 +9,7 @@
  
 Ext.namespace('Tine.Felamimail');
 
-require('./MessageFileButton');
+require('./MessageFileAction');
 
 import keydown from 'keydown';
 
@@ -364,7 +364,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             iconCls: 'action_editcopy'
         });
 
-        this.action_fileRecord = new Tine.Felamimail.MessageFileButton({});
+        this.action_fileRecord = new Tine.Felamimail.MessageFileAction({});
         
         this.action_importRecords = new Ext.Action({
             requiredGrant: 'addGrant',
@@ -449,7 +449,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 this.action_fileRecord,
                 this.action_spam,
                 this.action_ham
-            ],
+            ]
         });
     },
 
@@ -748,7 +748,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         let fileLocations = record.get('fileLocations');
         if (_.isArray(fileLocations) && fileLocations.length) {
-            const fileLocationText = Tine.Felamimail.MessageFileButton.getFileLocationText(fileLocations, '<br>');
+            const fileLocationText = Tine.Felamimail.MessageFileAction.getFileLocationText(fileLocations, '<br>');
 
             result +=  fileLocationText ? ('<img class="FelamimailFlagIcon MessageFileIcon" src="images/icon-set/icon_download.svg" ' +
                 'ext:qtitle="' + Ext.util.Format.htmlEncode(i18n._('Filed as:')) + '"' +
@@ -1305,7 +1305,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (e.getTarget('.MessageFileIcon')) {
             let record = this.getStore().getAt(row);
             let fileLocation = record.get('fileLocations')[0];
-            Tine.Felamimail.MessageFileButton.locationClickHandler(fileLocation.model, fileLocation.record_id);
+            Tine.Felamimail.MessageFileAction.locationClickHandler(fileLocation.model, fileLocation.record_id);
 
             e.stopEvent();
         }

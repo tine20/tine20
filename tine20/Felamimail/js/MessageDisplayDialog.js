@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-require('./MessageFileButton');
+require('./MessageFileAction');
 
 Ext.ns('Tine.Felamimail');
 
@@ -72,7 +72,7 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
             iconCls: 'action_email_forward'
         });
 
-        this.action_fileRecord = new Tine.Felamimail.MessageFileButton({
+        this.action_fileRecord = new Tine.Felamimail.MessageFileAction({
             disabled: this.record.id.match(/_/),
             record: this.record,
             scale: 'medium',
