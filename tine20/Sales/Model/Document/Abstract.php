@@ -219,7 +219,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::APP_NAME              => Sales_Config::APP_NAME,
                     self::MODEL_NAME            => Sales_Model_Document_Address::MODEL_NAME_PART,
                     self::REF_ID_FIELD          => Sales_Model_Document_Address::FLD_DOCUMENT_ID,
-                    self::TYPE                  => Sales_Model_Document_Address::TYPE_BILLING
+                    self::TYPE                  => Sales_Model_Document_Address::TYPE_POSTAL,
                 ],
             ],
             self::FLD_CONTACT_ID => [

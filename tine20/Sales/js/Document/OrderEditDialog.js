@@ -15,6 +15,18 @@ Tine.Sales.Document_OrderEditDialog = Ext.extend(Tine.Sales.Document_AbstractEdi
 
     initComponent () {
         this.supr().initComponent.call(this)
+    },
+
+    getRecordFormItems() {
+        const rtnVal = this.supr().getRecordFormItems.call(this)
+        const items = rtnVal[0].items
+        const placeholder = {xtype: 'label', html: '&nbsp', columnWidth: 1/5}
+
+        const followUpLine = [{... placeholder}, this.fields.invoice_recipient_id, this.fields.delivery_recipient_id, {... placeholder}, {... placeholder}]
+        const rIdx = _.indexOf(items, _.find(items, {line: 'recipient'}))
+        items.splice(rIdx+1, 0, followUpLine)
+
+        return rtnVal
     }
 });
 

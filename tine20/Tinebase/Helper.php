@@ -320,7 +320,7 @@ class Tinebase_Helper
                 return false;
             }
             $array = array_merge(
-                array_slice($array, 0, $pos),
+                array_slice($array, 0, ++$pos),
                 is_array($insert) ? $insert : [$insert],
                 array_slice($array, $pos)
             );

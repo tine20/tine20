@@ -54,6 +54,9 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             ]*/
         ];
 
+        // invoice recipient type
+        $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::CONFIG][self::TYPE] = Sales_Model_Document_Address::TYPE_BILLING;
+
         // invoice positions
         $_definition[self::FIELDS][self::FLD_POSITIONS][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_DocumentPosition_Invoice::MODEL_NAME_PART;

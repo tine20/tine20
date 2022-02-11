@@ -62,47 +62,6 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         ].join(Tine.Tinebase.CanonicalPath.separator);
     },
 
-    /**
-     * executed after record got updated from proxy
-     * 
-     * @private
-     */
-    onRecordLoad: function() {
-        // interrupt process flow until dialog is rendered
-        if (! this.rendered) {
-            this.onRecordLoad.defer(250, this);
-            return;
-        }
-        
-        if (Ext.isString(this.record)) {
-            this.record = this.recordProxy.recordReader({responseText: this.record});
-        }
-        
-        this.record.set('customer_id', this.fixedFields.get('customer_id'));
-        this.record.set('type',        String(this.fixedFields.get('type')).toLowerCase());
-        
-        Tine.Sales.AddressEditDialog.superclass.onRecordLoad.call(this);
-        
-        if (String(this.fixedFields.get('type')).toLowerCase() == 'billing') {
-            this.i18nRecordName = this.app.i18n._('Billing Address');
-            this.i18nRecordsName = this.app.i18n._('Billing Addresses');
-        } else {
-            this.i18nRecordName = this.app.i18n._('Delivery Address');
-            this.i18nRecordsName = this.app.i18n._('Delivery Addresses');
-        }
-        
-        if ((! this.copyRecord) && this.record.id) {
-            var c = this.record.get('customer_id');
-            var l = this.record.get('locality') ? ' (' + this.record.get('locality') + ')' : '';
-            this.window.setTitle(String.format(i18n._('Edit {0} "{1}"'), this.i18nRecordName, c.name + l));
-        } else if (! this.record.id) {
-            if (String(this.fixedFields.get('type')).toLowerCase() == 'billing') {
-                this.window.setTitle(this.app.i18n._('Add New Billing Address'));
-            } else {
-                this.window.setTitle(this.app.i18n._('Add New Delivery Address'));
-            }
-        }
-    },
     
     /**
      * executed when record gets updated from form
