@@ -3355,6 +3355,7 @@
         <table>
             <name>external_fulltext</name>
             <version>1</version>
+            <backupStructureOnly>true</backupStructureOnly>
             <declaration>
                 <field>
                     <name>id</name>
