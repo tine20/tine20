@@ -369,8 +369,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::BUCKETKEY] =
             static::class . '#' . self::FLD_DOCUMENT_NUMBER;
-        $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE] =
-            str_replace('_Model_', '_Controller_', static::class) . '::documentNumberConfigOverride';
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable_String::PREFIX] =
             Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
                 new Zend_Locale(Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE})

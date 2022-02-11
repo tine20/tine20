@@ -51,11 +51,15 @@ class Tinebase_Numberable extends Tinebase_Numberable_Abstract
      * @param string $_class
      * @param string $_field
      * @param array $_config
-     * @return Tinebase_Numberable_Abstract
+     * @return ?Tinebase_Numberable_Abstract
      * @throws Tinebase_Exception_NotImplemented
      */
     public static function getNumberable($_class, $_field, array $_config)
     {
+        if (isset($_config['config']['skip']) && $_config['config']['skip']) {
+            return null;
+        }
+
         if (!isset(self::$_numberableCache[$_class . '_#_' . $_field])) {
             if ($_config['type'] === 'numberableStr') {
                 self::$_numberableCache[$_class . '_#_' . $_field] = new Tinebase_Numberable_String($_config['config']);
