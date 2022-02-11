@@ -54,4 +54,82 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             ]
         ]));
     }
+
+    public function testInvoiceNumbers()
+    {
+        $customer = $this->_createCustomer();
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->create(new Sales_Model_Document_Invoice([
+            Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer->toArray(),
+            Sales_Model_Document_Abstract::FLD_RECIPIENT_ID => $customer->postal->toArray(),
+            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_PROFORMA,
+        ]));
+        $expander = new Tinebase_Record_Expander(Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Invoice::getConfiguration()->jsonExpander);
+        $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Invoice::class, [$invoice]));
+
+        $translate = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
+            new Zend_Locale(Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE}));
+
+        $inTranslated = $translate->_('IN-');
+        $piTranslated = $translate->_('PI-');
+
+        $this->assertStringStartsWith($piTranslated, $invoice->{Sales_Model_Document_Invoice::FLD_PROFORMA_NUMBER});
+        $this->assertEmpty($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER});
+
+        $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_DISCOUNT_TYPE} = Sales_Config::INVOICE_DISCOUNT_SUM;
+        $updatedInvoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Invoice::class, [$updatedInvoice]));
+
+        $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_PROFORMA_NUMBER},
+            $updatedInvoice->{Sales_Model_Document_Invoice::FLD_PROFORMA_NUMBER});
+        $this->assertEmpty($updatedInvoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER});
+
+        $updatedInvoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
+        $updatedInvoice = Sales_Controller_Document_Invoice::getInstance()->update($updatedInvoice);
+
+        $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_PROFORMA_NUMBER},
+            $updatedInvoice->{Sales_Model_Document_Invoice::FLD_PROFORMA_NUMBER});
+        $this->assertNotEmpty($updatedInvoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER});
+        $this->assertStringStartsWith($inTranslated, $updatedInvoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER});
+    }
+
+    public function testDeliveryNumbers()
+    {
+        $customer = $this->_createCustomer();
+
+        $delivery = Sales_Controller_Document_Delivery::getInstance()->create(new Sales_Model_Document_Delivery([
+            Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer->toArray(),
+            Sales_Model_Document_Abstract::FLD_RECIPIENT_ID => $customer->postal->toArray(),
+            Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS => Sales_Model_Document_Delivery::STATUS_CREATED,
+        ]));
+        $expander = new Tinebase_Record_Expander(Sales_Model_Document_Delivery::class,
+            Sales_Model_Document_Delivery::getConfiguration()->jsonExpander);
+        $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Delivery::class, [$delivery]));
+
+        $translate = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
+            new Zend_Locale(Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE}));
+
+        $dnTranslated = $translate->_('DN-');
+        $pdTranslated = $translate->_('PD-');
+
+        $this->assertStringStartsWith($pdTranslated, $delivery->{Sales_Model_Document_Delivery::FLD_PROFORMA_NUMBER});
+        $this->assertEmpty($delivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_NUMBER});
+
+        $delivery->{Sales_Model_Document_Delivery::FLD_INVOICE_DISCOUNT_TYPE} = Sales_Config::INVOICE_DISCOUNT_SUM;
+        $updatedDelivery = Sales_Controller_Document_Delivery::getInstance()->update($delivery);
+        $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Delivery::class, [$updatedDelivery]));
+
+        $this->assertSame($delivery->{Sales_Model_Document_Delivery::FLD_PROFORMA_NUMBER},
+            $updatedDelivery->{Sales_Model_Document_Delivery::FLD_PROFORMA_NUMBER});
+        $this->assertEmpty($updatedDelivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_NUMBER});
+
+        $updatedDelivery->{Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS} = Sales_Model_Document_Delivery::STATUS_DELIVERED;
+        $updatedDelivery = Sales_Controller_Document_Delivery::getInstance()->update($updatedDelivery);
+
+        $this->assertSame($delivery->{Sales_Model_Document_Delivery::FLD_PROFORMA_NUMBER},
+            $updatedDelivery->{Sales_Model_Document_Delivery::FLD_PROFORMA_NUMBER});
+        $this->assertNotEmpty($updatedDelivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_NUMBER});
+        $this->assertStringStartsWith($dnTranslated, $updatedDelivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_NUMBER});
+    }
 }

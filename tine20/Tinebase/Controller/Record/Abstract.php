@@ -3622,11 +3622,6 @@ HumanResources_CliTests.testSetContractsEndDate */
             throw new Tinebase_Exception_UnexpectedValue('status is not set');
         }
 
-        if (!isset($_config[$currentStatus])) {
-            throw new Tinebase_Exception_UnexpectedValue('status : ' . $currentStatus
-                . ' is not defined in transitions');
-        }
-
         if ($oldStatus !== $currentStatus) {
             if (!in_array($currentStatus, $targetStatus)) {
                 $translation = Tinebase_Translation::getTranslation();
