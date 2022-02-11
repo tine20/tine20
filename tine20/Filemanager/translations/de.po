@@ -737,8 +737,17 @@ msgstr "Ordner mit dem Namen ist bereits vorhanden!"
 msgid "Upload Folder"
 msgstr "Ordner Hochladen"
 
-msgid "Stop and Clear All Uploads"
-msgstr "Alle Uploads stoppen und löschen"
+msgid "Empty List"
+msgstr "Liste Leeren"
+
+msgid "Not all uploads are finished yet. What would you to do?"
+msgstr "Einige Uploads sind noch nicht fertig, Was möchten sie tun?"
+
+msgid "Remove finished uploads from this list only"
+msgstr "Nur fertige Uploads aus dieser Liste entfernen"
+
+msgid "Cancel all unfinished uploads before"
+msgstr "Alle nicht fertigen Uploads abbrechen"
 
 msgid "Uploads Monitor"
 msgstr "Uploads Fortschritt"
