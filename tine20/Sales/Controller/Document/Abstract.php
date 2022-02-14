@@ -97,6 +97,56 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             }
         }
 
+        // lets check if positions got removed and if that would affect our precursor documents
+        if (null !== $_record->{Sales_Model_Document_Abstract::FLD_POSITIONS}) {
+            if (!$_record->{Sales_Model_Document_Abstract::FLD_POSITIONS} instanceof Tinebase_Record_RecordSet) {
+                throw new Tinebase_Exception_Record_Validation(Sales_Model_Document_Abstract::FLD_POSITIONS .
+                    ' needs to be instance of ' . Tinebase_Record_RecordSet::class);
+            }
+            Tinebase_Record_Expander::expandRecord($_oldRecord);
+            $deletedPositions = [];
+            foreach ($_oldRecord->{Sales_Model_Document_Abstract::FLD_POSITIONS} as $oldPosition) {
+                if (!$_record->{Sales_Model_Document_Abstract::FLD_POSITIONS}->getById($oldPosition->getId())) {
+                    $deletedPositions[$oldPosition->getId()] = $oldPosition;
+                }
+            }
+            $checkedDocumentIds = [];
+            $removeDocumentIds = [];
+            /** @var Sales_Model_DocumentPosition_Abstract $delPos */
+            foreach ($deletedPositions as $delPos) {
+                if (!$delPos->{Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION}) {
+                    continue;
+                }
+                $docId = $delPos->{Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION}
+                    ->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID};
+                if (isset($checkedDocumentIds[$docId])) {
+                    continue;
+                }
+                $checkedDocumentIds[$docId] = true;
+                if (!$_oldRecord->{Sales_Model_Document_Abstract::FLD_POSITIONS}->find(
+                        function(Sales_Model_DocumentPosition_Abstract $pos) use($deletedPositions, $docId) {
+                            return $pos->{Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION}
+                                && $docId === $pos->{Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION}
+                                ->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID}
+                                && !isset($deletedPositions[$pos->getId()]);
+                        }, null)) {
+                    $removeDocumentIds[$docId] = $docId;
+                }
+            }
+
+            if (!empty($removeDocumentIds)) {
+                $_record->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} = $_oldRecord
+                    ->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS};
+
+                /** @var Tinebase_Model_DynamicRecordWrapper $precursor */
+                foreach ($_record->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} as $precursor) {
+                    if (isset($removeDocumentIds[$precursor->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD}])) {
+                        $_record->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS}->removeRecord($precursor);
+                    }
+                }
+            }
+        }
+
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
     }
 
@@ -121,9 +171,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         }
 
         if ($_oldRecord) {
-            $model = get_class($_oldRecord);
-            (new Tinebase_Record_Expander($model, $_oldRecord::getConfiguration()->jsonExpander))
-                ->expand(new Tinebase_Record_RecordSet($model, [$_oldRecord]));
+            Tinebase_Record_Expander::expandRecord($_oldRecord);
         }
 
         if (is_array($this->_bookRecordRequiredFields)) {
@@ -225,11 +273,26 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
     {
         $transactionRAII = Tinebase_RAII::getTransactionManagerRAII();
 
-        // TODO FIXME
-        // we need to make sure that we actually reload all transition data (documents, positions, etc.) from the db
-        /*******************************/
-        // ... or maybe we can do that outside ... but somebody has to do it
 
+        // we need to make sure that we actually reload all transition data (documents, positions, etc.) from the db
+        /** @var Sales_Model_Document_TransitionSource $sourceDocument */
+        foreach ($transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS} as $sourceDocument) {
+            if ($sourceDocument->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT} instanceof Sales_Model_Document_Abstract) {
+                $sourceDocument->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT} =
+                    $sourceDocument->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}->getId();
+            }
+            if ($sourceDocument->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}) {
+                /** @var Sales_Model_DocumentPosition_TransitionSource $sourcePosition */
+                foreach ($sourceDocument->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS} as $sourcePosition) {
+                    if ($sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION} instanceof Sales_Model_DocumentPosition_Abstract) {
+                        $sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION} =
+                            $sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}->getId();
+                    }
+                }
+            }
+        }
+
+        // then do expanding to fetch data from db
         (new Tinebase_Record_Expander(Sales_Model_Document_Transition::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
@@ -252,10 +315,12 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             $transition
         ]));
 
+        // do the transition
         /** @var Sales_Model_Document_Abstract $targetDocument */
         $targetDocument = new $transition->{Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE}([], true);
         $targetDocument->transitionFrom($transition);
 
+        // save result in db
         /** @var Tinebase_Controller_Record_Abstract $ctrl */
         $ctrl = Tinebase_Core::getApplicationInstance(get_class($targetDocument));
         /** @var Sales_Model_Document_Abstract $result */

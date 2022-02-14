@@ -42,7 +42,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $offer->{Sales_Model_Document_Offer::FLD_OFFER_STATUS} = Sales_Model_Document_Offer::STATUS_RELEASED;
         $offer = Sales_Controller_Document_Offer::getInstance()->update($offer);
 
-        Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
+        $order = Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
             Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => Sales_Model_Document_Order::class,
             Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
                 new Sales_Model_Document_TransitionSource([
@@ -53,6 +53,28 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                 ]),
             ]
         ]));
+
+        return $order;
+    }
+
+    public function testPositionRemoval()
+    {
+        $order = $this->testTransitionOfferOrder();
+        Tinebase_Record_Expander::expandRecord($order);
+
+        $order->{Sales_Model_Document_Abstract::FLD_POSITIONS}->removeFirst();
+        $order = Sales_Controller_Document_Order::getInstance()->update($order);
+        Tinebase_Record_Expander::expandRecord($order);
+
+        $this->assertCount(1, $order->{Sales_Model_Document_Abstract::FLD_POSITIONS});
+        $this->assertCount(1, $order->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS});
+
+        $order->{Sales_Model_Document_Abstract::FLD_POSITIONS}->removeFirst();
+        $order = Sales_Controller_Document_Order::getInstance()->update($order);
+        Tinebase_Record_Expander::expandRecord($order);
+
+        $this->assertCount(0, $order->{Sales_Model_Document_Abstract::FLD_POSITIONS});
+        $this->assertCount(0, $order->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS});
     }
 
     public function testInvoiceNumbers()
