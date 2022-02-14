@@ -43,7 +43,7 @@ msgstr "Priorität"
 
 #: js/TaskEditDialog.js:202 Model/Task.php:116 Model/Task.php:309
 msgid "Organizer"
-msgstr "Organisator"
+msgstr "Verantwortlich"
 
 #: js/TaskEditDialog.js:203
 msgid "Add Responsible ..."
