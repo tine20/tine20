@@ -29,6 +29,22 @@ class Tinebase_Record_Expander extends Tinebase_Record_Expander_Abstract
         }
     }
 
+    public static function expandRecord(Tinebase_Record_Interface $record): void
+    {
+        static::expandRecords(new Tinebase_Record_RecordSet(get_class($record), [$record]), $record::getConfiguration());
+    }
+
+    public static function expandRecords(Tinebase_Record_RecordSet $records, ?Tinebase_ModelConfiguration $mc = null): void
+    {
+        if (null === $mc) {
+            if ($records->count() < 1) {
+                return;
+            }
+            $mc = $records->getFirstRecord()::getConfiguration();
+        }
+        (new self($records->getRecordClassName(), $mc->jsonExpander))->expand($records);
+    }
+
     protected function _fetchData()
     {
         $dataToFetch = $this->_dataToFetch;

@@ -49,10 +49,21 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
 
         'exposeHttpApi'     => true,
         
-        'titleProperty'     => 'product_id.getTitle()',
+        'titleProperty'     => '{{ product_id.getTitle() }}',
         'appName'           => 'Sales',
         'modelName'         => 'ProductAggregate',
-        
+
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'product_id' => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_Product::FLD_NAME => [],
+                        Sales_Model_Product::FLD_DESCRIPTION => [],
+                    ]
+                ],
+            ]
+        ],
+
         'fields'            => array(
             'product_id'       => array(
                 'label'      => 'Product',    // _('Product')
