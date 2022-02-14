@@ -837,8 +837,11 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         $domain = $this->_config['domain'];
         $mycnf = $backupDir . '/my.cnf';
 
+        $dbConfig = $this->_config['dovecot'];
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dbconfig : ' . print_r($dbConfig, true));
+        
         $mysqlBackEnd = new Setup_Backend_Mysql();
-        $mysqlBackEnd->createMyConf($mycnf);
+        $mysqlBackEnd->createMyConf($mycnf, new Zend_Config($dbConfig));
 
         //create the dump via mysqldump with --where to select the data we want to export
         $cmd = "mysqldump --defaults-extra-file=$mycnf "
@@ -849,6 +852,9 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             .' --where="' . "domain='$domain'" . '"'
             ." | bzip2 > $backupDir/tine20_dovecot.sql.bz2";
 
-        exec($cmd);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'exec commend ' . print_r($cmd, true));
+        exec($cmd, $output);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'backexecoutput ' . print_r($output, true));
+
     }
 }
