@@ -428,9 +428,11 @@
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                 __METHOD__ . '::' . __LINE__ . ' Failed to send notification: ' . $e->getMessage());
             if ($_action === 'alarm') {
-                // throw exception in case of alarm as the exception is catched in \Tinebase_Alarm::sendPendingAlarms
+                // throw exception in case of alarm as the exception is caught in \Tinebase_Alarm::sendPendingAlarms
                 // and alarm sending is marked as failure
-                throw $e;
+                if (! $e instanceof Tinebase_Exception_NotFound) {
+                    throw $e;
+                }
             }
             return;
         }
@@ -447,9 +449,7 @@
         $organizer = $event->resolveOrganizer();
         $organizerAccountId = ($organizer instanceof Addressbook_Model_Contact) ? $organizer->account_id : null;
 
-        $prefUserId = $attendeeAccountId ? $attendeeAccountId :
-            ($organizerAccountId ? $organizerAccountId :
-                ($event->created_by));
+        $prefUserId = $attendeeAccountId ?: ($organizerAccountId ?: $event->created_by);
 
         try {
             $prefUser = Tinebase_User::getInstance()->getFullUserById($prefUserId);
