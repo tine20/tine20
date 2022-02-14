@@ -794,27 +794,36 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         $clientId = $this->_clientId;
         $mycnf = $backupDir . '/my.cnf';
         
+        $dbConfig = $this->_config['postfix'];
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dbconfig : ' . print_r($dbConfig, true));
+
+
         $mysqlBackEnd = new Setup_Backend_Mysql();
-        $mysqlBackEnd->createMyConf($mycnf);
+        $mysqlBackEnd->createMyConf($mycnf, new Zend_Config($dbConfig));
         
         $cmd = "mysqldump --defaults-extra-file=$mycnf "
             ."--single-transaction --max_allowed_packet=512M "
             ."--opt --no-tablespaces "
-            . escapeshellarg($this->_config['dbname']) . ' '
+            . escapeshellarg($dbConfig['dbname']) . ' '
             . escapeshellarg($this->_userTable)
             .' --where="' . "client_idnr='$clientId'" . '"'
             ." | bzip2 > $backupDir/tine20_postfix_users.sql.bz2";
-
-        exec($cmd);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'exec commend ' . print_r($cmd, true));
+        exec($cmd, $output);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'backexecoutput ' . print_r($output, true));
 
         //smtp_destinations (select all rows belonging to users that belong to our installation)
         $cmd = "mysqldump --defaults-extra-file=$mycnf "
             ."--single-transaction --max_allowed_packet=512M "
             ."--opt --no-tablespaces "
-            . escapeshellarg($this->_config['dbname']) . ' '
+            . escapeshellarg($dbConfig['dbname']) . ' '
             . escapeshellarg($this->_destinationTable)
             ." | bzip2 > $backupDir/tine20_postfix_destination.sql.bz2";
 
-        exec($cmd);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'exec commend ' . print_r($cmd, true));
+        exec($cmd, $output);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'backexecoutput ' . print_r($output, true));
+
     }
 }
