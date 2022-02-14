@@ -832,8 +832,15 @@ abstract class Tinebase_Controller_Record_Abstract
                 }
             }
 
-            if (true === $checkValue || true === $createNewValue) {
-                $numberable = $this->_getNumberable($_record, $className, $fieldDef['fieldName'], $fieldDef);
+            if (true !== $checkValue && true !== $createNewValue) {
+                continue;
+            }
+
+            if (!($numberable = $this->_getNumberable($_record, $className, $fieldDef['fieldName'], $fieldDef))) {
+                if (null !== $_oldRecord) {
+                    $_record->{$fieldDef['fieldName']} = $_oldRecord->{$fieldDef['fieldName']};
+                }
+                continue;
             }
 
             if (true === $checkValue) {
@@ -845,7 +852,7 @@ abstract class Tinebase_Controller_Record_Abstract
                     } else {
                         $createNewValue = true;
                     }
-                } else {
+                } elseif ($_oldRecord && !empty($_oldRecord->{$fieldDef['fieldName']})) {
                     $freeOldValue = true;
                 }
             }
@@ -887,7 +894,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param string $className
      * @param string $fieldName
      * @param array $fieldConfig
-     * @return Tinebase_Numberable_Abstract
+     * @return ?Tinebase_Numberable_Abstract
      */
     protected function _getNumberable($_record, $className, $fieldName, $fieldConfig)
     {
@@ -3613,11 +3620,6 @@ HumanResources_CliTests.testSetContractsEndDate */
 
         if ('' === $currentStatus) {
             throw new Tinebase_Exception_UnexpectedValue('status is not set');
-        }
-
-        if (!isset($_config[$currentStatus])) {
-            throw new Tinebase_Exception_UnexpectedValue('status : ' . $currentStatus
-                . ' is not defined in transitions');
         }
 
         if ($oldStatus !== $currentStatus) {

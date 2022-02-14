@@ -35,7 +35,7 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
 
     checkState: function(editDialog, record) {
         const mc = editDialog?.recordClass?.getModelConfiguration();
-        const type = _.get(mc, `fields${this.fieldName}.config.type`, 'billing');
+        const type = _.get(mc, `fields.${this.fieldName}.config.type`, 'billing');
 
         const customerField = editDialog.getForm().findField('customer_id') || editDialog.getForm().findField('customer')
         const customer = customerField?.selectedRecord;

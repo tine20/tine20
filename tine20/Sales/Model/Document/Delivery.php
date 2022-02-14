@@ -21,6 +21,7 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
     public const TABLE_NAME = 'sales_document_delivery';
 
     public const FLD_DELIVERY_STATUS = 'delivery_status';
+    public const FLD_PROFORMA_NUMBER = 'proformaNumber';
 
     /**
      * delivery status
@@ -50,6 +51,9 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
             ]*/
         ];
 
+        // delivery recipient type
+        $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::CONFIG][self::TYPE] = Sales_Model_Document_Address::TYPE_DELIVERY;
+
         // delivery positions
         $_definition[self::FIELDS][self::FLD_POSITIONS][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_DocumentPosition_Delivery::MODEL_NAME_PART;
@@ -62,11 +66,31 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
             self::LENGTH => 255,
             self::NULLABLE => true,
         ];
+
+        $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::NULLABLE] = true;
+        $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE] =
+            Sales_Controller_Document_Delivery::class . '::documentNumberConfigOverride';
+
+        Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_DOCUMENT_NUMBER, [
+            self::FLD_PROFORMA_NUMBER => [
+                self::TYPE                      => self::TYPE_NUMBERABLE_STRING,
+                self::LABEL                     => 'Proforma Number', //_('Proforma Number')
+                self::QUERY_FILTER              => true,
+                self::CONFIG                    => [
+                    Tinebase_Numberable::STEPSIZE          => 1,
+                    Tinebase_Numberable::BUCKETKEY         => self::class . '#' . self::FLD_PROFORMA_NUMBER,
+                    Tinebase_Numberable_String::PREFIX     => 'PD-', // _('PD-')
+                    Tinebase_Numberable_String::ZEROFILL   => 7,
+                    Tinebase_Numberable::CONFIG_OVERRIDE   =>
+                        Sales_Controller_Document_Delivery::class . '::proformaNumberConfigOverride',
+                ],
+            ],
+        ]);
     }
 
     protected static $_statusField = self::FLD_DELIVERY_STATUS;
     protected static $_statusConfigKey = Sales_Config::DOCUMENT_DELIVERY_STATUS;
-    protected static $_documentNumberPrefix = 'PD-'; // _('PD-')
+    protected static $_documentNumberPrefix = 'DN-'; // _('DN-')
 
     /**
      * holds the configuration object (must be declared in the concrete class)

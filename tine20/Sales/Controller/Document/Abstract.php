@@ -265,9 +265,4 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
 
         return $result;
     }
-
-    public function documentNumberConfigOverride(Sales_Model_Document_Abstract $document)
-    {
-        return [];
-    }
 }

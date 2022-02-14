@@ -171,19 +171,19 @@ Tine.Filemanager.nodeBackendMixin = {
      */
     searchRecords: function(filter, paging, options) {
         const cb = options.success;
-        options.success = function(response) {
+        options.success = async function (response) {
             const path = _.get(_.find(filter, {field: 'path'}), 'value');
             if (path) {
-                const virtualNodes = Tine.Tinebase.uploadManager.getVirtualNodesByPath(path);
+                const virtualNodes = await Tine.Tinebase.uploadManager.getChildNodesByPath(path);
                 _.each(virtualNodes, (nodeData) => {
                     if (!_.find(_.map(response.records, 'data'), {name: nodeData.name})) {
                         response.records.push(new this.recordClass(nodeData));
                     }
                 })
-                
+        
                 response.records = _.orderBy(response.records, [`data.${options.params.sort ?? 'name'}`], [paging.dir.toLowerCase()]);
             }
-            
+    
             cb.apply(cb.scope, arguments);
         }
         return Tine.Tinebase.data.RecordProxy.prototype.searchRecords.apply(this, arguments);

@@ -117,8 +117,8 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             region: 'center',
             xtype: 'columnform',
             items: [
-                [fields.document_number, fields[this.statusFieldName], { ...placeholder }, fields.document_category, fields.document_language],
-                [fields.customer_id, fields.recipient_id, fields.contact_id, _.assign(fields.customer_reference, {columnWidth: 2/5})],
+                [fields.document_number, fields[this.statusFieldName], _.assign({placeholder: 'proforma_document_number'}, placeholder), fields.document_category, fields.document_language],
+                _.assign([fields.customer_id, fields.recipient_id, fields.contact_id, _.assign(fields.customer_reference, {columnWidth: 2/5})], {line: 'recipient'}),
                 [ _.assign(fields.document_title, {columnWidth: 3/5}), { ...placeholder }, fields.date ],
                 [{xtype: 'textarea', name: 'boilerplate_Pretext', enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Pretext`}],
                 [fields.positions],

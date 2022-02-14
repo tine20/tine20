@@ -61,15 +61,21 @@ class Sales_Controller_Document_Delivery extends Sales_Controller_Document_Abstr
      */
     public function documentNumberConfigOverride(Sales_Model_Document_Abstract $document)
     {
-        if ($document->isBooked()) {
-            return [
-                Tinebase_Numberable_String::PREFIX => Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
-                    new Zend_Locale(Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE})
-                )->_('DN-'), // _('DN-')
-                Tinebase_Numberable::BUCKETKEY => Sales_Model_Document_Delivery::class . '#'
-                    . Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER . 'booked',
-            ];
+        if (!$document->isBooked()) {
+            return ['skip' => true];
         }
-        return parent::documentNumberConfigOverride($document);
+        return [];
+    }
+
+    /**
+     * @param Sales_Model_Document_Delivery $document
+     * @return array
+     */
+    public function proformaNumberConfigOverride(Sales_Model_Document_Abstract $document)
+    {
+        if ($document->isBooked()) {
+            return ['skip' => true];
+        }
+        return [];
     }
 }
