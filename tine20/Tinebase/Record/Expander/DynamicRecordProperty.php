@@ -32,7 +32,9 @@ class Tinebase_Record_Expander_DynamicRecordProperty extends Tinebase_Record_Exp
         $ids = [];
         /** @var Tinebase_Record_NewAbstract $record */
         foreach ($_records as $record) {
-            $model = $record->{$this->_mccCfg[MCC::REF_MODEL_FIELD]};
+            if (empty($model = $record->{$this->_mccCfg[MCC::REF_MODEL_FIELD]})) {
+                continue;
+            }
             if (!isset($ids[$model])) {
                 $ids[$model] = [];
             }
@@ -43,7 +45,7 @@ class Tinebase_Record_Expander_DynamicRecordProperty extends Tinebase_Record_Exp
             if (!empty($modelIds)) {
                 $self = $this;
                 $this->_rootExpander->_registerDataToFetch(new Tinebase_Record_Expander_DataRequest(
-                    $this->_prio, Tinebase_Core::getApplicationInstance($model, '', true), $ids,
+                    $this->_prio, Tinebase_Core::getApplicationInstance($model, '', true), $modelIds,
                     // workaround: [$this, '_setData'] doesn't work, even so it should!
                     function($_data) use($self) {$self->_setData($_data);}, $this->_getDeleted));
             } else {

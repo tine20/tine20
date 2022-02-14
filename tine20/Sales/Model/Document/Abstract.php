@@ -110,16 +110,21 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                self::FLD_CUSTOMER_ID => [
+                self::FLD_CUSTOMER_ID       => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        'delivery'      => [],
-                        'billing'       => [],
-                        'postal'        => [],
-                        'cpextern_id'   => [],
-                        'cpintern_id'   => [],
+                        'delivery'              => [],
+                        'billing'               => [],
+                        'postal'                => [],
+                        'cpextern_id'           => [],
+                        'cpintern_id'           => [],
                     ],
                 ],
-                self::FLD_RECIPIENT_ID => [],
+                self::FLD_RECIPIENT_ID      => [],
+                self::FLD_POSITIONS         => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION => [],
+                    ],
+                ],
             ]
         ],
 
