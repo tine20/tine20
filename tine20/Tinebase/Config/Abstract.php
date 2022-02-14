@@ -548,6 +548,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             fputs($fh, var_export(self::$_configFileData, true));
             fputs($fh, ';');
             fclose($fh);
+            chmod($filenameTmp, 0640);
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Wrote config to file ' . $filenameTmp);
