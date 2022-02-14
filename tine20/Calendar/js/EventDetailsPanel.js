@@ -227,6 +227,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                             layout: 'ux.display',
                             hideLabels: true,
                             border: false,
+                            autoScroll: true,
                             items: [{
                                 xtype: 'ux.displayfield',
                                 name: 'url',
