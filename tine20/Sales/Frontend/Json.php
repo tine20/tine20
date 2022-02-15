@@ -843,6 +843,28 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
     /*************************** offer functions *****************************/
 
+    public function createPaperSlip(string $model, string $documentId)
+    {
+        if (!($stream = fopen('php://memory', 'w+'))) {
+            throw new Tinebase_Exception_Backend('could not create memory stream');
+        }
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [
+            ['field' => 'id', 'operator' => 'equals', 'value' => $documentId]
+        ]);
+        $doc = new Sales_Export_Document($filter, null, ['definitionId' => Tinebase_ImportExportDefinition::getInstance()->getByName('document_offer_pdf')->getId()]);
+        $doc->generate();
+        $doc->write($stream);
+        rewind($stream);
+
+        /** @var Tinebase_Record_Interface $model */
+        $docCtrl = $model::getConfiguration()->getControllerInstance();
+        $document = $docCtrl->get($documentId);
+        Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($document, $doc->getDownloadFilename(), $stream);
+
+        return $this->_recordToJson($docCtrl->get($documentId));
+    }
+
     public function createFollowupDocument(array $documentTransition): array
     {
         /** @var Sales_Model_Document_Transition $documentTransition */
