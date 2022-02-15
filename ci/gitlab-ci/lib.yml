@@ -197,6 +197,25 @@
       
           docker_registry_rename_remote $REGISTRY_USER $REGISTRY_PASSWORD $REGISTRY $source $hash ${target}-commit ${IMAGE_TAG};
       }
+      
+      docker_registry_login () {
+          registry="$1"
+          username="$2"
+          password="$3"
+      
+          for i in {1..6}; do
+              if docker login "$registry" --username "$username" --password "$password"; then
+                  return 0
+              fi
+      
+              echo "($i) docker login failed, retrying it in 5 second ..."
+              curl https://${REGISTRY}/fail-${CI_PIPELINE_ID}-${CI_JOB_ID} # create a marker in the log if login fails
+              sleep 5
+          done
+      
+          echo "docker login failed, aborting ..."
+          return 1
+      }
 
       # lib/scripts/git_repo.sh
       git_repo_clone () {
