@@ -28,6 +28,7 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract implements SSO_RP
     public const FLD_ENTITYID = 'entityid';
     public const FLD_SINGLE_LOGOUT_SERVICE_LOCATION = 'singleLogoutServiceLocation';
     public const FLD_ATTRIBUTE_MAPPING = 'attributeMapping';
+    public const FLD_CUSTOM_HOOKS = 'customHooks';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -101,6 +102,9 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract implements SSO_RP
             self::FLD_ATTRIBUTE_MAPPING   => [
                 self::TYPE                  => self::TYPE_JSON,
             ],
+            self::FLD_CUSTOM_HOOKS        => [
+                self::TYPE                  => self::TYPE_JSON,
+            ],
         ]
     ];
 
@@ -121,6 +125,7 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract implements SSO_RP
             ],
             'ForceAuthn' => true,
             self::FLD_ATTRIBUTE_MAPPING => $this->{self::FLD_ATTRIBUTE_MAPPING},
+            self::FLD_CUSTOM_HOOKS => $this->{self::FLD_CUSTOM_HOOKS},
         ];
     }
 
