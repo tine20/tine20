@@ -15,6 +15,9 @@ class Sales_Document_ExportTest extends Sales_Document_Abstract
 {
     public function testExportSimpleDocument()
     {
+        $this->markTestSkipped('needs OOI, also, it doesnt clean up, as it needs to commit for OOI to work...');
+        $this->_testNeedsTransaction();
+
         $boilerplate1 = Sales_Controller_Boilerplate::getInstance()->create(
             Sales_BoilerplateControllerTest::getBoilerplate([
                 Sales_Model_Boilerplate::FLD_NAME => 'pretext'
@@ -63,7 +66,7 @@ class Sales_Document_ExportTest extends Sales_Document_Abstract
         $doc = new Sales_Export_Document($filter, null, ['definitionId' => Tinebase_ImportExportDefinition::getInstance()->getByName('document_offer_pdf')->getId()]);
         $doc->generate();
 
-        $tempfile = tempnam(Tinebase_Core::getTempDir(), __METHOD__ . '_') . '.docx';
+        $tempfile = tempnam(Tinebase_Core::getTempDir(), __METHOD__ . '_') . '.pdf';
         $doc->save($tempfile);
 
         $this->assertGreaterThan(0, filesize($tempfile));
