@@ -81,6 +81,7 @@ class SSO_PublicAPITest extends TestCase
                 SSO_Model_Saml2RPConfig::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION => 'https://localhost:8443/auth/saml2/sp/saml2-acs.php/localhost',
                 SSO_Model_Saml2RPConfig::FLD_SINGLE_LOGOUT_SERVICE_LOCATION => 'https://localhost:8443/auth/saml2/sp/saml2-logout.php/localhost',
                 SSO_Model_Saml2RPConfig::FLD_ATTRIBUTE_MAPPING => ['uid' => 'accountEmailAddress'],
+                SSO_Model_Saml2RPConfig::FLD_CUSTOM_HOOKS => ['postAuthenticate' => __DIR__ . '/samlPostAuthenticateHook.php'],
             ]),
         ]));
 
@@ -158,6 +159,9 @@ class SSO_PublicAPITest extends TestCase
         $this->assertNotFalse($xml = base64_decode($matches[1]));
         $this->assertStringContainsString('Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">' .
             Tinebase_Core::getUser()->accountEmailAddress . '</saml:NameID>', $xml);
+        $this->assertStringContainsString(
+            '<saml:Attribute Name="Klasse" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"><saml:AttributeValue xsi:type="xs:string">Users</saml:AttributeValue></saml:Attribute>',
+            $xml);
     }
 
     public function testOAuthGetLoginMask()
