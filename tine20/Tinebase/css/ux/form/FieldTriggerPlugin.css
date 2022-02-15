@@ -1,9 +1,19 @@
+.x-form-trigger-plugi-wrap .x-form-twin-triggers img.x-form-trigger {
+    height: 17px;
+}
+
+.ext-webkit .x-small-editor .x-form-trigger-plugi-wrap .x-form-trigger.x-form-trigger-plugin,
+.x-small-editor .x-form-trigger-plugi-wrap .x-form-trigger.x-form-trigger-plugin,
+.x-toolbar-cell .x-form-trigger-plugi-wrap .x-form-twin-triggers img.x-form-trigger {
+    height: 16px;
+}
+
 .x-form-trigger.x-form-trigger-plugin {
     background-repeat: no-repeat;
     box-sizing: border-box;
     background-size: 11px;
     width: 17px;
-    height: 16px;
+    height: 15px;
     position: absolute;
     right: 0px;
     top: 5px;
