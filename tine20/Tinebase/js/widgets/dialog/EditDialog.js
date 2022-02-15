@@ -1519,7 +1519,7 @@ Tine.widgets.dialog.EditDialog.getConstructor = function(recordClass) {
     if (! recordClass.getMeta) return null;
     var appName = recordClass.getMeta('appName'),
         modelName = recordClass.getMeta('modelName'),
-        editDialogClass = Tine[appName][modelName + 'EditDialog'];
+        editDialogClass = _.get(Tine, `${appName}.${modelName}EditDialog`);
 
     return editDialogClass;
 };
