@@ -22,6 +22,8 @@ trait Tinebase_Export_DocumentPdfTrait
      * @var null|Tinebase_FileSystem_Preview_ServiceInterface
      */
     protected $_previewService = null;
+    
+    protected $_useOO = false;
 
     /**
      * @return string
@@ -45,6 +47,11 @@ trait Tinebase_Export_DocumentPdfTrait
 
         $this->_format = 'pdf';
 
+        if ($this->_useOO && (!class_exists('OnlyOfficeIntegrator_Config') ||
+                !Tinebase_Application::getInstance()->isInstalled(OnlyOfficeIntegrator_Config::APP_NAME))) {
+            $this->_useOO = false;
+        }
+
         parent::__construct($_filter, $_controller, $_additionalOptions);
     }
 
@@ -58,6 +65,7 @@ trait Tinebase_Export_DocumentPdfTrait
     {
         $tempfile = Tinebase_TempFile::getTempPath() . '.' . $this->_getOldFormat();
         if ($this instanceof Tinebase_Export_Xls) {
+            // @phpstan-ignore-next-line
             parent::write($tempfile);
         } else {
             parent::save($tempfile);
@@ -65,19 +73,37 @@ trait Tinebase_Export_DocumentPdfTrait
 
         $this->_parentFile = $tempfile;
 
-        $previewUrl = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL};
-        if (! empty($previewUrl)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . ' Creating PDF on preview service (url: ' . $previewUrl . ')');
+        if (!$this->_useOO || !class_exists('OnlyOfficeIntegrator_Frontend_Json') || !class_exists('OnlyOfficeIntegrator_Controller')) {
+            $previewUrl = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL};
+            if (!empty($previewUrl)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . ' Creating PDF on preview service (url: ' . $previewUrl . ')');
+                }
+
+                $result = $this->_previewService->getPdfForFile($tempfile, true);
+
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . ' Preview service disabled / not configured');
+                }
+                throw new Tinebase_Exception_Backend('preview service not configured');
             }
-
-            $result = $this->_previewService->getPdfForFile($tempfile, true);
-
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . ' Preview service disabled / not configured');
+            $tempfile = Tinebase_TempFile::getInstance()->createTempFile($tempfile, 'export.' . $this->_getOldFormat());
+            $editorCfg = (new OnlyOfficeIntegrator_Frontend_Json())->getEditorConfigForTempFileId($tempfile->getId());
+            $result = OnlyOfficeIntegrator_Controller::getInstance()->callConversionService([
+                'async' => false,
+                'filetype' => $this->_getOldFormat(),
+                'outputtype' => 'pdf',
+                'title' => 'Example Document Title',
+                'url' => $editorCfg['document']['url'],
+                'key' => $editorCfg['document']['key'],
+            ]);
+
+            if (!isset($result['fileUrl'])) {
+                throw new Exception('bla');
             }
-            throw new Tinebase_Exception_Backend('preview service not configured');
+            $result = file_get_contents($result['fileUrl']);
         }
 
         if (null !== $_target) {

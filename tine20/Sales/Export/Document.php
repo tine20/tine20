@@ -13,11 +13,16 @@
  */
 class Sales_Export_Document extends Tinebase_Export_DocV2
 {
-    //use Tinebase_Export_DocumentPdfTrait;
+    use Tinebase_Export_DocumentPdfTrait;
 
     // we need to set locale etc before loading twig, so we overwrite _loadTwig
     protected function _loadTwig()
     {
+        if (class_exists('OnlyOfficeIntegrator_Config') &&
+                Tinebase_Application::getInstance()->isInstalled(OnlyOfficeIntegrator_Config::APP_NAME)) {
+            $this->_useOO = true;
+        }
+
         $this->_records = $this->_controller->search($this->_filter);
         if ($this->_records->count() !== 1) {
             throw new Tinebase_Exception_Record_Validation('can only export exactly one document at a time');
@@ -75,27 +80,8 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
         parent::_renderTwigTemplate($_record);
     }
 
-   /* protected function _getOldFormat()
+    protected function _getOldFormat()
     {
         return 'docx';
     }
-
-    /**
-     * output result
-     *
-     * @param string $_target
-     * @return string result
-     *
-    public function write($_target = null)
-    {
-        $this->_parentFile = null;
-        try {
-            return parent::write($_target);
-        } finally {
-            if (null !== $this->_parentFile) {
-                @unlink($this->_parentFile);
-                $this->_parentFile = null;
-            }
-        }
-    }*/
 }

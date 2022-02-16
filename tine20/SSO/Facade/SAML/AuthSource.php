@@ -110,5 +110,8 @@ class SSO_Facade_SAML_AuthSource extends \SimpleSAML\Auth\Source
             $state['PersistentAuthData'] = [];
         }
         $state['PersistentAuthData'][] = 'SPMetadata';
+        if (isset($state['SPMetadata']['customHooks']['postAuthenticate']) && is_readable($state['SPMetadata']['customHooks']['postAuthenticate'])) {
+            require $state['SPMetadata']['customHooks']['postAuthenticate'];
+        }
     }
 }
