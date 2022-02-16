@@ -52,6 +52,8 @@ trait Tinebase_Export_DocumentPdfTrait
             $this->_useOO = false;
         }
 
+        Tinebase_Export::doPdfLegacyHandling(false);
+
         parent::__construct($_filter, $_controller, $_additionalOptions);
     }
 
