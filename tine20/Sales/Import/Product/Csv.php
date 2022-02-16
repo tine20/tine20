@@ -21,7 +21,11 @@ class Sales_Import_Product_Csv extends Tinebase_Import_Csv_Generic
 
     protected $_additionalOptions = array(
         'container_id' => '',
-        'dates'        => array('lifespan_start','lifespan_end')
+        'dates' => [
+            'lifespan_start',
+            'lifespan_end'
+        ],
+        'defaultLanguage' => '',
     );
 
     protected $localizedFields = [];
@@ -32,10 +36,14 @@ class Sales_Import_Product_Csv extends Tinebase_Import_Csv_Generic
         parent::__construct($_options);
 
         $mc = Sales_Model_Product::getConfiguration();
-        /** @var Tinebase_Config_KeyField $kFld */
-        $kFld = Tinebase_Config::factory($mc->{Sales_Model_Product::LANGUAGES_AVAILABLE}[Sales_Model_Product::CONFIG]
+        if (empty($_options['defaultLanguage'])) {
+            /** @var Tinebase_Config_KeyField $kFld */
+            $kFld = Tinebase_Config::factory($mc->{Sales_Model_Product::LANGUAGES_AVAILABLE}[Sales_Model_Product::CONFIG]
             [Sales_Model_Product::APP_NAME])->{$mc->{Sales_Model_Product::LANGUAGES_AVAILABLE}[Sales_Model_Product::NAME]};
-        $this->defaultLanguage = $kFld->default;
+            $this->defaultLanguage = $kFld->default;
+        } else {
+            $this->defaultLanguage = $_options['defaultLanguage'];
+        }
 
         foreach ($mc->fields as $key => $field) {
             if ($field[Sales_Model_Product::TYPE] !== Sales_Model_Product::TYPE_RECORDS ||
