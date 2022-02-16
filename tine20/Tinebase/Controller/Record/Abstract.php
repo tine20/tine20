@@ -975,6 +975,10 @@ abstract class Tinebase_Controller_Record_Abstract
 
         foreach ($mc->denormalizedFields as $property => $definition) {
             if (TMCC::TYPE_RECORD === $definition[TMCC::TYPE]) {
+                if ($newRecord->{$property} instanceof $definition[TMCC::CONFIG][TMCC::DENORMALIZATION_OF]) {
+                    $model = $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME];
+                    $newRecord->{$property} = new $model($newRecord->{$property}->toArray());
+                }
                 if (null === $currentRecord) {
                     if (!empty($newRecord->{$property})) {
                         $this->_newDenormalizedRecord($newRecord->{$property}, $definition);
@@ -997,6 +1001,15 @@ abstract class Tinebase_Controller_Record_Abstract
                     }
                 }
             } elseif (TMCC::TYPE_RECORDS === $definition[TMCC::TYPE]) {
+                if ($newRecord->{$property} instanceof Tinebase_Record_RecordSet && $newRecord->{$property}
+                        ->getRecordClassName() === $definition[TMCC::CONFIG][TMCC::DENORMALIZATION_OF]) {
+                    $rs = $newRecord->{$property};
+                    $model = $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME];
+                    $newRecord->{$property} = new Tinebase_Record_RecordSet($model);
+                    foreach ($rs as $rec) {
+                        $newRecord->{$property}->addRecord(new $model($rec->toArray()));
+                    }
+                }
                 if (null === $currentRecord) {
                     if (!empty($newRecord->{$property})) {
                         foreach($newRecord->{$property} as $rec) {
@@ -1032,6 +1045,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
     protected function _newDenormalizedRecord(Tinebase_Record_Interface $record, array $definition)
     {
+
         if (!$record instanceof $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]) {
             throw new Tinebase_Exception_UnexpectedValue('is not instance of ' .
                 $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]);
