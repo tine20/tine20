@@ -20,9 +20,9 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $product2 = $this->_createProduct();
 
         $offer = Sales_Controller_Document_Offer::getInstance()->create(new Sales_Model_Document_Offer([
-            Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customer->toArray(),
+            Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customer,
             Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_DRAFT,
-            Sales_Model_Document_Offer::FLD_RECIPIENT_ID => $customer->postal->toArray(),
+            Sales_Model_Document_Offer::FLD_RECIPIENT_ID => $customer->postal,
             Sales_Model_Document_Offer::FLD_POSITIONS => [
                 new Sales_Model_DocumentPosition_Offer([
                     Sales_Model_DocumentPosition_Offer::FLD_TITLE => 'pos 1',
@@ -82,8 +82,8 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $customer = $this->_createCustomer();
 
         $invoice = Sales_Controller_Document_Invoice::getInstance()->create(new Sales_Model_Document_Invoice([
-            Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer->toArray(),
-            Sales_Model_Document_Abstract::FLD_RECIPIENT_ID => $customer->postal->toArray(),
+            Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Abstract::FLD_RECIPIENT_ID => $customer->postal,
             Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_PROFORMA,
         ]));
         $expander = new Tinebase_Record_Expander(Sales_Model_Document_Invoice::class,
@@ -121,8 +121,8 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $customer = $this->_createCustomer();
 
         $delivery = Sales_Controller_Document_Delivery::getInstance()->create(new Sales_Model_Document_Delivery([
-            Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer->toArray(),
-            Sales_Model_Document_Abstract::FLD_RECIPIENT_ID => $customer->postal->toArray(),
+            Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Abstract::FLD_RECIPIENT_ID => $customer->postal,
             Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS => Sales_Model_Document_Delivery::STATUS_CREATED,
         ]));
         $expander = new Tinebase_Record_Expander(Sales_Model_Document_Delivery::class,
