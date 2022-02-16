@@ -32,6 +32,12 @@ github_create_release_body() {
 
     previous_tag=$(github_get_latest_release_tag_name "$owner" "$repo")
 
+    git fetch origin "$previous_tag"
+
+    if ! git log "$tag...$previous_tag"; then
+        git fetch origin --unshallow --quiet
+    fi
+
     repo_release_notes "$tag" "$previous_tag"
 }
 
