@@ -29,7 +29,7 @@ describe('accounts', () => {
         await newPage.waitForTimeout(2500);
         await newPage.screenshot({path: 'screenshots/Administration/3_admin_benutzer_neu.png'});
     });
-    test('groups', async () => {
+    test.skip('groups', async () => {
         await newPage.waitForTimeout(1000);
         await expect(newPage).toClick('span', {text: 'Gruppen'});
         await newPage.waitForTimeout(500);
@@ -53,7 +53,7 @@ describe('groups', () => {
         await page.waitForTimeout(2000);
         await page.screenshot({path: 'screenshots/Administration/6_admin_gruppen.png'});
     });
-    test('edit group', async () => {
+    test.skip('edit group', async () => {
         await expect(page).toClick('.t-app-admin .x-grid3-cell-inner.x-grid3-col-name', {text: 'Users', clickCount: 2});
         newPage = await lib.getNewWindow();
         await newPage.waitForTimeout(2000);
