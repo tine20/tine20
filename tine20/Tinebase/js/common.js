@@ -86,7 +86,7 @@ Tine.Tinebase.common = {
                 Ext.log('debug console initialised');
             });
             scriptEl.on('fail', function () {
-                Ext.msg.alert('could not activate debug console');
+                Ext.Msg.alert('could not activate debug console');
             });
         } else {
             Ext.log('debug console reactivated');
