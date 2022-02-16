@@ -21,7 +21,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
     public const TABLE_NAME = 'sales_document_invoice';
 
     public const FLD_INVOICE_STATUS = 'invoice_status';
-    public const FLD_PROFORMA_NUMBER = 'proformaNumber';
+    public const FLD_DOCUMENT_PROFORMA_NUMBER = 'document_proforma_number';
 
     /**
      * invoice status
@@ -75,17 +75,17 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             Sales_Controller_Document_Invoice::class . '::documentNumberConfigOverride';
 
         Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_DOCUMENT_NUMBER, [
-            self::FLD_PROFORMA_NUMBER => [
+            self::FLD_DOCUMENT_PROFORMA_NUMBER => [
                 self::TYPE                      => self::TYPE_NUMBERABLE_STRING,
                 self::LABEL                     => 'Proforma Number', //_('Proforma Number')
                 self::QUERY_FILTER              => true,
                 self::CONFIG                    => [
                     Tinebase_Numberable::STEPSIZE          => 1,
-                    Tinebase_Numberable::BUCKETKEY         => self::class . '#' . self::FLD_PROFORMA_NUMBER,
+                    Tinebase_Numberable::BUCKETKEY         => self::class . '#' . self::FLD_DOCUMENT_PROFORMA_NUMBER,
                     Tinebase_Numberable_String::PREFIX     => 'PI-', // _('PI-')
                     Tinebase_Numberable_String::ZEROFILL   => 7,
                     Tinebase_Numberable::CONFIG_OVERRIDE   =>
-                        Sales_Controller_Document_Invoice::class . '::proformaNumberConfigOverride',
+                        Sales_Controller_Document_Invoice::class . '::documentProformaNumberConfigOverride',
                 ],
             ],
         ]);
