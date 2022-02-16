@@ -139,7 +139,8 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
         if (this.valueField && Ext.isDefined(this.value)){
             rec = this.findRecord(this.valueField, this.value);
         }
-        if (!rec || rec.get(this.displayField) != val){
+        
+        if (val && (!rec || rec.get(this.displayField) != val)){
             rec = this.findRecord(this.displayField, val);
         }
         
