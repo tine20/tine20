@@ -87,7 +87,12 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
         
         parent::setFromArray($_data);
     }
-    
+
+    public function getKeyFieldRecordModel(): string
+    {
+        return $this->_keyFieldRecordModel;
+    }
+
     /**
      * set key field record model
      * 
