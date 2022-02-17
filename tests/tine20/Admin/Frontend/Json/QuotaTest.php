@@ -80,11 +80,21 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
         // save total quota
         $app = 'Tinebase';
         $additionalData['totalInMB'] = 1234 * 1024 * 1024;
-        $result = $this->_json->saveQuota($app, null, $additionalData);
 
-        $totalQuotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->{Tinebase_Config::QUOTA_TOTALINMB};
+        Admin_Config::getInstance()->{Admin_Config::QUOTA_ALLOW_TOTALINMB_MANAGEMNET} = false;
+        $result = $this->_json->saveQuota($app, null, $additionalData);
+        
+        $totalQuotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB};
         static::assertEquals($result[Tinebase_Config::QUOTA_TOTALINMB], $totalQuotaConfig , true);
         static::assertEquals($totalQuotaConfig,  1234 , true);
+
+        $additionalData['totalInMB'] = 5678 * 1024 * 1024;
+        Admin_Config::getInstance()->{Admin_Config::QUOTA_ALLOW_TOTALINMB_MANAGEMNET} = true;
+        $result = $this->_json->saveQuota($app, null, $additionalData);
+        
+        $totalQuotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->{Tinebase_Config::QUOTA_TOTALINMB};
+        static::assertEquals($result[Tinebase_Config::QUOTA_TOTALINMB], $totalQuotaConfig , true);
+        static::assertEquals($totalQuotaConfig,  5678 , true);
     }
 
     /**
