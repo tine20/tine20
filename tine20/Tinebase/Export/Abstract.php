@@ -1309,8 +1309,15 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             } else {
                 $keyField = Tinebase_Config::factory($keyField['application'])->{$keyField['name']};
             }
+            /** @var Tinebase_Config_KeyFieldRecord $keyFieldRecordModel */
+            $keyFieldRecordModel = $keyField->getKeyFieldRecordModel();
+            $keyFieldRecordModel::setTranslation(
+                Tinebase_Translation::getTranslation($keyField['application'], $this->_locale));
             foreach ($_records as $record) {
-                $record->{$property} = $keyField->getTranslatedValue($record->{$property}, $this->_locale);
+                if ($record->{$property} && !$record->{$property} instanceof Tinebase_Config_KeyFieldRecord &&
+                        ($keyFieldRec = $keyField->records->getById($record->{$property}))) {
+                    $record->{$property} = $keyFieldRec;
+                }
             }
         }
 

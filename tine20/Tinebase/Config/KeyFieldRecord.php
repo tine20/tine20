@@ -84,4 +84,16 @@ class Tinebase_Config_KeyFieldRecord extends Tinebase_Record_Abstract
         $translation = Tinebase_Translation::getTranslation($appName, $locale);
         return $keyFieldRecord ? $translation->translate($keyFieldRecord->value) : $key;
     }
+
+    /** @var Zend_Translate */
+    protected static $translation;
+    public static function setTranslation(Zend_Translate $translation)
+    {
+        static::$translation = $translation;
+    }
+
+    public function __toString()
+    {
+        return static::$translation ? static::$translation->getAdapter()->_($this->value) : $this->value;
+    }
 }
