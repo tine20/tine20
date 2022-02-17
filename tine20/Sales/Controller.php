@@ -172,7 +172,7 @@ class Sales_Controller extends Tinebase_Controller_Event
             } else {
                 $postal = new Sales_Model_Address(array(
                     'customer_id' => $customer->related_id,
-                    'name' => $customer->related_record->name,
+                    'name' => $contact->n_given ?: $customer->related_record->name,
                     'street' =>  $contact->adr_one_street,
                     'postalcode' => $contact->adr_one_postalcode,
                     'locality' => $contact->adr_one_locality,
