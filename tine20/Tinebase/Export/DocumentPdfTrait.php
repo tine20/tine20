@@ -103,13 +103,17 @@ trait Tinebase_Export_DocumentPdfTrait
             ]);
 
             if (!isset($result['fileUrl'])) {
-                throw new Exception('bla');
+                throw new Tinebase_Exception_Backend('ooi pdf conversion service failed');
             }
             $result = file_get_contents($result['fileUrl']);
         }
 
         if (null !== $_target) {
-            file_put_contents($_target, $result);
+            if (is_resource($_target)) {
+                fwrite($_target, $result);
+            } else {
+                file_put_contents($_target, $result);
+            }
         } else {
             // outputs pdf!
             echo $result;

@@ -849,20 +849,35 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             throw new Tinebase_Exception_Backend('could not create memory stream');
         }
 
+        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [
             ['field' => 'id', 'operator' => 'equals', 'value' => $documentId]
         ]);
-        $doc = new Sales_Export_Document($filter, null, ['definitionId' => Tinebase_ImportExportDefinition::getInstance()->getByName('document_offer_pdf')->getId()]);
+        $doc = new Sales_Export_DocumentPdf($filter, null, ['definitionId' => Tinebase_ImportExportDefinition::getInstance()->getByName('document_offer_pdf')->getId()]);
         $doc->generate();
         $doc->write($stream);
         rewind($stream);
 
         /** @var Tinebase_Record_Interface $model */
         $docCtrl = $model::getConfiguration()->getControllerInstance();
+        /** @var Sales_Model_Document_Abstract $document */
         $document = $docCtrl->get($documentId);
-        Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($document, $doc->getDownloadFilename(), $stream);
 
-        return $this->_recordToJson($docCtrl->get($documentId));
+        $name = ($document->isBooked() ? '' : 'Proforma-') .
+            $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_DATE}->format('Y-m-d') . '-' .
+            ($document->isBooked() || !$document->has(Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER) ?
+                $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER} :
+                $document->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER}) . '-' . $document->getTitle() . '.pdf';
+
+        if ($node = $document->attachments->find('name', $name)) {
+            $document->attachments->removeRecord($node);
+        }
+        $document->attachments->addRecord(new Tinebase_Model_Tree_Node(['name' => $name, 'tempFile' => $stream], true));
+        $result = $this->_recordToJson($docCtrl->update($document));
+
+        $transaction->release();
+        return $result;
     }
 
     public function createFollowupDocument(array $documentTransition): array
