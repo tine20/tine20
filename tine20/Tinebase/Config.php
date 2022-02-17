@@ -287,7 +287,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
 
     const FEATURE_AUTODISCOVER_MAILCONFIG = 'autodiscoverMailConfig';
 
-
     /**
      * Community identification Number
      * 
@@ -823,11 +822,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const QUOTA = 'quota';
     const QUOTA_SHOW_UI = 'showUI';
     const QUOTA_INCLUDE_REVISION = 'includeRevision';
-    const QUOTA_TOTALINMB = 'totalInMB';
-    const QUOTA_TOTALBYUSERINMB = 'totalByUserInMB';
     const QUOTA_SOFT_QUOTA = 'softQuota';
     const QUOTA_SQ_NOTIFICATION_ROLE = 'softQuotaNotificationRole';
     const QUOTA_SKIP_IMAP_QUOTA = 'skipImapQuota';
+    const QUOTA_TOTALINMB = 'totalInMB';
+    const QUOTA_FILESYSTEM_TOTALINMB = 'filesystemTotalInMB';
+    const QUOTA_TOTALBYUSERINMB = 'totalByUserInMB';
 
     const SSO = 'sso';
     const SSO_ACTIVE = 'active';
@@ -2857,6 +2857,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'label'                 => 'Total quota in MB',
                     //_('Total quota in MB (0 for unlimited)')
                     'description'           => 'Total quota in MB (0 for unlimited)',
+                    'type'                  => 'integer',
+                    'clientRegistryInclude' => true,
+                    'setByAdminModule'      => true,
+                    'setBySetupModule'      => false,
+                    'default'               => 0,
+                ),
+                self::QUOTA_FILESYSTEM_TOTALINMB => array(
+                    //_('Filesystem total quota in MB')
+                    'label'                 => 'Filesystem total quota in MB',
+                    //_('Filesystem total quota in MB (0 for unlimited)')
+                    'description'           => 'Filesystem total quota in MB (0 for unlimited)',
                     'type'                  => 'integer',
                     'clientRegistryInclude' => true,
                     'setByAdminModule'      => true,

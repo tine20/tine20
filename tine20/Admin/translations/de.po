@@ -331,7 +331,7 @@ msgstr "Sortierung"
 
 #: js/container/EditDialog.js:209
 msgid "Container Hierarchy/Name"
-msgstr "Ordner Hierarchie/Name"
+msgstr "Kalender Hierarchie/Name"
 
 #: js/container/EditDialog.js:216
 msgid "Note for Owner"
@@ -1366,6 +1366,9 @@ msgstr "Dateiordner und Dateien löschen"
 
 msgid "Delete Email accounts"
 msgstr "E-Mail-Konten löschen"
+
+msgid "Manage Total Quota"
+msgstr "Gesamte Quota verwalten"
 
 msgid "enable application"
 msgstr "Anwendung aktivieren"
