@@ -1132,8 +1132,8 @@ class Tinebase_FileSystem implements
             $rootRevisionSize = 0;
         }
 
-        if ($sizeIncrease && $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} > 0) {
-            $total = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} * 1024 * 1024;
+        if ($sizeIncrease && $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB} > 0) {
+            $total = $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB} * 1024 * 1024;
             if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
                 if ($rootRevisionSize > $total) {
                     throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
@@ -4334,7 +4334,7 @@ class Tinebase_FileSystem implements
 
         $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
         $quotaIncludesRevisions = $quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION};
-        $total = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} * 1024 * 1024;
+        $total = $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB} * 1024 * 1024;
         $softQuota = $quotaConfig->{Tinebase_Config::QUOTA_SOFT_QUOTA};
         $this->_quotaNotificationRoleMembers = array();
 

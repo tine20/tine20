@@ -47,16 +47,24 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
         
         if ($application === 'Tinebase') {
             // check allow total quota management config first
-            if (!Admin_Config::getInstance()->{Admin_Config::QUOTA_ALLOW_TOTALINMB_MANAGEMNET}) {
-                throw new Tinebase_Exception_AccessDenied(
-                    $translate->_('It is not allowed to manage total Quota.'));
-            }
-
             $this->validateQuota($application, $recordData, $additionalData);
-            
+
             $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
-            $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = $additionalData['totalInMB'] / 1024 / 1024;
-            return [Tinebase_Config::QUOTA_TOTALINMB => $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB}];
+            if (Admin_Config::getInstance()->{Admin_Config::QUOTA_ALLOW_TOTALINMB_MANAGEMNET}) {
+                $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = $additionalData['totalInMB'] / 1024 / 1024;
+
+                $imapBackend = Tinebase_EmailUser::getInstance();
+                if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
+                    $totalEmailQuota = $imapBackend->getTotalUsageQuota();
+                    $totalEmailQuotaUsage = $totalEmailQuota['mailQuota'];
+                    $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB} =
+                        $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} - $totalEmailQuotaUsage;
+                }
+                return [Tinebase_Config::QUOTA_TOTALINMB => $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB}];
+            } else {
+                $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB} =  $additionalData['totalInMB'] / 1024 / 1024;
+                return [Tinebase_Config::QUOTA_TOTALINMB => $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB}];
+            }
         }
         
         if (!$recordData) {
@@ -107,7 +115,7 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
         if ($application === 'Filemanager') {
             if ($isPersonalNode) {
                 $this->validateQuota($application, $recordData, $additionalData);
-                
+
                 $user = Admin_Controller_User::getInstance()->get($additionalData['accountId']);
                 $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] = $recordData['quota'];
                 Admin_Controller_User::getInstance()->update($user);

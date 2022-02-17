@@ -71,7 +71,7 @@ class Sales_Controller_Document_Delivery extends Sales_Controller_Document_Abstr
      * @param Sales_Model_Document_Delivery $document
      * @return array
      */
-    public function proformaNumberConfigOverride(Sales_Model_Document_Abstract $document)
+    public function documentProformaNumberConfigOverride(Sales_Model_Document_Abstract $document)
     {
         if ($document->isBooked()) {
             return ['skip' => true];

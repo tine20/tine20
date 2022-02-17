@@ -46,7 +46,7 @@ class Tinebase_FileSystem_Quota
      */
     public static function getRootQuotaBytes()
     {
-        return self::getConfig()->{Tinebase_Config::QUOTA_TOTALINMB} * 1024 * 1024;
+        return self::getConfig()->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB} * 1024 * 1024;
     }
 
     /**

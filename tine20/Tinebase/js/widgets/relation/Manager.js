@@ -85,6 +85,7 @@ Tine.widgets.relation.Manager = function() {
                     && (ignoreApplications.indexOf(rec.getMeta('appName')) == -1) 
                     && (rec.getFieldNames().indexOf('relations') > -1)
                     && rec.getRecordName()
+                    && !rec.getModelConfiguration()?.denormalizationOf
                 ) {
                     items[key].push({
                         ownModel: recordClass.getMeta('recordName'),
