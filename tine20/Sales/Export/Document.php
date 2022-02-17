@@ -13,16 +13,9 @@
  */
 class Sales_Export_Document extends Tinebase_Export_DocV2
 {
-    use Tinebase_Export_DocumentPdfTrait;
-
     // we need to set locale etc before loading twig, so we overwrite _loadTwig
     protected function _loadTwig()
     {
-        if (class_exists('OnlyOfficeIntegrator_Config') &&
-                Tinebase_Application::getInstance()->isInstalled(OnlyOfficeIntegrator_Config::APP_NAME)) {
-            $this->_useOO = true;
-        }
-
         $this->_records = $this->_controller->search($this->_filter);
         if ($this->_records->count() !== 1) {
             throw new Tinebase_Exception_Record_Validation('can only export exactly one document at a time');
@@ -45,10 +38,21 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
             ]
         ]))->expand($this->_records);
 
-        $this->_locale = new Zend_Locale($this->_records->getFirstRecord()
-            ->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE});
+        $cat = $this->_records->getFirstRecord()->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY};
+        $lang = $this->_records->getFirstRecord()->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE};
+        $this->_locale = new Zend_Locale($lang);
         Sales_Model_DocumentPosition_Abstract::setExportContextLocale($this->_locale);
         $this->_translate = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, $this->_locale);
+
+        if (null !== ($overwriteTemplate = $this->_findOverwriteTemplate($this->_templateFileName, [
+                    $lang => null,
+                    $cat => [
+                        $lang => null,
+                    ],
+                ]))) {
+            $this->_templateFileName = $overwriteTemplate;
+            $this->_createDocument();
+        }
 
         $vats = new Tinebase_Record_RecordSet(Tinebase_Config_KeyFieldRecord::class, []);
         foreach ($this->_records->getFirstRecord()->{Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE} as $vat) {
@@ -78,10 +82,5 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
             $_record = $this->_records['PREPOSITIONS']->getFirstRecord();
         }
         parent::_renderTwigTemplate($_record);
-    }
-
-    protected function _getOldFormat()
-    {
-        return 'docx';
     }
 }

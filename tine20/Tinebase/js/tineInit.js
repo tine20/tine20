@@ -528,7 +528,9 @@ Tine.Tinebase.tineInit = {
         Tine.Tinebase.router = new director.Router().init();
         Tine.Tinebase.router.configure({notfound: function () {
             var defaultApp = Tine.Tinebase.appMgr.getDefault();
-            Tine.Tinebase.router.setRoute(defaultApp.getRoute());
+            if (defaultApp) {
+                Tine.Tinebase.router.setRoute(defaultApp.getRoute());
+            }
         }});
 
         var route = Tine.Tinebase.router.getRoute(),

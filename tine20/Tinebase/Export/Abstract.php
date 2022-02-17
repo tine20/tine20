@@ -470,6 +470,43 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         );
     }
 
+    protected function _findOverwriteTemplate(string $path, array $matchingData): ?string
+    {
+        if (strpos($path, 'tine20://') === 0) {
+            $prefix = 'tine20://';
+            $path = substr($path, 9);
+            $isdir = function(string $str) { return Tinebase_FileSystem::getInstance()->isDir($str); };
+            $isfile = function(string $str) { return Tinebase_FileSystem::getInstance()->isFile($str); };
+        } else {
+            $prefix = '';
+            $isdir = function(string $str) { return is_dir($str); };
+            $isfile = function(string $str) { return is_file($str); };
+        }
+
+        $filename = basename($path);
+        $dir = dirname($path);
+
+        $func = function(string $dir, array $matchingData, callable $func) use($filename, $isdir, $isfile): ?string {
+            $match = null;
+            foreach ($matchingData as $pathPart => $childData) {
+                if (null === $match && $isfile($dir . '/' . $pathPart . '/' . $filename)) {
+                    $match = $dir . '/' . $pathPart . '/' . $filename;
+                }
+
+                if (is_array($childData) && $isdir($dir . '/' . $pathPart)) {
+                    if (null !== ($result = $func($dir . '/' . $pathPart, $childData, $func)) &&
+                            (null === $match || count(explode('/', $result)) > count(explode('/', $match)))) {
+                        $match = $result;
+                    }
+                }
+            }
+            return $match;
+        };
+
+        $result = $func($dir, $matchingData, $func);
+        return $result ? $prefix . $result : $result;
+    }
+
     protected function _parseTemplatePath($_path)
     {
         if (strpos($_path, 'tine20://') !== 0) {
