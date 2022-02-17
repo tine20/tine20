@@ -138,7 +138,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $this->assertStringStartsWith($pdTranslated, $delivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_PROFORMA_NUMBER});
         $this->assertEmpty($delivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_NUMBER});
 
-        $delivery->{Sales_Model_Document_Delivery::FLD_INVOICE_DISCOUNT_TYPE} = Sales_Config::INVOICE_DISCOUNT_SUM;
+        $delivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_DATE} = Tinebase_DateTime::today()->subDay(1);
         $updatedDelivery = Sales_Controller_Document_Delivery::getInstance()->update($delivery);
         $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Delivery::class, [$updatedDelivery]));
 
