@@ -159,7 +159,7 @@ Ext.ux.WindowFactory.prototype = {
             }
 
             if (config.contentPanelConstructorConfig.contentPanelConstructorInterceptor) {
-                await config.contentPanelConstructorConfig.contentPanelConstructorInterceptor(config, window);
+                await config.contentPanelConstructorConfig.contentPanelConstructorInterceptor(config.contentPanelConstructorConfig, window);
             }
             
             // finally construct the content panel

@@ -864,11 +864,13 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         /** @var Sales_Model_Document_Abstract $document */
         $document = $docCtrl->get($documentId);
 
-        $name = ($document->isBooked() ? '' : 'Proforma-') .
-            $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_DATE}->format('Y-m-d') . '-' .
+        $name = ($document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_DATE} ?? Tinebase_DateTime::now())->format('Y-m-d') . '_' .
+            ($document->isBooked() ? '' : 'Proforma-') .
             ($document->isBooked() || !$document->has(Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER) ?
                 $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER} :
-                $document->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER}) . '-' . $document->getTitle() . '.pdf';
+                $document->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER}) .
+            ($document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_TITLE} ?
+                '-' . $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_TITLE} : '') . '.pdf';
 
         if ($node = $document->attachments->find('name', $name)) {
             $document->attachments->removeRecord($node);

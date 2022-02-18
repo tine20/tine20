@@ -19,6 +19,7 @@ import './Document/OrderEditDialog';
 import './Document/DeliveryEditDialog';
 import './Document/InvoiceEditDialog';
 import './Document/CreateFollowUpAction';
+import './Document/CreatePaperSlipAction';
 
 /**
  * address renderer, not a default renderer
