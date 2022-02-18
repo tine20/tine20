@@ -981,6 +981,26 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
 
     /**
+     * helper to load record (from extern)
+     *
+     * @param record
+     * @return {Promise<unknown>}
+     */
+    async loadRecord(record, supressMessageBus) {
+        return new Promise((resolve) => {
+            this.on('load', resolve, this, {single: true, buffer: 200});
+            this.record = record;
+            if (!supressMessageBus) {
+                window.postal.publish({
+                    channel: "recordchange",
+                    topic: [this.app.appName, this.recordClass, 'update'].join('.'),
+                    data: {... this.record.data}
+                });
+            }
+            this.onRecordLoad();
+        });
+    },
+    /**
      * executed after record got updated from proxy
      */
     onRecordLoad: function() {
@@ -1194,6 +1214,18 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     onSaveAndClose: function() {
         this.fireEvent('saveAndClose');
         this.onApplyChanges(true);
+    },
+
+    /**
+     * helper function to async force save
+     *
+     * @return {Promise<record>}
+     */
+    async applyChanges() {
+        return new Promise((resolve) => {
+            this.on('update', resolve, this, {single: true, buffer: 10});
+            this.onApplyChanges(false);
+        })
     },
 
     /**
