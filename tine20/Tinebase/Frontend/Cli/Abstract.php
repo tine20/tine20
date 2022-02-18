@@ -519,7 +519,7 @@ class Tinebase_Frontend_Cli_Abstract
         } else {
             echo "You need to define a plugin OR a definition OR a model at least!\n";
             echo "Usage example: php tine20.php --method Addressbook.import /path/to/import.vcf -- definition=adb_import_vcard\n";
-            exit;
+            return [];
         }
         
         // loop files in argv
