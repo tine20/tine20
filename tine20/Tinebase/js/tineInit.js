@@ -540,10 +540,10 @@ Tine.Tinebase.tineInit = {
         Tine.Tinebase.appMgr.getAll();
 
         // dispatch _after_ init resolvers/awaits
-        _.defer(() => {
+        _.defer(async () => {
             if (winConfig) {
                 var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel,
-                    card = Tine.WindowFactory.getCenterPanel(winConfig);
+                    card = await Tine.WindowFactory.getCenterPanel(winConfig);
 
                 mainCardPanel.add(card);
                 mainCardPanel.layout.setActiveItem(card.id);
