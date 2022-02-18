@@ -4,7 +4,7 @@
  *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -41,7 +41,8 @@ class Sales_AllTests
         $suite->addTestSuite(Sales_Document_ControllerTest::class);
         $suite->addTestSuite(Sales_Document_ExportTest::class);
         $suite->addTestSuite(Sales_Document_JsonTest::class);
-        
+        $suite->addTestSuite(Sales_Export_ProductTest::class);
+
         return $suite;
     }
 }
