@@ -4,7 +4,7 @@
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -191,5 +191,16 @@ class Sales_ProductControllerTest extends TestCase
             $updatedProduct = $this->getUit()->get($product['product']);
             $this->assertEquals($product['expectedIsActive'], $updatedProduct->is_active, print_r($product['product']->toArray(), true));
         }
+    }
+
+    public function testDeleteProduct()
+    {
+        $product = $this->testCreateProduct();
+        $this->getUit()->delete([$product->getId()]);
+        $result = $this->getUit()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Product::class, [
+            ['field' => 'id', 'operator' => 'equals', 'value' => $product->getId()]
+        ]));
+        $this->assertSame(0, $result->count());
     }
 }
