@@ -19,10 +19,6 @@ class Addressbook_Export_CsvTest extends TestCase
 {
     protected function _genericExportTest($_config)
     {
-        $app = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
-        $definition = Tinebase_ImportExportDefinition::getInstance()
-            ->updateOrCreateFromFilename($_config['definition'], $app);
-
         Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
             'adr_one_street'   => 'Montgomerie',
             'n_given'           => 'Paul',
@@ -39,27 +35,15 @@ class Addressbook_Export_CsvTest extends TestCase
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'adr_one_street', 'operator' => 'contains', 'value' => 'Montgomerie')
         ));
-        if (isset($_config['exportClass'])) {
-            $class = $_config['exportClass'];
-        } else {
-            $class = 'Tinebase_Export_CsvNew';
-        }
-        /** @var Tinebase_Export_CsvNew $csv */
-        $csv = new $class($filter, Addressbook_Controller_Contact::getInstance(), array(
-            'definitionId' => $definition->getId()
-        ));
-        $csv->generate();
-
-        $fh = fopen('php://memory', 'r+');
-        $csv->write($fh);
-
-        return $fh;
+        $_config['app'] = 'Addressbook';
+        return $this->_genericCsvExport($_config, $filter);
     }
 
     public function testNewCsvExport()
     {
         $fh = $this->_genericExportTest([
             'definition' => __DIR__ . '/definitions/adb_csv_test.xml',
+            'exportClass' => Tinebase_Export_CsvNew::class,
         ]);
         try {
             rewind($fh);
@@ -82,6 +66,7 @@ class Addressbook_Export_CsvTest extends TestCase
     {
         $fh = $this->_genericExportTest([
             'definition' => __DIR__ . '/definitions/adb_csv_test_twig.xml',
+            'exportClass' => Tinebase_Export_CsvNew::class,
         ]);
         try {
             rewind($fh);
