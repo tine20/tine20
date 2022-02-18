@@ -105,20 +105,25 @@ Ext.ux.WindowFactory.prototype = {
             c.width = Math.min(Ext.getBody().getBox().width, c.width);
 
             c.layout = c.layout || 'fit';
-            const cp = this.getCenterPanel(c);
+            const cp = this.getCenterPanel(c).then((cp) => {
+                const cardPanel = win.items.get(0)
+                cp.window = win;
+                cardPanel.items.add(cp);
+                cardPanel.layout.setActiveItem(0);
+                cp.doLayout();
+            });
             c.items = {
                 layout: 'card',
                 border: false,
                 activeItem: 0,
                 isWindowMainCardPanel: true,
-                items: [cp]
+                items: []
             };
 
             // NOTE: is this still true ?? -> we can only handle one window yet
             c.modal = true;
 
             win = new winConstructor(c);
-            c.items.items[0].window = win;
             if (cp.onWindowInject) {
                 cp.onWindowInject.call(cp, win);
             }
@@ -135,7 +140,7 @@ Ext.ux.WindowFactory.prototype = {
     /**
      * constructs window items from config properties
      */
-     getCenterPanel: function (config) {
+     getCenterPanel: async function (config) {
         var items;
 
         if (config.contentPanelConstructor) {
@@ -152,15 +157,19 @@ Ext.ux.WindowFactory.prototype = {
             for (var i = 0; i < parts.length; i += 1) {
                 ref = ref[parts[i]];
             }
+
+            if (config.contentPanelConstructorConfig.contentPanelConstructorInterceptor) {
+                await config.contentPanelConstructorConfig.contentPanelConstructorInterceptor(config, window);
+            }
             
             // finally construct the content panel
             Tine.log.info('WindowFactory::getCenterPanel - construct content panel');
             items = new ref(config.contentPanelConstructorConfig);
-            
+
             // remove x-window reference
             config.contentPanelConstructorConfig.listeners = null;
         } else {
-            items = config.items ? config.items : {};
+            items = new Ext.Container({layout: 'fit', border: false, items : config.items ? config.items : {}});
         }
         
         return items;
