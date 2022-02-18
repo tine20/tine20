@@ -296,6 +296,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         if (! Setup_Core::configFileExists() || Setup_Core::isRegistered(Setup_Core::USER)) {
             $registryData = array_merge($registryData, $this->checkConfig());
             $registryData = array_merge($registryData, array(
+                'rights'               => ['admin'],
                 'acceptedTermsVersion' => (! empty($registryData['checkDB']) && $this->_controller->isInstalled('Tinebase')) ? Setup_Controller::getInstance()->getAcceptedTerms() : 0,
                 'setupChecks'          => $this->envCheck(),
                 'configData'           => $this->loadConfig(),
