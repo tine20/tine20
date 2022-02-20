@@ -1761,12 +1761,18 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * seriously?.... please get rid of this
+     *
      * @param array $_communityNumber
      * @return mixed
      */
     public function aggregatePopulation(array $_communityNumber)
     {
-        $result = Tinebase_Controller_MunicipalityKey::getInstance()->aggregatePopulation(new Tinebase_Model_MunicipalityKey($_communityNumber));
-        return $result->toArray();
+        if (isset($_communityNumber['id'])) {
+            try {
+                return Tinebase_Controller_MunicipalityKey::getInstance()->get($_communityNumber['id'])->toArray();
+            } catch (Tinebase_Exception_NotFound $tenf) {}
+        }
+        return $_communityNumber;
     }
 }
