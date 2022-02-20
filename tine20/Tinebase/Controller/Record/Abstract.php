@@ -986,7 +986,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 } else {
                     if ($newRecord->{$property} instanceof $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]) {
                         if (null === $currentRecord->{$property} || $currentRecord->{$property}->getId() !== $newRecord->{$property}->getId()) {
-                            $this->_newDenormalizedRecord($newRecord->{$property}, $definition);
+                            $this->_newDenormalizedRecord($newRecord->{$property}, $definition, $currentRecord->{$property});
                         } else {
                             $newRecord->{$property}->{TMCC::FLD_ORIGINAL_ID} = $currentRecord->{$property}->{TMCC::FLD_ORIGINAL_ID};
                             if ($newRecord->{$property}->has(TMCC::FLD_LOCALLY_CHANGED)) {
@@ -1043,7 +1043,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
     }
 
-    protected function _newDenormalizedRecord(Tinebase_Record_Interface $record, array $definition)
+    protected function _newDenormalizedRecord(Tinebase_Record_Interface $record, array $definition, ?Tinebase_Record_Interface $oldRecord = null)
     {
 
         if (!$record instanceof $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]) {
@@ -1051,10 +1051,16 @@ abstract class Tinebase_Controller_Record_Abstract
                 $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]);
         }
         $originalRecord = null;
-        if ($record->getId()) {
+
+        if ($oldRecord) {
             /** @var Tinebase_Controller_Record_Abstract $ctrl */
-            $ctrl = Tinebase_Core::getApplicationInstance($definition[TMCC::CONFIG][TMCC::DENORMALIZATION_OF]);
+            $ctrl = Tinebase_Core::getApplicationInstance($definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]);
+            $ctrl->delete([$oldRecord->getId()]);
+        }
+        if ($record->getId()) {
             try {
+                /** @var Tinebase_Controller_Record_Abstract $ctrl */
+                $ctrl = Tinebase_Core::getApplicationInstance($definition[TMCC::CONFIG][TMCC::DENORMALIZATION_OF]);
                 $originalRecord = $ctrl->get($record->getId());
             } catch (Tinebase_Exception_NotFound $tenf) {
                 $record->setId(null);
