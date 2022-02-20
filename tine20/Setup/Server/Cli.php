@@ -94,6 +94,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                            setup.php --maintenance_mode -- state=[normal|all|off]',
                 'config_from_env'           => 'generates config from environment variables like TINE20__<application>_<propertiy>',
                 'is_installed'           => 'Checks if tine20 is installed, otherwise returns 1.',
+                'add_auth_token'        => 'Add a new token to table tine20_auth_token
+                        Examples:
+                            setup.php --add_auth_token -- user=admin id=longlongid auth_token=longlongtoken valid_until=2023-02-18 channels=broadcasthub,test,test2',
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {
@@ -130,7 +133,8 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->pgsqlMigration) &&
             empty($opts->maintenance_mode) &&
             empty($opts->config_from_env) &&
-            empty($opts->is_installed)))
+            empty($opts->is_installed) &&
+            empty($opts->add_auth_token)))
         {
             echo $opts->getUsageMessage();
             exit;
