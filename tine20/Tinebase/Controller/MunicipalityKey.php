@@ -114,6 +114,8 @@ class Tinebase_Controller_MunicipalityKey extends Tinebase_Controller_Record_Abs
                     if ($result) {
                         return $result;
                     }
+                } else {
+                    return null;
                 }
             }
         }
