@@ -454,6 +454,14 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         if (!$this->isProduct()) {
             return;
         }
+
+        if ($transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_STORNO}) {
+            $this->{self::FLD_UNIT_PRICE} = 0 - $this->{self::FLD_UNIT_PRICE};
+            if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_POSITION_DISCOUNT_TYPE}) {
+                $this->{self::FLD_POSITION_DISCOUNT_SUM} = 0 - $this->{self::FLD_POSITION_DISCOUNT_SUM};
+            }
+        }
+
         // we need to check if there are followup positions for our precursor position already
         $existingQuantities = null;
         /** @var Tinebase_Controller_Record_Abstract $ctrl */
@@ -476,6 +484,8 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
 
             $this->{self::FLD_QUANTITY} = $this->{self::FLD_QUANTITY} - $existingQuantities;
 
+            $this->computePrice();
+        } elseif ($transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_STORNO}) {
             $this->computePrice();
         }
     }
