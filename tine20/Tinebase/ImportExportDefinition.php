@@ -185,7 +185,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                 $_applicationId = Tinebase_Application::getInstance()->getApplicationByName($config->overrideApplication)->getId();
             }
             
-            $definition = new Tinebase_Model_ImportExportDefinition(array(
+            return new Tinebase_Model_ImportExportDefinition(array(
                 'application_id'              => $_applicationId,
                 'name'                        => $name,
                 'label'                       => empty($config->label) ? $name : $config->label,
@@ -210,9 +210,8 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                 'mapUndefinedFieldsTo'        => $config->mapUndefinedFieldsTo,
                 'postMappingHook'             => $config->postMappingHook,
                 'filter'                      => $config->filter,
+                Tinebase_Model_ImportExportDefinition::FLDS_SKIP_UPSTREAM_UPDATES => $config->skipUpstreamUpdates ?: false,
             ));
-            
-            return $definition;
         } else {
             throw new Tinebase_Exception_NotFound('Definition file "' . $_filename . '" not found.');
         }
@@ -278,7 +277,12 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $_application->getId(),
             $_name
         );
-        
+
+        if ($definition->{Tinebase_Model_ImportExportDefinition::FLDS_SKIP_UPSTREAM_UPDATES}) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Skip updating definition: ' . $definition->name);
+            return $definition;
+        }
+
         // try to get definition and update if it exists
         try {
             // also update deleted
@@ -287,7 +291,6 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $definition->setId($existing->getId());
             $definition->is_deleted = $existing->is_deleted;
             $definition->container_id = $existing->container_id;
-            // also update deleted
             $result = $this->update($definition, true, true);
             
         } catch (Tinebase_Exception_NotFound $tenf) {
