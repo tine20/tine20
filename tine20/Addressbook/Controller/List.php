@@ -685,24 +685,35 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     {
         $lists = $this->getMultiple($_ids);
         foreach ($lists as $list) {
-            $event = new Addressbook_Event_DeleteList();
-            $event->list = $list;
-            if (! Tinebase_Event::fireEvent($event)) {
+            if (! $this->_disabledEvents && ! $this->_fireDeleteEvent($list)) {
                 $key = array_search($list->getId(), $_ids);
                 unset($_ids[$key]);
-            } else {
-                if (isset($list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
-                    $list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
-                    preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $list->email)) {
-                    $mailAccount = $this->_getMailAccount($list);
-                    if ($mailAccount) {
-                        Felamimail_Controller_Account::getInstance()->delete($mailAccount->getId());
-                    }
-                }
+                continue;
             }
+
+            $this->_deleteMailingListAccount($list);
         }
 
         return $_ids;
+    }
+
+    protected function _fireDeleteEvent(Addressbook_Model_List $list): bool
+    {
+        $event = new Addressbook_Event_DeleteList();
+        $event->list = $list;
+        return Tinebase_Event::fireEvent($event);
+    }
+
+    protected function _deleteMailingListAccount(Addressbook_Model_List $list)
+    {
+        if (isset($list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST])
+            && $list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]
+            && preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $list->email)) {
+            $mailAccount = $this->_getMailAccount($list);
+            if ($mailAccount) {
+                Felamimail_Controller_Account::getInstance()->delete($mailAccount->getId());
+            }
+        }
     }
 
     /**

@@ -2099,8 +2099,8 @@ abstract class Tinebase_Controller_Record_Abstract
                 $records = $this->_backend->getMultiple((array)$ids);
             }
 
-            if (count((array)$ids) != count($records)) {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records)
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && count((array)$ids) != count($records)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records)
                     . ' of ' . count((array)$ids) . ' records exist.');
             }
 
