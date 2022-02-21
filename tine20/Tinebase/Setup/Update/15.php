@@ -6,7 +6,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * this is 2022.11 (ONLY!)
@@ -17,6 +17,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE015_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE015_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE015_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE       => [
@@ -32,6 +33,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE015_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -72,5 +77,20 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     {
         Setup_SchemaTool::updateSchema([Tinebase_Model_MunicipalityKey::class]);
         $this->addApplicationUpdate('Tinebase', '15.3', self::RELEASE015_UPDATE003);
+    }
+
+    public function update004()
+    {
+        if ($this->getTableVersion('importexport_definition') < 14) {
+            $this->_backend->addCol('importexport_definition', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>skip_upstream_updates</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>'));
+            $this->setTableVersion('tags', 14);
+        };
+
+        $this->addApplicationUpdate('Tinebase', '15.4', self::RELEASE015_UPDATE004);
     }
 }
