@@ -124,6 +124,18 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $this->assertCount(0, $order->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS});
     }
 
+    public function testDeleteInvoice()
+    {
+        $customer = $this->_createCustomer();
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->create(new Sales_Model_Document_Invoice([
+            Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_PROFORMA,
+        ]));
+
+        Sales_Controller_Document_Invoice::getInstance()->delete([$invoice->getId()]);
+    }
+
     public function testInvoiceNumbers()
     {
         $customer = $this->_createCustomer();
