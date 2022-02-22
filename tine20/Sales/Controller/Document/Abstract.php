@@ -52,6 +52,8 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             }
         }
 
+        $_record->calculatePricesIncludingPositions();
+
         parent::_inspectBeforeCreate($_record);
     }
 
@@ -146,6 +148,8 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
                 }
             }
         }
+
+        $_record->calculatePricesIncludingPositions();
 
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
     }
