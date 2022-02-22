@@ -82,7 +82,6 @@ describe('editDialog', () => {
         await newPage.type('input[name=summary]', 'Test Event');
         await newPage.screenshot({path: 'screenshots/Kalender/6_kalender_neuer_termin.png'});
         await newPage.click('[id^=CalendarEditDialogContainerSelectorext]');
-        console.log('klick');
         await newPage.waitForTimeout(500);
         await expect(newPage).toClick('.x-combo-list-item', {text: 'Andere Kalender wählen...'});
         await newPage.waitForTimeout(2000);
@@ -145,9 +144,16 @@ describe('context menu', () => {
         await page.waitForTimeout(2000);
         await expect(page).toClick('button', {text: 'Woche'});
         await page.waitForTimeout(2000);
-        await expect(page).toClick('.cal-daysviewpanel-event-body', {text: 'Test Event', button: 'right'});
-        await page.waitForTimeout(1000);
-        await page.screenshot({path: 'screenshots/Kalender/11_kalender_termin_kontextmenue.png'});
+        try {
+            await expect(page).toClick('.cal-daysviewpanel-event-body', {text: 'Test Event', button: 'right'});
+            await page.waitForTimeout(1000);
+            await page.screenshot({path: 'screenshots/Kalender/11_kalender_termin_kontextmenue.png'});
+        } catch (e) {
+            await expect(page).toClick('button', {text: 'Heute'});
+            await expect(page).toClick('.cal-daysviewpanel-event-body', {text: 'Test Event', button: 'right'});
+            await page.waitForTimeout(1000);
+            await page.screenshot({path: 'screenshots/Kalender/11_kalender_termin_kontextmenue.png'});
+        }
     });
 
     test('set answer', async () => {
