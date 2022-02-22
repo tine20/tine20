@@ -498,7 +498,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         // see Tine.Sales.Document_AbstractEditDialog.checkStates
         // Sales/js/Document/AbstractEditDialog.js
 
-        $this->{self::FLD_INVOICE_DISCOUNT_SUM} = floatval($this->{self::FLD_INVOICE_DISCOUNT_SUM});
         $this->{self::FLD_POSITIONS_NET_SUM} = 0;
         $this->{self::FLD_POSITIONS_DISCOUNT_SUM} = 0;
         $this->{self::FLD_SALES_TAX_BY_RATE} = [];
@@ -521,6 +520,14 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 $netSumByTaxRate[$taxRate] = 0;
             }
             $netSumByTaxRate[$taxRate] += floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_NET_PRICE});
+        }
+
+        if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_INVOICE_DISCOUNT_TYPE}) {
+            $this->{self::FLD_INVOICE_DISCOUNT_SUM} = (float)$this->{self::FLD_INVOICE_DISCOUNT_SUM};
+        } else {
+            $discount = ($this->{self::FLD_POSITIONS_NET_SUM} / 100) *
+                (float)$this->{self::FLD_INVOICE_DISCOUNT_PERCENTAGE};
+            $this->{self::FLD_INVOICE_DISCOUNT_SUM} = $discount;
         }
 
         $this->{self::FLD_SALES_TAX} =

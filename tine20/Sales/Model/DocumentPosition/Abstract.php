@@ -498,9 +498,13 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         }
         $this->{self::FLD_POSITION_PRICE} = $this->{self::FLD_UNIT_PRICE} * $this->{self::FLD_QUANTITY};
         if ($this->{self::FLD_POSITION_DISCOUNT_TYPE}) {
-            $discount = Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_POSITION_DISCOUNT_TYPE} ?
-                $this->{self::FLD_POSITION_DISCOUNT_SUM} :
-                ($this->{self::FLD_POSITION_PRICE} / 100) * (float)$this->{self::FLD_POSITION_DISCOUNT_PERCENTAGE};
+            if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_POSITION_DISCOUNT_TYPE}) {
+                $discount = (float)$this->{self::FLD_POSITION_DISCOUNT_SUM};
+            } else {
+                $discount = ($this->{self::FLD_POSITION_PRICE} / 100) *
+                    (float)$this->{self::FLD_POSITION_DISCOUNT_PERCENTAGE};
+                $this->{self::FLD_POSITION_DISCOUNT_SUM} = $discount;
+            }
         } else {
             $discount = 0;
         }
