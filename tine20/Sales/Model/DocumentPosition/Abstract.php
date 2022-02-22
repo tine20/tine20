@@ -240,12 +240,12 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             self::FLD_TITLE                     => [
                 self::LABEL                         => 'Product / Service', // _('Product / Service')
                 self::TYPE                          => self::TYPE_STRING,
+                self::NULLABLE                      => true,
                 self::QUERY_FILTER                  => true,
                 self::LENGTH                        => 255,
                 self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => false,
-                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED
-                ]
+                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                ],
             ],
             self::FLD_DESCRIPTION               => [
                 self::LABEL                         => 'Description', // _('Description')
@@ -255,7 +255,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::SHY                           => true,
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
-                ]
+                ],
             ],
             self::FLD_QUANTITY                  => [
                 self::LABEL                         => 'Quantity', // _('Quantity')
