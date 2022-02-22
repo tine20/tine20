@@ -220,6 +220,8 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
     public function testContainerAcls()
     {
+        $this->assertTrue(Addressbook_Controller_Contact::getInstance()->doContainerACLChecks());
+
         $contact = $this->_addContact();
         $result = $this->_uit->searchContacts([
             ['field' => 'container_id', 'operator' => 'equals', 'value' => $contact['container_id']]
