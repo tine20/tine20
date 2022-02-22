@@ -146,6 +146,8 @@ class Setup_Frontend_Cli
             $this->_configFromEnv();
         } elseif(isset($_opts->is_installed)) {
             $result = $this->_isInstalled();
+        } elseif(isset($_opts->add_auth_token)) {
+            $this->_addAuthToken($_opts);
         }
 
         Tinebase_Log::logUsageAndMethod('setup.php', $time_start, 'Setup.' . implode(',', $_opts->getOptions()));
@@ -1444,5 +1446,37 @@ class Setup_Frontend_Cli
         }
 
         return 1;
+    }
+
+
+    /**
+     * Add a new token to table tine20_auth_token
+     *
+     * @param Zend_Console_Getopt $_opts
+     */
+    protected function _addAuthToken(Zend_Console_Getopt $_opts)
+    {
+        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+
+        $mandatoryOptions = array(
+            'user',
+            'id',
+            'auth_token',
+            'valid_until',
+            'channels',
+        );
+
+        foreach($mandatoryOptions as $opt) {
+            if (!isset($options[$opt])) {
+                echo 'option ' . $opt . ' is mandatory' . PHP_EOL;
+                return;
+            }
+        }
+
+        $result = Setup_Controller::getInstance()->addAuthToken($options);
+
+        if (is_array($result)) {
+            echo "Auth token created: " . print_r($result, true) . PHP_EOL;
+        }
     }
 }

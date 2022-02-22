@@ -76,6 +76,7 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
                 self::TYPE                      => self::TYPE_NUMBERABLE_STRING,
                 self::LABEL                     => 'Proforma Number', //_('Proforma Number')
                 self::QUERY_FILTER              => true,
+                self::SHY                       => true,
                 self::CONFIG                    => [
                     Tinebase_Numberable::STEPSIZE          => 1,
                     Tinebase_Numberable::BUCKETKEY         => self::class . '#' . self::FLD_DOCUMENT_PROFORMA_NUMBER,

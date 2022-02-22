@@ -2869,4 +2869,53 @@ class Setup_Controller
 
         return $failures;
     }
+
+
+    /**
+     * Add a new auth token to table tine20_auth_token
+     *
+     * Parameter $options has to be array with this structure:
+     *      array(
+     *          'user'          => string   // Username to create the token for
+     *          'id'            => string   // Value for field tine20_auth_token.id
+     *          'auth_token'    => string   // Value for field tine20_auth_token.auth_token
+     *          'valid_until'   => string   // Value for field tine20_auth_token.valid_until
+     *          'channels'      => string   // Comma separated list of channel names. Values for JSON array in field tine20_auth_token.channels
+     *      )
+     *
+     * @param Array $options
+     * @return Array $result  Array with all fields of new record
+     */
+    public function addAuthToken($options)
+    {
+        $result = null;
+
+        $db = Setup_Core::getDb();
+
+        $channels = explode(',', $options['channels']);
+        foreach($channels as &$channel) {
+            $channel = '"' . $channel . '"';
+        }
+
+        try {
+            $query = 'INSERT INTO ' . SQL_TABLE_PREFIX . 'auth_token (id, auth_token, account_id, valid_until, channels) VALUES ';
+            $query .= '(';
+            $query .= $db->quote($options['id']) . ', ';
+            $query .= $db->quote($options['auth_token']) . ', ';
+            $query .= '(SELECT id FROM ' . SQL_TABLE_PREFIX . 'accounts WHERE login_name = ' . $db->quote($options['user']) . '), ';
+            $query .= $db->quote($options['valid_until']) . ', ';
+            $query .= $db->quote('[' . implode(',', $channels) . ']');
+            $query .= ')';
+
+            $db->query($query);
+
+            $dbResult = $db->query('SELECT * FROM ' . SQL_TABLE_PREFIX . 'auth_token WHERE id = ' . $db->quote($options['id']))->fetchAll();
+            $result = $dbResult[0];
+
+        } catch (Zend_Db_Exception $zde) {
+            Tinebase_Exception::log($zde);
+        }
+
+        return $result;
+    }
 }
