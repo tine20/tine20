@@ -104,7 +104,7 @@ class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
     {
         $children = array();
         foreach (Tinebase_FileSystem::getInstance()->getOtherUsers(Tinebase_Core::getUser(),
-                $this->_getApplicationName(), [Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC]) as
+                $this->_getApplicationName(), [Tinebase_Model_Grants::GRANT_READ, '&' . Tinebase_Model_Grants::GRANT_SYNC]) as
                 $node) {
             $name = $node->name;
             // we never use id as name!

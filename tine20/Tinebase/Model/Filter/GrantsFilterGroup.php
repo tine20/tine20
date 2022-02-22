@@ -91,7 +91,7 @@ class Tinebase_Model_Filter_GrantsFilterGroup extends Tinebase_Model_Filter_Filt
             $this->_tempBackend = null;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' $select after appending grants sql: ' . $select);
     }
 
@@ -106,7 +106,7 @@ class Tinebase_Model_Filter_GrantsFilterGroup extends Tinebase_Model_Filter_Filt
     {
         $db = $_select->getAdapter();
         $tblAlias = $this->_aclTableName . $iteration;
-        $_select->join(array(
+        $_select->joinLeft(array(
             /* table  */ $tblAlias => SQL_TABLE_PREFIX . $this->_aclTableName),
             /* on     */ $db->quoteIdentifier($tblAlias . '.record_id') . ' = ' . $db->quoteIdentifier($this->_tempBackend->getTableName() . '.' . $this->_aclIdColumn),
             array()
