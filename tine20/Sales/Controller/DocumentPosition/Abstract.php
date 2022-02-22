@@ -41,7 +41,11 @@ abstract class Sales_Controller_DocumentPosition_Abstract extends Tinebase_Contr
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
-
+        if (0 === strlen((string) $_record->{Sales_Model_DocumentPosition_Abstract::FLD_TITLE}) &&
+                0 === strlen((string) $_record->{Sales_Model_DocumentPosition_Abstract::FLD_DESCRIPTION})) {
+            throw new Tinebase_Exception_Record_Validation(Sales_Model_DocumentPosition_Abstract::FLD_TITLE . ' and ' .
+                Sales_Model_DocumentPosition_Abstract::FLD_DESCRIPTION . ' can not be both empty at the same time');
+        }
         parent::_inspectBeforeCreate($_record);
     }
 
@@ -51,7 +55,11 @@ abstract class Sales_Controller_DocumentPosition_Abstract extends Tinebase_Contr
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-
+        if (0 === strlen((string) $_record->{Sales_Model_DocumentPosition_Abstract::FLD_TITLE}) &&
+                0 === strlen((string) $_record->{Sales_Model_DocumentPosition_Abstract::FLD_DESCRIPTION})) {
+            throw new Tinebase_Exception_Record_Validation(Sales_Model_DocumentPosition_Abstract::FLD_TITLE . ' and ' .
+                Sales_Model_DocumentPosition_Abstract::FLD_DESCRIPTION . ' can not be both empty at the same time');
+        }
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
     }
 }
