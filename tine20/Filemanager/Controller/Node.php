@@ -1534,6 +1534,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 $success = $this->_backend->rmdir($_path->statpath, TRUE);
                 break;
         }
+
+        if ($success && ! Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
+            $this->_inspectAfterDelete($node);
+        }
         
         return $success;
     }
