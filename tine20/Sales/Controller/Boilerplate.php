@@ -123,4 +123,77 @@ class Sales_Controller_Boilerplate extends Tinebase_Controller_Record_Abstract
             }
         }
     }
+
+    public function getApplicableBoilerplates(string $type, ?Tinebase_DateTime $date = null, ?string $customerId = null, ?string $category = null, ?string $language = null): Tinebase_Record_RecordSet
+    {
+        $defaultLang = Sales_Config::getInstance()->{Sales_Config::LANGUAGES_AVAILABLE}->default;
+        $filter = [
+            ['field' => \Sales_Model_Boilerplate::FLD_MODEL,    'operator' => 'equals', 'value' => $type],
+        ];
+
+        if (null === $language || $language === $defaultLang) {
+            $language = $defaultLang;
+            $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_LANGUAGE, 'operator' => 'equals', 'value' => $language];
+        } else {
+            $filter[] = [
+                'condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_OR,
+                'filters'   => [
+                    ['field' => \Sales_Model_Boilerplate::FLD_LANGUAGE, 'operator' => 'equals', 'value' => $language],
+                    ['field' => \Sales_Model_Boilerplate::FLD_LANGUAGE, 'operator' => 'equals', 'value' => $defaultLang],
+                ],
+            ];
+        }
+
+        if (!$date) {
+            $date = Tinebase_DateTime::now();
+        }
+        $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_FROM, 'operator' => 'before_or_equals', 'value' => $date];
+        $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_UNTIL, 'operator' => 'after_or_equals', 'value' => $date];
+
+        $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY, 'operator' => 'equals', 'value' =>
+            $category ?: Sales_Config::DOCUMENT_CATEGORY_DEFAULT];
+
+        if ($customerId) {
+            $filter[] = [
+                'condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_OR,
+                'filters'   => [
+                    ['field' => \Sales_Model_Boilerplate::FLD_CUSTOMER, 'operator' => 'equals', 'value' => null],
+                    ['field' => \Sales_Model_Boilerplate::FLD_CUSTOMER, 'operator' => 'equals', 'value' => $customerId],
+                ],
+            ];
+        } else {
+            $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_CUSTOMER, 'operator' => 'equals', 'value' => null];
+        }
+
+        $result = new Tinebase_Record_RecordSet(Sales_Model_Boilerplate::class);
+
+        $names = [];
+        foreach ($this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                Sales_Model_Boilerplate::class, $filter)) as $boilerplate) {
+            while (isset($names[$boilerplate->{Sales_Model_Boilerplate::FLD_NAME}])) {
+                $current = $names[$boilerplate->{Sales_Model_Boilerplate::FLD_NAME}];
+                if ($language === $boilerplate->{Sales_Model_Boilerplate::FLD_LANGUAGE} &&
+                    $language !== $current->{Sales_Model_Boilerplate::FLD_LANGUAGE}) {
+                    $result->removeRecord($current);
+                    break;
+                }
+                if ($current->{Sales_Model_Boilerplate::FLD_CUSTOMER} &&
+                    !$boilerplate->{Sales_Model_Boilerplate::FLD_CUSTOMER}) {
+                    continue 2;
+                }
+                if ((!$current->{Sales_Model_Boilerplate::FLD_CUSTOMER} &&
+                        $boilerplate->{Sales_Model_Boilerplate::FLD_CUSTOMER}) ||
+                    ($boilerplate->{Sales_Model_Boilerplate::FLD_FROM} ||
+                        $boilerplate->{Sales_Model_Boilerplate::FLD_UNTIL})) {
+                    $result->removeRecord($current);
+                    break;
+                }
+                continue 2;
+            }
+            $names[$boilerplate->{Sales_Model_Boilerplate::FLD_NAME}] = $boilerplate;
+            $result->addRecord($boilerplate);
+        }
+
+        return $result;
+    }
 }
