@@ -195,6 +195,19 @@ class Sales_Controller extends Tinebase_Controller_Event
             }
         }
     }
+    
+    public function updateBillingAddress($contact)
+    {
+        $contactRelations = Tinebase_Relations::getInstance()->getRelations('Addressbook_Model_Contact', 'Sql', $contact->getId());
+        $billingAddress = $contactRelations->filter('type', 'CONTACTADDRESS');
+
+        if (count($billingAddress) >= 1) {
+            //This contact already has billing address relations
+            foreach ($billingAddress as $address) {
+                Sales_Controller_Address::getInstance()->contactToCustomerAddress($address->related_record, $contact);
+            }
+        }
+    }
 
     /**
      * event handler function
@@ -211,6 +224,7 @@ class Sales_Controller extends Tinebase_Controller_Event
                 break;
             case Addressbook_Event_InspectContactAfterUpdate::class:
                 $this->createUpdatePostalAddress($_eventObject->updatedContact);
+                $this->updateBillingAddress($_eventObject->updatedContact);
                 break;
         }
     }
