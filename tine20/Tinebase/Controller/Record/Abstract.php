@@ -2336,10 +2336,16 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($_record->has('alarms')) {
             $this->_deleteAlarmsForIds(array($_record->getId()));
         }
-        if ($this->_handleDependentRecords && ($config = $_record::getConfiguration())
-            && is_array($config->recordsFields)) {
-            foreach ($config->recordsFields as $property => $fieldDef) {
-                $this->_deleteDependentRecords($_record, $property, $fieldDef['config']);
+        if ($this->_handleDependentRecords && ($config = $_record::getConfiguration())) {
+            if (is_array($config->recordsFields)) {
+                foreach ($config->recordsFields as $property => $fieldDef) {
+                    $this->_deleteDependentRecords($_record, $property, $fieldDef['config']);
+                }
+            }
+            if (is_array($config->recordFields)) {
+                foreach ($config->recordFields as $property => $fieldDef) {
+                    $this->_deleteDependentRecords($_record, $property, $fieldDef['config']);
+                }
             }
         }
     }
@@ -2374,10 +2380,16 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_saveAlarms($_record);
         }
 
-        if ($this->_handleDependentRecords && ($config = $_record::getConfiguration())
-            && is_array($config->recordsFields)) {
-            foreach ($config->recordsFields as $property => $fieldDef) {
-                $this->_undeleteDependentRecords($_record, $property, $fieldDef['config']);
+        if ($this->_handleDependentRecords && ($config = $_record::getConfiguration())) {
+            if (is_array($config->recordsFields)) {
+                foreach ($config->recordsFields as $property => $fieldDef) {
+                    $this->_undeleteDependentRecords($_record, $property, $fieldDef['config']);
+                }
+            }
+            if (is_array($config->recordFields)) {
+                foreach ($config->recordFields as $property => $fieldDef) {
+                    $this->_undeleteDependentRecords($_record, $property, $fieldDef['config']);
+                }
             }
         }
     }

@@ -198,6 +198,21 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         return parent::_inspectDelete($_ids);
     }
 
+    /**
+     * delete one record
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _deleteRecord(Tinebase_Record_Interface $_record)
+    {
+        $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID} = Sales_Controller_Document_Customer::getInstance()
+            ->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Customer::class, [
+                'field' => Sales_Model_Document_Customer::FLD_DOCUMENT_ID, 'operator' => 'equals', 'value' => $_record->getId(),
+            ]))->getFirstRecord();
+        parent::_deleteRecord($_record);
+    }
+
     public static function createPrecursorTree(string $documentModel, array $documentIds, array &$resolvedIds, array $expanderDef): Tinebase_Record_RecordSet
     {
         $result = new Tinebase_Record_RecordSet(Tinebase_Model_DynamicRecordWrapper::class, []);
