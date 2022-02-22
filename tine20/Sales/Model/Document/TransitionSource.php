@@ -22,6 +22,7 @@ class Sales_Model_Document_TransitionSource extends Tinebase_Record_NewAbstract
     public const FLD_SOURCE_DOCUMENT = 'sourceDocument';
     public const FLD_SOURCE_DOCUMENT_MODEL = 'sourceDocumentModel';
     public const FLD_SOURCE_POSITIONS = 'sourcePositions';
+    public const FLD_IS_STORNO = 'isStorno';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -57,6 +58,10 @@ class Sales_Model_Document_TransitionSource extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],*/
+            ],
+            self::FLD_IS_STORNO                 => [
+                self::TYPE                          => self::TYPE_BOOLEAN,
+                self::INPUT_FILTERS                 => [Zend_Filter_Empty::class => false],
             ],
         ],
     ];

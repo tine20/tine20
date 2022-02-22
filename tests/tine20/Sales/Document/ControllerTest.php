@@ -4,7 +4,7 @@
  *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -13,6 +13,53 @@
  */
 class Sales_Document_ControllerTest extends Sales_Document_Abstract
 {
+    public function testInvoiceStorno()
+    {
+        $customer = $this->_createCustomer();
+        $product1 = $this->_createProduct();
+        $product2 = $this->_createProduct();
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->create(new Sales_Model_Document_Invoice([
+            Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_PROFORMA,
+            Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => $customer->postal,
+            Sales_Model_Document_Invoice::FLD_POSITIONS => [
+                new Sales_Model_DocumentPosition_Invoice([
+                    Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'pos 1',
+                    Sales_Model_DocumentPosition_Invoice::FLD_PRODUCT_ID => $product1->getId(),
+                    Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 1,
+                ], true),
+                new Sales_Model_DocumentPosition_Invoice([
+                    Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'pos 2',
+                    Sales_Model_DocumentPosition_Invoice::FLD_PRODUCT_ID => $product2->getId(),
+                    Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 1,
+                ], true),
+            ],
+        ]));
+
+        Tinebase_Record_Expander::expandRecord($invoice);
+        $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+
+        $storno = Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
+            Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
+                new Sales_Model_Document_TransitionSource([
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL =>
+                        Sales_Model_Document_Invoice::class,
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => $invoice,
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS => null,
+                    Sales_Model_Document_TransitionSource::FLD_IS_STORNO => true,
+                ]),
+            ]
+        ]));
+
+        Tinebase_Record_Expander::expandRecord($storno);
+        $this->assertSame(-2, (int)$storno->{Sales_Model_Document_Invoice::FLD_NET_SUM});
+    }
+
     public function testTransitionOfferOrder()
     {
         $customer = $this->_createCustomer();

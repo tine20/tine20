@@ -417,7 +417,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
                     $sourcePosition = new Sales_Model_DocumentPosition_TransitionSource([
                         Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION => $position,
-                        Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION_MODEL => get_class($position)
+                        Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION_MODEL => get_class($position),
+                        Sales_Model_DocumentPosition_TransitionSource::FLD_IS_STORNO => $record->{Sales_Model_Document_TransitionSource::FLD_IS_STORNO},
                     ]);
                     /** @var Sales_Model_DocumentPosition_Abstract $position */
                     $position = new $positionClass([], true);
@@ -511,7 +512,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             $this->{self::FLD_POSITIONS_DISCOUNT_SUM} = $this->{self::FLD_POSITIONS_DISCOUNT_SUM}
                 + floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_POSITION_DISCOUNT_SUM});
 
-            $taxRate = $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE} || 0;
+            $taxRate = $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE} ?: 0;
             if (!isset($salesTaxByRate[$taxRate])) {
                 $salesTaxByRate[$taxRate] = 0;
             }
@@ -532,11 +533,12 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         $this->{self::FLD_SALES_TAX} =
             array_reduce(array_keys($netSumByTaxRate), function($carry, $taxRate) use($netSumByTaxRate) {
-                $this->xprops(Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE)[$taxRate] =
+                $tax =
                     ($netSumByTaxRate[$taxRate] - $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} *
                         $netSumByTaxRate[$taxRate] / $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM})
                     * $taxRate / 100;
-                return $carry + $netSumByTaxRate[$taxRate];
+                $this->xprops(Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE)[$taxRate] = $tax;
+                return $carry + $tax;
             }, 0);
 
         foreach ($salesTaxByRate as $rate => $tax) {
@@ -548,6 +550,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         $this->{self::FLD_GROSS_SUM} = $this->{self::FLD_POSITIONS_NET_SUM} - $this->{self::FLD_INVOICE_DISCOUNT_SUM}
             + $this->{self::FLD_SALES_TAX};
+        $this->{self::FLD_NET_SUM} = $this->{self::FLD_POSITIONS_NET_SUM} - $this->{self::FLD_INVOICE_DISCOUNT_SUM};
     }
 
     /**
