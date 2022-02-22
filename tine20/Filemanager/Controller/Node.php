@@ -414,7 +414,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 // create basic nodes like personal|shared|user root
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                         ' ' . $path->statpath);
-                if ($path->name === Tinebase_FileSystem::FOLDER_TYPE_SHARED ||
+                if ($path->statpath === $this->_backend->getApplicationBasePath(
+                        Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName),
+                        Tinebase_FileSystem::FOLDER_TYPE_SHARED
+                    ) ||
                     $path->statpath === $this->_backend->getApplicationBasePath(
                         Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName), 
                         Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
