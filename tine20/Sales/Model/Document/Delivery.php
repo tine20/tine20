@@ -119,5 +119,10 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
             ->getFirstRecord()->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
             ->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID};
     }
+
+    // no moneytary fields, no calc to do
+    public function calculatePrices()
+    {
+    }
 }
 
