@@ -482,7 +482,9 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
 
     public function isProduct(): bool
     {
-        return self::POS_TYPE_PRODUCT === $this->{self::FLD_TYPE};
+        return self::POS_TYPE_PRODUCT === $this->{self::FLD_TYPE} ||
+            self::POS_TYPE_ALTERNATIVE === $this->{self::FLD_TYPE} ||
+            self::POS_TYPE_OPTIONAL === $this->{self::FLD_TYPE};
     }
 
     protected function canCreatePartialFollowUp(): void
