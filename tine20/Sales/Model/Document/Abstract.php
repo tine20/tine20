@@ -491,6 +491,20 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         }
     }
 
+    public function calculatePricesIncludingPositions()
+    {
+        if (!$this->{self::FLD_POSITIONS}) {
+            return;
+        }
+        
+        /** @var Sales_Model_DocumentPosition_Abstract $position */
+        foreach ($this->{self::FLD_POSITIONS} as $position) {
+            $position->computePrice();
+        }
+
+        $this->calculatePrices();
+    }
+
     public function calculatePrices()
     {
         // see AbstractMixin.computePrice
@@ -531,7 +545,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             $this->{self::FLD_INVOICE_DISCOUNT_SUM} = $discount;
         }
 
-        $this->{self::FLD_SALES_TAX} =
+        $this->{self::FLD_SALES_TAX} = $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM} ?
             array_reduce(array_keys($netSumByTaxRate), function($carry, $taxRate) use($netSumByTaxRate) {
                 $tax =
                     ($netSumByTaxRate[$taxRate] - $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} *
@@ -539,7 +553,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     * $taxRate / 100;
                 $this->xprops(Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE)[$taxRate] = $tax;
                 return $carry + $tax;
-            }, 0);
+            }, 0) : 0;
 
         foreach ($salesTaxByRate as $rate => $tax) {
             $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
