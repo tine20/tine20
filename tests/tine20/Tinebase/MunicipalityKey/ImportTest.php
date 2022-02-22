@@ -26,7 +26,7 @@ class Tinebase_MunicipalityKey_ImportTest extends ImportTestCase
         $definition = 'tinebase_import_municipalitykey';
         $result = $this->_doImport([], $definition);
 
-        $this->assertEquals(15, $result['totalcount'], print_r($result, true));
+        $this->assertEquals(23, $result['totalcount'], print_r($result, true));
         $this->assertEquals(0, $result['failcount'], print_r($result, true));
         $record = $result['results']->getFirstRecord();
         $this->assertEquals('Schleswig-Holstein',
