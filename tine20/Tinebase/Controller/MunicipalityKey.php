@@ -48,31 +48,88 @@ class Tinebase_Controller_MunicipalityKey extends Tinebase_Controller_Record_Abs
      */
     public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
+        /** @var Tinebase_Model_MunicipalityKey $communityNumber */
         $communityNumber = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect);
         return $this->aggregatePopulation($communityNumber);
     }
 
 
     /**
-     * @param $_communityNumber
+     * @param Tinebase_Model_MunicipalityKey $_municipality
      * @return mixed
      */
-    public function aggregatePopulation($_communityNumber)
+    public function aggregatePopulation(Tinebase_Model_MunicipalityKey $_municipality)
     {
-        if (!$_communityNumber->bevoelkerungGesamt) {
+        if (null === $_municipality->{Tinebase_Model_MunicipalityKey::FLD_BEVOELKERUNG_GESAMT}) {
             $population = 0;
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_MunicipalityKey::class, [
-                ['field' => 'arsCombined', 'operator' => 'startswith', 'value' => $_communityNumber->arsCombined]
+                ['field' => 'arsCombined', 'operator' => 'startswith', 'value' => $_municipality->arsCombined],
+                ['field' => 'arsCombined', 'operator' => 'not', 'value' => $_municipality->arsCombined],
             ]);
             $relatedCommunitys = $this->search($filter);
             
             foreach ($relatedCommunitys as $community) {
-                $population += $community->bevoelkerungGesamt;
+                $population += (int)$community->{Tinebase_Model_MunicipalityKey::FLD_BEVOELKERUNG_GESAMT};
             }
 
-            $_communityNumber->bevoelkerungGesamt = $population;
+            $_municipality->{Tinebase_Model_MunicipalityKey::FLD_BEVOELKERUNG_GESAMT} = $population;
         }
         
-        return $_communityNumber;
+        return $_municipality;
+    }
+
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+        parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
+
+        if ((int)$updatedRecord->{Tinebase_Model_MunicipalityKey::FLD_BEVOELKERUNG_GESAMT} !==
+                (int)$currentRecord->{Tinebase_Model_MunicipalityKey::FLD_BEVOELKERUNG_GESAMT}) {
+            Tinebase_Event::fireEvent(new Tinebase_Event_Record_Update(['observable' => $updatedRecord]));
+        }
+    }
+
+
+    /**
+     * Municipality Key might have a zero fill: 
+     * we need to cut off the individual parts, if they are only zeros and check he remaining key for a match
+     * 
+     * Gem length 3
+     * VB length 4
+     * Kreis length 2
+     * RB length 1
+     * 
+     * @param string $key
+     * @return Tinebase_Record_Interface|NULL
+     */
+    public function findMunicipalityKey(string $key)
+    {
+        $result = $this->_searchMunicipalityKey($key);
+        if (!$result) {
+            $pattern = ['000','0000','00','0'];
+            
+            foreach ($pattern as $part) {
+                if (substr($key, -strlen($part)) == $part) {
+                    $key = substr($key, 0, strlen($key) - strlen($part));
+                    $result = $this->_searchMunicipalityKey($key);
+                    if ($result) {
+                        return $result;
+                    }
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @param string $_key
+     * @return Tinebase_Record_Interface|NULL
+     */
+    private function _searchMunicipalityKey(string $_key)
+    {
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_MunicipalityKey::class, [
+            ['field' => 'arsCombined', 'operator' => 'equals', 'value' => $_key]
+        ]);
+        $municipalityKey = Tinebase_Controller_MunicipalityKey::getInstance()->search($filter)->getFirstRecord();
+        return $municipalityKey;
     }
 }

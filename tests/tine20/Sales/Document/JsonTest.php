@@ -109,6 +109,19 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->_instance->deleteDocument_Offers($document['id']);
     }
 
+    public function testOfferCustomerChange()
+    {
+        $document = $this->testOfferDocumentCustomerCopy(true);
+        $document[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['url'] = 'http://there.tld/home';
+        $document = $this->_instance->saveDocument_Offer($document);
+
+        $customer = $this->_createCustomer();
+        $document[Sales_Model_Document_Offer::FLD_CUSTOMER_ID] = $customer->toArray();
+        $document = $this->_instance->saveDocument_Offer($document);
+
+        $this->assertSame($customer->getId(), $document[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['original_id']);
+    }
+
     public function testOfferDocumentCustomerCopy($noAsserts = false)
     {
         $customer = $this->_createCustomer();
@@ -241,6 +254,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->assertSame($oldDeliveryAddress->getId(), $customerUpdated->delivery->getFirstRecord()->getId());
         $this->assertNotSame($oldDeliveryAddress->name, $customerUpdated->delivery->getFirstRecord()->name);
         $this->assertSame('other name', $customer->delivery->getFirstRecord()->name);
+        $this->assertSame($customer->postal->getId(), $customerUpdated->postal->getId());
 
         $secondCustomer = $this->_createCustomer();
         $document = Sales_Controller_Document_Offer::getInstance()->get($documentUpdated['id']);
@@ -267,7 +281,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
                 $this->assertSame($secondCustomer->delivery->getFirstRecord()->name, $address->name);
             }
         }
-        $this->assertSame($customer->postal->getId(), $customerUpdated->postal->getId());
+        $this->assertNotSame($customer->postal->getId(), $customerUpdated->postal->getId());
         $this->assertSame('new postal adr', $customerUpdated->postal->name);
     }
 

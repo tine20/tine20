@@ -986,7 +986,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 } else {
                     if ($newRecord->{$property} instanceof $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]) {
                         if (null === $currentRecord->{$property} || $currentRecord->{$property}->getId() !== $newRecord->{$property}->getId()) {
-                            $this->_newDenormalizedRecord($newRecord->{$property}, $definition);
+                            $this->_newDenormalizedRecord($newRecord->{$property}, $definition, $currentRecord->{$property});
                         } else {
                             $newRecord->{$property}->{TMCC::FLD_ORIGINAL_ID} = $currentRecord->{$property}->{TMCC::FLD_ORIGINAL_ID};
                             if ($newRecord->{$property}->has(TMCC::FLD_LOCALLY_CHANGED)) {
@@ -1043,7 +1043,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
     }
 
-    protected function _newDenormalizedRecord(Tinebase_Record_Interface $record, array $definition)
+    protected function _newDenormalizedRecord(Tinebase_Record_Interface $record, array $definition, ?Tinebase_Record_Interface $oldRecord = null)
     {
 
         if (!$record instanceof $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]) {
@@ -1051,10 +1051,16 @@ abstract class Tinebase_Controller_Record_Abstract
                 $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]);
         }
         $originalRecord = null;
-        if ($record->getId()) {
+
+        if ($oldRecord) {
             /** @var Tinebase_Controller_Record_Abstract $ctrl */
-            $ctrl = Tinebase_Core::getApplicationInstance($definition[TMCC::CONFIG][TMCC::DENORMALIZATION_OF]);
+            $ctrl = Tinebase_Core::getApplicationInstance($definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]);
+            $ctrl->delete([$oldRecord->getId()]);
+        }
+        if ($record->getId()) {
             try {
+                /** @var Tinebase_Controller_Record_Abstract $ctrl */
+                $ctrl = Tinebase_Core::getApplicationInstance($definition[TMCC::CONFIG][TMCC::DENORMALIZATION_OF]);
                 $originalRecord = $ctrl->get($record->getId());
             } catch (Tinebase_Exception_NotFound $tenf) {
                 $record->setId(null);
@@ -2093,8 +2099,8 @@ abstract class Tinebase_Controller_Record_Abstract
                 $records = $this->_backend->getMultiple((array)$ids);
             }
 
-            if (count((array)$ids) != count($records)) {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records)
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && count((array)$ids) != count($records)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records)
                     . ' of ' . count((array)$ids) . ' records exist.');
             }
 
@@ -2330,10 +2336,16 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($_record->has('alarms')) {
             $this->_deleteAlarmsForIds(array($_record->getId()));
         }
-        if ($this->_handleDependentRecords && ($config = $_record::getConfiguration())
-            && is_array($config->recordsFields)) {
-            foreach ($config->recordsFields as $property => $fieldDef) {
-                $this->_deleteDependentRecords($_record, $property, $fieldDef['config']);
+        if ($this->_handleDependentRecords && ($config = $_record::getConfiguration())) {
+            if (is_array($config->recordsFields)) {
+                foreach ($config->recordsFields as $property => $fieldDef) {
+                    $this->_deleteDependentRecords($_record, $property, $fieldDef['config']);
+                }
+            }
+            if (is_array($config->recordFields)) {
+                foreach ($config->recordFields as $property => $fieldDef) {
+                    $this->_deleteDependentRecords($_record, $property, $fieldDef['config']);
+                }
             }
         }
     }
@@ -2368,10 +2380,16 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_saveAlarms($_record);
         }
 
-        if ($this->_handleDependentRecords && ($config = $_record::getConfiguration())
-            && is_array($config->recordsFields)) {
-            foreach ($config->recordsFields as $property => $fieldDef) {
-                $this->_undeleteDependentRecords($_record, $property, $fieldDef['config']);
+        if ($this->_handleDependentRecords && ($config = $_record::getConfiguration())) {
+            if (is_array($config->recordsFields)) {
+                foreach ($config->recordsFields as $property => $fieldDef) {
+                    $this->_undeleteDependentRecords($_record, $property, $fieldDef['config']);
+                }
+            }
+            if (is_array($config->recordFields)) {
+                foreach ($config->recordFields as $property => $fieldDef) {
+                    $this->_undeleteDependentRecords($_record, $property, $fieldDef['config']);
+                }
             }
         }
     }

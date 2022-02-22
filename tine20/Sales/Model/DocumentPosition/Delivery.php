@@ -43,7 +43,18 @@ class Sales_Model_DocumentPosition_Delivery extends Sales_Model_DocumentPosition
         $_definition[self::FIELDS][self::FLD_DOCUMENT_ID][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_Document_Delivery::MODEL_NAME_PART;
 
-        // @TODO remove financial fields?
+        // remove all moneytary fields, this is a delivery document, no money here
+        unset($_definition[self::FIELDS][self::FLD_UNIT_PRICE]);
+        unset($_definition[self::FIELDS][self::FLD_POSITION_PRICE]);
+        unset($_definition[self::FIELDS][self::FLD_POSITION_DISCOUNT_TYPE]);
+        unset($_definition[self::FIELDS][self::FLD_POSITION_DISCOUNT_PERCENTAGE]);
+        unset($_definition[self::FIELDS][self::FLD_POSITION_DISCOUNT_SUM]);
+        unset($_definition[self::FIELDS][self::FLD_NET_PRICE]);
+        unset($_definition[self::FIELDS][self::FLD_SALES_TAX_RATE]);
+        unset($_definition[self::FIELDS][self::FLD_SALES_TAX]);
+        unset($_definition[self::FIELDS][self::FLD_GROSS_PRICE]);
+        unset($_definition[self::FIELDS][self::FLD_COST_CENTER_ID]);
+        unset($_definition[self::FIELDS][self::FLD_COST_BEARER_ID]);
     }
 
     /**

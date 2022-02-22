@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Sales_Model_Product</model>
+    <name>sales_product_csv_test</name>
+    <!-- _('CSV all data') -->
+    <label>CSV all data</label>
+    <type>export</type>
+    <plugin>Sales_Export_Product</plugin>
+    <language>de</language>
+    <columns>
+        <column>
+            <identifier>id</identifier>
+            <header>ID</header>
+        </column>
+        <column>
+            <identifier>name</identifier>
+            <header>Name</header>
+        </column>
+        <column>
+            <identifier>salesprice</identifier>
+            <header>Preis</header>
+        </column>
+    </columns>
+</config>

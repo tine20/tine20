@@ -398,7 +398,9 @@ Ext.Msg.show({
             }
             if (! opt.fn) {
                 return new Promise((resolve) => {
-                    opt.fn = resolve;
+                    opt.fn = function () {
+                        resolve.call(opt.scope || window, arguments.length > 2 ? arguments : [arguments[0]]);
+                    }
                 })
 
             }

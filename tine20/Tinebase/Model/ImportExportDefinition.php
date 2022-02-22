@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -15,21 +15,22 @@
  * @package     Tinebase
  * @subpackage  Import
  *
- * @property string id
- * @property string application_id
- * @property string model
- * @property string name
- * @property string label
- * @property string description
- * @property string type
- * @property string plugin
- * @property string plugin_options
- * @property array  plugin_options_json
- * @property array  plugin_options_definition
- * @property string filename
- * @property bool   favorite
- * @property string icon_class
- * @property int    order
+ * @property string $id
+ * @property string $application_id
+ * @property string $model
+ * @property string $name
+ * @property string $label
+ * @property string $description
+ * @property string $type
+ * @property string $plugin
+ * @property string $plugin_options
+ * @property array  $plugin_options_json
+ * @property array  $plugin_options_definition
+ * @property string $filename
+ * @property bool   $favorite
+ * @property string $icon_class
+ * @property int    $order
+ * @property bool   $skip_upstream_updates
  */
 class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
 {
@@ -53,6 +54,7 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
     const FLDS_FILENAME = 'filename';
     const FLDS_FILTER = 'filter';
     const FLDS_CONTAINER_ID = 'container_id';
+    const FLDS_SKIP_UPSTREAM_UPDATES = 'skip_upstream_updates';
 
     /**
      * key in $_validators/$_properties array for the filed which
@@ -226,6 +228,11 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
                 self::LABEL => 'Filter', // _('Filter')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::TYPE => self::TYPE_TEXT,
+            ],
+            self::FLDS_SKIP_UPSTREAM_UPDATES => [
+                self::LABEL => 'Skip Upstream Updates', // _('Skip Upstream Updates')
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true,    'default' => false],
+                self::TYPE => self::TYPE_BOOLEAN,
             ],
         ]
     ];

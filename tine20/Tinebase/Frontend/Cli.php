@@ -1939,13 +1939,51 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * import contacts
+     * import records
      *
      * @param Zend_Console_Getopt $_opts
+     * @return integer
      */
-    public function import($_opts)
+    public function import(Zend_Console_Getopt $_opts)
     {
-        parent::_import($_opts);
+       $result = parent::_import($_opts);
+       return empty($result) ? 1 : 0;
+    }
+
+    /**
+     * export records
+     *
+     * usage: method=Tinebase.export -- definition=DEFINITION_NAME
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return int
+     */
+    public function export(Zend_Console_Getopt $_opts): int
+    {
+        $args = $this->_parseArgs($_opts, array('definition'));
+
+        if (preg_match("/\.xml/", $args['definition'])) {
+            $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile(
+                $args['definition'],
+                Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
+            );
+        } else {
+            $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($args['definition']);
+        }
+
+        /** @var Tinebase_Export_Abstract $export */
+        $export = new $definition->plugin(null, null, [
+            'definitionId' => $definition->getId()
+        ]);
+        if (method_exists($export, 'write')) {
+            $export->generate();
+            $fh = fopen('php://stdout', 'r+');
+            $export->write($fh);
+            return 0;
+        } else {
+            echo "Export write() not implemented yet";
+            return 1;
+        }
     }
 
     /**

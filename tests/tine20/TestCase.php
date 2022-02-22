@@ -1288,4 +1288,29 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
         return $content;
     }
+
+    protected function _genericCsvExport(array $config, Tinebase_Model_Filter_FilterGroup $filter = null)
+    {
+        $app = Tinebase_Application::getInstance()->getApplicationByName($config['app']);
+        $definition = Tinebase_ImportExportDefinition::getInstance()
+            ->updateOrCreateFromFilename($config['definition'], $app);
+
+        if (isset($config['exportClass'])) {
+            $class = $config['exportClass'];
+        } else if ($definition->plugin) {
+            $class = $definition->plugin;
+        } else {
+            $class = Tinebase_Export_CsvNew::class;
+        }
+        /** @var Tinebase_Export_CsvNew $csv */
+        $csv = new $class($filter, null, array(
+            'definitionId' => $definition->getId()
+        ));
+        $csv->generate();
+
+        $fh = fopen('php://memory', 'r+');
+        $csv->write($fh);
+
+        return $fh;
+    }
 }

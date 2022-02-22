@@ -1011,7 +1011,7 @@ Ext.Foo = Ext.extend(Ext.Bar, {
         var me = this;
         return new Promise(function (fulfill, reject) {
             if (me.rendered) {
-                fulfill(true);
+                fulfill(me);
             } else {
                 me.on('render', fulfill);
             }

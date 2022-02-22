@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Sales_Model_Product</model>
+    <name>sales_product_csv</name>
+    <!-- _('CSV all data') -->
+    <label>CSV all data</label>
+    <type>export</type>
+    <plugin>Sales_Export_Product</plugin>
+    <language>de</language>
+    <plugin_options></plugin_options>
+</config>

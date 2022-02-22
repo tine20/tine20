@@ -70,6 +70,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             errorMsgs.push(app.formatMessage('Cannot book { sourceDocument }: ({e.code}) { e.message }', { sourceDocument: record.getTitle(), e }))
                         }
                         selections.splice.apply(selections, [selections.indexOf(record), 1].concat(updatedRecord ? [updatedRecord] : []))
+                        // @TODO in editDialog reload record
                     })
                 }
 
@@ -117,7 +118,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
             const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
             Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-GridPanel-ContextMenu`, action, 2)
             Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(action), medBtnStyle), 30)
-            Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-editDialog-Toolbar`, Ext.apply(new Ext.Button(action), medBtnStyle), 10)
+            Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-editDialog-Toolbar`, Ext.apply(new Ext.Button(action), medBtnStyle), 40)
         })
     })
 

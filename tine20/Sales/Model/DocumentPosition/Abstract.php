@@ -240,12 +240,12 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             self::FLD_TITLE                     => [
                 self::LABEL                         => 'Product / Service', // _('Product / Service')
                 self::TYPE                          => self::TYPE_STRING,
+                self::NULLABLE                      => true,
                 self::QUERY_FILTER                  => true,
                 self::LENGTH                        => 255,
                 self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => false,
-                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED
-                ]
+                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                ],
             ],
             self::FLD_DESCRIPTION               => [
                 self::LABEL                         => 'Description', // _('Description')
@@ -255,7 +255,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::SHY                           => true,
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
-                ]
+                ],
             ],
             self::FLD_QUANTITY                  => [
                 self::LABEL                         => 'Quantity', // _('Quantity')
@@ -454,6 +454,14 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         if (!$this->isProduct()) {
             return;
         }
+
+        if ($transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_STORNO}) {
+            $this->{self::FLD_UNIT_PRICE} = 0 - $this->{self::FLD_UNIT_PRICE};
+            if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_POSITION_DISCOUNT_TYPE}) {
+                $this->{self::FLD_POSITION_DISCOUNT_SUM} = 0 - $this->{self::FLD_POSITION_DISCOUNT_SUM};
+            }
+        }
+
         // we need to check if there are followup positions for our precursor position already
         $existingQuantities = null;
         /** @var Tinebase_Controller_Record_Abstract $ctrl */
@@ -477,12 +485,16 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             $this->{self::FLD_QUANTITY} = $this->{self::FLD_QUANTITY} - $existingQuantities;
 
             $this->computePrice();
+        } elseif ($transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_STORNO}) {
+            $this->computePrice();
         }
     }
 
     public function isProduct(): bool
     {
-        return self::POS_TYPE_PRODUCT === $this->{self::FLD_TYPE};
+        return self::POS_TYPE_PRODUCT === $this->{self::FLD_TYPE} ||
+            self::POS_TYPE_ALTERNATIVE === $this->{self::FLD_TYPE} ||
+            self::POS_TYPE_OPTIONAL === $this->{self::FLD_TYPE};
     }
 
     protected function canCreatePartialFollowUp(): void
@@ -496,9 +508,13 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         }
         $this->{self::FLD_POSITION_PRICE} = $this->{self::FLD_UNIT_PRICE} * $this->{self::FLD_QUANTITY};
         if ($this->{self::FLD_POSITION_DISCOUNT_TYPE}) {
-            $discount = Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_POSITION_DISCOUNT_TYPE} ?
-                $this->{self::FLD_POSITION_DISCOUNT_SUM} :
-                ($this->{self::FLD_POSITION_PRICE} / 100) * (float)$this->{self::FLD_POSITION_DISCOUNT_PERCENTAGE};
+            if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_POSITION_DISCOUNT_TYPE}) {
+                $discount = (float)$this->{self::FLD_POSITION_DISCOUNT_SUM};
+            } else {
+                $discount = ($this->{self::FLD_POSITION_PRICE} / 100) *
+                    (float)$this->{self::FLD_POSITION_DISCOUNT_PERCENTAGE};
+                $this->{self::FLD_POSITION_DISCOUNT_SUM} = $discount;
+            }
         } else {
             $discount = 0;
         }

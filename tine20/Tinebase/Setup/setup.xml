@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>15.3</version>
+    <version>15.4</version>
     <minimumRequiredVersion>12.28</minimumRequiredVersion>
     <tables>
         <table>
@@ -2495,7 +2495,7 @@
         </table>
         <table>
             <name>importexport_definition</name>
-            <version>13</version>
+            <version>14</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2611,6 +2611,11 @@
                     <name>deleted_by</name>
                     <type>text</type>
                     <length>40</length>
+                </field>
+                <field>
+                    <name>skip_upstream_updates</name>
+                    <type>boolean</type>
+                    <default>false</default>
                 </field>
                 <field>
                     <name>deleted_time</name>

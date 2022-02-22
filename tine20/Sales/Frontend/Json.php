@@ -849,7 +849,10 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             throw new Tinebase_Exception_Backend('could not create memory stream');
         }
 
-        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+        /** @var Tinebase_Record_Interface $model */
+        $docCtrl = $model::getConfiguration()->getControllerInstance();
+        /** @var Sales_Model_Document_Abstract $preExportDocument */
+        $preExportDocument = $docCtrl->get($documentId);
 
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [
             ['field' => 'id', 'operator' => 'equals', 'value' => $documentId]
@@ -859,16 +862,21 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $doc->write($stream);
         rewind($stream);
 
-        /** @var Tinebase_Record_Interface $model */
-        $docCtrl = $model::getConfiguration()->getControllerInstance();
+        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+
         /** @var Sales_Model_Document_Abstract $document */
         $document = $docCtrl->get($documentId);
+        if ($preExportDocument->seq < $document->seq) {
+            throw new Tinebase_Exception_ConcurrencyConflict('document seq increase during export, please try again');
+        }
 
-        $name = ($document->isBooked() ? '' : 'Proforma-') .
-            $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_DATE}->format('Y-m-d') . '-' .
+        $name = ($document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_DATE} ?? Tinebase_DateTime::now())->format('Y-m-d') . '_' .
+            ($document->isBooked() ? '' : 'Proforma-') .
             ($document->isBooked() || !$document->has(Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER) ?
                 $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER} :
-                $document->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER}) . '-' . $document->getTitle() . '.pdf';
+                $document->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER}) .
+            ($document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_TITLE} ?
+                '-' . $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_TITLE} : '') . '.pdf';
 
         if ($node = $document->attachments->find('name', $name)) {
             $document->attachments->removeRecord($node);

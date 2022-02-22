@@ -1184,6 +1184,12 @@ msgstr "Lieferstatus"
 msgid "Possible Delivery Status"
 msgstr "Mögliche Lieferstatus"
 
+msgid "Print Paper Slip"
+msgstr "Belegdruck"
+
+msgid "Create { targetType }"
+msgstr "{ targetType } erzeugen"
+
 #: Config.php:402
 msgid "Created (unbooked, open)"
 msgstr "Erstellt (ungebucht, offen)"
