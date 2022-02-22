@@ -144,7 +144,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             this.plugins = (this.plugins || []).concat(new RecordEditFieldTriggerPlugin({
                 allowCreateNew: false,
                 preserveJsonProps: 'original_id',
-                qtip: window.i18n._('Edit copy')
+                qtip: window.i18n._('Edit copy'),
+                editDialogMode: 'local'
             }))
         }
 
