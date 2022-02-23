@@ -1,0 +1,10 @@
+<?php
+return array(
+    'actionqueue' => array(
+        'active' => true,
+        'backend' => 'Redis',
+        'host' => '{{getv "/actionqueue/host" ""}}',
+        'port' => {{getv "/actionqueue/port" "6379"}},
+        'queueName' => 'actionqueue'
+    ),
+);

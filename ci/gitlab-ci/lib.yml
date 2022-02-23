@@ -635,6 +635,11 @@
             echo "%%%% after source copy" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
         fi
         echo "%%%% setup ..." >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+        
+        rm /etc/supervisor.d/worker.ini || true
+        rm /etc/crontabs/tine20 || true
+        rm /etc/confd/conf.d/worker.inc.php.toml || true 
+        
         /usr/sbin/confd -onetime -backend env;
         
         tine20_await_db;

@@ -1,0 +1,10 @@
+[template]
+prefix = "/tine20"
+src = "worker.inc.php.tmpl"
+dest = "/etc/tine20/conf.d/worker.inc.php"
+owner = "root"
+mode = "0644"
+keys = [
+    "/actionqueue/host",
+    "/actionqueue/port",
+]
