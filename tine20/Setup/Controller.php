@@ -603,7 +603,11 @@ class Setup_Controller
                             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
                         } catch (Exception $e) {
-                            Tinebase_TransactionManager::getInstance()->rollBack();
+                            try {
+                                Tinebase_TransactionManager::getInstance()->rollBack();
+                            } catch (PDOException $pe) {
+                                Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Got PDOException: ' . $pe->getMessage());
+                            }
                             Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
                             Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
                             throw $e;
