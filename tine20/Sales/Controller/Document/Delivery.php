@@ -78,4 +78,24 @@ class Sales_Controller_Document_Delivery extends Sales_Controller_Document_Abstr
         }
         return [];
     }
+
+    /**
+     * @param Sales_Model_Document_Delivery $_record
+     * @param Sales_Model_Document_Delivery|null $_oldRecord
+     */
+    protected function _setAutoincrementValues(Tinebase_Record_Interface $_record, Tinebase_Record_Interface $_oldRecord = null)
+    {
+        if ($_record->isBooked() && !$_oldRecord->isBooked() &&
+                $_record->{Sales_Model_Document_Delivery::FLD_DOCUMENT_NUMBER} ===
+                $_oldRecord->{Sales_Model_Document_Delivery::FLD_DOCUMENT_PROFORMA_NUMBER}) {
+            $_record->{Sales_Model_Document_Delivery::FLD_DOCUMENT_NUMBER} = null;
+            $_oldRecord->{Sales_Model_Document_Delivery::FLD_DOCUMENT_NUMBER} = null;
+        }
+        parent::_setAutoincrementValues($_record, $_oldRecord);
+
+        if (!$_record->isBooked()) {
+            $_record->{Sales_Model_Document_Delivery::FLD_DOCUMENT_NUMBER} =
+                $_record->{Sales_Model_Document_Delivery::FLD_DOCUMENT_PROFORMA_NUMBER};
+        }
+    }
 }

@@ -21,6 +21,7 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE015_UPDATE006 = __CLASS__ . '::update006';
     const RELEASE015_UPDATE007 = __CLASS__ . '::update007';
+    const RELEASE015_UPDATE008 = __CLASS__ . '::update008';
 
     static protected $_allUpdates = [
         // this needs to be executed before HR update, so we make it TB prio
@@ -51,6 +52,10 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE007          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update007',
+            ],
+            self::RELEASE015_UPDATE008          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update008',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -180,5 +185,14 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             Sales_Model_DocumentPosition_Order::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.7', self::RELEASE015_UPDATE007);
+    }
+
+    public function update008()
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_Delivery::class,
+            Sales_Model_Document_Invoice::class,
+        ]);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.8', self::RELEASE015_UPDATE008);
     }
 }
