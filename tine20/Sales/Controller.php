@@ -170,6 +170,8 @@ class Sales_Controller extends Tinebase_Controller_Event
             if ($postal) {
                 Sales_Controller_Address::getInstance()->contactToCustomerAddress($postal, $contact);
             } else {
+                $defaultLang = $this->getContactDefaultLanguage($contact);
+                
                 $postal = new Sales_Model_Address(array(
                     'customer_id' => $customer->related_id,
                     'name' => $contact->n_given ?: $customer->related_record->name,
@@ -178,12 +180,36 @@ class Sales_Controller extends Tinebase_Controller_Event
                     'locality' => $contact->adr_one_locality,
                     'countryname' => $contact->adr_one_countryname,
                     'prefix1' => $customer->related_record->name == $contact->n_fn ? '' : $contact->n_fn,
-                    'language' => $contact->language,
+                    'language' => $defaultLang,
                 ));
 
                 Sales_Controller_Address::getInstance()->create($postal);
             }
         }
+    }
+    
+    public function updateBillingAddress($contact)
+    {
+        $contactRelations = Tinebase_Relations::getInstance()->getRelations('Addressbook_Model_Contact', 'Sql', $contact->getId());
+        $billingAddress = $contactRelations->filter('type', 'CONTACTADDRESS');
+
+        if (count($billingAddress) >= 1) {
+            //This contact already has billing address relations
+            foreach ($billingAddress as $address) {
+                Sales_Controller_Address::getInstance()->contactToCustomerAddress($address->related_record, $contact);
+            }
+        }
+    }
+    
+    public function getContactDefaultLanguage($contact)
+    {
+        $defaultLang = Sales_Config::getInstance()->{Sales_Config::LANGUAGES_AVAILABLE}->default;
+        foreach (Sales_Config::getInstance()->{Sales_Config::LANGUAGES_AVAILABLE}->records as $language) {
+            if ($contact->language == $language->id) {
+                $defaultLang = $contact->language;
+            }
+        }
+        return $defaultLang;
     }
 
     /**
@@ -201,6 +227,7 @@ class Sales_Controller extends Tinebase_Controller_Event
                 break;
             case Addressbook_Event_InspectContactAfterUpdate::class:
                 $this->createUpdatePostalAddress($_eventObject->updatedContact);
+                $this->updateBillingAddress($_eventObject->updatedContact);
                 break;
         }
     }
