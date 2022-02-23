@@ -156,7 +156,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $piTranslated = $translate->_('PI-');
 
         $this->assertStringStartsWith($piTranslated, $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER});
-        $this->assertEmpty($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER});
+        $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER}, $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER});
 
         $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_DISCOUNT_TYPE} = Sales_Config::INVOICE_DISCOUNT_SUM;
         $updatedInvoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
@@ -164,7 +164,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
 
         $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER},
             $updatedInvoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER});
-        $this->assertEmpty($updatedInvoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER});
+        $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER}, $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER});
 
         $updatedInvoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
         $updatedInvoice = Sales_Controller_Document_Invoice::getInstance()->update($updatedInvoice);
@@ -195,7 +195,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $pdTranslated = $translate->_('PD-');
 
         $this->assertStringStartsWith($pdTranslated, $delivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_PROFORMA_NUMBER});
-        $this->assertEmpty($delivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_NUMBER});
+        $this->assertSame($delivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_PROFORMA_NUMBER}, $delivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_NUMBER});
 
         $delivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_DATE} = Tinebase_DateTime::today()->subDay(1);
         $updatedDelivery = Sales_Controller_Document_Delivery::getInstance()->update($delivery);
@@ -203,7 +203,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
 
         $this->assertSame($delivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_PROFORMA_NUMBER},
             $updatedDelivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_PROFORMA_NUMBER});
-        $this->assertEmpty($updatedDelivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_NUMBER});
+        $this->assertSame($delivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_PROFORMA_NUMBER}, $delivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_NUMBER});
 
         $updatedDelivery->{Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS} = Sales_Model_Document_Delivery::STATUS_DELIVERED;
         $updatedDelivery = Sales_Controller_Document_Delivery::getInstance()->update($updatedDelivery);
