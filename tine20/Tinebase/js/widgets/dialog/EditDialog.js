@@ -989,6 +989,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     async loadRecord(record, supressMessageBus) {
         return new Promise((resolve) => {
             this.on('load', resolve, this, {single: true, buffer: 200});
+            if (record === 'remote') {
+                return this.loadRemoteRecord()
+            }
             this.record = record;
             if (!supressMessageBus) {
                 window.postal.publish({
