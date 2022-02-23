@@ -217,6 +217,9 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
 
     protected static $_sortExternalMapping = array();
 
+    /** @var bool for isInJsonRAII / __construct */
+    protected static $inJson = false;
+
 
     /******************************** functions ****************************************/
     
@@ -253,7 +256,11 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         }
 
         if (is_array($_data)) {
-            $this->setFromArray($_data);
+            if (static::$inJson) {
+                $this->setFromJson($_data);
+            } else {
+                $this->setFromArray($_data);
+            }
         }
         
         $this->_isDirty = false;
@@ -1248,6 +1255,9 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      */
     public function setFromJson(&$_data)
     {
+        $raii = static::inFromJsonRAII();
+        $newRaii = Tinebase_Record_NewAbstract::inFromJsonRAII();
+
         if (is_array($_data)) {
             $recordData = &$_data;
         } else {
@@ -1269,6 +1279,9 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
 
         $this->_setFromJson($recordData);
         $this->setFromArray($recordData);
+
+        unset($raii);
+        unset($newRaii);
     }
     
     /**
@@ -1852,5 +1865,15 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     public function setAccountGrants(Tinebase_Record_Interface $grants)
     {
         $this->{self::FLD_ACCOUNT_GRANTS} = $grants;
+    }
+
+    public static function inFromJsonRAII(): ?Tinebase_RAII
+    {
+        if (!static::$inJson) {
+            static::$inJson = true;
+            $tmp = &static::$inJson;
+            return new Tinebase_RAII(function() use(&$tmp) { $tmp = false; });
+        }
+        return null;
     }
 }

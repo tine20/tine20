@@ -112,6 +112,9 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      */
     protected static $_sortExternalMapping = array();
 
+    /** @var bool for isInJsonRAII / __construct */
+    protected static $inJson = false;
+
 
     /******************************** functions ****************************************/
 
@@ -145,7 +148,11 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         $this->bypassFilters = (bool)$_bypassFilters;
 
         if (is_array($_data)) {
-            $this->setFromArray($_data);
+            if (static::$inJson) {
+                $this->setFromJson($_data);
+            } else {
+                $this->setFromArray($_data);
+            }
         }
 
         $this->_isDirty = false;
@@ -1405,6 +1412,15 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         date_default_timezone_set('UTC');
     }
 
+    public static function inFromJsonRAII(): ?Tinebase_RAII
+    {
+        if (!static::$inJson) {
+            static::$inJson = true;
+            $tmp = &static::$inJson;
+            return new Tinebase_RAII(function() use(&$tmp) { $tmp = false; });
+        }
+        return null;
+    }
 
     /**
      * fills a record from json data
@@ -1421,6 +1437,9 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      */
     public function setFromJson(&$_data)
     {
+        $raii = Tinebase_Record_Abstract::inFromJsonRAII();
+        $raiiNew = static::inFromJsonRAII();
+
         if (is_array($_data)) {
             $recordData = $_data;
         } else {
@@ -1442,6 +1461,9 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
 
         $this->_setFromJson($recordData);
         $this->setFromArray($recordData);
+
+        unset($raii);
+        unset($raiiNew);
     }
 
     /**
