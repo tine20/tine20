@@ -46,6 +46,9 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
+    // forbidden in windows, @see #202420
+    const FILENAME_FORBIDDEN_CHARS_EXP = '/[\/\\\:*?"<>|]/';
+
     const XPROPS_REVISION = 'revisionProps';
     const XPROPS_REVISION_NODE_ID = 'nodeId';
     const XPROPS_REVISION_ON = 'keep';
@@ -462,6 +465,15 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
     protected static $_resolveForeignIdFields = array(
         'Tinebase_Model_User' => array('created_by', 'last_modified_by')
     );
+
+    /**
+     * @param string $name
+     * @return array|string|string[]|null
+     */
+    public static function sanitizeName(string $name)
+    {
+        return preg_replace(self::FILENAME_FORBIDDEN_CHARS_EXP, '', $name);
+    }
 
     public static function modelConfigHook(array &$_definition)
     {
