@@ -170,15 +170,7 @@ class Sales_Controller extends Tinebase_Controller_Event
             if ($postal) {
                 Sales_Controller_Address::getInstance()->contactToCustomerAddress($postal, $contact);
             } else {
-                $defaultLang = '';
-                foreach (Sales_Config::getInstance()->{Sales_Config::LANGUAGES_AVAILABLE}->records as $language) {
-                    if ($contact->language == $language->id) {
-                        $defaultLang = $contact->language;
-                    }
-                }
-                if (!$defaultLang) {
-                    $defaultLang = Sales_Config::getInstance()->{Sales_Config::LANGUAGES_AVAILABLE}->default;
-                }
+                $defaultLang = $this->getContactDefaultLanguage($contact);
                 
                 $postal = new Sales_Model_Address(array(
                     'customer_id' => $customer->related_id,
@@ -207,6 +199,17 @@ class Sales_Controller extends Tinebase_Controller_Event
                 Sales_Controller_Address::getInstance()->contactToCustomerAddress($address->related_record, $contact);
             }
         }
+    }
+    
+    public function getContactDefaultLanguage($contact)
+    {
+        $defaultLang = Sales_Config::getInstance()->{Sales_Config::LANGUAGES_AVAILABLE}->default;
+        foreach (Sales_Config::getInstance()->{Sales_Config::LANGUAGES_AVAILABLE}->records as $language) {
+            if ($contact->language == $language->id) {
+                $defaultLang = $contact->language;
+            }
+        }
+        return $defaultLang;
     }
 
     /**
