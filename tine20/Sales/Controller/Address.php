@@ -243,7 +243,9 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
      */
     public function contactToCustomerAddress(Sales_Model_Address $address, Addressbook_Model_Contact $contact)
     {
+        $language = Sales_Controller::getInstance()->getContactDefaultLanguage($contact);
         $customer = Sales_Controller_Customer::getInstance()->get($address->customer_id);
+        
         //Update Address
         $address->name =  $contact->n_given ?: $customer->name;
         $address->street = $contact->adr_one_street;
@@ -252,7 +254,7 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         $address->region = $contact->adr_one_region;
         $address->countryname = $contact->adr_one_countryname;
         $address->prefix1 = $customer->name == $contact->n_fn ? '' : $contact->n_fn;
-        $address->language = $contact->language;
+        $address->language = $language;
 
         return Sales_Controller_Address::getInstance()->update($address);
     }
