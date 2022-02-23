@@ -63,6 +63,21 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         'titleProperty'     => 'fulltext',//array('%s - %s', array('number', 'title')),
         'appName'           => 'Sales',
         'modelName'         => 'Contract',
+
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'products'       => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'product_id' => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                Sales_Model_Product::FLD_NAME => [],
+                                Sales_Model_Product::FLD_DESCRIPTION => [],
+                            ],
+                        ],
+                    ],
+                ],
+            ]
+        ],
         
         'filterModel' => array(
             'contact_internal' => array(
