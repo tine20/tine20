@@ -384,14 +384,14 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
                 return {date: day.format('Y-m-d 00:00:00')}
             });
             
-            record = {
+            record = Tine.HumanResources.Model.FreeTime.getDefaultData({
                 'employee_id': _.get(selectedEmployee, 'data'),
                 'type': this.freeTimeType,
                 'freedays': freedays,
                 'days_count': freedays.length,
                 'firstday_date': freedays[0],
                 'lastday_date': freedays[freedays.length-1]
-            }
+            });
         }
 
         if (record) {

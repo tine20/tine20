@@ -446,7 +446,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                         }
 
                         // overwrite function
-                        Tine[appName].Model[modelName].getDefaultData = function() {
+                        Tine[appName].Model[modelName].getDefaultData = function(defaults) {
                             if (! dd) {
                                 var dd = Ext.decode(Ext.encode(modelConfig.defaultData));
                             }
@@ -466,7 +466,10 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                                     }
                                 }
                             }
-                            return dd;
+
+                            // @TODO: use grants model and set all grants to true for new records
+                            dd['account_grants'] = {'adminGrant': true};
+                            return Object.assign(dd, defaults);
                         };
                     }
                     
