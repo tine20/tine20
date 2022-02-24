@@ -63,5 +63,10 @@ class Sales_Model_DocumentPosition_Delivery extends Sales_Model_DocumentPosition
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    // no moneytary fields, no calc to do
+    public function computePrice()
+    {
+    }
 }
 

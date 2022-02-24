@@ -82,16 +82,17 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
             // autoWidth
             if (! this.formDefaults.columnWidth) {
                 const tcw = _.sum(_.map(initialRowConfig, 'columnWidth')) || 0;
-                const nw = _.filter(initialRowConfig, c => { return !c.columnWidth });
+                const nw = _.filter(initialRowConfig, c => { return c && !c.columnWidth });
                 nw.forEach(c => {c.columnWidth = (1-tcw)/nw.length});
             }
 
             // each row consits n column objects
             for (var n=0,m=initialRowConfig.length; n<m; n++) {
-                var column = initialRowConfig[n],
-                    cell = this.wrapFormItem(column);
-
-                rowConfig.items.push(cell);
+                const column = initialRowConfig[n];
+                if (column) {
+                    const cell = this.wrapFormItem(column);
+                    rowConfig.items.push(cell);
+                }
             }
             items.push(rowConfig);
         }

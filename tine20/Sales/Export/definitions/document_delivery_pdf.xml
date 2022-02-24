@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Sales_Model_Document_Delivery</model>
+    <name>document_delivery_pdf</name>
+    <type>export</type>
+    <plugin>Sales_Export_DocumentPdf</plugin>
+    <description>Delivery PDF</description>
+    <scope>system</scope>
+    <template>tine20:///Tinebase/folders/shared/export/templates/Sales/sales_document_delivery.docx</template>
+</config>

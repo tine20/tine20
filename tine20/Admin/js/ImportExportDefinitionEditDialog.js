@@ -1,6 +1,6 @@
 /*
  * Tine 2.0
- * 
+ *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
@@ -23,12 +23,12 @@ Tine.Tinebase.ImportExportDefinitionEditDialog = Ext.extend(Tine.widgets.dialog.
     modelName: 'ImportExportDefinition',
 
     windowNamePrefix: 'ImportExportDefinitionEditWindow_',
-    windowHeight: 600,
+    windowHeight: 700,
 
     evalGrants: false,
     showContainerSelector: false,
 
-    
+
     getFormItems: function () {
         var _ = window.lodash,
             fieldManager = _.bind(
@@ -72,8 +72,9 @@ Tine.Tinebase.ImportExportDefinitionEditDialog = Ext.extend(Tine.widgets.dialog.
                             fieldManager('name'),
                             fieldManager('label'),
                             fieldManager('description'),
-                            fieldManager('type', {columnWidth: 3/4}),
-                            fieldManager('favorite', {columnWidth: 1/4}),
+                            fieldManager('type', {columnWidth: 1/3}),
+                            fieldManager('scope', {columnWidth: 1/3}),
+                            fieldManager('favorite', {columnWidth: 1/3}),
                             fieldManager('application_id', {xtype: 'tw-app-picker'}),
                             fieldManager('model'),
                             fieldManager('plugin'),
@@ -81,7 +82,8 @@ Tine.Tinebase.ImportExportDefinitionEditDialog = Ext.extend(Tine.widgets.dialog.
                             fieldManager('skip_upstream_updates'),
                             fieldManager('plugin_options'),
                             fieldManager('format'),
-                            fieldManager('filename')
+                            fieldManager('filename'),
+                            fieldManager('skip_upstream_updates')
                         ]]
                     }]
                 }]

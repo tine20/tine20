@@ -226,11 +226,13 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             ],
             self::FLD_PRECURSOR_POSITION_MODEL  => [
                 self::TYPE                          => self::TYPE_STRING,
+                self::DISABLED                      => true,
                 self::SHY                           => true,
                 self::NULLABLE                      => true,
             ],
             self::FLD_PRECURSOR_POSITION        => [
                 self::TYPE                          => self::TYPE_DYNAMIC_RECORD,
+                self::DISABLED                      => true,
                 self::SHY                           => true,
                 self::NULLABLE                      => true,
                 self::CONFIG                        => [

@@ -791,7 +791,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [
             ['field' => 'id', 'operator' => 'equals', 'value' => $documentId]
         ]);
-        $doc = new Sales_Export_DocumentPdf($filter, null, ['definitionId' => Tinebase_ImportExportDefinition::getInstance()->getByName('document_offer_pdf')->getId()]);
+        $doc = new Sales_Export_DocumentPdf($filter, null, ['definitionId' => Tinebase_ImportExportDefinition::getInstance()->getByName(
+            'document_' . strtolower(preg_replace('/^Sales_Model_Document_/', '', $model) .'_pdf'))->getId()]);
         $doc->generate();
         $doc->write($stream);
         rewind($stream);

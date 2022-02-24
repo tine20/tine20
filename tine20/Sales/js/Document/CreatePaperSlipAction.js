@@ -23,6 +23,15 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 let record = this.initialConfig.selections[0]
                 const editDialog = cmp.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog})
                 const maskMsg = app.formatMessage('Creating {type} Paper Slip', { type: recordClass.getRecordName() })
+
+                if (editDialog) {
+                    try {
+                        await editDialog.isValid()
+                    } catch (e) {
+                        return
+                    }
+                }
+
                 const createPaperSlip = async (mask) => {
                     try {
                         mask.show()
