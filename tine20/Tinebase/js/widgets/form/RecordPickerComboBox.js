@@ -347,8 +347,13 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     setValue: function (value) {
         if (value) {
 
-            // value is a record
+            if (Ext.isObject(value) && typeof(value.get) !== 'function') {
+                // value is record data
+                value = this.recordProxy ? this.recordProxy.recordReader({responseText: Ext.encode(value)}) : new this.recordClass(value)
+            }
+
             if (typeof(value.get) === 'function') {
+                // value is a record
                 const existingRecord = this.store.getById(value.get(this.recordClass.getMeta('idProperty')))
                 if (existingRecord) {
                     this.store.remove(existingRecord);
@@ -356,19 +361,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                 this.store.addSorted(value);
 
                 value = value.get(this.valueField);
-            }
-
-            // value is a js object
-            else if (Ext.isObject(value)) {
-                var record = this.recordProxy ? this.recordProxy.recordReader({responseText: Ext.encode(value)}) : new this.recordClass(value)
-                if (! this.store.getById(value.id)) {
-                    this.store.addSorted(record);
-                }
-                value = value[this.valueField] || '';
-            }
-
-            // value is the current id
-            else if (Ext.isPrimitive(value) && value == this.getValue()) {
+            } else if (Ext.isPrimitive(value) && value == this.getValue()) {
+                // value is the current id
                 return this.setValue(this.selectedRecord);
             }
         }
