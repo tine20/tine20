@@ -14,10 +14,10 @@
  * @extends     Ext.Action
  */
 Tine.Felamimail.MessageFileAction = function(config) {
-    config.text = config.text ? config.text : i18n._('Save Message as');
     config.iconCls = 'action_file';
     config.app = Tine.Tinebase.appMgr.get('Felamimail');
     config.i18n = config.app.i18n;
+    config.text = config.text ? config.text : config.i18n._('Save Message as');
     config.menu = new Ext.menu.Menu({});
     
     Ext.apply(this, config);
