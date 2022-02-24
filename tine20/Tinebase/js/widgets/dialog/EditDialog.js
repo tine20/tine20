@@ -772,16 +772,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         this.fbar.push(this.action_cancel, this.action_saveAndClose);
 
-        if (this.action_print) {
-            this.tbarItems = this.tbarItems || [];
-            this.tbarItems.push(this.action_print);
-        }
-
-        if (this.action_export) {
-            this.tbarItems = this.tbarItems || [];
-            this.tbarItems.push(this.action_export);
-        }
-
         this.tbar = new Ext.Toolbar({
             items: this.tbarItems || [],
             plugins: [].concat(this.recordClass ? [{
@@ -789,6 +779,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-editDialog-Toolbar'
             }] : [])
         });
+
+        const btnStyle = _.find(this.tbar.items.items, {scale: 'medium'}) ? { scale: 'medium', rowspan: 2, iconAlign: 'top'} : {}
+        if (this.action_print) {
+            this.tbar.add(Ext.apply(new Ext.Button(this.action_print), btnStyle));
+        }
+
+        if (this.action_export) {
+            this.tbar.add(Ext.apply(new Ext.Button(this.action_export), btnStyle));
+        }
+
         this.actionUpdater.addActions(this.tbar.items);
     },
 
