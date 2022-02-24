@@ -192,6 +192,19 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
         _.set(record, this.roleDataPath, roleData);
     },
 
+    onEditDialogRecordUpdate: function(updatedRecord) {
+        const contact = Tine.Tinebase.data.Record.setFromJson(updatedRecord, Tine.Addressbook.Model.Contact);
+        const existing = this.store.getById(contact.id);
+        const idx = this.store.indexOf(existing);
+
+        [this.memberDataPath, this.roleDataPath].forEach((path) => {
+            _.set(contact, path, _.get(existing, path));
+        })
+
+        this.store.remove(existing);
+        this.store.insert(idx, contact);
+    },
+
     /**
      * get values from store (as array)
      *
