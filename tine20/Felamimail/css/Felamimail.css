@@ -129,7 +129,7 @@
 
 .preview-panel-felamimail-headers {
     background-color: #dddddd;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .preview-panel-felamimail-attachments {
