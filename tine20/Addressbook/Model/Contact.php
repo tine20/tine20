@@ -956,8 +956,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         if (empty($_data['org_name']) && empty($_data['n_family'])) {
             if (! empty($_data['n_fileas'])) {
                 $names = preg_split('/\s*,\s*/', $_data['n_fileas']);
-                $_data['n_family'] = $names[0];
                 if (empty($_data['n_given'])&& isset($names[1])) {
+                    $_data['n_family'] = $names[0];
                     $_data['n_given'] = $names[1];
                 }
             }
@@ -968,16 +968,19 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             : ((! empty($_data['org_name'])) ? $_data['org_name']
             : ((isset($_data['n_fileas'])) ? $_data['n_fileas'] : ''));
 
-        if (!empty($_data['n_given'])) {
-            $_data['n_fileas'] .= ', ' . $_data['n_given'];
+        if (!empty($_data['n_given']) && $_data['n_given'] !== $_data['n_fileas']) {
+            if (!empty($_data['n_fileas'])) {
+                $_data['n_fileas'] .= ', ';
+            }
+            $_data['n_fileas'] .= $_data['n_given'];
         }
 
-        $_data['n_fn'] = (!empty($_data['n_family'])) ? $_data['n_family']
-            : ((! empty($_data['org_name'])) ? $_data['org_name']
-            : ((isset($_data['n_fn'])) ? $_data['n_fn'] : ''));
-
         if (!empty($_data['n_given'])) {
-            $_data['n_fn'] = $_data['n_given'] . ' ' . $_data['n_fn'];
+            $_data['n_fn'] = $_data['n_given'] . (!empty($_data['n_family']) ? ' ' . $_data['n_family'] : '');
+        } else {
+            $_data['n_fn'] = (!empty($_data['n_family'])) ? $_data['n_family']
+                : ((! empty($_data['org_name'])) ? $_data['org_name']
+                    : ((isset($_data['n_fn'])) ? $_data['n_fn'] : ''));
         }
 
         // truncate some values if too long
