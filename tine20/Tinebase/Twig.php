@@ -147,6 +147,13 @@ class Tinebase_Twig
         $locale = $this->_locale;
         $translate = $this->_translate;
 
+        $n = new NumberFormatter($this->_locale->toString(), NumberFormatter::DECIMAL);
+        /** @var \Twig\Extension\CoreExtension $extension */
+        $extension = $this->_twigEnvironment->getExtension(\Twig\Extension\CoreExtension::class);
+        $extension->setNumberFormat(0,
+            $n->getSymbol(NumberFormatter::DECIMAL_SEPARATOR_SYMBOL),
+            $n->getSymbol(NumberFormatter::GROUPING_SEPARATOR_SYMBOL));
+
         $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('removeSpace', function($str) {
             return str_replace(' ', '', $str);
         }));

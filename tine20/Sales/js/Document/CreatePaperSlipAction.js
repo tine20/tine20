@@ -65,7 +65,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 } else {
                     const maskEl = cmp.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog || c instanceof Tine.widgets.MainScreen }).getEl()
                     const mask = new Ext.LoadMask(maskEl, { msg: maskMsg })
-                    await createPaperSlip(maskEl)
+                    await createPaperSlip(mask)
                     alert('OnlyOfficeIntegrator missing -> find paperSlip in attachments')
                 }
             }

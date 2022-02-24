@@ -59,9 +59,8 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
             $vats->addRecord(new Tinebase_Config_KeyFieldRecord([
                 'id' => $vat['tax_rate'],
                 'value' => $vat['tax_sum'],
-            ]));
+            ], true));
         }
-        new Tinebase_Config_KeyFieldRecord();
         $this->_records = [
             'PREPOSITIONS' => $this->_records,
             'POSITIONS' => $this->_records->getFirstRecord()->{Sales_Model_Document_Abstract::FLD_POSITIONS},

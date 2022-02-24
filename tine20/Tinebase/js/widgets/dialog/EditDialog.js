@@ -989,6 +989,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     async loadRecord(record, supressMessageBus) {
         return new Promise((resolve) => {
             this.on('load', resolve, this, {single: true, buffer: 200});
+            if (record === 'remote') {
+                return this.loadRemoteRecord()
+            }
             this.record = record;
             if (!supressMessageBus) {
                 window.postal.publish({
@@ -1069,7 +1072,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
                 const requiredGrants = _.get(this.modelConfig, `fields[${f.fieldName}].requiredGrants`);
                 if (requiredGrants) {
-                    hasRequiredGrants = hasRequiredGrants && requiredGrants.some((requiredGrant) => { return recordGrants[requiredGrant] });
+                    hasRequiredGrants = hasRequiredGrants && ( recordGrants.adminGrant || requiredGrants.some((requiredGrant) => { return recordGrants[requiredGrant] }));
                 }
 
                 // NOTE: requiredGrant is UI only property
