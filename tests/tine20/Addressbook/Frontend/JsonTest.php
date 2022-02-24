@@ -5,7 +5,7 @@
  *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  */
@@ -796,6 +796,19 @@ class Addressbook_Frontend_JsonTest extends TestCase
         ], null);
 
         static::assertCount(0, $result['results']);
+    }
+
+    /**
+     * Test automatic Full Name Creation with only n_given
+     */
+    public function testContactNameGivenFullName()
+    {
+        $newContactData = $this->_getContactData();
+        unset($newContactData['n_family']);
+        unset($newContactData['org_name']);
+        $contact = $this->_uit->saveContact($newContactData);
+        self::assertEquals('ali', $contact['n_fn'], 'n_fn mismatch');
+        self::assertEquals('ali', $contact['n_fileas'], 'n_fileas mismatch');
     }
 
     /**

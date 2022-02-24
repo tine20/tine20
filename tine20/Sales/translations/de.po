@@ -227,9 +227,18 @@ msgstr[1] "Textbausteine"
 msgid "The number you have tried to set is already in use!"
 msgstr "Diese Nummer ist bereits vergeben!"
 
+msgid "less {percentage}% discount"
+msgstr "abzgl. {percentage}% Rabatt"
+
+msgid "plus { tax }% tax"
+msgstr " zzgl. { tax}% Mwst."
+
+msgid "Payable within {days} days without deducation."
+msgstr "Zahlbar innerhalb von {days} Tagen ohne Abzug."
+
 #: Frontend/Json.php:667
 msgid "You have to set a customer!"
-msgstr "Bitte legen Seien Kunden fest!"
+msgstr "Bitte legen Sei einen Kunden fest!"
 
 #: Model/Customer.php:39 Model/Customer.php:270 Model/Contract.php:146
 #: Model/Contract.php:245 Model/Contract.php:266 Model/Offer.php:52

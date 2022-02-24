@@ -551,16 +551,14 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     ($netSumByTaxRate[$taxRate] - $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} *
                         $netSumByTaxRate[$taxRate] / $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM})
                     * $taxRate / 100;
-                $this->xprops(Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE)[$taxRate] = $tax;
+                if ($tax) {
+                    $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
+                        'tax_rate' => $taxRate,
+                        'tax_sum' => $tax,
+                    ];
+                }
                 return $carry + $tax;
             }, 0) : 0;
-
-        foreach ($salesTaxByRate as $rate => $tax) {
-            $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
-                'tax_rate' => $rate,
-                'tax_sum' => $tax,
-            ];
-        }
 
         $this->{self::FLD_GROSS_SUM} = $this->{self::FLD_POSITIONS_NET_SUM} - $this->{self::FLD_INVOICE_DISCOUNT_SUM}
             + $this->{self::FLD_SALES_TAX};
