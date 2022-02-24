@@ -107,6 +107,16 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
     }
 
     /**
+     * get appName
+     *
+     * @return string
+     */
+    public function getAppName()
+    {
+        return $this->_appName;
+    }
+
+    /**
      * set appName
      *
      * @param  string $_appName
