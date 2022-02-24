@@ -89,6 +89,8 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
         ]);
 
         // remove all moneytary fields, this is a delivery document, no money here
+        unset($_definition[self::FIELDS][self::FLD_POSITIONS_DISCOUNT_SUM]);
+        unset($_definition[self::FIELDS][self::FLD_POSITIONS_NET_SUM]);
         unset($_definition[self::FIELDS][self::FLD_INVOICE_DISCOUNT_TYPE]);
         unset($_definition[self::FIELDS][self::FLD_INVOICE_DISCOUNT_SUM]);
         unset($_definition[self::FIELDS][self::FLD_INVOICE_DISCOUNT_PERCENTAGE]);

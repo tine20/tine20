@@ -265,9 +265,9 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         Object.assign(this.columns.find((c) => c.dataIndex === 'pos_number'),{ width: 40 });
         // @TODO product_id picker nur sales produkte die noch aktiv
         Object.assign(this.columns.find((c) => c.dataIndex === 'title'),{ quickaddField: this.getProductPicker(), renderer: _.bind(this.titleRenderer, this) });
-        Object.assign(this.columns.find((c) => c.dataIndex === 'unit_price'),{ header: i18n._('Price') });
-        Object.assign(this.columns.find((c) => c.dataIndex === 'position_discount_sum'),{ header: i18n._('Discount') });
-        Object.assign(this.columns.find((c) => c.dataIndex === 'gross_price'),{ header: i18n._('Total') });
+        Object.assign(this.columns.find((c) => c.dataIndex === 'unit_price') || {},{ header: i18n._('Price') });
+        Object.assign(this.columns.find((c) => c.dataIndex === 'position_discount_sum') || {},{ header: i18n._('Discount') });
+        Object.assign(this.columns.find((c) => c.dataIndex === 'gross_price') || {},{ header: i18n._('Total') });
 
         const colModel = this.supr().getColumnModel.call(this);
 
