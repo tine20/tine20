@@ -327,7 +327,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             Ext.apply(this, Ext.decode(this.additionalConfig));
         }
 
-        var fixedFieldsData = Ext.isString(this.fixedFields) ? Ext.decode(this.fixedFields) : [];
+        var fixedFieldsData = Ext.isString(this.fixedFields) ? Ext.decode(this.fixedFields) : this.fixedFields || {};
         this.fixedFields = new Ext.util.MixedCollection();
         this.fixedFields.addAll(fixedFieldsData);
 
