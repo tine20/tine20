@@ -4533,8 +4533,8 @@ class Tinebase_FileSystem implements
 
                 Tinebase_Notification::getInstance()->send($user, array($user->contact_id), $translatedSubject, $path . ' exceeded ' . ($softQuota ? 'soft ' : '') . 'quota');
             }
-        } catch(Exception $e) {
-            // LOG
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
         }
     }
 
