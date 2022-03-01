@@ -97,15 +97,18 @@ Tine.ActiveSync.SyncDevicesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @returns {Array}
      */
     getAdditionalCtxItems: function() {
-        this.actionRemoteResetDevices = new Ext.Action({
-            text: this.app.i18n._('Remote Device Reset'),
-            disabled: ! Tine.Tinebase.common.hasRight('RESET DEVICES', 'ActiveSync'),
-            scope: this,
-            handler: this.onRemoteResetDevices,
-            iconCls: 'action_wipeDevice'
-        });
+        if (!this.app.getRegistry().get('config')['disableremotereset'].value) {
+            this.actionRemoteResetDevices = new Ext.Action({
+                text: this.app.i18n._('Remote Device Reset'),
+                disabled: !Tine.Tinebase.common.hasRight('RESET DEVICES', 'ActiveSync'),
+                scope: this,
+                handler: this.onRemoteResetDevices,
+                iconCls: 'action_wipeDevice',
+            });
 
-        return [this.actionRemoteResetDevices];
+            return [this.actionRemoteResetDevices];
+        }
+        return null;
     },
 
     /**
