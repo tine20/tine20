@@ -82,8 +82,7 @@ Tine.Tinebase.ImportExportDefinitionEditDialog = Ext.extend(Tine.widgets.dialog.
                             fieldManager('skip_upstream_updates'),
                             fieldManager('plugin_options'),
                             fieldManager('format'),
-                            fieldManager('filename'),
-                            fieldManager('skip_upstream_updates')
+                            fieldManager('filename')
                         ]]
                     }]
                 }]

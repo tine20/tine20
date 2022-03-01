@@ -105,7 +105,8 @@ Ext.form.NumberField = Ext.extend(Ext.form.TextField,  {
     },
 
     getValue : function(){
-        return this.fixPrecision(this.parseValue(Ext.form.NumberField.superclass.getValue.call(this)));
+        const value = Ext.form.NumberField.superclass.getValue.call(this);
+        return value === this.emptyValue ? value : this.fixPrecision(this.parseValue(value));
     },
 
     setValue : function(v){

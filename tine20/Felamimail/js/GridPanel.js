@@ -414,6 +414,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 ]
             }
         });
+        
+        this.action_addTask = new Ext.Action({
+            requiredGrant: 'readGrant',
+            text: Tine.Tinebase.appMgr.get('Tasks').i18n._('Add New Task'),
+            handler: this.onCreateTask,
+            iconCls: 'action_addTask',
+            scope: this,
+            disabled: true,
+            allowMultiple: false,
+            hidden: !Tine.Tinebase.appMgr.isEnabled('Tasks')
+        });
+        
         this.actionUpdater.addActions([
             this.action_deleteRecord,
             this.action_reply,
@@ -429,7 +441,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_copyRecord,
             this.action_moveRecord,
             this.action_spam,
-            this.action_ham
+            this.action_ham,
+            this.action_addTask
         ]);
         
         this.contextMenu = new Ext.menu.Menu({
@@ -448,8 +461,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 this.action_deleteRecord,
                 this.action_fileRecord,
                 this.action_spam,
-                this.action_ham
-            ]
+                this.action_ham,
+                this.action_addTask
+            ],
         });
     },
 
@@ -1697,6 +1711,38 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({
             record: newAccount
+        });
+    },
+    
+    /**
+     * create task handler
+     *
+     * @param {Button} button
+     * @param {Event} event
+     */
+    onCreateTask: function(button, event) {
+        const sm = this.getGrid().getSelectionModel();
+        const msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection();
+        
+        if (msgs.length > 1) {
+            return ;
+        }
+        
+        msgs.each(function(msg) {
+            if (msg?.data) {
+                const data = msg?.data;
+                const body = Tine.Tinebase.common.html2text(data?.body);
+                const record = Tine.Tinebase.data.Record.setFromJson(Ext.apply(Tine.Tasks.Model.Task.getDefaultData(),
+                    {
+                        summary: data?.subject,
+                        description: body
+                    }), Tine.Tasks.Model.Task);
+                record.setId(0);
+                
+                const popupWindow = Tine.Tasks.TaskEditDialog.openWindow({
+                    record: record
+                });
+            }
         });
     },
     

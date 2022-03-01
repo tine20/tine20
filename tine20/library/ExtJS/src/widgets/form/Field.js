@@ -43,6 +43,10 @@ Ext.form.Field = Ext.extend(Ext.BoxComponent,  {
      */
 
     /**
+     * @cfg {String} emptyValue value for value===emptyText or undefined
+     */
+    emptyValue : null,
+    /**
      * @cfg {String} invalidClass The CSS class to use when marking a field invalid (defaults to 'x-form-invalid')
      */
     invalidClass : 'x-form-invalid',
@@ -534,8 +538,8 @@ var form = new Ext.form.FormPanel({
             return this.value;
         }
         var v = this.el.getValue();
-        if(v === this.emptyText || v === undefined){
-            v = '';
+        if(v === this.emptyText || v === undefined || v === ''){
+            v = this.emptyValue;
         }
         return v;
     },
