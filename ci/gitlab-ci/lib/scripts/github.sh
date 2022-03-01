@@ -34,7 +34,7 @@ github_create_release_body() {
 
     git fetch origin "$previous_tag"
 
-    if ! git log "$tag...$previous_tag"; then
+    if ! git log "$tag...$previous_tag" 1> /dev/null; then
         git fetch origin --unshallow --quiet
     fi
 
@@ -57,7 +57,7 @@ github_release_add_asset() {
         -T "$path_to_asset" \
         -H "accept: application/vnd.github.v3+json" \
         -H "content-type: $(file -b --mime-type $path_to_asset)" \
-        "$upload_url?name=$name.tar.gz"
+        "$upload_url?name=$name.tar.bz2"
 }
 
 github_get_latest_release_tag_name() {
