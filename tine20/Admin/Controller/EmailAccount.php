@@ -456,8 +456,13 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
             $smtpUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
 
-            $_record->email_imap_user = $emailUserBackend->getEmailuser($fullUser)->toArray();
-            $_record->email_smtp_user = $smtpUserBackend->getEmailuser($fullUser)->toArray();
+            if (method_exists($emailUserBackend, 'getEmailuser')) {
+                $_record->email_imap_user = $emailUserBackend->getEmailuser($fullUser)->toArray();
+            }
+
+            if (method_exists($smtpUserBackend, 'getEmailuser')) {
+                $_record->email_smtp_user = $smtpUserBackend->getEmailuser($fullUser)->toArray();
+            }
         }
     }
 
