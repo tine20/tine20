@@ -1103,7 +1103,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     isValid: function() {
         var result = Tine.Felamimail.AccountEditDialog.superclass.isValid.call(this);
         var from = this.getForm().findField('from').getValue();
-        if (from.includes(',')) {
+        if (String(from).includes(',')) {
             this.getForm().markInvalid([{
                 id: 'from',
                 msg: this.app.i18n._("User Name (From) cannot contain a comma.")
