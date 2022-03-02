@@ -89,6 +89,7 @@
     "ezyang/htmlpurifier": "^4",
     "firebase/php-jwt": "^5",
     "giggsey/libphonenumber-for-php": "^8",
+    "hfig/mapi": "^1.2",
     "jumbojett/openid-connect-php": "dev-master",
     "laminas/laminas-diactoros": "^2.7",
     "laminas/laminas-http": "^2.14",
@@ -110,6 +111,7 @@
     "sentry/sentry": "^3",
     "simplesamlphp/simplesamlphp": "v1.18.*",
     "spomky-labs/otphp": "^10.0",
+    "swiftmailer/swiftmailer": "^6.3",
     "symfony/cache": "^5.3",
     "symfony/config": "^4",
     "symfony/dependency-injection": "^4",
@@ -167,5 +169,6 @@
   "support": {
     "issues": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues",
     "source": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM"
-  }
+  },
+  "minimum-stability": "RC"
 }
