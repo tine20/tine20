@@ -46,7 +46,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $this->_setupPreferences();
         
-        Calendar_Config::getInstance()->set(Calendar_Config::MAX_NOTIFICATION_PERIOD_FROM, /* last 10 years */ 52 * 10);
+        Calendar_Config::getInstance()->set(Calendar_Config::MAX_NOTIFICATION_PERIOD_FROM, /* last 50 years */ 52 * 10 * 5);
     }
     
     /**
@@ -465,18 +465,14 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testRecuringExceptions()
     {
-        $now = Tinebase_DateTime::now();
-        if ($now->get('d') === '02' && $now->get('m') === '03') {
-            self::markTestSkipped('failed on 2022-03-02 ... needs to be fixed');
-        }
-
-        $from = new Tinebase_DateTime('2012-03-01 00:00:00');
-        $until = new Tinebase_DateTime('2012-03-31 23:59:59');
+        $year = Tinebase_DateTime::now()->subYear(2)->format('Y');
+        $from = new Tinebase_DateTime($year . '-03-01 00:00:00');
+        $until = new Tinebase_DateTime($year . '-03-31 23:59:59');
         
         $event = new Calendar_Model_Event(array(
                 'summary'       => 'Some Daily Event',
-                'dtstart'       => '2012-03-14 09:00:00',
-                'dtend'         => '2012-03-14 10:00:00',
+                'dtstart'       =>  $year . '-03-14 09:00:00',
+                'dtend'         => $year . '-03-14 10:00:00',
                 'rrule'         => 'FREQ=DAILY;INTERVAL=1',
                 'container_id'  => $this->_getTestCalendar()->getId(),
                 'attendee'      => $this->_getPersonaAttendee('jmcblack')->merge($this->_getPersonaAttendee('pwulf')),
@@ -885,6 +881,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testAdoptAlarmDSTBoundary()
     {
+        $year = Tinebase_DateTime::now()->subYear(2)->format('Y');
         $event = $this->_getEvent();
         $event->rrule = 'FREQ=DAILY;INTERVAL=1';
         $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
@@ -896,8 +893,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         // prepare alarm for last non DST instance
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        $from = new Tinebase_DateTime('2012-03-24 00:00:00');
-        $until = new Tinebase_DateTime('2012-03-24 23:59:59');
+        $from = new Tinebase_DateTime($year . '-03-24 00:00:00');
+        $until = new Tinebase_DateTime($year . '-03-24 23:59:59');
         $recurSet =Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
         
         $alarm = $persistentEvent->alarms->getFirstRecord();
@@ -906,11 +903,11 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $loadedBaseEvent = $this->_eventController->get($persistentEvent->getId());
         $alarm = $loadedBaseEvent->alarms->getFirstRecord();
-        $this->assertEquals('2012-03-24', substr($alarm->getOption('recurid'), -19, -9), 'precondition failed');
+        $this->assertEquals($year . '-03-24', substr($alarm->getOption('recurid'), -19, -9), 'precondition failed');
         
         // adopt alarm
         $this->_eventController->adoptAlarmTime($loadedBaseEvent, $alarm, 'instance');
-        $this->assertEquals('2012-03-25', substr($alarm->getOption('recurid'), -19, -9), 'alarm adoption failed');
+        $this->assertEquals($year . '-03-25', substr($alarm->getOption('recurid'), -19, -9), 'alarm adoption failed');
     }
     
     /**
