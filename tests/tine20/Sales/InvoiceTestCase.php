@@ -115,7 +115,7 @@ class Sales_InvoiceTestCase extends TestCase
     
     /**
      * 
-     * @var Sales_Controller_CostCenter
+     * @var Tinebase_Controller_CostCenter
      */
     protected $_costcenterController = NULL;
     
@@ -297,9 +297,9 @@ class Sales_InvoiceTestCase extends TestCase
     
     protected function _createCostCenters()
     {
-        $this->_costcenterController = Sales_Controller_CostCenter::getInstance();
+        $this->_costcenterController = Tinebase_Controller_CostCenter::getInstance();
         
-        $this->_costcenterRecords = new Tinebase_Record_RecordSet('Sales_Model_CostCenter');
+        $this->_costcenterRecords = new Tinebase_Record_RecordSet(Tinebase_Model_CostCenter::class);
         $ccs = array('unittest1', 'unittest2', 'unittest3', 'unittest4');
         
         $id = 1;
@@ -307,8 +307,8 @@ class Sales_InvoiceTestCase extends TestCase
         $allCC = $this->_costcenterController->getAll();
         
         foreach($ccs as $title) {
-            $cc = new Sales_Model_CostCenter(
-                array('remark' => $title, 'number' => $id)
+            $cc = new Tinebase_Model_CostCenter(
+                array('name' => $title, 'number' => $id)
             );
             
             try {
@@ -608,21 +608,21 @@ class Sales_InvoiceTestCase extends TestCase
             
             $contract->relations = array(
                 array(
-                    'own_model'              => 'Sales_Model_Contract',
+                    'own_model'              => Sales_Model_Contract::class,
                     'own_backend'            => Tasks_Backend_Factory::SQL,
                     'own_id'                 => NULL,
                     'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                    'related_model'          => 'Sales_Model_CostCenter',
+                    'related_model'          => Tinebase_Model_CostCenter::class,
                     'related_backend'        => Tasks_Backend_Factory::SQL,
                     'related_id'             => $costcenter->getId(),
                     'type'                   => 'LEAD_COST_CENTER'
                 ),
                 array(
-                    'own_model'              => 'Sales_Model_Contract',
+                    'own_model'              => Sales_Model_Contract::class,
                     'own_backend'            => Tasks_Backend_Factory::SQL,
                     'own_id'                 => NULL,
                     'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                    'related_model'          => 'Sales_Model_Customer',
+                    'related_model'          => Sales_Model_Customer::class,
                     'related_backend'        => Tasks_Backend_Factory::SQL,
                     'related_id'             => $customer->getId(),
                     'type'                   => 'CUSTOMER'

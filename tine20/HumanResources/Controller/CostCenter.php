@@ -93,11 +93,11 @@ class HumanResources_Controller_CostCenter extends Tinebase_Controller_Record_Ab
      *
      * @param HumanResources_Model_Employee|string $employeeId
      * @param Tinebase_DateTime $date
-     * @param boolean $getSalesCostCenter if true, this returns the sales costcenter, not the mm-table like hr costcenter
+     * @param boolean $getCostCenter if true, this returns the sales costcenter, not the mm-table like hr costcenter
      * 
-     * @return HumanResources_Model_CostCenter|Sales_Model_CostCenter
+     * @return HumanResources_Model_CostCenter|Tinebase_Model_CostCenter
      */
-    public function getValidCostCenter($employeeId, $date = NULL, $getSalesCostCenter = FALSE)
+    public function getValidCostCenter($employeeId, $date = NULL, $getCostCenter = FALSE)
     {
         if (! $employeeId) {
             throw new Tinebase_Exception_InvalidArgument('You have to set an employee at least');
@@ -117,8 +117,8 @@ class HumanResources_Controller_CostCenter extends Tinebase_Controller_Record_Ab
             $result->sort('start_date', 'ASC');
             $cc = $result->getFirstRecord();
             
-            if ($getSalesCostCenter) {
-                return Sales_Controller_CostCenter::getInstance()->get($cc->cost_center_id);
+            if ($getCostCenter) {
+                return Tinebase_Controller_CostCenter::getInstance()->get($cc->cost_center_id);
             } else {
                 return $cc;
             }

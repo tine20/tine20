@@ -1708,6 +1708,19 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             )));
         }
 
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => Tinebase_Model_CostCenter::class,
+            'application_id' => $application,
+            'model' => Tinebase_Model_CostCenter::class,
+//            'label' => 'Cost Center' // _('Cost Center')
+        )));
+
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => Tinebase_Model_CostUnit::class,
+            'application_id' => $application,
+            'model' => Tinebase_Model_CostUnit::class,
+//            'label' => 'Cost Center' // _('Cost Center')
+        )));
 
         return $result;
     }

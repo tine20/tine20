@@ -145,9 +145,9 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _onCreate()
     {
-        $controller = Sales_Controller_CostCenter::getInstance();
+        $controller = Tinebase_Controller_CostCenter::getInstance();
         
-        $this->_costcenters = new Tinebase_Record_RecordSet('Sales_Model_CostCenter');
+        $this->_costcenters = new Tinebase_Record_RecordSet(Tinebase_Model_CostCenter::class);
         $ccs = (static::$_de)
             ? array('Management', 'Marketing', 'Entwicklung', 'Produktion', 'Verwaltung',     'Controlling')
             : array('Management', 'Marketing', 'Development', 'Production', 'Administration', 'Controlling')
@@ -155,12 +155,12 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         $id = 1;
         foreach($ccs as $title) {
-            if ($controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_CostCenter::class,
-                    [['field' => 'remark', 'operator' => 'equals', 'value' => $title]]))->count() > 0) {
+            if ($controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class,
+                    [['field' => 'name', 'operator' => 'equals', 'value' => $title]]))->count() > 0) {
                 continue;
             }
-            $cc = new Sales_Model_CostCenter(
-                array('remark' => $title, 'number' => $id)
+            $cc = new Tinebase_Model_CostCenter(
+                array('name' => $title, 'number' => $id)
             );
             try {
                 $controller->create($cc);
@@ -276,24 +276,27 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * get cost center
      * 
      * @param string
-     * @return Sales_Model_CostCenter
+     * @return Tinebase_Model_CostCenter
      */
     protected function _getCostCenter($number = NULL)
     {
         if ($number !== NULL) {
-            $c = Sales_Controller_CostCenter::getInstance()->search(new Sales_Model_CostCenterFilter(array(array(
-                'field'    => 'number',
-                'operator' => 'equals',
-                'value'    => $number,
-            ))))->getFirstRecord();
+            /** @var Tinebase_Model_CostCenter $c */
+            $c = Tinebase_Controller_CostCenter::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class,
+                array(array(
+                    'field'    => 'number',
+                    'operator' => 'equals',
+                    'value'    => $number,
+                ))))->getFirstRecord();
             
             if ($c) {
                 return $c;
             }
         }
-        $c = new Sales_Model_CostCenter(array(
+        $c = new Tinebase_Model_CostCenter(array(
             'number' => ($number) ? $number : Tinebase_Record_Abstract::generateUID(),
-            'remark' => Tinebase_Record_Abstract::generateUID(),
+            'name' => Tinebase_Record_Abstract::generateUID(),
         ));
         
         return $c;

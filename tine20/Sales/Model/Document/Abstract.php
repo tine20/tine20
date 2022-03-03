@@ -338,8 +338,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Cost Center', //_('Cost Center')
                 self::TYPE                          => self::TYPE_RECORD,
                 self::CONFIG                        => [
-                    self::APP_NAME                      => Sales_Config::APP_NAME,
-                    self::MODEL_NAME                    => Sales_Model_CostCenter::MODEL_NAME_PART,
+                    self::APP_NAME                      => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME                    => Tinebase_Model_CostCenter::MODEL_NAME_PART,
                 ],
                 self::NULLABLE                      => true,
             ],
@@ -347,8 +347,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Cost Bearer', //_('Cost Bearer')
                 self::TYPE                          => self::TYPE_RECORD,
                 self::CONFIG                        => [
-                    self::APP_NAME                      => Sales_Config::APP_NAME,
-                    self::MODEL_NAME                    => Sales_Model_CostCenter::MODEL_NAME_PART,
+                    self::APP_NAME                      => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME                    => Tinebase_Model_CostUnit::MODEL_NAME_PART,
                 ],
                 self::NULLABLE                      => true,
             ],

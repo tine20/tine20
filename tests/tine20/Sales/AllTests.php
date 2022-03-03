@@ -25,7 +25,6 @@ class Sales_AllTests
         $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Sales All Tests');
         $suite->addTestSuite('Sales_Backend_ContractTest');
         $suite->addTestSuite('Sales_Backend_NumberTest');
-        $suite->addTestSuite('Sales_Backend_CostCenterTest');
         $suite->addTestSuite('Sales_ControllerTest');
         $suite->addTestSuite('Sales_JsonTest');
         $suite->addTestSuite('Sales_SuppliersTest');

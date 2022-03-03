@@ -135,9 +135,9 @@ class Sales_Import_Invoice_Csv extends Tinebase_Import_Csv_Abstract
         static $costCenters;
         if (!empty($result['costcenter'])) {
             if (!$costCenters)
-                $costCenters = Sales_Controller_CostCenter::getInstance()->getAll();
+                $costCenters = Tinebase_Controller_CostCenter::getInstance()->getAll();
             foreach ($costCenters as $costCenter) {
-                if ($costCenter['remark'] == $result['costcenter']) {
+                if ($costCenter['name'] == $result['costcenter']) {
                     $result['costcenter_id'] = $costCenter['id'];
                 }
             }

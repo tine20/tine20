@@ -165,20 +165,18 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             fieldLabel: this.app.i18n._('Cleared at')
         });
         
-        if (Tine.Tinebase.appMgr.get('Sales')) {
-            secondRow.push({
-                xtype: 'tinerelationpickercombo',
-                fieldLabel: this.app.i18n._('Cost Center'),
-                editDialog: this,
-                allowBlank: true,
-                app: 'Sales',
-                recordClass: Tine.Sales.Model.CostCenter,
-                relationType: 'COST_CENTER',
-                relationDegree: 'sibling',
-                modelUnique: true
-            });
-        }
-        
+        secondRow.push({
+            xtype: 'tinerelationpickercombo',
+            fieldLabel: this.app.i18n._('Cost Center'),
+            editDialog: this,
+            allowBlank: true,
+            app: 'Tinebase',
+            recordClass: Tine.Tinebase.Model.CostCenter,
+            relationType: 'COST_CENTER',
+            relationDegree: 'sibling',
+            modelUnique: true
+        });
+
         var lastRow = [{
             columnWidth: 1/3,
             editDialog: this,

@@ -145,14 +145,14 @@ class Tinebase_TransactionManagerTest extends \PHPUnit\Framework\TestCase
     public function testNestedTransactions()
     {
         $c1 = Sales_Controller_Contract::getInstance();
-        $c2 = Sales_Controller_CostCenter::getInstance();
+        $c2 = Tinebase_Controller_CostCenter::getInstance();
         $tm = Tinebase_TransactionManager::getInstance();
         
         $tm->startTransaction(Tinebase_Core::getDb());
 
         try {
             // create cost center
-            $costCenter = $c2->create(new Sales_Model_CostCenter(array('number' => 123, 'remark' => 'unittest123')));
+            $costCenter = $c2->create(new Tinebase_Model_CostCenter(array('number' => 123, 'name' => 'unittest123')));
             
             // exception should be thrown (title needed)
             $c1->create(new Sales_Model_Contract(array()));

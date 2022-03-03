@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <name>sales_import_costcenter_csv</name>
-    <model>Sales_Model_CostCenter</model>
-    <plugin>Sales_Import_CostCenter_Csv</plugin>
+    <name>tinebase_import_costcenter_csv</name>
+    <model>Tinebase_Model_CostCenter</model>
+    <plugin>Tinebase_Import_CostCenter_Csv</plugin>
     <type>import</type>
     <headline>1</headline>
     <dryrun>0</dryrun>
@@ -14,8 +14,8 @@
             <destination>number</destination>
         </field>
         <field>
-            <source>remark</source>
-            <destination>remark</destination>
+            <source>name</source>
+            <destination>name</destination>
         </field>
     </mapping>
 </config>

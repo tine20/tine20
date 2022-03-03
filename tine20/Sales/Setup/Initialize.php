@@ -232,17 +232,6 @@ class Sales_Setup_Initialize extends Setup_Initialize
             ))
         ));
 
-        // CostCenters
-        $commonValues['model'] = 'Sales_Model_CostCenterFilter';
-
-        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
-            array_merge($commonValues, array(
-                'name' => "All Cost Centers", // _('All Cost Centers')
-                'description' => "All cost center records", // _('All costcenter records')
-                'filters' => array(),
-            ))
-        ));
-
         // OrderConfirmations
         $commonValues['model'] = 'Sales_Model_OrderConfirmationFilter';
 

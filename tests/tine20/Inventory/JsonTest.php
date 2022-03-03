@@ -198,8 +198,8 @@ class Inventory_JsonTest extends Inventory_TestCase
      */
     public function testCostCenterFilter()
     {
-        $cc = Sales_Controller_CostCenter::getInstance()->create(new Sales_Model_CostCenter(
-            array('remark' => 'test123qwe', 'number' => 123)
+        $cc = Tinebase_Controller_CostCenter::getInstance()->create(new Tinebase_Model_CostCenter(
+            array('name' => 'test123qwe', 'number' => 123)
         ));
         
         $inventoryItem = $this->_getInventoryItem();

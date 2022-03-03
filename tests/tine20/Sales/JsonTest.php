@@ -685,11 +685,12 @@ class Sales_JsonTest extends TestCase
      */
     public function testAllCostCenterMethods()
     {
-        $remark = Tinebase_Record_Abstract::generateUID(10);
+        $name = Tinebase_Record_Abstract::generateUID(10);
         $number = Tinebase_DateTime::now()->getTimestamp();
-        
+
+        $this->_instance = new Tinebase_Frontend_Json();
         $cc = $this->_instance->saveCostCenter(
-            array('number' => $number, 'remark' => $remark)
+            array('number' => $number, 'name' => $name)
         );
         
         $this->assertEquals(40, strlen($cc['id']));
@@ -697,14 +698,14 @@ class Sales_JsonTest extends TestCase
         $cc = $this->_instance->getCostCenter($cc['id']);
         
         $this->assertEquals($number, $cc['number']);
-        $this->assertEquals($remark, $cc['remark']);
+        $this->assertEquals($name, $cc['name']);
         
-        $cc['remark'] = $cc['remark'] . '_unittest';
+        $cc['name'] = $cc['name'] . '_unittest';
         $cc['number'] = $number - 5000;
         
         $cc = $this->_instance->saveCostCenter($cc);
         
-        $this->assertEquals($remark . '_unittest', $cc['remark']);
+        $this->assertEquals($name . '_unittest', $cc['name']);
         $this->assertEquals($number - 5000, $cc['number']);
         
         $accountId = Tinebase_Core::getUser()->getId();
@@ -716,10 +717,10 @@ class Sales_JsonTest extends TestCase
         $this->assertEquals(2, $cc['seq']);
         $this->assertEquals(0, $cc['is_deleted']);
         
-        $ccs = $this->_instance->searchCostCenters(array(array('field' => 'remark', 'operator' => 'equals', 'value' => $remark . '_unittest')), array());
+        $ccs = $this->_instance->searchCostCenters(array(array('field' => 'name', 'operator' => 'equals', 'value' => $name . '_unittest')), array());
         
         $this->assertEquals(1, $ccs['totalcount']);
-        $this->assertEquals($remark . '_unittest', $ccs['results'][0]['remark']);
+        $this->assertEquals($name . '_unittest', $ccs['results'][0]['name']);
         
         $this->_instance->deleteCostCenters($cc['id']);
         
@@ -727,11 +728,12 @@ class Sales_JsonTest extends TestCase
         
         $this->assertEquals(0, $ccs['totalcount']);
         
-        $be = new Sales_Backend_CostCenter();
+        $be = Tinebase_Controller_CostCenter::getInstance()->getBackend();
         $be->setModlogActive(FALSE);
-        
-        $filter = new Sales_Model_CostCenterFilter(array(array('field' => 'number', 'operator' => 'equals', 'value' => $number - 5000)), array());
-        $result = $be->search($filter);
+
+        $result = $be->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class, [
+            ['field' => 'number', 'operator' => 'equals', 'value' => $number - 5000]
+        ]));
         
         $this->assertEquals(1, $result->count());
         $this->assertEquals(1, $result->getFirstRecord()->is_deleted);

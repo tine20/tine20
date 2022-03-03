@@ -106,6 +106,7 @@ Tine.HumanResources.CostCenterGridPanel = Ext.extend(Tine.widgets.grid.QuickaddG
         recordData.employee_id = this.editDialog.record.get('id');
         var relatedRecord = this.costcenterQuickadd.store.getById(this.costcenterQuickadd.getValue());
         recordData.cost_center_id = relatedRecord.data;
+        recordData.start_date = recordData.start_date || new Date();
         this.store.addSorted(new this.recordClass(recordData));
     },
     
@@ -116,15 +117,16 @@ Tine.HumanResources.CostCenterGridPanel = Ext.extend(Tine.widgets.grid.QuickaddG
      * @private
      */
     getColumnModel: function() {
-        this.costCenterEditor = Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter', { allowBlank: true});
+        this.costCenterEditor = Tine.widgets.form.RecordPickerManager.get('Tinebase', 'CostCenter', { allowBlank: true});
         this.startdateEditor = new Ext.ux.form.ClearableDateField();
         
-        this.costcenterQuickadd = Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter', {allowBlank: true});
+        this.costcenterQuickadd = Tine.widgets.form.RecordPickerManager.get('Tinebase', 'CostCenter', {allowBlank: true});
         
         var columns = [
-            {id: 'cost_center_id', dataIndex: 'cost_center_id', type: Tine.Sales.Model.CostCenter, header: this.app.i18n._('Cost Center'),
-                 quickaddField: this.costcenterQuickadd, renderer: this.renderCostCenter,
-                 editor: this.costCenterEditor, scope: this
+            {id: 'cost_center_id', dataIndex: 'cost_center_id', type: Tine.Tinebase.Model.CostCenter, header: this.app.i18n._('Cost Center'),
+                quickaddField: this.costcenterQuickadd,
+                editor: this.costCenterEditor, scope: this,
+                renderer: Tine.widgets.grid.RendererManager.get('HumanResources', 'CostCenter', 'cost_center_id', Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL)
             }, {id: 'start_date',renderer: Tine.Tinebase.common.dateRenderer, editor: this.startdateEditor, quickaddField: new Ext.ux.form.ClearableDateField(), dataIndex: 'start_date', header: this.app.i18n._('Startdate'),  scope: this, width: 120}
         ];
         
@@ -150,18 +152,6 @@ Tine.HumanResources.CostCenterGridPanel = Ext.extend(Tine.widgets.grid.QuickaddG
             var relatedRecord = this.costCenterEditor.store.getById(this.costCenterEditor.getValue());
             o.record.set('cost_center_id', relatedRecord.data);
         }
-    },
-    
-    /**
-     * renders the cost center
-     * @param {Object} value
-     * @param {Object} row
-     * @param {Tine.Tinebase.data.Record} record
-     * 
-     * return {String}
-     */
-    renderCostCenter: function(value, row, record) {
-        return '<span class="tine-recordclass-gridicon SalesCostCenter">&nbsp;</span>' + (record ? record.get('cost_center_id').number + ' - ' + record.getTitle() : '');
     }
 });
 

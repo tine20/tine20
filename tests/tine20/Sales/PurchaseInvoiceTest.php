@@ -197,19 +197,19 @@ class Sales_PurchaseInvoiceTest extends TestCase
      */
     public function testSearchPurchaseInvoice()
     {
-        // they sort by remark?!
-        $cc1 = $this->_json->saveCostCenter(
-            array('number' => '1', 'remark' => 'a')
+        $tbJFE = new Tinebase_Frontend_Json();
+        $cc1 = $tbJFE->saveCostCenter(
+            array('number' => '1', 'name' => 'a')
         );
-        $cc2 = $this->_json->saveCostCenter(
-            array('number' => '2', 'remark' => 'b')
+        $cc2 = $tbJFE->saveCostCenter(
+            array('number' => '2', 'name' => 'b')
         );
 
         $purchase = $this->_createPurchaseInvoice();
         $purchase['relations'][1] = [
             'own_model' => 'Sales_Model_PurchaseInvoice',
             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
-            'related_model' => 'Sales_Model_CostCenter',
+            'related_model' => Tinebase_Model_CostCenter::class,
             'related_id' => $cc1['id'],
             'related_backend' => 'Sql',
             'type' => 'COST_CENTER'
@@ -263,23 +263,23 @@ class Sales_PurchaseInvoiceTest extends TestCase
             'price_gross2' => 2,
             'price_total' => 13.9,
             'relations' => [[
-                'own_model' => 'Sales_Model_PurchaseInvoice',
+                'own_model' => Sales_Model_PurchaseInvoice::class,
                 'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
-                'related_model' => 'Sales_Model_Supplier',
+                'related_model' => Sales_Model_Supplier::class,
                 'related_id' => $supplier->getId(),
                 'related_backend' => 'Sql',
                 'type' => 'SUPPLIER'
             ],[
-                'own_model' => 'Sales_Model_PurchaseInvoice',
+                'own_model' => Sales_Model_PurchaseInvoice::class,
                 'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
-                'related_model' => 'Sales_Model_CostCenter',
+                'related_model' => Tinebase_Model_CostCenter::class,
                 'related_id' => $cc2['id'],
                 'related_backend' => 'Sql',
                 'type' => 'COST_CENTER'
             ],[
-                'own_model' => 'Sales_Model_PurchaseInvoice',
+                'own_model' => Sales_Model_PurchaseInvoice::class,
                 'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
-                'related_model' => 'Addressbook_Model_Contact',
+                'related_model' => Addressbook_Model_Contact::class,
                 'related_id' => $purchase['relations'][0]['related_record']['cpextern_id'],
                 'related_backend' => 'Sql',
                 'type' => 'APPROVER'

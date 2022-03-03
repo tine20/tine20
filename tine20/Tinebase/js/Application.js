@@ -11,7 +11,8 @@ var EventEmitter = require('events');
 Ext.ns('Tine.Tinebase');
 
 /**
- * <p>Abstract base class for all Tine applications</p>
+ * Abstract base class for all Tine applications
+ * NOTE: app class for Tinebase app itself is Tine.Tinebase.Application.Tinebase (see bellow)
  * 
  * @namespace   Tine.Tinebase
  * @class       Tine.Tinebase.Application
@@ -33,6 +34,10 @@ Tine.Tinebase.Application = function(config) {
 
     this.i18n = new Locale.Gettext();
     this.i18n.textdomain(this.appName);
+
+    if (this.appName === 'Tinebase') {
+        Ext.apply(this, Tine.Tinebase.Application.Tinebase);
+    }
 
     /**
      * in memory msg bus for sync events
@@ -270,9 +275,11 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
 });
 
 Tine.Tinebase.featureEnabled = function(featureName) {
-    // need to create a "dummy" app to call featureEnabled()
-    var tinebaseApp = new Tine.Tinebase.Application({
-        appName: 'Tinebase'
-    });
-    return tinebaseApp.featureEnabled(featureName);
+    return Tine.Tinebase.appMgr.get('Tinebase').featureEnabled(featureName);
+};
+
+Tine.Tinebase.Application.Tinebase = {
+    registerCoreData() {
+        // don't use this -> register from server only
+    }
 };

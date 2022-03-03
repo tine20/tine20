@@ -107,11 +107,11 @@ describe('ApplicationStarter', () => {
             'costcenter': {
               'filter': 'Tinebase_Model_Filter_ForeignId',
               'options': {
-                'appName': 'Sales',
+                'appName': 'Tinebase',
                 'modelName': 'CostCenter',
                 'idProperty': 'id',
-                'filtergroup': 'Sales_Model_CostCenterFilter',
-                'controller': 'Sales_Controller_CostCenter'
+                'filtergroup': 'Tinebase_Model_CostCenterFilter',
+                'controller': 'Tinebase_Controller_CostCenter'
               }
             },
             'warranty': {
@@ -329,7 +329,7 @@ describe('ApplicationStarter', () => {
                 'default': null
               },
               'config': {
-                'appName': 'Sales',
+                'appName': 'Tinebase',
                 'modelName': 'CostCenter',
                 'idProperty': 'id'
               },

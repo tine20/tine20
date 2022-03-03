@@ -114,16 +114,16 @@ class Sales_Import_Contract_Csv extends Tinebase_Import_Csv_Abstract
     protected function _setCostCenter($result)
     {
         if (!empty($result['costcenter'])) {
-            $costCenters = Sales_Controller_CostCenter::getInstance()->getAll();
+            $costCenters = Tinebase_Controller_CostCenter::getInstance()->getAll();
             foreach ($costCenters as $costCenter) {
-                if ($costCenter['remark'] == $result['costcenter']) {
+                if ($costCenter['name'] == $result['costcenter']) {
                     $result['relations'][] =
                         array(
-                            'own_model' => 'Sales_Model_Contract',
+                            'own_model' => Sales_Model_Contract::class,
                             'own_backend' => Tasks_Backend_Factory::SQL,
                             'own_id' => NULL,
                             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
-                            'related_model' => 'Sales_Model_CostCenter',
+                            'related_model' => Tinebase_Model_CostCenter::class,
                             'related_backend' => Tasks_Backend_Factory::SQL,
                             'related_id' => $costCenter['id'],
                             'type' => 'LEAD_COST_CENTER'

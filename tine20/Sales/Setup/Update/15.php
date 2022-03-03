@@ -23,8 +23,17 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE007 = __CLASS__ . '::update007';
     const RELEASE015_UPDATE008 = __CLASS__ . '::update008';
     const RELEASE015_UPDATE009 = __CLASS__ . '::update009';
+    const RELEASE015_UPDATE010 = __CLASS__ . '::update010';
+    const RELEASE015_UPDATE011 = __CLASS__ . '::update011';
 
     static protected $_allUpdates = [
+        // this needs to be executed before TB struct update! cause we move the table from sales to tb
+        self::PRIO_TINEBASE_BEFORE_STRUCT   => [
+            self::RELEASE015_UPDATE010          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update010',
+            ],
+        ],
         // this needs to be executed before HR update, so we make it TB prio
         self::PRIO_TINEBASE_STRUCTURE       => [
             self::RELEASE015_UPDATE003          => [
@@ -71,6 +80,10 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
+            ],
+            self::RELEASE015_UPDATE011          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update011',
             ],
         ],
     ];
@@ -207,5 +220,46 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             Sales_Model_Document_Address::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.9', self::RELEASE015_UPDATE009);
+    }
+
+    public function update010()
+    {
+        // better safe than sorry, we do schema + content updates -> no transaction desired here
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET `own_model` = "'
+            . Tinebase_Model_CostCenter::class . '" where `own_model` = "Sales_Model_CostCenter"');
+
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET `related_model` = "'
+            . Tinebase_Model_CostCenter::class . '" where `related_model` = "Sales_Model_CostCenter"');
+
+        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX .
+            'filter where `model` = "Sales_Model_CostCenter" or `model` = "Sales_Model_CostCenterFilter"');
+
+        if ($this->_backend->tableExists('sales_cost_centers')) {
+            if ($this->_backend->columnExists('remark', 'sales_cost_centers')) {
+                $this->_backend->alterCol('sales_cost_centers', new Setup_Backend_Schema_Field_Xml('<field>
+                        <name>name</name>
+                        <type>text</type>
+                        <length>255</length>
+                        <notnull>false</notnull>
+                    </field>'), 'remark');
+            }
+            $this->getDb()->update(SQL_TABLE_PREFIX . 'sales_cost_centers', ['deleted_time' => '1970-01-01 00:00:00'], 'deleted_time IS NULL');
+            $this->_backend->renameTable('sales_cost_centers', Tinebase_Model_CostCenter::TABLE_NAME);
+        }
+        Tinebase_Application::getInstance()->removeApplicationTable(
+            Tinebase_Application::getInstance()->getApplicationByName(Sales_Config::APP_NAME), 'sales_cost_centers');
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.10', self::RELEASE015_UPDATE010);
+    }
+
+    public function update011()
+    {
+        try {
+            $def = Tinebase_ImportExportDefinition::getInstance()->getByName('sales_import_costcenter_csv');
+            Tinebase_ImportExportDefinition::getInstance()->delete([$def->getId()]);
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.11', self::RELEASE015_UPDATE011);
     }
 }

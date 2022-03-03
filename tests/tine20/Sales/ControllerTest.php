@@ -63,33 +63,33 @@ class Sales_ControllerTest extends \PHPUnit\Framework\TestCase
     public function testCostCenterController()
     {
         $cc = $this->_getCostCenter();
-        $ccRet = Sales_Controller_CostCenter::getInstance()->create($cc);
+        $ccRet = Tinebase_Controller_CostCenter::getInstance()->create($cc);
         
         $this->assertEquals($cc->id, $ccRet->id);
         $this->assertEquals($cc->number, $ccRet->number);
-        $this->assertEquals($cc->remark, $ccRet->remark);
+        $this->assertEquals($cc->name, $ccRet->name);
 
         // check uniquity
         $cc1 = $this->_getCostCenter();
         
         $this->expectException('Tinebase_Exception_Duplicate');
 
-        Sales_Controller_CostCenter::getInstance()->create($cc1);
+        Tinebase_Controller_CostCenter::getInstance()->create($cc1);
     }
     
     /**
      * get cost center
      *
-     * @return Sales_Model_CostCenter
+     * @return Tinebase_Model_CostCenter
      */
     protected function _getCostCenter()
     {
         $this->_costCenterNumber = $this->_costCenterNumber ? $this->_costCenterNumber : Tinebase_Record_Abstract::generateUID();
 
-        $cc = new Sales_Model_CostCenter(array(
+        $cc = new Tinebase_Model_CostCenter(array(
             'id'      => Tinebase_Record_Abstract::generateUID(),
             'number'  => $this->_costCenterNumber,
-            'remark'  => 'blabla'
+            'name'  => 'blabla'
         ), TRUE);
         return $cc;
     }
