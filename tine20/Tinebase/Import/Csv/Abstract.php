@@ -256,12 +256,27 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
                 $this->_headline = array();
             } else {
                 array_walk($this->_headline, function(&$value) {
-                    $value = trim($value);
+                    $value = trim(self::removeBomUtf8($value));
                 });
             }
         }
     }
-    
+
+    /**
+     * remove byte order mark
+     *
+     * @param string $s
+     * @return string
+     */
+    public static function removeBomUtf8(string $s): string
+    {
+        if(substr($s,0,3)==chr(hexdec('EF')).chr(hexdec('BB')).chr(hexdec('BF'))){
+            return substr($s,3);
+        }else{
+            return $s;
+        }
+    }
+
     /**
      * do the mapping
      *

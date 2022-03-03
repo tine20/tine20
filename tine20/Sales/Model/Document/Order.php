@@ -47,15 +47,10 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE] = [
             self::NAME                      => self::TABLE_NAME,
-            /*self::INDEXES                   => [
-                self::FLD_PRODUCT_ID            => [
-                    self::COLUMNS                   => [self::FLD_PRODUCT_ID],
-                ],
-            ]*/
         ];
 
         // order status
-        Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER, [
+        Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_DOCUMENT_NUMBER, [
             self::FLD_ORDER_STATUS => [
                 self::LABEL => 'Status', // _('Status')
                 self::TYPE => self::TYPE_KEY_FIELD,
@@ -66,28 +61,52 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
             // @TODO invoice & delivery status -> virtual from following documents
         ]);
 
+        $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::CONFIG][self::FORCE_VALUES] = [
+            Sales_Model_Document_Address::FLD_DOCUMENT_FIELD => self::FLD_RECIPIENT_ID,
+        ];
+
+        $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::CONFIG][self::ADD_FILTERS] = [
+            ['field' => Sales_Model_Document_Address::FLD_DOCUMENT_FIELD, 'operator' => 'equals', 'value' => self::FLD_RECIPIENT_ID],
+        ];
+
         // invoice & delivery recipients
-        Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], Sales_Model_Document_Abstract::FLD_RECIPIENT_ID, [
+        Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_RECIPIENT_ID, [
             self::FLD_INVOICE_RECIPIENT_ID => [
                 self::TYPE                  => self::TYPE_RECORD,
                 self::LABEL                 => 'Invoice Recipient', //_('Invoice Recipient')
                 self::NULLABLE              => true,
+                self::UI_CONFIG             => [
+                    self::TYPE                  => Sales_Model_Document_Address::TYPE_BILLING,
+                ],
                 self::CONFIG                => [
                     self::APP_NAME              => Sales_Config::APP_NAME,
                     self::MODEL_NAME            => Sales_Model_Document_Address::MODEL_NAME_PART,
                     self::REF_ID_FIELD          => Sales_Model_Document_Address::FLD_DOCUMENT_ID,
-                    self::TYPE                  => Sales_Model_Document_Address::TYPE_BILLING
+                    self::FORCE_VALUES          => [
+                        Sales_Model_Document_Address::FLD_DOCUMENT_FIELD => self::FLD_INVOICE_RECIPIENT_ID,
+                    ],
+                    self::ADD_FILTERS           => [
+                        ['field' => Sales_Model_Document_Address::FLD_DOCUMENT_FIELD, 'operator' => 'equals', 'value' => self::FLD_INVOICE_RECIPIENT_ID],
+                    ],
                 ],
             ],
             self::FLD_DELIVERY_RECIPIENT_ID => [
                 self::TYPE                  => self::TYPE_RECORD,
                 self::LABEL                 => 'Delivery Recipient', //_('Delivery Recipient')
                 self::NULLABLE              => true,
+                self::UI_CONFIG             => [
+                    self::TYPE                  => Sales_Model_Document_Address::TYPE_DELIVERY,
+                ],
                 self::CONFIG                => [
                     self::APP_NAME              => Sales_Config::APP_NAME,
                     self::MODEL_NAME            => Sales_Model_Document_Address::MODEL_NAME_PART,
                     self::REF_ID_FIELD          => Sales_Model_Document_Address::FLD_DOCUMENT_ID,
-                    self::TYPE                  => Sales_Model_Document_Address::TYPE_DELIVERY
+                    self::FORCE_VALUES          => [
+                        Sales_Model_Document_Address::FLD_DOCUMENT_FIELD => self::FLD_DELIVERY_RECIPIENT_ID,
+                    ],
+                    self::ADD_FILTERS           => [
+                        ['field' => Sales_Model_Document_Address::FLD_DOCUMENT_FIELD, 'operator' => 'equals', 'value' => self::FLD_DELIVERY_RECIPIENT_ID],
+                    ],
                 ],
             ],
         ]);
