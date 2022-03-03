@@ -689,33 +689,31 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @param string $_type
      * @param int $_num
      * @param string $_revision
-     * @throws Tinebase_Exception_InvalidArgument
-     * @throws Tinebase_Exception_NotFound
      */
     public function downloadPreview($_path, $_appId, $_type, $_num = 0, $_revision = null)
     {
         $this->checkAuth();
         
         $_revision = $_revision ?: null;
+        $node = null;
 
         if ($_path) {
             $path = ltrim($_path, '/');
 
-            if (strpos($path, 'records/') === 0) {
-                $pathParts = explode('/', $path);
-                $controller = Tinebase_Core::getApplicationInstance($pathParts[1]);
-
-                // ACL Check
-                $controller->get($pathParts[2]);
-
-                $node = Tinebase_FileSystem::getInstance()->stat('/' . $_appId . '/folders/' . $path, $_revision);
-            } else {
-                $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath('/' . $_appId . '/folders/' . $path);
-                try {
+            try {
+                if (strpos($path, 'records/') === 0) {
+                    $pathParts = explode('/', $path);
+                    /** @var Tinebase_Controller_Record_Abstract $controller */
+                    $controller = Tinebase_Core::getApplicationInstance($pathParts[1]);
+                    // ACL Check
+                    $controller->get($pathParts[2]);
+                    $node = Tinebase_FileSystem::getInstance()->stat('/' . $_appId . '/folders/' . $path, $_revision);
+                } else {
+                    $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath('/' . $_appId . '/folders/' . $path);
                     $node = Filemanager_Controller_Node::getInstance()->getFileNode($pathRecord, $_revision);
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
                 }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
             }
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
@@ -723,7 +721,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
         }
 
-        $this->_downloadPreview($node, $_type, $_num);
+        if ($node) {
+            $this->_downloadPreview($node, $_type, $_num);
+        }
 
         exit;
     }
