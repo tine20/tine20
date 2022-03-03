@@ -133,6 +133,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->is_installed)))
         {
             echo $opts->getUsageMessage();
+            if ($opts->config) {
+                echo "Using config: " . $opts->config . "\n";
+            }
             exit;
         }
 
