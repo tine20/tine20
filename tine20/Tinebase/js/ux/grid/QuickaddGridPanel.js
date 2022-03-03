@@ -248,7 +248,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 }
             }, this);
 
-            if (this.colModel.getColumnById(this.quickaddMandatory).quickaddField.getValue() != '') {
+            if (['', null, undefined].indexOf(this.colModel.getColumnById(this.quickaddMandatory).quickaddField.getValue()) < 0) {
                 if (this.fireEvent('newentry', data)){
                     var quickAddField = this.colModel.getColumnById(this.quickaddMandatory).quickaddField;
                     if (quickAddField.resetOnNew !== false) {

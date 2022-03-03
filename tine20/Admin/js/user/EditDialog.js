@@ -1146,7 +1146,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 // suggest for unchanged fields only
                 if (field && (!field.suggestedValue || field.getValue() === field.suggestedValue)) {
                     this.onRecordUpdate();
-                    const suggestion = this.twingEnv.render(fieldName, {account: this.record.data, email: {primarydomain: Tine.Tinebase.registry.get('primarydomain')}});
+                    // @FIXME twing can't cope with null values yet, remove this once twing fixed it
+                    const accountData = JSON.parse(JSON.stringify(this.record.data).replace(/:null([,}])/g, ':""$1'));
+                    const suggestion = this.twingEnv.render(fieldName, {account: accountData, email: {primarydomain: Tine.Tinebase.registry.get('primarydomain')}});
                     field.setValue(suggestion);
                     field.suggestedValue = suggestion;
                 }
