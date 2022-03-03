@@ -574,13 +574,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * login user with given username and password
      *
-     * @param  string $username the username
-     * @param  string $password the password
-     * @param  string $MFAUserConfigId config for mfa device to use
-     * @param  string $MFAPassword otp from mfa device
+     * @param string $username the username
+     * @param string $password the password
+     * @param string $MFAUserConfigId config for mfa device to use
+     * @param string $MFAPassword otp from mfa device
      * @return array
      */
-    public function login(string $username, string $password, string $MFAUserConfigId = null, string $MFAPassword = null)
+    public function login(string $username, string $password = null, string $MFAUserConfigId = null, string $MFAPassword = null)
     {
         try {
             Tinebase_Core::startCoreSession();
