@@ -70,9 +70,9 @@ Ext.ux.form.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
         var value = Ext.ux.form.DurationSpinner.superclass.getValue.call(this),
             isNegValue = false;
 
-        value = value.replace(',', '.');
-
         if(value && typeof value == 'string') {
+            value = value.replace(',', '.');
+
             if(value.match(Ext.ux.form.Spinner.DateStrategy.isNegRe)) {
                 value = value.replace(Ext.ux.form.Spinner.DateStrategy.isNegRe, '');
                 isNegValue = true;
