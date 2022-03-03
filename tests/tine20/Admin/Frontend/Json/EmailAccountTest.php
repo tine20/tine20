@@ -827,8 +827,9 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $this->_testNeedsTransaction();
   
         $sharedAccount = $this->testEmailAccountApiSharedAccount(false);
-        $quotaByte = 3000 * 1024 * 1024;
 
+        // test imap user
+        $quotaByte = 3000 * 1024 * 1024;
         $sharedAccount->email_imap_user = [
             'emailMailQuota' => $quotaByte,
             'emailSieveQuota' => $quotaByte
@@ -842,6 +843,19 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
 
         self::assertEquals($quotaByte , $userInBackend['quota_bytes'] * 1024 * 1024, 'email was not updated');
         self::assertEquals($quotaByte , $userInBackend['quota_message'] * 1024 * 1024, 'email was not updated');
-    }
 
+        // test smtp user
+        $sharedAccount->email_smtp_user = [
+            'emailForwards'    => array(Tinebase_Core::getUser()->accountEmailAddress, 'test@tine20.org'),
+            'emailAliases'     => array('bla@tine20.org', 'blubb@tine20.org')
+        ];
+        
+        Admin_Controller_EmailAccount::getInstance()->updateAccountEmailUsers($sharedAccount);
+        $pseudoFullUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($sharedAccount);
+
+        $this->assertEquals(array(Tinebase_Core::getUser()->accountEmailAddress, 'test@tine20.org'),
+            $pseudoFullUser->smtpUser->emailForwards->email, 'emailForwards was not updated');
+        $this->assertEquals(array('bla@tine20.org', 'blubb@tine20.org'),
+            $pseudoFullUser->smtpUser->emailAliases->email, 'emailAliases was not updated');
+    }
 }
