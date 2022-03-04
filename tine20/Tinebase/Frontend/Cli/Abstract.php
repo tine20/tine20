@@ -522,39 +522,44 @@ class Tinebase_Frontend_Cli_Abstract
             return [];
         }
         
-        // loop files in argv
-        $result = array();
-        foreach ((array) $args['filename'] as $filename) {
-            // read file
-            if ($_opts->v) {
-                echo "reading file $filename ...";
-            }
-            try {
-                $result[$filename] = $importer->importFile($filename);
+        if (! isset($args['filename'])) {
+            $result = $importer->import();
+            $this->_echoImportResult($result);
+        } else {
+            $result = array();
+            // loop files in argv
+            foreach ((array)$args['filename'] as $filename) {
+                // read file
                 if ($_opts->v) {
-                    echo "done.\n";
+                    echo "reading file $filename ...";
                 }
-            } catch (Exception $e) {
-                if ($_opts->v) {
-                    echo "failed (". $e->getMessage() . ").\n";
-                } else {
-                    echo $e->getMessage() . "\n";
+                try {
+                    $result[$filename] = $importer->importFile($filename);
+                    if ($_opts->v) {
+                        echo "done.\n";
+                    }
+                } catch (Exception $e) {
+                    if ($_opts->v) {
+                        echo "failed (" . $e->getMessage() . ").\n";
+                    } else {
+                        echo $e->getMessage() . "\n";
+                    }
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                    continue;
                 }
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-                continue;
+
+                $this->_echoImportResult($result[$filename]);
+
+                // import (check if dry run)
+                if ($_opts->d && $_opts->v) {
+                    print_r($result[$filename]['results']->toArray());
+
+                    if ($result[$filename]['failcount'] > 0) {
+                        print_r($result[$filename]['exceptions']->toArray());
+                    }
+                }
             }
-
-            $this->_echoImportResult($result[$filename]);
-
-            // import (check if dry run)
-            if ($_opts->d && $_opts->v) {
-                print_r($result[$filename]['results']->toArray());
-                
-                if ($result[$filename]['failcount'] > 0) {
-                    print_r($result[$filename]['exceptions']->toArray());
-                }
-            } 
         }
         
         return $result;

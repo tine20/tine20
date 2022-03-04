@@ -99,27 +99,13 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
      */
     public static function destroyAndRemoveCookie()
     {
-        if (self::sessionExists()) {
+        if (self::sessionExists() && session_status() === PHP_SESSION_ACTIVE) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Destroying session');
-            try {
-                Zend_Session::destroy(true, true);
-            } catch (ErrorException $ee) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                    __METHOD__ . '::' . __LINE__ . ' Session might have already been removed: '
-                    . $ee->getMessage());
-            }
+            Zend_Session::destroy();
         }
     }
-    
-    /**
-     * Destroy session but not remove cookie
-     */
-    public static function destroyAndMantainCookie()
-    {
-        Zend_Session::destroy(false, true);
-    }
-    
+
     /**
      * Zend_Session::writeClose encapsulation
      *
