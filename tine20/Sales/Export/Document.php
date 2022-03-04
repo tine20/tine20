@@ -38,8 +38,10 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
             ]
         ]))->expand($this->_records);
 
-        $cat = $this->_records->getFirstRecord()->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY};
-        $lang = $this->_records->getFirstRecord()->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE};
+        /** @var Sales_Model_Document_Abstract $record */
+        $record = $this->_records->getFirstRecord();
+        $cat = $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY};
+        $lang = $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE};
         $this->_locale = new Zend_Locale($lang);
         Sales_Model_DocumentPosition_Abstract::setExportContextLocale($this->_locale);
         $this->_translate = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, $this->_locale);
@@ -54,8 +56,14 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
             $this->_createDocument();
         }
 
+        // do this after any _createDocument calls! otherwise we lose the watermark
+        if (!$record->isBooked()) {
+            $this->_docTemplate->addWaterMark('PROFORMA', 1);
+            $this->_docTemplate->addWaterMark('PROFORMA', 2);
+        }
+
         $vats = new Tinebase_Record_RecordSet(Tinebase_Config_KeyFieldRecord::class, []);
-        foreach ($this->_records->getFirstRecord()->{Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE} as $vat) {
+        foreach ($record->{Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE} as $vat) {
             $vats->addRecord(new Tinebase_Config_KeyFieldRecord([
                 'id' => $vat['tax_rate'],
                 'value' => $vat['tax_sum'],
@@ -63,7 +71,7 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
         }
         $this->_records = [
             'PREPOSITIONS' => $this->_records,
-            'POSITIONS' => $this->_records->getFirstRecord()->{Sales_Model_Document_Abstract::FLD_POSITIONS},
+            'POSITIONS' => $record->{Sales_Model_Document_Abstract::FLD_POSITIONS},
             'POSTPOSITIONS' => $this->_records,
             'VATS' => $vats,
             'POSTVATS' => $this->_records,
