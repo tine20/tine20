@@ -568,7 +568,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $address = $addresses->filter('customer_id', $customer->getId())->filter('type', 'billing')->getFirstRecord();
             $addressId = $address ? $address->getId() : NULL;
 
-            $title = self::$_de ? ('Vertrag für KST ' . $costcenter->number . ' - ' . $costcenter->remark) : ('Contract for costcenter ' . $costcenter->number . ' - ' . $costcenter->remark) . ' ' . Tinebase_Record_Abstract::generateUID(3);
+            $title = self::$_de ? ('Vertrag für KST ' . $costcenter->number . ' - ' . $costcenter->name) : ('Contract for costcenter ' . $costcenter->number . ' - ' . $costcenter->name) . ' ' . Tinebase_Record_Abstract::generateUID(3);
             $ccid = $costcenter->getId();
 
             $contract = new Sales_Model_Contract(array(
@@ -625,7 +625,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'own_backend'            => Tasks_Backend_Factory::SQL,
                     'own_id'                 => NULL,
                     'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                    'related_model'          => 'Sales_Model_CostCenter',
+                    'related_model'          => Tinebase_Model_CostCenter::class,
                     'related_backend'        => Tasks_Backend_Factory::SQL,
                     'related_id'             => $ccid,
                     'type'                   => 'LEAD_COST_CENTER'
@@ -780,8 +780,8 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _onCreate()
     {
-        $controller = Sales_Controller_CostCenter::getInstance();
-        $this->_costCenters = new Tinebase_Record_RecordSet('Sales_Model_CostCenter');
+        $controller = Tinebase_Controller_CostCenter::getInstance();
+        $this->_costCenters = new Tinebase_Record_RecordSet(Tinebase_Model_CostCenter::class);
         $ccs = (static::$_de)
         ? array('Management', 'Marketing', 'Entwicklung', 'Produktion', 'Verwaltung',     'Controlling')
         : array('Management', 'Marketing', 'Development', 'Production', 'Administration', 'Controlling')
@@ -789,8 +789,8 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         $id = 1;
         foreach($ccs as $title) {
-            $cc = new Sales_Model_CostCenter(
-                array('remark' => $title, 'number' => $id)
+            $cc = new Tinebase_Model_CostCenter(
+                array('name' => $title, 'number' => $id)
             );
             try {
                 $controller->create($cc);

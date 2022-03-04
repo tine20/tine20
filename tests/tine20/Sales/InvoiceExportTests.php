@@ -49,8 +49,8 @@ class Sales_InvoiceExportTests extends Sales_InvoiceTestCase
         
         $all = $this->_invoiceController->getAll();
         
-        $cc3 = $this->_costcenterRecords->filter('remark', 'unittest3')->getFirstRecord();
-        $cc4 = $this->_costcenterRecords->filter('remark', 'unittest4')->getFirstRecord();
+        $cc3 = $this->_costcenterRecords->filter('name', 'unittest3')->getFirstRecord();
+        $cc4 = $this->_costcenterRecords->filter('name', 'unittest4')->getFirstRecord();
         
         $all->setTimezone(Tinebase_Core::getUserTimezone());
         

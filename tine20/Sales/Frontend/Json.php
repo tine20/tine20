@@ -32,7 +32,6 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected $_relatableModels = array(
         'Sales_Model_Contract',
-        'Sales_Model_CostCenter',
         'Sales_Model_Customer',
         'Sales_Model_Offer',
         'Sales_Model_Address',
@@ -60,7 +59,6 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_Document_Invoice::MODEL_NAME_PART,
         Sales_Model_DocumentPosition_Invoice::MODEL_NAME_PART,
         'Contract',
-        'CostCenter',
         'Customer',
         'Offer',
         'Address',
@@ -167,7 +165,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchContracts($filter, $paging)
     {
         return $this->_search($filter, $paging, Sales_Controller_Contract::getInstance(), 'Sales_Model_ContractFilter',
-            /* $_getRelations */ array('Sales_Model_Customer', 'Addressbook_Model_Contact', 'Sales_Model_CostCenter'));
+            /* $_getRelations */ array('Sales_Model_Customer', 'Addressbook_Model_Contact', 'Tinebase_Model_CostCenter'));
     }
 
     /**
@@ -270,53 +268,6 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchProductAggregates($filter, $paging)
     {
         return $this->_search($filter, $paging, Sales_Controller_ProductAggregate::getInstance(), 'Sales_Model_ProductAggregateFilter');
-    }
-    
-    /*************************** costcenter functions *****************************/
-
-    /**
-     * Search for records matching given arguments
-     *
-     * @param  array $filter
-     * @param  array $paging
-     * @return array
-     */
-    public function searchCostCenters($filter, $paging)
-    {
-        return $this->_search($filter, $paging, Sales_Controller_CostCenter::getInstance(), 'Sales_Model_CostCenterFilter');
-    }
-    
-    /**
-     * Return a single record
-     *
-     * @param   string $id
-     * @return  array record data
-     */
-    public function getCostCenter($id)
-    {
-        return $this->_get($id, Sales_Controller_CostCenter::getInstance());
-    }
-    
-    /**
-     * creates/updates a record
-     *
-     * @param  array $recordData
-     * @return array created/updated record
-     */
-    public function saveCostCenter($recordData)
-    {
-        return $this->_save($recordData, Sales_Controller_CostCenter::getInstance(), 'CostCenter');
-    }
-    
-    /**
-     * deletes existing records
-     *
-     * @param  array $ids
-     * @return string
-     */
-    public function deleteCostCenters($ids)
-    {
-        return $this->_delete($ids, Sales_Controller_CostCenter::getInstance());
     }
 
     // customer methods
@@ -678,7 +629,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_search($filter, $paging, Sales_Controller_PurchaseInvoice::getInstance(),
             'Sales_Model_PurchaseInvoiceFilter',
-            ['Sales_Model_Supplier', 'Sales_Model_CostCenter', 'Addressbook_Model_Contact']);
+            ['Sales_Model_Supplier', 'Tinebase_Model_CostCenter', 'Addressbook_Model_Contact']);
     }
     
     /**

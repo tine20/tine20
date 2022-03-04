@@ -72,11 +72,11 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $contract->relations = array(
             array(
-                'own_model'              => 'Sales_Model_Contract',
+                'own_model'              => Sales_Model_Contract::class,
                 'own_backend'            => Tasks_Backend_Factory::SQL,
                 'own_id'                 => NULL,
                 'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                'related_model'          => 'Sales_Model_CostCenter',
+                'related_model'          => Tinebase_Model_CostCenter::class,
                 'related_backend'        => Tasks_Backend_Factory::SQL,
                 'related_id'             => $this->_costcenterRecords->getFirstRecord()->getId(),
                 'type'                   => 'LEAD_COST_CENTER'
@@ -140,10 +140,10 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $all = $this->_invoiceController->getAll();
         
-        $cc1 = $this->_costcenterRecords->filter('remark', 'unittest1')->getFirstRecord();
-        $cc2 = $this->_costcenterRecords->filter('remark', 'unittest2')->getFirstRecord();
-        $cc3 = $this->_costcenterRecords->filter('remark', 'unittest3')->getFirstRecord();
-        $cc4 = $this->_costcenterRecords->filter('remark', 'unittest4')->getFirstRecord();
+        $cc1 = $this->_costcenterRecords->filter('name', 'unittest1')->getFirstRecord();
+        $cc2 = $this->_costcenterRecords->filter('name', 'unittest2')->getFirstRecord();
+        $cc3 = $this->_costcenterRecords->filter('name', 'unittest3')->getFirstRecord();
+        $cc4 = $this->_costcenterRecords->filter('name', 'unittest4')->getFirstRecord();
         
         $all->setTimezone(Tinebase_Core::getUserTimezone());
         
@@ -1688,10 +1688,10 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $this->_createCustomers(1);
         }
         
-        $costcenter = new Sales_Model_CostCenter();
+        $costcenter = new Tinebase_Model_CostCenter();
         $costcenter->number = 1337;
-        $costcenter->remark = 'Foobar Costcenter';
-        $costcenter = Sales_Controller_CostCenter::getInstance()->create($costcenter);
+        $costcenter->name = 'Foobar Costcenter';
+        $costcenter = Tinebase_Controller_CostCenter::getInstance()->create($costcenter);
         
         $invoice = new Sales_Model_Invoice();
         $invoice->description = 'Foobar Rechnung';

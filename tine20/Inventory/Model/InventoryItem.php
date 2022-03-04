@@ -158,8 +158,8 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'nullable'   => true,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
                 'config' => array(
-                    'appName'     => 'Sales',
-                    'modelName'   => 'CostCenter',
+                    'appName'     => Tinebase_Config::APP_NAME,
+                    'modelName'   => Tinebase_Model_CostCenter::MODEL_NAME_PART,
                     'idProperty'  => 'id',
                 ),
             ),

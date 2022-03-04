@@ -36,18 +36,6 @@
           "path": "js/"
         },
         {
-          "text": "CostCenterSearchCombo.js",
-          "path": "js/"
-        },
-        {
-          "text": "CostCenterGridPanel.js",
-          "path": "js/"
-        },
-        {
-          "text": "CostCenterEditDialog.js",
-          "path": "js/"
-        },
-        {
           "text": "ContractProductFilterModel.js",
           "path": "js/"
         },

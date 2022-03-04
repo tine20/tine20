@@ -57,11 +57,11 @@ class OpenDocument_DocumentTests extends \PHPUnit\Framework\TestCase
         
         $filename = Tinebase_Config::getInstance()->get('tmpdir') . DIRECTORY_SEPARATOR . Tinebase_Record_Abstract::generateUID(4) . '-ods-unittest.ods';
         
-        $ccc = Sales_Controller_CostCenter::getInstance();
+        $ccc = Tinebase_Controller_CostCenter::getInstance();
         
-        $cc1 = $ccc->create(new Sales_Model_CostCenter(array('number' => 'cc1', 'remark' => 'unittest-cc1')));
+        $cc1 = $ccc->create(new Tinebase_Model_CostCenter(array('number' => 'cc1', 'name' => 'unittest-cc1')));
         
-        $cc2 = $ccc->create(new Sales_Model_CostCenter(array('number' => 'cc2', 'remark' => 'unittest-cc2')));
+        $cc2 = $ccc->create(new Tinebase_Model_CostCenter(array('number' => 'cc2', 'name' => 'unittest-cc2')));
         
         $colInfo = array();
         $colInfo[$cc1->getId()] = $cc1->number;

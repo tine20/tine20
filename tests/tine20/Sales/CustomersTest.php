@@ -71,7 +71,7 @@ class Sales_CustomersTest extends \PHPUnit\Framework\TestCase
             'own_backend' => 'Sql',
             'own_id' => $ipnet->getId(),
             'related_degree' => 'sibling',
-            'remark' => 'phpunit test',
+            'name' => 'phpunit test',
             'related_model' => 'Sales_Model_Contract',
             'related_backend' => 'Sql',
             'related_id' => $contract->getId(),

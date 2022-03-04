@@ -55,9 +55,10 @@ class HumanResources_TestCase extends TestCase
         // remove employees and costcenters, if there are some already
         $filter = new HumanResources_Model_EmployeeFilter(array());
         HumanResources_Controller_Employee::getInstance()->deleteByFilter($filter);
-        
-        $filter = new Sales_Model_CostCenterFilter(array());
-        Sales_Controller_CostCenter::getInstance()->deleteByFilter($filter);
+
+        Tinebase_Controller_CostCenter::getInstance()->deleteByFilter(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class, [])
+        );
         
         parent::setUp();
     }
@@ -176,30 +177,34 @@ class HumanResources_TestCase extends TestCase
      * get sales cost center
      * 
      * @param string
-     * @return Sales_Model_CostCenter
+     * @return Tinebase_Model_CostCenter
      */
-    protected function _getSalesCostCenter($number = NULL)
+    protected function _getTinebaseCostCenter($number = NULL)
     {
         if ($number !== NULL) {
-            $c = Sales_Controller_CostCenter::getInstance()->search(new Sales_Model_CostCenterFilter([[
-                'field' => 'number', 'operator' => 'equals', 'value' => $number,
-            ], [
-                'field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET,
-            ]]))->getFirstRecord();
+            $c = Tinebase_Controller_CostCenter::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class, [[
+                    'field' => 'number', 'operator' => 'equals', 'value' => $number,
+                ], [
+                    'field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET,
+                ]]))->getFirstRecord();
             
             if ($c) {
                 if ($c->is_deleted) {
-                    $c = Sales_Controller_CostCenter::getInstance()->unDelete($c);
+                    Tinebase_Controller_CostCenter::getInstance()->unDelete($c);
+                    $c = Tinebase_Controller_CostCenter::getInstance()->get($c->getId());
                 }
+                /** @var Tinebase_Model_CostCenter $c */
                 return $c;
             }
         }
-        $c = new Sales_Model_CostCenter(array(
-            'number' => ($number) ? $number : Tinebase_Record_Abstract::generateUID(),
-            'remark' => Tinebase_Record_Abstract::generateUID(),
+        $c = new Tinebase_Model_CostCenter(array(
+            'number' => $number ?: Tinebase_Record_Abstract::generateUID(),
+            'name' => Tinebase_Record_Abstract::generateUID(),
         ));
-        
-        $c = Sales_Controller_CostCenter::getInstance()->create($c, FALSE);
+
+        /** @var Tinebase_Model_CostCenter $c */
+        $c = Tinebase_Controller_CostCenter::getInstance()->create($c, FALSE);
         
         return $c;
     }
@@ -215,10 +220,10 @@ class HumanResources_TestCase extends TestCase
             $startDate = new Tinebase_DateTime();
         }
         
-        $scs = $this->_getSalesCostCenter();
+        $tcs = $this->_getTinebaseCostCenter();
         return new HumanResources_Model_CostCenter(array(
             'start_date' => $startDate->toString(), 
-            'cost_center_id' => $scs->getId()
+            'cost_center_id' => $tcs->getId()
         ));
     }
     

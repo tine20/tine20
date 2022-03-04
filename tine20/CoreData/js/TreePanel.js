@@ -101,7 +101,7 @@ Ext.extend(Tine.CoreData.TreePanel, Ext.tree.TreePanel, {
                 coreDataNodes[coreData.application_id.name].push({
                     path: path + '/' + coreData.application_id.id + '/' + coreData.id,
                     id: coreData.id,
-                    text: coreDataApp.i18n._(coreData.label),
+                    text: coreData.label ? coreDataApp.i18n._(coreData.label) : Tine.Tinebase.data.RecordMgr.get(coreData.model).getModuleName(),
                     leaf: true,
                     attributes: coreData
                 });

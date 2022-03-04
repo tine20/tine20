@@ -85,11 +85,12 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
         }
         
         if ((isset($result["costcenter"]) || array_key_exists("costcenter", $result))) {
-            $result["costcenter"] = $c = Sales_Controller_CostCenter::getInstance()->search(new Sales_Model_CostCenterFilter(array(array(
-                'field'    => 'number',
-                'operator' => 'equals',
-                'value'    => $result["costcenter"]
-            ))))->getFirstRecord();
+            $result["costcenter"] = Tinebase_Controller_CostCenter::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class, array(array(
+                    'field'    => 'number',
+                    'operator' => 'equals',
+                    'value'    => $result["costcenter"]
+                ))))->getFirstRecord();
         }
         
         if ((isset($result["status"]) || array_key_exists("status", $result))) {

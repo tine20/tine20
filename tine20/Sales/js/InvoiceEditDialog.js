@@ -152,7 +152,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
             var relations = this.record.get('relations');
             var newRelations = [];
-            var allowedRelations = ['Sales_Model_Customer', 'Sales_Model_CostCenter', 'Sales_Model_Contract'];
+            var allowedRelations = ['Sales_Model_Customer', 'Tinebase_Model_CostCenter', 'Sales_Model_Contract'];
             Ext.each(relations, function(relation, index) {
                 if (allowedRelations.indexOf(relation.related_model) > -1) {
                     relation.id = null;
@@ -293,7 +293,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
                 if (! foundCustomer && relations[index].related_model == 'Sales_Model_Customer' && relations[index].type == 'CUSTOMER') {
                     foundCustomer = relations[index].related_record;
-                } else if (! foundCostCenter && relations[index].related_model == 'Sales_Model_CostCenter' && relations[index].type == 'LEAD_COST_CENTER') {
+                } else if (! foundCostCenter && relations[index].related_model == 'Tinebase_Model_CostCenter' && relations[index].type == 'LEAD_COST_CENTER') {
                     foundCostCenter = relations[index].related_record;
                 }
             }
@@ -638,7 +638,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     maxValue: 1024,
                                 }),
                                 allowDecimals: false
-                            }, Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter', {
+                            }, Tine.widgets.form.RecordPickerManager.get('Tinebase', 'CostCenter', {
                                     columnWidth: 1/2,
                                     blurOnSelect: true,
                                     allowBlank: false,

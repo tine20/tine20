@@ -42,7 +42,7 @@ class HumanResources_Model_CostCenter extends Tinebase_Record_Abstract
         'createModule'      => FALSE,
         'containerProperty' => NULL,
         'isDependent'       => TRUE,
-        'titleProperty'     => 'cost_center_id.remark',
+        'titleProperty'     => 'cost_center_id.name',
         'appName'           => 'HumanResources',
         'modelName'         => 'CostCenter',
 
@@ -86,8 +86,8 @@ class HumanResources_Model_CostCenter extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE),
                 'type'       => 'record',
                 'config' => array(
-                    'appName'     => 'Sales',
-                    'modelName'   => 'CostCenter',
+                    'appName'     => Tinebase_Config::APP_NAME,
+                    'modelName'   => Tinebase_Model_CostCenter::MODEL_NAME_PART,
                     'idProperty'  => 'id',
                     'isParent'    => FALSE
                 )
