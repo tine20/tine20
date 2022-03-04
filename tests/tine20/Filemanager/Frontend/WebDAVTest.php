@@ -146,7 +146,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $fs->setGrantsForNode($personalFolder, $personalFolder->grants);
 
         $children = $node->getChildren();
-
+        
         static::assertGreaterThanOrEqual(3, count($children));
         static::assertInstanceOf('Filemanager_Frontend_WebDAV', $children[0], 'wrong node class');
         $names = [];
@@ -157,6 +157,192 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         // we never use id as name, if it should be supported, go there and add it!
         // \Filemanager_Frontend_WebDAV::_getOtherUsersChildren
         static::assertEquals(1, count(array_intersect($names, [$sclever->{$property}])));
+    }
+
+    /**
+     * should not change default personal grants
+     */
+    public function testGetNodeForPath_webdav_filemanagerWithoutGrants_currentUser()
+    {
+        $nodeFsRootPath = '/webdav/Filemanager';
+ 
+        // try to get folder /user , should always sync
+        // it doesn't check grants in \Tinebase_WebDav_Collection_AbstractContainerTree::_getUser
+        $children = $this->_getNewWebDAVTreeNode($nodeFsRootPath)->getChildren();
+        static::assertCount(2, $children, 'child root nodes should always be sync');
+        
+        // try to get folder /user/personal, should always sync
+        // check grants in \Tinebase_WebDav_Collection_AbstractContainerTree::_getSharedChildren
+        $nodeUserRootPath = $nodeFsRootPath . '/'. Tinebase_Core::getUser()->accountDisplayName;
+        $children = $this->_getNewWebDAVTreeNode($nodeUserRootPath)->getChildren();
+        static::assertCount(1, $children, 'child node personal default should be sync');
+
+        // try to get folder /user/personal/dir1
+        // check grants in \Tinebase_Frontend_WebDAV_Directory::getChildren
+        $nodeUserRoot = $this->_getNewWebDAVTreeNode($nodeUserRootPath);
+        $nodeUserDefault = current($nodeUserRoot->getChildren());
+        $nodeUserDefault->createDirectory('dir1');
+        $nodeUserDefaultPath = $nodeUserRootPath . '/' . $nodeUserDefault->getName();
+        $children = $this->_getNewWebDAVTreeNode($nodeUserDefaultPath)->getChildren();
+        static::assertCount(1, $children, 'child node dir1 should be sync');
+        
+        // try to get folder /user/personal/dir1/dir2
+        // check grants in \Tinebase_Frontend_WebDAV_Directory::getChildren
+        $nodeDir1 = current($nodeUserDefault->getChildren());
+        $nodeDir1->createDirectory('dir2');
+        $nodeDir1Path = $nodeUserDefaultPath . '/' . $nodeDir1->getName();
+        $children = $this->_getNewWebDAVTreeNode($nodeDir1Path)->getChildren();
+        static::assertCount(1, $children, 'child node dir2 should be sync');
+    }
+
+    /**
+     * @throws Tinebase_Exception_NotFound
+     * @throws \Sabre\DAV\Exception\NotFound
+     */
+    public function testGetNodeForPath_webdav_filemanagerWithoutGrants_otherUser()
+    {
+        $nodeFsRootPath = '/webdav/Filemanager';
+  
+        // try to get folder /user
+        // check grants in \Filemanager_Frontend_WebDAV::_getOtherUsersChildren
+        $treeNodeUserRootPath = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Filemanager', Tinebase_FileSystem::FOLDER_TYPE_PERSONAL) . '/' .
+            Tinebase_Core::getUser()->getId();
+        $treeNodeUserRoot = Tinebase_FileSystem::getInstance()->stat($treeNodeUserRootPath);
+        $treeNodeUserDefault = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($treeNodeUserRoot)->getFirstRecord();
+        $this->_testGrantsHelper($treeNodeUserDefault, $nodeFsRootPath);
+
+        // try to get folder /user/personal ,
+        // check grants in \Tinebase_WebDav_Collection_AbstractContainerTree::_getSharedChildren
+        $nodeUserRootPath = $nodeFsRootPath . '/'. Tinebase_Core::getUser()->accountDisplayName;
+        $this->_testGrantsHelper($treeNodeUserDefault, $nodeUserRootPath);
+
+        // try to get folder /user/personal/dir1
+        // check grants in \Tinebase_Frontend_WebDAV_Directory::getChildren
+        $nodeUserRoot = $this->_getNewWebDAVTreeNode($nodeUserRootPath);
+        $nodeUserDefault = current($nodeUserRoot->getChildren());
+        $nodeUserDefaultPath = $nodeUserRootPath . '/' . $nodeUserDefault->getName();
+        $nodeUserDefault->createDirectory('dir1');
+        $treeNodeDir1 = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($treeNodeUserDefault)->getFirstRecord();
+        $this->_testGrantsHelper($treeNodeDir1, $nodeUserDefaultPath);
+
+        // try to get folder /user/personal/dir1/dir2
+        // check grants in \Tinebase_Frontend_WebDAV_Directory::getChildren
+        $nodeDir1 = current($nodeUserDefault->getChildren());
+        $nodeDir1->createDirectory('dir2');
+        $nodeDir1Path = $nodeUserDefaultPath . '/' . $nodeDir1->getName();
+        $treeNodeDir2 = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($treeNodeDir1)->getFirstRecord();
+        $this->_testGrantsHelper($treeNodeDir2, $nodeDir1Path);
+    }
+
+    /**
+     * @throws Tinebase_Exception_NotFound
+     * @throws \Sabre\DAV\Exception\NotFound
+     */
+    public function testGetNodeForPath_webdav_filemanagerWithoutGrants_shared()
+    {
+        $nodeFsRootPath = '/webdav/Filemanager';
+        // try to get folder /shared , should always sync and ignore grants setting
+        $children = $this->_getNewWebDAVTreeNode($nodeFsRootPath)->getChildren();
+        static::assertCount(2, $children, 'child root nodes should always be sync');
+        
+        // try to get folder /shared/dir1
+        // check grants in \Tinebase_WebDav_Collection_AbstractContainerTree::_getSharedDirectories
+        $nodeSharedRootPath = $nodeFsRootPath . '/'. 'shared';
+        $nodeSharedRoot = $this->_getNewWebDAVTreeNode($nodeSharedRootPath);
+        $nodeSharedRoot->createDirectory('dir1');
+        $treeNodeSharedRootPath = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Filemanager', Tinebase_FileSystem::FOLDER_TYPE_SHARED);
+        $treeNodeSharedRoot = Tinebase_FileSystem::getInstance()->stat($treeNodeSharedRootPath);
+        $treeNodeDir1 = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($treeNodeSharedRoot)->getFirstRecord();
+        $this->_testGrantsHelper($treeNodeDir1, $nodeSharedRootPath);
+
+        // try to get folder /shared/dir1/dir2
+        // check grants in \Tinebase_Frontend_WebDAV_Directory::getChildren
+        $nodeDir1 = current($nodeSharedRoot->getChildren());
+        $nodeDir1->createDirectory('dir2');
+        $nodeDir1Path = $nodeSharedRootPath . '/' . $nodeDir1->getName();
+        $treeNodeDir2 = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($treeNodeDir1)->getFirstRecord();
+        $this->_testGrantsHelper($treeNodeDir2, $nodeDir1Path);
+    }
+
+    /**
+     * node should only be sync when user has both READ_GRANT and SYNC_GRANT
+     * 
+     * @throws Tinebase_Exception_NotFound
+     * @throws \Sabre\DAV\Exception\NotFound
+     */
+    protected function _testGrantsHelper($folder, $nodePath, $isForcedSyncNode = false)
+    {
+        $testSyncUser = $this->_personas['sclever'];
+        $hideNodesCount = ! $isForcedSyncNode ? 1 : 0;
+        
+        // set default grant for test sync user first
+        Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($folder);
+        if (isset($folder['grants'])) {
+            $folder->grants->addRecord(new Tinebase_Model_Grants([
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                'account_id' => $testSyncUser->getId(),
+                Tinebase_Model_Grants::GRANT_ADMIN => true
+            ]));
+            Tinebase_FileSystem::getInstance()->setGrantsForNode($folder, $folder->grants);
+        }
+        
+        // change current user to test the sync ability
+        Tinebase_Core::setUser($testSyncUser);
+        $expectChildren = $this->_getNewWebDAVTreeNode($nodePath)->getChildren();
+        $expectChildCount = count($expectChildren);
+
+        // assert sync only without read_grant nor sync_grant
+        foreach ($folder->grants as $grant) {
+            if ($grant->account_id === $testSyncUser->getId() || $grant->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
+                $grant->adminGrant = false;
+                $grant->syncGrant = false;
+                $grant->readGrant = false;
+            }
+        }
+        Tinebase_FileSystem::getInstance()->setGrantsForNode($folder, $folder->grants);
+        $children = $this->_getNewWebDAVTreeNode($nodePath)->getChildren();
+        static::assertCount($expectChildCount - $hideNodesCount, $children, 'children node should not be sync');
+
+        // assert sync only with read_grant or sync_grant
+        foreach ($folder->grants as $grant) {
+            if ($grant->account_id === $testSyncUser->getId()) {
+                $grant['syncGrant'] = false;
+                $grant['readGrant'] = true;
+            }
+        }
+        Tinebase_FileSystem::getInstance()->setGrantsForNode($folder, $folder->grants);
+        $children = $this->_getNewWebDAVTreeNode($nodePath)->getChildren();
+        static::assertCount($expectChildCount - $hideNodesCount, $children, 'children node should not be sync');
+
+        foreach ($folder->grants as $grant) {
+            if ($grant->account_id === $testSyncUser->getId()) {
+                $grant['syncGrant'] = true;
+                $grant['readGrant'] = false;
+            }
+        }
+        Tinebase_FileSystem::getInstance()->setGrantsForNode($folder, $folder->grants);
+        $children = $this->_getNewWebDAVTreeNode($nodePath)->getChildren();
+        static::assertCount($expectChildCount - $hideNodesCount, $children, 'children node should not be sync');
+
+        // assert sync only with both read_grant and sync_grant
+        foreach ( $folder->grants as $grant) {
+            if ($grant->account_id === $testSyncUser->getId()) {
+                $grant['syncGrant'] = true;
+                $grant['readGrant'] = true;
+            }
+        }
+        Tinebase_FileSystem::getInstance()->setGrantsForNode($folder, $folder->grants);
+        $children = $this->_getNewWebDAVTreeNode($nodePath)->getChildren();
+        static::assertCount($expectChildCount, $children, 'children node should be sync');
+
+        // reset current user and folder grants for operating nodes
+        Tinebase_Core::setUser($this->_originalTestUser);
+        
+        foreach ( $folder->grants as $grant) {
+            if ($grant->account_id === $testSyncUser->getId()) {
+                $folder->grants->removeRecord($grant);
+            }
+        }
     }
 
     public function testGetNodeForPath_webdav_filemanagerWithOtherUsersLoginName()
@@ -1013,5 +1199,16 @@ EOS
         }
         
         return $this->_webdavTree;
+    }
+
+    /**
+     *
+     * @return \Sabre\DAV\ICollection|\Sabre\DAV\INode|\Sabre\DAV\ObjectTree
+     */
+    protected function _getNewWebDAVTreeNode($path)
+    {   
+        $node = new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root());
+        $node = $node->getNodeForPath($path);
+        return $node;
     }
 }

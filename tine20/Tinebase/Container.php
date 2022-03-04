@@ -807,19 +807,20 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         // enforce string for pgsql
         array_walk($roleMemberships, function(&$item) {$item = (string)$item;});
 
-        $quotedActId   = $db->quoteIdentifier("{$_aclTableName}.account_id");
-        $quotedActType = $db->quoteIdentifier("{$_aclTableName}.account_type");
+        $accountSelectFunc = function($quotedActId, $quotedActType) use($_select, $db, $accountId, $groupMemberships, $roleMemberships) {
+            $accountSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
+            $accountSelect
+                ->orWhere("{$quotedActId} = ? AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $accountId)
+                ->orWhere("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP), empty($groupMemberships) ? ' ' : $groupMemberships)
+                ->orWhere("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE), empty($roleMemberships) ? ' ' : $roleMemberships);
+
+            if (!Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
+                $accountSelect->orWhere("{$quotedActType} = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
+            }
+            $accountSelect->appendWhere(Zend_Db_Select::SQL_AND);
+        };
         
-        $accountSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
-        $accountSelect
-            ->orWhere("{$quotedActId} = ? AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $accountId)
-            ->orWhere("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP), empty($groupMemberships) ? ' ' : $groupMemberships)
-            ->orWhere("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE), empty($roleMemberships) ? ' ' : $roleMemberships);
-        
-        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
-            $accountSelect->orWhere("{$quotedActType} = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
-        }
-        $accountSelect->appendWhere(Zend_Db_Select::SQL_AND);
+        $accountSelectFunc($db->quoteIdentifier("{$_aclTableName}.account_id"), $db->quoteIdentifier("{$_aclTableName}.account_type"));
         
         // we only need to filter, if the filter does not contain %
         if (!in_array('*', $grants)) {
@@ -833,6 +834,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             }
             $iteration = 0;
             $grantsSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
+            $grantsSelect->openBracket();
             foreach ($grants as $grant) {
                 if ($grant[0] === '(') {
                     $grantsSelect->openBracket();
@@ -858,6 +860,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                     if ($iteration > 0) {
                         $callbackIdentifier = call_user_func($joinCallBack, $_select, $iteration);
                         $grantsSelect->where($db->quoteIdentifier($callbackIdentifier . '.account_grant') . ' LIKE ?', $grant);
+                        $accountSelectFunc($db->quoteIdentifier("{$callbackIdentifier}.account_id"), $db->quoteIdentifier("{$callbackIdentifier}.account_type"));
                     } else {
                         $grantsSelect->where($quotedGrant . ' LIKE ?', $grant);
                     }
@@ -869,6 +872,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                     $grantsSelect->closeBracket();
                 }
             }
+            $grantsSelect->closeBracket();
 
             // admin grant includes all other grants
             if (! in_array(Tinebase_Model_Grants::GRANT_ADMIN, $grants)) {
