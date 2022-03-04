@@ -551,7 +551,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
         // TODO allow NODES here
         $otherUsers = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $this->_getApplicationName(), array(
             Tinebase_Model_Grants::GRANT_READ,
-            Tinebase_Model_Grants::GRANT_SYNC
+            '&' . Tinebase_Model_Grants::GRANT_SYNC
         ));
 
         foreach ($otherUsers as $user) {
@@ -597,14 +597,14 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                         $accountId,
                         array(
                             Tinebase_Model_Grants::GRANT_READ,
-                            Tinebase_Model_Grants::GRANT_SYNC
+                            '&' . Tinebase_Model_Grants::GRANT_SYNC
                         )
                     );
                 } else {
                     // NOTE: seems to be the expected behavior for non-delegation clients
                     $containers = $this->_containerController->getContainerByACL(Tinebase_Core::getUser(), $this->_model, array(
                         Tinebase_Model_Grants::GRANT_READ,
-                        Tinebase_Model_Grants::GRANT_SYNC
+                        '&' . Tinebase_Model_Grants::GRANT_SYNC
                     ));
                 }
             } catch (Tinebase_Exception_AccessDenied $tead) {
@@ -635,7 +635,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             $this->_model ?: $this->_getApplicationName(),
             array(
                 Tinebase_Model_Grants::GRANT_READ,
-                Tinebase_Model_Grants::GRANT_SYNC
+                '&' . Tinebase_Model_Grants::GRANT_SYNC
             )
         );
 
