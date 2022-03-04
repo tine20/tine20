@@ -12,7 +12,7 @@
     <label>Municipality Key Import</label>
     <!-- _("Municipality Key Import") -->
     <sheet>1</sheet>
-    <startRow>7</startRow>
+    <startRow>1</startRow>
     <endRow></endRow>
     <startColumn>A</startColumn>
     <endColumn></endColumn>

@@ -77,7 +77,9 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
      */
     protected function _getRawData(&$_resource)
     {
-        if (false === $_resource->valid()) {
+        static $recursion = 0;
+        if (false === $_resource->valid() || $recursion > 50) {
+            $recursion = 0;
             return false;
         }
 
@@ -93,8 +95,10 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
 
         if ($proceed === false) {
             $_resource->next();
-            return false;
+            ++$recursion;
+            return $this->_getRawData($_resource);
         }
+        $recursion = 0;
 
         $rowArray = $this->_rowToArray($row);
         $_resource->next();
