@@ -315,7 +315,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 'account_id'    => Tinebase_Core::getUser()->getId(),
                 'clienttype'    => 'TineCli',
             )));
-            
+
+            $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($_username, $_password);
+            Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
+
         } else {
             echo "Wrong username and/or password.\n";
             exit();
