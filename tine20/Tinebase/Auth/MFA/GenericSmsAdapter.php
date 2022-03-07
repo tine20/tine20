@@ -39,6 +39,8 @@ class Tinebase_Auth_MFA_GenericSmsAdapter implements Tinebase_Auth_MFA_AdapterIn
         if ($pinLength < 3 || $pinLength > 10) throw new Tinebase_Exception('pin length needs to be between 3 and 10');
         $pin = sprintf('%0' . $pinLength .'d', random_int(1, pow(10, $pinLength) - 1));
 
+        $_userCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->isValid();
+
         $client = Tinebase_Core::getHttpClient($this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_URL},
             $this->_httpClientConfig);
         $client->setMethod($this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_METHOD});
