@@ -593,4 +593,14 @@ class Tinebase_Helper
         $disabledFunctions = strtolower((string) ini_get('disable_functions'));
         return strpos($disabledFunctions, 'shell_exec') === false;
     }
+
+    public static function isHashId($string): bool
+    {
+        return (
+            !ctype_digit($string)
+            && is_string($string)
+            && strlen($string) === 40
+            && preg_match('/^[a-f0-9]+$/', $string)
+        );
+    }
 }

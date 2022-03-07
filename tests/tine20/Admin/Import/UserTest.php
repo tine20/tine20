@@ -4,16 +4,11 @@
  *
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Christian Feitl<c.feitl@metaways.de>
  */
 
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-class Admin_Import_UserTest extends TestCase
+class Admin_Import_UserTest extends ImportTestCase
 {
     /**
      * @var Tinebase_Model_Container
@@ -21,7 +16,7 @@ class Admin_Import_UserTest extends TestCase
     protected $_importContainer = null;
 
     protected function tearDown(): void
-{
+    {
         parent::tearDown();
     }
 
@@ -60,5 +55,14 @@ class Admin_Import_UserTest extends TestCase
         }
 
         self::assertEquals(count($users), $count);
+    }
+
+    public function testImportUsersWithGroups()
+    {
+        $this->_filename = __DIR__ . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'user_import_example.csv';
+        $this->_deleteImportFile = false;
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('admin_user_import_csv');
+        $result = $this->_doImport([], $definition);
+        self::assertEquals(1, $result['totalcount'], print_r($result, true));
     }
 }
