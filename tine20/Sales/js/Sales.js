@@ -39,7 +39,6 @@ Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
         {modelName: 'Supplier', requiredRight: 'manage_suppliers', singularContainerMode: true},
         {modelName: 'Invoice', requiredRight: 'manage_invoices', singularContainerMode: true},
         {modelName: 'PurchaseInvoice', requiredRight: 'manage_purchase_invoices', singularContainerMode: true},
-        {modelName: 'CostCenter', requiredRight: 'manage_costcenters', singularContainerMode: true},
         {modelName: 'Offer', requiredRight: 'manage_offers', singularContainerMode: true},
         {modelName: 'OrderConfirmation', requiredRight: 'manage_orderconfirmations', singularContainerMode: true},
         // new documents
@@ -268,16 +267,6 @@ Tine.Sales.renderBillingPoint = function(v) {
 }
 
 Tine.widgets.grid.RendererManager.register('Sales', 'Contract', 'billing_point', Tine.Sales.renderBillingPoint);
-
-Tine.Sales.renderCostCenter = function(value, row, rec) {
-    if (Ext.isObject(value)) {
-        return value.number + ' - ' + value.remark;
-    }
-
-    return '';
-};
-
-Tine.widgets.grid.RendererManager.register('Sales', 'Invoice', 'costcenter_id', Tine.Sales.renderCostCenter);
 
 /**
  * allows all accountables to register (needed for accountable combo box)

@@ -2,21 +2,21 @@
 /**
  * Tine 2.0
  *
- * @package     Sales
+ * @package     Tinebase
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Christian Feitl<c.feitl@metaways.de>
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * csv import class for the Sales
  *
- * @package     Sales
+ * @package     Tinebase
  * @subpackage  Import
  *
  */
-class Sales_Import_CostCenter_Csv extends Tinebase_Import_Csv_Generic
+class Tinebase_Import_CostCenter_Csv extends Tinebase_Import_Csv_Generic
 {
 
     /**
@@ -30,10 +30,10 @@ class Sales_Import_CostCenter_Csv extends Tinebase_Import_Csv_Generic
         if($result['number'] == '') {
             while(!isset($existCostCenter)) {
                 $result['number'] = rand('100', '999');
-                $filter = Sales_Model_CostCenterFilter::getFilterForModel('Sales_Model_CostCenter', [
+                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class, [
                     ['field' => 'number', 'operator' => 'equals', 'value' => $result['number']]
                 ]);
-                $existCostCenter = Sales_Controller_CostCenter::getInstance()->search($filter);
+                $existCostCenter = Tinebase_Controller_CostCenter::getInstance()->search($filter);
             }
         }
         return $result;

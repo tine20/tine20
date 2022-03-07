@@ -178,7 +178,7 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                     'type'   => 'relation',
                     'label'  => 'Cost Center',    // _('Cost Center')
                     'config' => array(
-                        'appName'   => 'Sales',
+                        'appName'   => 'Tinebase',
                         'modelName' => 'CostCenter',
                         'type'      => 'COST_CENTER'
                     ),
@@ -233,7 +233,7 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
             'defaultType'  => 'APPROVER'
         ),
         array(
-            'relatedApp'   => 'Sales',
+            'relatedApp'   => 'Tinebase',
             'relatedModel' => 'CostCenter',
             'config' => array(
                 array('type' => 'COST_CENTER', 'degree' => 'sibling', 'text' => 'Lead Cost Center', 'max' => '1:0'), // _('Lead Cost Center')

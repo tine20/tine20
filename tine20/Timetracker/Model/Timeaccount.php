@@ -309,7 +309,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      * @see Tinebase_Record_Abstract
      */
     protected static $_relatableConfig = array(
-        array('relatedApp' => 'Sales', 'relatedModel' => 'CostCenter', 'config' => array(
+        array('relatedApp' => 'Tinebase', 'relatedModel' => 'CostCenter', 'config' => array(
             array('type' => 'COST_CENTER', 'degree' => 'sibling', 'text' => 'Cost Center', 'max' => '1:0'), // _('Cost Center')
             )
         ),

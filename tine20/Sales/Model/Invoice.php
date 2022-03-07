@@ -148,7 +148,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 'label' => 'Cost Center', //_('Cost Center')
                 'type'  => 'record',
                 'config' => array(
-                    'appName'     => 'Sales',
+                    'appName'     => 'Tinebase',
                     'modelName'   => 'CostCenter',
                     'idProperty'  => 'id'
                 )

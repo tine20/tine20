@@ -254,10 +254,10 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     /**
      * returns employees currently belonging to the given cost center (id)
      * 
-     * @param string|Sales_Model_CostCenter $costCenterId
+     * @param string|Tinebase_Model_CostCenter $costCenterId
      * @return Tinebase_Record_RecordSet|NULL
      */
-    public function getEmployeesBySalesCostCenter($costCenterId) {
+    public function getEmployeesByCostCenter($costCenterId) {
         $costCenterId = is_string($costCenterId) ? $costCenterId : $costCenterId->getId();
 
         $ccController = HumanResources_Controller_CostCenter::getInstance();

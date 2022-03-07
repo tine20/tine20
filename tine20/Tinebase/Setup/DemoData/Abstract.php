@@ -46,7 +46,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
     /**
      * holds the costcenter for "marketing"
      * 
-     * @var Sales_Model_CostCenter
+     * @var Tinebase_Model_CostCenter
      */
     protected $_marketingCostCenter;
     
@@ -60,7 +60,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
     /**
      * holds the costcenter for "development"
      * 
-     * @var Sales_Model_CostCenter
+     * @var Tinebase_Model_CostCenter
      */
     protected $_developmentCostCenter;
     
@@ -514,15 +514,15 @@ abstract class Tinebase_Setup_DemoData_Abstract
      */
     protected function _loadCostCentersAndDivisions()
     {
-        $filter = new Sales_Model_CostCenterFilter(array());
-        $this->_costCenters  = Sales_Controller_CostCenter::getInstance()->search($filter)->sort('number');
+        $this->_costCenters  = Tinebase_Controller_CostCenter::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class, []))->sort('number');
         $this->_costCenterKeys[] = array();
         
         foreach($this->_costCenters as $cc) {
-            if ($cc->remark == 'Marketing') {
+            if ($cc->name == 'Marketing') {
                 $this->_marketingCostCenter = $cc;
             }
-            if ($cc->remark == 'Development' || $cc->remark == 'Entwicklung') {
+            if ($cc->name == 'Development' || $cc->name == 'Entwicklung') {
                 $this->_developmentCostCenter = $cc;
             }
             $this->_costCenterKeys[] = $cc->getId();

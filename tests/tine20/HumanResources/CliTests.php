@@ -63,7 +63,7 @@ class HumanResources_CliTests extends HumanResources_TestCase
     {
         self::markTestSkipped('cli employee import is broken, not testing');
 
-        $cc = $this->_getSalesCostCenter(7);
+        $cc = $this->_getCostCenter(7);
         
         $this->_doImport(true);
         
@@ -158,7 +158,7 @@ class HumanResources_CliTests extends HumanResources_TestCase
         $this->assertEquals('Hypo Real Estate', $susan->bank_name, print_r($susan->toArray(), TRUE));
         
         // cost center check
-        $cc = $this->_getSalesCostCenter(7);
+        $cc = $this->_getCostCenter(7);
         $susan->contracts = HumanResources_Controller_Contract::getInstance()->getContractsByEmployeeId($susan->getId());
         $this->assertEquals(1, $susan->contracts->count(), 'no contracts found');
     }

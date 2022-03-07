@@ -208,11 +208,13 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $args = $this->_parseArgs($opts);
             
             // expecting cost center number here, creating contract from data
-            $costCenter = Sales_Controller_CostCenter::getInstance()->search(new Sales_Model_CostCenterFilter(array(array(
-                'field'    => 'number',
-                'operator' => 'equals',
-                'value'    => $employee->countryname,
-            ))))->getFirstRecord();
+            $costCenter = Tinebase_Controller_CostCenter::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class,
+                array(array(
+                    'field'    => 'number',
+                    'operator' => 'equals',
+                    'value'    => $employee->countryname,
+                ))))->getFirstRecord();
             
             $contract = HumanResources_Controller_Employee::getInstance()->createContractDataForEmployee(array(
                 'feastCalendarId'     => isset($args['feast_calendar_id']) ? $args['feast_calendar_id'] : NULL,

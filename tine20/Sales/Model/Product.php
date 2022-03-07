@@ -106,7 +106,7 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
         self::ASSOCIATIONS              => [
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
                 self::FLD_COSTCENTER        => [
-                    self::TARGET_ENTITY         => Sales_Model_CostCenter::class,
+                    self::TARGET_ENTITY         => Tinebase_Model_CostCenter::class,
                     self::FIELD_NAME            => self::FLD_COSTCENTER,
                     self::JOIN_COLUMNS          => [[
                         self::NAME                  => self::FLD_COSTCENTER,
@@ -297,8 +297,8 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                 self::LABEL => 'Costcenter', // _('Costcenter')
                 self::TYPE => self::TYPE_RECORD,
                 self::CONFIG => [
-                    self::APP_NAME              => Sales_Config::APP_NAME,
-                    self::MODEL_NAME            => Sales_Model_CostCenter::MODEL_NAME_PART,
+                    self::APP_NAME              => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME            => Tinebase_Model_CostCenter::MODEL_NAME_PART,
                 ],
                 self::NULLABLE => true,
             ],

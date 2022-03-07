@@ -107,7 +107,7 @@ class Sales_Export_Ods_Invoice extends Sales_Export_Ods_Abstract
                 
                 switch ($identifier) {
                     case 'costcenter_id':
-                        $value = $record[$identifier]['number'] . ' - ' . $record[$identifier]['remark'];
+                        $value = $record[$identifier]['number'] . ' - ' . $record[$identifier]['name'];
                         break;
                     case 'customer':
                         $value = $customer;

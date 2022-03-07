@@ -38,6 +38,7 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
     public const FLD_BREITENGRAD = 'breitengrad';
     public const FLD_REISEGEBIET = 'reisegebiet';
     public const FLD_GRAD_DER_VERSTAEDTERUNG = 'gradDerVerstaedterung';
+    public const FLD_GEBIETSSTAND = 'gebietsstand';
 
     public const MODEL_NAME_PART = 'MunicipalityKey';
     public const TABLE_NAME = 'municipalitykeys';
@@ -263,6 +264,13 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL                     => 'Grad der Verstädterung', // _('Grad der Verstädterung')
                 self::NAME                      => 'gradVerstaedterung',
+            ],
+            self::FLD_GEBIETSSTAND => [
+                self::TYPE => self::TYPE_DATE,
+                self::LABEL => 'Gebietsstand', // _('Gebietsstand')
+                self::NULLABLE => true,
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
             ],
         ]
     ];

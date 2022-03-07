@@ -267,7 +267,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // TODO: resolve this in controller
         if (! empty($employee['costcenters']) && is_array($employee['costcenters'])) {
-            $cc = Sales_Controller_CostCenter::getInstance()->search(new Sales_Model_CostCenterFilter(array()));
+            $cc = Tinebase_Controller_CostCenter::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class, []));
             for ($i = 0; $i < count($employee['costcenters']); $i++) {
                 $costCenter = $cc->filter('id', $employee['costcenters'][$i]['cost_center_id'])->getFirstRecord();
                 if ($costCenter) {

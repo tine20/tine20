@@ -499,8 +499,8 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     xtype: 'tinerelationpickercombo',
                                     fieldLabel: this.app.i18n._('Lead Cost Center'),
                                     allowBlank: true,
-                                    app: 'Sales',
-                                    recordClass: Tine.Sales.Model.CostCenter,
+                                    app: 'Tinebase',
+                                    recordClass: Tine.Tinebase.Model.CostCenter,
                                     relationType: 'COST_CENTER',
                                     relationDegree: 'sibling',
                                     modelUnique: true

@@ -1381,7 +1381,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->markTestSkipped('0010492: fix failing invoices and timetracker tests');
 
         $ta = $this->_getTimeaccount(array('title' => 'to find'), true);
-        $cc = Sales_Controller_CostCenter::getInstance()->create(new Sales_Model_CostCenter(array('number' => 1, 'title' => 'test')));
+        $cc = Tinebase_Controller_CostCenter::getInstance()->create(new Tinebase_Model_CostCenter(array('number' => 1, 'title' => 'test')));
 
         $customer = Sales_Controller_Customer::getInstance()->create(new Sales_Model_Customer(array(
             'number' => 100,

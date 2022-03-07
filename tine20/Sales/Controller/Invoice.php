@@ -37,7 +37,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     /**
      * the costcenter of the contract which is handled by _createAutoInvoicesForContract
      * 
-     * @var Sales_Model_CostCenter
+     * @var Tinebase_Model_CostCenter
      */
     protected $_currentBillingCostCenter = NULL;
     
@@ -202,17 +202,19 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     /**
      * finds the costcenter of $this->_currentContract
      * 
-     * @return Sales_Model_CostCenter|NULL
+     * @return Tinebase_Model_CostCenter|NULL
      */
     protected function _findCurrentCostCenter()
     {
         $this->_currentBillingCostCenter = NULL;
         
         foreach ($this->_currentBillingContract->relations as $relation) {
-            if ($relation->type == 'LEAD_COST_CENTER' && $relation->related_model == 'Sales_Model_CostCenter') {
+            if ($relation->type == 'LEAD_COST_CENTER' && $relation->related_model == Tinebase_Model_CostCenter::class) {
                 $this->_currentBillingCostCenter = $relation->related_record;
             }
         }
+
+        return $this->_currentBillingCostCenter;
     }
     
     /**
@@ -228,7 +230,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             if ($relation->type == 'CUSTOMER' && $relation->related_model == 'Sales_Model_Customer') {
                 $this->_currentBillingCustomer = $relation->related_record;
             }
-        } 
+        }
+
+        return $this->_currentBillingCustomer;
     }
 
     /**

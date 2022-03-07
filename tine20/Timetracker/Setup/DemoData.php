@@ -94,7 +94,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     /**
      * cc controller
      * 
-     * @var Sales_Controller_CostCenter
+     * @var Tinebase_Controller_CostCenter
      */
     protected $_ccController;
     
@@ -168,7 +168,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _beforeCreate()
     {
-        $this->_ccController  = Sales_Controller_CostCenter::getInstance();
+        $this->_ccController  = Tinebase_Controller_CostCenter::getInstance();
         $this->_taController  = Timetracker_Controller_Timeaccount::getInstance();
         $this->_taController->sendNotifications(FALSE);
         $this->_tsController  = Timetracker_Controller_Timesheet::getInstance();
@@ -245,17 +245,17 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'description' => 'Created By Tine 2.0 DEMO DATA'
                 ));
                 
-                if (($costcenter->remark == 'Marketing') || ($costcenter->remark == $developmentString)) {
-                    $contract = $costcenter->remark == 'Marketing' ? $this->_contractsMarketing->getByIndex(rand(0, ($this->_contractsMarketing->count() -1))) : $this->_contractsDevelopment->getByIndex(rand(0, ($this->_contractsDevelopment->count() -1)));
+                if (($costcenter->name == 'Marketing') || ($costcenter->name == $developmentString)) {
+                    $contract = $costcenter->name == 'Marketing' ? $this->_contractsMarketing->getByIndex(rand(0, ($this->_contractsMarketing->count() -1))) : $this->_contractsDevelopment->getByIndex(rand(0, ($this->_contractsDevelopment->count() -1)));
                     
-                    $ta->budget = $costcenter->remark == 'Marketing' ? 100 : NULL;
+                    $ta->budget = $costcenter->name == 'Marketing' ? 100 : NULL;
                     $ta->relations = array(
                         array(
                             'own_model'              => 'Timetracker_Model_Timeaccount',
                             'own_backend'            => 'SQL',
                             'own_id'                 => NULL,
                             'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                            'related_model'          => 'Sales_Model_CostCenter',
+                            'related_model'          => Tinebase_Model_CostCenter::class,
                             'related_backend'        => Tasks_Backend_Factory::SQL,
                             'related_id'             => $costcenter->getId(),
                             'type'                   => 'COST_CENTER'
@@ -279,7 +279,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                             'own_backend'            => 'SQL',
                             'own_id'                 => NULL,
                             'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                            'related_model'          => 'Sales_Model_CostCenter',
+                            'related_model'          => Tinebase_Model_CostCenter::class,
                             'related_backend'        => Tasks_Backend_Factory::SQL,
                             'related_id'             => $costcenter->getId(),
                             'type'                   => 'COST_CENTER'
@@ -309,7 +309,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     /**
      * returns the cost center for the current account
      *
-     * @return HumanResources_Model_CostCenter|Sales_Model_CostCenter
+     * @return HumanResources_Model_CostCenter|Tinebase_Model_CostCenter
      */
     protected function _getCurrentUsersCostCenter()
     {
@@ -338,7 +338,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         if (Tinebase_Application::getInstance()->isInstalled('HumanResources')) {
             $cc = $this->_getCurrentUsersCostCenter();
         } else {
-            $cc = $this->_costCenters->filter('remark', 'Management')->getFirstRecord();
+            $cc = $this->_costCenters->filter('name', 'Management')->getFirstRecord();
         }
         
         

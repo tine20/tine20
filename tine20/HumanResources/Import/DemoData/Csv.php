@@ -89,9 +89,9 @@ class HumanResources_Import_DemoData_Csv extends Tinebase_Import_Csv_Abstract
         HumanResources_Controller_Contract::getInstance()->create($contract_Model);
         
 
-        foreach (Sales_Controller_CostCenter::getInstance()->getAll() as $costCenter)
+        foreach (Tinebase_Controller_CostCenter::getInstance()->getAll() as $costCenter)
         {
-            if($costCenter['remark'] == $this->_costCenter )
+            if($costCenter['name'] == $this->_costCenter )
             {
                 $costCenter_id = $costCenter['id'];
             }
