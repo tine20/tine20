@@ -21,6 +21,10 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
 {
     protected $_createdPasswords = [];
     protected $_createdAccounts = [];
+    /**
+     * @var Admin_Controller_User
+     */
+    protected $_controller;
 
     /**
      * additional config options
@@ -93,9 +97,11 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
     protected function _importRecord($_record, $_resolveStrategy = NULL, $_recordData = array())
     {
         if ($_record instanceof Tinebase_Model_FullUser && $this->_controller instanceof Admin_Controller_User) {
-            
+
+            $this->_resolveGroups($_record);
+
             $record = $_record;
-            
+
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . ' record Data' . print_r($_recordData, true));
             if (isset($_recordData['smtpUser'])) {
@@ -154,5 +160,43 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
                 'pwdMustChange' => isset($result['pwdMustChange']) ? new Tinebase_DateTime($result['pwdMustChange']) : ''
                             );
         return $result;
+    }
+
+    /**
+     * resolve / create import user groups (might be given as name)
+     *
+     * @param Tinebase_Model_FullUser $_record
+     * @return void
+     */
+    protected function _resolveGroups(Tinebase_Model_FullUser$_record)
+    {
+        $_record->accountPrimaryGroup = $this->_resolveGroup($_record->accountPrimaryGroup);
+        if (is_array($_record->groups)) {
+            $groups = [];
+            foreach ($_record->groups as $group) {
+                $groups[] = $this->_resolveGroup($group);
+            }
+            $_record->groups = $groups;
+        }
+    }
+
+    protected function _resolveGroup(?string $groupNameOrId): ?string
+    {
+        if (! $groupNameOrId || Tinebase_Helper::isHashId($groupNameOrId)) {
+            return $groupNameOrId;
+        } else {
+            /** @var Tinebase_Group_Sql $groupController */
+            $groupController = Tinebase_Group::getInstance();
+            try {
+                $group = $groupController->getGroupByName($groupNameOrId);
+                return $group->getId();
+            } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                // create group on the fly
+                $group = $groupController->create(new Tinebase_Model_Group([
+                    'name' => $groupNameOrId,
+                ]));
+                return $group->getId();
+            }
+        }
     }
 }

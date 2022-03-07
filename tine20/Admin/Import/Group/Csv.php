@@ -36,9 +36,6 @@ class Admin_Import_Group_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected function _importRecord($_record, $_resolveStrategy = NULL, $_recordData = array())
     {
-        $admCfg = Tinebase_Core::getConfig()->get('Admin');
-        $excludeGroups = array();
-        
         $be = new Tinebase_Group_Sql();
         $members = explode(' ', $_record->members);
         
@@ -62,8 +59,6 @@ class Admin_Import_Group_Csv extends Tinebase_Import_Csv_Abstract
             $group->visibility = Tinebase_Model_Group::VISIBILITY_DISPLAYED;
             
             $be->updateGroupInSqlBackend($group);
-            
-            $memberUids = array();
             
             if (!empty($members) && $members[0] != "") {
                 $users = $this->_resolveUsers($members);
