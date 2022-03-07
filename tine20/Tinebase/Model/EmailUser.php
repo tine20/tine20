@@ -120,13 +120,16 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
                 $data = ! is_array($_data[$arrayField])
                     ? explode(',', preg_replace('/ /', '', $_data[$arrayField]))
                     : $_data[$arrayField];
-                foreach ($data as $index => $value) {
-                    if (! isset($value['email'])) {
-                        $data[$index] = [
+                array_walk($data, function (&$value) {
+                    if (! is_array($value) && $value) {
+                        $value = [
                             'email' => $value
                         ];
                     }
-                }
+                });
+                $data = array_filter($data, function($value) {
+                    return is_array($value) && isset($value['email']) && $value['email'];
+                });
                 $_data[$arrayField] = new Tinebase_Record_RecordSet($model, $data);
             }
         }
