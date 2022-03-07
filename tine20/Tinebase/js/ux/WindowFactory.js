@@ -107,7 +107,8 @@ Ext.ux.WindowFactory.prototype = {
             c.layout = c.layout || 'fit';
             const cp = this.getCenterPanel(c).then((cp) => {
                 const cardPanel = win.items.get(0)
-                cp.window = win;
+                // NOTE: cp might contain a wrap
+                _.set(c.contentPanelConstructor ? cp : cp.get(0), 'window', win);
                 cardPanel.items.add(cp);
                 cardPanel.layout.setActiveItem(0);
                 cp.doLayout();
