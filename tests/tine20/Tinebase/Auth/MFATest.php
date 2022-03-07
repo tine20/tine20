@@ -242,6 +242,30 @@ class Tinebase_Auth_MFATest extends TestCase
             ->mfa_configs->getFirstRecord()), 'validate didn\'t succeed');
     }
 
+    public function testSmsAtCreateUser()
+    {
+        $userTest = new Admin_Frontend_Json_UserTest();
+        $ref = new ReflectionProperty(Admin_Frontend_Json_UserTest::class, '_json');
+        $ref->setAccessible(true);
+        $ref->setValue($userTest, new Admin_Frontend_Json());
+        $userData = $userTest->_getUserArrayWithPw();
+        $userData['mfa_configs'] = [[
+            Tinebase_Model_MFA_UserConfig::FLD_ID => 'userunittest',
+            Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'unittest',
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS =>
+                Tinebase_Model_MFA_SmsUserConfig::class,
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG => [
+                    Tinebase_Model_MFA_SmsUserConfig::FLD_CELLPHONENUMBER => ' 0176 / 1234567890',
+                ],
+        ]];
+
+        $userData = (new Admin_Frontend_Json())->saveUser($userData);
+        $this->assertNotEmpty($userData['mfa_configs'][0][Tinebase_Model_MFA_UserConfig::FLD_CONFIG]
+            [Tinebase_Model_MFA_SmsUserConfig::FLD_CELLPHONENUMBER]);
+        $this->assertSame('+491761234567890', $userData['mfa_configs'][0][Tinebase_Model_MFA_UserConfig::FLD_CONFIG]
+            [Tinebase_Model_MFA_SmsUserConfig::FLD_CELLPHONENUMBER]);
+    }
+
     public function testGenericSmsAdapter()
     {
         $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(

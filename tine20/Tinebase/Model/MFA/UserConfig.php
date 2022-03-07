@@ -120,4 +120,17 @@ class Tinebase_Model_MFA_UserConfig extends Tinebase_Record_NewAbstract
             $this->{self::FLD_CONFIG}->updateUserNewRecordCallback($newUser, $oldUser, $this);
         }
     }
+
+    /**
+     * validate and filter the the internal data
+     *
+     * @param bool $_throwExceptionOnInvalidData
+     * @return bool
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function isValid($_throwExceptionOnInvalidData = false)
+    {
+        return parent::isValid($_throwExceptionOnInvalidData) &&
+            (! $this->{self::FLD_CONFIG} instanceof Tinebase_Record_Interface || $this->{self::FLD_CONFIG}->isValid($_throwExceptionOnInvalidData));
+    }
 }
