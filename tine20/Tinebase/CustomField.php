@@ -805,30 +805,59 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         $cfId = ($_customfieldId instanceof Tinebase_Model_CustomField_Config) ? $_customfieldId->getId() : $_customfieldId;
         
         try {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Setting grants for custom field ' . $cfId . ' -> ' . implode(',', $_grants) . ' for '
-                . ($_accountType !== NULL ? $_accountType : Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE) . ' (' . $_accountId . ')');
-            
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             if ($_removeOldGrants) {
                 $this->_backendACL->deleteByProperty($cfId, 'customfield_id');
             }
-
+            
             foreach ($_grants as $grant) {
-                if (in_array($grant, Tinebase_Model_CustomField_Grant::getAllGrants())) {
-                    $newGrant = new Tinebase_Model_CustomField_Grant(array(
-                        'customfield_id'=> $cfId,
-                        'account_type'  => ($_accountType !== NULL) ? $_accountType : Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                        'account_id'    => ($_accountId !== NULL) ? $_accountId : 0,
-                        'account_grant' => $grant
-                    ));
-                    $this->_backendACL->create($newGrant);
+                if (! is_array($grant)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Setting grants for custom field ' . $cfId . ' -> ' . implode(',', $_grants) . ' for '
+                        . ($_accountType !== NULL ? $_accountType : Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE) . ' (' . $_accountId . ')');
+
+                    if (in_array($grant, Tinebase_Model_CustomField_Grant::getAllGrants())) {
+                        $newGrant = new Tinebase_Model_CustomField_Grant(array(
+                            'customfield_id'=> $cfId,
+                            'account_type'  => ($_accountType !== NULL) ? $_accountType : Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                            'account_id'    => ($_accountId !== NULL) ? $_accountId : 0,
+                            'account_grant' => $grant
+                        ));
+                        $this->_backendACL->create($newGrant);
+                    }
+                } else {
+                    if (! isset($grant['account_id'])) {
+                        continue;
+                    }
+                    
+                    foreach ($grant as $field => $value) {
+                        if (in_array($field, Tinebase_Model_CustomField_Grant::getAllGrants()) && $value === TRUE) {
+                            $newGrant =  new Tinebase_Model_CustomField_Grant(array(
+                                'customfield_id' => $cfId,
+                                'account_type'  => $grant['account_type'] ?? Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                                'account_id'    => $grant['account_id'] ?? 0,
+                                'account_grant' => $field
+                            ));
+                            $newGrant['id'] = Tinebase_Record_Abstract::generateUID();
+
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . ' Setting grants for custom field ' . $cfId . ' -> ' . $field . ' for '
+                                . $newGrant['account_type'] . ' (' . $newGrant['account_id'] . ')');
+                            
+                            try {
+                                $this->_backendACL->create($newGrant);
+                            } catch (Zend_Db_Statement_Exception $zdse) {
+                                if (! Tinebase_Exception::isDbDuplicate($zdse)) {
+                                    throw $zdse;
+                                }
+                            }
+                        }
+                    }
                 }
             }
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $this->_clearCache();
-            
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw new Tinebase_Exception_Backend($e->getMessage());
@@ -851,6 +880,36 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         }
         
         return $result;
+    }
+
+    /**
+     * get all grants of a given customfieldId
+     *
+     * @param string $_customfieldId
+     * @return Tinebase_Record_RecordSet Set of Tinebase_Model_TagRight
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function getGrants($_customfieldId)
+    {
+        $db = $this->_backendACL->getAdapter();
+        $dbCommand = $this->_backendACL->getDbCommand();
+        $cfId = ($_customfieldId instanceof Tinebase_Model_CustomField_Config) ? $_customfieldId->getId() : $_customfieldId;
+
+
+        $select = $db->select()
+            ->from(array('customfield_acl' => SQL_TABLE_PREFIX . 'customfield_acl'),
+                array('*', 'customfield_id', 'account_type', 'account_id', 'account_grant' => $dbCommand->getAggregate('account_grant'))
+            )
+            ->where($db->quoteInto($db->quoteIdentifier('customfield_id') . ' = ?', $cfId))
+            ->group(array('customfield_id', 'account_type', 'account_id'));
+
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+
+        $stmt = $db->query($select);
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+
+        $rights = new Tinebase_Record_RecordSet(Tinebase_Model_CustomField_Grant::class, $rows, true);
+        return $rights;
     }
     
     /**

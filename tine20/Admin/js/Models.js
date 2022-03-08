@@ -15,8 +15,24 @@ Ext.ns('Tine.Admin.Model');
  * @class       Tine.Admin.Model.TagRight
  * @extends     Ext.data.Record
  * 
- * TagRight Record Definition
+ * CustomFieldRight Record Definition
  */ 
+Tine.Admin.Model.CustomFieldRight = Ext.data.Record.create([
+    {name: 'customfield_id'},
+    {name: 'account_id'},
+    {name: 'account_type'},
+    {name: 'account_name'},
+    {name: 'readGrant', type: 'boolean'},
+    {name: 'writeGrant',  type: 'boolean'}
+]);
+
+/**
+ * @namespace   Tine.Admin.Model
+ * @class       Tine.Admin.Model.TagRight
+ * @extends     Ext.data.Record
+ *
+ * TagRight Record Definition
+ */
 Tine.Admin.Model.TagRight = Ext.data.Record.create([
     {name: 'account_id'},
     {name: 'account_type'},

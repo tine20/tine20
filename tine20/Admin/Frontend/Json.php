@@ -1163,7 +1163,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getCustomfield($id)
     {
-        return $this->_get($id, Admin_Controller_Customfield::getInstance());
+        $customField = Admin_Controller_Customfield::getInstance()->get($id)->toArray();
+        $customField['grants'] = self::resolveAccountName($customField['grants'] , true);
+        return $customField;
     }
 
     /**

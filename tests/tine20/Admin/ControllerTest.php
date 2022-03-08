@@ -41,7 +41,7 @@ class Admin_ControllerTest extends TestCase
     }
 
     /**
-     * testCustomFieldDelete
+     * testCustomFieldUpdate
      */
     public function testCustomFieldUpdate()
     {
@@ -52,6 +52,15 @@ class Admin_ControllerTest extends TestCase
         $result = $cfs->filter('name', 'unittest_test')->getFirstRecord();
 
         $result->name = 'changed name';
+        $result->grants = [
+            [
+                'customfield_id' => $result->getId(),
+                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                'account_id'    => Tinebase_Core::getUser()->getId(),
+                Tinebase_Model_CustomField_Grant::GRANT_READ => true,
+                Tinebase_Model_CustomField_Grant::GRANT_WRITE => true,
+            ]
+        ];
         $updatedCF = Admin_Controller_Customfield::getInstance()->update($result);
         static::assertEquals($result->name, $updatedCF->name);
 
