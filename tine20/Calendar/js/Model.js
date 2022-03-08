@@ -253,7 +253,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         mute: false
     };
     
-    if (prefs.get('defaultalarmenabled')) {
+    if (+prefs.get('defaultalarmenabled')) {
         data.alarms = [{minutes_before: parseInt(prefs.get('defaultalarmminutesbefore'), 10)}];
     }
 
