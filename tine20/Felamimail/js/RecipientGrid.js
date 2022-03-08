@@ -219,8 +219,12 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 specialkey: this.onSearchComboSpecialkey,
                 select: this.onSearchComboSelect,
                 render: (combo) => {
-                    combo.getEl().on('input', (e, dom) => {
-                        const value = this.searchCombo.getValue();
+                    combo.getEl().on('paste', (e, dom) => {
+                        e = e.browserEvent;
+                        const clipboardData = e.clipboardData || window.clipboardData;
+                        const pastedData = clipboardData.getData('Text');
+                        
+                        const value = pastedData.replaceAll("\r\n", ',');
                         if (Math.abs(value.length - this.searchCombo.lastInputEventValue.length) > 5 && (value.match(/@/g) || []).length > 1) {
                             import(/* webpackChunkName: "Tinebase/js/email-addresses" */ 'email-addresses').then((addrs) => {
                                 if (!this.loadMask) {
