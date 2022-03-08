@@ -247,13 +247,14 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         $customer = Sales_Controller_Customer::getInstance()->get($address->customer_id);
         
         //Update Address
-        $address->name =  $contact->n_given ?: $customer->name;
+        $address->name =  $customer->name;
         $address->street = $contact->adr_one_street;
         $address->postalcode  = $contact->adr_one_postalcode;
         $address->locality = $contact->adr_one_locality;
         $address->region = $contact->adr_one_region;
         $address->countryname = $contact->adr_one_countryname;
         $address->prefix1 = $customer->name == $contact->n_fn ? '' : $contact->n_fn;
+        $address->prefix2 = $contact->org_name;
         $address->language = $language;
 
         return Sales_Controller_Address::getInstance()->update($address);
