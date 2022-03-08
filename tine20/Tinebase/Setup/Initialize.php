@@ -209,8 +209,8 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         ]));
 
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter([
-            'name' => "All Cost Bearers", // _('All Cost Bearers')
-            'description' => "All cost bearer records", // _('All cost bearer records')
+            'name' => "All Cost Units", // _('All Cost Units')
+            'description' => "All cost unit records", // _('All cost unit records')
             'filters' => [],
             'account_id' => NULL,
             'model' => Tinebase_Model_CostUnit::class,

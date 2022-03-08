@@ -5178,6 +5178,31 @@ msgstr ""
 msgid "Create {0}"
 msgstr "{0} erstellen"
 
+msgid "Cost Center"
+msgid_plural "Cost Centers"
+msgstr[0] "Kostenstelle"
+msgstr[1] "Kostenstellen"
+
+msgid "Cost Unit"
+msgid_plural "Cost Units"
+msgstr[0] "Kostenträger"
+msgstr[1] "Kostenträger"
+
+msgid "Number"
+msgstr "Nummer"
+
+msgid "All Cost Centers"
+msgstr "Alle Kostenstellen"
+
+msgid "All cost center records"
+msgstr "Alle Kostenstellen Datensätze"
+
+msgid "All Cost Units"
+msgstr "Alle Kostenträger"
+
+msgid "All cost unit records"
+msgstr "Alle Kostenträger Datensätze"
+
 #: Model/MunicipalityKey.php:214
 msgid "plz"
 msgstr "PLZ"
