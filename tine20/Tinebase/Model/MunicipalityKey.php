@@ -111,7 +111,6 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
-                self::INPUT_FILTERS => [Zend_Filter_Empty::class => null]
             ],
             self::FLD_ARS_RB => [
                 self::TYPE => self::TYPE_STRING,
@@ -122,7 +121,6 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
-                self::INPUT_FILTERS => [Zend_Filter_Empty::class => null]
             ],
             self::FLD_ARS_KREIS => [
                 self::TYPE => self::TYPE_STRING,
@@ -133,7 +131,6 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
-                self::INPUT_FILTERS => [Zend_Filter_Empty::class => null]
             ],
             self::FLD_ARS_VB => [
                 self::TYPE => self::TYPE_STRING,
@@ -144,7 +141,6 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
-                self::INPUT_FILTERS => [Zend_Filter_Empty::class => null]
             ],
             self::FLD_ARS_GEM => [
                 self::TYPE => self::TYPE_STRING,
@@ -155,7 +151,6 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
-                self::INPUT_FILTERS => [Zend_Filter_Empty::class => null]
             ],
             self::FLD_ARS_COMBINED => [
                 self::TYPE => self::TYPE_STRING,
