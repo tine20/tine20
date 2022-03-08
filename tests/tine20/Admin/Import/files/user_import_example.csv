@@ -1,0 +1,2 @@
+"firstname","lastname","loginname","password","email","primary_group_id","additional_groups"
+"m.muster","Max","Muster","foo","","PRIMARYGROUP","GROUP1,GROUP2"
