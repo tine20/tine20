@@ -244,6 +244,8 @@ class Tinebase_Auth_MFATest extends TestCase
 
     public function testSmsAtCreateUser()
     {
+        $this->_skipIfLDAPBackend('Zend_Ldap_Exception: 0x44 (Already exists): adding: cn=tine20phpunitgroup,ou=groups,dc=tine,dc=test');
+
         $userTest = new Admin_Frontend_Json_UserTest();
         $ref = new ReflectionProperty(Admin_Frontend_Json_UserTest::class, '_json');
         $ref->setAccessible(true);
