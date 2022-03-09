@@ -281,9 +281,10 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
     /**
      * @param Tinebase_Record_RecordSet $_recordSetOne
      * @param Tinebase_Record_RecordSet $_recordSetTwo
+     * @param ?Tinebase_Record_DiffContext $context
      * @return null|Tinebase_Record_RecordSetDiff
      */
-    public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne, Tinebase_Record_RecordSet $_recordSetTwo)
+    public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne, Tinebase_Record_RecordSet $_recordSetTwo, ?Tinebase_Record_DiffContext $context = null)
     {
         $setOne = [];
         $mapOne = [];

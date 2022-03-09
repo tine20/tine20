@@ -315,6 +315,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
       */
      public function getTitle()
      {
+         if (!$this->product_id) return '';
          $p = Sales_Controller_Product::getInstance()->get($this->product_id);
          (new Tinebase_Record_Expander(Sales_Model_Product::class, [
              Tinebase_Record_Expander::EXPANDER_PROPERTIES => [

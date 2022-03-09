@@ -254,7 +254,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      * (non-PHPdoc)
      * @see Tinebase_Record_Abstract::diff()
      */
-    public function diff($record, $omitFields = array())
+    public function diff($record, $omitFields = array(), ?Tinebase_Record_DiffContext $context = null)
     {
         $checkRrule = false;
         if (! in_array('rrule', $omitFields)) {
@@ -262,7 +262,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             $checkRrule = true;
         }
         
-        $diff = parent::diff($record, $omitFields);
+        $diff = parent::diff($record, $omitFields, $context);
         
         if ($checkRrule) {
             $ownRrule    = ! $this->rrule instanceof Calendar_Model_Rrule ? Calendar_Model_Rrule::getRruleFromString((string) $this->rrule) : $this->rrule;

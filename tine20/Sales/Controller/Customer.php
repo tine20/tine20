@@ -206,7 +206,7 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
      */
     protected function _resolveBillingAddress($_record)
     {
-        if (!empty($_record->billing)) {
+        if (!empty($_record->billing) && (!$_record->billing instanceof Tinebase_Record_RecordSet || $_record->billing->count() > 0)) {
             return;
         }
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));

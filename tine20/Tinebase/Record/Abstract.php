@@ -979,9 +979,10 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      * 
      * @param Tinebase_Record_Interface $_record record for comparison
      * @param array $omitFields omit fields (for example modlog fields)
+     * @param ?Tinebase_Record_DiffContext $context
      * @return Tinebase_Record_Diff|NULL
      */
-    public function diff($_record, $omitFields = array())
+    public function diff($_record, $omitFields = array(), ?Tinebase_Record_DiffContext $context = null)
     {
         /** this is very bad, it is because of the subdiff below... maybe it is resolved in the meantime? */
         if (! $_record instanceof Tinebase_Record_Interface) {
@@ -1053,7 +1054,13 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                         $ownField = $ownField->getId();
                     }
                 } else {
-                    $subdiff = $ownField->diff($recordField);
+                    if ($ownField instanceof Tinebase_Record_Interface) {
+                        $model = $ownField;
+                    } else {
+                        $model = $ownField->getRecordClassName();
+                    }
+                    $subdiff = $ownField->diff($recordField,
+                        $context ? $context->getSubDiffOmitFields($model::getConfiguration()) : [], $context);
                     if (($subdiff instanceof Tinebase_Record_Diff || $subdiff instanceof Tinebase_Record_RecordSetDiff)
                         && !$subdiff->isEmpty()
                     ) {
@@ -1065,15 +1072,18 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             } elseif (empty($ownField) && $recordField instanceof Tinebase_Record_Interface) {
                 $model = get_class($recordField);
                 $emptyRecord = new $model(array(), true);
-                $subdiff = $emptyRecord->diff($recordField);
+                $subdiff = $emptyRecord->diff($recordField,
+                    $context ? $context->getSubDiffOmitFields($recordField::getConfiguration()) : [], $context);
                 if (is_object($subdiff) && ! $subdiff->isEmpty()) {
                     $diff[$fieldName] = $subdiff;
                     $oldData[$fieldName] = $ownField;
                 }
                 continue;
             } elseif (empty($ownField) && $recordField instanceof Tinebase_Record_RecordSet) {
+                $model = $recordField->getRecordClassName();
                 $emptyRecordSet = new Tinebase_Record_RecordSet($recordField->getRecordClassName(), array());
-                $subdiff = $emptyRecordSet->diff($recordField);
+                $subdiff = $emptyRecordSet->diff($recordField,
+                    $context ? $context->getSubDiffOmitFields($model::getConfiguration()) : [], $context);
                 if (is_object($subdiff) && ! $subdiff->isEmpty()) {
                     $diff[$fieldName] = $subdiff;
                     $oldData[$fieldName] = $ownField;
@@ -1454,9 +1464,10 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      * undoes the change stored in the diff
      *
      * @param Tinebase_Record_Diff $diff
+     * @param bool $applySeq
      * @return void
      */
-    public function undo(Tinebase_Record_Diff $diff)
+    public function undo(Tinebase_Record_Diff $diff, bool $applySeq = false)
     {
         /* TODO special treatment? for what? how?
          * oldData does not contain RecordSetDiffs. It plainly contains the old data present in the property before it was changed.
@@ -1468,6 +1479,9 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
 
         foreach((array)($diff->oldData) as $property => $oldValue)
         {
+            if (!$applySeq && 'seq' === $property) {
+                continue;
+            }
             if ('customfields' === $property) {
                 if (!is_array($oldValue)) {
                     $oldValue = array();
@@ -1715,9 +1729,10 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     /**
      * @param Tinebase_Record_RecordSet $_recordSetOne
      * @param Tinebase_Record_RecordSet $_recordSetTwo
+     * @param ?Tinebase_Record_DiffContext $context
      * @return null|Tinebase_Record_RecordSetDiff
      */
-    public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne, Tinebase_Record_RecordSet $_recordSetTwo)
+    public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne, Tinebase_Record_RecordSet $_recordSetTwo, ?Tinebase_Record_DiffContext $context = null)
     {
         return null;
     }
