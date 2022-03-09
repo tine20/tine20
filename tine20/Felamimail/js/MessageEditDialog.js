@@ -548,6 +548,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     isForwardedMessage: function () {
         return (this.forwardMsgs && this.forwardMsgs.length === 1);
     },
+    
+    getSignaturePosition: function (account) {
+        return _.get(account, 'data.signature_position', 'below') ?? null;
+    },
 
     /**
      * add signature to message
@@ -562,13 +566,15 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         msgBody = _.isString(arguments[3]) ? arguments[3] : this.msgBody;
 
-        let signaturePosition = _.get(account, 'data.signature_position', 'below');
+        const signaturePosition = this.getSignaturePosition(account);
         signatureText = _.isString(arguments[2]) ? arguments[2] : this.getSignature(account, format);
-
+        
         if (signaturePosition === 'below') {
             msgBody += signatureText;
-        } else {
-            msgBody = signatureText + '<br/><br/>' + msgBody;
+        } 
+        
+        if (signaturePosition === 'above') {
+            msgBody = signatureText !== '' ? signatureText + '<br/><br/>' + msgBody : msgBody;
         }
 
         if (! arguments[3]) {
@@ -587,7 +593,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getSignature: function (account, format, signature) {
         let signatureText = Tine.Felamimail.getSignature(account, signature);
-
+        
         if (format === 'text/plain') {
             signatureText = Tine.Tinebase.common.html2text(signatureText);
         }
@@ -1431,11 +1437,39 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         let newSignature = this.getSignature(account, format, signature);
 
         let bodyContent = this.bodyCards.layout.activeItem.getValue();
-        bodyContent = oldSignature ?
-            bodyContent.replace(oldSignature, newSignature) :
-            this.addSignature(account, format, newSignature, bodyContent);
+        bodyContent = oldSignature ? this.replaceSignature(account, bodyContent, oldSignature, newSignature) 
+            : this.addSignature(account, format, newSignature, bodyContent);
 
         this.bodyCards.layout.activeItem.setValue(bodyContent);
+    },
+    
+    /**
+     * replace signature in mail body
+     *
+     */
+    replaceSignature: function(account, bodyContent, oldSignature, newSignature) {
+        // remove style first
+        bodyContent = bodyContent.replace(/<span class="felamimail-body-signature" .*">/, '<span class="felamimail-body-signature">');
+        
+        // we only replace the content inside <span>.*</span> , in case user delete the default new lines
+        oldSignature = oldSignature.replace(/^<br><br>/, '');
+        newSignature = newSignature.replace(/^<br><br>/, '');
+        bodyContent = bodyContent.replace(oldSignature, newSignature);
+        
+        // remove generated extra newlines when user change the signature
+        if (newSignature === '') {
+            const position = this.getSignaturePosition(account);
+            
+            if (position === 'above') {
+               bodyContent = bodyContent.replace(/^<br><br><br><br>/, '');
+            }
+            
+            if (position === 'below') {
+                bodyContent = bodyContent.replace(/<br><br>$/, '');
+            }
+        }
+        
+        return bodyContent;
     },
 
     /**
