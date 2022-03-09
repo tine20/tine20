@@ -65,7 +65,7 @@ Ext.apply(Ext.ux.log, {
      * @param {Number} prio
      */
     setPrio: function(prio) {
-        this.PRIO = prio;
+        this.PRIO = Ext.LOGLEVEL = prio;
         for (var name in this.priorities) {
             this[name] = this[name.toLowerCase()] = prio >= this.priorities[name] ? this.prioLogFnMap[name] : Ext.emptyFn;
         }
@@ -74,6 +74,6 @@ Ext.apply(Ext.ux.log, {
 
 // init Ext.ux.log
 Ext.onReady(function() {
-    Ext.ux.log.setPrio(Ext.LOGLEVEL);
+    Ext.ux.log.setPrio(Ext.LOGLEVEL||8);
     Ext.ux.log.debug('logger initialized');
 });
