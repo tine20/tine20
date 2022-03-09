@@ -417,7 +417,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.action_addTask = new Ext.Action({
             requiredGrant: 'readGrant',
-            text: Tine.Tinebase.appMgr.get('Tasks').i18n._('Add New Task'),
+            text: Tine.Tinebase.appMgr.isEnabled('Tasks') ? Tine.Tinebase.appMgr.get('Tasks').i18n._('Add New Task') : '',
             handler: this.onCreateTask,
             iconCls: 'action_addTask',
             scope: this,
