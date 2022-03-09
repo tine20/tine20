@@ -65,7 +65,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         Tine.Sales.Document_AbstractEditDialog.superclass.checkStates.apply(this, arguments)
 
         this.record.set('sales_tax', Object.keys(sums['net_sum_by_tax_rate']).reduce((a, rate) => {
-            sums['sales_tax_by_rate'][rate] = (sums['net_sum_by_tax_rate'][rate] - this.record.get('invoice_discount_sum') * sums['net_sum_by_tax_rate'][rate] / this.record.get('positions_net_sum')) * rate / 100
+            sums['sales_tax_by_rate'][rate] = (sums['net_sum_by_tax_rate'][rate] - this.record.get('invoice_discount_sum') * ((sums['net_sum_by_tax_rate'][rate] / this.record.get('positions_net_sum'))||0)) * rate / 100
             return a + sums['sales_tax_by_rate'][rate]
         }, 0))
         this.record.set('sales_tax_by_rate', Object.keys(sums['sales_tax_by_rate']).reduce((a, rate) => {
