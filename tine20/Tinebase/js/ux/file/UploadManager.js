@@ -262,10 +262,10 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
      * Tine.Filemanager.nodeBackendMixin.searchRecord method needs all the pending nodeData,
      * so that user can switch and see the pending nodes while uploading
      */ 
-    async getChildNodesByPath(path) {
+    async getProcessingNodesByPath(path) {
         let tasks = await this.mainChannel.getAllTasks();
         tasks = _.filter(tasks, (task) => {
-            return path === task.args.targetFolderPath;
+            return path === task.args.targetFolderPath && task.args.nodeData.status !== 'complete';
         });
         return _.map(tasks, 'args.nodeData');
     },
