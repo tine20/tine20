@@ -39,7 +39,7 @@ Tine.widgets.grid.RendererManager = function() {
          * default renderer - quote content
          */
         defaultRenderer: function(value) {
-            return value ? Ext.util.Format.htmlEncode(value) : '';
+            return [null, undefined].indexOf(value) < 0 ? Ext.util.Format.htmlEncode(value) : '';
         },
 
         /**
