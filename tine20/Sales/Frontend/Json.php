@@ -728,6 +728,12 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
     /*************************** offer functions *****************************/
 
+    /**
+     * @apiTimeout 60
+     * @param string $model
+     * @param string $documentId
+     * @return array
+     */
     public function createPaperSlip(string $model, string $documentId)
     {
         if (!($stream = fopen('php://memory', 'w+'))) {

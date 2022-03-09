@@ -53,7 +53,8 @@ class Tinebase_Server_JsonTests extends TestCase
                     'name' => 'duplicateCheck'
                 )
             ),
-            'returns' => 'array'
+            'returns' => 'array',
+            'apiTimeout' => null,
         ), $smdArray['services']['Inventory.saveInventoryItem'], 'saveInventoryItem smd mismatch');
         $this->assertEquals(array
         (
@@ -66,7 +67,8 @@ class Tinebase_Server_JsonTests extends TestCase
                     'name' => 'ids'
                 )
             ),
-            'returns' => 'array'
+            'returns' => 'array',
+            'apiTimeout' => null,
         ), $smdArray['services']['Inventory.deleteInventoryItems']);
 
         $this->assertEquals(array
@@ -88,7 +90,8 @@ class Tinebase_Server_JsonTests extends TestCase
                     'name' => 'paging'
                 )
             ),
-            'returns' => 'array'
+            'returns' => 'array',
+            'apiTimeout' => null,
         ), $smdArray['services']['Inventory.searchInventoryItems']);
 
         self::assertEquals(array
@@ -122,7 +125,8 @@ class Tinebase_Server_JsonTests extends TestCase
                     'name' => 'clientRecordData'
                 ),
             ),
-            'returns' => 'array'
+            'returns' => 'array',
+            'apiTimeout' => null,
         ), $smdArray['services']['Inventory.importInventoryItems']);
     }
 

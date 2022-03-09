@@ -696,6 +696,8 @@ class Tinebase_Frontend_JsonTest extends TestCase
             // no smtp config found
         }
 
+        self::assertSame(60, $registryData['Tinebase']['serviceMap']['services']['Sales.createPaperSlip']['apiTimeout']);
+
         self::assertLessThan(2000000, strlen(json_encode($registryData)), 'registry size got too big');
     }
 
