@@ -33,6 +33,20 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
             $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, $expanderDef);
             $expander->expand($records);
         }
+
+        if($multiple !== true) {
+            $contact = $records->getFirstRecord();
+            if ($contact->groups instanceof Tinebase_Record_RecordSet) {
+                $memberRoles = Addressbook_Controller_ListMemberRole::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_ListMemberRole::class, [
+                    ['field' => 'list_id', 'operator' => 'in', 'value' => $contact->groups->getId()],
+                    ['field' => 'contact_id', 'operator' => 'equals', 'value' => $contact->getid()],
+                ]));
+                foreach ($contact->groups as $list) {
+                    $list->memberroles = $memberRoles->filter('list_id', $list->getId());
+                }
+                \Addressbook_Convert_List_Json::resolveMemberroles($contact->groups);
+            }
+        }
     }
 
    /**

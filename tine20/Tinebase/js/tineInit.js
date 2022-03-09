@@ -74,8 +74,8 @@ Tine.onAllAppsLoaded = () => {
 /**
  * quiet logging in release mode
  */
-Ext.LOGLEVEL = Tine.clientVersion.buildType === 'RELEASE' ? 0 : 7;
 Tine.log = Ext.ux.log;
+Tine.log.setPrio(Tine.clientVersion.buildType === 'RELEASE' ? 0 : 7);
 
 /**
  * in memory per window msg bus for sync events

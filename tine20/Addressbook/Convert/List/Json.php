@@ -108,7 +108,7 @@ class Addressbook_Convert_List_Json extends Tinebase_Convert_Json
      */
     protected function _resolveBeforeToArray($records, $modelConfiguration, $multiple = false)
     {
-        $this->_resolveMemberroles($records);
+        self::resolveMemberroles($records);
 
         parent::_resolveBeforeToArray($records, $modelConfiguration, $multiple);
     }
@@ -118,7 +118,7 @@ class Addressbook_Convert_List_Json extends Tinebase_Convert_Json
      *
      * @param $records
      */
-    protected function _resolveMemberroles($records)
+    public static function resolveMemberroles($records)
     {
         $listRoles = Addressbook_Controller_ListRole::getInstance()->getAll();
         $contactIds = array();

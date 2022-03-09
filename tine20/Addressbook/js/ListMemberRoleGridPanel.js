@@ -38,7 +38,7 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
 
         this.memberDataPath = 'data.' + this.memberProperty;
         this.roleDataPath = 'data.' + this.roleProperty;
-        
+
         this.title = this.hasOwnProperty('title') ? this.title : this.app.i18n._('Members');
         this.plugins = this.plugins || [];
         this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
@@ -157,17 +157,9 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
      * @constructor
      */
     listMemberRoleRenderer: function(value) {
-        if (Ext.isArray(value)) {
-            var result = [];
-            Ext.each(value, function(memberrole) {
-                if (memberrole.list_role_id.name) {
-                    result.push(memberrole.list_role_id.name);
-                }
-            });
-            return result.toString();
-        }
-
-        return '';
+        return _.map(value, (memberrole) => {
+            return Ext.util.Format.htmlEncode(_.get(memberrole, 'list_role_id.name', window.i18n._hidden('unknown')));
+        }).join(', ') || '';
     },
 
     preferredEmailRenderer : function(value,metadata,record) {
@@ -178,7 +170,7 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
         var _ = window.lodash,
             memberData = _.get(record, this.memberDataPath) || [],
             rolesData = _.get(record, this.roleDataPath) || [];
-        
+
         this.setStoreFromArray(memberData);
         this.setRolesFromData(rolesData);
     },
@@ -187,7 +179,7 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
         var _ = window.lodash,
             memberData = this.getFromStoreAsArray(),
             roleData = this.getRolesFromData(memberData);
-        
+
         _.set(record, this.memberDataPath, memberData);
         _.set(record, this.roleDataPath, roleData);
     },
@@ -238,7 +230,7 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
 
     /**
      * get memberrole records from store
-     * 
+     *
      * @param data
      * @returns {mixed}
      */
@@ -258,13 +250,13 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
                 }
             });
         }
-        
+
         return result;
     },
 
     /**
      * get memberroles
-     * 
+     *
      * @param roles
      * @param list
      */
