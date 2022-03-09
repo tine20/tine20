@@ -257,7 +257,7 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
     public function update011()
     {
         try {
-            $def = Tinebase_ImportExportDefinition::getInstance()->getByName('sales_import_costcenter_csv');
+            $def = Tinebase_ImportExportDefinition::getInstance()->getByName('tinebase_import_costcenter_csv');
             Tinebase_ImportExportDefinition::getInstance()->delete([$def->getId()]);
         } catch (Tinebase_Exception_NotFound $tenf) {}
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.11', self::RELEASE015_UPDATE011);
