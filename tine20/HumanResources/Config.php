@@ -31,18 +31,6 @@ class HumanResources_Config extends Tinebase_Config_Abstract
     const WTR_CORRECTION_STATUS_DECLINED = 'DECLINED';
 
     /**
-     * Vacation Status
-     * @var string
-     */
-    const VACATION_STATUS = 'vacationStatus';
-
-    /**
-     * Sickness Status
-     * @var string
-     */
-    const SICKNESS_STATUS = 'sicknessStatus';
-    
-    /**
      * Default Feast Calendar (used for tailoring datepicker)
      * @var string
      */

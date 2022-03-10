@@ -115,7 +115,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                 }
             }
         }
-        
+
         this.items = this.getPortalColumn();
         Tine.widgets.mainscreen.WestPanel.superclass.initComponent.apply(this, arguments);
     },
@@ -373,6 +373,18 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                 }, this);
             }
             this.portalColumn = new Ext.ux.PortalColumn({
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key:   ['Tine', this.app.appName, this.contentType, 'WestPanelPortalColumn'].join('.'),
+                    config: {
+                        collapsible: true,
+                        baseCls: 'ux-arrowcollapse',
+                        animCollapse: true,
+                        titleCollapse:true,
+                        draggable : true,
+                        autoScroll: false
+                    }
+                }],
                 columnWidth: 1,
                 items: items
             });

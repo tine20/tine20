@@ -58,6 +58,10 @@
     background-color: #ffac71!important;
 }
 
+.HumanResourcesFreeTime {
+    background-image:url(../../images/icon-set/icon_logout.svg) !important;
+}
+
 .FreeTimePlanning {
     background-image:url(../../images/icon-set/icon_calendar_strahl.svg) !important;
 }

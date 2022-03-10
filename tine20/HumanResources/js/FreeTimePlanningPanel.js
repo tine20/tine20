@@ -149,6 +149,7 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
                 // support multiple freetimes per day?
                 let freeTimeType = freeTimes[0].type;
                 char = _.get(freeTimeType, 'abbreviation', freeTimeType[0]);
+                bgColor = _.get(freeTimeType, 'color', '#FFFFFF');
                 // @TODO color
             }
         }

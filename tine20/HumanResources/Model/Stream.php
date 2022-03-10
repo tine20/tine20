@@ -47,7 +47,7 @@ class HumanResources_Model_Stream extends Tinebase_Record_NewAbstract
      */
     protected static $_modelConfiguration = [
         self::VERSION                   => 1,
-        self::RECORD_NAME               => 'Stream',
+        self::RECORD_NAME               => 'Stream', // gettext('GENDER_Stream')
         self::RECORDS_NAME              => 'Streams', // ngettext('Stream', 'Streams', n)
         self::HAS_RELATIONS             => true,
         self::COPY_RELATIONS            => false,

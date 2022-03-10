@@ -57,7 +57,7 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
      */
     protected static $_modelConfiguration = [
         self::VERSION                   => 3,
-        self::RECORD_NAME               => 'Absence reason',
+        self::RECORD_NAME               => 'Absence reason', // gettext('GENDER_Absence reason')
         self::RECORDS_NAME              => 'Absence reasons', // ngettext('Absence reason', 'Absence reasons', n)
         self::TITLE_PROPERTY            => 'name',
         self::HAS_CUSTOM_FIELDS         => true,

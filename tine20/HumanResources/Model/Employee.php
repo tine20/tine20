@@ -34,7 +34,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
      */
     protected static $_modelConfiguration = array(
         'version'           => 17,
-        'recordName'        => 'Employee',
+        'recordName'        => 'Employee', // gettext('GENDER_Employee')
         'recordsName'       => 'Employees', // ngettext('Employee', 'Employees', n)
         'hasRelations'      => TRUE,
         'hasCustomFields'   => TRUE,
@@ -50,6 +50,16 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'titleProperty'     => 'n_fn',
         'appName'           => 'HumanResources',
         'modelName'         =>  self::MODEL_NAME_PART,
+
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'division_id' => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
+                        Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
+                    ]
+                ]
+            ]
+        ],
 
         'filterModel' => array(
             'is_employed' => array(

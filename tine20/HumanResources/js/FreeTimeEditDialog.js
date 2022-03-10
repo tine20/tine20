@@ -34,7 +34,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     
     // private
     recordFromJson: true,
-    
+    evalGrants: false,
+
     /**
      * inits the component
      */
@@ -82,6 +83,11 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             typeString = this.app.i18n._('Free Time');
         }
         let isNewRecord = !this.record.get('creation_time');
+        const grants = _.get(employee, 'data.division_id.account_grants', {});
+        const isOwn = Tine.Tinebase.registry.get('currentAccount').accountId === _.get(employee, 'data.account_id.accountId');
+        const processStatus = this.processStatusPicker.getValue();
+        const allowUpdate = grants.adminGrant || grants.updateChangeRequestGrant ||
+            (processStatus === 'REQUESTED' && (isNewRecord || (isOwn && grants.createOwnChangeRequestGrant) || grants.createChangeRequestGrant));
 
         if (!isNewRecord) {
             this.window.setTitle(String.format(this.app.i18n._('Edit {0} for {1}'), this.app.i18n._hidden(typeString), employeeName));
@@ -89,14 +95,30 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'),  this.app.i18n._hidden(typeString), employeeName));
         }
 
-        this.employeePicker.setDisabled(!isNewRecord || this.fixedFields.indexOfKey('employee_id') >= 0);
-        this.typePicker.setDisabled(!isNewRecord || this.fixedFields.indexOfKey('type') >= 0);
-        
-        this.sicknessStatusPicker[type.id === 'sickness' ? 'show' : 'hide']();
-        this.vacationStatusPicker[type.id === 'vacation' ? 'show' : 'hide']();
+        this.employeePicker.setReadOnly(!isNewRecord || this.fixedFields.indexOfKey('employee_id') >= 0);
+        this.typePicker.setReadOnly(!isNewRecord || this.fixedFields.indexOfKey('type') >= 0);
+
+        this.processStatusPicker.setDisabled(!(grants.updateChangeRequestGrant || grants.adminGrant));
+        this.typeStatusPicker[type.id === 'sickness' ? 'show' : 'hide']();
         this.accountPicker[type.id === 'vacation' ? 'show' : 'hide']();
-        this.accountPicker.setDisabled(!employee);
+        this.accountPicker.setReadOnly(!employee);
         this.remainingDaysField[type.id === 'vacation' ? 'show' : 'hide']();
+
+        [this.typeStatusPicker, this.datePicker, this.getForm().findField('description'), this.attachmentsPanel, this.action_saveAndClose].forEach((item) => {
+            item[item.setReadOnly ? 'setReadOnly' : 'setDisabled'](!allowUpdate);
+        });
+
+        // description // attachments ... -> setReadOnly
+
+        /**
+         * @TODO apply acl
+         * // allow to set process status if UPDATE_CHANGE_REQUEST (in division of employee)
+         * // process status requested -> allow to change all (incl. OK btn) everything (own && CREATE_OWN_CHANGE_REQUEST) || CREATE_CHANGE_REQUEST
+         * // other process status -> allow if UPDATE_CHANGE_REQUEST
+         *
+         * // OK btn
+         *   new records: if (own && CREATE_OWN_CHANGE_REQUEST) || CREATE_CHANGE_REQUEST  UPDATE_CHANGE_REQUEST
+         */
     },
     
     /**
@@ -311,22 +333,22 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     
     initStatusPickers: function() {
         var statusPickerDefaults = {
-            fieldLabel: this.app.i18n._('Status'),
             xtype: 'widget-keyfieldcombo',
             app: 'HumanResources',
-            width: 115,
+            columnWidth: 1/2,
         };
-
-        this.sicknessStatusPicker = new Tine.Tinebase.widgets.keyfield.ComboBox(
+        this.processStatusPicker = new Tine.Tinebase.widgets.keyfield.ComboBox(
             Ext.apply({
-                keyFieldName: 'sicknessStatus',
-                name: 'sicknessStatus'
+                fieldLabel: this.app.i18n._('Process status'),
+                keyFieldName: 'freeTimeProcessStatus',
+                name: 'freeTimeProcessStatus'
             }, statusPickerDefaults)
         );
-        this.vacationStatusPicker = new Tine.Tinebase.widgets.keyfield.ComboBox(
+        this.typeStatusPicker = new Tine.Tinebase.widgets.keyfield.ComboBox(
             Ext.apply({
-                keyFieldName: 'vacationStatus',
-                name: 'vacationStatus'
+                fieldLabel: this.app.i18n._('Type specific status'),
+                keyFieldName: 'freeTimeTypeStatus',
+                name: 'freeTimeTypeStatus'
             }, statusPickerDefaults)
         );
     },
@@ -344,7 +366,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.typePicker = Tine.widgets.form.FieldManager.get('HumanResources', 'FreeTime', 'type', Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
     },
 
-    getFormItems: function() {
+    getRecordFormItems: function() {
         this.initDatePicker();
         this.initAccountPicker();
         this.initStatusPickers();
@@ -372,87 +394,35 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         });
         
         return {
-            xtype: 'tabpanel',
-            plain:true,
-            activeTab: 0,
-            border: false,
-            items:[{
-                title: this.app.i18n._('Freetime'),
-                autoScroll: true,
-                border: false,
-                frame: true,
-                layout: 'border',
-                items: [{
-                    region: 'center',
-                    layout: 'hfit',
-                    border: false,
-                    items: [{
-                        xtype: 'fieldset',
-                        autoHeight: true,
-                        title: this.app.i18n._('Days'),
-                        items: [{
-                            xtype: 'columnform',
-                            labelAlign: 'top',
-                            formDefaults: {
-                                xtype:'textfield',
-                                anchor: '100%',
-                                labelSeparator: '',
-                                allowBlank: false,
-                                columnWidth: 1
-                            },
-                            items: [
-                                [this.employeePicker],
-                                [this.typePicker],
-                                [this.sicknessStatusPicker],
-                                [this.vacationStatusPicker],
-                                [this.accountPicker],
-                                [this.remainingDaysField],
-                                [{
-                                    xtype: 'panel',
-                                    cls: 'HumanResources x-form-item',
-                                    style: {
-                                        'float': 'right',
-                                        margin: '0 5px 10px 0'
-                                    },
-                                    items: [{html: '<label style="display:block; margin-bottom: 5px">' + this.app.i18n._('Select Days') + '</label>'}, this.datePicker]
-                                }]
-                            ]
-                        }]
+            xtype: 'fieldset',
+            autoHeight: true,
+            title: this.app.i18n._('Days'),
+            items: [{
+                xtype: 'columnform',
+                labelAlign: 'top',
+                formDefaults: {
+                    xtype:'textfield',
+                    anchor: '100%',
+                    labelSeparator: '',
+                    allowBlank: false,
+                    columnWidth: 1
+                },
+                items: [
+                    [this.employeePicker],
+                    [this.typePicker],
+                    [this.processStatusPicker, this.typeStatusPicker],
+                    [this.accountPicker],
+                    [this.remainingDaysField],
+                    [{
+                        xtype: 'panel',
+                        cls: 'HumanResources x-form-item',
+                        style: {
+                            'float': 'right',
+                            margin: '0 5px 10px 0'
+                        },
+                        items: [{html: '<label style="display:block; margin-bottom: 5px">' + this.app.i18n._('Select Days') + '</label>'}, this.datePicker]
                     }]
-                }, {
-                    // activities and tags
-                    layout: 'ux.multiaccordion',
-                    animate: true,
-                    region: 'east',
-                    width: 210,
-                    split: true,
-                    collapsible: true,
-                    collapseMode: 'mini',
-                    header: false,
-                    margins: '0 5 0 5',
-                    border: true,
-                    items: [
-                        new Ext.Panel({
-                            title: this.app.i18n._('Description'),
-                            iconCls: 'descriptionIcon',
-                            layout: 'form',
-                            labelAlign: 'top',
-                            border: false,
-                            items: [{
-                                style: 'margin-top: -4px; border 0px;',
-                                labelSeparator: '',
-                                xtype: 'textarea',
-                                name: 'description',
-                                hideLabel: true,
-                                grow: false,
-                                preventScrollbars: false,
-                                anchor: '100% 100%',
-                                emptyText: this.app.i18n._('Enter description'),
-                                requiredGrant: 'editGrant'
-                            }]
-                        })
-                    ]
-                }]
+                ]
             }]
         };
     }

@@ -20,6 +20,8 @@
  */
 class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
 {
+    public const MODEL_NAME_PART = 'FreeTime';
+
     public const TABLE_NAME = 'humanresources_freetime';
     public const FLD_TYPE_STATUS = 'type_status';
     public const FLD_PROCESS_STATUS = 'process_status';
@@ -32,20 +34,32 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
     protected static $_modelConfiguration = array(
         'version'         => 10,
         'recordName'      => 'Free Time', // ngettext('Free Time', 'Free Times', n)
-        'recordsName'     => 'Free Times',
+        'recordsName'     => 'Free Times', // gettext('GENDER_Free Time')
         'hasRelations'    => FALSE,
         'hasCustomFields' => FALSE,
         'hasNotes'        => FALSE,
         'hasTags'         => FALSE,
+        'hasAttachments'  => TRUE,
         'modlogActive'    => TRUE,
         'isDependent'     => TRUE,
-        'createModule'    => FALSE,
+        'createModule'    => TRUE,
         'titleProperty'   => 'description',
         'appName'         => 'HumanResources',
         'modelName'       => 'FreeTime',
-        'requiredRight'                 => HumanResources_Acl_Rights::MANAGE_WORKINGTIME,
         self::DELEGATED_ACL_FIELD => 'employee_id',
-
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'employee_id' => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'division_id' => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
+                                Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
         'associations' => [
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
                 'employee_id' => [
@@ -104,7 +118,7 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                 )
             ),
             'type'            => array(
-                'label' => 'Type', // _('Type')
+                'label' => 'Absence reason', // _('Absence reason')
                 'type'  => self::TYPE_RECORD,
                 'config' => array(
                     'appName'     => HumanResources_Config::APP_NAME,

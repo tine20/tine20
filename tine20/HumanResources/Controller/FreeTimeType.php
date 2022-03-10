@@ -61,7 +61,8 @@ class HumanResources_Controller_FreeTimeType extends Tinebase_Controller_Record_
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         if ($_oldRecord->system || $_record->system) {
-            throw new Tinebase_Exception_Record_NotAllowed('system fields may not be updated');
+            // 20222-03-11 cweiss: I think update of system fields is OK and nessesary
+//            throw new Tinebase_Exception_Record_NotAllowed('system fields may not be updated');
         }
 
         parent::_inspectBeforeUpdate($_record, $_oldRecord);

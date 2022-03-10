@@ -140,6 +140,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         $freeTimes = $this->search(new HumanResources_Model_FreeTimeFilter([
             ['field' => 'employee_id', 'operator' => 'equals', 'value' => $employeeId],
             ['field' => 'type',        'operator' => 'equals', 'value' => HumanResources_Model_FreeTimeType::ID_VACATION],
+            ['field' => HumanResources_Model_FreeTime::FLD_PROCESS_STATUS, 'operator' => 'equals', 'value' => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED],
         ]));
         
         return HumanResources_Controller_FreeDay::getInstance()->search(new HumanResources_Model_FreeDayFilter([
@@ -224,7 +225,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
                array('field' => 'type', 'operator' => 'equals', 'value' => 'vacation')
            ));
            $vacationTimeFilter->addFilter(new Tinebase_Model_Filter_Text(
-               array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->employee_id)
+               array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->getIdFromProperty('employee_id'))
            ));
            
            $vacationTimes = $this->search($vacationTimeFilter);

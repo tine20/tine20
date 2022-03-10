@@ -18,6 +18,22 @@ use Tinebase_ModelConfiguration_Const as TMCC;
  */
 class HumanResources_Setup_Initialize extends Setup_Initialize
 {
+    public static $freeTimeTypes = [
+        // NOTE: no feastday type as feastdays are treated via feastday cal which is shared and not per user
+        ['name' => '[S] Sickness',                               'system' => true,  'color' => '#F4D03F', 'wage_type' => HumanResources_Model_WageType::ID_SICK,          'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false, 'id' => HumanResources_Model_FreeTimeType::ID_SICKNESS], // gettext('[S] Sickness')
+        ['name' => '[C] Sickness of Child',                      'system' => false, 'color' => '#F4D03F', 'wage_type' => HumanResources_Model_WageType::ID_SICK_CHILD,    'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false], // gettext('[C] Sickness of Child')
+        ['name' => '[7] Sick pay - Sickness from 7nth week on',  'system' => false, 'color' => '#F4D03F', 'wage_type' => HumanResources_Model_WageType::ID_SICK_SICKPAY,  'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false], // gettext('[7] Sick pay - Sickness from 7nth week on')
+        ['name' => '[V] Vacation',                               'system' => true,  'color' => '#2ECC71', 'wage_type' => HumanResources_Model_WageType::ID_VACATION,      'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false, 'id' => HumanResources_Model_FreeTimeType::ID_VACATION], // gettext('[V] Vacation')
+        ['name' => '[P] Special Vacation',                       'system' => false, 'color' => '#58D68D', 'wage_type' => HumanResources_Model_WageType::ID_VACATION,      'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false], // gettext('[P] Special Vacation')
+        ['name' => '[U] Unpaid Vacation',                        'system' => false, 'color' => '#82E0AA', 'wage_type' => HumanResources_Model_WageType::ID_VACATION,      'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false], // gettext('[U] Unpaid Vacation')
+        ['name' => '[H] Short Business trip',                    'system' => false, 'color' => '#3498DB', 'wage_type' => HumanResources_Model_WageType::ID_SALARY,        'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true], // gettext('[S] Short Business trip')
+        ['name' => '[B] Business trip',                          'system' => false, 'color' => '#2E86C1', 'wage_type' => HumanResources_Model_WageType::ID_SALARY,        'allow_booking' => true,  'allow_planning' => true,  'enable_timetracking' => false], // gettext('[B] Business trip')
+        ['name' => '[D] Visit doctor',                           'system' => false, 'color' => '#F7DC6F', 'wage_type' => HumanResources_Model_WageType::ID_SALARY,        'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true], // gettext('[D] Visit doctor')
+        ['name' => '[F] Flex time reduction',                    'system' => true,  'color' => '#27AE60', 'wage_type' => HumanResources_Model_WageType::ID_NO_WAGE,       'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false], // gettext('[F] Flex time reduction')
+        ['name' => '[R] Break',                                  'system' => true,  'color' => '#ABEBC6', 'wage_type' => HumanResources_Model_WageType::ID_NO_WAGE,       'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true], // gettext('[R] Break')
+        ['name' => '[T] Training',                               'system' => true,  'color' => '#5DADE2', 'wage_type' => HumanResources_Model_WageType::ID_SALARY,        'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => true], // gettext('[T] Training')
+    ];
+
     /**
      * create favorites
      */
@@ -248,24 +264,9 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
     public static function createFreeTimeTypes($throw = true)
     {
         $translate = Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME);
-        $freeTimeTypes = [
-            // NOTE: no feastday type as feastdays are treated via feastday cal which is shared and not per user
-            ['name' => $translate->_('[S] Sickness'),                               'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_SICK,          'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false, 'id' => HumanResources_Model_FreeTimeType::ID_SICKNESS],
-            ['name' => $translate->_('[C] Sickness of Child'),                      'system' => false, 'wage_type' => HumanResources_Model_WageType::ID_SICK_CHILD,    'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
-            ['name' => $translate->_('[7] Sick pay - Sickness from 7nth week on'),  'system' => false, 'wage_type' => HumanResources_Model_WageType::ID_SICK_SICKPAY,  'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
-            ['name' => $translate->_('[V] Vacation'),                               'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_VACATION,      'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false, 'id' => HumanResources_Model_FreeTimeType::ID_VACATION],
-            ['name' => $translate->_('[P] Special Vacation'),                       'system' => false, 'wage_type' => HumanResources_Model_WageType::ID_VACATION,      'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
-            ['name' => $translate->_('[U] Unpaid Vacation'),                        'system' => false, 'wage_type' => HumanResources_Model_WageType::ID_VACATION,      'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
-            ['name' => $translate->_('[S] Short Business trip'),                    'system' => false, 'wage_type' => HumanResources_Model_WageType::ID_SALARY,        'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true],
-            ['name' => $translate->_('[B] Business trip'),                          'system' => false, 'wage_type' => HumanResources_Model_WageType::ID_SALARY,        'allow_booking' => true,  'allow_planning' => true,  'enable_timetracking' => false],
-            ['name' => $translate->_('[D] Visit doctor'),                           'system' => false, 'wage_type' => HumanResources_Model_WageType::ID_SALARY,        'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true],
-            ['name' => $translate->_('[F] Flex time reduction'),                    'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_NO_WAGE,       'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
-            ['name' => $translate->_('[B] Break'),                                  'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_NO_WAGE,       'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true],
-            ['name' => $translate->_('[T] Training'),                               'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_SALARY,        'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => true],
-        ];
-
         $fttCntrl = HumanResources_Controller_FreeTimeType::getInstance();
-        foreach ($freeTimeTypes as $ftt) {
+        foreach (self::$freeTimeTypes as $ftt) {
+            $ftt['name'] = $translate->_($ftt['name']);
             $ftt['abbreviation'] = preg_replace(['/.*\[/', '/\].*/'], '', $ftt['name']);
             try {
                 $fttCntrl->create(new HumanResources_Model_FreeTimeType($ftt));
