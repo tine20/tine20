@@ -285,7 +285,7 @@ Tine.HumanResources.WorkingTimeSchemeEditDialog = Ext.extend(Tine.widgets.dialog
  * @return {Ext.ux.Window}
  */
 Tine.HumanResources.WorkingTimeSchemeEditDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
+    const id = config.recordId ?? config.record?.id ?? 0;
     var window = Tine.WindowFactory.getWindow({
         width: 600,
         height: 520,

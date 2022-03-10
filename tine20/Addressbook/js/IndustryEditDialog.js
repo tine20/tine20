@@ -31,7 +31,7 @@ Tine.Addressbook.IndustryEditDialog = Ext.extend(Tine.widgets.dialog.SimpleRecor
  * @return {Ext.ux.Window}
  */
 Tine.Addressbook.IndustryEditDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
+    const id = config.recordId ?? config.record?.id ?? 0;
     var window = Tine.WindowFactory.getWindow({
         width: 400,
         height: 300,

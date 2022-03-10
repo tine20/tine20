@@ -199,7 +199,7 @@ Tine.Voipmanager.AsteriskSipPeerEditDialog = Ext.extend(Tine.widgets.dialog.Edit
  * Asterisk SipPeer Edit Popup
  */
 Tine.Voipmanager.AsteriskSipPeerEditDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
+    const id = config.recordId ?? config.record?.id ?? 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 470,
