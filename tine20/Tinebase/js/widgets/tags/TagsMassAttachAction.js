@@ -87,7 +87,6 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
             layout: 'fit',
             width: 300,
             height: 300,
-            padding: '5px',
             modal: true,
             closeAction: 'hide', // mhh not working :-(
             title: i18n._('Select Tags'),
