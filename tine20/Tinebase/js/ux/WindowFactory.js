@@ -87,6 +87,7 @@ Ext.ux.WindowFactory.prototype = {
      */
     getExtWindow: function (c) {
         let win = Ext.WindowMgr.get(c.name);
+        const winConstructor = c.modal ? Ext.Window : this.windowClass;
 
         if (! win) {
             c.id = c.name;
@@ -118,7 +119,7 @@ Ext.ux.WindowFactory.prototype = {
                 items: []
             };
 
-            win = new Ext.Window(c);
+            win = new winConstructor(c);
 
             this.getCenterPanel(c, win).then((cp) => {
                 const cardPanel = win.items.get(0)
