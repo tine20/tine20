@@ -567,7 +567,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  * @return  {Ext.ux.Window}
  */
 Tine.Crm.LeadEditDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
+    const id = config.recordId ?? config.record?.id ?? 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 750,
