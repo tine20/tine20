@@ -137,7 +137,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
     onDestroy: function() {
         _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
-        return this.supr().onDestroy.call(this);
+        return Tine.widgets.grid.FileUploadGrid.superclass.onDestroy.call(this);
     },
     
     /**
