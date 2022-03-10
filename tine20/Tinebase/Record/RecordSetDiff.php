@@ -89,4 +89,17 @@ class Tinebase_Record_RecordSetDiff extends Tinebase_Record_Abstract
         
         return implode(' - ', $result);
     }
+
+    public function purgeLonelySeq()
+    {
+        foreach (array('added', 'removed', 'modified') as $action) {
+            if (is_array($this->_properties[$action])) {
+                foreach($this->_properties[$action] as $key => $value) {
+                    if (count($value['seq']) === 1 && isset($value['seq'])) {
+                        unset($this->_properties[$action][$key]);
+                    }
+                }
+            }
+        }
+    }
 }

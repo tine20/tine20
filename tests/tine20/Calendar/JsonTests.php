@@ -1884,6 +1884,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         $adminIndex = ($eventData['attendee'][0]['user_id']['n_fn'] === 'Susan Clever') ? 1 : 0;
         $eventData['attendee'][$adminIndex]['status'] = Calendar_Model_Attender::STATUS_TENTATIVE;
         $event = $this->_uit->saveEvent($eventData);
+
+        $admIndex = ($event['attendee'][0]['user_id']['n_fn'] === 'Susan Clever') ? 1 : 0;
+        $this->assertSame(Calendar_Model_Attender::STATUS_TENTATIVE, $event['attendee'][$admIndex]['status']);
         
         $loggedMods = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(
             Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),

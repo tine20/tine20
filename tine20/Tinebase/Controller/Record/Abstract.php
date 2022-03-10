@@ -616,6 +616,9 @@ abstract class Tinebase_Controller_Record_Abstract
             if ($record->has('notes')) {
                 $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($this->_modelName, $record->getId());
             }
+            if (!empty($record::getConfiguration()->jsonExpander)) {
+                Tinebase_Record_Expander::expandRecord($record);
+            }
         } finally {
             unset($this->_getRelatedDataRecursion[$record->getId()]);
         }

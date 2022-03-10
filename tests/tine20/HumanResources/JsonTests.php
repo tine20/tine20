@@ -353,6 +353,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      */
     public function testContract()
     {
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+
         $sdate = new Tinebase_DateTime();
         $sdate->subMonth(4);
         $edate = new Tinebase_DateTime();
@@ -431,15 +433,13 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         // doing this manually, this won't be the last assertion, and more assertions are needed
         // $this->expectException('Tinebase_Exception_Data');
         
-        $exception = new Exception('no exception has been thrown');
-        
         try {
             $this->_json->saveEmployee($employee);
+            $this->fail('HumanResources_Exception_ContractOverlap exception expected');
         } catch (HumanResources_Exception_ContractOverlap $exception) {
             // thrown in HR_Controller_Employee
+            $this->assertEquals('The contracts must not overlap!', $exception->getMessage());
         }
-        
-        $this->assertEquals('The contracts must not overlap!', $exception->getMessage());
         
         $this->_removeAllEmployees();
         

@@ -477,36 +477,9 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertEquals(4, $positions->count());
 
         $contract4 = $this->_contractRecords->getByIndex(3);
-        $filter = new Sales_Model_ProductAggregateFilter(
-            array(
-                array('field' => 'interval', 'operator' => 'equals', 'value' => 3),
-                //array('field' => 'contract_id', 'operator' => 'equals', 'value' => $this->_contractRecords->getByIndex(3)->getId()),
-            ), 'AND');
-        $filter->addFilter(new Tinebase_Model_Filter_ForeignId(//ExplicitRelatedRecord(
-            array('field' => 'contract_id', 'operator' => 'AND', 'value' =>
-                array(
-                    array(
-                        'field' =>  ':id', 'operator' => 'equals', 'value' => $contract4->getId()
-                    )
-                ),
-                'options' => array(
-                    'controller'        => 'Sales_Controller_Contract',
-                    'filtergroup'       => 'Sales_Model_ContractFilter',
-                    //'own_filtergroup'   => 'Sales_Model_ProductAggregateFilter',
-                    //'own_controller'    => 'Sales_Controller_ProductAggregate',
-                    //'related_model'     => 'Sales_Model_Contract',
-                    'modelName' => 'Sales_Model_Contract',
-                ),
-            )
-        ));
-
-        $pA = Sales_Controller_ProductAggregate::getInstance()->search($filter);
-        $this->assertEquals(1, $pA->count());
-        $pA = $pA->getFirstRecord();
-        $pA->interval = 4;
-        sleep(1);
-        Sales_Controller_ProductAggregate::getInstance()->update($pA);
+        $contract4->products->find('interval', 3)->interval = 4;
         $contract4->title = $contract4->getTitle() . ' changed';
+        sleep(1);
         // don't update relations
         unset($contract4->relations);
         $this->_contractController->update($contract4);

@@ -40,7 +40,9 @@ class Tinebase_Record_Expander extends Tinebase_Record_Expander_Abstract
             if ($records->count() < 1) {
                 return;
             }
-            $mc = $records->getFirstRecord()::getConfiguration();
+            if (null === ($mc = $records->getFirstRecord()::getConfiguration())) {
+                return;
+            }
         }
         (new self($records->getRecordClassName(), $mc->jsonExpander))->expand($records);
     }

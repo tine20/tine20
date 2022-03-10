@@ -757,10 +757,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         /** @var Tinebase_Model_Note $updateNote */
         foreach ($notes as $updateNote) {
-            $this->assertTrue(strpos($updateNote->note, ':  revision (0 -> 1) contenttype (application/octet-stream -> text/plain) size ( -> 8)') !== false ||
-                strpos($updateNote->note, ':  revision (0 -> 1) contenttype (application/octet-stream -> text/plain) Größe ( -> 8)') !== false ||
-                strpos($updateNote->note, ':  revision (1 -> 2) size (8 -> ' . $strLen . ')') !== false ||
-                strpos($updateNote->note, ':  revision (1 -> 2) Größe (8 -> ' . $strLen . ')') !== false,
+            $this->assertTrue(strpos($updateNote->note, ':  revision (0 -> 1) contenttype (application/octet-stream -> text/plain) seq (1 -> 2) size ( -> 8)') !== false ||
+                strpos($updateNote->note, ':  revision (0 -> 1) contenttype (application/octet-stream -> text/plain) seq (1 -> 2) Größe ( -> 8)') !== false ||
+                strpos($updateNote->note, ':  revision (1 -> 2) seq (4 -> 5) size (8 -> ' . $strLen . ')') !== false ||
+                strpos($updateNote->note, ':  revision (1 -> 2) seq (4 -> 5) Größe (8 -> ' . $strLen . ')') !== false,
                 $updateNote->note . ' did not match');
         }
     }
@@ -2242,7 +2242,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         self::assertEquals(1, count($result['grants']), print_r($result['grants'], true));
         self::assertEquals(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, $result['grants'][0]['account_type']);
 
-        return $node;
+        return $result;
     }
 
     public function testRemoveNodeAclTopLevel()
