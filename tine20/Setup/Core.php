@@ -200,7 +200,12 @@ class Setup_Core extends Tinebase_Core
         // check database first
         if (self::configFileExists()) {
             $dbConfig = Tinebase_Core::getConfig()->database;
-            
+            if (! $dbConfig) {
+                Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' No database section found in config.');
+                return false;
+            }
+
             if ($dbConfig->adapter === self::PDO_MYSQL && (! defined(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY) || ! defined(PDO::MYSQL_ATTR_INIT_COMMAND))) {
                 Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                     . ' MySQL PDO constants not defined.');

@@ -1082,7 +1082,7 @@ class Tinebase_Core
         $config = self::getConfig();
         
         if (!isset($config->database)) {
-            die ("Database section not found in central configuration file.\n");
+            throw new Tinebase_Exception_Backend("Database section not found in central configuration file.");
         }
         
         $dbConfig = $config->database;
@@ -1112,12 +1112,12 @@ class Tinebase_Core
         $dbConfig = self::getConfig();
 
         if (!isset($dbConfig->{Tinebase_Config::EXTERNAL_DATABASE})) {
-            die ("external database section not found in central configuration file.\n");
+            throw new Tinebase_Exception_Backend("External database section not found in central configuration file.");
         }
 
         $dbConfig = $dbConfig->{Tinebase_Config::EXTERNAL_DATABASE};
         if (!isset($dbConfig->{$dbName})) {
-            die ("external database section with name '$dbName' not found in central configuration file.\n");
+            throw new Tinebase_Exception_Backend("External database section with name '$dbName' not found in central configuration file.");
         }
 
         $dbConfig = $dbConfig->{$dbName};

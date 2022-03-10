@@ -148,8 +148,14 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             $path = strstr($opts->config, 'config.inc.php') !== false ? dirname($opts->config) : $opts->config;
             set_include_path($path . PATH_SEPARATOR . get_include_path());
         }
-        
-        Setup_Core::initFramework();
+
+        try {
+            Setup_Core::initFramework();
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            echo $e->getMessage() . "\n";
+            exit(1);
+        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Is cli request. method: ' . $this->getRequestMethod());
@@ -159,7 +165,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             $result = $setupServer->handle($opts);
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
-            echo $e . "\n";
+            echo $e->getMessage() . "\n";
             $result = 1;
         }
 
