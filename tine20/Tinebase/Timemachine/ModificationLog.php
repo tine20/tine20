@@ -869,7 +869,12 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
     {
         $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         if (null !== $_curRecord && null !== $_newRecord) {
-            Tinebase_Record_Expander::expandRecords(new Tinebase_Record_RecordSet(get_class($_curRecord), [$_curRecord, $_newRecord]));
+            try {
+                Tinebase_Record_Expander::expandRecords(new Tinebase_Record_RecordSet(get_class($_curRecord), [$_curRecord, $_newRecord]));
+            } catch (Tinebase_Exception_NotImplemented $teni) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $teni->getMessage());
+            }
             $metaProps = $this->_metaProperties;
             $diffContext = (new Tinebase_Record_DiffContext())->setSubDiffOmitFieldsDelegator(
                 function(?Tinebase_ModelConfiguration $mc) use($metaProps) {
