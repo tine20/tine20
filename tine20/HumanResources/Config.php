@@ -17,6 +17,14 @@ class HumanResources_Config extends Tinebase_Config_Abstract
 {
     const APP_NAME = 'HumanResources';
 
+    const FREE_TIME_TYPE_STATUS = 'freeTimeTypeStatus';
+    const FREE_TIME_TYPE_STATUS_EXCUSED = 'EXCUSED';
+    const FREE_TIME_TYPE_STATUS_UNEXCUSED = 'UNEXCUSED';
+    const FREE_TIME_PROCESS_STATUS = 'freeTimeProcessStatus';
+    const FREE_TIME_PROCESS_STATUS_REQUESTED = 'REQUESTED';
+    const FREE_TIME_PROCESS_STATUS_ACCEPTED = 'ACCEPTED';
+    const FREE_TIME_PROCESS_STATUS_DECLINED = 'DECLINED';
+
     /**
      * Vacation Status
      * @var string
@@ -90,40 +98,39 @@ class HumanResources_Config extends Tinebase_Config_Abstract
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
-        self::VACATION_STATUS => array(
-            //_('Vacation Status')
-            'label'                 => 'Vacation Status',
-            //_('Possible vacation status definitions')
-            'description'           => 'Possible vacation status definitions',
-            'type'                  => 'keyFieldConfig',
-            'options'               => array('recordModel' => 'HumanResources_Model_FreeTimeStatus'),
-            'clientRegistryInclude' => TRUE,
-            'default'               => array(
-                'records' => array(
-                    array('id' => 'REQUESTED',  'value' => 'Requested',  'icon' => 'images/icon-set/icon_invite.svg', 'system' => TRUE),  //_('Requested')
-                    array('id' => 'IN-PROCESS', 'value' => 'In process', 'icon' => 'images/icon-set/icon_reload.svg', 'system' => TRUE),  //_('In process')
-                    array('id' => 'ACCEPTED',   'value' => 'Accepted',   'icon' => 'images/icon-set/icon_ok.svg', 'system' => TRUE),  //_('Accepted')
-                    array('id' => 'DECLINED',   'value' => 'Declined',   'icon' => 'images/icon-set/icon_stop.svg', 'system' => TRUE),  //_('Declined')
-
-                ),
-                'default' => 'REQUESTED'
-            )
-        ),
-        self::SICKNESS_STATUS => array(
+        self::FREE_TIME_TYPE_STATUS => array(
             //_('Sickness Status')
             'label'                 => 'Sickness Status',
             //_('Possible sickness status definitions')
             'description'           => 'Possible sickness status definitions',
             'type'                  => 'keyFieldConfig',
-            'options'               => array('recordModel' => 'HumanResources_Model_FreeTimeStatus'),
+            'options'               => array('recordModel' => HumanResources_Model_FreeTimeStatus::class),
             'clientRegistryInclude' => TRUE,
             'default'               => array(
                 'records' => array(
-                    array('id' => 'EXCUSED',   'value' => 'Excused',   'icon' => 'images/icon-set/icon_ok.svg', 'system' => TRUE),  //_('Excused')
-                    array('id' => 'UNEXCUSED', 'value' => 'Unexcused', 'icon' => 'images/icon-set/icon_stop.svg', 'system' => TRUE),  //_('Unexcused')
+                    array('id' => self::FREE_TIME_TYPE_STATUS_EXCUSED,   'value' => 'Excused',   'icon' => 'images/icon-set/icon_ok.svg', 'system' => TRUE),  //_('Excused')
+                    array('id' => self::FREE_TIME_TYPE_STATUS_UNEXCUSED, 'value' => 'Unexcused', 'icon' => 'images/icon-set/icon_stop.svg', 'system' => TRUE),  //_('Unexcused')
 
                 ),
                 'default' => 'EXCUSED'
+            )
+        ),
+        self::FREE_TIME_PROCESS_STATUS => array(
+            //_('Vacation Status')
+            'label'                 => 'Vacation Status',
+            //_('Possible vacation status definitions')
+            'description'           => 'Possible vacation status definitions',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => HumanResources_Model_FreeTimeStatus::class),
+            'clientRegistryInclude' => TRUE,
+            'default'               => array(
+                'records' => array(
+                    array('id' => self::FREE_TIME_PROCESS_STATUS_REQUESTED,  'value' => 'Requested',  'icon' => 'images/icon-set/icon_invite.svg', 'system' => TRUE),  //_('Requested')
+                    array('id' => self::FREE_TIME_PROCESS_STATUS_ACCEPTED,   'value' => 'Accepted',   'icon' => 'images/icon-set/icon_ok.svg', 'system' => TRUE),  //_('Accepted')
+                    array('id' => self::FREE_TIME_PROCESS_STATUS_DECLINED,   'value' => 'Declined',   'icon' => 'images/icon-set/icon_stop.svg', 'system' => TRUE),  //_('Declined')
+
+                ),
+                'default' => 'REQUESTED'
             )
         ),
         self::DEFAULT_FEAST_CALENDAR => array(

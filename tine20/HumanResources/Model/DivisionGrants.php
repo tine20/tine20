@@ -118,4 +118,25 @@ class HumanResources_Model_DivisionGrants extends Tinebase_Model_Grants
             ],
         ];
     }
+
+    public function setFromArray(array &$_data)
+    {
+        if (isset($_data[self::CREATE_CHANGE_REQUEST]) && $_data[self::CREATE_CHANGE_REQUEST]) {
+            $_data[self::READ_CHANGE_REQUEST] = true;
+        }
+        if (isset($_data[self::UPDATE_CHANGE_REQUEST]) && $_data[self::UPDATE_CHANGE_REQUEST]) {
+            $_data[self::READ_CHANGE_REQUEST] = true;
+        }
+        if (isset($_data[self::UPDATE_TIME_DATA]) && $_data[self::UPDATE_TIME_DATA]) {
+            $_data[self::READ_TIME_DATA] = true;
+        }
+        if (isset($_data[self::UPDATE_EMPLOYEE_DATA]) && $_data[self::UPDATE_EMPLOYEE_DATA]) {
+            $_data[self::READ_EMPLOYEE_DATA] = true;
+            $_data[self::UPDATE_CHANGE_REQUEST] = true;
+        }
+        if (isset($_data[self::READ_EMPLOYEE_DATA]) && $_data[self::READ_EMPLOYEE_DATA]) {
+            $_data[self::READ_CHANGE_REQUEST] = true;
+        }
+        parent::setFromArray($_data);
+    }
 }

@@ -273,6 +273,7 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
                 'employee_id'       => $this->employee->getId(),
                 'account_id'        => $this->employee->account_id,
                 'type'              => HumanResources_Model_FreeTimeType::ID_VACATION,
+                HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
                 'freedays'          => [
                     ['date' => '2018-08-01']
                 ]
@@ -307,6 +308,7 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
                 'employee_id'       => $this->employee->getId(),
                 'account_id'        => $this->employee->account_id,
                 'type'              => HumanResources_Model_FreeTimeType::ID_SICKNESS,
+                HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
                 'freedays'          => [
                     ['date' => '2018-08-01']
                 ]

@@ -1429,7 +1429,9 @@ abstract class Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Doing ACL check ...');
         
-        if ($_currentRecord->has('container_id') && $_currentRecord->container_id != $_record->container_id) {
+        if (($_currentRecord->has('container_id') && $_currentRecord->container_id != $_record->container_id) ||
+            (($mc = $_record::getConfiguration()) && ($daf = $mc->delegateAclField) &&
+                $_currentRecord->getIdFromProperty($daf) !== $_record->getIdFromProperty($daf))) {
             $this->_checkGrant($_record, self::ACTION_CREATE);
             $this->_checkRight(self::ACTION_CREATE);
             // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine

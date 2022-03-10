@@ -689,6 +689,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             ['field' => 'employee_id', 'operator' => 'equals', 'value' => $this->_employee->getId()],
             ['field' => 'lastday_date', 'operator' => 'after_or_equals', 'value' => $start],
             ['field' => 'firstday_date', 'operator' => 'before_or_equals', 'value' => $end],
+            ['field' => HumanResources_Model_FreeTime::FLD_PROCESS_STATUS, 'operator' => 'equals', 'value' => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED],
         ];
 
         // fetch all freetime of an employee between start and end

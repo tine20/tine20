@@ -4,7 +4,7 @@
  *
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -40,6 +40,7 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
                 'employee_id' => $this->employee->getId(),
                 'account_id' => $accountId,
                 'type' => HumanResources_Model_FreeTimeType::ID_VACATION,
+                HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
                 'freedays' => [
                     ['date' => '2018-08-01'],
                     ['date' => '2018-08-02']

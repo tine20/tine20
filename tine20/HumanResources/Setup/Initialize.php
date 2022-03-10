@@ -64,6 +64,65 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
                 'filters' => array(),
             ))
         ));
+
+        // FreeTime
+        static::addFreeTimePersistenFilter();
+    }
+
+    public static function addFreeTimePersistenFilter()
+    {
+        $pfe = Tinebase_PersistentFilter::getInstance();
+        $commonValues = array(
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('HumanResources')->getId(),
+            'model'             => HumanResources_Model_FreeTime::class . 'Filter',
+        );
+
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name' => "All Free Times", // _('All Free Times')
+                'description' => "All free time records", // _('All free time records')
+                'filters' => [],
+            ))
+        ));
+
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name' => "All Free Times this year", // _('All Free Times this year')
+                'description' => "All Free Times this year", // _('All Free Times this year')
+                'filters' => [
+                    'condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_OR,
+                    'filters' => [
+                        ['field' => 'firstday_date', 'operator' => 'within', 'value' => 'yearThis'],
+                        ['field' => 'lastday_date', 'operator' => 'within', 'value' => 'yearThis'],
+                    ],
+                ],
+            ))
+        ));
+
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name' => "All Free Times next year", // _('All Free Times next year')
+                'description' => "All Free Times next year", // _('All Free Times next year')
+                'filters' => [
+                    'condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_OR,
+                    'filters' => [
+                        ['field' => 'firstday_date', 'operator' => 'within', 'value' => 'yearNext'],
+                        ['field' => 'lastday_date', 'operator' => 'within', 'value' => 'yearNext'],
+                    ],
+                ],
+            ))
+        ));
+
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name' => "All Free Times requested", // _('All Free Times requested')
+                'description' => "All Free Times requested", // _('All Free Times requested')
+                'filters' => [
+                    ['field' => HumanResources_Model_FreeTime::FLD_PROCESS_STATUS, 'operator' => 'equals', 'value' => HumanResources_Config::FREE_TIME_PROCESS_STATUS_REQUESTED],
+                ],
+            ))
+        ));
     }
 
     /**

@@ -51,6 +51,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'employee_id'   => $savedEmployee['id'],
             'account_id'    => $myAccount->getId(),
             'type'          => 'vacation',
+            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_REQUESTED,
             'freedays'      => array(
                 array('date' => $date->getClone()->addDay(60), 'duration' => 1),
             )
@@ -165,6 +166,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'employee_id'   => $savedEmployee['id'],
             'account_id'    => $myAccount->getId(),
             'type'          => 'vacation',
+            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_REQUESTED,
             'freedays'      => array(
                 array('date' => $firstDayDate, 'duration' => 1),
                 array('date' => $firstDayDate->getClone()->addDay(1), 'duration' => 1),
@@ -685,7 +687,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'account_id' => $accountId2013,
             'employee_id' => $employee->getId(),
             'type' => 'vacation',
-            'status' => 'ACCEPTED',
+            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
             'firstday_date' => $yesterday->subWeek(1)->toString()
         );
         $nd = $referenceDate->subMonth(2);
@@ -726,7 +728,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'account_id' => $accountId2014,
             'employee_id' => $employee->getId(),
             'type' => 'vacation',
-            'status' => 'ACCEPTED',
+            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
             'firstday_date' => $refdate,
             'lastday_date'  => $refdate->addDay(3)->toString(),
             'days_count' => 3
@@ -768,7 +770,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'account_id' => $accountId2013,
             'employee_id' => $employee->getId(),
             'type' => 'vacation',
-            'status' => 'ACCEPTED',
+            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
             'firstday_date' => $day->toString()
         );
         
@@ -793,7 +795,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'account_id' => $accountId2013,
             'employee_id' => $employee->getId(),
             'type' => 'sickness',
-            'status' => 'ACCEPTED',
+            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
             'firstday_date' => $day->toString()
         );
         
@@ -869,7 +871,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'account_id' => $accountId2013,
             'employee_id' => $employee->getId(),
             'type' => 'vacation',
-            'status' => 'ACCEPTED',
+            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
         );
         
         $newFreeTime['freedays'] = array(
@@ -1104,7 +1106,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'employee_id' => $employeeJson['id'],
             'account_id' => $account->getId(),
             'type' => 'vacation',
-            'status' => 'ACCEPTED',
+            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
             'freedays' => [['duration' => '1', 'date' => '2013-01-11 00:00:00']],
         ]));
         
@@ -1245,7 +1247,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'account_id' => $account['id'],
             'employee_id' => $recordData['id'],
             'type' => 'vacation',
-            'status' => 'ACCEPTED',
+            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
             'firstday_date' => $day->toString()
         );
         
@@ -1265,7 +1267,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'account_id' => $account['id'],
             'employee_id' => $recordData['id'],
             'type' => 'vacation',
-            'status' => 'ACCEPTED',
+            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
             'firstday_date' => $day->toString()
         );
         
@@ -1288,7 +1290,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'account_id' => $account['id'],
             'employee_id' => $recordData['id'],
             'type' => 'vacation',
-            'status' => 'ACCEPTED',
+            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
             'firstday_date' => $day->toString()
         );
         
@@ -1311,7 +1313,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'account_id' => $account['id'],
             'employee_id' => $recordData['id'],
             'type' => 'sickness',
-            'status' => "EXCUSED",
+            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
+            HumanResources_Model_FreeTime::FLD_TYPE_STATUS => HumanResources_Config::FREE_TIME_TYPE_STATUS_EXCUSED,
             'firstday_date' => $day->toString()
         );
         
@@ -1349,7 +1352,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
                 'account_id' => $account['id'],
                 'employee_id' => $recordData['id'],
                 'type' => 'sickness',
-                'status' => "UNEXCUSED",
+                HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
+                HumanResources_Model_FreeTime::FLD_TYPE_STATUS => HumanResources_Config::FREE_TIME_TYPE_STATUS_UNEXCUSED,
                 'firstday_date' => $day->toString()
         );
         
