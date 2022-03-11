@@ -367,6 +367,7 @@ class Tinebase_ApplicationTest extends TestCase
                 HumanResources_Model_StreamModalReport::class,
                 HumanResources_Model_WageType::class,
                 HumanResources_Model_WorkingTimeScheme::class,
+                HumanResources_Model_WTRCorrection::class,
             ),
             'Inventory' => array(
                 Inventory_Model_InventoryItem::class,

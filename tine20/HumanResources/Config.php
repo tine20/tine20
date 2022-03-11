@@ -25,6 +25,11 @@ class HumanResources_Config extends Tinebase_Config_Abstract
     const FREE_TIME_PROCESS_STATUS_ACCEPTED = 'ACCEPTED';
     const FREE_TIME_PROCESS_STATUS_DECLINED = 'DECLINED';
 
+    const WTR_CORRECTION_STATUS = 'wtrCorrectionStatus';
+    const WTR_CORRECTION_STATUS_REQUESTED = 'REQUESTED';
+    const WTR_CORRECTION_STATUS_ACCEPTED = 'ACCEPTED';
+    const WTR_CORRECTION_STATUS_DECLINED = 'DECLINED';
+
     /**
      * Vacation Status
      * @var string
@@ -130,7 +135,23 @@ class HumanResources_Config extends Tinebase_Config_Abstract
                     array('id' => self::FREE_TIME_PROCESS_STATUS_DECLINED,   'value' => 'Declined',   'icon' => 'images/icon-set/icon_stop.svg', 'system' => TRUE),  //_('Declined')
 
                 ),
-                'default' => 'REQUESTED'
+                'default' => self::FREE_TIME_PROCESS_STATUS_REQUESTED
+            )
+        ),
+        self::WTR_CORRECTION_STATUS => array(
+            //_('Working Time Correction Status')
+            'label'                 => 'Working Time Correction Status',
+            //_('Working Time Correction Status')
+            'description'           => 'Working Time Correction Status',
+            'type'                  => 'keyFieldConfig',
+            'clientRegistryInclude' => TRUE,
+            'default'               => array(
+                'records' => array(
+                    array('id' => self::WTR_CORRECTION_STATUS_REQUESTED,  'value' => 'Requested',  'icon' => 'images/icon-set/icon_invite.svg', 'system' => TRUE),  //_('Requested')
+                    array('id' => self::WTR_CORRECTION_STATUS_ACCEPTED,   'value' => 'Accepted',   'icon' => 'images/icon-set/icon_ok.svg', 'system' => TRUE),  //_('Accepted')
+                    array('id' => self::WTR_CORRECTION_STATUS_DECLINED,   'value' => 'Declined',   'icon' => 'images/icon-set/icon_stop.svg', 'system' => TRUE),  //_('Declined')
+                ),
+                'default' => self::WTR_CORRECTION_STATUS_REQUESTED,
             )
         ),
         self::DEFAULT_FEAST_CALENDAR => array(
