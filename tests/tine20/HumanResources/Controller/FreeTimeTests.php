@@ -137,4 +137,49 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
                     ['field' => 'account_id', 'operator' => 'equals', 'value' => $freeTime->account_id],
                 ]))->count());
     }
+
+    public function testCreateChangeRequestGrant()
+    {
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+
+        $freeTime = $this->_createFreeTime('pwulf');
+
+        Tinebase_Core::setUser($this->_personas['jsmith']);
+
+        try {
+            HumanResources_Controller_FreeTime::getInstance()->get($freeTime->getId());
+            $this->fail('pwulf should not see jsmith data');
+        } catch (Tinebase_Exception_AccessDenied $tead) {}
+
+        try {
+            HumanResources_Controller_Account::getInstance()->get($freeTime->account_id);
+            $this->fail('pwulf should not see jsmith data');
+        } catch (Tinebase_Exception_AccessDenied $tead) {}
+
+        try {
+            HumanResources_Controller_Employee::getInstance()->get($freeTime->employee_id);
+            $this->fail('pwulf should not see jsmith data');
+        } catch (Tinebase_Exception_AccessDenied $tead) {}
+
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer(
+            ($d = HumanResources_Controller_Division::getInstance()->get($this->employee->division_id))->container_id,
+            true);
+        $grants->addRecord(new HumanResources_Model_DivisionGrants([
+            'record_id' => $d->container_id,
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id' => $this->_personas['jsmith']->getId(),
+            HumanResources_Model_DivisionGrants::CREATE_CHANGE_REQUEST => true,
+        ]));
+        Tinebase_Container::getInstance()->setGrants($d->container_id, $grants, true, false);
+
+
+        HumanResources_Controller_FreeTime::getInstance()->get($freeTime->getId());
+        HumanResources_Controller_Account::getInstance()->get($freeTime->account_id);
+        HumanResources_Controller_Employee::getInstance()->get($freeTime->employee_id);
+        $contracts = HumanResources_Controller_Contract::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Contract::class, [
+                ['field' => 'employee_id', 'operator' => 'equals', 'value' => $freeTime->employee_id],
+            ]));
+        $this->assertSame(1, $contracts->count());
+    }
 }
