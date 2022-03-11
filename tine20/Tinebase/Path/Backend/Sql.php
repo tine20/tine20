@@ -408,8 +408,16 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             }
 
             $filters = $_filter->getFilterObjects();
-            if (!$this->_allowComplexFilter && count($filters) > 1) {
-                throw new Tinebase_Exception_NotImplemented('paths don\'t support complex filters for in memory operations');
+            if (count($filters) > 1) {
+                if (!$this->_allowComplexFilter) {
+                    throw new Tinebase_Exception_NotImplemented('paths don\'t support complex filters for in memory operations');
+                } else {
+                    $filters = array_values(array_filter($_filter->getFilter('shadow_path', true, true), function ($val) {
+                        return $val->getOperator() === 'endswith';
+                    }));
+                    $filters[0] = clone $filters[0];
+                    $filters[0]->setOperator('contains');
+                }
             }
             reset($filters);
             /**
