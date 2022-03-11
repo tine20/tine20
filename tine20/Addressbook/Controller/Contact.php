@@ -650,6 +650,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             'observable' => $_record
         )));
 
+        $event = new Addressbook_Event_DeleteContact();
+        $event->record = $_record;
+        Tinebase_Event::fireEvent($event);
+
         $recordBackendIds = $_record->syncBackendIds;
 
         parent::_deleteRecord($_record);

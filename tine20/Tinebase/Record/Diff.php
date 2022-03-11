@@ -111,4 +111,27 @@ class Tinebase_Record_Diff extends Tinebase_Record_Abstract
         });
         return count($nonEmptyValues) === 0;
     }
+
+    public function purgeLonelySeq()
+    {
+        if (is_array($this->_properties['diff'])) {
+            foreach ($this->_properties['diff'] as $key => $value) {
+                if ($value instanceof Tinebase_Record_Diff || $value instanceof Tinebase_Record_RecordSetDiff) {
+                    $value->purgeLonelySeq();
+                    if ($value->isEmpty()) {
+                        unset($this->_properties['diff'][$key]);
+                        if (is_array($this->_properties['oldData'])) {
+                            unset($this->_properties['oldData'][$key]);
+                        }
+                    }
+                }
+            }
+            if (count($this->_properties['diff']) === 1 && isset($this->_properties['diff']['seq'])) {
+                unset($this->_properties['diff']['seq']);
+                if (is_array($this->_properties['oldData'])) {
+                    unset($this->_properties['oldData']['seq']);
+                }
+            }
+        }
+    }
 }

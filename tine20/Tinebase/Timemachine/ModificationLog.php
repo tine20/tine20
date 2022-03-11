@@ -75,7 +75,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         //'is_deleted',
         'deleted_time',
         'deleted_by',
-        'seq',
+        // do NOT add seq! it is required for concurrency management to be part of the modlog
+        // 'seq',
     );
     
     /**
@@ -868,7 +869,20 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
     {
         $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         if (null !== $_curRecord && null !== $_newRecord) {
-            $diff = $_curRecord->diff($_newRecord, array_merge($this->_metaProperties, $_newRecord->getModlogOmitFields()));
+            try {
+                Tinebase_Record_Expander::expandRecords(new Tinebase_Record_RecordSet(get_class($_curRecord), [$_curRecord, $_newRecord]));
+            } catch (Tinebase_Exception_NotImplemented $teni) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $teni->getMessage());
+            }
+            $metaProps = $this->_metaProperties;
+            $diffContext = (new Tinebase_Record_DiffContext())->setSubDiffOmitFieldsDelegator(
+                function(?Tinebase_ModelConfiguration $mc) use($metaProps) {
+                    return $mc ? array_merge($metaProps, $mc->modlogOmitFields) : $metaProps;
+                });
+            $diff = $_curRecord->diff($_newRecord, $diffContext->getSubDiffOmitFields($_newRecord::getConfiguration()),
+                $diffContext);
+            $diff->purgeLonelySeq();
             $notNullRecord = $_newRecord;
         } else {
             if (null !== $_newRecord) {
@@ -878,12 +892,11 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 $notNullRecord = $_curRecord;
                 $diffProp = 'oldData';
             }
+            Tinebase_Record_Expander::expandRecord($notNullRecord);
             $diffData = $notNullRecord->toArray();
 
             foreach (array_merge($this->_metaProperties, $notNullRecord->getModlogOmitFields()) as $omit) {
-                if (isset($diffData[$omit])) {
-                    unset($diffData[$omit]);
-                }
+                unset($diffData[$omit]);
             }
 
             $diff = new Tinebase_Record_Diff(array($diffProp => $diffData));
@@ -1270,7 +1283,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $this->_backend->deleteByProperty($_application->getId(), 'application_id');
     }
 
-    public static function getModifiedAttributes(Tinebase_Record_RecordSet $modLogs)
+    public static function getModifiedAttributes(Tinebase_Record_RecordSet $modLogs, bool $includeSeq = false)
     {
         $result = array();
 
@@ -1283,6 +1296,10 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             } else {
                 $result[$modAtrb] = null;
             }
+        }
+
+        if (!$includeSeq) {
+            unset($result['seq']);
         }
 
         return array_keys($result);

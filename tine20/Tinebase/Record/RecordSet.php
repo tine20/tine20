@@ -667,9 +667,11 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      *  - modified -> array of diffs  for all different records that are in both record sets
      * 
      * @param Tinebase_Record_RecordSet $recordSet
+     * @param array $omitFields
+     * @param Tinebase_Record_DiffContext $context
      * @return Tinebase_Record_RecordSetDiff
      */
-    public function diff($recordSet)
+    public function diff($recordSet, array $omitFields = [], ?Tinebase_Record_DiffContext $context = null)
     {
         if (! $recordSet instanceof Tinebase_Record_RecordSet) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -683,7 +685,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
 
         /** @var Tinebase_Record_Interface $model */
         $model = $this->getRecordClassName();
-        if (null !== ($result = $model::recordSetDiff($this, $recordSet))) {
+        if (null !== ($result = $model::recordSetDiff($this, $recordSet, $context))) {
             return $result;
         }
         
@@ -713,7 +715,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             $removed->addRecord($this->getByIndex($index));
         }
         foreach ($modifiedIds as $id) {
-            $diff = $this->getById($id)->diff($recordSet->getById($id));
+            $diff = $this->getById($id)->diff($recordSet->getById($id), $omitFields, $context);
             if (! $diff->isEmpty()) {
                 $modified->addRecord($diff);
             }

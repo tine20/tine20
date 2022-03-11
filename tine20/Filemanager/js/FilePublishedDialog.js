@@ -130,7 +130,7 @@ Tine.Filemanager.FilePublishedDialog = Ext.extend(Ext.FormPanel, {
 });
 
 Tine.Filemanager.FilePublishedDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
+    const id = config.recordId ?? config.record?.id ?? 0;
     return Tine.WindowFactory.getWindow({
         width: 350,
         height: 200,

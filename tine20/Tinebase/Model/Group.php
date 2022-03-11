@@ -155,9 +155,10 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
      * will (re)load and populate members property if required
      *
      * @param Tinebase_Record_Diff $diff
+     * @param bool $applySeq
      * @return void
      */
-    public function undo(Tinebase_Record_Diff $diff)
+    public function undo(Tinebase_Record_Diff $diff, bool $applySeq = false)
     {
         $members = null;
         $oldMembers = null;

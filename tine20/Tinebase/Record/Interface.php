@@ -188,9 +188,10 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * 
      * @param  Tinebase_Record_Interface $_record record for comparism
      * @param array $omitFields omit fields (for example modlog fields)
+     * @param ?Tinebase_Record_DiffContext $context
      * @return Tinebase_Record_Diff with differences field => different value
      */
-    public function diff($_record, $omitFields = array());
+    public function diff($_record, $omitFields = array(), ?Tinebase_Record_DiffContext $context = null);
 
     /**
      * merge given record into $this, only fills so far empty properties with new values from given record
@@ -272,9 +273,10 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * undoes the change stored in the diff
      *
      * @param Tinebase_Record_Diff $diff
+     * @param bool $applySeq
      * @return void
      */
-    public function undo(Tinebase_Record_Diff $diff);
+    public function undo(Tinebase_Record_Diff $diff, bool $applySeq = false);
 
     /**
      * applies the change stored in the diff
@@ -355,9 +357,10 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     /**
      * @param Tinebase_Record_RecordSet $_recordSetOne
      * @param Tinebase_Record_RecordSet $_recordSetTwo
+     * @param ?Tinebase_Record_DiffContext $context
      * @return null|Tinebase_Record_RecordSetDiff
      */
-    public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne, Tinebase_Record_RecordSet $_recordSetTwo);
+    public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne, Tinebase_Record_RecordSet $_recordSetTwo, ?Tinebase_Record_DiffContext $context = null);
 
     /**
      * @param string $_property

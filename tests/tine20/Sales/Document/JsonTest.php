@@ -77,6 +77,32 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
             $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Boilerplate::FLD_BOILERPLATE]);
     }
 
+    public function testOfferDocumentModLog()
+    {
+        $customer = $this->_createCustomer();
+        $customerData = $customer->toArray();
+        $product = $this->_createProduct();
+
+        $document = new Sales_Model_Document_Offer([
+            Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customerData,
+            Sales_Model_Document_Offer::FLD_RECIPIENT_ID => $customerData['delivery'][0],
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_DRAFT,
+            Sales_Model_Document_Offer::FLD_POSITIONS => [
+                [
+                    Sales_Model_DocumentPosition_Offer::FLD_TITLE => 'ipsum',
+                    Sales_Model_DocumentPosition_Offer::FLD_PRODUCT_ID => $product->toArray()
+                ]
+            ],
+        ]);
+        $document = $this->_instance->saveDocument_Offer($document->toArray(true));
+
+        $updatedDocument = $this->_instance->saveDocument_Offer($document);
+        $modLogs = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(
+            Tinebase_Application::getInstance()->getApplicationByName(Sales_Config::APP_NAME)->getId(),
+            new Sales_Model_Document_Offer($document), $updatedDocument['seq']);
+        $this->assertSame(0, $modLogs->count());
+    }
+
     public function testOfferDocumentWithoutRecipient()
     {
         $customer = $this->_createCustomer();

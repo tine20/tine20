@@ -86,8 +86,8 @@ Ext.ux.WindowFactory.prototype = {
      * @private
      */
     getExtWindow: function (c) {
-        var win = Ext.WindowMgr.get(c.name);
-        var winConstructor = c.modal ? Ext.Window : this.windowClass;
+        let win = Ext.WindowMgr.get(c.name);
+        const winConstructor = c.modal ? Ext.Window : this.windowClass;
 
         if (! win) {
             c.id = c.name;
@@ -105,14 +105,12 @@ Ext.ux.WindowFactory.prototype = {
             c.width = Math.min(Ext.getBody().getBox().width, c.width);
 
             c.layout = c.layout || 'fit';
-            const cp = this.getCenterPanel(c).then((cp) => {
-                const cardPanel = win.items.get(0)
-                // NOTE: cp might contain a wrap
-                _.set(c.contentPanelConstructor ? cp : cp.get(0), 'window', win);
-                cardPanel.items.add(cp);
-                cardPanel.layout.setActiveItem(0);
-                cp.doLayout();
-            });
+
+            if (!c.contentPanelConstructor) {
+                c.contentPanelConstructorConfig = {layout: 'fit', border: false, items : c.items || {}};
+                c.contentPanelConstructor = 'Ext.Container';
+            }
+
             c.items = {
                 layout: 'card',
                 border: false,
@@ -121,13 +119,17 @@ Ext.ux.WindowFactory.prototype = {
                 items: []
             };
 
-            // NOTE: is this still true ?? -> we can only handle one window yet
-            c.modal = true;
-
             win = new winConstructor(c);
-            if (cp.onWindowInject) {
-                cp.onWindowInject.call(cp, win);
-            }
+
+            this.getCenterPanel(c, win).then((cp) => {
+                const cardPanel = win.items.get(0)
+                cardPanel.items.add(cp);
+                cardPanel.layout.setActiveItem(0);
+                cp.doLayout();
+                if (cp.onWindowInject) {
+                    cp.onWindowInject.call(cp, win);
+                }
+            });
         }
         
         // if initShow property is present and it is set to false don't show window, just return reference
@@ -141,39 +143,25 @@ Ext.ux.WindowFactory.prototype = {
     /**
      * constructs window items from config properties
      */
-     getCenterPanel: async function (config) {
-        var items;
+     getCenterPanel: async function (config, win) {
+        config.contentPanelConstructorConfig = config.contentPanelConstructorConfig || {};
 
-        if (config.contentPanelConstructor) {
-            config.contentPanelConstructorConfig = config.contentPanelConstructorConfig || {};
+        // place a reference to current window class in the itemConstructor.
+        // this may be overwritten depending on concrete window implementation
+        config.contentPanelConstructorConfig.window = win || config.window || config;
 
-            // place a reference to current window class in the itemConstructor.
-            // this may be overwritten depending on concrete window implementation
-            config.contentPanelConstructorConfig.window = config;
-            
-            // find the constructor in this context
-            var parts = config.contentPanelConstructor.split('.'),
-            ref = window;
-            
-            for (var i = 0; i < parts.length; i += 1) {
-                ref = ref[parts[i]];
-            }
-
-            if (config.contentPanelConstructorConfig.contentPanelConstructorInterceptor) {
-                await config.contentPanelConstructorConfig.contentPanelConstructorInterceptor(config.contentPanelConstructorConfig, window);
-            }
-            
-            // finally construct the content panel
-            Tine.log.info('WindowFactory::getCenterPanel - construct content panel');
-            items = new ref(config.contentPanelConstructorConfig);
-
-            // remove x-window reference
-            config.contentPanelConstructorConfig.listeners = null;
-        } else {
-            items = new Ext.Container({layout: 'fit', border: false, items : config.items ? config.items : {}});
+        if (config.contentPanelConstructorConfig.contentPanelConstructorInterceptor) {
+            await config.contentPanelConstructorConfig.contentPanelConstructorInterceptor(config.contentPanelConstructorConfig, window);
         }
+
+        // finally construct the content panel
+        Tine.log.info('WindowFactory::getCenterPanel - construct content panel');
+        const centerPanel = new (_.get(window, config.contentPanelConstructor))(config.contentPanelConstructorConfig);
+
+        // remove x-window reference
+        config.contentPanelConstructorConfig.listeners = null;
         
-        return items;
+        return centerPanel;
     },
     
     /**
@@ -189,7 +177,7 @@ Ext.ux.WindowFactory.prototype = {
         config.name = Ext.isString(config.name) ? config.name.replace(/[^a-zA-Z0-9_]/g, '') : config.name;
         
         if (! config.title && config.contentPanelConstructorConfig && config.contentPanelConstructorConfig.title) {
-        config.title = config.contentPanelConstructorConfig.title;
+            config.title = config.contentPanelConstructorConfig.title;
             delete config.contentPanelConstructorConfig.title;
         }
         

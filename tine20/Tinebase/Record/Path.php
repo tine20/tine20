@@ -91,7 +91,7 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
     public function getPathsForRecord(Tinebase_Record_Interface $_record)
     {
         $filter = new Tinebase_Model_PathFilter(array(
-            array('field' => 'shadow_path', 'operator' => 'contains', 'value' => $_record->getShadowPathPart())
+            array('field' => 'shadow_path', 'operator' => 'contains', 'value' => $_record->getId())
         ));
         $filterGroup = new Tinebase_Model_Filter_FilterGroup([], 'OR');
         $filterGroup->addFilter(new Tinebase_Model_Filter_Text([
