@@ -1316,6 +1316,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 'useRfc2307'                => array(
                     'type'                      => Tinebase_Config::TYPE_BOOL,
                 ),
+                'emailAttribute'            => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    'default'                   => 'mail',
+                ),
                 self::SYNCOPTIONS           => array(
                     'type'                      => 'object',
                     'class'                     => 'Tinebase_Config_Struct',
