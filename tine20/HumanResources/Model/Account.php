@@ -107,7 +107,13 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
             'contracts' => array(
                 'type' => 'virtual',
             ),
-            'scheduled_remaining_vacation_days' => array(
+            'possible_vacation_days' => array(
+                'type' => 'virtual',
+                'config' => array(
+                    'type' => 'integer'
+                )
+            ),
+            'scheduled_requested_vacation_days' => array(
                 'type' => 'virtual',
                 'config' => array(
                     'type' => 'integer'
@@ -119,7 +125,7 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
                     'type' => 'integer'
                 )
             ),
-            'possible_vacation_days' => array(
+            'scheduled_remaining_vacation_days' => array(
                 'type' => 'virtual',
                 'config' => array(
                     'type' => 'integer'

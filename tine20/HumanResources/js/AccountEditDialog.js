@@ -26,7 +26,7 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
      */
     evalGrants: false,
 
-    windowWidth: 550,
+    windowWidth: 600,
     windowHeight: 560,
     
     /**
@@ -98,9 +98,10 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
                             formDefaults: cfDefaults,
                             labelAlign: 'top',
                             items: [[
-                                {fieldLabel: this.app.i18n._('Possible vaction days'), name: 'possible_vacation_days', columnWidth: 1/3 },
-                                {fieldLabel: this.app.i18n._('Remaining vaction days'), name: 'scheduled_remaining_vacation_days', columnWidth: 1/3 },
-                                {fieldLabel: this.app.i18n._('Taken vaction days'), name: 'scheduled_taken_vacation_days', columnWidth: 1/3 }
+                                {fieldLabel: this.app.i18n._('Possible vaction days'), name: 'possible_vacation_days', columnWidth: 1/4 },
+                                {fieldLabel: this.app.i18n._('Requested vaction days'), name: 'scheduled_requested_vacation_days', columnWidth: 1/4 },
+                                {fieldLabel: this.app.i18n._('Taken vaction days'), name: 'scheduled_taken_vacation_days', columnWidth: 1/4 },
+                                {fieldLabel: this.app.i18n._('Remaining vaction days'), name: 'scheduled_remaining_vacation_days', columnWidth: 1/4 },
                             ]]
                         }]
                     }, {

@@ -267,7 +267,7 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
             'possible_vacation_days'            => intval($possibleVacationDays),
             'scheduled_taken_vacation_days'     => $scheduledTakenVacationDays->count(),
             'scheduled_requested_vacation_days' => $scheduledRequestedVacationDays->count(),
-            'scheduled_remaining_vacation_days' => intval(floor($possibleVacationDays)) - $scheduledTakenVacationDays->count(),
+            'scheduled_remaining_vacation_days' => intval(floor($possibleVacationDays)) - $scheduledRequestedVacationDays->count() - $scheduledTakenVacationDays->count(),
             'actual_until'                      => $actualUntil,
             'actual_taken_vacation_days'        => $actualTakenVacationDays->count(),
             'actual_requested_vacation_days'    => $actualRequestedVacationDays->count(),

@@ -62,8 +62,9 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         if (statusPicker && this.record.get('created_by')) {
             statusPicker.setValue(this.record.get('status'));
         }
-        
-        this.datePicker.setValue(Date.parseDate(_.get(this.record, 'data.firstday_date'), Date.patterns.ISO8601Long) || new Date());
+
+        const firstDay = _.get(this.record, 'data.firstday_date');
+        this.datePicker.setValue((Ext.isDate(firstDay) ? firstDay : Date.parseDate(firstDay, Date.patterns.ISO8601Long)) || new Date());
         this.datePicker.setSelected(_.map(_.get(this.record, 'data.freedays', []), (day) => {
             return Date.parseDate(day.date, Date.patterns.ISO8601Long);
         }));
@@ -108,17 +109,28 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             item[item.setReadOnly ? 'setReadOnly' : 'setDisabled'](!allowUpdate);
         });
 
-        // description // attachments ... -> setReadOnly
+        // compute vacation values
+        const year = _.get(this, 'accountPicker.selectedRecord.data.year');
+        const feastAndFreeDays = _.get(this.feastAndFreeDaysCache, year);
 
-        /**
-         * @TODO apply acl
-         * // allow to set process status if UPDATE_CHANGE_REQUEST (in division of employee)
-         * // process status requested -> allow to change all (incl. OK btn) everything (own && CREATE_OWN_CHANGE_REQUEST) || CREATE_CHANGE_REQUEST
-         * // other process status -> allow if UPDATE_CHANGE_REQUEST
-         *
-         * // OK btn
-         *   new records: if (own && CREATE_OWN_CHANGE_REQUEST) || CREATE_CHANGE_REQUEST  UPDATE_CHANGE_REQUEST
-         */
+        const currentDays = this.record.get('days_count');
+        const currentStatus = this.form.findField('process_status').getValue();
+        const originalDays = this.record.get('creation_time') ? +_.get(this.record, 'modified.days_count', currentDays) : 0;
+        const originalStatus = this.record.get('creation_time') ? _.get(this.record, 'modified.process_status', currentStatus) : 'REQUESTED';
+
+        const possible = _.get(feastAndFreeDays, 'vacation.possible_vacation_days', 0);
+        this.form.findField('possible_vacation_days').setValue(year && feastAndFreeDays ?  possible : '');
+
+        let requested = _.get(feastAndFreeDays, 'vacation.scheduled_requested_vacation_days', 0);
+        requested = requested - (originalStatus === 'REQUESTED' ? originalDays : 0) + (currentStatus === 'REQUESTED' ? currentDays : 0);
+        this.form.findField('scheduled_requested_vacation_days').setValue(year && feastAndFreeDays ? requested : '');
+
+        let taken = _.get(feastAndFreeDays, 'vacation.scheduled_taken_vacation_days', 0);
+        taken = taken - (originalStatus === 'ACCEPTED' ? originalDays : 0) + (currentStatus === 'ACCEPTED' ? currentDays : 0);
+        this.form.findField('scheduled_taken_vacation_days').setValue(year && feastAndFreeDays ? taken : '');
+
+        const remaining = possible - requested - taken;
+        this.form.findField('scheduled_remaining_vacation_days').setValue(year && feastAndFreeDays ? remaining : '');
     },
     
     /**
@@ -341,7 +353,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             Ext.apply({
                 fieldLabel: this.app.i18n._('Process status'),
                 keyFieldName: 'freeTimeProcessStatus',
-                name: 'freeTimeProcessStatus'
+                name: 'process_status'
             }, statusPickerDefaults)
         );
         this.typeStatusPicker = new Tine.Tinebase.widgets.keyfield.ComboBox(
@@ -373,26 +385,35 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.initEmployeePicker();
         this.initTypePicker();
 
+        this.possibleVacationDays = new Ext.form.NumberField({
+            fieldLabel: this.app.i18n._('Entitlement'),
+            columnWidth: 1/4,
+            name: 'possible_vacation_days',
+            readOnly: true,
+            allowBlank: true
+        });
+        this.requestedDaysField = new Ext.form.NumberField({
+            fieldLabel: this.app.i18n._('Requested'),
+            columnWidth: 1/4,
+            name: 'scheduled_requested_vacation_days',
+            readOnly: true,
+            allowBlank: true
+        });
+        this.acceptedDaysField = new Ext.form.NumberField({
+            fieldLabel: this.app.i18n._('Accepted'),
+            columnWidth: 1/4,
+            name: 'scheduled_taken_vacation_days',
+            readOnly: true,
+            allowBlank: true
+        });
         this.remainingDaysField = new Ext.form.NumberField({
             fieldLabel: this.app.i18n._('Remaining'),
-            columnWidth: 1/3,
+            columnWidth: 1/4,
             name: 'scheduled_remaining_vacation_days',
             readOnly: true,
-            allowBlank: true,
-            
-            checkState: () => {
-                const year = _.get(this, 'accountPicker.selectedRecord.data.year');
-                const feastAndFreeDays = _.get(this.feastAndFreeDaysCache, year);
-                let remaining = _.get(feastAndFreeDays, 'remainingVacation', 0);
-
-                const currentDays = this.record.get('days_count');
-                const originalDays = this.record.get('creation_time') ? +_.get(this.record, 'modified.days_count', currentDays) : 0;
-                remaining = remaining + originalDays - currentDays;
-
-                this.form.findField('scheduled_remaining_vacation_days').setValue(year && feastAndFreeDays ? remaining : '');
-            }
+            allowBlank: true
         });
-        
+
         return {
             xtype: 'fieldset',
             autoHeight: true,
@@ -412,7 +433,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     [this.typePicker],
                     [this.processStatusPicker, this.typeStatusPicker],
                     [this.accountPicker],
-                    [this.remainingDaysField],
+                    [this.possibleVacationDays, this.acceptedDaysField, this.requestedDaysField, this.remainingDaysField],
                     [{
                         xtype: 'panel',
                         cls: 'HumanResources x-form-item',

@@ -187,7 +187,9 @@ Tine.HumanResources.EmployeeEditDialogFreeTimeGridPanel = Ext.extend(Tine.widget
             'employee_id': this.editDialog.record.data,
             'type':        this.freetimeType.toLowerCase() // we need the type obj here
         };
-        
+        // have division grants in dlg
+        button.fixedFields.employee_id.division_id = this.editDialog.getForm().findField('division_id').selectedRecord.data;
+
         Tine.HumanResources.EmployeeEditDialogFreeTimeGridPanel.superclass.onEditInNewWindow.call(this, button, record, plugins);
     },
 
