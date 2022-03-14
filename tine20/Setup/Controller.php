@@ -538,13 +538,16 @@ class Setup_Controller
      * applications is legacy, we always update all installed applications
      *
      * @param Tinebase_Record_RecordSet $_applications
-     * @param bool $strict
+     * @param array $options
      * @return  array   messages
      * @throws Tinebase_Exception
      *
      * TODO refactor signature ... we dont want that? do we? always all...
      */
-    public function updateApplications(Tinebase_Record_RecordSet $_applications = null, $strict = false)
+    public function updateApplications(Tinebase_Record_RecordSet $_applications = null, array $options = [
+        'strict' => false,
+        'skipQueueCheck' => false,
+    ])
     {
         $this->clearCache();
 
@@ -579,7 +582,7 @@ class Setup_Controller
             $classes = [self::class => $this];
 
             try {
-                $this->_prepareUpdate(Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly());
+                $this->_prepareUpdate(Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly(), $options['skipQueueCheck']);
 
                 foreach ($updatesByPrio as $prio => $updates) {
                     foreach ($updates as $update) {
@@ -618,7 +621,7 @@ class Setup_Controller
                 if (Setup_SchemaTool::hasSchemaUpdates()) {
                     Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
                         ' pending schema updates found, this should not happen!');
-                    if ($strict) {
+                    if ($options['strict']) {
                         throw new Setup_Backend_Exception_NotImplemented('missing schema updates in update scripts');
                     }
                     Setup_SchemaTool::updateAllSchema();
@@ -710,7 +713,7 @@ class Setup_Controller
      * @param Tinebase_Model_User $_user
      * @throws Tinebase_Exception
      */
-    protected function _prepareUpdate(Tinebase_Model_User $_user)
+    protected function _prepareUpdate(Tinebase_Model_User $_user, $skipQueueCheck = false)
     {
         $setupXml = $this->getSetupXml('Tinebase');
         if(!empty($setupXml->minimumRequiredVersion) &&
@@ -720,16 +723,10 @@ class Setup_Controller
                 'you reached the desired major version you want to upgrade to');
         }
 
-        // check action queue is empty and wait for it to finish
-        $timeStart = time();
-        foreach (Tinebase_ActionQueue::getAllInstances() as $actionQueue) {
-            while ($actionQueue->getQueueSize() > 0 && time() - $timeStart < 300) {
-                usleep(10000);
-            }
-            if (time() - $timeStart >= 300) {
-                throw new Tinebase_Exception('waited for Action Queue to become empty for more than 300 sec');
-            }
+        if (! $skipQueueCheck) {
+            $this->_checkActionQueue();
         }
+
         // set action to direct
         Tinebase_ActionQueue::getInstance(null, Tinebase_ActionQueue::BACKEND_DIRECT);
         Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN, Tinebase_ActionQueue::BACKEND_DIRECT);
@@ -781,6 +778,20 @@ class Setup_Controller
         } finally {
             Tinebase_Model_Role::setIsReplicable(true);
             $roleController->modlogActive($oldModLog);
+        }
+    }
+
+    protected function _checkActionQueue()
+    {
+        // check action queue is empty and wait for it to finish
+        $timeStart = time();
+        foreach (Tinebase_ActionQueue::getAllInstances() as $actionQueue) {
+            while ($actionQueue->getQueueSize() > 0 && time() - $timeStart < 300) {
+                usleep(10000);
+            }
+            if (time() - $timeStart >= 300) {
+                throw new Tinebase_Exception('waited for Action Queue to become empty for more than 300 sec');
+            }
         }
     }
 
