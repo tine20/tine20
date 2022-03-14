@@ -92,7 +92,7 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
                         xtype: 'fieldset',
                         layout: 'hfit',
                         autoHeight: true,
-                        title: this.app.i18n._('Free Times'),
+                        title: this.app.i18n._('Vacation'),
                         items: [{
                             xtype: 'columnform',
                             formDefaults: cfDefaults,

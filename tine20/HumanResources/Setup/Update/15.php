@@ -114,6 +114,7 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
         Tinebase_TransactionManager::getInstance()->rollBack();
         Setup_SchemaTool::updateSchema([
             HumanResources_Model_FreeTime::class,
+            HumanResources_Model_FreeTimeType::class,
         ]);
 
         $this->getDb()->update(SQL_TABLE_PREFIX . HumanResources_Model_FreeTime::TABLE_NAME, [
@@ -141,6 +142,19 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             ]));
 
         HumanResources_Setup_Initialize::addFreeTimePersistenFilter();
+
+        $translate = Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME);
+        $existingFTTs = HumanResources_Controller_FreeTimeType::getInstance()->getAll();
+        foreach(HumanResources_Setup_Initialize::$freeTimeTypes as $ftt) {
+            foreach([$ftt['name'], $translate->_($ftt['name'])] as $name) {
+                $existingFTT = $existingFTTs->filter('name', $name)->getFirstRecord();
+                if ($existingFTT) {
+                    $existingFTT->color = $ftt['color'];
+                    HumanResources_Controller_FreeTimeType::getInstance()->update($existingFTT);
+                    continue 2;
+                }
+            }
+        }
 
         $this->addApplicationUpdate('HumanResources', '15.5', self::RELEASE015_UPDATE005);
     }

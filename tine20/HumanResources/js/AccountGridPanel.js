@@ -31,6 +31,10 @@ Tine.HumanResources.AccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.HumanResources.AccountGridPanel.superclass.initComponent.call(this);
         this.action_addInNewWindow.hide();
         this.action_deleteRecord.hide();
+        this.action_editInNewWindow.actionUpdater = (action, grants, records, isFilterSelect, filteredContainers) => {
+            let enabled = records.length === 1
+            action.setDisabled(!enabled)
+        }
     },
     
     createMissingAccounts: function() {

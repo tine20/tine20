@@ -47,7 +47,7 @@ class HumanResources_Model_WorkingTimeScheme extends Tinebase_Record_NewAbstract
      */
     protected static $_modelConfiguration = array(
         self::VERSION               => self::MY_VERSION,
-        self::RECORD_NAME           => 'Working time scheme',
+        self::RECORD_NAME           => 'Working time scheme', // gettext('GENDER_Working time scheme')
         self::RECORDS_NAME          => 'Working time schemes', // ngettext('Working time scheme', 'Working time schemes', n)
         self::MODLOG_ACTIVE         => TRUE,
         self::IS_DEPENDENT          => TRUE,

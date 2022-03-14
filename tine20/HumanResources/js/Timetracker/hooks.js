@@ -3,6 +3,7 @@ Tine.Tinebase.ApplicationStarter.isInitialised().then(() => {
 
     Tine.widgets.MainScreen.registerContentType('Timetracker', {appName: 'HumanResources', modelName: 'DailyWTReport', group: app.i18n._('Workingtime Tracking'), groupIconCls: 'HumanResourcesTimetrackerHooks'});
     Tine.widgets.MainScreen.registerContentType('Timetracker', {appName: 'HumanResources', modelName: 'MonthlyWTReport', group: app.i18n._('Workingtime Tracking'), groupIconCls: 'HumanResourcesTimetrackerHooks'});
+    Tine.widgets.MainScreen.registerContentType('Timetracker', {appName: 'HumanResources', modelName: 'FreeTime', group: app.i18n._('Workingtime Tracking'), groupIconCls: 'HumanResourcesTimetrackerHooks'});
 
     Tine.widgets.MainScreen.registerContentType('Timetracker', {
         appName: 'HumanResources',

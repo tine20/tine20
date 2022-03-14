@@ -49,7 +49,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'Account',
         HumanResources_Model_FreeTimeType::MODEL_NAME_PART,
         'FreeDay',
-        'FreeTime',
         HumanResources_Model_BLDailyWTReport_WorkingTime::MODEL_NAME_PART,
         HumanResources_Model_DailyWTReport::MODEL_NAME_PART,
         HumanResources_Model_MonthlyWTReport::MODEL_NAME_PART,
@@ -58,6 +57,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         HumanResources_Model_StreamModalReport::MODEL_NAME_PART,
         HumanResources_Model_WageType::MODEL_NAME_PART,
         HumanResources_Model_WorkingTimeScheme::MODEL_NAME_PART,
+        HumanResources_Model_FreeTime::MODEL_NAME_PART,
     ];
 
     protected $_defaultModel = 'Employee';

@@ -178,7 +178,7 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
         HumanResources_Controller_Employee::getInstance()->get($freeTime->employee_id);
         $contracts = HumanResources_Controller_Contract::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Contract::class, [
-                ['field' => 'employee_id', 'operator' => 'equals', 'value' => $freeTime->employee_id],
+                ['field' => 'employee_id', 'operator' => 'equals', 'value' => $freeTime->getIdFromProperty('employee_id')],
             ]));
         $this->assertSame(1, $contracts->count());
     }

@@ -33,7 +33,7 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
     protected static $_modelConfiguration = array(
         'version'           => 5,
         'recordName'        => 'Personal account', // ngettext('Personal account', 'Personal accounts', n)
-        'recordsName'       => 'Personal accounts',
+        'recordsName'       => 'Personal accounts', // gettext('GENDER_Personal account')
         'hasRelations'      => TRUE,
         'hasCustomFields'   => TRUE,
         'hasNotes'          => TRUE,

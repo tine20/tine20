@@ -55,7 +55,7 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
      */
     protected static $_modelConfiguration = [
         self::VERSION                   => 2,
-        self::RECORD_NAME               => 'Monthly Working Time Report',
+        self::RECORD_NAME               => 'Monthly Working Time Report', // gettext('GENDER_Monthly Working Time Report')
         self::RECORDS_NAME              => 'Monthly Working Time Reports', // ngettext('Monthly Working Time Report', 'Monthly Working Time Reports', n)
         self::TITLE_PROPERTY            => self::FLDS_MONTH,
         self::HAS_CUSTOM_FIELDS         => true,
