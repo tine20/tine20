@@ -165,7 +165,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         if ((isset($_options['ldap']) || array_key_exists('ldap', $_options))) {
             $this->_ldap = $_options['ldap'];
         }
-        
+        if (isset($_options['emailAttribute']) && !empty($_options['emailAttribute'])) {
+            $this->_rowNameMapping['accountEmailAddress'] = $_options['emailAttribute'];
+        }
+
         $this->_options = $_options;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
@@ -179,7 +182,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $this->_groupBaseFilter    = $this->_options['groupFilter'];
 
         $this->_rowNameMapping['accountId'] = $this->_userUUIDAttribute;
-        
+
         if (! $this->_ldap instanceof Tinebase_Ldap) {
             $this->_ldap = new Tinebase_Ldap($this->_options);
             try {
