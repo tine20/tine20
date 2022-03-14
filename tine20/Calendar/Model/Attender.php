@@ -731,11 +731,16 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     $list = Addressbook_Controller_List::getInstance()->get($groupAttender->user_id);
                     $listId = $list->getId();
                 } catch (Exception $e) {
-                    // lets try group
-                    $group = Tinebase_Group::getInstance()->getGroupById($groupAttender->user_id);
-                    if (!empty($group->list_id)) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__  . ' fixme: depricated use of  group id');
-                        $groupAttender->user_id = $listId = $group->list_id;
+                    // let's try group
+                    try {
+                        $group = Tinebase_Group::getInstance()->getGroupById($groupAttender->user_id);
+                        if (!empty($group->list_id)) {
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' fixme: depricated use of  group id');
+                            $groupAttender->user_id = $listId = $group->list_id;
+                        }
+                    } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' ' . $ternd->getMessage());
                     }
                 }
             } else {
@@ -751,7 +756,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 
                 $toAdd = array_diff($groupAttenderContactIds, $allCurrGroupMembersContactIds);
                 
-                foreach($toAdd as $userId) {
+                foreach ($toAdd as $userId) {
                     $_attendee->addRecord(new Calendar_Model_Attender(array(
                         'user_type' => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
                         'user_id'   => $userId,
