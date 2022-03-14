@@ -60,6 +60,8 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
     protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::READ_TIME_DATA];
     protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::READ_TIME_DATA];
 
+    protected $allowCorrectionUpdate = false;
+
     /**
      * the constructor
      *
@@ -757,10 +759,12 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             $allowedProperties = [
                 'evaluation_period_start_correction' => true,
                 'evaluation_period_end_correction' => true,
-                'working_time_correction' => true,
                 'working_time_target_correction' => true,
                 'user_remark' => true,
             ];
+            if ($this->allowCorrectionUpdate) {
+                $allowedProperties[HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_CORRECTION] = true;
+            }
             foreach ($_record->getFields() as $prop) {
                 if (!isset($allowedProperties[$prop])) {
                     $_record->{$prop} = $_oldRecord->{$prop};
@@ -795,5 +799,33 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                 break;
             }
         }
+    }
+
+    public function recalcCorrection(string $id)
+    {
+        $correction = 0;
+        foreach (HumanResources_Controller_WTRCorrection::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_WTRCorrection::class,[
+                ['field' => HumanResources_Model_WTRCorrection::FLD_WTR_DAILY, 'operator' => 'equals', 'value' => $id],
+                ['field' => HumanResources_Model_WTRCorrection::FLD_STATUS, 'operator' => 'equals', 'value' => HumanResources_Config::WTR_CORRECTION_STATUS_ACCEPTED],
+            ])) as $c) {
+            $correction += intval($c->{HumanResources_Model_WTRCorrection::FLD_CORRECTION});
+        }
+
+        $oldAclVal = $this->doContainerACLChecks(false);
+        $oldCorrectionVal = $this->allowCorrectionUpdate;
+        $this->allowCorrectionUpdate = true;
+        $raii = new Tinebase_RAII(function() use($oldAclVal, $oldCorrectionVal) {
+            $this->doContainerACLChecks($oldAclVal);
+            $this->allowCorrectionUpdate = $oldCorrectionVal;
+        });
+
+        $record = $this->get($id);
+        if (intval($record->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_CORRECTION}) !== $correction) {
+            $record->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_CORRECTION} = $correction;
+            $this->update($record);
+        }
+
+        unset($raii);
     }
 }

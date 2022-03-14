@@ -142,5 +142,49 @@ class HumanResources_Controller_WTRCorrection extends Tinebase_Controller_Record
                 HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY . ' or ' .
                 HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY . ' needs to be set');
         }
+        if ($record->{HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY} &&
+                $record->{HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY}) {
+            throw new Tinebase_Exception_Record_Validation(HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY . ' and '
+                . HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY . ' must not be both set');
+        }
+    }
+
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectAfterCreate($_createdRecord, $_record);
+        /** @var HumanResources_Model_WTRCorrection $_createdRecord */
+        $this->updateParent($_createdRecord);
+    }
+
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+        parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
+        /** @var HumanResources_Model_WTRCorrection $updatedRecord */
+        $this->updateParent($updatedRecord);
+        if ($record->getIdFromProperty(HumanResources_Model_WTRCorrection::FLD_WTR_DAILY)
+                !== $currentRecord->getIdFromProperty(HumanResources_Model_WTRCorrection::FLD_WTR_DAILY) ||
+                $record->getIdFromProperty(HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY)
+                !== $currentRecord->getIdFromProperty(HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY)) {
+            $this->updateParent($currentRecord);
+        }
+    }
+
+    protected function _inspectAfterDelete(Tinebase_Record_Interface $record)
+    {
+        parent::_inspectAfterDelete($record);
+        /** @var HumanResources_Model_WTRCorrection $record */
+        $this->updateParent($record);
+    }
+
+    protected function updateParent(HumanResources_Model_WTRCorrection $record)
+    {
+        if ($record->{HumanResources_Model_WTRCorrection::FLD_WTR_DAILY}) {
+            $ctrl = HumanResources_Controller_DailyWTReport::getInstance();
+            $id = $record->getIdFromProperty(HumanResources_Model_WTRCorrection::FLD_WTR_DAILY);
+        } else {
+            $ctrl = HumanResources_Controller_MonthlyWTReport::getInstance();
+            $id = $record->getIdFromProperty(HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY);
+        }
+        $ctrl->recalcCorrection($id);
     }
 }
