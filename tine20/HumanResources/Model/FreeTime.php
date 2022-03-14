@@ -178,7 +178,8 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                    'appName' => 'HumanResources',
                    'modelName'   => 'FreeDay',
                    'refIdField'  => 'freetime_id',
-                   'dependentRecords' => TRUE
+                   'dependentRecords' => TRUE,
+                   self::IGNORE_ACL => true,
                ),
            ),
         )
