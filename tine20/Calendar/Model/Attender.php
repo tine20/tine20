@@ -1075,7 +1075,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 if ($attender->user_id instanceof Tinebase_Record_Interface) {
                     // already resolved
                     continue;
-                } elseif (isset(self::$_resolvedAttendeesCache[$attender->user_type][$attender->user_id])){
+                } elseif (isset(self::$_resolvedAttendeesCache[$attender->user_type])
+                    && isset(self::$_resolvedAttendeesCache[$attender->user_type][$attender->user_id])
+                ){
                     // already in cache
                     $attender->user_id = self::$_resolvedAttendeesCache[$attender->user_type][$attender->user_id];
                 } else {
