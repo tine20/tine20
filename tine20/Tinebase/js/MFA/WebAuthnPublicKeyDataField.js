@@ -51,7 +51,7 @@ const WebAuthnPublicKeyDataField = Ext.extend(Ext.form.FieldSet, {
     setValue: function(value, record) {
         const supr = Ext.form.TextField.prototype.setValue.createDelegate(this.publicKeyDataField);
 
-        if (!value && !record.id) {
+        if (!value && [0, "0"].indexOf(record.id) >= 0) {
             this.register();
             supr(i18n._('Configuring FIDO2 WebAuthn Device ...'));
         } else {

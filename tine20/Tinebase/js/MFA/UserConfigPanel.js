@@ -42,11 +42,10 @@ class UserConfigPanel extends Tine.Tinebase.BL.BLConfigPanel {
                 return {
                     id: Tine.Tinebase.data.Record.generateUID(),
                     config_class: _.find(mfaDevices, {mfa_config_id: this.store.getAt(this.selectedIndex).data.field1}).config_class,
-                    mfa_config_id: this.getValue()/*,
+                    mfa_config_id: this.getValue(),
                     config: {
-                        // this is a hack to transport the accountData to the UserConfigs UI (needed e.g. for h|totp, webauthn)
-                        account_id: JSON.stringify(me.editDialog.record.data)
-                    }*/
+                        id: 0
+                    }
                 };
             };
         }));
