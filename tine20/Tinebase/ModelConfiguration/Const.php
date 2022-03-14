@@ -119,6 +119,7 @@ class Tinebase_ModelConfiguration_Const {
 
     const ID = 'id';
     const ID_GENERATOR_TYPE = 'idGeneratorType';
+    const IGNORE_ACL = 'ignoreACL';
     const INDEXES = 'indexes';
     const INPUT_FILTERS = 'inputFilters';
     const IS_DEPENDENT = 'isDependent';
