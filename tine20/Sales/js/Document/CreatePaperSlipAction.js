@@ -58,12 +58,16 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({
                         id: record.id,
                         contentPanelConstructorInterceptor: async (config) => {
-                            const win = config.window.popup
-                            const mainCardPanel = win.Tine.Tinebase.viewport.tineViewportMaincardpanel
-                            mainCardPanel.get(0).hide()
+                            const isPopupWindow = config.window.popup
+                            const win = isPopupWindow ? config.window.popup : window
+                            const mainCardPanel = isPopupWindow ? win.Tine.Tinebase.viewport.tineViewportMaincardpanel : await config.window.afterIsRendered()
+                            isPopupWindow ? mainCardPanel.get(0).hide() : null;
+
                             const mask = new win.Ext.LoadMask(mainCardPanel.el, { msg: maskMsg })
                             await createPaperSlip(mask)
-                            const attachment = record.get('attachments')[0]
+                            const attachments = record.get('attachments')
+                            const mdates = _.map(attachments, (attachement) => {return _.compact([attachement.last_modified_time, attachement.creation_time]).sort().pop()})
+                            const attachment = attachments[mdates.indexOf([...mdates].sort().pop())]
                             Object.assign(config, {
                                 recordData: attachment,
                                 id: attachment.id
