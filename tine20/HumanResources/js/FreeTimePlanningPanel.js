@@ -142,7 +142,7 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
 
     initFreeTimeTypes: async function() {
         this.freeTimeTypes = [];
-        this.freeTimeTypes = _.get(await Tine.HumanResources.searchFreeTimeTypes({}), 'results', []);
+        this.freeTimeTypes = _.get(await Tine.HumanResources.searchFreeTimeTypes([{field: 'allow_planning', operator: 'equals', value: true}]), 'results', []);
     },
     
     renderFreeDay: function(value, metaData, record, rowIndex, colIndex, store, day) {

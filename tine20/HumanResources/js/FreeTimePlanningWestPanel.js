@@ -34,7 +34,7 @@ const colorLegend = Ext.extend(Ext.Panel, {
                 // make sure grid is updated after group changed
                 this.onUpdateRecord = _.bind(this.onUpdateRecord, this, _, 'local');
 
-                Tine.Addressbook.contactListsGridPanel.superclass.initComponent.call(this);
+                Tine.HumanResources.FreeTimeTypeGridPanel.prototype.initComponent.call(this);
                 this.store.on('load', () => {
                     this.setHeight(this.grid.view.el.child('.x-grid3-body').getHeight() + this.grid.view.el.child('.x-grid3-header').getHeight());
                 })
@@ -45,6 +45,11 @@ const colorLegend = Ext.extend(Ext.Panel, {
                     {id: 'type', header: this.app.i18n._('&nbsp;'), dataIndex: 'color', width: 10, hidden: false, renderer: Tine.Tinebase.common.colorRenderer,},
                     {id: 'name', header: this.app.i18n._('Name'), width: 100, sortable: true, dataIndex: 'name'}
                 ];
+            },
+
+            onStoreBeforeload: function(store, options) {
+                Tine.HumanResources.FreeTimeTypeGridPanel.prototype.onStoreBeforeload.call(this, store, options);
+                options.params.filter.push({field: 'allow_planning', operator: 'equals', value: true});
             }
         })
 
