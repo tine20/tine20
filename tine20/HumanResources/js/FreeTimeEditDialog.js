@@ -85,6 +85,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         }
         let isNewRecord = !this.record.get('creation_time');
         const grants = _.get(employee, 'data.division_id.account_grants', {});
+        const isNew = !this.record.get('creation_time');
         const isOwn = Tine.Tinebase.registry.get('currentAccount').accountId === _.get(employee, 'data.account_id.accountId');
         const processStatus = this.processStatusPicker.getValue();
         const allowUpdate = grants.adminGrant || grants.updateChangeRequestGrant ||
@@ -100,9 +101,16 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.typePicker.setReadOnly(!isNewRecord || this.fixedFields.indexOfKey('type') >= 0);
 
         this.processStatusPicker.setDisabled(!(grants.updateChangeRequestGrant || grants.adminGrant));
+        if (isNew && employee !== this.processStatusPicker.employee && (grants.updateChangeRequestGrant || grants.adminGrant)) {
+            this.processStatusPicker.employee = employee;
+            this.processStatusPicker.setValue('ACCEPTED');
+        }
         this.typeStatusPicker[type.id === 'sickness' ? 'show' : 'hide']();
         this.accountPicker[type.id === 'vacation' ? 'show' : 'hide']();
         this.accountPicker.setReadOnly(!employee);
+        this.possibleVacationDays[type.id === 'vacation' ? 'show' : 'hide']();
+        this.requestedDaysField[type.id === 'vacation' ? 'show' : 'hide']();
+        this.acceptedDaysField[type.id === 'vacation' ? 'show' : 'hide']();
         this.remainingDaysField[type.id === 'vacation' ? 'show' : 'hide']();
 
         [this.typeStatusPicker, this.datePicker, this.getForm().findField('description'), this.attachmentsPanel, this.action_saveAndClose].forEach((item) => {
@@ -119,18 +127,18 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         const originalStatus = this.record.get('creation_time') ? _.get(this.record, 'modified.process_status', currentStatus) : 'REQUESTED';
 
         const possible = _.get(feastAndFreeDays, 'vacation.possible_vacation_days', 0);
-        this.form.findField('possible_vacation_days').setValue(year && feastAndFreeDays ?  possible : '');
+        this.possibleVacationDays.setValue(year && feastAndFreeDays ?  possible : '');
 
         let requested = _.get(feastAndFreeDays, 'vacation.scheduled_requested_vacation_days', 0);
         requested = requested - (originalStatus === 'REQUESTED' ? originalDays : 0) + (currentStatus === 'REQUESTED' ? currentDays : 0);
-        this.form.findField('scheduled_requested_vacation_days').setValue(year && feastAndFreeDays ? requested : '');
+        this.requestedDaysField.setValue(year && feastAndFreeDays ? requested : '');
 
         let taken = _.get(feastAndFreeDays, 'vacation.scheduled_taken_vacation_days', 0);
         taken = taken - (originalStatus === 'ACCEPTED' ? originalDays : 0) + (currentStatus === 'ACCEPTED' ? currentDays : 0);
-        this.form.findField('scheduled_taken_vacation_days').setValue(year && feastAndFreeDays ? taken : '');
+        this.acceptedDaysField.setValue(year && feastAndFreeDays ? taken : '');
 
         const remaining = possible - requested - taken;
-        this.form.findField('scheduled_remaining_vacation_days').setValue(year && feastAndFreeDays ? remaining : '');
+        this.remainingDaysField.setValue(year && feastAndFreeDays ? remaining : '');
     },
     
     /**
@@ -375,7 +383,9 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
 
     initTypePicker: function() {
-        this.typePicker = Tine.widgets.form.FieldManager.get('HumanResources', 'FreeTime', 'type', Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
+        this.typePicker = Tine.widgets.form.FieldManager.get('HumanResources', 'FreeTime', 'type', Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG, {
+            additionalFilters: [{field: 'allow_planning', operator: 'equals', value: true}]
+        });
     },
 
     getRecordFormItems: function() {
