@@ -367,12 +367,20 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                         Timetracker_Model_TimeaccountGrants::VIEW_ALL,
                         Timetracker_Model_TimeaccountGrants::BOOK_ALL
                     ))
-                    || ($_record->account_id == Tinebase_Core::getUser()->getId() && Timetracker_Controller_Timeaccount::getInstance()->hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN))
+                    || ($_record->account_id == Tinebase_Core::getUser()->getId() && Timetracker_Controller_Timeaccount::getInstance()->hasGrant($_record->timeaccount_id, [
+                            Timetracker_Model_TimeaccountGrants::BOOK_OWN,
+                            Timetracker_Model_TimeaccountGrants::READ_OWN,
+                            Timetracker_Model_TimeaccountGrants::REQUEST_OWN,
+                        ]))
                 );
                 break;
             case 'create':
                 $hasGrant = (
-                    ($_record->account_id == Tinebase_Core::getUser()->getId() && Timetracker_Controller_Timeaccount::getInstance()->hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN))
+                    ($_record->account_id == Tinebase_Core::getUser()->getId() && Timetracker_Controller_Timeaccount::getInstance()->hasGrant($_record->timeaccount_id, array_merge([
+                            Timetracker_Model_TimeaccountGrants::BOOK_OWN
+                        ], Timetracker_Config::TS_PROCESS_STATUS_REQUESTED === $_record->process_status ? [
+                            Timetracker_Model_TimeaccountGrants::REQUEST_OWN
+                        ] : [])))
                     || Timetracker_Controller_Timeaccount::getInstance()->hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL)
                 );
                 
@@ -388,7 +396,11 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 break;
             case 'update':
                 $hasGrant = (
-                    ($_record->account_id == Tinebase_Core::getUser()->getId() && Timetracker_Controller_Timeaccount::getInstance()->hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN))
+                    ($_record->account_id == Tinebase_Core::getUser()->getId() && Timetracker_Controller_Timeaccount::getInstance()->hasGrant($_record->timeaccount_id, array_merge([
+                            Timetracker_Model_TimeaccountGrants::BOOK_OWN
+                        ], Timetracker_Config::TS_PROCESS_STATUS_REQUESTED === $_record->process_status && $_record->process_status === $_oldRecord->process_status ? [
+                            Timetracker_Model_TimeaccountGrants::REQUEST_OWN
+                        ] : [])))
                     || Timetracker_Controller_Timeaccount::getInstance()->hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL)
                 );
                 

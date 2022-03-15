@@ -17,6 +17,9 @@
  *  */
 class Timetracker_Model_TimeaccountGrants extends Tinebase_Model_Grants
 {
+    const READ_OWN = 'readOwnGrant';
+    const REQUEST_OWN = 'requestOwnGrant';
+
     /**
      * constant for book own TS grant
      *
@@ -56,6 +59,8 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Model_Grants
     public static function getAllGrants()
     {
         $allGrants = array(
+            self::READ_OWN,
+            self::REQUEST_OWN,
             self::BOOK_OWN,
             self::VIEW_ALL,
             self::BOOK_ALL,
@@ -79,6 +84,8 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Model_Grants
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $grants = array(Tinebase_Model_Grants::GRANT_READ      => true,
+            self::READ_OWN => true,
+            self::REQUEST_OWN => true,
             Timetracker_Model_TimeaccountGrants::BOOK_OWN => TRUE,
             Timetracker_Model_TimeaccountGrants::VIEW_ALL => TRUE,
             Timetracker_Model_TimeaccountGrants::BOOK_ALL => TRUE,
