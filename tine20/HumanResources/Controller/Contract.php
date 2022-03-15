@@ -98,7 +98,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         }
         
         $diff = $_record->diff($_oldRecord, array(
-            'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'notes', 'end_date', 'seq', 'tags',
+            'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'notes', 'end_date', 'seq', 'tags', 'account_grants'
             // see 0011962: contract end_date can't be changed if vacation has been added
             // TODO fix json encoded field diff - this is only a workaround
             // sadly, there is currently no test that breaks without this hotfix :(
