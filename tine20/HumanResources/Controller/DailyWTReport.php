@@ -654,6 +654,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
     {
         $filterData = [
             ['field' => 'account_id', 'operator' => 'equals', 'value' => $this->_employee->account_id],
+            ['field' => 'process_status', 'operator' => 'equals', 'value' => Timetracker_Config::TS_PROCESS_STATUS_ACCEPTED],
             ['field' => 'start_date', 'operator' => 'after_or_equals', 'value' => $this->_startDate->format('Y-m-d')],
             ['field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $this->_endDate->format('Y-m-d')],
         ];

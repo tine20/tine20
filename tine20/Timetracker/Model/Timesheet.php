@@ -40,7 +40,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 8,
+        'version'           => 9,
         'recordName'        => 'Timesheet',
         'recordsName'       => 'Timesheets', // ngettext('Timesheet', 'Timesheets', n)
         'hasRelations'      => true,
@@ -290,6 +290,13 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'nullable'              => true,
                 'copyOmit'              => true,
             ),
+            'process_status'            => [
+                self::LABEL                 => 'Process Status', // _('Process Status')
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE                  => self::TYPE_KEY_FIELD,
+                self::NAME                  => Timetracker_Config::TS_PROCESS_STATUS,
+                self::DEFAULT_VAL           => Timetracker_Config::TS_PROCESS_STATUS_ACCEPTED,
+            ],
         )
     );
     
