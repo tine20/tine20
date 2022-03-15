@@ -62,7 +62,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
 
         this.hasEditAccountRight = this.asAdminModule ? true : Tine.Tinebase.common.hasRight('manage_accounts', 'Felamimail');
-    
+        
         Tine.Felamimail.AccountEditDialog.superclass.initComponent.call(this);
     },
 
@@ -90,8 +90,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         } else {
             this.grantsGrid.setValue(this.record.get('grants'));
         }
-
-        this.loadEmailQuotas();
+        
         this.disableSieveTabs();
         this.disableFormFields();
     },
@@ -100,7 +99,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onAfterRecordLoad: function() {
         Tine.Felamimail.AccountEditDialog.superclass.onAfterRecordLoad.call(this);
         this.preventCheckboxEvents = false;
-        
+    
+        this.loadEmailQuotas();
         this.loadDefaultAddressbook();
     },
 
@@ -200,8 +200,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     item.setDisabled(true);
                     break;
                 case 'emailMailQuota':
+                    item.setDisabled(! this.emailImapUser.hasOwnProperty('emailMailQuota') || ! this.hasEditAccountRight);
+                    break;
                 case 'emailSieveQuota':
-                    item.setDisabled(! this.record.data?.email_imap_user || ! this.hasEditAccountRight);
+                    item.setDisabled(! this.emailImapUser.hasOwnProperty('emailSieveQuota') || ! this.hasEditAccountRight);                    
                     break;
                 case 'container_id':
                     item.setDisabled(this.record.get('visibility') === 'hidden');
@@ -300,8 +302,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         if (this.asAdminModule) {
             this.saveInAdbFields = Tine.Admin.UserEditDialog.prototype.getSaveInAddessbookFields(this, this.record.get('type') === 'system');
+            this.emailImapUser = this.record.data?.email_imap_user;
         } else {
             this.saveInAdbFields = [];
+            this.emailImapUser = [];
         }
         
         var commonFormDefaults = {
@@ -505,31 +509,30 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: 'emailMailQuota',
                         xtype: 'extuxbytesfield',
                         disabled: true,
-                        hidden: !this.asAdminModule
-                    },
-                    {
+                        hidden: !this.asAdminModule || ! this.emailImapUser.hasOwnProperty('emailMailQuota')
+                    }],
+                    [{
                         fieldLabel: 'Current Mailbox size',
                         name: 'emailMailSize',
                         xtype: 'extuxbytesfield',
                         disabled: true,
-                        hidden: !this.asAdminModule
-                    },
-                    {
+                        hidden: !this.asAdminModule || ! this.emailImapUser.hasOwnProperty('emailMailSize')
+                    }],
+                    [{
                         fieldLabel: 'Sieve Quota',
                         emptyText: 'no quota set',
                         name: 'emailSieveQuota',
                         xtype: 'extuxbytesfield',
                         disabled: true,
-                        hidden: !this.asAdminModule
-                    },
-                    {
+                        hidden: !this.asAdminModule || ! this.emailImapUser.hasOwnProperty('emailSieveQuota')
+                    }],
+                    [{
                         fieldLabel: 'Current Sieve size',
                         name: 'emailSieveSize',
                         xtype: 'extuxbytesfield',
                         disabled: true,
-                        hidden: !this.asAdminModule
-                    }
-                ]
+                        hidden: !this.asAdminModule || ! this.emailImapUser.hasOwnProperty('emailSieveSize')
+                    }]
                 ]
             }, {
                 title: this.app.i18n._('SMTP'),
@@ -1119,11 +1122,15 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     loadEmailQuotas: function () {
         if (this.asAdminModule ) {
-            if (this.record.data?.email_imap_user) {
-                this.getForm().findField('emailMailQuota').setValue(this.record.data.email_imap_user.emailMailQuota);
-                this.getForm().findField('emailMailSize').setValue(this.record.data.email_imap_user.emailMailSize);
-                this.getForm().findField('emailSieveQuota').setValue(this.record.data.email_imap_user.emailSieveQuota);
-                this.getForm().findField('emailSieveSize').setValue(this.record.data.email_imap_user.emailSieveSize);
+            this.emailImapUser = this.record.data?.email_imap_user;
+            
+            if (this.emailImapUser.hasOwnProperty('emailMailQuota')) {
+                this.getForm().findField('emailMailQuota').setValue(this.emailImapUser.emailMailQuota);
+                this.getForm().findField('emailMailSize').setValue(this.emailImapUser.emailMailSize);
+            }
+            if (this.emailImapUser.hasOwnProperty('emailSieveQuota')) {
+                this.getForm().findField('emailSieveQuota').setValue(this.emailImapUser.emailSieveQuota);
+                this.getForm().findField('emailSieveSize').setValue(this.emailImapUser.emailSieveSize);
             }
         }
     },
@@ -1203,8 +1210,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     updateEmailQuotas: function () {
         if (this.asAdminModule) {
-            if (this.record.data?.email_imap_user) {
+            if (this.emailImapUser.hasOwnProperty('emailMailQuota')) {
                 this.record.data.email_imap_user.emailMailQuota = this.getForm().findField('emailMailQuota').getValue();
+            }
+    
+            if (this.emailImapUser.hasOwnProperty('emailSieveQuota')) {
                 this.record.data.email_imap_user.emailSieveQuota = this.getForm().findField('emailSieveQuota').getValue();
             }
         }
