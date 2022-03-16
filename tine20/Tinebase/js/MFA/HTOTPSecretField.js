@@ -52,7 +52,7 @@ const HTOTOPSecretField = Ext.extend(Ext.form.FieldSet, {
     setValue: function(value, record) {
         const supr = Ext.form.TextField.prototype.setValue.createDelegate(this.secretField);
         
-        if (!value && !record.id) {
+        if (!value && [0, "0"].indexOf(record.id) >= 0) {
             supr(i18n._('Generating secret key ...'));
             this.secretField.setDisabled(true);
             import(/* webpackChunkName: "Tinebase/js/rfc4648" */ 'rfc4648').then((module) => {

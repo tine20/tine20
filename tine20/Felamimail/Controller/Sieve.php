@@ -642,10 +642,12 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $timezone = Tinebase_Core::getUserTimezone();
         $representatives = ($vacation->contact_ids) ? Addressbook_Controller_Contact::getInstance()->getMultiple($vacation->contact_ids) : array();
         if ($vacation->contact_ids && count($representatives) > 0) {
-            // sort representatives
+            // sort and expand representatives
             $representativesArray = array();
             foreach ($vacation->contact_ids as $id) {
-                $representativesArray[] = $representatives->getById($id);
+                if ($contact = $representatives->getById($id)) {
+                    $representativesArray[] = $contact;
+                }
             }
         }
         try {

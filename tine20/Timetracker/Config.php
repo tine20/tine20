@@ -38,6 +38,11 @@ class Timetracker_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const STATUS ='status';
+
+    const TS_PROCESS_STATUS = 'tsProcessStatus';
+    const TS_PROCESS_STATUS_REQUESTED = 'requested';
+    const TS_PROCESS_STATUS_ACCEPTED = 'accepted';
+    const TS_PROCESS_STATUS_DECLINED = 'declined';
     
 
     /**
@@ -91,8 +96,23 @@ class Timetracker_Config extends Tinebase_Config_Abstract
                 ),
                 'default' => Timetracker_Model_Timeaccount::STATUS_NOT_YET_BILLED,
             )
-        )
+        ),
+        self::TS_PROCESS_STATUS => [
+            self::LABEL                 => 'Timesheet Process Status',
+            self::DESCRIPTION           => 'Timesheet Process Status',
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => self::TS_PROCESS_STATUS_ACCEPTED, 'value' => 'accepted', 'system' => true],
+                    ['id' => self::TS_PROCESS_STATUS_DECLINED, 'value' => 'declined', 'system' => true],
+                    ['id' => self::TS_PROCESS_STATUS_REQUESTED, 'value' => 'requested', 'system' => true],
+                ],
+                self::DEFAULT_STR           => self::TS_PROCESS_STATUS_ACCEPTED,
+            ],
+        ],
     ];
+
     /**
      * holds the instance of the singleton
      *

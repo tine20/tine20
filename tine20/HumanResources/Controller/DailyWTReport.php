@@ -60,6 +60,8 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
     protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::READ_TIME_DATA];
     protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::READ_TIME_DATA];
 
+    protected $allowCorrectionUpdate = false;
+
     /**
      * the constructor
      *
@@ -654,6 +656,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
     {
         $filterData = [
             ['field' => 'account_id', 'operator' => 'equals', 'value' => $this->_employee->account_id],
+            ['field' => 'process_status', 'operator' => 'equals', 'value' => Timetracker_Config::TS_PROCESS_STATUS_ACCEPTED],
             ['field' => 'start_date', 'operator' => 'after_or_equals', 'value' => $this->_startDate->format('Y-m-d')],
             ['field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $this->_endDate->format('Y-m-d')],
         ];
@@ -689,6 +692,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             ['field' => 'employee_id', 'operator' => 'equals', 'value' => $this->_employee->getId()],
             ['field' => 'lastday_date', 'operator' => 'after_or_equals', 'value' => $start],
             ['field' => 'firstday_date', 'operator' => 'before_or_equals', 'value' => $end],
+            ['field' => HumanResources_Model_FreeTime::FLD_PROCESS_STATUS, 'operator' => 'equals', 'value' => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED],
         ];
 
         // fetch all freetime of an employee between start and end
@@ -756,10 +760,12 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             $allowedProperties = [
                 'evaluation_period_start_correction' => true,
                 'evaluation_period_end_correction' => true,
-                'working_time_correction' => true,
                 'working_time_target_correction' => true,
                 'user_remark' => true,
             ];
+            if ($this->allowCorrectionUpdate) {
+                $allowedProperties[HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_CORRECTION] = true;
+            }
             foreach ($_record->getFields() as $prop) {
                 if (!isset($allowedProperties[$prop])) {
                     $_record->{$prop} = $_oldRecord->{$prop};
@@ -794,5 +800,33 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                 break;
             }
         }
+    }
+
+    public function recalcCorrection(string $id)
+    {
+        $correction = 0;
+        foreach (HumanResources_Controller_WTRCorrection::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_WTRCorrection::class,[
+                ['field' => HumanResources_Model_WTRCorrection::FLD_WTR_DAILY, 'operator' => 'equals', 'value' => $id],
+                ['field' => HumanResources_Model_WTRCorrection::FLD_STATUS, 'operator' => 'equals', 'value' => HumanResources_Config::WTR_CORRECTION_STATUS_ACCEPTED],
+            ])) as $c) {
+            $correction += intval($c->{HumanResources_Model_WTRCorrection::FLD_CORRECTION});
+        }
+
+        $oldAclVal = $this->doContainerACLChecks(false);
+        $oldCorrectionVal = $this->allowCorrectionUpdate;
+        $this->allowCorrectionUpdate = true;
+        $raii = new Tinebase_RAII(function() use($oldAclVal, $oldCorrectionVal) {
+            $this->doContainerACLChecks($oldAclVal);
+            $this->allowCorrectionUpdate = $oldCorrectionVal;
+        });
+
+        $record = $this->get($id);
+        if (intval($record->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_CORRECTION}) !== $correction) {
+            $record->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_CORRECTION} = $correction;
+            $this->update($record);
+        }
+
+        unset($raii);
     }
 }

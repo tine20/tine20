@@ -4,7 +4,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -74,7 +74,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
      */
     protected static $_modelConfiguration = [
         'version' => 3,
-        'recordName' => 'Daily Working Time Report',
+        'recordName' => 'Daily Working Time Report', // gettext('GENDER_Daily Working Time Report')
         'recordsName' => 'Daily Working Time Reports', // ngettext('Daily Working Time Report', 'Daily Working Time Reports', n)
         'containerProperty' => null,
         'hasRelations' => true,
@@ -129,6 +129,12 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 'employee_id__date' => [
                     self::COLUMNS       => ['employee_id', 'date'],
                 ],
+            ],
+        ],
+
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                HumanResources_Model_MonthlyWTReport::FLDS_CORRECTIONS => [],
             ],
         ],
 
@@ -339,6 +345,20 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::TYPE                  => 'boolean',
                 self::DEFAULT_VAL           => 0,
                 self::COPY_OMIT             => true,
+            ],
+            HumanResources_Model_MonthlyWTReport::FLDS_CORRECTIONS => [
+                self::TYPE                          => self::TYPE_RECORDS,
+                self::LABEL                         => 'Working Time Correction Requests', // _('Working Time Correction Requests')
+                self::NULLABLE                      => true,
+                self::DOCTRINE_IGNORE               => true,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => HumanResources_Config::APP_NAME,
+                    self::MODEL_NAME                    => HumanResources_Model_WTRCorrection::MODEL_NAME_PART,
+                    self::REF_ID_FIELD                  => HumanResources_Model_WTRCorrection::FLD_WTR_DAILY,
+                ],
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
         ]
     ];

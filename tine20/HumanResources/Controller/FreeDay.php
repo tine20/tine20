@@ -21,11 +21,11 @@ class HumanResources_Controller_FreeDay extends Tinebase_Controller_Record_Abstr
     use Tinebase_Controller_SingletonTrait;
     use HumanResources_Controller_CheckFilterACLEmployeeTrait;
 
-    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
-    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
-    protected $_requiredFilterACLupdate  = [HumanResources_Model_DivisionGrants::UPDATE_EMPLOYEE_DATA];
-    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
-    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
+    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::READ_CHANGE_REQUEST];
+    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::READ_CHANGE_REQUEST];
+    protected $_requiredFilterACLupdate  = [HumanResources_Model_DivisionGrants::UPDATE_CHANGE_REQUEST];
+    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::READ_CHANGE_REQUEST];
+    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::READ_CHANGE_REQUEST];
 
     /**
      * the constructor
@@ -40,6 +40,10 @@ class HumanResources_Controller_FreeDay extends Tinebase_Controller_Record_Abstr
         // activate this if you want to use containers
         $this->_doContainerACLChecks = true;
         $this->_traitDelegateAclField = 'freetime_id';
+        $this->_traitGetOwnGrants = [
+            HumanResources_Model_DivisionGrants::READ_OWN_DATA,
+            HumanResources_Model_DivisionGrants::CREATE_OWN_CHANGE_REQUEST
+        ];
     }
 
     protected function _getCheckFilterACLTraitFilter()
@@ -54,35 +58,6 @@ class HumanResources_Controller_FreeDay extends Tinebase_Controller_Record_Abstr
             ]);
     }
 
-    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
-    {
-        if (!$this->_doContainerACLChecks) {
-            return true;
-        }
-
-        // if we have manage_employee right, we have all grants
-        if (Tinebase_Core::getUser()->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::MANAGE_EMPLOYEE)) {
-            return true;
-        }
-
-        switch ($_action) {
-            case self::ACTION_GET:
-                try {
-                    HumanResources_Controller_FreeTime::getInstance()->get($_record->getIdFromProperty('freetime_id'));
-                } catch (Tinebase_Exception_AccessDenied $e) {
-                    if ($_throw) {
-                        throw new Tinebase_Exception_AccessDenied($_errorMessage);
-                    } else {
-                        return false;
-                    }
-                }
-                return true;
-            case self::ACTION_CREATE:
-            case self::ACTION_UPDATE:
-            case self::ACTION_DELETE:
-                $_action = HumanResources_Model_DivisionGrants::UPDATE_EMPLOYEE_DATA;
-                break;
-        }
-        return parent::_checkGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
-    }
+    // we do not implement this at all, we solely depend on free times doing its job (vie delegated acl)
+    // protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
 }

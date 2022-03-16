@@ -34,7 +34,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     
     // private
     recordFromJson: true,
-    
+    evalGrants: false,
+
     /**
      * inits the component
      */
@@ -61,8 +62,9 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         if (statusPicker && this.record.get('created_by')) {
             statusPicker.setValue(this.record.get('status'));
         }
-        
-        this.datePicker.setValue(Date.parseDate(_.get(this.record, 'data.firstday_date'), Date.patterns.ISO8601Long) || new Date());
+
+        const firstDay = _.get(this.record, 'data.firstday_date');
+        this.datePicker.setValue((Ext.isDate(firstDay) ? firstDay : Date.parseDate(firstDay, Date.patterns.ISO8601Long)) || new Date());
         this.datePicker.setSelected(_.map(_.get(this.record, 'data.freedays', []), (day) => {
             return Date.parseDate(day.date, Date.patterns.ISO8601Long);
         }));
@@ -82,6 +84,12 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             typeString = this.app.i18n._('Free Time');
         }
         let isNewRecord = !this.record.get('creation_time');
+        const grants = _.get(employee, 'data.division_id.account_grants', {});
+        const isNew = !this.record.get('creation_time');
+        const isOwn = Tine.Tinebase.registry.get('currentAccount').accountId === _.get(employee, 'data.account_id.accountId');
+        const processStatus = this.processStatusPicker.getValue();
+        const allowUpdate = grants.adminGrant || grants.updateChangeRequestGrant ||
+            (processStatus === 'REQUESTED' && (isNewRecord || (isOwn && grants.createOwnChangeRequestGrant) || grants.createChangeRequestGrant));
 
         if (!isNewRecord) {
             this.window.setTitle(String.format(this.app.i18n._('Edit {0} for {1}'), this.app.i18n._hidden(typeString), employeeName));
@@ -89,14 +97,48 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'),  this.app.i18n._hidden(typeString), employeeName));
         }
 
-        this.employeePicker.setDisabled(!isNewRecord || this.fixedFields.indexOfKey('employee_id') >= 0);
-        this.typePicker.setDisabled(!isNewRecord || this.fixedFields.indexOfKey('type') >= 0);
-        
-        this.sicknessStatusPicker[type.id === 'sickness' ? 'show' : 'hide']();
-        this.vacationStatusPicker[type.id === 'vacation' ? 'show' : 'hide']();
+        this.employeePicker.setReadOnly(!isNewRecord || this.fixedFields.indexOfKey('employee_id') >= 0);
+        this.typePicker.setReadOnly(!isNewRecord || this.fixedFields.indexOfKey('type') >= 0);
+
+        this.processStatusPicker.setDisabled(!(grants.updateChangeRequestGrant || grants.adminGrant));
+        if (isNew && employee !== this.processStatusPicker.employee && (grants.updateChangeRequestGrant || grants.adminGrant)) {
+            this.processStatusPicker.employee = employee;
+            this.processStatusPicker.setValue('ACCEPTED');
+        }
+        this.typeStatusPicker[type.id === 'sickness' ? 'show' : 'hide']();
         this.accountPicker[type.id === 'vacation' ? 'show' : 'hide']();
-        this.accountPicker.setDisabled(!employee);
+        this.accountPicker.setReadOnly(!employee);
+        this.possibleVacationDays[type.id === 'vacation' ? 'show' : 'hide']();
+        this.requestedDaysField[type.id === 'vacation' ? 'show' : 'hide']();
+        this.acceptedDaysField[type.id === 'vacation' ? 'show' : 'hide']();
         this.remainingDaysField[type.id === 'vacation' ? 'show' : 'hide']();
+
+        [this.typeStatusPicker, this.datePicker, this.getForm().findField('description'), this.attachmentsPanel, this.action_saveAndClose].forEach((item) => {
+            item[item.setReadOnly ? 'setReadOnly' : 'setDisabled'](!allowUpdate);
+        });
+
+        // compute vacation values
+        const year = _.get(this, 'accountPicker.selectedRecord.data.year');
+        const feastAndFreeDays = _.get(this.feastAndFreeDaysCache, year);
+
+        const currentDays = this.record.get('days_count');
+        const currentStatus = this.form.findField('process_status').getValue();
+        const originalDays = this.record.get('creation_time') ? +_.get(this.record, 'modified.days_count', currentDays) : 0;
+        const originalStatus = this.record.get('creation_time') ? _.get(this.record, 'modified.process_status', currentStatus) : 'REQUESTED';
+
+        const possible = _.get(feastAndFreeDays, 'vacation.possible_vacation_days', 0);
+        this.possibleVacationDays.setValue(year && feastAndFreeDays ?  possible : '');
+
+        let requested = _.get(feastAndFreeDays, 'vacation.scheduled_requested_vacation_days', 0);
+        requested = requested - (originalStatus === 'REQUESTED' ? originalDays : 0) + (currentStatus === 'REQUESTED' ? currentDays : 0);
+        this.requestedDaysField.setValue(year && feastAndFreeDays ? requested : '');
+
+        let taken = _.get(feastAndFreeDays, 'vacation.scheduled_taken_vacation_days', 0);
+        taken = taken - (originalStatus === 'ACCEPTED' ? originalDays : 0) + (currentStatus === 'ACCEPTED' ? currentDays : 0);
+        this.acceptedDaysField.setValue(year && feastAndFreeDays ? taken : '');
+
+        const remaining = possible - requested - taken;
+        this.remainingDaysField.setValue(year && feastAndFreeDays ? remaining : '');
     },
     
     /**
@@ -311,22 +353,22 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     
     initStatusPickers: function() {
         var statusPickerDefaults = {
-            fieldLabel: this.app.i18n._('Status'),
             xtype: 'widget-keyfieldcombo',
             app: 'HumanResources',
-            width: 115,
+            columnWidth: 1/2,
         };
-
-        this.sicknessStatusPicker = new Tine.Tinebase.widgets.keyfield.ComboBox(
+        this.processStatusPicker = new Tine.Tinebase.widgets.keyfield.ComboBox(
             Ext.apply({
-                keyFieldName: 'sicknessStatus',
-                name: 'sicknessStatus'
+                fieldLabel: this.app.i18n._('Process status'),
+                keyFieldName: 'freeTimeProcessStatus',
+                name: 'process_status'
             }, statusPickerDefaults)
         );
-        this.vacationStatusPicker = new Tine.Tinebase.widgets.keyfield.ComboBox(
+        this.typeStatusPicker = new Tine.Tinebase.widgets.keyfield.ComboBox(
             Ext.apply({
-                keyFieldName: 'vacationStatus',
-                name: 'vacationStatus'
+                fieldLabel: this.app.i18n._('Type specific status'),
+                keyFieldName: 'freeTimeTypeStatus',
+                name: 'freeTimeTypeStatus'
             }, statusPickerDefaults)
         );
     },
@@ -341,118 +383,77 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
 
     initTypePicker: function() {
-        this.typePicker = Tine.widgets.form.FieldManager.get('HumanResources', 'FreeTime', 'type', Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
+        this.typePicker = Tine.widgets.form.FieldManager.get('HumanResources', 'FreeTime', 'type', Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG, {
+            additionalFilters: [{field: 'allow_planning', operator: 'equals', value: true}]
+        });
     },
 
-    getFormItems: function() {
+    getRecordFormItems: function() {
         this.initDatePicker();
         this.initAccountPicker();
         this.initStatusPickers();
         this.initEmployeePicker();
         this.initTypePicker();
 
+        this.possibleVacationDays = new Ext.form.NumberField({
+            fieldLabel: this.app.i18n._('Entitlement'),
+            columnWidth: 1/4,
+            name: 'possible_vacation_days',
+            readOnly: true,
+            allowBlank: true
+        });
+        this.requestedDaysField = new Ext.form.NumberField({
+            fieldLabel: this.app.i18n._('Requested'),
+            columnWidth: 1/4,
+            name: 'scheduled_requested_vacation_days',
+            readOnly: true,
+            allowBlank: true
+        });
+        this.acceptedDaysField = new Ext.form.NumberField({
+            fieldLabel: this.app.i18n._('Accepted'),
+            columnWidth: 1/4,
+            name: 'scheduled_taken_vacation_days',
+            readOnly: true,
+            allowBlank: true
+        });
         this.remainingDaysField = new Ext.form.NumberField({
             fieldLabel: this.app.i18n._('Remaining'),
-            columnWidth: 1/3,
+            columnWidth: 1/4,
             name: 'scheduled_remaining_vacation_days',
             readOnly: true,
-            allowBlank: true,
-            
-            checkState: () => {
-                const year = _.get(this, 'accountPicker.selectedRecord.data.year');
-                const feastAndFreeDays = _.get(this.feastAndFreeDaysCache, year);
-                let remaining = _.get(feastAndFreeDays, 'remainingVacation', 0);
-
-                const currentDays = this.record.get('days_count');
-                const originalDays = this.record.get('creation_time') ? +_.get(this.record, 'modified.days_count', currentDays) : 0;
-                remaining = remaining + originalDays - currentDays;
-
-                this.form.findField('scheduled_remaining_vacation_days').setValue(year && feastAndFreeDays ? remaining : '');
-            }
+            allowBlank: true
         });
-        
+
         return {
-            xtype: 'tabpanel',
-            plain:true,
-            activeTab: 0,
-            border: false,
-            items:[{
-                title: this.app.i18n._('Freetime'),
-                autoScroll: true,
-                border: false,
-                frame: true,
-                layout: 'border',
-                items: [{
-                    region: 'center',
-                    layout: 'hfit',
-                    border: false,
-                    items: [{
-                        xtype: 'fieldset',
-                        autoHeight: true,
-                        title: this.app.i18n._('Days'),
-                        items: [{
-                            xtype: 'columnform',
-                            labelAlign: 'top',
-                            formDefaults: {
-                                xtype:'textfield',
-                                anchor: '100%',
-                                labelSeparator: '',
-                                allowBlank: false,
-                                columnWidth: 1
-                            },
-                            items: [
-                                [this.employeePicker],
-                                [this.typePicker],
-                                [this.sicknessStatusPicker],
-                                [this.vacationStatusPicker],
-                                [this.accountPicker],
-                                [this.remainingDaysField],
-                                [{
-                                    xtype: 'panel',
-                                    cls: 'HumanResources x-form-item',
-                                    style: {
-                                        'float': 'right',
-                                        margin: '0 5px 10px 0'
-                                    },
-                                    items: [{html: '<label style="display:block; margin-bottom: 5px">' + this.app.i18n._('Select Days') + '</label>'}, this.datePicker]
-                                }]
-                            ]
-                        }]
+            xtype: 'fieldset',
+            autoHeight: true,
+            title: this.app.i18n._('Days'),
+            items: [{
+                xtype: 'columnform',
+                labelAlign: 'top',
+                formDefaults: {
+                    xtype:'textfield',
+                    anchor: '100%',
+                    labelSeparator: '',
+                    allowBlank: false,
+                    columnWidth: 1
+                },
+                items: [
+                    [this.employeePicker],
+                    [this.typePicker],
+                    [this.processStatusPicker, this.typeStatusPicker],
+                    [this.accountPicker],
+                    [this.possibleVacationDays, this.acceptedDaysField, this.requestedDaysField, this.remainingDaysField],
+                    [{
+                        xtype: 'panel',
+                        cls: 'HumanResources x-form-item',
+                        style: {
+                            'float': 'right',
+                            margin: '0 5px 10px 0'
+                        },
+                        items: [{html: '<label style="display:block; margin-bottom: 5px">' + this.app.i18n._('Select Days') + '</label>'}, this.datePicker]
                     }]
-                }, {
-                    // activities and tags
-                    layout: 'ux.multiaccordion',
-                    animate: true,
-                    region: 'east',
-                    width: 210,
-                    split: true,
-                    collapsible: true,
-                    collapseMode: 'mini',
-                    header: false,
-                    margins: '0 5 0 5',
-                    border: true,
-                    items: [
-                        new Ext.Panel({
-                            title: this.app.i18n._('Description'),
-                            iconCls: 'descriptionIcon',
-                            layout: 'form',
-                            labelAlign: 'top',
-                            border: false,
-                            items: [{
-                                style: 'margin-top: -4px; border 0px;',
-                                labelSeparator: '',
-                                xtype: 'textarea',
-                                name: 'description',
-                                hideLabel: true,
-                                grow: false,
-                                preventScrollbars: false,
-                                anchor: '100% 100%',
-                                emptyText: this.app.i18n._('Enter description'),
-                                requiredGrant: 'editGrant'
-                            }]
-                        })
-                    ]
-                }]
+                ]
             }]
         };
     }

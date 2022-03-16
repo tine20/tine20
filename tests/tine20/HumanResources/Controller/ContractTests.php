@@ -75,6 +75,7 @@ class HumanResources_Controller_ContractTests extends HumanResources_TestCase
             'status'        => 'ACCEPTED',
             'employee_id'   => $employee->getId(),
             'account_id'    => $myAccount->getId(),
+            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_REQUESTED,
             'type'          => 'vacation',
             'freedays'      => array(
                 array('date' => $firstDayDate, 'duration' => 1)

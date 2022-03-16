@@ -33,7 +33,7 @@ class HumanResources_Model_FreeDay extends Tinebase_Record_Abstract
     protected static $_modelConfiguration = array(
         'version'           => 3,
         'recordName'        => 'Free Day', // ngettext('Free Day', 'Free Days', n)
-        'recordsName'       => 'Free Days',
+        'recordsName'       => 'Free Days', // gettext('GENDER_Free Day')
         'hasRelations'      => FALSE,
         'hasCustomFields'   => FALSE,
         'hasNotes'          => FALSE,

@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -20,35 +20,46 @@
  */
 class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
 {
-    /**
-     * holds the configuration object (must be set in the concrete class)
-     *
-     * @var Tinebase_ModelConfiguration
-     */
-    protected static $_configurationObject;
-    
+    public const MODEL_NAME_PART = 'FreeTime';
+
+    public const TABLE_NAME = 'humanresources_freetime';
+    public const FLD_TYPE_STATUS = 'type_status';
+    public const FLD_PROCESS_STATUS = 'process_status';
+
     /**
      * Holds the model configuration
      *
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'         => 9,
+        'version'         => 10,
         'recordName'      => 'Free Time', // ngettext('Free Time', 'Free Times', n)
-        'recordsName'     => 'Free Times',
+        'recordsName'     => 'Free Times', // gettext('GENDER_Free Time')
         'hasRelations'    => FALSE,
         'hasCustomFields' => FALSE,
         'hasNotes'        => FALSE,
         'hasTags'         => FALSE,
+        'hasAttachments'  => TRUE,
         'modlogActive'    => TRUE,
         'isDependent'     => TRUE,
-        'createModule'    => FALSE,
+        'createModule'    => TRUE,
         'titleProperty'   => 'description',
         'appName'         => 'HumanResources',
         'modelName'       => 'FreeTime',
-        'requiredRight'                 => HumanResources_Acl_Rights::MANAGE_WORKINGTIME,
         self::DELEGATED_ACL_FIELD => 'employee_id',
-
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'employee_id' => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'division_id' => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
+                                Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
         'associations' => [
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
                 'employee_id' => [
@@ -71,7 +82,7 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
         ],
 
         'table'             => array(
-            'name'    => 'humanresources_freetime',
+            'name'    => self::TABLE_NAME,
             'indexes' => array(
                 'employee_id' => array(
                     'columns' => array('employee_id'),
@@ -107,7 +118,7 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                 )
             ),
             'type'            => array(
-                'label' => 'Type', // _('Type')
+                'label' => 'Absence reason', // _('Absence reason')
                 'type'  => self::TYPE_RECORD,
                 'config' => array(
                     'appName'     => HumanResources_Config::APP_NAME,
@@ -122,13 +133,22 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
             ),
-            'status'          => array(
+            self::FLD_TYPE_STATUS          => array(
                 'label' => 'Status', // _('Status')
-                'queryFilter' => TRUE,
                 'type'  => 'keyfield',
-                'name'  => HumanResources_Config::VACATION_STATUS,
+                'name'  => HumanResources_Config::FREE_TIME_TYPE_STATUS,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
+                self::DEFAULT_VAL => null,
+            ),
+            self::FLD_PROCESS_STATUS          => array(
+                'label' => 'Status', // _('Status')
+                'type'  => 'keyfield',
+                'name'  => HumanResources_Config::FREE_TIME_PROCESS_STATUS,
+                'validators' => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
             ),
             'firstday_date'   => array(
                 'label' => 'First Day', // _('First Day')
@@ -158,9 +178,17 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                    'appName' => 'HumanResources',
                    'modelName'   => 'FreeDay',
                    'refIdField'  => 'freetime_id',
-                   'dependentRecords' => TRUE
+                   'dependentRecords' => TRUE,
+                   self::IGNORE_ACL => true,
                ),
            ),
         )
     );
+
+    /**
+     * holds the configuration object (must be set in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject;
 }

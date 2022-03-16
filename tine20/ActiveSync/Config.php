@@ -33,6 +33,8 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
      */
     const DISABLE_ACCESS_LOG = 'disableaccesslog';
 
+    const DISABLE_REMOTE_RESET = 'disableremotereset';
+
     /**
      * MAX_FILTER_TYPE_EMAIL
      * 
@@ -93,6 +95,17 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
                 // '/^Android-Mail.*/', // example if you like to deny all Android-Mail* clients
             ],
         ),
+        self::DISABLE_REMOTE_RESET => [
+            //_('Disable Remote Reset Action')
+            'label'                 => 'Disable Remote Reset Action',
+            //_('Disable Remote Reset Action AdminPanel')
+            'description'           => 'Disable Remote Reset Action on AdminPanel',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => FALSE,
+        ],
         self::DISABLE_ACCESS_LOG => array(
         //_('Disable Access Log')
             'label'                 => 'Disable Access Log creation',

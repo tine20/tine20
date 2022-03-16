@@ -63,6 +63,17 @@ class HumanResources_TestCase extends TestCase
         parent::setUp();
     }
 
+    protected function tearDown(): void
+    {
+        $this->_feast_calendar = null;
+        $this->_department = null;
+        $this->_40hoursWorkingTimeScheme = null;
+        $this->employee = null;
+        $this->division = null;
+
+        parent::tearDown();
+    }
+
 
     protected function _createBasicData($account = null)
     {

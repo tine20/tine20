@@ -24,7 +24,10 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
     protected $_contractController = NULL;
 
     protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
-    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
+    protected $_requiredFilterACLget = [
+        HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+        '|' . HumanResources_Model_DivisionGrants::READ_BASIC_EMPLOYEE_DATA
+    ];
     protected $_requiredFilterACLupdate  = [HumanResources_Model_DivisionGrants::UPDATE_EMPLOYEE_DATA];
     protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
     protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
@@ -166,16 +169,19 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
         // find out free days (vacation, sickness)
         $freetimeController = HumanResources_Controller_FreeTime::getInstance();
         
-        $filter = new HumanResources_Model_FreeTimeFilter(array(), 'AND');
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())));
+        $filter = new HumanResources_Model_FreeTimeFilter([
+            ['field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId()],
+            ['field' => HumanResources_Model_FreeTime::FLD_PROCESS_STATUS, 'operator' => 'equals', 'value' => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED],
+            ['field' => 'type', 'operator' => 'equals', 'value' => 'sickness'],
+        ], 'AND');
         
-        $freeTimes = $freetimeController->search($filter);
+        $sickness = $freetimeController->search($filter);
         
-        $unexcusedSicknessTimes = $freeTimes->filter('type', 'sickness')->filter('status', 'UNEXCUSED');
-        $excusedSicknessTimes   = $freeTimes->filter('type', 'sickness')->filter('status', 'EXCUSED');
+        $unexcusedSicknessTimes = $sickness->filter(HumanResources_Model_FreeTime::FLD_TYPE_STATUS, HumanResources_Config::FREE_TIME_TYPE_STATUS_UNEXCUSED);
+        $excusedSicknessTimes   = $sickness->filter(HumanResources_Model_FreeTime::FLD_TYPE_STATUS, HumanResources_Config::FREE_TIME_TYPE_STATUS_EXCUSED);
         
         $freedayController = HumanResources_Controller_FreeDay::getInstance();
-        $filter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
+        $filter = new HumanResources_Model_FreeDayFilter([], 'AND');
         
         $unexcusedSicknessFilter = clone $filter;
         $unexcusedSicknessFilter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $unexcusedSicknessTimes->id)));
@@ -232,7 +238,8 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
 
         $freeTimes = $freetimeController->search($filter);
         
-        $acceptedVacationTimes  = $freeTimes->filter('type', 'vacation')->filter('status', '/(?! DECLINED)/', true);
+        $acceptedVacationTimes  = $freeTimes->filter('type', 'vacation')->filter(HumanResources_Model_FreeTime::FLD_PROCESS_STATUS, HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED);
+        $requestedVacationTimes  = $freeTimes->filter('type', 'vacation')->filter(HumanResources_Model_FreeTime::FLD_PROCESS_STATUS, HumanResources_Config::FREE_TIME_PROCESS_STATUS_REQUESTED);
 
         $freedayController = HumanResources_Controller_FreeDay::getInstance();
         $filter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
@@ -246,13 +253,24 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
             return $actualUntil ? $freeday->date < $actualUntil : true;
         });
 
+        $requestedVacationFilter = clone $filter;
+        $requestedVacationFilter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $requestedVacationTimes->id)));
+        $scheduledRequestedVacationDays = $freedayController->search($requestedVacationFilter);
+
+        $actualRequestedVacationDays = $scheduledRequestedVacationDays->filter(function($freeday) use ($actualUntil) {
+            //@TODO: convert date
+            return $actualUntil ? $freeday->date < $actualUntil : true;
+        });
+
         return [
             'vacation_expiary_date'             => HumanResources_Config::getInstance()->getVacationExpirationDate($account->year),
             'possible_vacation_days'            => intval($possibleVacationDays),
             'scheduled_taken_vacation_days'     => $scheduledTakenVacationDays->count(),
-            'scheduled_remaining_vacation_days' => intval(floor($possibleVacationDays)) - $scheduledTakenVacationDays->count(),
+            'scheduled_requested_vacation_days' => $scheduledRequestedVacationDays->count(),
+            'scheduled_remaining_vacation_days' => intval(floor($possibleVacationDays)) - $scheduledRequestedVacationDays->count() - $scheduledTakenVacationDays->count(),
             'actual_until'                      => $actualUntil,
             'actual_taken_vacation_days'        => $actualTakenVacationDays->count(),
+            'actual_requested_vacation_days'    => $actualRequestedVacationDays->count(),
             'actual_remaining_vacation_days'    => intval(floor($possibleVacationDays)) - $actualTakenVacationDays->count()
         ];
     }

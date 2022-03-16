@@ -205,7 +205,8 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
     onNewentry: function(recordData) {
         const defaultData = Ext.isFunction(this.recordClass.getDefaultData) ?
                 this.recordClass.getDefaultData() : {};
-        const newRecord = new this.recordClass(defaultData, Ext.id());
+        // @TODO shouldn't have all new (remote) records 0|"0" as id?
+        const newRecord = new this.recordClass(defaultData, recordData.id ?? defaultData.id ?? Tine.Tinebase.data.Record.generateUID());
 
         _.each(recordData, function(val, key) {
             if (val) {

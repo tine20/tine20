@@ -17,8 +17,17 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE015_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE015_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE015_UPDATE004 = __CLASS__ . '::update004';
+    const RELEASE015_UPDATE005 = __CLASS__ . '::update005';
 
     static protected $_allUpdates = [
+        // we'll do some querys here and we want them done before any schema tool comes along to play
+        self::PRIO_TINEBASE_BEFORE_STRUCT   => [
+            self::RELEASE015_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
+            ],
+        ],
         self::PRIO_NORMAL_APP_STRUCTURE     => [
             self::RELEASE015_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
@@ -27,6 +36,10 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE015_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -86,5 +99,63 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
         } finally {
             $divisionCtrl->doContainerACLChecks($oldValue);
         }
+    }
+
+    public function update004()
+    {
+        $this->getDb()->query('ALTER TABLE ' . SQL_TABLE_PREFIX . HumanResources_Model_FreeTime::TABLE_NAME .
+            ' CHANGE `status` `' . HumanResources_Model_FreeTime::FLD_TYPE_STATUS . '` varchar(40)');
+
+        $this->addApplicationUpdate('HumanResources', '15.4', self::RELEASE015_UPDATE004);
+    }
+
+    public function update005()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        Setup_SchemaTool::updateSchema([
+            HumanResources_Model_FreeTime::class,
+            HumanResources_Model_FreeTimeType::class,
+        ]);
+
+        $this->getDb()->update(SQL_TABLE_PREFIX . HumanResources_Model_FreeTime::TABLE_NAME, [
+            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED
+        ]);
+
+        $this->getDb()->update(SQL_TABLE_PREFIX . HumanResources_Model_FreeTime::TABLE_NAME, [
+            HumanResources_Model_FreeTime::FLD_TYPE_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED
+        ], HumanResources_Model_FreeTime::FLD_TYPE_STATUS . ' = "IN-PROCESS"');
+
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . HumanResources_Model_FreeTime::TABLE_NAME . ' SET ' .
+            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS . ' = ' . HumanResources_Model_FreeTime::FLD_TYPE_STATUS .
+            ' WHERE ' . HumanResources_Model_FreeTime::FLD_TYPE_STATUS . $this->getDb()->quoteInto(' IN (?)', [
+                HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
+                HumanResources_Config::FREE_TIME_PROCESS_STATUS_REQUESTED,
+                HumanResources_Config::FREE_TIME_PROCESS_STATUS_DECLINED
+            ]));
+
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . HumanResources_Model_FreeTime::TABLE_NAME . ' SET ' .
+            HumanResources_Model_FreeTime::FLD_TYPE_STATUS . ' = NULL WHERE ' .
+            HumanResources_Model_FreeTime::FLD_TYPE_STATUS . $this->getDb()->quoteInto(' IN (?)', [
+                HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
+                HumanResources_Config::FREE_TIME_PROCESS_STATUS_REQUESTED,
+                HumanResources_Config::FREE_TIME_PROCESS_STATUS_DECLINED
+            ]));
+
+        HumanResources_Setup_Initialize::addFreeTimePersistenFilter();
+
+        $translate = Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME);
+        $existingFTTs = HumanResources_Controller_FreeTimeType::getInstance()->getAll();
+        foreach(HumanResources_Setup_Initialize::$freeTimeTypes as $ftt) {
+            foreach([$ftt['name'], $translate->_($ftt['name'])] as $name) {
+                $existingFTT = $existingFTTs->filter('name', $name)->getFirstRecord();
+                if ($existingFTT) {
+                    $existingFTT->color = $ftt['color'];
+                    HumanResources_Controller_FreeTimeType::getInstance()->update($existingFTT);
+                    continue 2;
+                }
+            }
+        }
+
+        $this->addApplicationUpdate('HumanResources', '15.5', self::RELEASE015_UPDATE005);
     }
 }

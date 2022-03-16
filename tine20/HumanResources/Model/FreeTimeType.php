@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiß <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2019-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -56,8 +56,8 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 2,
-        self::RECORD_NAME               => 'Absence reason',
+        self::VERSION                   => 3,
+        self::RECORD_NAME               => 'Absence reason', // gettext('GENDER_Absence reason')
         self::RECORDS_NAME              => 'Absence reasons', // ngettext('Absence reason', 'Absence reasons', n)
         self::TITLE_PROPERTY            => 'name',
         self::HAS_CUSTOM_FIELDS         => true,
@@ -108,13 +108,6 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 self::LABEL             => 'Name', // _('Name')
             ],
-//            // @TODO: have type color in modelconfig
-//            'color' => [
-//                self::TYPE              => self::TYPE_STRING,
-//                self::LENGTH            => 7,
-//                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
-//                self::LABEL             => 'Color', // _('Color')
-//            ],
             'description' => [
                 self::TYPE              => self::TYPE_FULLTEXT,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true,],
@@ -169,6 +162,12 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
                 self::QUERY_FILTER      => false,
                 self::NULLABLE          => true,
             ],
+            'color' => [
+                self::TYPE                      => self::TYPE_HEX_COLOR,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Color', // _('Color')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ]
         ]
     ];
 }
