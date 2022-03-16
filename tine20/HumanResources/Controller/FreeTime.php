@@ -21,11 +21,11 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
     use Tinebase_Controller_SingletonTrait;
     use HumanResources_Controller_CheckFilterACLEmployeeTrait;
 
-    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
-    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
-    protected $_requiredFilterACLupdate  = [HumanResources_Model_DivisionGrants::UPDATE_EMPLOYEE_DATA];
-    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
-    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
+    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::READ_CHANGE_REQUEST];
+    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::READ_CHANGE_REQUEST];
+    protected $_requiredFilterACLupdate  = [HumanResources_Model_DivisionGrants::UPDATE_CHANGE_REQUEST];
+    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::READ_CHANGE_REQUEST];
+    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::READ_CHANGE_REQUEST];
 
     /**
      * the constructor
@@ -39,10 +39,15 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         $this->_purgeRecords = TRUE;
         // activate this if you want to use containers
         $this->_doContainerACLChecks = true;
+        $this->_traitGetOwnGrants = [
+            HumanResources_Model_DivisionGrants::READ_OWN_DATA,
+            HumanResources_Model_DivisionGrants::CREATE_OWN_CHANGE_REQUEST
+        ];
     }
 
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
+        /** @var HumanResources_Model_FreeTime $_record */
         if (!$this->_doContainerACLChecks) {
             return true;
         }
@@ -52,25 +57,50 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
             return true;
         }
 
+        if (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::UPDATE_EMPLOYEE_DATA, false) ||
+                parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::GRANT_ADMIN, false)) {
+            return true;
+        }
+        if (self::ACTION_DELETE !== $_action &&
+                parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::UPDATE_CHANGE_REQUEST, false)) {
+            return true;
+        }
+
         switch ($_action) {
             case self::ACTION_GET:
-                try {
-                    HumanResources_Controller_Employee::getInstance()->get($_record->getIdFromProperty('employee_id'));
-                } catch (Tinebase_Exception_AccessDenied $e) {
-                    if ($_throw) {
-                        throw new Tinebase_Exception_AccessDenied($_errorMessage);
-                    } else {
-                        return false;
-                    }
+                if (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::READ_CHANGE_REQUEST, false) ||
+                        ($this->_checkOwnEmployee($_record) &&
+                            (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::CREATE_OWN_CHANGE_REQUEST, false) ||
+                                parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::READ_OWN_DATA, false)
+                            ))) {
+                    return true;
                 }
-                return true;
+                break;
             case self::ACTION_CREATE:
             case self::ACTION_UPDATE:
+                if (HumanResources_Config::FREE_TIME_PROCESS_STATUS_REQUESTED === $_record->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS} &&
+                        (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::CREATE_CHANGE_REQUEST, false) ||
+                            (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::CREATE_OWN_CHANGE_REQUEST, false) &&
+                            $this->_checkOwnEmployee($_record)))) {
+                    return true;
+                }
+                break;
             case self::ACTION_DELETE:
-                $_action = HumanResources_Model_DivisionGrants::UPDATE_EMPLOYEE_DATA;
                 break;
         }
-        return parent::_checkGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
+
+        throw new Tinebase_Exception_AccessDenied($_errorMessage);
+    }
+
+    protected function _checkOwnEmployee(HumanResources_Model_FreeTime $record): bool
+    {
+        $ctrl = HumanResources_Controller_Employee::getInstance();
+        $oldValue = $ctrl->doContainerACLChecks(false);
+
+        $raii = new Tinebase_RAII(function() use($oldValue, $ctrl) { $ctrl->doContainerACLChecks($oldValue); });
+        $result = $ctrl->get($record->getIdFromProperty('employee_id'))->account_id === Tinebase_Core::getUser()->getId();
+        unset($raii);
+        return $result;
     }
 
     /**
@@ -110,6 +140,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         $freeTimes = $this->search(new HumanResources_Model_FreeTimeFilter([
             ['field' => 'employee_id', 'operator' => 'equals', 'value' => $employeeId],
             ['field' => 'type',        'operator' => 'equals', 'value' => HumanResources_Model_FreeTimeType::ID_VACATION],
+            ['field' => HumanResources_Model_FreeTime::FLD_PROCESS_STATUS, 'operator' => 'equals', 'value' => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED],
         ]));
         
         return HumanResources_Controller_FreeDay::getInstance()->search(new HumanResources_Model_FreeDayFilter([
@@ -194,7 +225,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
                array('field' => 'type', 'operator' => 'equals', 'value' => 'vacation')
            ));
            $vacationTimeFilter->addFilter(new Tinebase_Model_Filter_Text(
-               array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->employee_id)
+               array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->getIdFromProperty('employee_id'))
            ));
            
            $vacationTimes = $this->search($vacationTimeFilter);

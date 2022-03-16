@@ -57,7 +57,7 @@ class HumanResources_Model_WageType extends Tinebase_Record_Abstract
      */
     protected static $_modelConfiguration = [
         self::VERSION                   => 1,
-        self::RECORD_NAME               => 'Wage type',
+        self::RECORD_NAME               => 'Wage type', // gettext('GENDER_Wage type')
         self::RECORDS_NAME              => 'Wage types', // ngettext('Wage type', 'Wage types', n)
         self::TITLE_PROPERTY            => 'name',
         self::HAS_CUSTOM_FIELDS         => true,

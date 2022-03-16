@@ -1429,7 +1429,9 @@ abstract class Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Doing ACL check ...');
         
-        if ($_currentRecord->has('container_id') && $_currentRecord->container_id != $_record->container_id) {
+        if (($_currentRecord->has('container_id') && $_currentRecord->container_id != $_record->container_id) ||
+            (($mc = $_record::getConfiguration()) && ($daf = $mc->delegateAclField) &&
+                $_currentRecord->getIdFromProperty($daf) !== $_record->getIdFromProperty($daf))) {
             $this->_checkGrant($_record, self::ACTION_CREATE);
             $this->_checkRight(self::ACTION_CREATE);
             // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
@@ -2841,41 +2843,53 @@ abstract class Tinebase_Controller_Record_Abstract
             throw new Tinebase_Exception_Record_DefinitionFailure('If a record is dependent, a refIdField has to be defined!');
         }
 
-        if ($_record->has($_property) && $_record->{$_property}) {
-            $recordClassName = $_fieldConfig[TMCC::RECORD_CLASS_NAME];
-            /** @var Tinebase_Controller_Interface $ccn */
-            $ccn = $_fieldConfig[TMCC::CONTROLLER_CLASS_NAME];
-            /** @var Tinebase_Controller_Record_Interface $controller */
-            $controller = $ccn::getInstance();
-
-            /** @var Tinebase_Record_Interface $rec */
-            // legacy - should be already done in frontend json - remove if all record properties are record sets before getting to controller
-            if (is_array($_record->{$_property})) {
-                /** @var Tinebase_Record_Interface $rec */
-                $rec = new $recordClassName(array(),true);
-                $tmp = $_record->{$_property};
-                $rec->setFromJsonInUsersTimezone($tmp);
-
-                $_record->{$_property} = $rec;
-            }
-            // legacy end
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating a dependent record on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
-            }
-
-            if (strlen($_record->{$_property}->getId()) < 40) {
-                $_record->{$_property}->setId(Tinebase_Record_Abstract::generateUID());
-            }
-            $_record->{$_property}->{$_fieldConfig[TMCC::REF_ID_FIELD]} = $_createdRecord->getId();
-            if (isset($_fieldConfig[TMCC::FORCE_VALUES])) {
-                foreach ($_fieldConfig[TMCC::FORCE_VALUES] as $prop => $val) {
-                    $_record->{$_property}->{$prop} = $val;
-                }
-            }
-
-            $_createdRecord->{$_property} = $controller->create($_record->{$_property});
+        if (!$_record->has($_property) || !$_record->{$_property}) {
+            return;
         }
+
+        $recordClassName = $_fieldConfig[TMCC::RECORD_CLASS_NAME];
+        /** @var Tinebase_Controller_Interface $ccn */
+        $ccn = $_fieldConfig[TMCC::CONTROLLER_CLASS_NAME];
+        /** @var Tinebase_Controller_Record_Abstract $controller */
+        $controller = $ccn::getInstance();
+        $ctrlAclRaii = null;
+        if (isset($_fieldConfig[TMCC::IGNORE_ACL]) && $_fieldConfig[TMCC::IGNORE_ACL]) {
+            $oldCtrlAclVal = $controller->doContainerACLChecks(false);
+            $ctrlAclRaii = new Tinebase_RAII(function() use($oldCtrlAclVal, $controller) {
+                $controller->doContainerACLChecks($oldCtrlAclVal);
+            });
+        }
+
+        /** @var Tinebase_Record_Interface $rec */
+        // legacy - should be already done in frontend json - remove if all record properties are record sets before getting to controller
+        if (is_array($_record->{$_property})) {
+            /** @var Tinebase_Record_Interface $rec */
+            $rec = new $recordClassName(array(),true);
+            $tmp = $_record->{$_property};
+            $rec->setFromJsonInUsersTimezone($tmp);
+
+            $_record->{$_property} = $rec;
+        }
+        // legacy end
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating a dependent record on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+        }
+
+        if (strlen($_record->{$_property}->getId()) < 40) {
+            $_record->{$_property}->setId(Tinebase_Record_Abstract::generateUID());
+        }
+        $_record->{$_property}->{$_fieldConfig[TMCC::REF_ID_FIELD]} = $_createdRecord->getId();
+        if (isset($_fieldConfig[TMCC::FORCE_VALUES])) {
+            foreach ($_fieldConfig[TMCC::FORCE_VALUES] as $prop => $val) {
+                $_record->{$_property}->{$prop} = $val;
+            }
+        }
+
+        $_createdRecord->{$_property} = $controller->create($_record->{$_property});
+
+        unset($ctrlAclRaii);
+
     }
 
     /**
@@ -2911,8 +2925,15 @@ abstract class Tinebase_Controller_Record_Abstract
 
         /** @var Tinebase_Controller_Interface $ccn */
         $ccn = $_fieldConfig[TMCC::CONTROLLER_CLASS_NAME];
-        /** @var Tinebase_Controller_Record_Interface|Tinebase_Controller_SearchInterface $controller */
+        /** @var Tinebase_Controller_Record_Abstract $controller */
         $controller = $ccn::getInstance();
+        $ctrlAclRaii = null;
+        if (isset($_fieldConfig[TMCC::IGNORE_ACL]) && $_fieldConfig[TMCC::IGNORE_ACL]) {
+            $oldCtrlAclVal = $controller->doContainerACLChecks(false);
+            $ctrlAclRaii = new Tinebase_RAII(function() use($oldCtrlAclVal, $controller) {
+                $controller->doContainerACLChecks($oldCtrlAclVal);
+            });
+        }
         $recordClassName = $_fieldConfig[TMCC::RECORD_CLASS_NAME];
         $filter = [['field' => $_fieldConfig[TMCC::REF_ID_FIELD], 'operator' => 'equals', 'value' => $_record->getId()]];
         if (isset($_fieldConfig[TMCC::ADD_FILTERS])) {
@@ -2957,6 +2978,7 @@ abstract class Tinebase_Controller_Record_Abstract
         } elseif ($existingDepRec) {
             $controller->delete($existingDepRec);
         }
+        unset($ctrlAclRaii);
     }
 
     /**
@@ -2973,58 +2995,70 @@ abstract class Tinebase_Controller_Record_Abstract
             return;
         }
         
-        if ($_record->has($_property) && $_record->{$_property}) {
-            $recordClassName = $_fieldConfig['recordClassName'];
-            $new = new Tinebase_Record_RecordSet($recordClassName);
-            /** @var Tinebase_Controller_Interface $ccn */
-            $ccn = $_fieldConfig['controllerClassName'];
-            /** @var Tinebase_Controller_Record_Interface $controller */
-            $controller = $ccn::getInstance();
-
-            /** @var Tinebase_Record_Interface $rec */
-            // legacy - should be already done in frontend json - remove if all record properties are record sets before getting to controller
-            if (is_array($_record->{$_property})) {
-                $rs = new Tinebase_Record_RecordSet($recordClassName);
-                foreach ($_record->{$_property} as $recordArray) {
-                    /** @var Tinebase_Record_Interface $rec */
-                    $rec = new $recordClassName(array(),true);
-                    $rec->setFromJsonInUsersTimezone($recordArray);
-                    
-                    if (strlen($rec->getId()) < 40) {
-                        $rec->{$rec->getIdProperty()} = Tinebase_Record_Abstract::generateUID();
-                    }
-                    
-                    $rs->addRecord($rec);
-                }
-                $_record->{$_property} = $rs;
-            } else {
-                foreach ($_record->{$_property} as $rec) {
-                    if (strlen($rec->getId()) < 40) {
-                        $rec->{$rec->getIdProperty()} = Tinebase_Record_Abstract::generateUID();
-                    }
-                }
-            }
-            // legacy end
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating ' . $_record->{$_property}->count() . ' dependent records on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
-            }
-
-            if (isset($_fieldConfig[TMCC::FORCE_VALUES])) {
-                foreach ($_fieldConfig[TMCC::FORCE_VALUES] as $prop => $val) {
-                    $_record->{$_property}->{$prop} = $val;
-                }
-            }
-            foreach ($_record->{$_property} as $record) {
-                $record->{$_fieldConfig['refIdField']} = $_createdRecord->getId();
-                if (! $record->getId() || strlen($record->getId()) != 40) {
-                    $record->{$record->getIdProperty()} = NULL;
-                }
-                $new->addRecord($controller->create($record));
-            }
-    
-            $_createdRecord->{$_property} = $new;
+        if (!$_record->has($_property) || !$_record->{$_property}) {
+            return;
         }
+
+        $recordClassName = $_fieldConfig['recordClassName'];
+        $new = new Tinebase_Record_RecordSet($recordClassName);
+        /** @var Tinebase_Controller_Interface $ccn */
+        $ccn = $_fieldConfig['controllerClassName'];
+        /** @var Tinebase_Controller_Record_Abstract $controller */
+        $controller = $ccn::getInstance();
+
+        $ctrlAclRaii = null;
+        if (isset($_fieldConfig[TMCC::IGNORE_ACL]) && $_fieldConfig[TMCC::IGNORE_ACL]) {
+            $oldCtrlAclVal = $controller->doContainerACLChecks(false);
+            $ctrlAclRaii = new Tinebase_RAII(function() use($oldCtrlAclVal, $controller) {
+                $controller->doContainerACLChecks($oldCtrlAclVal);
+            });
+        }
+
+        /** @var Tinebase_Record_Interface $rec */
+        // legacy - should be already done in frontend json - remove if all record properties are record sets before getting to controller
+        if (is_array($_record->{$_property})) {
+            $rs = new Tinebase_Record_RecordSet($recordClassName);
+            foreach ($_record->{$_property} as $recordArray) {
+                /** @var Tinebase_Record_Interface $rec */
+                $rec = new $recordClassName(array(),true);
+                $rec->setFromJsonInUsersTimezone($recordArray);
+
+                if (strlen($rec->getId()) < 40) {
+                    $rec->{$rec->getIdProperty()} = Tinebase_Record_Abstract::generateUID();
+                }
+
+                $rs->addRecord($rec);
+            }
+            $_record->{$_property} = $rs;
+        } else {
+            foreach ($_record->{$_property} as $rec) {
+                if (strlen($rec->getId()) < 40) {
+                    $rec->{$rec->getIdProperty()} = Tinebase_Record_Abstract::generateUID();
+                }
+            }
+        }
+        // legacy end
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating ' . $_record->{$_property}->count() . ' dependent records on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+        }
+
+        if (isset($_fieldConfig[TMCC::FORCE_VALUES])) {
+            foreach ($_fieldConfig[TMCC::FORCE_VALUES] as $prop => $val) {
+                $_record->{$_property}->{$prop} = $val;
+            }
+        }
+        foreach ($_record->{$_property} as $record) {
+            $record->{$_fieldConfig['refIdField']} = $_createdRecord->getId();
+            if (! $record->getId() || strlen($record->getId()) != 40) {
+                $record->{$record->getIdProperty()} = NULL;
+            }
+            $new->addRecord($controller->create($record));
+        }
+
+        $_createdRecord->{$_property} = $new;
+
+        unset($ctrlAclRaii);
     }
 
     /**
@@ -3060,12 +3094,20 @@ abstract class Tinebase_Controller_Record_Abstract
 
         /** @var Tinebase_Controller_Interface $ccn */
         $ccn = $_fieldConfig['controllerClassName'];
-        /** @var Tinebase_Controller_Record_Interface|Tinebase_Controller_SearchInterface $controller */
+        /** @var Tinebase_Controller_Record_Abstract $controller */
         $controller = $ccn::getInstance();
         $recordClassName = $_fieldConfig['recordClassName'];
         $filterClassName = $_fieldConfig['filterClassName'];
         /** @var Tinebase_Record_RecordSet|Tinebase_Record_Interface $existing */
         $existing = new Tinebase_Record_RecordSet($recordClassName);
+
+        $ctrlAclRaii = null;
+        if (isset($_fieldConfig[TMCC::IGNORE_ACL]) && $_fieldConfig[TMCC::IGNORE_ACL]) {
+            $oldCtrlAclVal = $controller->doContainerACLChecks(false);
+            $ctrlAclRaii = new Tinebase_RAII(function() use($oldCtrlAclVal, $controller) {
+                $controller->doContainerACLChecks($oldCtrlAclVal);
+            });
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . print_r($_record->{$_property}, TRUE));
@@ -3151,6 +3193,8 @@ abstract class Tinebase_Controller_Record_Abstract
             $controller->delete($deleteIds);
         }
         $_record->{$_property} = $existing;
+
+        unset($ctrlAclRaii);
     }
 
     /**
@@ -3171,9 +3215,17 @@ abstract class Tinebase_Controller_Record_Abstract
 
         /** @var Tinebase_Controller_Interface $ccn */
         $ccn = $_fieldConfig['controllerClassName'];
-        /** @var Tinebase_Controller_Record_Interface|Tinebase_Controller_SearchInterface $controller */
+        /** @var Tinebase_Controller_Record_Abstract $controller */
         $controller = $ccn::getInstance();
         $filterClassName = $_fieldConfig['filterClassName'];
+
+        $ctrlAclRaii = null;
+        if (isset($_fieldConfig[TMCC::IGNORE_ACL]) && $_fieldConfig[TMCC::IGNORE_ACL]) {
+            $oldCtrlAclVal = $controller->doContainerACLChecks(false);
+            $ctrlAclRaii = new Tinebase_RAII(function() use($oldCtrlAclVal, $controller) {
+                $controller->doContainerACLChecks($oldCtrlAclVal);
+            });
+        }
 
         $filterArray = isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : [];
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterClassName, $filterArray, 'AND');
@@ -3210,6 +3262,8 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             $controller->delete($deleteIds);
         }
+
+        unset($ctrlAclRaii);
     }
 
     /**
@@ -3231,9 +3285,17 @@ abstract class Tinebase_Controller_Record_Abstract
 
         /** @var Tinebase_Controller_Interface $ccn */
         $ccn = $_fieldConfig['controllerClassName'];
-        /** @var Tinebase_Controller_Record_Interface|Tinebase_Controller_SearchInterface $controller */
+        /** @var Tinebase_Controller_Record_Abstract $controller */
         $controller = $ccn::getInstance();
         $filterClassName = $_fieldConfig['filterClassName'];
+
+        $ctrlAclRaii = null;
+        if (isset($_fieldConfig[TMCC::IGNORE_ACL]) && $_fieldConfig[TMCC::IGNORE_ACL]) {
+            $oldCtrlAclVal = $controller->doContainerACLChecks(false);
+            $ctrlAclRaii = new Tinebase_RAII(function() use($oldCtrlAclVal, $controller) {
+                $controller->doContainerACLChecks($oldCtrlAclVal);
+            });
+        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . $_property);
@@ -3273,6 +3335,8 @@ HumanResources_CliTests.testSetContractsEndDate */
         foreach ($unDeleteRecords as $record) {
             $controller->unDelete($record);
         }
+
+        unset($ctrlAclRaii);
     }
 
     /**

@@ -58,6 +58,12 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
         this.defaultFilters = [{
             field: 'employment_end', operator: 'after', value: new Date().clearTime().getLastDateOfMonth().add(Date.DAY, 1)
         }];
+
+        // this.detailsPanel = {
+        //     recordClass: Tine.HumanResources.Model.FreeTime,
+        //     xtype: 'widget-detailspanel'
+        // };
+
         Tine.HumanResources.FreeTimePlanningPanel.superclass.initComponent.call(me);
 
         me.grid.on('cellmousedown', _.bind(me.onCellMouseDown, me));
@@ -85,6 +91,11 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
         me.selectionModel = new Ext.ux.grid.MultiCellSelectionModel({
             // getCount: function() {return 0},
             // getSelections: function() { return []},
+            // getSelected: () => { // needed for detailsPanel
+            //     const selections = me.getSelectedFreeTimes();
+            //     // @TODO filter for freeTimes (skip empty cells)
+            //     return selections.length ? Tine.Tinebase.data.Record.setFromJson(selections[0], Tine.HumanResources.Model.FreeTime)  : null;
+            // },
             selectRow: function() {},
             listeners: {
                 'beforecellselect': _.bind(me.onBeforeCellSelect, me),
@@ -131,29 +142,34 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
 
     initFreeTimeTypes: async function() {
         this.freeTimeTypes = [];
-        this.freeTimeTypes = _.get(await Tine.HumanResources.searchFreeTimeTypes({}), 'results', []);
+        this.freeTimeTypes = _.get(await Tine.HumanResources.searchFreeTimeTypes([{field: 'allow_planning', operator: 'equals', value: true}]), 'results', []);
     },
     
     renderFreeDay: function(value, metaData, record, rowIndex, colIndex, store, day) {
         let me = this;
         let bgColor = '#FFFFFF';
+        let processStatus = '';
+        let img = '';
         let char = '';
 
         if (me.isExcludeDay(record, day)) {
             bgColor = 'lightgrey';
-            char = 'X';
+            char = '-';
         }
         else {
             let freeTimes = me.getFreeTimes(record, day);
             if (freeTimes.length) {
                 // support multiple freetimes per day?
-                let freeTimeType = freeTimes[0].type;
+                const freeTimeType = freeTimes[0].type;
+                processStatus = _.get(freeTimes[0], 'process_status', '')
                 char = _.get(freeTimeType, 'abbreviation', freeTimeType[0]);
-                // @TODO color
+                bgColor = _.get(freeTimeType, 'color', '#FFFFFF');
+                img = Tine.Tinebase.widgets.keyfield.Renderer.get('HumanResources', 'freeTimeProcessStatus', 'icon')(processStatus)
+                // bgColor = _.get(freeTimeType, 'icon', 'none');
             }
         }
 
-        return '<div class="hr-freetimeplanning-daycell" style="background-color: ' + bgColor + ';">' + char + '</div>'
+        return `<div class="hr-freetimeplanning-daycell hr-freetimeplanning-daycell=${processStatus}" style="background-color: ${bgColor};">${img}${char}</div>`
 
     },
 

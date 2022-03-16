@@ -155,7 +155,7 @@ Ext.ux.ItemRegistry.prototype = {
                 def = {xtype: def};
             }
             
-            item = this.cmp.lookupComponent(def);
+            item = this.cmp.lookupComponent(Object.assign(def, this.config));
         }
 
         item.registerdItemPos = reg.pos ? reg.pos : this.cmp.items.length * 10;

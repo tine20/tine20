@@ -4,7 +4,7 @@
  *
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -40,6 +40,7 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
                 'employee_id' => $this->employee->getId(),
                 'account_id' => $accountId,
                 'type' => HumanResources_Model_FreeTimeType::ID_VACATION,
+                HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
                 'freedays' => [
                     ['date' => '2018-08-01'],
                     ['date' => '2018-08-02']
@@ -135,5 +136,50 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
                 HumanResources_Model_FreeTime::class, [
                     ['field' => 'account_id', 'operator' => 'equals', 'value' => $freeTime->account_id],
                 ]))->count());
+    }
+
+    public function testCreateChangeRequestGrant()
+    {
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+
+        $freeTime = $this->_createFreeTime('pwulf');
+
+        Tinebase_Core::setUser($this->_personas['jsmith']);
+
+        try {
+            HumanResources_Controller_FreeTime::getInstance()->get($freeTime->getId());
+            $this->fail('pwulf should not see jsmith data');
+        } catch (Tinebase_Exception_AccessDenied $tead) {}
+
+        try {
+            HumanResources_Controller_Account::getInstance()->get($freeTime->account_id);
+            $this->fail('pwulf should not see jsmith data');
+        } catch (Tinebase_Exception_AccessDenied $tead) {}
+
+        try {
+            HumanResources_Controller_Employee::getInstance()->get($freeTime->employee_id);
+            $this->fail('pwulf should not see jsmith data');
+        } catch (Tinebase_Exception_AccessDenied $tead) {}
+
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer(
+            ($d = HumanResources_Controller_Division::getInstance()->get($this->employee->division_id))->container_id,
+            true);
+        $grants->addRecord(new HumanResources_Model_DivisionGrants([
+            'record_id' => $d->container_id,
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id' => $this->_personas['jsmith']->getId(),
+            HumanResources_Model_DivisionGrants::CREATE_CHANGE_REQUEST => true,
+        ]));
+        Tinebase_Container::getInstance()->setGrants($d->container_id, $grants, true, false);
+
+
+        HumanResources_Controller_FreeTime::getInstance()->get($freeTime->getId());
+        HumanResources_Controller_Account::getInstance()->get($freeTime->account_id);
+        HumanResources_Controller_Employee::getInstance()->get($freeTime->employee_id);
+        $contracts = HumanResources_Controller_Contract::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Contract::class, [
+                ['field' => 'employee_id', 'operator' => 'equals', 'value' => $freeTime->getIdFromProperty('employee_id')],
+            ]));
+        $this->assertSame(1, $contracts->count());
     }
 }

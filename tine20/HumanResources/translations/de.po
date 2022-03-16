@@ -133,10 +133,6 @@ msgstr[1] "Sonderurlaube"
 msgid "Summary"
 msgstr "Zusammenfassung"
 
-#: js/AccountEditDialog.js:108
-msgid "Free Times"
-msgstr "Freie Tage"
-
 #: js/AccountEditDialog.js:114
 msgid "Possible vaction days"
 msgstr "Mögliche Urlaubstage"
@@ -754,8 +750,8 @@ msgstr "Sonderurlaub"
 #: Model/FreeTime.php:35
 msgid "Free Time"
 msgid_plural "Free Times"
-msgstr[0] "Freizeitanspruch"
-msgstr[1] "Freizeitansprüche"
+msgstr[0] "Abwesenheit"
+msgstr[1] "Abwesenheiten"
 
 #: Model/FreeTime.php:84 Model/Employee.php:84
 msgid "Account"

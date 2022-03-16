@@ -47,7 +47,7 @@ class HumanResources_Model_StreamModalReport extends Tinebase_Record_NewAbstract
      */
     protected static $_modelConfiguration = [
         self::VERSION               => 1,
-        self::RECORD_NAME           => 'Modality Report',
+        self::RECORD_NAME           => 'Modality Report', // gettext('GENDER_Modality Report')
         self::RECORDS_NAME          => 'Modality Reports', // ngettext('Modality Report', 'Modality Reports', n)
         self::HAS_RELATIONS         => true,
         self::COPY_RELATIONS        => false,

@@ -4,7 +4,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -30,6 +30,7 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
     const MODEL_NAME_PART                       = 'MonthlyWTReport';
     const TABLE_NAME                            = 'humanresources_wt_monthlyreport';
 
+    const FLDS_CORRECTIONS                      = 'corrections';
     const FLDS_MONTH                            = 'month';
     const FLDS_EMPLOYEE_ID                      = 'employee_id';
     const FLDS_DAILY_WT_REPORTS                 = 'dailywtreports';
@@ -55,7 +56,7 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
      */
     protected static $_modelConfiguration = [
         self::VERSION                   => 2,
-        self::RECORD_NAME               => 'Monthly Working Time Report',
+        self::RECORD_NAME               => 'Monthly Working Time Report', // gettext('GENDER_Monthly Working Time Report')
         self::RECORDS_NAME              => 'Monthly Working Time Reports', // ngettext('Monthly Working Time Report', 'Monthly Working Time Reports', n)
         self::TITLE_PROPERTY            => self::FLDS_MONTH,
         self::HAS_CUSTOM_FIELDS         => true,
@@ -97,6 +98,12 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
                         'referencedColumnName'  => 'id'
                     ]],
                 ]
+            ],
+        ],
+
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLDS_CORRECTIONS          => [],
             ],
         ],
 
@@ -212,6 +219,20 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
             HumanResources_Model_DailyWTReport::FLDS_WORKING_TIMES => [
                 self::SHY                           => true,
                 self::TYPE                          => self::TYPE_VIRTUAL,
+            ],
+            self::FLDS_CORRECTIONS              => [
+                self::TYPE                          => self::TYPE_RECORDS,
+                self::LABEL                         => 'Working Time Correction Requests', // _('Working Time Correction Requests')
+                self::NULLABLE                      => true,
+                self::DOCTRINE_IGNORE               => true,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => HumanResources_Config::APP_NAME,
+                    self::MODEL_NAME                    => HumanResources_Model_WTRCorrection::MODEL_NAME_PART,
+                    self::REF_ID_FIELD                  => HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY,
+                ],
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
         ],
     ];

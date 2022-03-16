@@ -40,7 +40,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
     protected static $_modelConfiguration = array(
         'version'           => 4,
         'recordName'      => 'Contract', // ngettext('Contract', 'Contracts', n)
-        'recordsName'     => 'Contracts',
+        'recordsName'     => 'Contracts', // gettext('GENDER_Contract')
         'hasRelations'    => FALSE,
         'hasCustomFields' => FALSE,
         'hasNotes'        => FALSE,

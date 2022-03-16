@@ -14,6 +14,7 @@ trait HumanResources_Controller_CheckFilterACLEmployeeTrait
 {
     protected $_traitDelegateAclField = 'employee_id';
     protected $_traitCheckFilterACLRight = HumanResources_Acl_Rights::MANAGE_EMPLOYEE;
+    protected $_traitGetOwnGrants = [HumanResources_Model_DivisionGrants::READ_OWN_DATA];
 
     /**
      * Removes containers where current user has no access to
@@ -52,7 +53,7 @@ trait HumanResources_Controller_CheckFilterACLEmployeeTrait
             array_merge($_filter->getOptions(), [
                 'modelName' => $this->_modelName
             ]));
-        $containerFilter->setRequiredGrants([HumanResources_Model_DivisionGrants::READ_OWN_DATA]);
+        $containerFilter->setRequiredGrants($this->_traitGetOwnGrants);
         $andWrapper->addFilter($containerFilter);
         $andWrapper->addFilter($this->_getCheckFilterACLTraitFilter());
         $orWrapper->addFilterGroup($andWrapper);

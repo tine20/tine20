@@ -49,7 +49,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'Account',
         HumanResources_Model_FreeTimeType::MODEL_NAME_PART,
         'FreeDay',
-        'FreeTime',
         HumanResources_Model_BLDailyWTReport_WorkingTime::MODEL_NAME_PART,
         HumanResources_Model_DailyWTReport::MODEL_NAME_PART,
         HumanResources_Model_MonthlyWTReport::MODEL_NAME_PART,
@@ -58,6 +57,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         HumanResources_Model_StreamModalReport::MODEL_NAME_PART,
         HumanResources_Model_WageType::MODEL_NAME_PART,
         HumanResources_Model_WorkingTimeScheme::MODEL_NAME_PART,
+        HumanResources_Model_FreeTime::MODEL_NAME_PART,
     ];
 
     protected $_defaultModel = 'Employee';
@@ -508,7 +508,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         /* vacation computation -> shoud be extra call!*/
         $account = $_accountId ? $aController->get($_accountId) : $aController->getByEmployeeYear($_employeeId, $_year);
-        $remainingVacation = HumanResources_Controller_Account::getInstance()->resolveVacation($account)['scheduled_remaining_vacation_days'];
+        $vacation = HumanResources_Controller_Account::getInstance()->resolveVacation($account);
         /* end vacation computation */
         
         $maxDate = clone $minDate;
@@ -586,7 +586,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // TODO: remove results property, just return results array itself
         return array(
             'results' => array(
-                'remainingVacation' => intval(floor($remainingVacation)),
+                'vacation'          => $vacation,
+                'remainingVacation' => intval(floor($vacation['scheduled_remaining_vacation_days'])),
                 'excludeDates'      => $excludeDates,
                 'freeTimeTypes'     => $freeTimeTypes->toArray(),
                 'allFreeTimes'      => $allFreeTimes->toArray(),
