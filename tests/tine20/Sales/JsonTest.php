@@ -113,11 +113,40 @@ class Sales_JsonTest extends TestCase
         $tbJson = new Tinebase_Frontend_Json();
         // add Responsible contact1 to both contracts
         $response = $tbJson->updateMultipleRecords('Sales', 'Contract',
-            array(array('name' => '%RESPONSIBLE-Addressbook_Model_Contact', 'value' => $contact1->getId())),
+            array(
+                array('name' => '%RESPONSIBLE-Addressbook_Model_Contact', 'value' => $contact1->getId()),
+                array('name' => '%add', 'value' => json_encode(array(
+                    'own_model' => 'Sales_Model_Contract',
+                    'own_backend' => 'Sql',
+                    'related_degree' => 'sibling',
+                    'related_model' => 'Addressbook_Model_Contact',
+                    'related_backend' => 'Sql',
+                    'related_id' => $contact1->getId(),
+                    'type' => 'RESPONSIBLE',
+                    // create relation failed if we set relation id here
+                    //'id' => Tinebase_Record_Abstract::generateUID()
+                )))
+            ),
             array(array('field' => 'id', 'operator' => 'in', 'value' => $contract1and2Ids))
         );
-
         $this->assertEquals(2, count($response['results']));
+        
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Tinebase_Model_Relation', [
+            ['field' => 'own_model', 'operator' => 'equals', 'value' => 'Sales_Model_Contract'],
+            ['field' => 'related_model', 'operator' => 'equals', 'value' => 'Addressbook_Model_Contact'],
+            ['field' => 'type', 'operator' => 'equals', 'value' => 'RESPONSIBLE'],
+        ]);
+        $contractRelations = Tinebase_Relations::getInstance()->search($filter);
+        $this->assertEquals(2, count($contractRelations));
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Tinebase_Model_Relation', [
+            ['field' => 'own_model', 'operator' => 'equals', 'value' => 'Addressbook_Model_Contact'],
+            ['field' => 'related_model', 'operator' => 'equals', 'value' => 'Sales_Model_Contract'],
+            ['field' => 'type', 'operator' => 'equals', 'value' => 'RESPONSIBLE'],
+        ]);
+        $contactRelations = Tinebase_Relations::getInstance()->search($filter);
+        $this->assertEquals(2, count($contactRelations));
+
         
         $contract1re = $this->_instance->getContract($contract1->getId());
         $contract2re = $this->_instance->getContract($contract2->getId());
@@ -140,7 +169,7 @@ class Sales_JsonTest extends TestCase
         $response = $tbJson->updateMultipleRecords('Sales', 'Contract',
             array(
                 array('name' => '%CUSTOMER-Addressbook_Model_Contact', 'value' => $contact3->getId()),
-                array('name' => '%RESPONSIBLE-Addressbook_Model_Contact', 'value' => $contact4->getId())
+                array('name' => '%RESPONSIBLE-Addressbook_Model_Contact', 'value' => $contact4->getId()),
                 ),
             array(array('field' => 'id', 'operator' => 'in', 'value' => $contract1and2Ids))
         );
