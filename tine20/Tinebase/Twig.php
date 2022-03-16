@@ -160,7 +160,9 @@ class Tinebase_Twig
         $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('transliterate', function($str) {
             return transliterator_transliterate('Any-Latin; Latin-ASCII', $str);
         }));
-
+        $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('preg_replace', function($subject, $pattern, $replacement, int $limit=-1, int $count=null) {
+            return preg_replace($pattern, $replacement, $subject, $limit, $count);
+        }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('translate',
             function ($str) use($locale, $translate) {
                 $translatedStr = $translate->translate($str, $locale);
