@@ -403,13 +403,16 @@ msgstr "Lieferantennummer"
 
 #: Model/Supplier.php:163 Model/Address.php:150 js/SupplierEditDialog.js:301
 #: js/AddressEditDialog.js:185 js/CustomerEditDialog.js:369
-msgid "Prefix"
-msgstr "Zusatz"
+msgid "Prefix 1"
+msgstr "Zusatz 1"
 
 #: Model/Supplier.php:171 Model/Address.php:157 js/SupplierEditDialog.js:305
 #: js/AddressEditDialog.js:188 js/CustomerEditDialog.js:373
-msgid "Additional Prefix"
+msgid "Prefix 2"
 msgstr "Zusatz 2"
+
+msgid "Prefix 3"
+msgstr "Zusatz 3"
 
 #: Model/Supplier.php:195 Model/Address.php:108 js/SupplierEditDialog.js:272
 #: js/AddressEditDialog.js:166 js/CustomerEditDialog.js:340

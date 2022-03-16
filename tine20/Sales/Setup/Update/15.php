@@ -25,6 +25,7 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE009 = __CLASS__ . '::update009';
     const RELEASE015_UPDATE010 = __CLASS__ . '::update010';
     const RELEASE015_UPDATE011 = __CLASS__ . '::update011';
+    const RELEASE015_UPDATE012 = __CLASS__ . '::update012';
 
     static protected $_allUpdates = [
         // this needs to be executed before TB struct update! cause we move the table from sales to tb
@@ -70,6 +71,10 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE009          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update009',
+            ],
+            self::RELEASE015_UPDATE012          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update012',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -261,5 +266,13 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             Tinebase_ImportExportDefinition::getInstance()->delete([$def->getId()]);
         } catch (Tinebase_Exception_NotFound $tenf) {}
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.11', self::RELEASE015_UPDATE011);
+    }
+
+    public function update012()
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Address::class,
+        ]);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.12', self::RELEASE015_UPDATE012);
     }
 }

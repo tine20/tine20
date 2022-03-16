@@ -346,11 +346,15 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 columnWidth: 1
                             }], [{
                                 name: 'adr_prefix1',
-                                fieldLabel: this.app.i18n._('Prefix'),
+                                fieldLabel: this.app.i18n._('Prefix 1'),
                                 columnWidth: 1
                             }], [{
                                 name: 'adr_prefix2',
-                                fieldLabel: this.app.i18n._('Additional Prefix'),
+                                fieldLabel: this.app.i18n._('Prefix 2'),
+                                columnWidth: 1
+                            }], [{
+                                name: 'adr_prefix3',
+                                fieldLabel: this.app.i18n._('Prefix 3'),
                                 columnWidth: 1
                             }, ], [{
                                 name: 'adr_street',
