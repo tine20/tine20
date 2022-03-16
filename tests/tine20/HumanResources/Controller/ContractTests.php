@@ -98,8 +98,6 @@ class HumanResources_Controller_ContractTests extends HumanResources_TestCase
 
     /**
      * some contract tests (more in jsontests)
-     *
-     * @group nogitlabci
      */
     public function testContract($setDFComId = false)
     {
@@ -181,7 +179,7 @@ class HumanResources_Controller_ContractTests extends HumanResources_TestCase
             'account_id' => $account->getId(),
             'employee_id' => $contract->employee_id,
             'type' => 'vacation',
-            'status' => 'ACCEPTED',
+            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
             'firstday_date' => $refDate->toString()
         );
         
