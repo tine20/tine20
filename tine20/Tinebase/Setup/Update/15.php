@@ -20,6 +20,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE015_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE015_UPDATE006 = __CLASS__ . '::update006';
+    const RELEASE015_UPDATE007 = __CLASS__ . '::update007';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE       => [
@@ -54,7 +55,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
             ],
-
+            self::RELEASE015_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
+            ],
         ],
     ];
 
@@ -124,5 +128,25 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.6', self::RELEASE015_UPDATE006);
+    }
+
+    public function update007()
+    {
+        if ($this->getTableVersion('importexport_definition') < 14) {
+            $this->setTableVersion('importexport_definition', 14);
+        };
+        if ($this->getTableVersion('tags') == 14) {
+            $this->setTableVersion('tags', 10);
+        };
+        if (!$this->_backend->columnExists('filter', 'importexport_definition')) {
+            $this->_backend->addCol('importexport_definition', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>filter</name>
+                    <type>text</type>
+                    <length>16000</length>
+                </field>'));
+        }
+        $this->setTableVersion('importexport_definition', 15);
+        $this->addApplicationUpdate('Tinebase', '15.7', self::RELEASE015_UPDATE007);
     }
 }
