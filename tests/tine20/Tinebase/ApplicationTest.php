@@ -346,6 +346,12 @@ class Tinebase_ApplicationTest extends TestCase
             ),
             'HumanResources' => array(
                 HumanResources_Model_Account::class,
+                HumanResources_Model_AttendanceRecord::class,
+                HumanResources_Model_AttendanceRecorderClockInOutResult::class,
+                HumanResources_Model_AttendanceRecorderDevice::class,
+                HumanResources_Model_AttendanceRecorderDeviceRef::class,
+                HumanResources_Model_BLAttendanceRecorder_Config::class,
+                HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::class,
                 HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::class,
                 HumanResources_Model_BLDailyWTReport_BreakTimeConfig::class,
                 HumanResources_Model_BLDailyWTReport_Config::class,

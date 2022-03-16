@@ -21,6 +21,7 @@ class HumanResources_AllTests
         $suite->addTestSuite(HumanResources_BL_DailyWTReport_CalculateBreakTimeTest::class);
         $suite->addTestSuite(HumanResources_BL_DailyWTReport_LimitWorkingTimeTest::class);
         $suite->addTestSuite(HumanResources_CliTests::class);
+        $suite->addTestSuite(HumanResources_Controller_AttendanceControllerTests::class);
         $suite->addTestSuite(HumanResources_Controller_ContractTests::class);
         $suite->addTestSuite(HumanResources_Controller_DailyWTReportTests::class);
         $suite->addTestSuite(HumanResources_Controller_EmployeeTests::class);

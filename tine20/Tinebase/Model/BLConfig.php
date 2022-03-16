@@ -54,6 +54,7 @@ class Tinebase_Model_BLConfig extends Tinebase_Record_NewAbstract
                 self::LABEL                 => 'Config', // _('Config)
                 self::CONFIG                => [
                     self::REF_MODEL_FIELD       => self::FLDS_CLASSNAME,
+                    self::PERSISTENT            => true,
                 ]
             ]
         ],
