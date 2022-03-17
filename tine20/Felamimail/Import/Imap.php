@@ -38,6 +38,11 @@ class Felamimail_Import_Imap extends Tinebase_Import_Abstract
     protected Felamimail_Model_Folder $_folder;
 
     /**
+     * @var int
+     */
+    protected int $_maxNumberOfImportRecords = 10;
+
+    /**
      * constructs a new importer from given config
      *
      * @param array $_options
@@ -118,7 +123,7 @@ class Felamimail_Import_Imap extends Tinebase_Import_Abstract
         ]);
         $this->_messagesToImport = Felamimail_Controller_Message::getInstance()->search($filter, new Tinebase_Model_Pagination([
             'start' => 0,
-            'limit' => 500,
+            'limit' => $this->_maxNumberOfImportRecords,
         ]));
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' .
