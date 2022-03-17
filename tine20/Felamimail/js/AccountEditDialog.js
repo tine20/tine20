@@ -302,7 +302,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         if (this.asAdminModule) {
             this.saveInAdbFields = Tine.Admin.UserEditDialog.prototype.getSaveInAddessbookFields(this, this.record.get('type') === 'system');
-            this.emailImapUser = this.record.data?.email_imap_user;
+            this.emailImapUser = this.record.data?.email_imap_user || [];
         } else {
             this.saveInAdbFields = [];
             this.emailImapUser = [];
@@ -1122,15 +1122,15 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     loadEmailQuotas: function () {
         if (this.asAdminModule ) {
-            this.emailImapUser = this.record.data?.email_imap_user;
-            
-            if (this.emailImapUser.hasOwnProperty('emailMailQuota')) {
-                this.getForm().findField('emailMailQuota').setValue(this.emailImapUser.emailMailQuota);
-                this.getForm().findField('emailMailSize').setValue(this.emailImapUser.emailMailSize);
+            const emailImapUser = this.record.data?.email_imap_user || [];
+
+            if (emailImapUser.hasOwnProperty('emailMailQuota')) {
+                this.getForm().findField('emailMailQuota').setValue(emailImapUser.emailMailQuota);
+                this.getForm().findField('emailMailSize').setValue(emailImapUser.emailMailSize);
             }
-            if (this.emailImapUser.hasOwnProperty('emailSieveQuota')) {
-                this.getForm().findField('emailSieveQuota').setValue(this.emailImapUser.emailSieveQuota);
-                this.getForm().findField('emailSieveSize').setValue(this.emailImapUser.emailSieveSize);
+            if (emailImapUser.hasOwnProperty('emailSieveQuota')) {
+                this.getForm().findField('emailSieveQuota').setValue(emailImapUser.emailSieveQuota);
+                this.getForm().findField('emailSieveSize').setValue(emailImapUser.emailSieveSize);
             }
         }
     },
@@ -1210,6 +1210,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     updateEmailQuotas: function () {
         if (this.asAdminModule) {
+            if (! this.emailImapUser) {
+                return;
+            }
             if (this.emailImapUser.hasOwnProperty('emailMailQuota')) {
                 this.record.data.email_imap_user.emailMailQuota = this.getForm().findField('emailMailQuota').getValue();
             }

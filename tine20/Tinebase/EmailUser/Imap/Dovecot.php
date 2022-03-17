@@ -327,12 +327,24 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
     protected function _getExistingUser($emailUserData)
     {
         $select = $this->_getSelect();
-        $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'loginname') . " = ?",
-            $emailUserData['loginname']);
-        if (isset($emailUserData['userid'])) {
+        
+        if (! empty($emailUserData['loginname'])) {
+            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'loginname') . " = ?",
+                $emailUserData['loginname']);
+        }
+        
+        if (! empty($emailUserData['userid'])) {
             $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'userid') . " != ?",
                 $emailUserData['userid']);
         }
+
+        if (empty($emailUserData['loginname']) && empty($emailUserData['userid'])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' either loginname or userid should be set.');
+            
+            $select->where('1=0');
+        }
+        
         return $select->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
     }
 
