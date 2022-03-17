@@ -428,23 +428,28 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $filesToWatch = array();
 
         foreach ($orderedApplications as $application) {
-            if (! empty($apps) && $apps[0] != 'all' && ! in_array($application, $apps)) continue;
-            switch($_fileType) {
+            if (! empty($apps) && $apps[0] != 'all' && ! in_array($application, $apps)) {
+                continue;
+            }
+            switch ($_fileType) {
                 case 'js':
                     $filesToWatch[] = "{$application}/js/{$application}";
                     break;
                 case 'lang':
-                    $fileName = "{$application}/js/{$application}-lang-" . Tinebase_Core::getLocale() . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
+                    $fileName = "{$application}/js/{$application}-lang-" . Tinebase_Core::getLocale()
+                        . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
                     $lang = Tinebase_Core::getLocale();
                     $customPath = Tinebase_Config::getInstance()->translations;
-                    $basePath = is_readable("$customPath/$lang/$fileName") ?  "$customPath/$lang" : '.';
+                    $basePath = ! empty($customPath) && is_readable("$customPath/$lang/$fileName")
+                        ? "$customPath/$lang"
+                        : '.';
 
-                    $langFile = "{$basePath}/{$application}/js/{$application}-lang-" . Tinebase_Core::getLocale() . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
+                    $langFile = "{$basePath}/{$application}/js/{$application}-lang-" . Tinebase_Core::getLocale()
+                        . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
                     $filesToWatch[] = $langFile;
                     break;
                 default:
                     throw new Exception('no such fileType');
-                    break;
             }
         }
 
