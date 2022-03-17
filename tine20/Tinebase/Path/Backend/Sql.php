@@ -642,4 +642,12 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         static::$_shadowPathMapping[$shadow_path] = $id;
         static::$_idToShadowPath[$id] = $shadow_path;
     }
+
+    public static function optimizePathsTable()
+    {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Optimizing path table ...');
+        $db = Tinebase_Core::getDb();
+        $stmt = $db->query('OPTIMIZE TABLE ' . $db->table_prefix . 'path;');
+        $stmt->closeCursor();
+    }
 }

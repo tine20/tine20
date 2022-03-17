@@ -179,7 +179,9 @@ class Sales_Controller extends Tinebase_Controller_Event
                     'postalcode' => $contact->adr_one_postalcode,
                     'locality' => $contact->adr_one_locality,
                     'countryname' => $contact->adr_one_countryname,
-                    'prefix1' => $customer->related_record->name == $contact->n_fn ? '' : $contact->n_fn,
+                    'prefix1' => $contact->org_name,
+                    'prefix2' => $contact->org_unit,
+                    'prefix3' =>  $customer->related_record->name == $contact->n_fn ? '' : $contact->n_fn,
                     'language' => $defaultLang,
                 ));
 

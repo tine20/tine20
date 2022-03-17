@@ -136,11 +136,15 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }], [{
                 columnWidth: 1,
                 name: 'prefix1',
-                fieldLabel: this.app.i18n._('Prefix')
+                fieldLabel: this.app.i18n._('Prefix 1')
             }], [{
                 columnWidth: 1,
                 name: 'prefix2',
-                fieldLabel: this.app.i18n._('Additional Prefix')
+                fieldLabel: this.app.i18n._('Prefix 2')
+            }], [{
+                columnWidth: 1,
+                name: 'prefix3',
+                fieldLabel: this.app.i18n._('Prefix 3')
             }], [{
                 name: 'street',
                 fieldLabel: this.app.i18n._('Street')

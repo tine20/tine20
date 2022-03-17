@@ -253,8 +253,9 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         $address->locality = $contact->adr_one_locality;
         $address->region = $contact->adr_one_region;
         $address->countryname = $contact->adr_one_countryname;
-        $address->prefix1 = $customer->name == $contact->n_fn ? '' : $contact->n_fn;
-        $address->prefix2 = $contact->org_name;
+        $address->prefix1 = $contact->org_name;
+        $address->prefix2 = $contact->org_unit;
+        $address->prefix3 = $customer->name == $contact->n_fn ? '' : $contact->n_fn;
         $address->language = $language;
 
         return Sales_Controller_Address::getInstance()->update($address);

@@ -132,6 +132,8 @@ class Tinebase_Frontend_CliTest extends TestCase
      */
     public function testPurgeDeletedRecordsAllTables()
     {
+        $this->_testNeedsTransaction();
+
         $opts = $this->_getOpts();
         if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
             $deletedFile = $this->_addAndDeleteFile();

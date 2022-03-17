@@ -466,7 +466,7 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                         this.selectionHandler(item, e);
                     }
                 },
-                getEventData: (eventName) => {
+                getEventData: function(eventName) {
                     if (eventName === 'apply') {
                         const attachRecord = this.getForm().findField('attachRecord').selectedRecord;
                         return {

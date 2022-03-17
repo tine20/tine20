@@ -31,6 +31,7 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
     public const FLD_NAME = 'name';
     public const FLD_PREFIX1 = 'prefix1';
     public const FLD_PREFIX2 = 'prefix2';
+    public const FLD_PREFIX3 = 'prefix3';
     public const FLD_EMAIL = 'email';
     public const FLD_STREET = 'street';
     public const FLD_POBOX = 'pobox';
@@ -56,7 +57,7 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION   => 3,
+        self::VERSION   => 4,
         self::RECORD_NAME   => 'Address', // ngettext('Address', 'Addresss', n)
         self::RECORDS_NAME  => 'Addresss', // gettext('GENDER_Address')
         self::HAS_RELATIONS => true,
@@ -119,14 +120,21 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
                 self::QUERY_FILTER => true,
             ],
             self::FLD_PREFIX1 => [
-                self::LABEL   => 'Prefix', //_('Prefix')
+                self::LABEL   => 'Prefix 1', //_('Prefix 1')
                 self::NULLABLE => TRUE,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::TYPE => self::TYPE_STRING,
                 self::QUERY_FILTER => TRUE
             ],
             self::FLD_PREFIX2 => [
-                self::LABEL   => 'Additional Prefix', //_('Additional Prefix')
+                self::LABEL   => 'Prefix 2', //_('Prefix 2')
+                self::NULLABLE => TRUE,
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE => self::TYPE_STRING,
+                self::QUERY_FILTER => TRUE
+            ],
+            self::FLD_PREFIX3 => [
+                self::LABEL   => 'Prefix 3', //_('Prefix 3')
                 self::NULLABLE => TRUE,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::TYPE => self::TYPE_STRING,
