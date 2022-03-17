@@ -547,6 +547,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             echo "\nCleaning files...";
             $this->clearDeletedFiles();
+
+            echo "\nOptimizing path table...";
+            Tinebase_Path_Backend_Sql::optimizePathsTable();
         }
 
         echo "\n\n";
