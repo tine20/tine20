@@ -39,6 +39,7 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
     public const FLD_REISEGEBIET = 'reisegebiet';
     public const FLD_GRAD_DER_VERSTAEDTERUNG = 'gradDerVerstaedterung';
     public const FLD_GEBIETSSTAND = 'gebietsstand';
+    public const FLD_BEVOELKERUNGSSTAND = 'bevoelkerungsstand';
 
     public const MODEL_NAME_PART = 'MunicipalityKey';
     public const TABLE_NAME = 'municipalitykeys';
@@ -49,7 +50,7 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 2,
+        self::VERSION => 3,
         self::MODLOG_ACTIVE => true,
         self::IS_DEPENDENT => true,
 
@@ -263,6 +264,13 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
             self::FLD_GEBIETSSTAND => [
                 self::TYPE => self::TYPE_DATE,
                 self::LABEL => 'Gebietsstand', // _('Gebietsstand')
+                self::NULLABLE => true,
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
+            ],
+            self::FLD_BEVOELKERUNGSSTAND => [
+                self::TYPE => self::TYPE_DATE,
+                self::LABEL => 'Bevölkerungsstand', // _('Bevölkerungsstand')
                 self::NULLABLE => true,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],

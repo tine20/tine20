@@ -21,6 +21,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE015_UPDATE006 = __CLASS__ . '::update006';
     const RELEASE015_UPDATE007 = __CLASS__ . '::update007';
+    const RELEASE015_UPDATE008 = __CLASS__ . '::update008';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE       => [
@@ -48,6 +49,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE006          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update006',
+            ],
+            self::RELEASE015_UPDATE008          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update008',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -148,5 +153,14 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
         }
         $this->setTableVersion('importexport_definition', 15);
         $this->addApplicationUpdate('Tinebase', '15.7', self::RELEASE015_UPDATE007);
+    }
+
+    public function update008()
+    {
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_MunicipalityKey::class,
+        ]);
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.8', self::RELEASE015_UPDATE008);
     }
 }
