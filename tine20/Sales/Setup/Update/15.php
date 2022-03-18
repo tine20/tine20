@@ -26,6 +26,8 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE010 = __CLASS__ . '::update010';
     const RELEASE015_UPDATE011 = __CLASS__ . '::update011';
     const RELEASE015_UPDATE012 = __CLASS__ . '::update012';
+    const RELEASE015_UPDATE013 = __CLASS__ . '::update013';
+
 
     static protected $_allUpdates = [
         // this needs to be executed before TB struct update! cause we move the table from sales to tb
@@ -75,6 +77,10 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE012          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update012',
+            ],
+            self::RELEASE015_UPDATE013          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update013',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -274,5 +280,13 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             Sales_Model_Address::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.12', self::RELEASE015_UPDATE012);
+    }
+
+    public function update013()
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_Address::class,
+        ]);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.13', self::RELEASE015_UPDATE013);
     }
 }
