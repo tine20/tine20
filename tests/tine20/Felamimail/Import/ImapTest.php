@@ -24,6 +24,8 @@ class Felamimail_Import_ImapTest extends TestCase
      */
     protected Felamimail_Controller_MessageTest $_emailTestClass;
 
+    protected Felamimail_Model_Message $_message;
+
     /**
      * set up test environment
      *
@@ -62,13 +64,16 @@ class Felamimail_Import_ImapTest extends TestCase
         $password = $account->password;
 
         $definitionName = 'testFelamimailImportImap';
-        $this->_definition = Tinebase_ImportExportDefinition::getInstance()->create(new Tinebase_Model_ImportExportDefinition(array(
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId(),
-            'name'              => $definitionName,
-            'type'              => 'import',
-            'model'             => 'Addressbook_Model_Contact',
-            'plugin'            => Felamimail_Import_Imap::class,
-            'plugin_options'    =>'<?xml version="1.0" encoding="UTF-8"?>
+        try {
+            $this->_definition = Tinebase_ImportExportDefinition::getInstance()->getByName($definitionName);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $this->_definition = Tinebase_ImportExportDefinition::getInstance()->create(new Tinebase_Model_ImportExportDefinition(array(
+                'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId(),
+                'name' => $definitionName,
+                'type' => 'import',
+                'model' => 'Addressbook_Model_Contact',
+                'plugin' => Felamimail_Import_Imap::class,
+                'plugin_options' => '<?xml version="1.0" encoding="UTF-8"?>
             <config>
                 <dryrun>1</dryrun>
                 <folder>Junk</folder>
@@ -78,25 +83,14 @@ class Felamimail_Import_ImapTest extends TestCase
                 <user>' . $username . '</user>
                 <password>' . $password . '</password>
             </config>'
-        )));
+            )));
+        }
     }
 
     public function testImport()
     {
         $this->_testNeedsTransaction();
-
-        $this->_createDefinition();
-        $importer = Felamimail_Import_Imap::createFromDefinition($this->_definition);
-
-        // put message with adb json into mailaccount Junk folder
-        $emailFile = 'import_contact.eml';
-        $message =  $this->_emailTestClass->messageTestHelper(
-            $emailFile
-        );
-        // remove seen flag - importer only imports "unseen" messages
-        Felamimail_Controller_Message_Flags::getInstance()->clearFlags($message, [Zend_Mail_Storage::FLAG_SEEN]);
-
-        $result = $importer->import();
+        $result = $this->_import('import_contact.eml');
 
         self::assertEquals(1, $result['totalcount'], print_r($result, true));
         $contact = $result['results']->getFirstRecord();
@@ -106,5 +100,38 @@ class Felamimail_Import_ImapTest extends TestCase
         $result = $importer->import();
         self::assertEquals(0, $result['totalcount'],
             'should no longer import a message - imported message should have been marked as seen');
+    }
+
+    protected function _import($emailFile)
+    {
+        $this->_createDefinition();
+        $importer = Felamimail_Import_Imap::createFromDefinition($this->_definition);
+
+        // put message with adb json into mailaccount Junk folder
+        $this->_message = $this->_emailTestClass->messageTestHelper(
+            $emailFile
+        );
+        // remove seen flag - importer only imports "unseen" messages
+        Felamimail_Controller_Message_Flags::getInstance()->clearFlags($this->_message, [Zend_Mail_Storage::FLAG_SEEN]);
+
+        return $importer->import();
+    }
+
+    public function testImportFail()
+    {
+        $this->_testNeedsTransaction();
+        $filename = 'import_contact_fail.eml';
+        $result = $this->_import($filename);
+        self::assertEquals(1, $result['failcount'], print_r($result, true));
+
+        $message = $this->_emailTestClass->searchAndCacheMessage($filename);
+        $expected = [
+            Zend_Mail_Storage::FLAG_SEEN,
+            Zend_Mail_Storage::FLAG_FLAGGED,
+        ];
+        $flags = $message->flags;
+        sort($expected);
+        sort($flags);
+        self::assertEquals($expected, $flags, 'message not FLAGGED: ' . print_r($message->toArray(), true));
     }
 }
