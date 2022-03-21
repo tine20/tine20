@@ -2309,13 +2309,13 @@ class Tinebase_FileSystem implements
         $tries = 0;
         $currentFilesHash = null;
         $previousCurrentFilesHash = null;
-        while (!$fileCreated && ($currentFilesHash = sha1_file($hashFile)) !== $hash && $tries++ < 10) {
+        while (!$fileCreated && ($currentFilesHash = @sha1_file($hashFile)) !== $hash && $tries++ < 10) {
             if ($previousCurrentFilesHash === $currentFilesHash) {
                 // hash did not change -> we will start cleaning up then
                 break;
             }
             $previousCurrentFilesHash = $currentFilesHash;
-            // hash file mismatch! First lets sleep some time, maybe somebody is writting the file...
+            // hash file mismatch! First lets sleep some time, maybe somebody is writing the file...
             usleep(100000); // 100ms
         }
         if (!$fileCreated && $currentFilesHash !== $hash) {
