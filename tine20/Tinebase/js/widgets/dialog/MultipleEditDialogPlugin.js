@@ -680,48 +680,62 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             return false;
         }
         
-        
         this.changedHuman = '<br /><br /><ul>';
-        var changes = [];
+        const changes = [];
+        
+        // cope with added relations
+        if (this.editDialog.relationsPanel) {
+            Ext.each(this.editDialog.relationsPanel.getData(), function (relation) {
+                const rrc = Tine.Tinebase.data.RecordMgr.get(relation['related_model']);
+                const rr = new rrc(relation['related_record']);
+                const modelName = rrc.getRecordName();
+                const title = rr.getTitle();
+                const type = relation['type'] || " ";
+
+                relation['own_id'] = "";
+                relation['related_record'] = "";
+                // we have to empty the relation id, otherwise backend failed to generate relations
+                relation['id'] = "";
+                changes.push({name: '%add', value: Ext.encode(relation)});
+    
+                let createdFromPicker = false;
+                
+                _.each(this.editDialog.relationPickers, (picker) => {
+                    if (picker.relationType === relation['type']
+                        && picker.getValue() === relation['related_id']
+                        && picker.fullModelName === relation['related_model']) 
+                    {
+                        createdFromPicker = true;
+                    }
+                });
+                
+                if (! createdFromPicker) {
+                    this.changedHuman += '<li><span style="font-weight:bold">' + String.format(i18n._('Add {0} Relation'), modelName) + ':</span> ';
+                    this.changedHuman += Ext.util.Format.htmlEncode(title);
+                    this.changedHuman += '</li>';
+                }
+            }, this);
+        }
         
         Ext.each(this.changedFields, function(field) {
             var ff = field.formField,
                 renderer = Ext.util.Format.htmlEncode;
-                
+        
             var label = ff.fieldLabel ? ff.fieldLabel : ff.boxLabel ? ff.boxLabel : ff.ownerCt.fieldLabel;
-                    label = label ? label : ff.ownerCt.title;
-                    
-            changes.push({name: (field.type == 'relation') ? field.recordKey : ff.getName(), value: ff.getValue()});
-                    
+            label = label ? label : ff.ownerCt.title;
+            
+            changes.push({name: (field.type === 'relation') ? field.recordKey : ff.getName(), value: ff.getValue()});
+
             this.changedHuman += '<li><span style="font-weight:bold">' + label + ':</span> ';
             if (ff.isXType('checkbox')) {
-                    renderer = Tine.Tinebase.common.booleanRenderer;
-                } else if (ff.isXType('durationspinner')) {
-                    renderer = Tine.Tinebase.common.minutesRenderer;
-                }
-                
-                this.changedHuman += ff.lastSelectionText ? renderer(ff.lastSelectionText) : renderer(ff.getValue());
-                this.changedHuman += '</li>';
+                renderer = Tine.Tinebase.common.booleanRenderer;
+            } else if (ff.isXType('durationspinner')) {
+                renderer = Tine.Tinebase.common.minutesRenderer;
+            }
+        
+            this.changedHuman += ff.lastSelectionText ? renderer(ff.lastSelectionText) : renderer(ff.getValue());
+            this.changedHuman += '</li>';
         }, this);
-
-        // cope with added relations
-        if (this.editDialog.relationsPanel) {
-            Ext.each(this.editDialog.relationsPanel.getData(), function (relation) {
-                var rrc = Tine.Tinebase.data.RecordMgr.get(relation['related_model']),
-                    rr = new rrc(relation['related_record']),
-                    modelName = rrc.getRecordName(),
-                    title = rr.getTitle(),
-                    type = relation['type'] || " ";
-
-                relation['own_id'] = "";
-                relation['related_record'] = "";
-
-                changes.push({name: '%add', value: Ext.encode(relation)});
-                this.changedHuman += '<li><span style="font-weight:bold">' + String.format(i18n._('Add {0} Relation'), modelName) + ':</span> ';
-                this.changedHuman += Ext.util.Format.htmlEncode(title);
-                this.changedHuman += '</li>';
-            }, this);
-        }
 
         this.changedHuman += '</ul>';
         var filter = this.selectionFilter;

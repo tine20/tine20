@@ -2881,7 +2881,7 @@ class Tinebase_FileSystem implements
          Tinebase_Model_Tempfile      tempfile
          string                       with tempFile id
          array                        with [id] => tempFile id (this is odd IMHO)
-         stream                       stream ressource
+         resource                     stream resource
          null                         create empty file
      * @param string $path
      * @param boolean $deleteTempFileAfterCopy
@@ -2906,10 +2906,12 @@ class Tinebase_FileSystem implements
             } else {
                 return $this->copyTempfile($tempFile->tempFile, $path, $deleteTempFileAfterCopy);
             }
-        } else if ($tempFile instanceof Tinebase_Model_TempFile) {
+        } else if ($tempFile instanceof Tinebase_Model_TempFile && file_exists($tempFile->path)) {
             $tempStream = fopen($tempFile->path, 'r');
         } else {
-            throw new Tinebase_Exception_UnexpectedValue('unexpected tempfile value');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' ' . print_r($tempFile, true));
+            throw new Tinebase_Exception_UnexpectedValue('Unexpected tempfile value or file not found');
         }
         
         $this->copyStream($tempStream, $path);
