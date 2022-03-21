@@ -50,8 +50,9 @@ class Felamimail_Import_ImapTest extends TestCase
         if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
             $this->_emailTestClass->tearDown();
         }
-        Tinebase_ImportExportDefinition::getInstance()->delete([$this->_definition->getId()]);
         parent::tearDown();
+
+        // TODO remove definition - but be careful: removing it multiple times might result in duplication exceptions ... :(
     }
 
     protected function _createDefinition()
