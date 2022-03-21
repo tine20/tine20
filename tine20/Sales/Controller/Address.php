@@ -245,6 +245,7 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
     {
         $language = Sales_Controller::getInstance()->getContactDefaultLanguage($contact);
         $customer = Sales_Controller_Customer::getInstance()->get($address->customer_id);
+        $fullName = $this->getContactFullName($contact);
         
         //Update Address
         $address->name =  $customer->name;
@@ -255,9 +256,22 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         $address->countryname = $contact->adr_one_countryname;
         $address->prefix1 = $contact->org_name;
         $address->prefix2 = $contact->org_unit;
-        $address->prefix3 = $customer->name == $contact->n_fn ? '' : $contact->n_fn;
+        $address->prefix3 = $fullName;
         $address->language = $language;
 
         return Sales_Controller_Address::getInstance()->update($address);
+    }
+
+    /**
+     * @param Addressbook_Model_Contact $contact
+     * @return string
+     */
+    public function getContactFullName(Addressbook_Model_Contact $contact): string
+    {
+        $fullName = $contact->n_fn;
+        if ($contact->n_prefix) {
+            $fullName = $contact->n_prefix . ' ' . $fullName;
+        }
+        return $fullName;
     }
 }
