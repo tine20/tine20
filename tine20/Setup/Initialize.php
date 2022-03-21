@@ -247,22 +247,54 @@ class Setup_Initialize
      * ]
      *
      * @param array $tags
+     * @param bool $randomizeColors
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
      */
-    public static function createSharedTags(array $tags)
+    public static function createSharedTags(array $tags, bool $randomizeColors = true)
     {
         $controller = Tinebase_Tags::getInstance();
 
         foreach ($tags as $tag) {
+            if (is_scalar($tag)) {
+                $tag = [
+                    'name' => $tag,
+                    'description' => $tag,
+                ];
+            }
+
+            try {
+                Tinebase_Tags::getInstance()->getTagByName($tag['name']);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Tag already exists: ' . $tag['name']);
+                continue;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // go on ...
+            }
+
+            if (isset($tag['color'])) {
+                $color = $tag['color'];
+            } else {
+                $color = $randomizeColors ? '#' . Tinebase_Record_Abstract::generateUID(6) : '#339966';
+                // check for 'parent' tag
+                if (strpos($tag['name'], '/') !== false) {
+                    $path = explode('/', $tag['name']);
+                    try {
+                        $parent = Tinebase_Tags::getInstance()->getTagByName($path[0]);
+                        $color = $parent->color;
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                    }
+                }
+            }
+
             $sharedTag = new Tinebase_Model_Tag(array(
                 'type' => Tinebase_Model_Tag::TYPE_SHARED,
                 'name' => $tag['name'],
                 'description' => $tag['description'],
-                'color' => $tag['color'],
-                'system_tag' => $tag['system_tag'] ?? false
+                'color' => $color,
+                'system_tag' => $tag['system_tag'] ?? 0
             ));
 
             $savedSharedTag = $controller->createTag($sharedTag);
@@ -273,7 +305,7 @@ class Setup_Initialize
                 'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
                 'account_id' => 0,
                 'view_right' => true,
-                'use_right' => !$tag['system_tag'],
+                'use_right' => ! ($tag['system_tag'] ?? false),
             ));
             $controller->setRights($right);
 
