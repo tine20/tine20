@@ -123,6 +123,9 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
      */
     public function setValue($_value)
     {
+        if ($_value instanceof Tinebase_Record_Interface) {
+            $_value = $_value->getId();
+        }
         $this->_foreignIds = NULL;
         $this->_valueIsNull = empty($_value) || (is_array($_value) && count($_value) === 1 && isset($_value[0]) &&
                 is_array($_value[0]) && array_key_exists('value', $_value[0]) && empty($_value[0]['value']));

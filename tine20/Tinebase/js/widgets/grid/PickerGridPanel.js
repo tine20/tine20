@@ -160,7 +160,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.configColumns = (this.configColumns !== null) ? this.configColumns : [];
         this.searchComboConfig = this.searchComboConfig || {};
         this.searchComboConfig.additionalFilterSpec = this.additionalFilterSpec;
-        
+
+        this.recordClass = _.isString(this.recordClass) ? Tine.Tinebase.data.RecordMgr.get(this.recordClass) : this.recordClass;
         this.labelField = this.labelField ? this.labelField : (this.recordClass && this.recordClass.getMeta ? this.recordClass.getMeta('titleProperty') : null);
         this.recordName = this.recordName ? this.recordName : (this.recordClass && this.recordClass.getRecordName ? this.recordClass.getRecordName() || i18n._('Record') : i18n._('Record'));
 
@@ -403,8 +404,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.on('rowcontextmenu', this.onRowContextMenu.createDelegate(this), this);
 
         this.viewConfig = {
-            autoFill: true,
-            forceFit: true
+            autoFill: true
         };
     },
 
@@ -539,10 +539,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             record: Ext.encode(record.data),
             recordId: record.getId(),
             listeners: {
-                update: (recordData) => {
-                    const record = Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass);
-                    this.store.add(record);
-                }
+                scope: this,
+                update: this.onEditDialogRecordUpdate
             }
         }, this.editDialogConfig || {}));
     },
@@ -568,6 +566,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             if (this.fireEvent('beforeremoverecord', selectedRows[i]) !== false) {
                 this.store.remove(selectedRows[i]);
             }
+        }
+        if (this.deleteOnServer === true) {
+            this.recordClass.getProxy().deleteRecords(selectedRows);
         }
     },
 
@@ -685,7 +686,12 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             isSelected = this.getSelectionModel().isSelected(idx);
 
         this.getStore().removeAt(idx);
-        this.getStore().insert(idx, [updatedRecord]);
+        if (idx >= 0) {
+            this.getStore().insert(idx, [updatedRecord]);
+        } else {
+            this.getStore().add(updatedRecord);
+        }
+
         if (isSelected) {
             this.getSelectionModel().selectRow(idx, true);
         }

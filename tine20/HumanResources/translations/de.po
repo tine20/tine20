@@ -73,6 +73,9 @@ msgstr "Konnte nicht als Urlaub gebucht werden"
 msgid "GENDER_Division"
 msgstr "female"
 
+msgid "GENDER_Working time correction"
+msgstr "female"
+
 #: Model/Division.php:34
 msgid "Division"
 msgid_plural "Divisions"

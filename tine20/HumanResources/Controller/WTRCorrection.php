@@ -82,7 +82,7 @@ class HumanResources_Controller_WTRCorrection extends Tinebase_Controller_Record
                 break;
             case self::ACTION_CREATE:
             case self::ACTION_UPDATE:
-                if (HumanResources_Config::FREE_TIME_PROCESS_STATUS_REQUESTED === $_record->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS} &&
+                if (HumanResources_Config::WTR_CORRECTION_STATUS_REQUESTED === $_record->{HumanResources_Model_WTRCorrection::FLD_STATUS} &&
                         (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::CREATE_CHANGE_REQUEST, false) ||
                             (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::CREATE_OWN_CHANGE_REQUEST, false) &&
                             $this->_checkOwnEmployee($_record)))) {
@@ -136,15 +136,15 @@ class HumanResources_Controller_WTRCorrection extends Tinebase_Controller_Record
     protected function _inspect($record)
     {
         /** @var HumanResources_Model_WTRCorrection $record */
-        if (!$record->{HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY} &&
+        if (!$record->{HumanResources_Model_WTRCorrection::FLD_WTR_DAILY} &&
                 !$record->{HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY}) {
             throw new Tinebase_Exception_Record_Validation('either ' .
                 HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY . ' or ' .
                 HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY . ' needs to be set');
         }
-        if ($record->{HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY} &&
+        if ($record->{HumanResources_Model_WTRCorrection::FLD_WTR_DAILY} &&
                 $record->{HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY}) {
-            throw new Tinebase_Exception_Record_Validation(HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY . ' and '
+            throw new Tinebase_Exception_Record_Validation(HumanResources_Model_WTRCorrection::FLD_WTR_DAILY . ' and '
                 . HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY . ' must not be both set');
         }
     }

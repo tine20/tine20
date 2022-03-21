@@ -135,6 +135,15 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 HumanResources_Model_MonthlyWTReport::FLDS_CORRECTIONS => [],
+                self::FLDS_EMPLOYEE_ID => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'division_id' => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
+                                Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ],
 
@@ -289,11 +298,27 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
                 self::INPUT_FILTERS         => ['Zend_Filter_Empty' => 0],
             ],
-            // manuelles feld für korrekturen ("musterschüler")
+            HumanResources_Model_MonthlyWTReport::FLDS_CORRECTIONS => [
+                self::TYPE                          => self::TYPE_RECORDS,
+                self::LABEL                         => 'Working Time Correction Requests', // _('Working Time Correction Requests')
+                self::NULLABLE                      => true,
+                self::DOCTRINE_IGNORE               => true,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => HumanResources_Config::APP_NAME,
+                    self::MODEL_NAME                    => HumanResources_Model_WTRCorrection::MODEL_NAME_PART,
+                    self::REF_ID_FIELD                  => HumanResources_Model_WTRCorrection::FLD_WTR_DAILY,
+                ],
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+            ],
             'working_time_correction' => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
-                self::LABEL                 => 'Working Time Correction', // _('Working Time Correction')
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+                self::LABEL                 => 'Sum Accepted Working Time Correction', // _('Sum Accepted Working Time Correction')
                 self::DEFAULT_VAL           => 0,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
                 self::INPUT_FILTERS         => ['Zend_Filter_Empty' => 0],
@@ -345,20 +370,6 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::TYPE                  => 'boolean',
                 self::DEFAULT_VAL           => 0,
                 self::COPY_OMIT             => true,
-            ],
-            HumanResources_Model_MonthlyWTReport::FLDS_CORRECTIONS => [
-                self::TYPE                          => self::TYPE_RECORDS,
-                self::LABEL                         => 'Working Time Correction Requests', // _('Working Time Correction Requests')
-                self::NULLABLE                      => true,
-                self::DOCTRINE_IGNORE               => true,
-                self::CONFIG                        => [
-                    self::APP_NAME                      => HumanResources_Config::APP_NAME,
-                    self::MODEL_NAME                    => HumanResources_Model_WTRCorrection::MODEL_NAME_PART,
-                    self::REF_ID_FIELD                  => HumanResources_Model_WTRCorrection::FLD_WTR_DAILY,
-                ],
-                self::UI_CONFIG                     => [
-                    self::READ_ONLY                     => true,
-                ],
             ],
         ]
     ];

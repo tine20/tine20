@@ -216,6 +216,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 region: 'north',
                 xtype: 'columnform',
                 border: false,
+                frame: true,
                 autoHeight: true,
                 items: [[{
                     columnWidth: 0.8,
