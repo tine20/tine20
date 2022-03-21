@@ -33,6 +33,16 @@ class Felamimail_Import_Imap extends Tinebase_Import_Abstract
     protected Tinebase_Record_RecordSet $_importedMessages;
 
     /**
+     * @var Tinebase_Record_RecordSet
+     */
+    protected Tinebase_Record_RecordSet $_failedMessages;
+
+    /**
+     * @var Felamimail_Model_Message
+     */
+    protected $_currentMessage = null;
+
+    /**
      * @var Felamimail_Model_Folder
      */
     protected Felamimail_Model_Folder $_folder;
@@ -78,6 +88,7 @@ class Felamimail_Import_Imap extends Tinebase_Import_Abstract
         $this->_updateCaches();
         $this->_getMessages();
         $this->_importedMessages = new Tinebase_Record_RecordSet(Felamimail_Model_Message::class);
+        $this->_failedMessages = new Tinebase_Record_RecordSet(Felamimail_Model_Message::class);
     }
 
     /**
@@ -139,34 +150,58 @@ class Felamimail_Import_Imap extends Tinebase_Import_Abstract
     protected function _getRawData(&$_resource)
     {
         // get next unread message of mail account
-        $message = $this->_messagesToImport->getFirstRecord();
-        if (!$message) {
+        $this->_currentMessage = $this->_messagesToImport->getFirstRecord();
+        if (!$this->_currentMessage) {
             return false;
         }
         $this->_messagesToImport->removeFirst();
 
         // get json data from message body
-        $body = Felamimail_Controller_Message::getInstance()->getMessageBody($message, 0, Zend_Mime::TYPE_TEXT);
+        $body = Felamimail_Controller_Message::getInstance()->getMessageBody($this->_currentMessage, 0, Zend_Mime::TYPE_TEXT);
         // TODO add check for valid json?
         $content = Tinebase_Helper::jsonDecode($body);
         if (! empty($content)) {
-            $this->_importedMessages->addRecord($message);
+            $this->_importedMessages->addRecord($this->_currentMessage);
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' .
-                __LINE__ . ' No valid JSON body found in message ' . print_r($message->toArray(), true));
+                __LINE__ . ' No valid JSON body found in message ' . print_r($this->_currentMessage->toArray(), true));
+            $this->_failedMessages->addRecord($this->_currentMessage);
             return null;
         }
         return $content;
     }
-    
+
+    /**
+     * handle import exceptions
+     *
+     * @param Exception $e
+     * @param integer $recordIndex
+     * @param Tinebase_Record_Interface|array $record
+     * @param boolean $allowToResolveDuplicates
+     *
+     * @todo use json converter for client record
+     */
+    protected function _handleImportException(Exception $e, $recordIndex, $record = null, $allowToResolveDuplicates = true)
+    {
+        if ($this->_currentMessage) {
+            $this->_failedMessages->addRecord($this->_currentMessage);
+        }
+        parent::_handleImportException($e, $recordIndex, $record, $allowToResolveDuplicates);
+    }
+
     /**
      * do something after the import
      */
     protected function _afterImport()
     {
-        // mark all imported messages as seen
+        // mark all imported + failed messages as seen, also mark failed messages with FLAGGED
         Felamimail_Controller_Message_Flags::getInstance()->addFlags(
             $this->_importedMessages, [Zend_Mail_Storage::FLAG_SEEN]);
+        Felamimail_Controller_Message_Flags::getInstance()->addFlags(
+            $this->_failedMessages, [
+                Zend_Mail_Storage::FLAG_SEEN,
+                Zend_Mail_Storage::FLAG_FLAGGED,
+            ]);
 
         // remove no longer needed import account
         Felamimail_Controller_Account::getInstance()->delete([$this->_account->getId()]);
