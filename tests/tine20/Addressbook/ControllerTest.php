@@ -299,7 +299,7 @@ class Addressbook_ControllerTest extends TestCase
      */
     public function testUpdateContactWithMissingPostalcode()
     {
-        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::MAPPANEL, TRUE)) {
+        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::GEO_SERVICE, TRUE)) {
             $this->markTestSkipped('Nominatim disabled');
         }
         

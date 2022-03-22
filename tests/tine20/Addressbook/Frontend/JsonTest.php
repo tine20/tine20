@@ -899,7 +899,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $this->assertEquals($contact['id'], $updatedContact['id'], 'updated produced a new contact');
         $this->assertEquals('PHPUNIT UPDATE', $updatedContact['n_family'], 'updating data failed');
 
-        if (Tinebase_Config::getInstance()->get(Tinebase_Config::MAPPANEL, TRUE)) {
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::GEO_SERVICE, TRUE)) {
             // check geo data
             $this->assertEquals(10, round($updatedContact['adr_one_lon']), 'wrong geodata (lon): ' . $updatedContact['adr_one_lon']);
             $this->assertEquals(54, round($updatedContact['adr_one_lat']), 'wrong geodata (lat): ' . $updatedContact['adr_one_lat']);
