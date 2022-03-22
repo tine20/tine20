@@ -407,14 +407,10 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             return;
         }
 
-        $fullUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
-        $newFullUser = clone($fullUser);
-
         if (isset($account['email_imap_user'])) {
-            foreach ($account['email_imap_user'] as $key => $value) {
-                $newFullUser->imapUser[$key] = $value;
-            }
-            
+            $fullUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
+            $newFullUser = clone($fullUser);
+
             $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
             $emailUserBackend->updateUser($fullUser, $newFullUser);
         }
