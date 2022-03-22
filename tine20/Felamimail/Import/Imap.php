@@ -104,17 +104,24 @@ class Felamimail_Import_Imap extends Tinebase_Import_Abstract
      */
     protected function _initAccount()
     {
-        $this->_account = Felamimail_Controller_Account::getInstance()->create(new Felamimail_Model_Account([
-            'name' => 'Felamimail Import Account',
-            'email' => 'felamimailimport@' . $this->_options['host'],
-            'type' => Tinebase_EmailUser_Model_Account::TYPE_USER,
-            'user_id' => Tinebase_Core::getUser()->getId(),
-            'host' => $this->_options['host'],
-            'ssl' => $this->_options['ssl'],
-            'port' => $this->_options['port'],
-            'user' => $this->_options['user'],
-            'password' => $this->_options['password'],
-        ]));
+        $email = 'felamimailimport@' . $this->_options['host'];
+        $this->_account = Felamimail_Controller_Account::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                ['field' => 'email', 'operator' => 'equals', 'value' => $email]
+        ]))->getFirstRecord();
+        if (! $this->_account) {
+            $this->_account = Felamimail_Controller_Account::getInstance()->create(new Felamimail_Model_Account([
+                'name' => 'Felamimail Import Account',
+                'email' => $email,
+                'type' => Tinebase_EmailUser_Model_Account::TYPE_USER,
+                'user_id' => Tinebase_Core::getUser()->getId(),
+                'host' => $this->_options['host'],
+                'ssl' => $this->_options['ssl'],
+                'port' => $this->_options['port'],
+                'user' => $this->_options['user'],
+                'password' => $this->_options['password'],
+            ]));
+        }
     }
 
     protected function _updateCaches()

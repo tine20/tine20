@@ -198,7 +198,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     {
         if (in_array(Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT}, (array) $_ids)) {
             $accounts = $this->search();
-            $defaultAccountId = (count($accounts) > 0) ? $accounts->getFirstRecord()->getId() : '';
+            if (count($accounts) > 0) {
+                $systemAccount = $accounts->filter('type', Tinebase_EmailUser_Model_Account::TYPE_SYSTEM);
+                $defaultAccountId = count($systemAccount) > 0 ? $systemAccount->getFirstRecord()->getId() : $accounts->getFirstRecord()->getId();
+            } else {
+                $defaultAccountId = '';
+            }
 
             Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} = $defaultAccountId;
         }
