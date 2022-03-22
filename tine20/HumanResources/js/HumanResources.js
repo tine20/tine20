@@ -10,12 +10,14 @@
 
 Ext.namespace('Tine.HumanResources');
 
-require('./DailyWTReportGridPanel');
-require('./MonthlyWTReportGridPanel');
-require('./MonthlyWTReportEditDialog');
-require('./FreeTimeGridPanel');
-require('./FreeTimePlanningWestPanel');
-require('./FreeTimePlanningPanel');
+import './DailyWTReportGridPanel'
+import './MonthlyWTReportGridPanel'
+import './MonthlyWTReportEditDialog'
+import './WTRCorrectionPicker'
+import './WTRCorrectionEditDialog'
+import './FreeTimeGridPanel'
+import './FreeTimePlanningWestPanel'
+import './FreeTimePlanningPanel'
 import './DivisionEditDialog'
 import './Timetracker/hooks'
 

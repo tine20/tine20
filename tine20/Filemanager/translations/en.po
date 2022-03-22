@@ -702,3 +702,6 @@ msgstr "Manage anonymous download links"
 #: Acl/Rights.php:109
 msgid "Allow viewing, adding and deleting download links"
 msgstr "Allow viewing, adding and deleting download links"
+
+msgid "Copy Public Link"
+msgstr "Copy Public Link"

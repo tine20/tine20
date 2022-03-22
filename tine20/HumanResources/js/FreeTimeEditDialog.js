@@ -83,9 +83,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         if (Ext.isObject(typeString)) {
             typeString = this.app.i18n._('Free Time');
         }
-        let isNewRecord = !this.record.get('creation_time');
+        const isNewRecord = !this.record.get('creation_time');
         const grants = _.get(employee, 'data.division_id.account_grants', {});
-        const isNew = !this.record.get('creation_time');
         const isOwn = Tine.Tinebase.registry.get('currentAccount').accountId === _.get(employee, 'data.account_id.accountId');
         const processStatus = this.processStatusPicker.getValue();
         const allowUpdate = grants.adminGrant || grants.updateChangeRequestGrant ||
@@ -101,7 +100,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.typePicker.setReadOnly(!isNewRecord || this.fixedFields.indexOfKey('type') >= 0);
 
         this.processStatusPicker.setDisabled(!(grants.updateChangeRequestGrant || grants.adminGrant));
-        if (isNew && employee !== this.processStatusPicker.employee && (grants.updateChangeRequestGrant || grants.adminGrant)) {
+        if (isNewRecord && employee !== this.processStatusPicker.employee && (grants.updateChangeRequestGrant || grants.adminGrant)) {
             this.processStatusPicker.employee = employee;
             this.processStatusPicker.setValue('ACCEPTED');
         }

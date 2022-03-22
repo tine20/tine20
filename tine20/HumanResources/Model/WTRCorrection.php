@@ -30,21 +30,40 @@ class HumanResources_Model_WTRCorrection extends Tinebase_Record_NewAbstract
      */
     protected static $_modelConfiguration = [
         self::VERSION               => 1,
-        self::RECORD_NAME           => 'Working time report correction',
-        self::RECORDS_NAME          => 'Working time report correction', // ngettext('Working time report correction', 'Working time report corrections', n)
+        self::RECORD_NAME           => 'Working time correction', // gettext('GENDER_Working time correction')
+        self::RECORDS_NAME          => 'Working time corrections', // ngettext('Working time corrections', 'Working time corrections', n)
         self::MODLOG_ACTIVE         => true,
+        self::HAS_ATTACHMENTS       => true,
         self::TITLE_PROPERTY        => self::FLD_TITLE,
         self::APP_NAME              => HumanResources_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
+        self::CREATE_MODULE         => false,
         self::EXPOSE_JSON_API       => true,
+        self::DEFAULT_SORT_INFO     => ['field' => 'creation_time', 'direction' => 'DESC'],
+        self::DELEGATED_ACL_FIELD   => self::FLD_EMPLOYEE_ID,
 
         self::TABLE                 => [
             self::NAME                  => self::TABLE_NAME,
         ],
 
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_EMPLOYEE_ID => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'division_id' => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
+                                Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+
         self::FIELDS                => [
             self::FLD_EMPLOYEE_ID       => [
                 self::TYPE                  => self::TYPE_RECORD,
+                self::LABEL                 => 'Employee', // _('Employee')
                 self::CONFIG                => [
                     self::APP_NAME              => HumanResources_Config::APP_NAME,
                     self::MODEL_NAME            => HumanResources_Model_Employee::MODEL_NAME_PART,
@@ -60,6 +79,7 @@ class HumanResources_Model_WTRCorrection extends Tinebase_Record_NewAbstract
                     self::APP_NAME              => HumanResources_Config::APP_NAME,
                     self::MODEL_NAME            => HumanResources_Model_DailyWTReport::MODEL_NAME_PART,
                 ],
+                self::DISABLED              => true,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::NULLABLE              => true,
             ],
@@ -69,6 +89,7 @@ class HumanResources_Model_WTRCorrection extends Tinebase_Record_NewAbstract
                     self::APP_NAME              => HumanResources_Config::APP_NAME,
                     self::MODEL_NAME            => HumanResources_Model_MonthlyWTReport::MODEL_NAME_PART,
                 ],
+                self::DISABLED              => true,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::NULLABLE              => true,
             ],
@@ -89,6 +110,7 @@ class HumanResources_Model_WTRCorrection extends Tinebase_Record_NewAbstract
             ],
             self::FLD_CORRECTION        => [
                 self::TYPE                  => self::TYPE_INTEGER,
+                self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::LABEL                 => 'Correction', // _('Correction')
                 self::VALIDATORS            => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,

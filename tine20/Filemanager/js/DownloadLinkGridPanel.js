@@ -72,6 +72,14 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             handler: this.onCreate,
             iconCls: 'action_add'
         });
+
+        this.actionCopy = new Ext.Action({
+            text: this.app.i18n._('Copy Public Link'),
+            disabled: false,
+            scope: this,
+            handler: this.onCopy,
+            iconCls: 'clipboard'
+        });
         
         this.actionRemove = new Ext.Action({
             text: i18n._('Remove record'),
@@ -83,6 +91,7 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.tbar = [
             this.actionCreate,
+            this.actionCopy,
             this.actionRemove
         ];
         
@@ -93,6 +102,7 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }],
             items: [
                 this.actionCreate,
+                this.actionCopy,
                 this.actionRemove
             ]
         });
@@ -115,6 +125,11 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         Tine.Filemanager.DownloadLinkGridPanel.superclass.initComponent.call(this);
         
         this.initialLoad();
+    },
+
+    onCopy: function() {
+        let selectedRows = this.getSelectionModel().getSelections();
+        Tine.Filemanager.FilePublishedDialog.openWindow({record:selectedRows['0']})
     },
 
     onRecordLoad: function(editDialog, record, ticketFn) {

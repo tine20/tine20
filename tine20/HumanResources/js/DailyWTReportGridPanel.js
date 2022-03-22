@@ -9,6 +9,7 @@ Ext.ns('Tine.HumanResources');
 
 // NOTE: recordClass and some other config is injected by appStarter
 Tine.HumanResources.DailyWTReportGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+    evalGrants: false,
 
     initComponent: function() {
 

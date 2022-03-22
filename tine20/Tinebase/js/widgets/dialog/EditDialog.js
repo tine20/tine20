@@ -877,7 +877,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // To bypass this you can set recordFromJson === true, then the dialog wouldn't load the record from server!
         // But to make this work you need to pass a json encoded record to the editdialog as string!
         // NOTE: we only load records with id from remote, new records (id === 0/null/undefined) are local
-        if (this.mode !== 'local' && this.recordFromJson !== true && this.record?.id) {
+        if (this.mode !== 'local' && this.recordFromJson !== true && [null, undefined, 0, '0'].indexOf(this.record?.id) < 0) {
             this.loadRemoteRecord();
         } else {
             this.onRecordLoad.defer(10, this);
@@ -1027,7 +1027,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.doCopyRecord();
             this.window.setTitle(String.format(i18n._('Copy {0}'), this.i18nRecordName));
         } else {
-            if (! this.record.id) {
+            if (!this.record || !(this.record.get && this.record.get('creation_time'))) {
                 this.window.setTitle(formatMessage('{gender, select, male {Add New {recordName}} female {Add New {recordName}} other {Add New {recordName}}}', {
                     gender: this.recordClass.getRecordGender(),
                     recordName: this.i18nRecordName

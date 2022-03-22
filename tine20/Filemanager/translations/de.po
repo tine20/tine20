@@ -838,3 +838,6 @@ msgstr "Dateiinhalt"
 
 #~ msgid "The destination has the same path the source has. No action has been performed."
 #~ msgstr "Das Ziel hat den selben Pfad wie die Quelle. Die Aktion wurde nicht ausgeführt."
+
+msgid "Copy Public Link"
+msgstr "Öffentlichen Link kopieren"
