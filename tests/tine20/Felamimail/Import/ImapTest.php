@@ -24,8 +24,6 @@ class Felamimail_Import_ImapTest extends TestCase
      */
     protected Felamimail_Controller_MessageTest $_emailTestClass;
 
-    protected Felamimail_Model_Message $_message;
-
     /**
      * set up test environment
      *
@@ -50,9 +48,8 @@ class Felamimail_Import_ImapTest extends TestCase
         if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
             $this->_emailTestClass->tearDown();
         }
+        Tinebase_ImportExportDefinition::getInstance()->delete([$this->_definition->getId()]);
         parent::tearDown();
-
-        // TODO remove definition - but be careful: removing it multiple times might result in duplication exceptions ... :(
     }
 
     protected function _createDefinition()
@@ -60,7 +57,6 @@ class Felamimail_Import_ImapTest extends TestCase
         $account = $this->_emailTestClass->getAccount();
         $account->resolveCredentials(false);
 
-        // $username = Tinebase_EmailUser::getInstance()->getEmailUserName(Tinebase_Core::getUser());
         $username = $account->user;
         $password = $account->password;
 
@@ -91,41 +87,16 @@ class Felamimail_Import_ImapTest extends TestCase
     public function testImport()
     {
         $this->_testNeedsTransaction();
-        $result = $this->_import('import_contact.eml');
+        $failFilename = 'import_contact_fail.eml';
+        $result = $this->_import(['import_contact.eml', $failFilename]);
 
         self::assertEquals(1, $result['totalcount'], print_r($result, true));
+        self::assertEquals(1, $result['failcount'], print_r($result, true));
         $contact = $result['results']->getFirstRecord();
         self::assertEquals('Setz', $contact->n_fn, print_r($contact->toArray(), true));
 
-        $importer = Felamimail_Import_Imap::createFromDefinition($this->_definition);
-        $result = $importer->import();
-        self::assertEquals(0, $result['totalcount'],
-            'should no longer import a message - imported message should have been marked as seen');
-    }
-
-    protected function _import($emailFile)
-    {
-        $this->_createDefinition();
-        $importer = Felamimail_Import_Imap::createFromDefinition($this->_definition);
-
-        // put message with adb json into mailaccount Junk folder
-        $this->_message = $this->_emailTestClass->messageTestHelper(
-            $emailFile
-        );
-        // remove seen flag - importer only imports "unseen" messages
-        Felamimail_Controller_Message_Flags::getInstance()->clearFlags($this->_message, [Zend_Mail_Storage::FLAG_SEEN]);
-
-        return $importer->import();
-    }
-
-    public function testImportFail()
-    {
-        $this->_testNeedsTransaction();
-        $filename = 'import_contact_fail.eml';
-        $result = $this->_import($filename);
-        self::assertEquals(1, $result['failcount'], print_r($result, true));
-
-        $message = $this->_emailTestClass->searchAndCacheMessage($filename);
+        // check if failed import is marked FLAGGED
+        $message = $this->_emailTestClass->searchAndCacheMessage($failFilename);
         $expected = [
             Zend_Mail_Storage::FLAG_SEEN,
             Zend_Mail_Storage::FLAG_FLAGGED,
@@ -134,5 +105,27 @@ class Felamimail_Import_ImapTest extends TestCase
         sort($expected);
         sort($flags);
         self::assertEquals($expected, $flags, 'message not FLAGGED: ' . print_r($message->toArray(), true));
+
+        $importer = Felamimail_Import_Imap::createFromDefinition($this->_definition);
+        $result = $importer->import();
+        self::assertEquals(0, $result['totalcount'],
+            'should no longer import a message - imported message should have been marked as seen');
+    }
+
+    protected function _import($emailFiles)
+    {
+        $this->_createDefinition();
+        $importer = Felamimail_Import_Imap::createFromDefinition($this->_definition);
+
+        // put messages with adb json into mailaccount Junk folder
+        foreach ($emailFiles as $emailFile) {
+            $message = $this->_emailTestClass->messageTestHelper(
+                $emailFile
+            );
+            // remove seen flag - importer only imports "unseen" messages
+            Felamimail_Controller_Message_Flags::getInstance()->clearFlags($message, [Zend_Mail_Storage::FLAG_SEEN]);
+        }
+
+        return $importer->import();
     }
 }
