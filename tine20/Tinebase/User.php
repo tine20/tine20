@@ -154,6 +154,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             'maxGroupId' => '11099',
             'groupUUIDAttribute' => 'entryUUID',
             'userUUIDAttribute' => 'entryUUID',
+            'emailAttribute' => 'mail',
             self::DEFAULT_USER_GROUP_NAME_KEY  => Tinebase_Group::DEFAULT_USER_GROUP,
             self::DEFAULT_ADMIN_GROUP_NAME_KEY => Tinebase_Group::DEFAULT_ADMIN_GROUP,
             'readonly' => false,
