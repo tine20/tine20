@@ -29,15 +29,8 @@ Ext.namespace('Tine.Timetracker');
  * Create a new Tine.Timetracker.TimesheetGridPanel
  */
 Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
-    /**
-     * record class
-     * @cfg {Tine.Timetracker.Model.Timesheet} recordClass
-     */
-    recordClass: Tine.Timetracker.Model.Timesheet,
 
-    /**
-     * @private grid cfg
-     */
+    recordClass: 'Tine.Timetracker.Model.Timesheet',
     defaultSortInfo: {field: 'start_date', direction: 'DESC'},
     gridConfig: {
         autoExpandColumn: 'description'

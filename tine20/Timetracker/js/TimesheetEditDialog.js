@@ -21,8 +21,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     windowNamePrefix: 'TimesheetEditWindow_',
     appName: 'Timetracker',
     modelName: 'Timesheet',
-    recordClass: Tine.Timetracker.Model.Timesheet,
-    recordProxy: Tine.Timetracker.timesheetBackend,
+    recordClass: 'Tine.Timetracker.Model.Timesheet',
+    // recordProxy: Tine.Timetracker.timesheetBackend,
     tbarItems: null,
     evalGrants: false,
     useInvoice: false,
@@ -294,7 +294,33 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             this.calculateAccountingTime();
         }
     },
-    
+
+    checkStates() {
+        Tine.Timetracker.TimesheetEditDialog.superclass.checkStates.apply(this, arguments);
+
+        const accountId = this.getForm().findField('account_id').getValue();
+        const timeAccount = this.getForm().findField('timeaccount_id').selectedRecord;
+        const isNewRecord = !this.record.get('creation_time');
+        const grants = _.get(timeAccount, 'data.account_grants', {});
+        const isOwn = Tine.Tinebase.registry.get('currentAccount').accountId === accountId;
+        const processStatusPicker = this.getForm().findField('process_status')
+        const processStatus = processStatusPicker.getValue();
+        const allowUpdate = grants.adminGrant || grants.manageBillableGrant || grants.bookAllGrant || (isOwn && grants.bookOwnGrant) ||
+            (processStatus === 'REQUESTED' && (isNewRecord || (isOwn && grants.requestOwnGrant)));
+
+        this.getForm().findField('account_id').setDisabled(! (grants.bookAllGrant ||grants.adminGrant));
+        processStatusPicker.setDisabled(!(grants.manageBillableGrant || grants.bookAllGrant || (isOwn && grants.bookOwnGrant) || grants.adminGrant));
+        if (isNewRecord && timeAccount !== processStatusPicker.timeAccount) {
+            processStatusPicker.timeAccount = timeAccount;
+            processStatusPicker.setValue((grants.manageBillableGrant || grants.bookAllGrant || (isOwn && grants.bookOwnGrant)) ? 'ACCEPTED' : 'REQUESTED');
+        }
+
+        // @TODO -> add a lot of props -> all?
+        [this.getForm().findField('description'), this.attachmentsPanel, this.action_saveAndClose].forEach((item) => {
+            item[item.setReadOnly ? 'setReadOnly' : 'setDisabled'](!allowUpdate);
+        });
+    },
+
     /**
      * returns dialog
      * 
@@ -347,12 +373,15 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         items: [[
                             fieldManager('timeaccount_id', {
                                 disabled: this.record.get('workingtime_is_cleared') ? true : false,
-                                columnWidth: 1,
+                                columnWidth: 0.75,
                                 listeners: {
                                     scope: this,
                                     select: this.onTimeaccountSelect
                                 },
                                 lazyInit: false
+                            }),
+                            fieldManager('process_status', {
+                                columnWidth: 0.25,
                             })
                         ], [
                             fieldManager('duration', {

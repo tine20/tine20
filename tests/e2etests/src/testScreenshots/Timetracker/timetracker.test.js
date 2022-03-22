@@ -25,7 +25,7 @@ describe('timeaccount', () => {
         });
 
         test('permissions', async () => {
-            await expect(editDialog).toClick('span', {text: 'Zugang'});
+            await expect(editDialog).toClick('span', {text: 'Zugriffsrechte'});
             await editDialog.waitForSelector('.x-grid3-viewport');
             await editDialog.screenshot({path: 'screenshots/Zeiterfassung/3_zeiterfassung_zeitkonto_rechte.png'});
             await expect(editDialog).toClick('button', {text: 'Abbrechen'});

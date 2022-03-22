@@ -40,9 +40,9 @@ class Timetracker_Config extends Tinebase_Config_Abstract
     const STATUS ='status';
 
     const TS_PROCESS_STATUS = 'tsProcessStatus';
-    const TS_PROCESS_STATUS_REQUESTED = 'requested';
-    const TS_PROCESS_STATUS_ACCEPTED = 'accepted';
-    const TS_PROCESS_STATUS_DECLINED = 'declined';
+    const TS_PROCESS_STATUS_REQUESTED = 'REQUESTED';
+    const TS_PROCESS_STATUS_ACCEPTED = 'ACCEPTED';
+    const TS_PROCESS_STATUS_DECLINED = 'DECLINED';
     
 
     /**
@@ -104,9 +104,9 @@ class Timetracker_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::DEFAULT_STR           => [
                 self::RECORDS               => [
-                    ['id' => self::TS_PROCESS_STATUS_ACCEPTED, 'value' => 'accepted', 'system' => true],
-                    ['id' => self::TS_PROCESS_STATUS_DECLINED, 'value' => 'declined', 'system' => true],
-                    ['id' => self::TS_PROCESS_STATUS_REQUESTED, 'value' => 'requested', 'system' => true],
+                    array('id' => self::TS_PROCESS_STATUS_REQUESTED,  'value' => 'Requested',  'icon' => 'images/icon-set/icon_invite.svg', 'system' => TRUE),  //_('Requested')
+                    array('id' => self::TS_PROCESS_STATUS_ACCEPTED,   'value' => 'Accepted',   'icon' => 'images/icon-set/icon_ok.svg', 'system' => TRUE),  //_('Accepted')
+                    array('id' => self::TS_PROCESS_STATUS_DECLINED,   'value' => 'Declined',   'icon' => 'images/icon-set/icon_stop.svg', 'system' => TRUE),  //_('Declined')
                 ],
                 self::DEFAULT_STR           => self::TS_PROCESS_STATUS_ACCEPTED,
             ],
