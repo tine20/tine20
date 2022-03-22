@@ -52,6 +52,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         HumanResources_Model_BLDailyWTReport_WorkingTime::MODEL_NAME_PART,
         HumanResources_Model_DailyWTReport::MODEL_NAME_PART,
         HumanResources_Model_MonthlyWTReport::MODEL_NAME_PART,
+        HumanResources_Model_WTRCorrection::MODEL_NAME_PART,
         HumanResources_Model_Stream::MODEL_NAME_PART,
         HumanResources_Model_StreamModality::MODEL_NAME_PART,
         HumanResources_Model_StreamModalReport::MODEL_NAME_PART,
@@ -77,6 +78,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 HumanResources_Model_BLDailyWTReport_WorkingTime::MODEL_NAME_PART,
                 HumanResources_Model_DailyWTReport::MODEL_NAME_PART,
                 HumanResources_Model_MonthlyWTReport::MODEL_NAME_PART,
+                HumanResources_Model_WTRCorrection::MODEL_NAME_PART,
                 HumanResources_Model_WageType::MODEL_NAME_PART,
             ]);
         }
