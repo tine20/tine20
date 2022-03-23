@@ -31,6 +31,7 @@ Ext.namespace('Tine.Timetracker');
  * Create a new Tine.Timetracker.TimeaccountGridPanel
  */
 Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+    recordClass: 'Tine.Timetracker.Model.Timeaccount',
     defaultSortInfo: {field: 'creation_time', direction: 'DESC'},
     gridConfig: {
         autoExpandColumn: 'title'

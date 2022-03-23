@@ -1465,7 +1465,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
 
         // save draft in draft folder
-        return Felamimail_Controller_Message_Send::getInstance()->saveMessageInFolder($draftFolder, $_message, [Zend_Mail_Storage::FLAG_SEEN]);
+        $draft = Felamimail_Controller_Message_Send::getInstance()->saveMessageInFolder($draftFolder, $_message, [Zend_Mail_Storage::FLAG_SEEN]);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Saved draft with uid ' . $draft->messageuid);
+        return $draft;
     }
 
     /**

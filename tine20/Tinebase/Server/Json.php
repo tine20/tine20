@@ -141,8 +141,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         $json = Tinebase_Core::filterInputForDatabase($json);
 
         if (empty($json)) {
-            // nginx cuts the JSON POST payload if out of disk space ...
-            throw new Tinebase_Exception_SystemGeneric('Got empty JSON request - server out of disk space?');
+            // nginx cuts the JSON POST payload if out of disk space ... but also client might be sending us empty payload
+            throw new Tinebase_Exception_SystemGeneric('Got empty JSON request');
         }
 
         if (substr($json, 0, 1) == '[') {

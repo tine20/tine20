@@ -343,12 +343,24 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const ACCEPTEDTERMSVERSION = 'acceptedTermsVersion';
-    
+
+    /**
+     * Config key for using geo service
+     * @var string
+     */
+    const GEO_SERVICE = 'geoService';
+
+    /**
+     * Config key for using geo service url
+     * @var string
+     */
+    const GEO_SERVICE_URL = 'geoServiceUrl';
+
     /**
      * Config key for map panel in addressbook / include geoext code
      * @var string
      */
-    const MAPPANEL = 'mapPanel';
+    const GEO_SERVICE_MAPPANEL = 'mapPanel';
 
     /**
      * disable ldap certificate check
@@ -1772,17 +1784,39 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
-        self::MAPPANEL => array(
-                                   //_('Use Geolocation Services')
+        self::GEO_SERVICE => [
+            //_('Use Geolocation Services')
             'label'                 => 'Use Geolocation Services',
-                                   //_('Use of external Geolocation services is allowed.')
+            //_('Use of external Geolocation services is allowed.')
             'description'           => 'Use of external Geolocation services is allowed.',
             'type'                  => 'bool',
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
             'default'               => true,
-        ),
+        ],
+        self::GEO_SERVICE_MAPPANEL => [
+            //_('Show geo service map panel')
+            'label'                 => 'Show geo service map panel',
+            //_('Show geo service map panel in Contact dialog')
+            'description'           => 'Show geo service map panel in Contact dialog',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => true,
+            'default'               => true,
+        ],
+        self::GEO_SERVICE_URL => [
+            //_('Geolocation Service URL')
+            'label'                 => 'Geolocation Service URL',
+            //_('Geolocation Service URL')
+            'description'           => 'Geolocation Service URL',
+            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'default'               => 'https://nominatim.openstreetmap.org/',
+        ],
         // TODO should this be added to LDAP config array/struct?
         self::LDAP_DISABLE_TLSREQCERT => array(
                                    //_('Disable LDAP TLS Certificate Check')

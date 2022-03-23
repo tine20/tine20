@@ -16,10 +16,6 @@
           "path": "js/"
         },
         {
-          "text": "Models.js",
-          "path": "js/"
-        },
-        {
           "text": "Timetracker.js",
           "path": "js/"
         },

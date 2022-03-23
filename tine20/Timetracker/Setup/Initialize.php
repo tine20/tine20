@@ -16,6 +16,22 @@
  */
 class Timetracker_Setup_Initialize extends Setup_Initialize
 {
+    public static function addTSRequestedFavorite()
+    {
+        Tinebase_PersistentFilter::getInstance()->createDuringSetup(new Tinebase_Model_PersistentFilter(array(
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Timetracker')->getId(),
+            'model'             => Timetracker_Model_Timesheet::class,
+            'name'              => "Requested Timesheets", // _("Requested Timesheets")
+            'description'       => "Requested Timesheets",
+            'filters'           => array(array(
+                'field'     => 'process_status',
+                'operator'  => 'equals',
+                'value'     => Timetracker_Config::TS_PROCESS_STATUS_REQUESTED,
+            )),
+        )));
+    }
+
     /**
      * init favorites
      */
@@ -98,7 +114,8 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
                 'value'     => 'monthLast',
             )),
         ))));
-        
+
+        static::addTSRequestedFavorite();
         
         // Timeaccounts
         $commonValues = array(

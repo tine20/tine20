@@ -47,7 +47,11 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * All configured models
      * @var array
      */
-	protected $_configuredModels = array('Timesheet', 'Timeaccount');
+	protected $_configuredModels = array(
+        Timetracker_Model_Timesheet::MODEL_NAME_PART,
+        Timetracker_Model_Timeaccount::MODEL_NAME_PART,
+        Timetracker_Model_TimeaccountGrants::MODEL_NAME_PART,
+    );
 
     /**
      * the constructor
@@ -116,9 +120,9 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 // resolve timeaccounts
                 $timeaccountIds = $_records->timeaccount_id;
                 $timeaccounts = $this->_timeaccountController->getMultiple(array_unique(array_values($timeaccountIds)));
-                
+
                 $invoices = FALSE;
-                
+
                 Timetracker_Controller_Timeaccount::getInstance()->getGrantsOfRecords($timeaccounts, Tinebase_Core::get('currentAccount'));
 
                 foreach ($_records as $record) {

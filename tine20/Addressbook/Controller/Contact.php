@@ -63,9 +63,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         // fields used for private and company address
         $this->_addressFields = array('locality', 'postalcode', 'street', 'countryname');
         
-        $this->_setGeoDataForContacts = Tinebase_Config::getInstance()->get(Tinebase_Config::MAPPANEL, TRUE);
+        $this->_setGeoDataForContacts = Tinebase_Config::getInstance()->get(Tinebase_Config::GEO_SERVICE, TRUE);
         if (! $this->_setGeoDataForContacts) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Mappanel/geoext/nominatim disabled with config option.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Geolocation service disabled with config option.');
         }
     }
     
@@ -919,11 +920,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     /**
      * @return Zend_Service_Nominatim
      */
-    protected function _getNominatimService()
+    protected function _getNominatimService(): Zend_Service_Nominatim
     {
         $httpClient = Tinebase_Core::getHttpClient();
-        $nominatim = new Zend_Service_Nominatim(/* url */ null, $httpClient);
-        return $nominatim;
+        return new Zend_Service_Nominatim(Tinebase_Config::getInstance()->{Tinebase_Config::GEO_SERVICE_URL}, $httpClient);
     }
 
     /**

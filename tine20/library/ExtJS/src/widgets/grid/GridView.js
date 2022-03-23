@@ -1171,7 +1171,7 @@ viewConfig: {
         var width = 0;
         var w;
         for (i = 0; i < colCount; i++){
-            if(!cm.isHidden(i) && !cm.isFixed(i) && i !== omitColumn){
+            if(!cm.isHidden(i) && !cm.isFixed(i) && i > (omitColumn || -1)){
                 w = cm.getColumnWidth(i);
                 cols.push(i);
                 extraCol = i;

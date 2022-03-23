@@ -87,6 +87,16 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
             ),
         ),
 
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'timeaccount_id' => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
+                        Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
+                    ],
+                ],
+            ],
+        ],
+
         // frontend
         'multipleEdit'      => true,
         'splitButton'       => true,
