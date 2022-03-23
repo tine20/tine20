@@ -18,8 +18,8 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     windowNamePrefix: 'TimeaccountEditWindow_',
     appName: 'Timetracker',
     modelName: 'Timeaccount',
-    recordClass: Tine.Timetracker.Model.Timeaccount,
-    recordProxy: Tine.Timetracker.timeaccountBackend,
+    recordClass: 'Tine.Timetracker.Model.Timeaccount',
+    // recordProxy: Tine.Timetracker.timeaccountBackend,
     useInvoice: false,
     displayNotes: true,
 
@@ -50,42 +50,6 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         return true;
     },
 
-    /**
-     * containerProperty (all contracts in one container) exists, so overwrite creating selector here
-     */
-    initContainerSelector: Ext.emptyFn,
-
-    /**
-     * TODO generalize this
-     */
-    onRecordLoad: function() {
-        // make sure grants grid is initialized
-        this.getGrantsGrid();
-        
-        var grants = this.record.get('grants') || [];
-        this.grantsGrid.getStore().loadData({results: grants});
-        Tine.Timetracker.TimeaccountEditDialog.superclass.onRecordLoad.call(this);
-        
-        if (! this.copyRecord && ! this.record.id) {
-            this.window.setTitle(this.app.i18n._('Add New Timeaccount'));
-        }
-    },
-
-    /**
-     * TODO generalize this
-     */
-    onRecordUpdate: function() {
-        Tine.Timetracker.TimeaccountEditDialog.superclass.onRecordUpdate.call(this);
-        this.record.set('grants', '');
-        
-        var grants = [];
-        this.grantsGrid.getStore().each(function(_record){
-            grants.push(_record.data);
-        });
-        
-        this.record.set('grants', grants);
-    },
-    
     /**
      * returns dialog
      * 
@@ -268,31 +232,12 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         bodyStyle: 'border:1px solid #B5B8C8;'
                     })]
                 }]
-            },{
-                title: this.app.i18n._('Access'),
-                layout: 'fit',
-                items: [this.getGrantsGrid()]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: (! this.copyRecord) ? this.record.id : null,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             })]
         };
-    },
-
-    getGrantsGrid: function() {
-        if (! this.grantsGrid) {
-            this.grantsGrid = new Tine.widgets.container.GrantsGrid({
-                selectType: 'both',
-                title:  this.app.i18n._('Permissions'),
-                alwaysShowAdminGrant: true,
-                hasAccountPrefix: true,
-                selectAnyone: false,
-                selectTypeDefault: 'group',
-                recordClass: Tine.Timetracker.Model.TimeaccountGrant
-            });
-        }
-        return this.grantsGrid;
     },
     
     /**

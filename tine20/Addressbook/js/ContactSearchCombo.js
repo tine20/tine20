@@ -179,10 +179,12 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
                     // account object
                     this.accountId = value.accountId;
                     value = value.accountDisplayName;
+                    this.selectedAccount = Tine.Tinebase.data.Record.setFromJson(value, Tine.Tinebase.Model.Account);
                 } else if (typeof(value.get) == 'function') {
                     // account record
                     this.accountId = value.get('id');
                     value = value.get('name');
+                    this.selectedAccount = value;
                 }
             } else {
                 this.accountId = null;

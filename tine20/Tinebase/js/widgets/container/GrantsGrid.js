@@ -92,6 +92,8 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
         }
         
         Tine.widgets.container.GrantsGrid.superclass.initComponent.call(this);
+
+        this.actionEdit.setHidden(true);
         
         this.getStore().on('update', this.onStoreUpdate, this);
         

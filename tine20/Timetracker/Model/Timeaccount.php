@@ -64,6 +64,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         'hasAttachments'    => TRUE,
         'createModule'      => TRUE,
         'containerProperty' => 'container_id',
+        self::EXTENDS_CONTAINER         => self::FLD_CONTAINER_ID,
         'grantsModel'       => 'Timetracker_Model_TimeaccountGrants',
         'multipleEdit'      => TRUE,
         'requiredRight'     => 'manage',
@@ -85,6 +86,12 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
 //                ]],
 //            ]
 //        ]],
+
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
+                Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
+            ],
+        ],
 
         'table'             => array(
             'name'    => self::TABLE_NAME,
