@@ -15,6 +15,71 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
 {
     protected $_ts;
 
+    public function testCorrectionFilter()
+    {
+        $this->_createBasicData();
+
+        $this->_createTimesheets();
+
+        // create report
+        $start = new Tinebase_DateTime('2018-08-01 00:00:00');
+        $end = new Tinebase_DateTime('2018-08-31 23:59:59');
+        $calcResult = HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee($this->employee, $start, $end);
+
+        $result = $this->_getReportsForEmployee($this->employee);
+        self::assertGreaterThanOrEqual(3, count($result), 'should have more than (or equal) 3 daily reports');
+
+        $dailyWTR = $result->getFirstRecord();
+        $dailyCorrection = HumanResources_Controller_WTRCorrection::getInstance()->create(new HumanResources_Model_WTRCorrection([
+            HumanResources_Model_WTRCorrection::FLD_STATUS => HumanResources_Config::WTR_CORRECTION_STATUS_REQUESTED,
+            HumanResources_Model_WTRCorrection::FLD_WTR_DAILY => $dailyWTR->getId(),
+            HumanResources_Model_WTRCorrection::FLD_EMPLOYEE_ID => $dailyWTR->getIdFromProperty(HumanResources_Model_DailyWTReport::FLDS_EMPLOYEE_ID),
+            HumanResources_Model_WTRCorrection::FLD_CORRECTION => 600,
+        ]));
+
+        $result = HumanResources_Controller_DailyWTReport::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            HumanResources_Model_DailyWTReport::class, [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $dailyWTR->getId()],
+                ['field' => HumanResources_Model_MonthlyWTReport::FLDS_CORRECTIONS,  'operator' => 'definedBy', 'value' => [
+                        ['field' => 'status', 'operator' => 'equals', 'value' => 'REQUESTED'],
+                    ],
+                ],
+            ]
+        ))->getFirstRecord();
+
+        $this->assertNotNull($result);
+        Tinebase_Record_Expander::expandRecord($result);
+        $result = $result->{HumanResources_Model_MonthlyWTReport::FLDS_CORRECTIONS}->getFirstRecord();
+        $this->assertNotNull($result);
+        $this->assertSame($dailyCorrection->getId(), $result->getId());
+
+        $monthlyWTR = $dailyWTR->monthlywtreport;
+        $this->assertNotNull($monthlyWTR);
+
+        $monthlyCorrection = HumanResources_Controller_WTRCorrection::getInstance()->create(new HumanResources_Model_WTRCorrection([
+            HumanResources_Model_WTRCorrection::FLD_STATUS => HumanResources_Config::WTR_CORRECTION_STATUS_REQUESTED,
+            HumanResources_Model_WTRCorrection::FLD_WTR_MONTHLY => $monthlyWTR,
+            HumanResources_Model_WTRCorrection::FLD_EMPLOYEE_ID => $dailyWTR->getIdFromProperty(HumanResources_Model_DailyWTReport::FLDS_EMPLOYEE_ID),
+            HumanResources_Model_WTRCorrection::FLD_CORRECTION => 600,
+        ]));
+
+        $result = HumanResources_Controller_MonthlyWTReport::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            HumanResources_Model_MonthlyWTReport::class, [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $monthlyWTR],
+                ['field' => HumanResources_Model_MonthlyWTReport::FLDS_CORRECTIONS,  'operator' => 'definedBy', 'value' => [
+                    ['field' => 'status', 'operator' => 'equals', 'value' => 'REQUESTED'],
+                ],
+                ],
+            ]
+        ))->getFirstRecord();
+
+        $this->assertNotNull($result);
+        Tinebase_Record_Expander::expandRecord($result);
+        $result = $result->{HumanResources_Model_MonthlyWTReport::FLDS_CORRECTIONS}->getFirstRecord();
+        $this->assertNotNull($result);
+        $this->assertSame($monthlyCorrection->getId(), $result->getId());
+    }
+
     public function testCalculateAllReports()
     {
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
