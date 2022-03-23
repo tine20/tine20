@@ -1576,7 +1576,12 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         foreach ($servers as $server) {
             $serverConfig = Tinebase_Config::getInstance()->{$server};
-
+            
+            if (empty($serverConfig)) {
+                $message .= 'CONFIG : ' . $server . ' IS NOT SET, SKIP' .  PHP_EOL;
+                continue;
+            }
+            
             $host = isset($serverConfig->{'hostname'}) ? $serverConfig->{'hostname'} : $serverConfig->{'host'};
             $port = $serverConfig->{'port'};
 
@@ -1584,25 +1589,23 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             if (empty($host) || empty($port)) {
                 $message .= ' -> INVALID VALUE' . PHP_EOL;
-                $result = 2;
                 continue;
             }
-
-            $output = shell_exec('nc -d -N -w3 ' . $host . ' ' . $port . PHP_EOL);
-
-            if (!$output) {
-                echo 'COMMAND CANNOT BE EXECUTE' . PHP_EOL;
-                return 99;
-            }
-
-            if (strpos($output, 'OK') || strstr($output, '220')) {
-                $message .= ' -> CONNECTION OK' . PHP_EOL;
-            } else {
-                $message .= ' -> CONNECTION ERROR' . PHP_EOL;
-                $result = 1;
-            }
+            
+            $command = 'nc -v -d -N -w3 ' . $host . ' ' . $port . ' 2>&1';
+            exec($command, $output, $result_code);
+            $output = print_r($output, true);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . PHP_EOL . 'netcat command: ' . $command
+                    . PHP_EOL . 'result code : ' . $result_code
+                    . PHP_EOL . 'output : ' . $output
+                );
+            };
 
             $message .= PHP_EOL . $output . PHP_EOL;
+            $result = $result_code;
         }
 
         echo $message . "\n";
