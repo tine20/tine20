@@ -15,6 +15,7 @@ class Timetracker_Setup_Update_15 extends Setup_Update_Abstract
 {
     const RELEASE015_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE015_UPDATE001 = __CLASS__ . '::update001';
+    const RELEASE015_UPDATE002 = __CLASS__ . '::update002';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -27,6 +28,10 @@ class Timetracker_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
+            ],
+            self::RELEASE015_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
             ],
         ],
     ];
@@ -43,5 +48,11 @@ class Timetracker_Setup_Update_15 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate('Timetracker', '15.1', self::RELEASE015_UPDATE001);
+    }
+
+    public function update002()
+    {
+        Timetracker_Setup_Initialize::addTSRequestedFavorite();
+        $this->addApplicationUpdate('Timetracker', '15.2', self::RELEASE015_UPDATE002);
     }
 }
