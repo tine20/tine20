@@ -315,8 +315,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             processStatusPicker.setValue((grants.manageBillableGrant || grants.bookAllGrant || (isOwn && grants.bookOwnGrant)) ? 'ACCEPTED' : 'REQUESTED');
         }
 
-        // @TODO -> add a lot of props -> all?
-        [this.getForm().findField('description'), this.attachmentsPanel, this.action_saveAndClose].forEach((item) => {
+        [this.attachmentsPanel, this.action_saveAndClose].forEach((item) => {
             item[item.setReadOnly ? 'setReadOnly' : 'setDisabled'](!allowUpdate);
         });
     },
