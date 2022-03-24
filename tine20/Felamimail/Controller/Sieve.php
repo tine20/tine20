@@ -809,28 +809,42 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             try {
                 $user = Tinebase_User::getInstance()->getFullUserById($_account->user_id);
                 if (isset($user->smtpUser) && $user->emailForwardOnly) {
-                    $_account->sieve_notification_move = false;
+                    $_account->sieve_notification_move = Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_INACTIVE;
                 }
             } catch (Tinebase_Exception_NotFound $tenf) {
             }
         }
+        
+        if (! isset($_account->sieve_notification_move)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    'Skip update sieve script: ' . $this->_scriptName . 
+                    ', Invalid sieve notification move setting : ' . print_r($_account, true)
+                    );
+            }
+            return;
+        }
 
         $scriptParts = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_ScriptPart');
-        if (isset($_account->sieve_notification_move)
-            && $_account->sieve_notification_move
-            && ! empty($_account->sieve_notification_move_folder)
-        ) {
+
+        if (! empty($_account->sieve_notification_move_folder) 
+            && $_account->sieve_notification_move !== Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_INACTIVE) {
             $scriptParts->addRecord(new Felamimail_Model_Sieve_ScriptPart([
                 'account_id' => $_account,
                 'type' => Felamimail_Model_Sieve_ScriptPart::TYPE_AUTO_MOVE_NOTIFICATION,
-                'script' => 'if header :contains "X-Tine20-Type" "Notification" {
-    fileinto :create "' . $_account->sieve_notification_move_folder . '";
-}',
+                'script' => 'if header :contains "X-Tine20-Type" "Notification" {fileinto :create "' 
+                    . $_account->sieve_notification_move_folder . '";}',
                 'name' => 'auto_move_notification',
                 'requires' => ['"fileinto"', '"mailbox"'],
             ]));
         }
+        
         $this->_updateScriptParts($_account, $scriptParts, Felamimail_Model_Sieve_ScriptPart::TYPE_AUTO_MOVE_NOTIFICATION);
+        
+        if ($_account->sieve_notification_move === Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_AUTO) {
+            $_account->sieve_notification_move = Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_ACTIVE;
+            Felamimail_Controller_Account::getInstance()->update($_account);
+        }
     }
 
     /**
