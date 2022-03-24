@@ -871,4 +871,5 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
 
     abstract public function addUserInSqlBackend(Tinebase_Model_FullUser $_user);
     abstract public function updateUserInSqlBackend(Tinebase_Model_FullUser $_user);
+    abstract public function undelete(string $loginname);
 }

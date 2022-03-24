@@ -1225,14 +1225,20 @@ class Tinebase_User implements Tinebase_Controller_Interface
             }
 
         } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
-                ' No system user could be created');
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                ' No system user could be created: ' . $e->getMessage());
 
             // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)
 
             try {
                 if ($e instanceof Zend_Db_Statement_Exception && Tinebase_Exception::isDbDuplicate($e)) {
-                    $systemUser = $userBackend->getUserByLoginName($accountLoginName);
+                    // user might have been deleted -> undelete
+                    try {
+                        $systemUser = $userBackend->getUserByLoginName($accountLoginName);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        $userBackend->undelete($accountLoginName);
+                        $systemUser = $userBackend->getUserByLoginName($accountLoginName);
+                    }
                 } else {
                     $systemUser = $userBackend->addUserInSqlBackend($systemUser);
                     $groupsBackend->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
