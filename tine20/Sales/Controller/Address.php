@@ -269,8 +269,12 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
     public function getContactFullName(Addressbook_Model_Contact $contact): string
     {
         $fullName = $contact->n_given . ' ' . $contact->n_family;
+        
         if ($contact->n_prefix) {
             $fullName = $contact->n_prefix . ' ' . $fullName;
+        }
+        if ($contact->salutation) {
+            $fullName = $contact->salutation . ' ' . $fullName;
         }
         return $fullName;
     }
