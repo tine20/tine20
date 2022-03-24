@@ -1305,6 +1305,18 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $this->_writeModLog(null, $user);
     }
 
+    public function undelete(string $loginname)
+    {
+        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('login_name') . ' = ?', $loginname),
+        );
+        $accountsTable->update(array(
+            'deleted_time' => '1970-01-01 00:00:00',
+            'is_deleted' => 0,
+        ), $where);
+    }
+
     /**
      * delete users
      * 
