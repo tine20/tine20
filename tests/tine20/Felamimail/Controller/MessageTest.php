@@ -5,7 +5,7 @@
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -1254,6 +1254,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         $preparediMIPPart = $message->preparedParts->getFirstRecord()->preparedData;
         $this->assertTrue($preparediMIPPart instanceof Calendar_Model_iMIP, 'is no iMIP');
         $this->assertEquals($expectedOriginator, $preparediMIPPart->originator);
+        $this->assertNotEmpty($preparediMIPPart->method, 'method is empty: ' . print_r($preparediMIPPart->toArray(), true));
         $event = $preparediMIPPart->getEvent();
         $this->assertTrue($event instanceof Calendar_Model_Event, 'is no event');
         $this->assertEquals($expectedEventSummary, $event->summary);
@@ -1298,7 +1299,17 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         $cachedMessage = $this->messageTestHelper('invite_outlook.eml', NULL, NULL, array('oliver@example.org', $email));
         $this->_testInvitationMessage($cachedMessage, 'user@telekom.ch', 'Test von Outlook an Tine20', 1);
     }
-    
+
+    /**
+     * validate email invitation from zoom
+     */
+    public function testEmailInvitationFromZoom()
+    {
+        $email = $this->_getTestEmailAddress();
+        $cachedMessage = $this->messageTestHelper('zoom_invite.eml', NULL, NULL, array('name@example.net', $email));
+        $this->_testInvitationMessage($cachedMessage, 'two@some.de', 'Klavierunterricht', 0);
+    }
+
     /**
      * get test email address
      * 

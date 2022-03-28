@@ -1,0 +1,50 @@
+X-Tine20TestMessage: zoom_invite.eml
+Received: from vmail-director02.metaways.net ([10.129.4.2])
+	by vmail-imap02.mcs.metaways.net with LMTP id UObBDC7wf2DWZQAAHd4clg
+Received: from vmail-smtp02.metaways.net ([10.129.4.2])
+	by vmail-director02.metaways.net with LMTP id 4ACQDC7wf2DGLwAAknJBew
+	; Wed, 21 Apr 2021 11:28:14 +0200
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+	by vmail-smtp02.metaways.net (Postfix) with ESMTPS id 194711F658
+	for <one@some.de>; Wed, 21 Apr 2021 11:28:12 +0200 (CEST)
+Received: from [91.21.112.183] ([91.21.112.183]) by
+ msvc-mesg-gmx125.server.lan (via HTTP); Wed, 21 Apr 2021 11:28:11 +0200
+MIME-Version: 1.0
+Message-ID: <trinity-dda5dfd5-f946-442b-bad5-3eeed8820db9-1618997291663@msvc-mesg-gmx125>
+From: hinz kunz <two@some.de>
+To: one <one@some.de>
+Subject: zoom invite
+Content-Type: multipart/mixed;
+ boundary=nika-11b6734f-7a90-40ec-ab7d-cdf3e0c9fa5e
+Importance: normal
+Date: Wed, 21 Apr 2021 11:28:11 +0200
+X-Priority: 3
+
+--nika-11b6734f-7a90-40ec-ab7d-cdf3e0c9fa5e
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body>one osm l=C3=A4dt Sie zu einem geplanten Zoom-Meeting ein=2E<br=
+/><br/>Thema: Klavierunterricht f=C3=BCr olaf <br/>Uhrzeit: <a href=3D"http=
+://22=2EApr">22=2EApr</a>=2E=2E2021 03:50 PM Amsterdam, Berlin, Rom, Stockh=
+olm, Wien<br/><br/>Zoom-Meeting beitreten<br/><a href=3D"https://us05web=2E=
+zoom=2Eus/j/xxxxxxxxxxx?pwd=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">https://us0=
+5web=2Ezoom=2Eus/j/xxxxxxxxxxx?pwd=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</a><b=
+r/><br/>Meeting-ID: xxxxxxxxxxxxx<br/>Kenncode: xxxxxx<br/><br/><br/>--<br/=
+>Diese Nachricht wurde von meinem Android Mobiltelefon mit GMX Mail gesende=
+t=2E</body></html>
+--nika-11b6734f-7a90-40ec-ab7d-cdf3e0c9fa5e
+Content-Type: text/calendar
+Content-Disposition: attachment; filename=Zoom-Meeting.ics
+Content-Transfer-Encoding: base64
+
+QkVHSU46VkNBTEVOREFSClZFUlNJT046Mi4wCkJFR0lOOlZFVkVOVApDUkVBVEVEOjIwMjEwNDIx
+VDA5Mjc1MloKREVTQ1JJUFRJT046c29tIG9uZSBsZHQgU2llIHp1IGVpbmVtIGdlcGxhbnRlbiBa
+b29tLU1lZXRpbmcgZWluLlxuXG5UaGVtYTogS2xhdmllcnVudGVycmljaHRcbgpEVEVORDoyMDIx
+MDQyMlQxNDI1MDBaCkRUU1RBUlQ6MjAyMTA0MjJUMTM1MDAwWgpMT0NBVElPTjpodHRwczovL3Vz
+MDV3ZWIuem9vbS51cy9qLzg2ODAzOTgxMTYwP3B3ZD02OVlBcTcKU1VNTUFSWTtMQU5HVUFHRT11
+cy1FTjpLbGF2aWVydW50ZXJyaWNodApVSUQ6MGZhMzY4ZDQtNzc0Ny00YTUwLTk2MGQtNDE3Y2Iy
+M2E5ZjcxCkJFR0lOOlZBTEFSTQpUUklHR0VSOi1QVDEwTQpBQ1RJT046RElTUExBWQpERVNDUklQ
+VElPTjpSZW1pbmRlcgpFTkQ6VkFMQVJNCkVORDpWRVZFTlQKRU5EOlZDQUxFTkRBUg==
+--nika-11b6734f-7a90-40ec-ab7d-cdf3e0c9fa5e--
+

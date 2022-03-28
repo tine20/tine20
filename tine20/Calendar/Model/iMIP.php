@@ -156,8 +156,16 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
      */
     public function __set($_name, $_value)
     {
-        if ($_name == 'ics') unset($this->event);
-        if ($_name == 'method') $_value = trim(strtoupper($_value));
+        if ($_name == 'ics') {
+            unset($this->event);
+        }
+        if ($_name == 'method') {
+            if (empty($_value)) {
+                $_value = self::METHOD_REQUEST;
+            } else {
+                $_value = trim(strtoupper($_value));
+            }
+        }
         
         return parent::__set($_name, $_value);
     }
