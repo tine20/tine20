@@ -661,6 +661,7 @@ class Tinebase_FileSystem implements
         
         $options = stream_context_get_options($handle);
         $this->_streamOptionsForNextOperation = array();
+        $transactionId = null;
 
         switch ($options['tine20']['mode']) {
             case 'a+':
@@ -697,12 +698,7 @@ class Tinebase_FileSystem implements
                         Tinebase_TransactionManager::getInstance()->rollBack();
                     }
                 }
-                
                 break;
-                
-            default:
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
-                    __LINE__ . ' Got mode : ' . $options['tine20']['mode'] . ' - nothing to do.');
         }
         
         fclose($handle);
