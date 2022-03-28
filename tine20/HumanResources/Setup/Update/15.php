@@ -19,6 +19,7 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE015_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE015_UPDATE005 = __CLASS__ . '::update005';
+    const RELEASE015_UPDATE006 = __CLASS__ . '::update006';
 
     static protected $_allUpdates = [
         // we'll do some querys here and we want them done before any schema tool comes along to play
@@ -40,6 +41,10 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE005          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update005',
+            ],
+            self::RELEASE015_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -157,5 +162,12 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('HumanResources', '15.5', self::RELEASE015_UPDATE005);
+    }
+
+    public function update006()
+    {
+        HumanResources_Setup_Initialize::addWTRCorrectionPersistentFilter();
+
+        $this->addApplicationUpdate('HumanResources', '15.6', self::RELEASE015_UPDATE006);
     }
 }

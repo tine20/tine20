@@ -83,6 +83,43 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
 
         // FreeTime
         static::addFreeTimePersistenFilter();
+
+        // Daily/Monthly WTR
+        static::addWTRCorrectionPersistentFilter();
+    }
+
+    public static function addWTRCorrectionPersistentFilter()
+    {
+        $pfe = Tinebase_PersistentFilter::getInstance();
+        $commonValues = array(
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('HumanResources')->getId(),
+            'model'             => HumanResources_Model_DailyWTReport::class,
+        );
+
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name' => "Daily WTR Corretions Requested", // _('Daily WTR Corretions Requested')
+                'description' => "Daily WTR Corretions Requested", // _('Daily WTR Corretions Requested')
+                'filters' => [
+                    ['field' => HumanResources_Model_MonthlyWTReport::FLDS_CORRECTIONS, 'operator' => 'definedBy', 'value' => [
+                        ['field' => 'status', 'operator' => 'equals', 'value' => HumanResources_Config::WTR_CORRECTION_STATUS_REQUESTED],
+                    ]],
+                ],
+            ))
+        ));
+
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name' => "Monthly WTR Corretions Requested", // _('Monthly WTR Corretions Requested')
+                'description' => "Monthly WTR Corretions Requested", // _('Monthly WTR Corretions Requested')
+                'filters' => [
+                    ['field' => HumanResources_Model_MonthlyWTReport::FLDS_CORRECTIONS, 'operator' => 'definedBy', 'value' => [
+                        ['field' => 'status', 'operator' => 'equals', 'value' => HumanResources_Config::WTR_CORRECTION_STATUS_REQUESTED],
+                    ]],
+                ],
+            ))
+        ));
     }
 
     public static function addFreeTimePersistenFilter()
