@@ -1066,7 +1066,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
 
             if ($part['type'] == 'multipart') {
-                $attachments = $attachments + $this->getAttachments($message, $part['partId']);
+                $attachments = array_merge($attachments, $this->getAttachments($message, $part['partId']));
             } else {
                 $filename = $this->_getAttachmentFilename($part);
 
