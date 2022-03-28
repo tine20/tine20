@@ -203,7 +203,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
             } elseif (isset($this->_options['modelName'])) {
                 $this->_controller = Tinebase_Core::getApplicationInstance($this->_options['modelName']);
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' No modelName or controller defined in filter options, can not resolve record.');
                 return null;
             }
@@ -227,9 +227,17 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
         
         try {
             if (method_exists($controller, 'get')) {
-                $recordArray = $controller->get($value, /* $_containerId = */ null, /* $_getRelatedData = */ false)->toArray();
+                $record = $controller->get($value, /* $_containerId = */ null, /* $_getRelatedData = */ false);
+                if ($record) {
+                    $recordArray = $record->toArray();
+                } else {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' Could not get record with id ' . $value . ' / controller: ' . get_class($controller));
+                    return $value;
+                }
             } else {
-                Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . ' Controller ' . get_class($controller) . ' has no get method');
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Controller '
+                    . get_class($controller) . ' has no get method');
                 return $value;
             }
         } catch (Exception $e) {
