@@ -2,6 +2,7 @@ version: '2'
 services:
   db:
     image: mariadb:10.6
+    command: --max-allowed-packet=209715210
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: &MYSQL_DATABASE tine20db
@@ -16,7 +17,7 @@ services:
       - internal_network
 
   web:
-    image: tinegroupware/tine:2020.11
+    image: tinegroupware/tine:2021.11
     restart: always 
     depends_on:
       - db
