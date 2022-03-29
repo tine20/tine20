@@ -55,4 +55,18 @@ describe('QuickLookRegistry', () => {
     expect(uit.hasExtension('eml')).to.be.true
     expect(uit.getExtension('eml')).to.be.string('felamimaildetailspanel')
   })
+  
+  it('can handle msg extension', () => {
+    uit.registerExtension('msg', 'myxtype')
+    expect(uit.hasExtension('msg')).to.be.true
+    expect(uit.getExtension('msg')).to.be.string('myxtype')
+  })
+  
+  it('has item for msg extension after Felamimail init', () => {
+    // initialize Felamimail
+    Tine.Felamimail.Application.prototype.registerQuickLookPanel()
+    
+    expect(uit.hasExtension('msg')).to.be.true
+    expect(uit.getExtension('msg')).to.be.string('felamimaildetailspanel')
+  })
 })

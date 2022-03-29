@@ -288,6 +288,8 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
 
         Tine.Filemanager.QuickLookRegistry.registerContentType('message/rfc822', 'felamimaildetailspanel');
         Tine.Filemanager.QuickLookRegistry.registerExtension('eml', 'felamimaildetailspanel');
+        Tine.Filemanager.QuickLookRegistry.registerExtension('msg', 'felamimaildetailspanel');
+    
         return true;
     },
 
