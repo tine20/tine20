@@ -1901,11 +1901,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         msg.set('subject', subject);
                         msg.set('is_spam_suspicions', false);
                         msg.commit();
-                        this.editBuffer.push(msg.id);
+                        this.addToEditBuffer(msg);
                     }
                     
                 }
-                
                 promises.push(Tine.Felamimail.processSpam(msg, option));
 
             }, this);
@@ -1932,7 +1931,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             
             await Promise.allSettled(promises)
                 .then(() => {
-                    this.onAfterDelete(msgsIds);
+                    if ('spam' === option) {
+                        this.onAfterDelete(msgsIds);
+                    }
+                    
                     this.doRefresh();
             });
             
