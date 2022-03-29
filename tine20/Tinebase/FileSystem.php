@@ -2258,7 +2258,7 @@ class Tinebase_FileSystem implements
         if (!file_exists($hashDirectory)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' create hash directory: ' . $hashDirectory);
-            if (@mkdir($hashDirectory, 0700) === false) {
+            if (@mkdir($hashDirectory, 0700, true) === false) {
                 if (!is_dir($hashDirectory)) {
                     throw new Tinebase_Exception_UnexpectedValue('failed to create directory');
                 }
