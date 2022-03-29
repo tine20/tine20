@@ -79,3 +79,105 @@
     border: 2px solid #b8cfee;
     border-right: 3px solid #b8cfee;
 }
+
+.attendance-recorder ul, .attendance-recorder li, .attendance-recorder .x-box-layout-ct {
+    height: 100% !important;
+}
+
+.attendance-recorder .x-grid3-scroller, .attendance-recorder input, .attendance-recorder .x-form-trigger {
+    background-color: #f2f2f2;
+}
+.attendance-recorder .x-trigger-wrap-focus input, .attendance-recorder .x-trigger-wrap-focus .x-form-trigger{
+    background-color: #fff;
+}
+
+.tine-row-action-icons .tine-recordclass-gridicon {
+    margin: -2px 2px -2px 0;
+}
+
+.attendance-clock {
+    background-image:url(../../images/icon-set/icon_attendanceclock.svg) !important;
+}
+
+.clock-in {
+    background-image:url(../../images/icon-set/df/icon_df_login.svg) !important;
+}
+
+.clock-out {
+    background-image:url(../../images/icon-set/df/icon_df_logout.svg) !important;
+}
+
+.clock-break {
+    background-image:url(../../images/icon-set/df/icon_df_person_cross.svg) !important;
+}
+
+.clock-esc {
+    background-image:url(../../images/icon-set/df/icon_df_esc.svg) !important;
+}
+
+.clock-projecttime {
+    background-image:url(../../images/icon-set/df/icon_df_projecttime.svg) !important;
+}
+
+.clock-info {
+    background-image:url(../../images/icon-set/df/icon_df_info.svg) !important;
+}
+
+.project-clock-in {
+    background-image:url(../../images/icon-set/icon_play.svg) !important;
+}
+
+.project-clock-pause {
+    background-image:url(../../images/icon-set/icon_pause.svg) !important;
+}
+
+.project-clock-out {
+    background-image:url(../../images/icon-set/icon_stop_2.svg) !important;
+}
+
+.x-menu.x-menu-floating.x-layer.attendance-recorder {
+    background-image: none;
+}
+
+.attendance-clock-msg {
+    position: absolute;
+    display: inline;
+    line-height: 20px;
+    text-align: center;
+    font-size: 16px;
+    overflow-wrap: break-word;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow-wrap: break-word;
+}
+
+.attendance-clock-clock {
+    line-height: 40px;
+    font-size: 32px;
+}
+
+.attendance-clock-error {
+    color: red;
+}
+
+.attendance-clock-status {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    font-size: 12px;
+}
+
+.attendance-clock-blink {
+    animation: attendance-clock-blink-animation 0.5s steps(5, start) infinite;
+    animation-direction: alternate;
+}
+
+@keyframes attendance-clock-blink-animation {
+    0% { opacity: 0; }
+    70% { opacity: 0.7; }
+    100% { opacity: 1; }
+    70% { opacity: 0.7; }
+    0% { opacity: 0; }
+}
+

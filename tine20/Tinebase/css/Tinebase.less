@@ -139,6 +139,10 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
     background-position: top !important;
     background-repeat: no-repeat;
 }
+.x-btn-icon-large-top .x-btn-image {
+    width: 32px;
+    height: 32px;
+}
 /* END svg fixes */
 
 .action_rename {
@@ -820,6 +824,7 @@ ul.x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel:hover {
 }
 
 .tine-recordclass-gridicon {
+    cursor: pointer;
     background-repeat: no-repeat;
     display: block;
     height: 16px;
@@ -827,6 +832,20 @@ ul.x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel:hover {
     margin: -2px 5px -2px 0;
     float:left;
     background-size: 16px;
+    &:hover {
+        background-size: 17px;
+    }
+    &:active {
+        background-size: 16px;
+    }
+}
+
+.tine-recordclass-gridicon.x-item-disabled {
+    cursor: default;
+    opacity: 0.5;
+    &:hover {
+        background-size: 16px;
+    }
 }
 
 /******** downloads ***********/

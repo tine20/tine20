@@ -118,11 +118,15 @@ Ext.ux.form.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
 });
 
 Ext.ux.form.DurationSpinner.durationRenderer = function(value, config) {
+    config = config || {};
     if(! value || value == '00:00') {
         value = config.emptyOnZero ? '' : '00:00';
     } else if(! value.toString().match(/:/)) {
-        if (config.baseUnit == 'seconds') {
+        if (config.baseUnit === 'seconds') {
             value = Math.round(value/60);
+        }
+        if (config.baseUnit === 'milliseconds') {
+            value = Math.round(value/60000);
         }
         var isNegValue = value < 0,
             hours = Math.floor(Math.abs(value) / 60),
