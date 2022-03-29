@@ -1021,6 +1021,11 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param options
      */
     onLoad: function(store, records, options){
+        // update the latest filter here, make sure each gridPanel have their own latest filter
+        const filterData = _.get(store, 'reader.jsonData.filter', {});
+        const pathFilter = _.get(_.find(filterData, {field: 'path'}), 'value');
+        this.latestFilter = _.isArray(pathFilter) ? pathFilter[0] : pathFilter;
+        
         const quota = _.get(store, 'reader.jsonData.quota', false);
             
         if (quota) {
@@ -1044,7 +1049,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getFilteredContainers: function () {
         const pathFilter = _.get(_.find(_.get(this, 'store.reader.jsonData.filter', {}), {field: 'path'}), 'value');
-        return pathFilter ? [pathFilter] : null;
+        const value = this.latestFilter ?? pathFilter;
+        return value ? [value] : null;
     },
     
     /**
