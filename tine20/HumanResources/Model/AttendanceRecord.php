@@ -56,12 +56,20 @@ class HumanResources_Model_AttendanceRecord extends Tinebase_Record_NewAbstract
         self::APP_NAME              => HumanResources_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
 
+        self::JSON_EXPANDER         => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_FREETIMETYPE_ID => [],
+            ],
+        ],
 
         self::TABLE                 => [
             self::NAME                  => self::TABLE_NAME,
             self::INDEXES               => [
                 self::FLD_DEVICE_ID         => [
                     self::COLUMNS               => [self::FLD_DEVICE_ID, self::FLD_ACCOUNT_ID, self::FLD_STATUS]
+                ],
+                self::FLD_TIMESTAMP         => [
+                    self::COLUMNS               => [self::FLD_DEVICE_ID, self::FLD_ACCOUNT_ID, self::FLD_TIMESTAMP]
                 ],
                 self::FLD_ACCOUNT_ID        => [
                     self::COLUMNS               => [self::FLD_ACCOUNT_ID, self::FLD_STATUS]

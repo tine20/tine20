@@ -7,6 +7,7 @@ class HumanResources_Config_AttendanceRecorder
     protected $account;
     protected $device;
     protected $employee;
+    protected $freetimetypeId;
     protected $metaData;
     protected $reason;
     protected $refId;
@@ -45,6 +46,17 @@ class HumanResources_Config_AttendanceRecorder
     public function getEmployee(): ?HumanResources_Model_Employee
     {
         return $this->employee;
+    }
+
+    public function setFreetimetypeId(?string $id): self
+    {
+        $this->freetimetypeId = $id;
+        return $this;
+    }
+
+    public function getFreetimetypeId(): ?string
+    {
+        return $this->freetimetypeId;
     }
 
     public function setMetaData(?array $md): self

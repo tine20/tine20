@@ -621,6 +621,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ]))
             ->setDevice($device)
             ->setRefId($record->{HumanResources_Model_AttendanceRecord::FLD_REFID} ?: null)
+            ->setFreetimetypeId($record->{HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID} ?
+                $record->getIdFromProperty(HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID) : null)
             ->setThrowOnFaultyAction(true);
         return HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn($cfg)->toArray();
     }
@@ -643,6 +645,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ]))
             ->setDevice($device)
             ->setRefId($record->{HumanResources_Model_AttendanceRecord::FLD_REFID} ?: null)
+            ->setFreetimetypeId($record->{HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID} ?
+                $record->getIdFromProperty(HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID) : null)
             ->setThrowOnFaultyAction(true);
         return HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut($cfg)->toArray();
     }
@@ -665,6 +669,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ]))
             ->setDevice($device)
             ->setRefId($record->{HumanResources_Model_AttendanceRecord::FLD_REFID} ?: null)
+            ->setFreetimetypeId($record->{HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID} ?
+                $record->getIdFromProperty(HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID) : null)
             ->setThrowOnFaultyAction(true);
         return HumanResources_Controller_AttendanceRecorder::getInstance()->clockPause($cfg)->toArray();
     }
