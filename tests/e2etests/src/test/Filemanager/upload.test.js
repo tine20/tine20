@@ -40,7 +40,7 @@ describe('filemanager', () => {
                 await expect(editDialog).toClick('span',{text: 'Berechtigungen'});
             });
             test('add user in grantsPanel', async () => {
-                await expect(editDialog).toClick('.x-form-cb-label', {text:'Diese Ordner hat eigene Berechtigungen'});
+                await expect(editDialog).toClick('.x-form-cb-label', {text:'Dieser Ordner hat eigene Berechtigungen'});
                 let input = await editDialog.$$('.x-panel-tbar.x-panel-tbar-noheader');
                 await input[1].click();
                 await editDialog.keyboard.press('ArrowDown');
