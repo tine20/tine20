@@ -480,7 +480,7 @@ msgstr "Berechtigungen"
 
 #: js/GrantsPanel.js:36
 msgid "This folder has its own grants"
-msgstr "Diese Ordner hat eigene Berechtigungen"
+msgstr "Dieser Ordner hat eigene Berechtigungen"
 
 #: js/GrantsPanel.js:40
 msgid "Grants of a folder also apply recursively to all sub folders unless they have their own grants."
