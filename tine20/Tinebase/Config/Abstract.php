@@ -1036,8 +1036,9 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     {
         $hookClass = Tinebase_Config::getInstance()->get($configKey);
         if ($hookClass) {
-            if (! class_exists($hookClass)) {
-                @include($hookClass . '.php');
+            $filename = $hookClass . '.php';
+            if (! class_exists($hookClass) && file_exists($filename)) {
+                @include($filename);
             }
 
             if (class_exists($hookClass)) {
