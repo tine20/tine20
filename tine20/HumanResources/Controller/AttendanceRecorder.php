@@ -228,7 +228,7 @@ class HumanResources_Controller_AttendanceRecorder
             }
             $refIds[$record->{HumanResources_Model_AttendanceRecord::FLD_REFID}] = true;
             $config->setRefId($record->{HumanResources_Model_AttendanceRecord::FLD_REFID});
-            $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_OUTS}->addRecord(
+            $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_PAUSES}->addRecord(
                 $this->backend->create(
                     $this->createAttendanceRecord($config, HumanResources_Model_AttendanceRecord::TYPE_CLOCK_PAUSED)
                 )
@@ -351,6 +351,7 @@ class HumanResources_Controller_AttendanceRecorder
             HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => $config->getDevice()->getId(),
             HumanResources_Model_AttendanceRecord::FLD_STATUS => $config->getStatus(),
             HumanResources_Model_AttendanceRecord::FLD_REFID => $config->getRefId() ?: Tinebase_Record_Abstract::generateUID(),
+            HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID => $config->getFreetimetypeId(),
             'xprops' => [HumanResources_Model_AttendanceRecord::META_DATA => $config->getMetaData()],
         ]);
     }
