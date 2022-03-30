@@ -183,7 +183,14 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
      * @var string
      */
     protected $_contentControllerName = 'Calendar_Controller_MSEventFacade';
-    
+
+    /**
+     * instance of the content specific controller
+     *
+     * @var Calendar_Controller_MSEventFacade
+     */
+    protected $_contentController;
+
     protected $_defaultContainerPreferenceName = Calendar_Preference::DEFAULTCALENDAR;
     
     /**
@@ -249,7 +256,12 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
         if (! $attendee) {
             throw new Syncroton_Exception_Status_MeetingResponse("party crushing not allowed", Syncroton_Exception_Status_MeetingResponse::INVALID_REQUEST);
         }
-        $attendee->status = $this->_meetingResponseAttendeeStatusMapping[$response->userResponse];
+        if (isset($this->_meetingResponseAttendeeStatusMapping[$response->userResponse])) {
+            $attendee->status = $this->_meetingResponseAttendeeStatusMapping[$response->userResponse];
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Status not supported: ' . $response->userResponse);
+        }
         
         Calendar_Controller_Event::getInstance()->$method($instance, $attendee, $attendee->status_authkey);
         
@@ -351,7 +363,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     break;
                     
                 case 'dtend':
-                    if ($entry->dtend instanceof DateTime) {
+                    if ($entry->dtend instanceof Tinebase_DateTime) {
                         if ($entry->is_all_day_event == true) {
                             // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in AS
                             $dtend = clone $entry->dtend;
@@ -908,7 +920,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
     /**
      * handle alarms / Reminder
      * 
-     * @param SimpleXMLElement $xmlData
+     * @param SimpleXMLElement $data
      * @param Calendar_Model_Event $event
      */
     protected function _handleAlarms($data, $event)
@@ -1007,7 +1019,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
     /**
      * set status of own attender depending on BusyStatus
      * 
-     * @param SimpleXMLElement $xmlData
+     * @param SimpleXMLElement $data
      * @param Calendar_Model_Event $event
      * 
      * @todo move detection of special handling / device type to device library
@@ -1111,7 +1123,9 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
             $filter->addFilter($statusFilter);
             $filter->addFilter($containerFilter);
         }
-        
+
+        // don't return more than the previous 6 months
+        $from = Tinebase_DateTime::now()->subMonth(6);
         if (in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
                 case Syncroton_Command_Sync::FILTER_2_WEEKS_BACK:
@@ -1127,9 +1141,6 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     $from = Tinebase_DateTime::now()->subMonth(6);
                     break;
             }
-        } else {
-            // don't return more than the previous 6 months
-            $from = Tinebase_DateTime::now()->subMonth(6);
         }
         
         // next 10 years
@@ -1159,7 +1170,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
     /**
      * NOTE: calendarFilter is based on contentFilter for ActiveSync
      *
-     * @param $folderId
+     * @param string|Tinebase_Model_Container $folderId
      */
     protected function _assertContentControllerParams($folderId)
     {
