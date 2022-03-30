@@ -393,18 +393,36 @@ class Tinebase_Frontend_CliTest extends TestCase
      */
     public function testMonitoringMailServers()
     {
-        $this->_skipWithoutEmailSystemAccountConfig();
+        $servers = [
+            Tinebase_Config::SMTP,
+            Tinebase_Config::IMAP,
+            Tinebase_Config::SIEVE
+        ];
+        
+        $serverConfig = [];
+
+        foreach ($servers as $key => $server) {
+            $serverConfig[$key] = Tinebase_Config::getInstance()->{$server};
+            Tinebase_Config::getInstance()->set($server, null);
+        }
 
         ob_start();
         $result = $this->_cli->monitoringMailServers();
         $out = ob_get_clean();
 
-        if ($result === 99) {
-            self::markTestSkipped('netcat is not installed');
+        self::assertStringContainsString('INVALID VALUE', $out);
+        self::assertLessThanOrEqual(0, $result);
+        
+        foreach ($servers as $key => $server) {
+            Tinebase_Config::getInstance()->set($server, $serverConfig[$key]);
         }
         
-        self::assertStringContainsString('CONNECTION ', $out);
-        self::assertLessThanOrEqual(1, $result);
+        ob_start();
+        $result = $this->_cli->monitoringMailServers();
+        $out = ob_get_clean();
+               
+        self::assertStringContainsString('succeeded', $out);
+        self::assertLessThanOrEqual(0, $result);
     }
 
     /**
