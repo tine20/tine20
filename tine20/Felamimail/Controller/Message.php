@@ -11,6 +11,11 @@
  * @todo        parse mail body and add <a> to telephone numbers?
  */
 
+
+use Hfig\MAPI;
+use Hfig\MAPI\OLE\Pear;
+use Hfig\MAPI\Mime\Swiftmailer;
+
 /**
  * message controller for Felamimail
  *
@@ -1373,6 +1378,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * @param string $nodeId
      * @return Felamimail_Model_Message
+     * @throws Tinebase_Exception_NotFound
      */
     public function getMessageFromNode($nodeId)
     {
@@ -1384,15 +1390,36 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         Tinebase_FileSystem::getInstance()->checkPathACL($path);
 
         // @todo check if it's an email (.eml?)
+        if ($node['contenttype'] === 'application/vnd.ms-outlook') {
+            // message parsing and file IO are kept separate
+            $messageFactory = new MAPI\MapiMessageFactory(new Swiftmailer\Factory());
+            $documentFactory = new Pear\DocumentFactory();
+            
+            $hashFile = Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash);
+            $ole = $documentFactory->createFromFile($hashFile);
+            $parsedMessage = $messageFactory->parseMessage($ole);
+            $content = $parsedMessage->toMimeString();
 
-        $content = Tinebase_FileSystem::getInstance()->getNodeContents($node);
+            // write it to cache
+            $cacheId = sha1(self::class . $node['name']);
+            Tinebase_Core::getCache()->save($content, $cacheId);
 
-        // @todo allow to configure body mime type to fetch?
+            $message = Felamimail_Model_Message::createFromMime($content);
+            
+            if ($message['body_content_type'] === 'text/html') {
+                $body = utf8_encode($parsedMessage->getBodyHTML());
+                $message->body = str_replace("\r", '', $body);
+                $message->body = $this->_purifyBodyContent($message->body);
+            }
+        } else {
+            $content = Tinebase_FileSystem::getInstance()->getNodeContents($node);
+            // @todo allow to configure body mime type to fetch?
+            $message = Felamimail_Model_Message::createFromMime($content);
+            $message->body = $this->_purifyBodyContent($message->body);
+        }
 
-        $message = Felamimail_Model_Message::createFromMime($content);
         $message->setId($node->getId());
-        $message->body = $this->_purifyBodyContent($message->body);
-
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Got Message: ' . print_r($message->toArray(), true));
 

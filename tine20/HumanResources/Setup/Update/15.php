@@ -20,6 +20,8 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE015_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE015_UPDATE006 = __CLASS__ . '::update006';
+    const RELEASE015_UPDATE007 = __CLASS__ . '::update007';
+    const RELEASE015_UPDATE008 = __CLASS__ . '::update008';
 
     static protected $_allUpdates = [
         // we'll do some querys here and we want them done before any schema tool comes along to play
@@ -46,6 +48,10 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update006',
             ],
+            self::RELEASE015_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
+            ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE015_UPDATE000          => [
@@ -55,6 +61,10 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE015_UPDATE008          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update008',
             ],
         ],
     ];
@@ -169,5 +179,23 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
         HumanResources_Setup_Initialize::addWTRCorrectionPersistentFilter();
 
         $this->addApplicationUpdate('HumanResources', '15.6', self::RELEASE015_UPDATE006);
+    }
+
+    public function update007()
+    {
+        Setup_SchemaTool::updateSchema([
+            HumanResources_Model_AttendanceRecord::class,
+            HumanResources_Model_AttendanceRecorderDevice::class,
+            HumanResources_Model_AttendanceRecorderDeviceRef::class,
+        ]);
+
+        $this->addApplicationUpdate('HumanResources', '15.7', self::RELEASE015_UPDATE007);
+    }
+
+    public function update008()
+    {
+        HumanResources_Setup_Initialize::addAttendanceRecorderDevices();
+
+        $this->addApplicationUpdate('HumanResources', '15.8', self::RELEASE015_UPDATE008);
     }
 }

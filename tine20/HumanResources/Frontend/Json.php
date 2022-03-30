@@ -602,7 +602,84 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
              )
         );
     }
-    
+
+    public function clockIn(array $deviceRecord): array
+    {
+        /** @var HumanResources_Model_AttendanceRecord $record */
+        $record = $this->_jsonToRecord($deviceRecord, HumanResources_Model_AttendanceRecord::class);
+        // if there are dependent records, set the timezone of them and add them to a recordSet
+        $this->_dependentRecordsFromJson($record);
+
+        /** @var HumanResources_Model_AttendanceRecorderDevice $device */
+        $device = HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get($record->getIdFromProperty(
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID
+        ));
+        $cfg = (new HumanResources_Config_AttendanceRecorder())
+            ->setMetaData(array_merge(isset($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA]) ?
+                $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA] : [], [
+                HumanResources_Config_AttendanceRecorder::METADATA_SOURCE => __METHOD__
+            ]))
+            ->setDevice($device)
+            ->setRefId($record->{HumanResources_Model_AttendanceRecord::FLD_REFID} ?: null)
+            ->setThrowOnFaultyAction(true);
+        return HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn($cfg)->toArray();
+    }
+
+    public function clockOut(array $deviceRecord): array
+    {
+        /** @var HumanResources_Model_AttendanceRecord $record */
+        $record = $this->_jsonToRecord($deviceRecord, HumanResources_Model_AttendanceRecord::class);
+        // if there are dependent records, set the timezone of them and add them to a recordSet
+        $this->_dependentRecordsFromJson($record);
+
+        /** @var HumanResources_Model_AttendanceRecorderDevice $device */
+        $device = HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get($record->getIdFromProperty(
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID
+        ));
+        $cfg = (new HumanResources_Config_AttendanceRecorder())
+            ->setMetaData(array_merge(isset($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA]) ?
+                $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA] : [], [
+                HumanResources_Config_AttendanceRecorder::METADATA_SOURCE => __METHOD__
+            ]))
+            ->setDevice($device)
+            ->setRefId($record->{HumanResources_Model_AttendanceRecord::FLD_REFID} ?: null)
+            ->setThrowOnFaultyAction(true);
+        return HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut($cfg)->toArray();
+    }
+
+    public function clockPause(array $deviceRecord): array
+    {
+        /** @var HumanResources_Model_AttendanceRecord $record */
+        $record = $this->_jsonToRecord($deviceRecord, HumanResources_Model_AttendanceRecord::class);
+        // if there are dependent records, set the timezone of them and add them to a recordSet
+        $this->_dependentRecordsFromJson($record);
+
+        /** @var HumanResources_Model_AttendanceRecorderDevice $device */
+        $device = HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get($record->getIdFromProperty(
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID
+        ));
+        $cfg = (new HumanResources_Config_AttendanceRecorder())
+            ->setMetaData(array_merge(isset($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA]) ?
+                $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA] : [], [
+                HumanResources_Config_AttendanceRecorder::METADATA_SOURCE => __METHOD__
+            ]))
+            ->setDevice($device)
+            ->setRefId($record->{HumanResources_Model_AttendanceRecord::FLD_REFID} ?: null)
+            ->setThrowOnFaultyAction(true);
+        return HumanResources_Controller_AttendanceRecorder::getInstance()->clockPause($cfg)->toArray();
+    }
+
+    public function getAttendanceRecorderDeviceStates()
+    {
+        return $this->_search([
+                ['field' => HumanResources_Model_AttendanceRecord::FLD_ACCOUNT_ID, 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()],
+                ['field' => HumanResources_Model_AttendanceRecord::FLD_STATUS,  'operator' => 'equals', 'value' => HumanResources_Model_AttendanceRecord::STATUS_OPEN],
+            ], [
+                'sort' => HumanResources_Model_AttendanceRecord::FLD_SEQUENCE,
+                'dir' => 'ASC'
+            ], HumanResources_Controller_AttendanceRecord::getInstance(), HumanResources_Model_AttendanceRecord::class);
+    }
+
     /**
      * Sets the config for HR
      * 

@@ -545,7 +545,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      *
      * @todo what about grant checking here???
      * 
-     * @param   int|Tinebase_Model_Container $_containerId the id of the container
+     * @param   string|Tinebase_Model_Container $_containerId the id of the container
      * @param   bool                         $_getDeleted get deleted records
      * @return  Tinebase_Model_Container
      */

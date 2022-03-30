@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Tine 2.0 - http://www.tine20.org
  *
@@ -28,9 +27,125 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         parent::setUp();
         $this->_uit = $this->_json = new HumanResources_Frontend_Json();
+    }
+
+    public function testClockInProjectTime()
+    {
+        $ta = Timetracker_Controller_Timeaccount::getInstance()->create(new Timetracker_Model_Timeaccount([
+            'title' => 'unittest',
+        ]));
+        $result = $this->_json->clockIn([
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID,
+            'xprops' => [
+                HumanResources_Model_AttendanceRecord::META_DATA => [
+                    Timetracker_Model_Timeaccount::class => $ta->getId(),
+                ],
+            ],
+        ]);
+        $this->assertCount(4, $result);
+        $this->assertCount(2, $result['clock_ins']);
+        $this->assertCount(0, $result['clock_outs']);
+        $this->assertCount(0, $result['clock_pauses']);
+        $this->assertCount(0, $result['faulty_clocks']);
+
+        $record = array_values(array_filter($result['clock_ins'], function($val) {
+            return isset($val['xprops'][HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timeaccount::class]);
+        }));
+        $this->assertCount(1, $record);
+
+        $result = $this->_json->clockOut($record[0]);
+        $this->assertCount(4, $result);
+        $this->assertCount(0, $result['clock_ins']);
+        $this->assertCount(1, $result['clock_outs']);
+        $this->assertCount(0, $result['clock_pauses']);
+        $this->assertCount(0, $result['faulty_clocks']);
+
+        HumanResources_Controller_AttendanceRecorder::runBLPipes();
+
+        $ts = Timetracker_Controller_Timesheet::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Timetracker_Model_Timesheet::class, [
+            ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $ta->getId()],
+        ]));
+        $this->assertSame(1, $ts->count());
+    }
+
+    public function testClockInWorktime()
+    {
+        $result = $this->_json->clockIn([
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID
+        ]);
+        $this->assertCount(4, $result);
+        $this->assertArrayHasKey('clock_ins', $result);
+        $this->assertArrayHasKey('clock_outs', $result);
+        $this->assertArrayHasKey('clock_pauses', $result);
+        $this->assertArrayHasKey('faulty_clocks', $result);
+        $this->assertCount(1, $result['clock_ins']);
+        $this->assertCount(0, $result['clock_outs']);
+        $this->assertCount(0, $result['clock_pauses']);
+        $this->assertCount(0, $result['faulty_clocks']);
+
+        $clockOut = $this->_json->clockOut([
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID
+        ]);
+        $this->assertCount(4, $clockOut);
+        $this->assertArrayHasKey('clock_ins', $clockOut);
+        $this->assertArrayHasKey('clock_outs', $clockOut);
+        $this->assertArrayHasKey('clock_pauses', $clockOut);
+        $this->assertArrayHasKey('faulty_clocks', $clockOut);
+        $this->assertCount(0, $clockOut['clock_ins']);
+        $this->assertCount(1, $clockOut['clock_outs']);
+        $this->assertCount(0, $clockOut['clock_pauses']);
+        $this->assertCount(0, $clockOut['faulty_clocks']);
+    }
+
+    public function testClockOutWorktimeStopsPT()
+    {
+        $this->_json->clockIn([
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID
+        ]);
+        $this->_json->clockIn([
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID
+        ]);
+
+        $clockOut = $this->_json->clockOut([
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID
+        ]);
+        $this->assertCount(4, $clockOut);
+        $this->assertArrayHasKey('clock_ins', $clockOut);
+        $this->assertArrayHasKey('clock_outs', $clockOut);
+        $this->assertArrayHasKey('clock_pauses', $clockOut);
+        $this->assertArrayHasKey('faulty_clocks', $clockOut);
+        $this->assertCount(0, $clockOut['clock_ins']);
+        $this->assertCount(2, $clockOut['clock_outs']);
+        $this->assertCount(0, $clockOut['clock_pauses']);
+        $this->assertCount(0, $clockOut['faulty_clocks']);
+    }
+
+    public function testClockWTBLPipeSimple()
+    {
+        $taId = HumanResources_Controller_WorkingTimeScheme::getInstance()->getWorkingTimeAccount(null)->getId();
+        $ts = Timetracker_Controller_Timesheet::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Timetracker_Model_Timesheet::class, [
+            ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $taId],
+        ]));
+        $this->assertSame(0, $ts->count());
+
+        $this->_json->clockIn([
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID
+        ]);
+        $this->_json->clockOut([
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID
+        ]);
+        HumanResources_Controller_AttendanceRecorder::runBLPipes();
+
+        $ts = Timetracker_Controller_Timesheet::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Timetracker_Model_Timesheet::class, [
+                ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $taId],
+            ]));
+        $this->assertSame(1, $ts->count());
     }
 
     public function testGetFeastAndFreeDaysWithGrants()

@@ -77,7 +77,7 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
         ));
 
         this.plugins = this.plugins || [];
-        if (! this.useAccountRecord && !this.additionalFilterSpec ) {
+        if (! this.useAccountRecord && !this.additionalFilterSpec && !this.additionalFilters) {
             this.plugins.push(new RecordEditFieldTriggerPlugin(this.recordEditPluginConfig || {}));
         }
 

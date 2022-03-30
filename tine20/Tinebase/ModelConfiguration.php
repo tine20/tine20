@@ -1901,6 +1901,10 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                             !isset($this->_converters[$fieldKey])) {
                         $this->_converters[$fieldKey] = [new Tinebase_Model_Converter_JsonRecordSet()];
                     }
+                    if (isset($fieldDef[self::CONFIG][self::STORAGE]) && self::TYPE_JSON_REFID === $fieldDef[self::CONFIG][self::STORAGE] &&
+                            !isset($this->_converters[$fieldKey])) {
+                        $this->_converters[$fieldKey] = [new Tinebase_Model_Converter_JsonRecordSet(true)];
+                    }
                 }
                 if ($deNormOf) {
                     $this->_denormalizedFields[$fieldKey] = $fieldDef;

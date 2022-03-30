@@ -65,10 +65,10 @@ class HumanResources_Controller_WorkingTimeScheme extends Tinebase_Controller_Re
      *
      * NOTE: only one generic ta yet!
      *
-     * @param HumanResources_Model_Employee $employee
+     * @param ?HumanResources_Model_Employee $employee
      * @return Timetracker_Model_Timeaccount
      */
-    public function getWorkingTimeAccount(HumanResources_Model_Employee $employee)
+    public function getWorkingTimeAccount(?HumanResources_Model_Employee $employee)
     {
         $timeaccountId = HumanResources_Config::getInstance()->get(HumanResources_Config::WORKING_TIME_TIMEACCOUNT);
         $tac = Timetracker_Controller_Timeaccount::getInstance();

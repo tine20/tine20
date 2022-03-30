@@ -13,6 +13,14 @@ parameters:
       - Zend_Console_Getopt
       - Zend_Translate
       - Zend_View
+      # TODO fix in Syncroton phpdoc ...
+      - Syncroton_Model_EmailBody
+      - Syncroton_Model_Event
+      - Syncroton_Model_EventAttendee
+      - Syncroton_Model_EventException
+      - Syncroton_Model_EventRecurrence
+      - Syncroton_Model_IDevice
+      - Syncroton_Model_MeetingResponse
     reportUnmatchedIgnoredErrors: false
     level: 2
     excludePaths:
