@@ -47,3 +47,15 @@ merge:
         AUTO_MERGE_VAR: "true"
     - if: $AUTO_MERGE == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /auto_merge/
+
+mergemain:
+  stage: merge2
+  extends: .abstract.merge
+  script:
+    - merge_merge_mirror origin main github main
+    - merge_merge_mirror github main origin main
+    - release_tag_main_if_needed
+    - merge_trigger_next
+  rules:
+    - if: $AUTO_MERGE_MAIN == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /auto_merge_main/

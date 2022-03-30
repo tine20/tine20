@@ -198,6 +198,10 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Sabre\DAV\ServerPlugin
         foreach ($properties as $href => $entries) {
             if (count($entries) === 0) { //404
                 $response = $dom->createElement('d:response');
+                // Make sure the URI sent is equal to the one sent by a
+                // Sabre\DAV\Property\Response.
+                $href = Sabre\DAV\URLUtil::encodePath($href);
+                $href = $this->server->getBaseUri() . $href;
                 $href = $dom->createElement('d:href', $href);
                 $response->appendChild($href);
                 $status = $dom->createElement('d:status', $this->server->httpResponse->getStatusMessage(404));
