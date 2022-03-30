@@ -210,6 +210,12 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
                 }
                 $config[self::OPTIONS][self::UNSIGNED] = $config[self::UNSIGNED];
             }
+            if (isset($config[self::AUTOINCREMENT])) {
+                if (!isset($config[self::OPTIONS])) {
+                    $config[self::OPTIONS] = [];
+                }
+                $config[self::OPTIONS][self::AUTOINCREMENT] = $config[self::AUTOINCREMENT];
+            }
         } elseif (self::TYPE_RECORDS === $config[self::TYPE] && isset($config[self::CONFIG][self::STORAGE]) &&
                 self::TYPE_JSON === $config[self::CONFIG][self::STORAGE]) {
             $config[self::TYPE] = self::$_typeMap[self::TYPE_JSON];

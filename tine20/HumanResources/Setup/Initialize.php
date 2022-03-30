@@ -34,6 +34,61 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         ['name' => '[T] Training',                               'system' => true,  'color' => '#5DADE2', 'wage_type' => HumanResources_Model_WageType::ID_SALARY,        'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => true], // gettext('[T] Training')
     ];
 
+    public static function addAttendanceRecorderDevices()
+    {
+        $arDeviceCtrl = HumanResources_Controller_AttendanceRecorderDevice::getInstance();
+
+        $tineWorkingTimeDevice = $arDeviceCtrl->create(new HumanResources_Model_AttendanceRecorderDevice([
+            'id' => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID,
+            HumanResources_Model_AttendanceRecorderDevice::FLD_NAME => 'tine system working time',
+        ]));
+
+        $tineProjectTimeDevice = $arDeviceCtrl->create(new HumanResources_Model_AttendanceRecorderDevice([
+            'id' => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID,
+            HumanResources_Model_AttendanceRecorderDevice::FLD_NAME => 'tine system project time',
+            HumanResources_Model_AttendanceRecorderDevice::FLD_ALLOW_MULTI_START => true,
+            HumanResources_Model_AttendanceRecorderDevice::FLD_STARTS => [
+                new HumanResources_Model_AttendanceRecorderDeviceRef([
+                    HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID => $tineWorkingTimeDevice->getId(),
+                ], true),
+            ],
+            HumanResources_Model_AttendanceRecorderDevice::FLD_BLPIPE => new Tinebase_Record_RecordSet(
+                HumanResources_Model_BLAttendanceRecorder_Config::class, [
+                    new HumanResources_Model_BLAttendanceRecorder_Config([
+                        HumanResources_Model_BLAttendanceRecorder_Config::FLDS_CLASSNAME => HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::class,
+                        HumanResources_Model_BLAttendanceRecorder_Config::FLDS_CONFIG_RECORD => new HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig([
+                            HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_ALLOW_OTHER_TA => true,
+                        ])
+                    ]),
+                ]),
+        ]));
+
+        $tineWorkingTimeDevice->{HumanResources_Model_AttendanceRecorderDevice::FLD_STOPS} =
+            new Tinebase_Record_RecordSet(HumanResources_Model_AttendanceRecorderDeviceRef::class, [
+                new HumanResources_Model_AttendanceRecorderDeviceRef([
+                    HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID => $tineProjectTimeDevice->getId(),
+                ], true),
+            ]);
+        $tineWorkingTimeDevice->{HumanResources_Model_AttendanceRecorderDevice::FLD_BLPIPE} = new Tinebase_Record_RecordSet(
+            HumanResources_Model_BLAttendanceRecorder_Config::class, [
+                new HumanResources_Model_BLAttendanceRecorder_Config([
+                    HumanResources_Model_BLAttendanceRecorder_Config::FLDS_CLASSNAME => HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::class,
+                    HumanResources_Model_BLAttendanceRecorder_Config::FLDS_CONFIG_RECORD => new HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig([
+                        HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_ALLOW_OTHER_TA => false,
+                        HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_FILL_GAPS_OF_DEVICES => [
+                            $tineProjectTimeDevice->getId()
+                        ],
+                    ])
+                ]),
+            ]);
+        $arDeviceCtrl->update($tineWorkingTimeDevice);
+    }
+
+    protected function _initializeAttendanceRecorderDevices()
+    {
+        static::addAttendanceRecorderDevices();
+    }
+
     /**
      * create favorites
      */

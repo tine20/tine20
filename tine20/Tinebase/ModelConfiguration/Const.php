@@ -21,6 +21,7 @@ class Tinebase_ModelConfiguration_Const {
     const APPLICATION = 'application';
     const APP_NAME = 'appName';
     const ASSOCIATIONS = 'associations';
+    const AUTOINCREMENT = 'autoincrement';
     const AVAILABLE_MODELS = 'availableModels';
 
     /**
@@ -216,6 +217,7 @@ class Tinebase_ModelConfiguration_Const {
 
     const TYPE_INTEGER = 'integer';
     const TYPE_JSON = 'json';
+    const TYPE_JSON_REFID = 'jsonRefId';
     const TYPE_KEY_FIELD = 'keyfield';
     const TYPE_LABEL = 'label';
     /**

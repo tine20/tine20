@@ -75,6 +75,10 @@ class Tinebase_Record_Expander_Factory
                         $fieldDef[MCC::CONFIG][MCC::STORAGE]) {
                     return new Tinebase_Record_Expander_JsonStorageProperty($propModel, $_property, $_definition,
                         $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
+                } elseif (isset($fieldDef[MCC::CONFIG][MCC::STORAGE]) && MCC::TYPE_JSON_REFID ===
+                        $fieldDef[MCC::CONFIG][MCC::STORAGE]) {
+                    return new Tinebase_Record_Expander_JsonRefIdStorageProperty($fieldDef, $propModel, $_property, $_definition,
+                        $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
                 } else {
                     if (isset($fieldDef[MCC::CONFIG][MCC::REF_ID_FIELD])) {
                         $_definition['fieldDefConfig'] = $fieldDef[MCC::CONFIG];
