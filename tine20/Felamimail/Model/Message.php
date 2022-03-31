@@ -127,10 +127,12 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
         'messageuid'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'message_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'folder_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'subject'               => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
-        'from_email'            => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
-        'from_name'             => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
-        'sender'                => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+        'subject'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        // virtual field = $record['from_name'] . ' <' . $record['from_email'] . '>'
+        'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'from_name'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'from_email'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'sender'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'to'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'cc'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'bcc'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -852,8 +854,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
                 }
                 foreach ($recordData[$field] as $addresses) {
                     if (is_array($addresses)) {
-                        if (isset($addresses['email'])) {
-                            $email = $addresses['email'];
+                        if (! empty($addresses['email']) && $addresses['type'] !== 'group') {
+                            $email = $addresses;
                         } else if (count($addresses) === 1) {
                             // the first element could be an email address
                             $email = array_pop($addresses);
@@ -866,32 +868,37 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
                     } else {
                         $email = $addresses;
                     }
+                    
+                    // todo: do we really want to support multi emails in a single field?
+                    if (! is_array($email)) {
+                       if (substr_count($email, '@') > 1) {
+                           $delimiter = strpos($email,';') !== false ? ';' : ',';
+                           $recipients = array_merge($recipients, explode($delimiter, $email));
+                       } else {
+                           // single recipient
+                           $recipients[] =  $this->sanitizeMailAddress($email);
+                       }
 
-                    if (substr_count($email, '@') > 1) {
-                        $delimiter = strpos($email,';') !== false ? ';' : ',';
-                        $recipients = array_merge($recipients, explode($delimiter, $email));
+                        foreach ($recipients as $key => &$recipient) {
+                            // extract email address if name and address given
+                            if (preg_match('/(.*)<(.*)>/', $recipient, $matches) > 0) {
+                                $recipient = $this->sanitizeMailAddress($matches[2]);
+                            }
+                            if (empty($recipient)) {
+                                unset($recipients[$key]);
+                            }
+                            $recipient = trim($recipient);
+                        }
+                        unset($recipient);
                     } else {
-                        // single recipient
-                        $recipients[] =  $this->sanitizeMailAddress($email);
+                        $recipients[] = $email;
                     }
                 }
                 
-                foreach ($recipients as $key => &$recipient) {
-                    // extract email address if name and address given
-                    if (preg_match('/(.*)<(.*)>/', $recipient, $matches) > 0) {
-                        $recipient = $this->sanitizeMailAddress($matches[2]);
-                    }
-                    if (empty($recipient)) {
-                        unset($recipients[$key]);
-                    }
-                    $recipient = trim($recipient);
-                }
-                unset($recipient);
-
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                     __METHOD__ . '::' . __LINE__ . ' ' . print_r($recipients, true));
                 
-                $recordData[$field] = array_unique($recipients);
+                $recordData[$field] = array_unique($recipients, SORT_REGULAR);
             }
         }
     }

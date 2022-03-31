@@ -786,7 +786,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.replyTo) {
             this.initReplyRecipients();
         }
-
+        
         Ext.each(['to', 'cc', 'bcc'], function (field) {
             if (this.draftOrTemplate) {
                 this[field] = this.draftOrTemplate.get(field);
@@ -794,7 +794,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
             if (!this.record.get(field)) {
                 this[field] = Ext.isArray(this[field]) ? this[field] : Ext.isString(this[field]) ? [this[field]] : [];
-                this.record.set(field, Ext.unique(this[field]));
+                this.record.set(field, this[field]);
             }
             delete this[field];
 
@@ -806,9 +806,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * init recipients from reply/replyToAll information
      */
-    initReplyRecipients: function () {
+    initReplyRecipients: async function () {
+        // should resolve recipients here , save data
         var replyTo = this.replyTo.get('headers')['reply-to'];
-
+    
         if (replyTo) {
             this.to = replyTo;
         } else {
@@ -818,24 +819,28 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             } else {
                 this.to = toemail;
             }
+        
+            if (this.replyTo.get('from')) {
+                this.to = this.replyTo.get('from');
+            }
         }
-
+    
         if (this.replyToAll) {
             if (!Ext.isArray(this.to)) {
                 this.to = [this.to];
             }
             this.to = this.to.concat(this.replyTo.get('to'));
             this.cc = this.replyTo.get('cc');
-
+        
             // remove own email and all non-email strings/objects from to/cc
-            var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
-                ownEmailRegexp = new RegExp(window.lodash.escapeRegExp(account.get('email')));
+            const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
+            const ownEmailRegexp = new RegExp(window.lodash.escapeRegExp(account.get('email')));
+            
             Ext.each(['to', 'cc'], function (field) {
-                for (var i = 0; i < this[field].length; i++) {
-                    if (!Ext.isString(this[field][i]) || !this[field][i].match(/@/) || ownEmailRegexp.test(this[field][i])) {
-                        this[field].splice(i, 1);
-                    }
-                }
+                this[field] = _.filter(this[field], (addressData) => {
+                    const email = addressData.email ?? addressData;
+                    return Ext.isString(email) && email.match(/@/) && ! ownEmailRegexp.test(email);
+                });
             }, this);
         }
     },
@@ -863,7 +868,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.record.set(field, mailAddresses);
                 this.recipientGrid.syncRecipientsToStore([field], this.record, true, false);
                 this['AddressLoadMask'].hide();
-
             }.createDelegate(this));
         }
     },
@@ -1158,6 +1162,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 scope: this,
                 'update': function (record) {
                     var messageWithRecipients = Ext.isString(record) ? new this.recordClass(Ext.decode(record)) : record;
+                    debugger
                     this.recipientGrid.syncRecipientsToStore(['to', 'cc', 'bcc'], messageWithRecipients, true, true);
                 }
             }
@@ -1689,14 +1694,18 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var me = this;
 
         return new Promise(async function (fulfill, reject) {
-            var recipients = [],
-                resolvePromise = fulfill;
+            const recipients = [];
+            const resolvePromise = fulfill;
 
             me.recipientGrid.getStore().each(async function (recipient) {
-                var address = recipient.get('address');
+                let address = recipient.get('address');
 
                 if (!address) {
                     return;
+                }
+                
+                if ( address?.email) {
+                    address = address?.email;
                 }
 
                 recipients.push(await me.extractMailFromString(address));
@@ -1725,7 +1734,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     extractMailFromString: async function (string) {
         return await import(/* webpackChunkName: "Tinebase/js/email-addresses" */ 'email-addresses').then((addrs) => {
             const parsed = addrs.parseOneAddress(string.replace(',', ''));
-            return parsed.address;
+            return parsed?.address;
         });
     },
 
@@ -1844,9 +1853,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     validateRecipients: function () {
         var me = this;
+
         return new Promise(function (fulfill, reject) {
             var to = me.record.get('to'),
                 cc = me.record.get('cc'),
+                bcc = me.record.get('bcc'),
                 bcc = me.record.get('bcc'),
                 all = [].concat(to).concat(cc).concat(bcc);
 

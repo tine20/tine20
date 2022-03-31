@@ -432,8 +432,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     if (! empty($_record->{$type})) {
                         $exploded = explode(',', $_record->{$type});
                         $_record->{$type} = $exploded;
-                    } else {
-                        $_record->{$type} = array();
                     }
                 }
             }

@@ -208,9 +208,8 @@ Tine.Tinebase.tineInit = {
 
                 // search Contact first
                 const targetClassName = target?.dom?.className;
-                const email = Tine.Tinebase.common.findEmail(targetClassName === 'tinebase-email-link' ? target?.id : target?.dom?.href);
-
-                this.contextMenu = await this.getEmailContextMenu(target, email);
+                const emailData = Tine.Tinebase.common.findEmailData(targetClassName === 'tinebase-email-link' ? target?.id : target?.dom?.href);
+                this.contextMenu = await this.getEmailContextMenu(target, emailData?.email, emailData?.name);
                 this.contextMenu.showAt(position);
             }
 
@@ -353,44 +352,37 @@ Tine.Tinebase.tineInit = {
         };
     },
 
-    async getEmailContextMenu(target, email) {
+    async getEmailContextMenu(target, email, name, type = 'contact') {
         // store click position, make sure menuItem diaplay around the link
-        if (Tine.Addressbook && email) {
-            let contacts = await Tine.Addressbook.searchContacts([{
-                field: 'email', operator: 'in', value: email
-            }]);
-
-            contacts = contacts?.results;
-
-            this.contextMenu = new Ext.menu.Menu({
-                items: []
-            });
-
-            if (contacts.length) {
-                contacts.forEach((contact) => {
-                    contact = Tine.Tinebase.data.Record.setFromJson(contact, Tine.Addressbook.Model.Contact);
-                    const action_editContact = new Ext.Action({
-                        text: contact?.data?.n_fileas,
-                        handler: this.contactHandler.createDelegate(this, [target, contact, email]),
-                        iconCls: 'AddressbookIconCls',
-                        scope: this
-                    });
-
-                    this.contextMenu.addMenuItem(action_editContact);
-                });
-            }
-
-            this.action_addContact = new Ext.Action({
-                text: i18n._('Create Contact'),
-                handler: this.contactHandler.createDelegate(this, [target, null, email]),
-                iconCls: 'action_add',
-                scope: this,
-                hidden: contacts.length,
-            });
-
-            this.contextMenu.addMenuItem(this.action_addContact);
+        if (! Tine.Addressbook  ||  ! email) {
+            return;
         }
+        
+        const contextMenu = new Ext.menu.Menu({
+            items: []
+        });
+    
+        let items = [];
+        if (type === 'group' || type ===  'mailingList') {
+            items = await this.getListContextMenuItems(email, name);
+        } else {
+            items = await this.getContactContextMenuItems(target, email, name);
+        }
+    
+        items.forEach((item) => {
+            contextMenu.addMenuItem(item);
+        });
+        
+        this.action_addContact = new Ext.Action({
+            text: i18n._('Create Contact'),
+            handler: this.contactHandler.createDelegate(this, [target, null, email]),
+            iconCls: 'action_add',
+            scope: this,
+            hidden: items.length,
+        });
 
+        contextMenu.addMenuItem(this.action_addContact);
+        
         this.action_copyEmailPlainText = new Ext.Action({
             text: i18n._('Copy to Clipboard'),
             handler: async function () {
@@ -421,20 +413,92 @@ Tine.Tinebase.tineInit = {
             scope: this
         });
 
-        this.contextMenu.addMenuItem(this.action_comeposeEmail);
-        this.contextMenu.addMenuItem(this.action_copyEmailPlainText);
+        contextMenu.addMenuItem(this.action_comeposeEmail);
+        contextMenu.addMenuItem(this.action_copyEmailPlainText);
 
-        return this.contextMenu;
+        return contextMenu;
+    },
+    
+    async getContactContextMenuItems(target, email, name) {
+        const contactItems = [];
+        const filters = [{
+            condition: "OR", filters: [
+                {field: 'email', operator: 'equals', value: email},
+                {field: 'email_home', operator: 'equals', value: email}
+            ]
+        }];
+    
+        if (name && name !== '') {
+            filters.push({
+                condition: "OR", filters: [
+                    {field: 'n_fn', operator: 'equals', value: name},
+                    {field: 'n_fileas', operator: 'equals', value: name}
+                ]
+            });
+        }
+    
+        const { results: contacts } = await Tine.Addressbook.searchContacts(filters);
+    
+        if (contacts.length > 0) {
+            contacts.forEach((contact) => {
+                contact = Tine.Tinebase.data.Record.setFromJson(contact, Tine.Addressbook.Model.Contact);
+                const action_editContact = new Ext.Action({
+                    text: i18n._('Edit') + '  ' + contact.get('n_fileas'),
+                    handler: this.contactHandler.createDelegate(this, [target, contact, email]),
+                    iconCls: 'AddressbookIconCls',
+                    scope: this
+                });
+            
+                contactItems.push(action_editContact);
+            });
+        }
+        
+        return contactItems;
+    },
+    
+    async getListContextMenuItems(email, name) {
+        const listItems = [];
+        const listFilters = [{field: 'email', operator: 'equals', value: email}];
+        
+        if (name && name !== '') {
+            listFilters.push({
+                condition: "AND", filters: [
+                    {field: 'name', operator: 'equals', value: name},
+                ]
+            });
+        }
+        
+        const { results: contacts } = await Tine.Addressbook.searchLists(listFilters);
+        
+        this.contextMenu = new Ext.menu.Menu({
+            items: []
+        });
+        
+        if (contacts.length > 0) {
+            contacts.forEach((contact) => {
+                contact = Tine.Tinebase.data.Record.setFromJson(contact, Tine.Addressbook.Model.List);
+                const action_editContact = new Ext.Action({
+                    text: i18n._('Edit') + '  ' + contact.get('name'),
+                    handler: this.listHandler.createDelegate(this, [contact]),
+                    iconCls: 'AddressbookIconCls',
+                    scope: this
+                });
+    
+                listItems.push(action_editContact);
+            });
+        }
+
+        return listItems;
     },
 
-    contactHandler(target, record, email) {
+    contactHandler (target, record, email) {
         // check if addressbook app is available
         if (! Tine.Tinebase.common.hasRight('run', 'Addressbook')) {
             return;
         }
         
-        email = email.length ? email[0] : Ext.isString(email) ? email : '';
-        
+        email = Array.isArray(email) && email.length > 0 ? email[0] : Ext.isString(email) ? email : '';
+
         Tine.Addressbook.ContactEditDialog.openWindow({
             record: record ?? new Tine.Addressbook.Model.Contact({
                 email: email
@@ -442,25 +506,39 @@ Tine.Tinebase.tineInit = {
             listeners: {
                 scope: this,
                 'load': function(editdlg) {
-                    if (!record && target) {
-                        const linkified = target?.dom?.className === 'linkified';
-                        const contactInfo = Ext.util.Format.htmlDecode(linkified ? target?.dom?.href : target.id);
-
-                        if (linkified) {
-                            editdlg.record.set('email', contactInfo.replace('mailto:', ''));
-                        } else {
-                            const parts = contactInfo.split(':');
-
-                            editdlg.record.set('email', parts[1]);
-                            editdlg.record.set('n_given', parts[2]);
-                            editdlg.record.set('n_family', parts[3]);
+                    if (!record) {
+                        if (email) {
+                            editdlg.record.set('email', email);
                         }
-                    }
-                    if (email) {
-                        editdlg.record.set('email', email);
+                        
+                        if (target) {
+                            const linkified = target?.dom?.className === 'linkified';
+                            const contactInfo = Ext.util.Format.htmlDecode(linkified ? target?.dom?.href : target.id);
+    
+                            if (linkified) {
+                                editdlg.record.set('email', contactInfo.replace('mailto:', ''));
+                            } else {
+                                const parts = contactInfo.split(':');
+        
+                                editdlg.record.set('email', parts[1]);
+                                editdlg.record.set('n_given', parts[2]);
+                                editdlg.record.set('n_family', parts[3]);
+                            }
+                        }
                     }
                 }
             }
+        });
+    },
+    
+    listHandler(record) {
+        // check if addressbook app is available
+        if (! Tine.Tinebase.common.hasRight('run', 'Addressbook')) {
+            return;
+        }
+
+        Tine.Addressbook.ListEditDialog.openWindow({
+            record: record,
         });
     },
 

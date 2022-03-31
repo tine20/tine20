@@ -2043,3 +2043,6 @@ msgstr ""
 
 msgid "Explore Sieve script"
 msgstr "Sieve-Skript anzeigen"
+
+msgid "Resolve to single contact"
+msgstr "In Einzelkontakte umwandeln"

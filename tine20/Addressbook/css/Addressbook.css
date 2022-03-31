@@ -35,6 +35,18 @@
     background-image:url(../../images/icon-set/icon_address_group.svg) !important;
 }
 
+.renderer_typePrivateIcon {
+    background-image: url(../../images/icon-set/icon_calender_class_private.svg) !important;
+}
+
+.renderer_typeMailingListIcon {
+    background-image: url(../../images/icon-set/icon_email_mailinglist.svg) !important;
+}
+
+.renderer_typeGroupMemberIcon {
+    background-image:url(../../images/icon-set/icon_groupmember.svg) !important;
+}
+
 .renderer_displayNameRenderer_noName {
     font-style: italic;
     /*color: #808080;*/

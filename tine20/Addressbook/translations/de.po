@@ -1286,3 +1286,9 @@ msgstr "Suche nach Mitgliedern ..."
 
 msgid "Maximum Members"
 msgstr "Max. Funktionsbeisitzer"
+
+msgid "Mailing List Member"
+msgstr "E-Mail-Verteiler Mitglieder"
+
+msgid "Group Member"
+msgstr "Gruppenmitglied"

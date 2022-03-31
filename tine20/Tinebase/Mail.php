@@ -636,7 +636,7 @@ class Tinebase_Mail extends Zend_Mail
                 ' Could not parse addresses: ' . var_export($addresses, TRUE));
             return array();
         }
-        
+        //todo: should we parse contact type too ?
         foreach ($addresses as $key => $address) {
             if (preg_match('/(.*)<(.+@[^@]+)>/', $address, $matches)) {
                 $name = trim(trim($matches[1]), '"');

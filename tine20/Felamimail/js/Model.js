@@ -30,6 +30,7 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
       { name: 'to' },
       { name: 'cc' },
       { name: 'bcc' },
+      { name: 'from' },
       { name: 'sent',     type: 'date', dateFormat: Date.patterns.ISO8601Long },
       { name: 'received', type: 'date', dateFormat: Date.patterns.ISO8601Long },
       { name: 'flags' },

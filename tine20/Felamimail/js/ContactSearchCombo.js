@@ -42,7 +42,10 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
      * no path filter for emails!
      */
     addPathFilter: false,
-
+    
+    recordEditPluginConfig: false,
+    additionalFilterSpec: {},
+    
     /**
      * @private
      */
@@ -58,20 +61,21 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
         
         this.tpl = new Ext.XTemplate(
             '<tpl for="."><div class="search-item">',
-                '{[this.encode(values.n_fileas)]}',
-                ' (<b>{[this.shorten(this.encode(values.email, values.email_home, values.emails))]}</b>)',
+            '{[this.getIcon(values)]}',
+            '<span style="padding-left: 5px;">',
+            '{[this.encode(values, "name")]}',
+            ' <b>{[this.shorten(this.encode(values, "email"))]}</b>',
+            '</span>',
             '</div></tpl>',
             {
-                encode: function(email, email_home, emails) {
-                    if (email) {
-                        return Ext.util.Format.htmlEncode(email);
-                    } else if (email_home) {
-                        return Ext.util.Format.htmlEncode(email_home);
-                    } else if (emails) {
-                        return Ext.util.Format.htmlEncode(emails);
-                    } else {
-                        return '';
+                encode: function(values, field) {
+                    let value = _.get(values, field) ?? '';
+                    
+                    if (field === 'email' && value !== '') {
+                        value = `( ${value} )`;
                     }
+                    
+                    return Ext.util.Format.htmlEncode(value);
                 },
                 shorten: function(text) {
                     if (text) {
@@ -83,7 +87,8 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
                     } else {
                         return "";
                     }
-                }
+                },
+                getIcon: this.resolveAddressIconCls.createDelegate(this)
             }
         );
         
@@ -91,20 +96,31 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
         
         this.store.on('load', this.onStoreLoad, this);
     },
-
+    
     /**
      * use beforequery to set query filter
      *
      * @param {Event} qevent
      */
-    onBeforeQuery: function(qevent){
+    onBeforeQuery: function (qevent) {
         Tine.Felamimail.ContactSearchCombo.superclass.onBeforeQuery.apply(this, arguments);
-
+    
         const filter = this.store.baseParams.filter;
         const queryFilter = _.find(filter, {field: 'query'});
         _.remove(filter, queryFilter);
+
         filter.push({field: 'name_email_query', operator: 'contains', value: queryFilter.value});
     },
+
+    doQuery : function(q, forceAll){
+        // always load store otherwise the recipients will not be updated
+        this.store.load({
+            params: this.getParams(q)
+        });
+  
+        Tine.Felamimail.ContactSearchCombo.superclass.doQuery.apply(this, arguments);
+    },
+    
     /**
      * override default onSelect
      * - set email/name as value
@@ -113,19 +129,9 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
      * @private
      */
     onSelect: function(record, index) {
-        if (!record.get("emails")) {
-            var value = Tine.Felamimail.getEmailStringFromContact(record);
-            this.setValue(value);
-            this.valueIsList = false;
-        } else {
-            this.setValue(record.get("emails"));
-            this.valueIsList = true;
-        }
-
         this.selectedRecord = record;
-
+        this.value = this.getValue();
         this.collapse();
-        this.fireEvent('blur', this);
         this.fireEvent('select', this, record, index);
     },
     
@@ -137,21 +143,13 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
     getValue: function() {
         return this.getRawValue();
     },
-
-    /** 
-     * @return bool
-     */
-    getValueIsList: function() {
-        return this.valueIsList;
-    },
-
+  
     /**
      * always set valueIsList to false
      *
-     * @param String value
+     * @param value
      */
     setValue: function(value) {
-       this.valueIsList = false;
        Tine.Felamimail.ContactSearchCombo.superclass.setValue.call(this, value); 
     }, 
     
@@ -165,32 +163,63 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
      */
     onStoreLoad: function(store, records, options) {
         this.removeDuplicates(store);
-        this.addAlternativeEmail(store, records);
     },
     
-    /**
-     * add alternative email addresses
-     * 
-     * @param {} store
-     * @param {} records
-     */
-    addAlternativeEmail: function(store, records) {
-        var index = 0,
-            newRecord,
-            recordData;
-            
-        Ext.each(records, function(record) {
-            if (record.get('email') && record.get('email_home') && record.get('email') !== record.get('email_home')) {
-                index++;
-                recordData = Ext.copyTo({}, record.data, ['email_home', 'n_fileas']);
-                newRecord = Tine.Addressbook.contactBackend.recordReader({responseText: Ext.util.JSON.encode(recordData)});
-                newRecord.id = Ext.id();
-                
-                Tine.log.debug('add alternative: ' + Tine.Felamimail.getEmailStringFromContact(newRecord));
-                store.insert(index, [newRecord]);
-            }
-            index++;
-        });
+    resolveAddressIconCls: function(values) {
+        let type = values?.type ?? '';
+        let iconClass = 'EmailAccount';
+        let tip = Ext.util.Format.capitalize(type);
+        const i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n;
+        
+        switch (type) {
+            case 'user':
+                tip = 'Contact of a user account'
+                iconClass = 'Account';
+                break;
+            case 'mailingListMember':
+                tip = 'Mailing List Member';
+                iconClass = 'Account';
+                break;
+            case 'responsible':
+                iconClass = 'Contact';
+                break;
+            case 'mailingList':
+                tip = 'Mailing List';
+                iconClass = 'MailingList';
+                break;
+            case 'email_account':
+                iconClass = 'EmailAccount';
+                break;
+            case 'email_home':
+                iconClass = 'Private';
+                break;
+            case 'group':
+                tip = 'System Group';
+                iconClass = 'Group';
+                break;
+            case 'groupMember':
+                tip = 'Group Member';
+                iconClass = 'GroupMember';
+                break;
+            default :
+                if (type === '') {
+                    tip = 'E-Mail';
+                    iconClass = 'EmailAccount';
+                    if (values.record_id !== '') {
+                        tip = 'Contact';
+                        iconClass = 'Contact';
+                    }
+                }
+                break;
+        }
+    
+        if (values?.email_type === 'email_home') {
+            iconClass = 'Private';
+            tip = 'Email (private)';
+        }
+        
+        return '<div class="tine-combo-icon renderer AddressbookIconCls renderer_type' + iconClass + 'Icon" ext:qtip="' 
+            + Ext.util.Format.htmlEncode(i18n._(tip)) + '"/></div>';
     },
     
     /**
@@ -199,11 +228,11 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
      * @param {} store
      */
     removeDuplicates: function(store) {
-        var duplicates = null;
+        let duplicates = null;
         
         store.each(function(record) {
             duplicates = store.queryBy(function(contact) {
-                return record.id !== contact.id && Tine.Felamimail.getEmailStringFromContact(record) == Tine.Felamimail.getEmailStringFromContact(contact);
+                return record.id !== contact.id && Tine.Felamimail.getEmailStringFromContact(record) === Tine.Felamimail.getEmailStringFromContact(contact);
             });
             if (duplicates.getCount() > 0) {
                 Tine.log.debug('remove duplicate: ' + Tine.Felamimail.getEmailStringFromContact(record));
@@ -233,6 +262,6 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
                 }
             }
         });
-    }    
+    }
 });
 Ext.reg('felamimailcontactcombo', Tine.Felamimail.ContactSearchCombo);

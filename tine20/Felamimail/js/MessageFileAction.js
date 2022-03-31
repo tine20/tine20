@@ -174,18 +174,16 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
          const emailsInRecipientGrid = [];
 
         _.each(this.composeDialog.recipientGrid.store.data.items, (recipient) => {
-            const full = recipient.get('address'),
-                parsed = addressparser.parse(String(full).replace(/,/g, '\\\\,')),
-                email = parsed.length ? parsed[0].address : '';
-
+            const addressData = recipient.get('address');
+            const email = addressData.email;
+            const title = addressData?.name ? `${addressData.name} < ${addressData.email} >` : email;
+            
             if (email) {
                 emailsInRecipientGrid.push(email);
                 const fileTarget = {
-                    record_title: full,
+                    record_title: title,
                     model: Tine.Addressbook.Model.EmailAddress,
-                    data: {
-                        email: email
-                    },
+                    data: addressData,
                 };
 
                 if (! this.menu.getComponent(email)) {
@@ -354,7 +352,7 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
         const  messageFilter = this.initialConfig.selectionModel.getSelectionFilter();
         const  messageCount = this.initialConfig.selectionModel.getCount();
         const  locations = [this.itemToLocation(item)];
-
+        
         this.setIconClass('x-btn-wait');
         Tine.Felamimail.fileMessages(messageFilter, locations)
             .then(() => {

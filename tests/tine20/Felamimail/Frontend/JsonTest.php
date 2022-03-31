@@ -393,13 +393,45 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $message = $this->_searchForMessageBySubject($messageToSend['subject'], $this->_account->sent_folder);
         $this->assertEquals($message['from_email'], $messageToSend['from_email']);
         $this->assertTrue(isset($message['to'][0]));
-        $this->assertEquals($message['to'][0], $messageToSend['to'][0], 'recipient not found');
-        $this->assertEquals($message['bcc'][0], $messageToSend['bcc'][0], 'bcc recipient not found');
+        
+        $this->assertEquals($messageToSend['to'][0], $message['to'][0], 'recipient not found');
+        $this->assertEquals($messageToSend['bcc'][0], $message['bcc'][0], 'bcc recipient not found');
         $this->assertEquals($message['subject'], $messageToSend['subject']);
 
         // reset sclevers original email address
         $contact->email = $originalEmail;
         Addressbook_Controller_Contact::getInstance()->update($contact, FALSE);
+    }
+
+    /**
+     * test Send Message With Recipient Data
+     */
+    public function testSendMessageWithRecipientData()
+    {
+        // build message with wrong line end rfc822 part
+        $testEmail = $this->_getEmailAddress();
+
+        $adbJsonFE = new Addressbook_Frontend_Json();
+        $address = [
+            'email' => $testEmail,
+            'n_fileas' => '',
+            'name' => '',
+            'type' => 'user',
+            'email_type' => ''
+        ];
+        $result = $adbJsonFE->searchContactsByRecipientsToken([$address]);
+        $emails = array_filter($result['results'], function($addressData) {
+            return $addressData['email_type'] === 'email' ? $addressData : null;
+        });
+
+        $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain);
+        $messageToSend['to'] = $emails;
+
+        $message = $this->_json->saveMessage($messageToSend);
+
+        $this->assertEquals($message['from_email'], $messageToSend['from_email']);
+        $this->assertTrue(isset($message['to'][0]));
+        $this->assertEquals($message['to'][0], $messageToSend['to'][0], 'recipient not found');
     }
 
     /**
@@ -2265,8 +2297,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertEquals('Christof Gacki', $message['from_name']);
         self::assertEquals('c.gacki@metaways.de', $message['from_email']);
         self::assertEquals(2, count($message['cc']));
-        self::assertEquals('c.weiss@metaways.de', $message['cc'][0]);
-        self::assertEquals('name@example.com', $message['cc'][1]);
+        self::assertEquals('c.weiss@metaways.de', $message['cc'][0]['email']);
+        self::assertEquals('name@example.com', $message['cc'][1]['email']);
         self::assertStringContainsString('wie gestern besprochen würde mich sehr freuen', $message['body']);
         self::assertEquals(Zend_Mime::TYPE_HTML, $message['body_content_type'], $message['body']);
         self::assertTrue(isset($message['attachments']), 'no attachments found: ' . print_r($message, true));
