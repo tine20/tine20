@@ -213,7 +213,9 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                         options.language = this.ownLangPicker.getValue()
                     }
 
-                    const title = record ? record.getTitle(options) : ' '
+                    let title = record ? record.getTitle(options) : ' ';
+                    title = title && this.app ? this.app.i18n._hidden(title) : title;
+
                     return Ext.util.Format.htmlEncode(title)
                 }).createDelegate(this)
             })

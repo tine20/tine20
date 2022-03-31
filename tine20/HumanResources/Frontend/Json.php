@@ -704,6 +704,43 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ], HumanResources_Controller_AttendanceRecord::getInstance(), HumanResources_Model_AttendanceRecord::class);
     }
 
+    public function wtInfo()
+    {
+        $employeeController = HumanResources_Controller_Employee::getInstance();
+        $freeTimeController = HumanResources_Controller_FreeTime::getInstance();
+        $monthlyWTReportController = HumanResources_Controller_MonthlyWTReport::getInstance();
+
+        $releaseACLUsageCallbacks = [
+            $employeeController->assertPublicUsage(),
+            $freeTimeController->assertPublicUsage(),
+            $monthlyWTReportController->assertPublicUsage(),
+        ];
+
+        try {
+            $employee = $employeeController->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
+                ['field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()],
+            ]))->getFirstRecord();
+
+            $allRemainingVacationsDays = $freeTimeController->getRemainingVacationDays($employee);
+            $remainingVacations = "{$allRemainingVacationsDays} Tage";
+
+            $monthlyWTR = $monthlyWTReportController->getByEmployeeMonth($employee);
+            $balanceTS = $monthlyWTR ?
+                $monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE} : 0;
+            $balanceTime = (string)round($balanceTS / 3600) . ':' .
+                str_pad((string)abs($balanceTS / 60) % 60, 2, "0", STR_PAD_LEFT);
+            $balance = ($balanceTS >= 0 ? "+{$balanceTime} (haben)" : "{$balanceTime} (soll)");
+
+        } finally {
+            foreach(array_reverse($releaseACLUsageCallbacks) as $releaseACLUsageCallback) {
+                $releaseACLUsageCallback();
+            }
+
+        }
+
+        return "Zeitsaldo: {$balance}\n Resturlaub: {$remainingVacations}";
+    }
+
     /**
      * Sets the config for HR
      * 

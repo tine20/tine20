@@ -243,8 +243,9 @@ Tine.Tinebase.tineInit = {
                 }
                 
                 let wavesEl = e.getTarget('.x-btn', 10, true)
+                    || e.getTarget('.tine-recordclass-gridicon', 10, true)
                     || e.getTarget('.x-tree-node-el', 10, true);
-                if (wavesEl) {
+                if (wavesEl && !wavesEl.hasClass('x-item-disabled')) {
                     wavesEl.addClass('waves-effect');
                     Waves.ripple(wavesEl.dom);
                     wavesEl.removeClass.defer(1500, wavesEl, ['waves-effect']);

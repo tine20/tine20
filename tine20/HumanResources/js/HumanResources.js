@@ -20,6 +20,7 @@ import './FreeTimePlanningWestPanel'
 import './FreeTimePlanningPanel'
 import './DivisionEditDialog'
 import './Timetracker/hooks'
+import './AttendanceRecorder'
 
 Tine.HumanResources.Application = Ext.extend(Tine.Tinebase.Application, {
 
