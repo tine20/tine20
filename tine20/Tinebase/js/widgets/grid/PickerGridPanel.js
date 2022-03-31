@@ -404,7 +404,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.on('rowcontextmenu', this.onRowContextMenu.createDelegate(this), this);
 
         this.viewConfig = {
-            autoFill: true
+            autoFill: true,
+            forceFit: true
         };
     },
 
