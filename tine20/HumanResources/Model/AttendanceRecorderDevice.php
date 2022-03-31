@@ -22,6 +22,7 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
     const TABLE_NAME = 'humanresources_attendance_record_device';
 
     const FLD_ALLOW_MULTI_START = 'allowMultiStart';
+    const FLD_ALLOW_PAUSE = 'allowPause';
     const FLD_BLPIPE = 'blpipe';
     const FLD_IS_TINE_UI_DEVICE = 'is_tine_ui_device';
     const FLD_NAME = 'name';
@@ -37,7 +38,7 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 1,
+        self::VERSION                   => 2,
         self::APP_NAME                  => HumanResources_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::MODLOG_ACTIVE             => true,
@@ -84,6 +85,10 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
             self::FLD_ALLOW_MULTI_START     => [
                 self::TYPE                      => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL               => false,
+            ],
+            self::FLD_ALLOW_PAUSE           => [
+                self::TYPE                      => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL               => true,
             ],
             self::FLD_STOPS                 => [
                 self::TYPE                      => self::TYPE_RECORDS,

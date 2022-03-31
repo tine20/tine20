@@ -22,6 +22,7 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE006 = __CLASS__ . '::update006';
     const RELEASE015_UPDATE007 = __CLASS__ . '::update007';
     const RELEASE015_UPDATE008 = __CLASS__ . '::update008';
+    const RELEASE015_UPDATE009 = __CLASS__ . '::update009';
 
     static protected $_allUpdates = [
         // we'll do some querys here and we want them done before any schema tool comes along to play
@@ -51,6 +52,10 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE007          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update007',
+            ],
+            self::RELEASE015_UPDATE009          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update009',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -197,5 +202,15 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
         HumanResources_Setup_Initialize::addAttendanceRecorderDevices();
 
         $this->addApplicationUpdate('HumanResources', '15.8', self::RELEASE015_UPDATE008);
+    }
+
+    public function update009()
+    {
+        Setup_SchemaTool::updateSchema([
+            HumanResources_Model_AttendanceRecord::class,
+            HumanResources_Model_AttendanceRecorderDevice::class,
+        ]);
+
+        $this->addApplicationUpdate('HumanResources', '15.9', self::RELEASE015_UPDATE009);
     }
 }

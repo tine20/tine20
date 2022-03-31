@@ -32,6 +32,68 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->_uit = $this->_json = new HumanResources_Frontend_Json();
     }
 
+    public function testClockInOutOfSequence()
+    {
+        $taId = HumanResources_Controller_WorkingTimeScheme::getInstance()->getWorkingTimeAccount(null)->getId();
+        $ts = Timetracker_Controller_Timesheet::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                    ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $taId],
+                ]
+            ));
+        $this->assertSame(0, $ts->count());
+        $ta = Timetracker_Controller_Timeaccount::getInstance()->create(new Timetracker_Model_Timeaccount([
+            'title' => 'unittest',
+        ]));
+
+        $this->_json->clockIn([
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID,
+            'xprops' => [
+                HumanResources_Model_AttendanceRecord::META_DATA => [
+                    Timetracker_Model_Timeaccount::class => $ta->getId(),
+                ],
+            ],
+        ]);
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice(HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get(HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID))
+            ->setTimeStamp(Tinebase_DateTime::now()->addHour(1))
+        );
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice(HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get(HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID))
+            ->setAccount($this->_personas['sclever'])
+            ->setMetaData([Timetracker_Model_Timeaccount::class => $ta->getId()])
+        );
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice(HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get(HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID))
+            ->setAccount($this->_personas['sclever'])
+            ->setMetaData([Timetracker_Model_Timeaccount::class => $ta->getId()])
+        );
+
+        HumanResources_Controller_AttendanceRecorder::runBLPipes();
+        $ts = Timetracker_Controller_Timesheet::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $taId],
+            ]
+        ));
+        $this->assertSame(1, $ts->count());
+        $this->assertGreaterThan(58, $ts->getFirstRecord()->duration);
+        $this->assertLessThan(62, $ts->getFirstRecord()->duration);
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice(HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get(HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID))
+            ->setTimeStamp(Tinebase_DateTime::now()->subHour(1))
+        );
+
+        HumanResources_Controller_AttendanceRecorder::runBLPipes();
+        $newTs = Timetracker_Controller_Timesheet::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                    ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $taId],
+                ]
+            ));
+        $this->assertSame(1, $newTs->count());
+        $this->assertNotSame($ts->getFirstRecord()->getId(), $newTs->getFirstRecord()->getId());
+        $this->assertGreaterThan(118, $newTs->getFirstRecord()->duration);
+        $this->assertLessThan(122, $newTs->getFirstRecord()->duration);
+    }
     public function testClockInProjectTime()
     {
         $ta = Timetracker_Controller_Timeaccount::getInstance()->create(new Timetracker_Model_Timeaccount([

@@ -17,7 +17,8 @@ use Tinebase_ModelConfiguration_Const as MCC;
  * @package     HumanResources
  * @subpackage  BL
  */
-class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_ElementInterface
+class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_ElementInterface,
+    HumanResources_BL_AttendanceRecorder_UndoInterface
 {
     /** @var HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig */
     protected $_config;
@@ -126,6 +127,20 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
             $ts->need_for_clarification = true;
         }
 
-        Timetracker_Controller_Timesheet::getInstance()->create($ts);
+        $ts = Timetracker_Controller_Timesheet::getInstance()->create($ts);
+        $clockOut->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class] =
+            $ts->getId();
+    }
+
+    public function undo(Tinebase_Record_RecordSet $data): void
+    {
+        /** @var HumanResources_Model_AttendanceRecord $record */
+        foreach ($data as $record) {
+            if (isset($record
+                    ->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class])) {
+                Timetracker_Controller_Timesheet::getInstance()->delete($record
+                    ->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]);
+            }
+        }
     }
 }

@@ -32,7 +32,9 @@ class HumanResources_Model_AttendanceRecord extends Tinebase_Record_NewAbstract
     const TYPE_CLOCK_PAUSED = 'clock_paused';
 
     const FLD_ACCOUNT_ID = 'account_id';
+    const FLD_AUTOGEN = 'autogen';
     const FLD_BLPROCESSED = 'blprocessed';
+    const FLD_CREATION_CONFIG = 'creation_config';
     const FLD_DEVICE_ID = 'device_id';
     const FLD_FREETIMETYPE_ID = 'freetimetype_id';
     const FLD_SEQUENCE = 'sequence';
@@ -42,6 +44,7 @@ class HumanResources_Model_AttendanceRecord extends Tinebase_Record_NewAbstract
     const FLD_REFID = 'refId';
 
     const META_DATA = 'metaData';
+    const CLOCK_OUT_GRACEFULLY = 'clockOutGracefully';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -49,7 +52,7 @@ class HumanResources_Model_AttendanceRecord extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION               => 1,
+        self::VERSION               => 2,
         self::MODLOG_ACTIVE         => true,
         self::HAS_XPROPS            => true,
 
@@ -69,7 +72,7 @@ class HumanResources_Model_AttendanceRecord extends Tinebase_Record_NewAbstract
                     self::COLUMNS               => [self::FLD_DEVICE_ID, self::FLD_ACCOUNT_ID, self::FLD_STATUS]
                 ],
                 self::FLD_TIMESTAMP         => [
-                    self::COLUMNS               => [self::FLD_DEVICE_ID, self::FLD_ACCOUNT_ID, self::FLD_TIMESTAMP]
+                    self::COLUMNS               => [self::FLD_ACCOUNT_ID, self::FLD_TIMESTAMP]
                 ],
                 self::FLD_ACCOUNT_ID        => [
                     self::COLUMNS               => [self::FLD_ACCOUNT_ID, self::FLD_STATUS]
@@ -96,10 +99,6 @@ class HumanResources_Model_AttendanceRecord extends Tinebase_Record_NewAbstract
                     self::APP_NAME              => HumanResources_Config::APP_NAME,
                     self::MODEL_NAME            => HumanResources_Model_AttendanceRecorderDevice::MODEL_NAME_PART,
                 ],
-            ],
-            self::FLD_BLPROCESSED       => [
-                self::TYPE                  => self::TYPE_BOOLEAN,
-                self::DEFAULT_VAL           => 0,
             ],
             self::FLD_ACCOUNT_ID        => [
                 self::TYPE                  => self::TYPE_USER,
@@ -144,6 +143,17 @@ class HumanResources_Model_AttendanceRecord extends Tinebase_Record_NewAbstract
                     ]
                 ],
             ],
+            self::FLD_BLPROCESSED       => [
+                self::TYPE                  => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL           => 0,
+            ],
+            self::FLD_AUTOGEN           => [
+                self::TYPE                  => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL           => 0,
+            ],
+            self::FLD_CREATION_CONFIG   => [
+                self::TYPE                  => self::TYPE_TEXT,
+            ],
             self::FLD_FREETIMETYPE_ID   => [
                 self::TYPE                  => self::TYPE_RECORD,
                 self::NULLABLE              => true,
@@ -169,4 +179,9 @@ class HumanResources_Model_AttendanceRecord extends Tinebase_Record_NewAbstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    public function getConfig(): HumanResources_Config_AttendanceRecorder
+    {
+        return unserialize($this->{self::FLD_CREATION_CONFIG});
+    }
 }

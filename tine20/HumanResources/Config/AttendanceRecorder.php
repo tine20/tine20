@@ -5,6 +5,7 @@ class HumanResources_Config_AttendanceRecorder
     public const METADATA_SOURCE = 'source';
 
     protected $account;
+    protected $autoGen = false;
     protected $device;
     protected $employee;
     protected $freetimetypeId;
@@ -24,6 +25,17 @@ class HumanResources_Config_AttendanceRecorder
     public function getAccount(): ?Tinebase_Model_FullUser
     {
         return $this->account;
+    }
+
+    public function setAutogen(bool $val): self
+    {
+        $this->autoGen = $val;
+        return $this;
+    }
+
+    public function getAutogen(): bool
+    {
+        return $this->autoGen;
     }
 
     public function setDevice(?HumanResources_Model_AttendanceRecorderDevice $device): self
@@ -123,5 +135,45 @@ class HumanResources_Config_AttendanceRecorder
     public function getTimeStamp(): ?Tinebase_DateTime
     {
         return $this->timeStamp;
+    }
+
+    public function __serialize(): array
+    {
+        return [
+            'account' => $this->account ? $this->account->getId() : null,
+            'autoGen' => $this->autoGen,
+            'device' => $this->device ? $this->device->getId() : null,
+            'employee' => $this->employee ? $this->employee->getId() : null,
+            'freetimetypeId' => $this->freetimetypeId,
+            'metaData' => $this->metaData,
+            'reason' => $this->reason ? $this->reason->getId() : null,
+            'refId' => $this->refId,
+            'status' => $this->status,
+            'timeStamp' => $this->timeStamp ? (string)$this->timeStamp : null,
+        ];
+    }
+
+    public function  __unserialize(array $data): void
+    {
+        if (isset($data['account'])) {
+            $this->account = Tinebase_User::getInstance()->getFullUserById($data['account']);
+        }
+        $this->autoGen = $data['autoGen'];
+        if (isset($data['device'])) {
+            $this->device = HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get($data['device']);
+        }
+        if (isset($data['employee'])) {
+            $this->employee = HumanResources_Controller_Employee::getInstance()->get($data['employee']);
+        }
+        $this->freetimetypeId = $data['freetimetypeId'];
+        $this->metaData = $data['metaData'];
+        if (isset($data['reason'])) {
+            $this->reason = HumanResources_Controller_FreeTimeType::getInstance()->get($data['reason']);
+        }
+        $this->refId = $data['refId'];
+        $this->status = $data['status'];
+        if (isset($data['timeStamp'])) {
+            $this->timeStamp = new Tinebase_DateTime($data['timeStamp']);
+        }
     }
 }
