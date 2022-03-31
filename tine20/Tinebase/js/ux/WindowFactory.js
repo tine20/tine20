@@ -107,7 +107,7 @@ Ext.ux.WindowFactory.prototype = {
             c.layout = c.layout || 'fit';
 
             if (!c.contentPanelConstructor) {
-                c.contentPanelConstructorConfig = {layout: 'fit', border: false, items : c.items || {}};
+                c.contentPanelConstructorConfig = {_isAutoWrapped: true, layout: 'fit', border: false, items : c.items || {}};
                 c.contentPanelConstructor = 'Ext.Container';
             }
 
@@ -149,6 +149,9 @@ Ext.ux.WindowFactory.prototype = {
         // place a reference to current window class in the itemConstructor.
         // this may be overwritten depending on concrete window implementation
         config.contentPanelConstructorConfig.window = win || config.window || config;
+        if (config.contentPanelConstructorConfig._isAutoWrapped) {
+            config.contentPanelConstructorConfig.items.window = config.contentPanelConstructorConfig.window;
+        }
 
         if (config.contentPanelConstructorConfig.contentPanelConstructorInterceptor) {
             await config.contentPanelConstructorConfig.contentPanelConstructorInterceptor(config.contentPanelConstructorConfig, window);
@@ -160,6 +163,9 @@ Ext.ux.WindowFactory.prototype = {
 
         // remove x-window reference
         config.contentPanelConstructorConfig.listeners = null;
+        if (config.contentPanelConstructorConfig._isAutoWrapped) {
+            config.contentPanelConstructorConfig.items.listeners = null;
+        }
         
         return centerPanel;
     },
