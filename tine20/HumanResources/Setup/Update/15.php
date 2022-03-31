@@ -23,6 +23,7 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE007 = __CLASS__ . '::update007';
     const RELEASE015_UPDATE008 = __CLASS__ . '::update008';
     const RELEASE015_UPDATE009 = __CLASS__ . '::update009';
+    const RELEASE015_UPDATE010 = __CLASS__ . '::update010';
 
     static protected $_allUpdates = [
         // we'll do some querys here and we want them done before any schema tool comes along to play
@@ -70,6 +71,10 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE008          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update008',
+            ],
+            self::RELEASE015_UPDATE010          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update010',
             ],
         ],
     ];
@@ -213,4 +218,33 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
 
         $this->addApplicationUpdate('HumanResources', '15.9', self::RELEASE015_UPDATE009);
     }
+
+    public function update010()
+    {
+        $tineProjectTimeDevice = HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get(
+            HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID);
+        $tineWorkingTimeDevice = HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get(
+            HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID);
+
+        $tineWorkingTimeDevice->{HumanResources_Model_AttendanceRecorderDevice::FLD_PAUSES} =
+            new Tinebase_Record_RecordSet(HumanResources_Model_AttendanceRecorderDeviceRef::class, [
+                new HumanResources_Model_AttendanceRecorderDeviceRef([
+                    HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID => $tineProjectTimeDevice->getId(),
+                ], true),
+            ]);
+        $tineWorkingTimeDevice->{HumanResources_Model_AttendanceRecorderDevice::FLD_UNPAUSES} =
+            new Tinebase_Record_RecordSet(HumanResources_Model_AttendanceRecorderDeviceRef::class, [
+                new HumanResources_Model_AttendanceRecorderDeviceRef([
+                    HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID => $tineProjectTimeDevice->getId(),
+                ], true),
+            ]);
+
+        HumanResources_Controller_AttendanceRecorderDevice::getInstance()->update($tineWorkingTimeDevice);
+
+        $this->addApplicationUpdate('HumanResources', '15.10', self::RELEASE015_UPDATE010);
+    }
+
+    /**
+     * $
+     */
 }
