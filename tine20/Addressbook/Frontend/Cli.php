@@ -264,7 +264,8 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * update geodata - only updates addresses without geodata for adr_one
      *
-     * opts tag update only Contact with tagging
+     * opts: "tag" update only contact with tagging
+     *       "containerId" update only contacts in defined container
      *
      * @param Zend_Console_Getopt $opts
      * @throws Tinebase_Exception_InvalidArgument
@@ -273,14 +274,15 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function updateContactGeodata($opts)
     {
-        $params = $this->_parseArgs($opts, array('containerId'));
+        $params = $this->_parseArgs($opts);
 
         $filter = [
-            ['field' => 'container_id', 'operator' => 'equals', 'value' => $params['containerId']],
             ['field' => 'adr_one_lon', 'operator' => 'isnull', 'value' => null]
         ];
 
-        $oldACL = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
+        if (isset($params['containerId'])) {
+            $filter[] = ['field' => 'container_id', 'operator' => 'equals', 'value' => $params['containerId']];
+        }
 
         if (isset($params['tag'])) {
             $tag = Tinebase_Tags::getInstance()->searchTags(
@@ -292,8 +294,8 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $filter[] = ['field' => 'tag', 'operator' => 'equals', 'value' => $tag->getId()];
         }
 
-        // get all contacts in a container
         $filter = new Addressbook_Model_ContactFilter($filter);
+        $oldACL = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
         $records = Addressbook_Controller_Contact::getInstance()->search($filter);
         echo 'Found records: ' . $records->count() . "\n";
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
