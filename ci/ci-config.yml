@@ -1,7 +1,7 @@
 # overwritten by: ci-config.yml < variables in gitlab-ci.yml < gitlab project variables < per pipeline variables
 variables:
   # The major commit ref name is mainly used for ci caching. Non feature branches should be there own major. The major of feature branches should be the branch the will be merged into.
-  MAJOR_COMMIT_REF_NAME: "main"
+  MAJOR_COMMIT_REF_NAME: "2022.11"
 
   # General
   # "Docker hub tag for this build."
