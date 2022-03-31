@@ -21,7 +21,7 @@ Tine.widgets.customfields.ConfigManager = function() {
             // set defaults -- uiconfig are empty strings :-(
             _.each(allCfs, function(cfConfig) {
                 _.each({tab: 'customfields', 'group': '', sort: 0}, function(defaultValue, field) {
-                    if (_.get(cfConfig, 'definition.uiconfig.' + field, '') == '') {
+                    if (['', null].indexOf(_.get(cfConfig, 'definition.uiconfig.' + field, '')) >= 0) {
                         _.set(cfConfig, 'definition.uiconfig.' + field, defaultValue);
                     }
                 });
