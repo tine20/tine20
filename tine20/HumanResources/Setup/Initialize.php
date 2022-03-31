@@ -69,6 +69,18 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
                     HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID => $tineProjectTimeDevice->getId(),
                 ], true),
             ]);
+        $tineWorkingTimeDevice->{HumanResources_Model_AttendanceRecorderDevice::FLD_PAUSES} =
+            new Tinebase_Record_RecordSet(HumanResources_Model_AttendanceRecorderDeviceRef::class, [
+                new HumanResources_Model_AttendanceRecorderDeviceRef([
+                    HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID => $tineProjectTimeDevice->getId(),
+                ], true),
+            ]);
+        $tineWorkingTimeDevice->{HumanResources_Model_AttendanceRecorderDevice::FLD_UNPAUSES} =
+            new Tinebase_Record_RecordSet(HumanResources_Model_AttendanceRecorderDeviceRef::class, [
+                new HumanResources_Model_AttendanceRecorderDeviceRef([
+                    HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID => $tineProjectTimeDevice->getId(),
+                ], true),
+            ]);
         $tineWorkingTimeDevice->{HumanResources_Model_AttendanceRecorderDevice::FLD_BLPIPE} = new Tinebase_Record_RecordSet(
             HumanResources_Model_BLAttendanceRecorder_Config::class, [
                 new HumanResources_Model_BLAttendanceRecorder_Config([

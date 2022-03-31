@@ -26,8 +26,10 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
     const FLD_BLPIPE = 'blpipe';
     const FLD_IS_TINE_UI_DEVICE = 'is_tine_ui_device';
     const FLD_NAME = 'name';
+    const FLD_PAUSES = 'pauses';
     const FLD_STOPS = 'stops';
     const FLD_STARTS = 'starts';
+    const FLD_UNPAUSES = 'unpauses';
 
     const SYSTEM_WORKING_TIME_ID = 'wt00000000000000000000000000000000000000';
     const SYSTEM_PROJECT_TIME_ID = 'pt00000000000000000000000000000000000000';
@@ -120,8 +122,37 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
                     ],
                 ],
             ],
+            self::FLD_PAUSES                => [
+                self::TYPE                      => self::TYPE_RECORDS,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => HumanResources_Config::APP_NAME,
+                    self::MODEL_NAME                => HumanResources_Model_AttendanceRecorderDeviceRef::MODEL_NAME_PART,
+                    self::REF_ID_FIELD              => HumanResources_Model_AttendanceRecorderDeviceRef::FLD_PARENT_ID,
+                    self::DEPENDENT_RECORDS         => true,
+                    self::FORCE_VALUES              => [
+                        HumanResources_Model_AttendanceRecorderDeviceRef::FLD_TYPE => self::FLD_PAUSES,
+                    ],
+                    self::ADD_FILTERS               => [
+                        ['field' => HumanResources_Model_AttendanceRecorderDeviceRef::FLD_TYPE, 'operator' => 'equals', 'value' => self::FLD_PAUSES],
+                    ],
+                ],
+            ],
+            self::FLD_UNPAUSES              => [
+                self::TYPE                      => self::TYPE_RECORDS,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => HumanResources_Config::APP_NAME,
+                    self::MODEL_NAME                => HumanResources_Model_AttendanceRecorderDeviceRef::MODEL_NAME_PART,
+                    self::REF_ID_FIELD              => HumanResources_Model_AttendanceRecorderDeviceRef::FLD_PARENT_ID,
+                    self::DEPENDENT_RECORDS         => true,
+                    self::FORCE_VALUES              => [
+                        HumanResources_Model_AttendanceRecorderDeviceRef::FLD_TYPE => self::FLD_UNPAUSES,
+                    ],
+                    self::ADD_FILTERS               => [
+                        ['field' => HumanResources_Model_AttendanceRecorderDeviceRef::FLD_TYPE, 'operator' => 'equals', 'value' => self::FLD_UNPAUSES],
+                    ],
+                ],
+            ],
             // field restarts?
-            // field pauses?
             self::FLD_BLPIPE                => [
                 self::TYPE                      => self::TYPE_RECORDS,
                 self::NULLABLE                  => true,

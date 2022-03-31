@@ -624,7 +624,13 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ->setFreetimetypeId($record->{HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID} ?
                 $record->getIdFromProperty(HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID) : null)
             ->setThrowOnFaultyAction(true);
-        return HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn($cfg)->toArray();
+
+        $result = HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn($cfg);
+
+        HumanResources_Controller_AttendanceRecorder::runBLPipes(Tinebase_Core::getUser()->getId());
+        $result->reloadData();
+
+        return $result->toArray();
     }
 
     public function clockOut(array $deviceRecord): array
@@ -648,7 +654,13 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ->setFreetimetypeId($record->{HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID} ?
                 $record->getIdFromProperty(HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID) : null)
             ->setThrowOnFaultyAction(true);
-        return HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut($cfg)->toArray();
+
+        $result = HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut($cfg);
+
+        HumanResources_Controller_AttendanceRecorder::runBLPipes(Tinebase_Core::getUser()->getId());
+        $result->reloadData();
+
+        return $result->toArray();
     }
 
     public function clockPause(array $deviceRecord): array
@@ -672,7 +684,13 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ->setFreetimetypeId($record->{HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID} ?
                 $record->getIdFromProperty(HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID) : null)
             ->setThrowOnFaultyAction(true);
-        return HumanResources_Controller_AttendanceRecorder::getInstance()->clockPause($cfg)->toArray();
+
+        $result = HumanResources_Controller_AttendanceRecorder::getInstance()->clockPause($cfg);
+
+        HumanResources_Controller_AttendanceRecorder::runBLPipes(Tinebase_Core::getUser()->getId());
+        $result->reloadData();
+
+        return $result->toArray();
     }
 
     public function getAttendanceRecorderDeviceStates()

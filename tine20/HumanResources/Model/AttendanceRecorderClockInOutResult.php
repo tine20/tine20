@@ -72,4 +72,20 @@ class HumanResources_Model_AttendanceRecorderClockInOutResult extends Tinebase_R
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    public function reloadData(): void
+    {
+        foreach ([
+                self::FLD_CLOCK_INS,
+                self::FLD_CLOCK_OUTS,
+                self::FLD_CLOCK_PAUSES,
+                self::FLD_FAULTY_CLOCKS,
+                 ] as $prop) {
+            if (!$this->{$prop} instanceof Tinebase_Record_RecordSet || 0 === $this->{$prop}->count()) {
+                continue;
+            }
+            $this->{$prop} = HumanResources_Controller_AttendanceRecord::getInstance()
+                ->getMultiple($this->{$prop}->getArrayOfIds());
+        }
+    }
 }
