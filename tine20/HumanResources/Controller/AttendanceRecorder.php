@@ -99,11 +99,12 @@ class HumanResources_Controller_AttendanceRecorder
         $outOfSequenceClosure = $this->checkOutOfSequence($config);
 
         $lastRecord = null;
+        $openRecords = null;
         if (null === $config->getRefId()) {
             if ($config->getDevice()->{HumanResources_Model_AttendanceRecorderDevice::FLD_ALLOW_MULTI_START}) {
                 $config->setRefId(Tinebase_Record_Abstract::generateUID());
             } else {
-                if ($lastRecord = $this->getOpenRecords($config->getAccount()->getId(), $config->getDevice()->getId())->getLastRecord()) {
+                if ($lastRecord = ($openRecords = $this->getOpenRecords($config->getAccount()->getId(), $config->getDevice()->getId()))->getLastRecord()) {
                     $config->setRefId($lastRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID});
                 } else {
                     $config->setRefId(Tinebase_Record_Abstract::generateUID());
@@ -136,6 +137,13 @@ class HumanResources_Controller_AttendanceRecorder
             $subConfig->setRefId($lastRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID});
             if (!$graceful) {
                 $subConfig->setStatus(HumanResources_Model_AttendanceRecord::STATUS_FAULTY);
+                foreach ($openRecords as $openRecord) {
+                    if (HumanResources_Model_AttendanceRecord::STATUS_FAULTY !==
+                            $openRecord->{HumanResources_Model_AttendanceRecord::FLD_STATUS}) {
+                        $openRecord->{HumanResources_Model_AttendanceRecord::FLD_STATUS} = HumanResources_Model_AttendanceRecord::STATUS_FAULTY;
+                        HumanResources_Controller_AttendanceRecord::getInstance()->update($openRecord);
+                    }
+                }
             }
             $subConfig->setAutogen(true);
             $subConfig->setMetaData(array_filter($subConfig->getMetaData() ?: [], function($key) {
@@ -413,6 +421,7 @@ class HumanResources_Controller_AttendanceRecorder
         }
 
         $refIds = [];
+        $orgConfig = clone $config;
         /** @var HumanResources_Model_AttendanceRecord $record */
         foreach ($toBeClosed as $record) {
             $record->{HumanResources_Model_AttendanceRecord::FLD_STATUS} = HumanResources_Model_AttendanceRecord::STATUS_CLOSED;
@@ -424,7 +433,7 @@ class HumanResources_Controller_AttendanceRecorder
             $config->setRefId($record->{HumanResources_Model_AttendanceRecord::FLD_REFID});
             $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_OUTS}->addRecord(
                 $this->backend->create(
-                    $this->createAttendanceRecord($config, HumanResources_Model_AttendanceRecord::TYPE_CLOCK_OUT)
+                    $this->createAttendanceRecord($config, HumanResources_Model_AttendanceRecord::TYPE_CLOCK_OUT, $orgConfig)
                 )
             );
         }
@@ -460,7 +469,7 @@ class HumanResources_Controller_AttendanceRecorder
         });
     }
 
-    protected function createAttendanceRecord(HumanResources_Config_AttendanceRecorder $config, string $type): HumanResources_Model_AttendanceRecord
+    protected function createAttendanceRecord(HumanResources_Config_AttendanceRecorder $config, string $type, ?HumanResources_Config_AttendanceRecorder $orgConfig = null): HumanResources_Model_AttendanceRecord
     {
         return new HumanResources_Model_AttendanceRecord([
             HumanResources_Model_AttendanceRecord::FLD_TIMESTAMP => $config->getTimeStamp(),
@@ -470,7 +479,7 @@ class HumanResources_Controller_AttendanceRecorder
             HumanResources_Model_AttendanceRecord::FLD_STATUS => $config->getStatus(),
             HumanResources_Model_AttendanceRecord::FLD_REFID => $config->getRefId() ?: Tinebase_Record_Abstract::generateUID(),
             HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID => $config->getFreetimetypeId(),
-            HumanResources_Model_AttendanceRecord::FLD_CREATION_CONFIG => serialize($config),
+            HumanResources_Model_AttendanceRecord::FLD_CREATION_CONFIG => serialize($orgConfig ?: $config),
             HumanResources_Model_AttendanceRecord::FLD_AUTOGEN => $config->getAutogen(),
             'xprops' => [HumanResources_Model_AttendanceRecord::META_DATA => $config->getMetaData()],
         ]);
