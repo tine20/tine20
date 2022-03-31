@@ -1170,7 +1170,10 @@ viewConfig: {
         var extraCol = 0;
         var width = 0;
         var w;
+        var c;
         for (i = 0; i < colCount; i++){
+            c = cm.getColumnAt(i);
+            c.initialConfig = c.initialConfig || {... c};
             if(!cm.isHidden(i) && !cm.isFixed(i) && i > (omitColumn || -1)){
                 w = cm.getColumnWidth(i);
                 cols.push(i);
@@ -1179,14 +1182,23 @@ viewConfig: {
                 width += w;
             }
         }
+        var aec = this.autoExpand && this.grid.autoExpandColumn ? cm.getIndexById(this.grid.autoExpandColumn) : -1;
         var frac = (aw - cm.getTotalWidth())/width;
         while (cols.length){
             w = cols.pop();
             i = cols.pop();
-            cm.setColumnWidth(i, Math.max(this.grid.minColumnWidth, Math.floor(w + w*frac)), true);
+            c = cm.getColumnAt(i);
+            width = Math.max(this.grid.minColumnWidth, Math.floor(w + w*frac));
+            width = aec>0 && !omitColumn>0 && c.initialConfig.width ? Math.min(c.initialConfig.width, width) : width;
+            cm.setColumnWidth(i, width, true);
         }
 
-        if((tw = cm.getTotalWidth(false)) > aw){
+        tw = cm.getTotalWidth(false);
+        if (aec>0 && tw < aw && !omitColumn>0) {
+            cm.setColumnWidth(aec, cm.getColumnWidth(i)+aw-tw);
+        }
+
+        if(tw > aw){
             var adjustCol = ac != vc ? omitColumn : extraCol;
              cm.setColumnWidth(adjustCol, Math.max(1,
                      cm.getColumnWidth(adjustCol)- (tw-aw)), true);
