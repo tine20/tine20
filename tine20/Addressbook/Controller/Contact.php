@@ -923,7 +923,12 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     protected function _getNominatimService(): Zend_Service_Nominatim
     {
         $httpClient = Tinebase_Core::getHttpClient();
-        return new Zend_Service_Nominatim(Tinebase_Config::getInstance()->{Tinebase_Config::GEO_SERVICE_URL}, $httpClient);
+        $url = Tinebase_Config::getInstance()->{Tinebase_Config::GEO_SERVICE_URL};
+        if ($url && substr($url, -1) !== '/') {
+            // Nominatim service needs a trailing slash
+            $url .= '/';
+        }
+        return new Zend_Service_Nominatim($url, $httpClient);
     }
 
     /**
