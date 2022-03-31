@@ -13,6 +13,7 @@ parameters:
       - Zend_Console_Getopt
       - Zend_Translate
       - Zend_View
+      - Laminas\Stdlib\ParametersInterface
       # TODO fix in Syncroton phpdoc ...
       - Syncroton_Model_EmailBody
       - Syncroton_Model_Event

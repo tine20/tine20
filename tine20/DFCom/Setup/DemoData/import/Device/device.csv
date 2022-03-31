@@ -1,0 +1,3 @@
+name,description,location,lastSeen,cellularData,GPRSAliveCounter,GPRSData,digitalStatus,lists,controlCommands,deviceString,serialNumber,authKey,timezone,fwVersion,setupVersion
+DFCom-EV21,Zeiterfassung Eingang EG,Hamburg,,,,,,,,EW-045-E2,35101275,,Europe/Berlin,,
+DFCom-EV22,Zeiterfassung Eingang EG,Hamburg,,,,,,,,EW-045-E3,35101272,,Europe/Berlin,,

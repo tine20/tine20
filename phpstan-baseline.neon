@@ -2706,6 +2706,201 @@ parameters:
 			path: tine20/Crm/views/newLeadPlain.php
 
 		-
+			message: "#^Call to an undefined method Tinebase_Log\\:\\:ERR\\(\\)\\.$#"
+			count: 1
+			path: tine20/DFCom/Controller/Device.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_Log\\:\\:WARN\\(\\)\\.$#"
+			count: 1
+			path: tine20/DFCom/Controller/Device.php
+
+		-
+			message: "#^Undefined variable\\: \\$setupAuthKey$#"
+			count: 1
+			path: tine20/DFCom/Controller/Device.php
+
+		-
+			message: "#^Class DFCom_Model_DeviceResponse does not have a constructor and must be instantiated without any parameters\\.$#"
+			count: 1
+			path: tine20/DFCom/Import/DeviceRecord/Csv.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$result\\)\\: Unexpected token \"\\$result\", expected type at offset 18$#"
+			count: 1
+			path: tine20/DFCom/Import/DeviceRecord/Csv.php
+
+		-
+			message: "#^Method DFCom_Model_Device\\:\\:mergeStatusData\\(\\) should return DFCom_Model_Device but return statement is missing\\.$#"
+			count: 1
+			path: tine20/DFCom/Model/Device.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$GPRSAliveCounter\\)\\: Unexpected token \"\\$GPRSAliveCounter\", expected type at offset 377$#"
+			count: 1
+			path: tine20/DFCom/Model/Device.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$GPRSData\\)\\: Unexpected token \"\\$GPRSData\", expected type at offset 411$#"
+			count: 1
+			path: tine20/DFCom/Model/Device.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$authKey\\)\\: Unexpected token \"\\$authKey\", expected type at offset 162$#"
+			count: 1
+			path: tine20/DFCom/Model/Device.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$cellularData\\)\\: Unexpected token \"\\$cellularData\", expected type at offset 347$#"
+			count: 1
+			path: tine20/DFCom/Model/Device.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$controlCommands\\)\\: Unexpected token \"\\$controlCommands\", expected type at offset 491$#"
+			count: 1
+			path: tine20/DFCom/Model/Device.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$description\\)\\: Unexpected token \"\\$description\", expected type at offset 209$#"
+			count: 1
+			path: tine20/DFCom/Model/Device.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$deviceString\\)\\: Unexpected token \"\\$deviceString\", expected type at offset 102$#"
+			count: 1
+			path: tine20/DFCom/Model/Device.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$digitalStatus\\)\\: Unexpected token \"\\$digitalStatus\", expected type at offset 437$#"
+			count: 1
+			path: tine20/DFCom/Model/Device.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$fwVersion\\)\\: Unexpected token \"\\$fwVersion\", expected type at offset 264$#"
+			count: 1
+			path: tine20/DFCom/Model/Device.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$lastSeen\\)\\: Unexpected token \"\\$lastSeen\", expected type at offset 321$#"
+			count: 1
+			path: tine20/DFCom/Model/Device.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$lists\\)\\: Unexpected token \"\\$lists\", expected type at offset 468$#"
+			count: 1
+			path: tine20/DFCom/Model/Device.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$location\\)\\: Unexpected token \"\\$location\", expected type at offset 238$#"
+			count: 1
+			path: tine20/DFCom/Model/Device.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$name\\)\\: Unexpected token \"\\$name\", expected type at offset 187$#"
+			count: 1
+			path: tine20/DFCom/Model/Device.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$serialNumber\\)\\: Unexpected token \"\\$serialNumber\", expected type at offset 132$#"
+			count: 1
+			path: tine20/DFCom/Model/Device.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$setupVersion\\)\\: Unexpected token \"\\$setupVersion\", expected type at offset 291$#"
+			count: 1
+			path: tine20/DFCom/Model/Device.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$device_id\\)\\: Unexpected token \"\\$device_id\", expected type at offset 99$#"
+			count: 1
+			path: tine20/DFCom/Model/DeviceList.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$export_definition_id\\)\\: Unexpected token \"\\$export_definition_id\", expected type at offset 148$#"
+			count: 1
+			path: tine20/DFCom/Model/DeviceList.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$list_status\\)\\: Unexpected token \"\\$list_status\", expected type at offset 216$#"
+			count: 1
+			path: tine20/DFCom/Model/DeviceList.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$list_version\\)\\: Unexpected token \"\\$list_version\", expected type at offset 186$#"
+			count: 1
+			path: tine20/DFCom/Model/DeviceList.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$name\\)\\: Unexpected token \"\\$name\", expected type at offset 126$#"
+			count: 1
+			path: tine20/DFCom/Model/DeviceList.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$data\\)\\: Unexpected token \"\\$data\", expected type at offset 162$#"
+			count: 1
+			path: tine20/DFCom/Model/DeviceRecord.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$device_id\\)\\: Unexpected token \"\\$device_id\", expected type at offset 105$#"
+			count: 1
+			path: tine20/DFCom/Model/DeviceRecord.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$device_table\\)\\: Unexpected token \"\\$device_table\", expected type at offset 132$#"
+			count: 1
+			path: tine20/DFCom/Model/DeviceRecord.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$processed\\)\\: Unexpected token \"\\$processed\", expected type at offset 184$#"
+			count: 1
+			path: tine20/DFCom/Model/DeviceRecord.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$name\\)\\: Unexpected token \"\\$name\", expected type at offset 52$#"
+			count: 1
+			path: tine20/DFCom/Model/DeviceResponse.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_Log\\:\\:WARN\\(\\)\\.$#"
+			count: 1
+			path: tine20/DFCom/RecordHandler/TimeAccounting.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$end\\)\\: Unexpected token \"\\$end\", expected type at offset 43$#"
+			count: 1
+			path: tine20/DFCom/RecordHandler/TimeAccounting.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$timesheet\\)\\: Unexpected token \"\\$timesheet\", expected type at offset 18$#"
+			count: 1
+			path: tine20/DFCom/RecordHandler/TimeAccounting.php
+
+		-
+			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
+			count: 2
+			path: tine20/DFCom/Setup/Update/13.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$bool\\)\\: Unexpected token \"\\$bool\", expected type at offset 18$#"
+			count: 2
+			path: tine20/EFile/Controller.php
+
+		-
+			message: "#^Static method EFile_Controller\\:\\:getApplicationNode\\(\\) invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: tine20/EFile/Controller.php
+
+		-
+			message: "#^Array has 2 duplicate keys with value 2 \\(\\\\Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadataInfo\\:\\:MANY_TO_ONE, \\\\Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadataInfo\\:\\:MANY_TO_ONE\\)\\.$#"
+			count: 1
+			path: tine20/EFile/Model/FileMetadata.php
+
+		-
+			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
+			count: 2
+			path: tine20/EFile/Setup/Update/1.php
+
+		-
 			message: "#^PHPDoc tag @param has invalid value \\(mixed\\[int\\|Tinebase_Model_User\\] \\$_account   the account object\\)\\: Unexpected token \"\\[\", expected variable at offset 81$#"
 			count: 1
 			path: tine20/ExampleApplication/Controller.php

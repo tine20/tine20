@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application>
+    <name>DFCom</name>
+    <version>15.1</version>
+    <order>80</order>
+    <depends>
+        <application>Addressbook</application>
+        <application>CoreData</application>
+        <application>HumanResources</application>
+        <application>Timetracker</application>
+    </depends>
+</application>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>DFCom_Model_DeviceRecord</model>
+    <plugin>DFCom_Import_DeviceRecord_Csv</plugin>
+    <name>dfcom_import_deviceRecord_csv</name>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <extension>csv</extension>
+    <mapping>
+        <field>
+            <source>deviceName</source>
+            <destination>deviceName</destination>
+        </field>
+        <field>
+            <source>device_table</source>
+            <destination>device_table</destination>
+        </field>
+        <field>
+            <source>dateTime</source>
+            <destination>dateTime</destination>
+        </field>
+        <field>
+            <source>user</source>
+            <destination>user</destination>
+        </field>
+        <field>
+            <source>functionKey</source>
+            <destination>functionKey</destination>
+        </field>
+        <field>
+            <source>functionValue</source>
+            <destination>functionValue</destination>
+        </field>
+        <field>
+            <source>data</source>
+            <destination>data</destination>
+        </field>
+    </mapping>
+</config>

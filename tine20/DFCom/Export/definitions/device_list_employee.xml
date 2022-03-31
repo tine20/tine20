@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>HumanResources_Model_Employee</model>
+    <name>DFCom_device_list_employee</name>
+    <deviceName>employee</deviceName>
+    <!-- _('Employee Device List') -->
+    <label>Employee Device List</label>
+    <type>export</type>
+    <plugin>Tinebase_Export_CsvNew</plugin>
+    <filter>[{"field": "employment_begin"}]</filter>
+    <icon_class>tinebase-action-export-csv</icon_class>
+    <sort>
+        <field>dfcom_id</field>
+        <direction>ASC</direction>
+    </sort>
+    <header>0</header>
+    <delimiter>&#x09;</delimiter>
+    <enclosure></enclosure>
+    <columns>
+        <column>
+            <identifier>number</identifier>
+            <header>employeeNumber</header>
+        </column>
+        <column>
+            <identifier>dfcom_id</identifier>
+            <header>cardId</header>
+            <twig>{{ '%010d'|format(record.dfcom_id) }}</twig>
+        </column>
+        <column>
+            <identifier>n_fn</identifier>
+            <header>name</header>
+        </column>
+
+    </columns>
+</config>

@@ -1,0 +1,223 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - DFCom\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Export/definitions/device_list_employee.xml:6
+msgid "Employee Device List"
+msgstr "Employee Device List"
+
+#: Export/definitions/device_list_absenceReasions.xml:6
+msgid "Absence Reasons Device List"
+msgstr "Absence Reasons Device List"
+
+#: Controller/Device.php:98
+msgid "New Device"
+msgstr "New Device"
+
+#: Model/DeviceRecord.php:39
+msgid "Device Record"
+msgid_plural "Device Records"
+msgstr[0] "Device Record"
+msgstr[1] "Device Records"
+
+#: Model/DeviceRecord.php:45
+msgid "Device Records Container"
+msgid_plural "Device Records Containers"
+msgstr[0] "Device Records Container"
+msgstr[1] "Device Records Containers"
+
+#: Model/DeviceRecord.php:85 Model/DeviceList.php:81 Model/Device.php:61
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Device"
+msgstr[1] "Devices"
+
+#: Model/DeviceRecord.php:100
+msgid "Device Table"
+msgstr "Device Table"
+
+#: Model/DeviceRecord.php:106
+msgid "Data"
+msgstr "Data"
+
+#: Model/DeviceList.php:40
+msgid "Device list"
+msgid_plural "Device lists"
+msgstr[0] "Device list"
+msgstr[1] "Device lists"
+
+#: Model/DeviceList.php:97 Model/Device.php:115
+msgid "Name"
+msgstr "Name"
+
+#: Model/DeviceList.php:104
+msgid "Export Definition"
+msgstr "Export Definition"
+
+#: Model/DeviceList.php:112
+msgid "Active list version"
+msgstr "Active list version"
+
+#: Model/DeviceList.php:122
+msgid "List status"
+msgstr "List status"
+
+#: Model/Device.php:94
+msgid "Type"
+msgstr "Type"
+
+#: Model/Device.php:101
+msgid "Serial number"
+msgstr "Serial number"
+
+#: Model/Device.php:108
+msgid "Auth key"
+msgstr "Auth key"
+
+#: Model/Device.php:122
+msgid "Description"
+msgstr "Description"
+
+#: Model/Device.php:130
+msgid "Location"
+msgstr "Location"
+
+#: Model/Device.php:138
+msgid "Timezone"
+msgstr "Timezone"
+
+#: Model/Device.php:146
+msgid "Firmware"
+msgstr "Firmware"
+
+#: Model/Device.php:152
+msgid "Setup Version"
+msgstr "Setup Version"
+
+#: Model/Device.php:157
+msgid "Last seen"
+msgstr "Last seen"
+
+#: Model/Device.php:164
+msgid "Cellular data"
+msgstr "Cellular data"
+
+#: Model/Device.php:171
+msgid "GPRS alive counter"
+msgstr "GPRS alive counter"
+
+#: Model/Device.php:178
+msgid "GPRS data"
+msgstr "GPRS data"
+
+#: Model/Device.php:185
+msgid "Digital status"
+msgstr "Digital status"
+
+#: Model/Device.php:190
+msgid "Lists"
+msgstr "Lists"
+
+#: Model/Device.php:204
+msgid "Control Commands"
+msgstr "Control Commands"
+
+#: RecordHandler/TimeAccounting.php:128 RecordHandler/TimeAccounting.php:136
+msgid "Clock in: %1$s"
+msgstr "Clock in: %1$s"
+
+#: RecordHandler/TimeAccounting.php:154
+msgid "Clock out: %1$s"
+msgstr "Clock out: %1$s"
+
+#: Config.php:42
+msgid "Device List Status"
+msgstr "Device List Status"
+
+#: Config.php:44
+msgid "Possible list status from device list feedback records."
+msgstr "Possible list status from device list feedback records."
+
+#: Config.php:51
+msgid "List was send to device"
+msgstr "List was send to device"
+
+#: Config.php:52
+msgid "List was taken over"
+msgstr "List was taken over"
+
+#: Config.php:53
+msgid "Generic error"
+msgstr "Generic error"
+
+#: Config.php:54
+msgid "Invalid label"
+msgstr "Invalid label"
+
+#: Config.php:55
+msgid "Unknown list"
+msgstr "Unknown list"
+
+#: Config.php:56
+msgid "Parameter missing"
+msgstr "Parameter missing"
+
+#: Config.php:57
+msgid "Error in list line"
+msgstr "Error in list line"
+
+#: Config.php:58
+msgid "List is ignored"
+msgstr "List is ignored"
+
+#: Config.php:59
+msgid "Duplicate list definition"
+msgstr "Duplicate list definition"
+
+#: Config.php:60
+msgid "An other list upgrade is in progress"
+msgstr "An other list upgrade is in progress"
+
+#: Config.php:66
+msgid "Initial AuthKey for Device Setup"
+msgstr "Initial AuthKey for Device Setup"
+
+#: Config.php:68
+msgid "Must be set as default for global variable authKey (max 20 chars) in DataFox Studio for the device setup."
+msgstr "Must be set as default for global variable authKey (max 20 chars) in DataFox Studio for the device setup."
+
+#: Config.php:75
+msgid "Default Container for Devices"
+msgstr "Default Container for Devices"
+
+#: Config.php:77
+msgid "The container where new devices are created in."
+msgstr "The container where new devices are created in."
+
+#: Config.php:84
+msgid "Default Devices Lists"
+msgstr "Default Devices Lists"
+
+#: Config.php:86
+msgid "List export definition names to load into devices per default."
+msgstr "List export definition names to load into devices per default."
+
+#: Config.php:93
+msgid "Device Record Handlers"
+msgstr "Device Record Handlers"
+
+#: Config.php:95
+msgid "Handler class for given device record."
+msgstr "Handler class for given device record."

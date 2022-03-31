@@ -1,0 +1,20 @@
+########################
+# Tine 2.0
+# @package     DFCom
+# @subpackage  DemoData
+# @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+# @author      Christian Feitl <c.feitl@metaways.de>
+# @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
+#
+# demodata for DFCom module
+########################
+---
+name: DFCom
+
+files:
+  #$app,$model,$definition,$file
+  - DFCom/Device/dfcom_import_device_csv/*
+  - DFCom/DeviceRecord/dfcom_import_deviceRecord_csv/*
+
+sets:
+  - HumanResources/hr.yml
