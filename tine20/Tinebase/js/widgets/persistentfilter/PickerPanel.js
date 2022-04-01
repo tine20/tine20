@@ -69,7 +69,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
 
         var appName = this.recordClass ? this.recordClass.getMeta('appName') : this.app.appName,
             modelName = this.recordClass ? this.recordClass.getMeta('modelName') : window.lodash.upperFirst(this.contentType),
-            filterModelName = this.filterModel || (appName + '_Model_' + modelName + 'Filter'),
+            filterModelName = this.filterModel || (appName + '_Model_' + modelName),
             state = Ext.state.Manager.get(this.stateId, {});
 
         if (! this.recordClass) {
@@ -79,11 +79,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         this.recordCollection = this.store.queryBy(function(record, id) {
             if (record.get('application_id') == this.app.id) {
                 if(this.contentType || this.filterModel) {
-                    if (record.get('model') == filterModelName) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return [filterModelName, `${filterModelName}Filter`].indexOf(record.get('model')) >=0;
                 } else {
                     return true;
                 }

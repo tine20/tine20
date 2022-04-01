@@ -90,11 +90,11 @@ class HumanResources_Model_DivisionGrants extends Tinebase_Model_Grants
             ],
             self::READ_TIME_DATA => [
                 self::LABEL         => 'Read time data', // _('Read time data')
-                self::DESCRIPTION   => 'The grant to read working time accounts for all employees in this division.', // _('The grant to read working time accounts for all employees in this division.')
+                self::DESCRIPTION   => 'The grant to read working time reports for all employees in this division.', // _('The grant to read working time reports for all employees in this division.')
             ],
             self::UPDATE_TIME_DATA => [
                 self::LABEL         => 'Update time data', // _('Update time data')
-                self::DESCRIPTION   => 'The grant to update working time accounts for all employees in this division.', // _('The grant to update working time accounts for all employees in this division.')
+                self::DESCRIPTION   => 'The grant to update working time reports for all employees in this division.', // _('The grant to update working time reports for all employees in this division.')
             ],
             self::CREATE_OWN_CHANGE_REQUEST => [
                 self::LABEL         => 'Create own change requests', // _('Create own change requests')
