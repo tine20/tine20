@@ -134,6 +134,33 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertSame(1, $ts->count());
     }
 
+    public function testClockPauseWorktime()
+    {
+        $result = $this->_json->clockIn([
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID
+        ]);
+
+        $clockPause = $this->_json->clockPause([
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID,
+            HumanResources_Model_AttendanceRecord::FLD_REFID => $result['clock_ins'][0][HumanResources_Model_AttendanceRecord::FLD_REFID],
+        ]);
+
+        $this->assertSame(HumanResources_Model_AttendanceRecord::STATUS_OPEN, $clockPause['clock_pauses'][0][HumanResources_Model_AttendanceRecord::FLD_STATUS]);
+    }
+
+    public function testClockPauseWorktimeNoRefId()
+    {
+        $this->_json->clockIn([
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID
+        ]);
+
+        $clockPause = $this->_json->clockPause([
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID,
+        ]);
+
+        $this->assertSame(HumanResources_Model_AttendanceRecord::STATUS_OPEN, $clockPause['clock_pauses'][0][HumanResources_Model_AttendanceRecord::FLD_STATUS]);
+    }
+
     public function testClockInWorktime()
     {
         $result = $this->_json->clockIn([
