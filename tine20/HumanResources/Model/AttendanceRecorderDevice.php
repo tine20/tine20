@@ -59,6 +59,16 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
                         HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID => [],
                     ],
                 ],
+                self::FLD_PAUSES => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID => [],
+                    ],
+                ],
+                self::FLD_UNPAUSES => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID => [],
+                    ],
+                ],
             ],
         ],
 
