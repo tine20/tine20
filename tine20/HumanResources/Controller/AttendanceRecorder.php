@@ -194,6 +194,8 @@ class HumanResources_Controller_AttendanceRecorder
                         HumanResources_Controller_AttendanceRecord::getInstance()->update($openRecord);
                     }
                 }
+            } else {
+                $subConfig->setStatus(HumanResources_Model_AttendanceRecord::STATUS_CLOSED);
             }
             $subConfig->setAutogen(true);
             $subConfig->setMetaData(array_filter($subConfig->getMetaData() ?: [], function($key) {
