@@ -38,6 +38,20 @@ class HumanResources_Controller_AttendanceRecorder
             return null;
         }
 
+        // shallow clone
+        $blUndo = $aheadRecords->getClone(true);
+        $refIdsToOpen = array_unique($aheadRecords->filter(HumanResources_Model_AttendanceRecord::FLD_TYPE,
+            HumanResources_Model_AttendanceRecord::TYPE_CLOCK_OUT)->{HumanResources_Model_AttendanceRecord::FLD_REFID});
+        if (!empty($refIdsToOpen)) {
+            $refIdsToOpen = $this->backend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_AttendanceRecord::class, [
+                ['field' => HumanResources_Model_AttendanceRecord::FLD_ACCOUNT_ID, 'operator' => 'equals', 'value' => $config->getAccount()->getId()],
+                ['field' => HumanResources_Model_AttendanceRecord::FLD_REFID, 'operator' => 'in', 'value' => $refIdsToOpen],
+                ['field' => 'id', 'operator' => 'notin', 'value' => $aheadRecords->getArrayOfIds()],
+            ]));
+            $blUndo->merge($refIdsToOpen);
+            $blUndo->sort(HumanResources_Model_AttendanceRecord::FLD_SEQUENCE, 'ASC', 'asort',  SORT_NUMERIC);
+        }
+
         // undo BL
         $deviceIds = array_unique($aheadRecords->{HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID});
         foreach ($deviceIds as $deviceId) {
@@ -46,7 +60,7 @@ class HumanResources_Controller_AttendanceRecorder
                     0 === $device->{HumanResources_Model_AttendanceRecorderDevice::FLD_BLPIPE}->count()) {
                 continue;
             }
-            $deviceRecords = $aheadRecords->filter(HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID, $deviceId);
+            $deviceRecords = $blUndo->filter(HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID, $deviceId);
             foreach ($device->{HumanResources_Model_AttendanceRecorderDevice::FLD_BLPIPE} as $blpipe) {
                 $blElem = $blpipe->configRecord->getNewBLElement();
                 if ($blElem instanceof HumanResources_BL_AttendanceRecorder_UndoInterface) {
@@ -55,9 +69,25 @@ class HumanResources_Controller_AttendanceRecorder
             }
         }
 
+        $blUndo->removeRecordsById($aheadRecords);
         // delete
         foreach ($aheadRecords as $record) {
             $this->backend->getBackend()->delete($record->getId());
+        }
+        if ($refIdsToOpen instanceof Tinebase_Record_RecordSet) {
+            foreach ($refIdsToOpen as $record) {
+                if (HumanResources_Model_AttendanceRecord::STATUS_OPEN === $record->{HumanResources_Model_AttendanceRecord::FLD_STATUS}) {
+                    continue;
+                }
+                $record->{HumanResources_Model_AttendanceRecord::FLD_STATUS} = HumanResources_Model_AttendanceRecord::STATUS_OPEN;
+                $this->backend->getBackend()->update($record);
+                $blUndo->removeById($record->getId());
+            }
+        }
+        foreach ($blUndo as $record) {
+            if ($record->isDirty()) {
+                $this->backend->getBackend()->update($record);
+            }
         }
 
         // return and do this api call
