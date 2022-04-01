@@ -179,8 +179,7 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
             'duration' => 0,
         ], true);
 
-        $ts->description = sprintf($translate->translate('Clock in: %1$s'), $ts->start_time) . ' ' .
-            sprintf($translate->translate('Clock out: %1$s'), $ts->end_time);
+        $ts->description = sprintf($translate->translate('Clock in: %1$s'), $ts->start_time);
         if ($record->{HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID}) {
             $ts->{HumanResources_Model_FreeTimeType::TT_TS_SYSCF_CLOCK_OUT_REASON} = $record->getIdFromProperty(HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID);
         }
@@ -202,9 +201,16 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
         $ids = [];
         /** @var HumanResources_Model_AttendanceRecord $record */
         foreach ($data as $record) {
+            if ($record->{HumanResources_Model_AttendanceRecord::FLD_BLPROCESSED}) {
+                $record->{HumanResources_Model_AttendanceRecord::FLD_BLPROCESSED} = 0;
+            }
             if (isset($record
                     ->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class])) {
                 $ids[] = $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class];
+                // xprops doesn't dirty!
+                unset($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]);
+                // this does:
+                $record->{HumanResources_Model_AttendanceRecord::FLD_BLPROCESSED} = 0;
             }
         }
         if (!empty($ids)) {
