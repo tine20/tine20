@@ -38,6 +38,13 @@ class HumanResources_Controller_AttendanceRecorder
             return null;
         }
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' out of sequence clock action encountered.'
+        );
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($config->__serialize(), true)
+        );
+
         // shallow clone
         $blUndo = $aheadRecords->getClone(true);
         $refIdsToOpen = array_unique($aheadRecords->filter(HumanResources_Model_AttendanceRecord::FLD_TYPE,
@@ -93,10 +100,17 @@ class HumanResources_Controller_AttendanceRecorder
         // return and do this api call
         // then replay deleted api calls!
         return function() use ($aheadRecords) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' replay API actions due to out of sequence clock action.'
+            );
             /** @var HumanResources_Model_AttendanceRecord $record */
             foreach($aheadRecords->filter(HumanResources_Model_AttendanceRecord::FLD_AUTOGEN, false) as $record) {
                 $cfg = $record->getConfig();
                 $cfg->setThrowOnFaultyAction(false);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $record->{HumanResources_Model_AttendanceRecord::FLD_TYPE} .
+                    ' ' . print_r($cfg->__serialize(), true)
+                );
                 switch($record->{HumanResources_Model_AttendanceRecord::FLD_TYPE}) {
                     case HumanResources_Model_AttendanceRecord::TYPE_CLOCK_IN:
                         $this->clockIn($cfg);
@@ -114,6 +128,11 @@ class HumanResources_Controller_AttendanceRecorder
 
     public function clockIn(HumanResources_Config_AttendanceRecorder $config): HumanResources_Model_AttendanceRecorderClockInOutResult
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($config->__serialize(), true)
+        );
+
         $raii = Tinebase_RAII::getTransactionManagerRAII();
 
         $this->prepareConfig($config);
@@ -163,6 +182,7 @@ class HumanResources_Controller_AttendanceRecorder
                 throw new Tinebase_Exception_UnexpectedValue('can\'t clock in, open attendance record found');
             }
 
+            $config->setRefId(Tinebase_Record_Abstract::generateUID());
             $subConfig = clone $config;
             $subConfig->setRefId($lastRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID});
             if (!$graceful) {
@@ -270,6 +290,11 @@ class HumanResources_Controller_AttendanceRecorder
 
     public function clockPause(HumanResources_Config_AttendanceRecorder $config): HumanResources_Model_AttendanceRecorderClockInOutResult
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($config->__serialize(), true)
+        );
+
         $raii = Tinebase_RAII::getTransactionManagerRAII();
 
         $this->prepareConfig($config);
@@ -384,6 +409,11 @@ class HumanResources_Controller_AttendanceRecorder
 
     public function clockOut(HumanResources_Config_AttendanceRecorder $config): HumanResources_Model_AttendanceRecorderClockInOutResult
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($config->__serialize(), true)
+        );
+
         $raii = Tinebase_RAII::getTransactionManagerRAII();
 
         $this->prepareConfig($config);
