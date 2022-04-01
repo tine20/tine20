@@ -176,6 +176,7 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
             ))
         ));
 
+        $commonValues['model'] = HumanResources_Model_MonthlyWTReport::class;
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
                 'name' => "Monthly WTR Corretions Requested", // _('Monthly WTR Corretions Requested')
