@@ -1066,7 +1066,13 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     'options' => array('modelName' => $recordClass)
                 )
             );
-        } elseif ($this->_extendsContainer) {
+        }
+        if ($this->_extendsContainer) {
+            if (!$this->_containerProperty) {
+                $this->_containerProperty = $this->_extendsContainer;
+            } elseif ($this->_containerProperty !== $this->_extendsContainer) {
+                throw new Tinebase_Exception_Record_DefinitionFailure('containerProperty and extendsContainer may not be different');
+            }
             $this->_fields[$this->_extendsContainer] = array(
                 'nullable'         => true,
                 self::LENGTH       => 40,
