@@ -113,7 +113,8 @@ Ext.ux.grid.GridViewMenuPlugin = Ext.extend(Object, {
                 );
             }
         });
-        
+
+        grid.view.scrollOffset = 18;
 
     },
 
