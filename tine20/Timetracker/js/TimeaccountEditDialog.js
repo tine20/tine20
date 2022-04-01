@@ -22,7 +22,8 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     // recordProxy: Tine.Timetracker.timeaccountBackend,
     useInvoice: false,
     displayNotes: true,
-
+    showContainerSelector: false,
+    
     windowWidth: 800,
     windowHeight: 500,
 
