@@ -41,11 +41,9 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
      */
     public function execute(Tinebase_BL_PipeContext $_context, Tinebase_BL_DataInterface $_data)
     {
+        /** @var HumanResources_BL_AttendanceRecorder_Data $_data */
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__);
 
-        /** @var HumanResources_BL_AttendanceRecorder_Data $_data */
-        $phpstan = 'murks';
-        unset($phpstan); // for real, otherwise that @var from two lines above makes issues...
         foreach (array_unique($_data->data->{HumanResources_Model_AttendanceRecord::FLD_ACCOUNT_ID}) as $accountId) {
             // read config, not property here!
             if (!$this->_config->{HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_STATIC_TA}) {
