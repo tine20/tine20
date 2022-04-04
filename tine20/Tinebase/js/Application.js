@@ -200,7 +200,7 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
                 }
             }
         }
-
+        
         // default mainscreen route
         if (!this.routes || !this.routes['']) {
             var me = this;
