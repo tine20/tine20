@@ -62,8 +62,8 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                 $prevRecord = null;
                 /** @var HumanResources_Model_AttendanceRecord $record */
                 foreach ($accountData->filter(HumanResources_Model_AttendanceRecord::FLD_REFID, $refId) as $record) {
-                    if (isset($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class])) {
-                        $tsId = $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class];
+                    if (isset($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['id'])) {
+                        $tsId = $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['id'];
                         $prevRecord = $record;
                         continue;
                     }
@@ -93,7 +93,7 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
         }
     }
 
-    protected function updateTimeSheet(Timetracker_Model_Timesheet $ts, HumanResources_Model_AttendanceRecord $prevRecord, HumanResources_Model_AttendanceRecord $record)
+    protected function updateTimeSheet(Timetracker_Model_Timesheet &$ts, HumanResources_Model_AttendanceRecord $prevRecord, HumanResources_Model_AttendanceRecord $record)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__);
 
@@ -103,8 +103,16 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
         }
 
         $prevRecord->{HumanResources_Model_AttendanceRecord::FLD_BLPROCESSED} = true;
-        $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class] =
+        $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['id'] =
             $ts->getId();
+        if (isset($prevRecord->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['changed'])) {
+            $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['changed'] =
+                $prevRecord->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['changed'];
+        }
+
+        if ((int)$ts->seq > (int)$prevRecord->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['seq']) {
+            $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['changed'] = true;
+        }
 
         if (HumanResources_Model_AttendanceRecord::STATUS_FAULTY === $record->{HumanResources_Model_AttendanceRecord::FLD_STATUS} ||
                 HumanResources_Model_AttendanceRecord::STATUS_FAULTY === $prevRecord->{HumanResources_Model_AttendanceRecord::FLD_STATUS}) {
@@ -120,9 +128,11 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                 $ts->description = $ts->description . ' ' . sprintf($translate->translate('Clock out: %1$s'),
                     $record->{HumanResources_Model_AttendanceRecord::FLD_TIMESTAMP}->format('H:i:s'));
 
-                Timetracker_Controller_Timesheet::getInstance()->update($ts);
+                $ts = Timetracker_Controller_Timesheet::getInstance()->update($ts);
             }
 
+            $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['seq'] =
+                $ts->seq;
             $record->{HumanResources_Model_AttendanceRecord::FLD_BLPROCESSED} = true;
             return false;
         }
@@ -153,7 +163,13 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
             }
         }
 
-        Timetracker_Controller_Timesheet::getInstance()->update($ts);
+        $ts = Timetracker_Controller_Timesheet::getInstance()->update($ts);
+        // this doesnt make record dirty
+        $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['seq']
+            = $ts->seq;
+        // this does
+        $record->{HumanResources_Model_AttendanceRecord::FLD_BLPROCESSED} = (bool)$record->{HumanResources_Model_AttendanceRecord::FLD_BLPROCESSED};
+
         return true;
     }
 
@@ -193,9 +209,12 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
 
         $ts = Timetracker_Controller_Timesheet::getInstance()->create($ts);
         // doesnt make the record dirty!
-        $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class] =
+        $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['id'] =
             $ts->getId();
-        $record->{HumanResources_Model_AttendanceRecord::FLD_STATUS} = $record->{HumanResources_Model_AttendanceRecord::FLD_STATUS};
+        $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['seq'] =
+            $ts->seq;
+        // this does
+        $record->{HumanResources_Model_AttendanceRecord::FLD_STATUS} = (string)$record->{HumanResources_Model_AttendanceRecord::FLD_STATUS};
 
         return $ts;
     }
@@ -204,23 +223,46 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__);
 
+        $tsCtrl = Timetracker_Controller_Timesheet::getInstance();
+        $tsCtrlRaii = new Tinebase_RAII($tsCtrl->assertPublicUsage());
+
         $ids = [];
+        $tsData = [];
         /** @var HumanResources_Model_AttendanceRecord $record */
         foreach ($data as $record) {
             if ($record->{HumanResources_Model_AttendanceRecord::FLD_BLPROCESSED}) {
                 $record->{HumanResources_Model_AttendanceRecord::FLD_BLPROCESSED} = 0;
             }
-            if (isset($record
-                    ->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class])) {
-                $ids[] = $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class];
+            if (isset($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['id'])) {
+                $id = $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['id'];
+                $ids[$id] = $id;
+                $tsData[$id] = $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class];
+
                 // xprops doesn't dirty!
                 unset($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]);
                 // this does:
-                $record->{HumanResources_Model_AttendanceRecord::FLD_BLPROCESSED} = 0;
+                $record->{HumanResources_Model_AttendanceRecord::FLD_BLPROCESSED} = false;
             }
         }
-        if (!empty($ids)) {
-            Timetracker_Controller_Timesheet::getInstance()->delete(array_unique($ids));
+
+        foreach ($tsData as $id => $tsd) {
+            $ts = null;
+            if (isset($tsd['changed']) || (int)($ts = $tsCtrl->get($id))->seq > (int)$tsd['seq']) {
+                unset($ids[$id]);
+                if (!$ts) {
+                    $ts = $tsCtrl->get($id);
+                }
+                if (!$ts->need_for_clarification) {
+                    $ts->need_for_clarification = true;
+                    $tsCtrl->update($ts);
+                }
+            }
         }
+
+        if (!empty($ids)) {
+            $tsCtrl->delete(array_values($ids));
+        }
+
+        unset($tsCtrlRaii);
     }
 }
