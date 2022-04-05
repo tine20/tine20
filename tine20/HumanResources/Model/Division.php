@@ -31,6 +31,8 @@ class HumanResources_Model_Division extends Tinebase_Record_NewAbstract
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::RECORD_NAME               => 'Division', // gettext('GENDER_Division')
         self::RECORDS_NAME              => 'Divisions', // ngettext('Division', 'Divisions', n)
+        self::CONTAINER_NAME            => 'Division',
+        self::CONTAINERS_NAME           => 'Divisions',
         self::HAS_RELATIONS             => true,
         self::MODLOG_ACTIVE             => true,
         self::HAS_DELETED_TIME_UNIQUE   => true,
