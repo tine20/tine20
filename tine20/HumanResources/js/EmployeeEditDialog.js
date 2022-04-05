@@ -139,14 +139,12 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             }
         )];
             
-        if (this.useSales) {
-            firstRow.push(Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Division', {
-                    name: 'division_id',
-                    fieldLabel: this.app.i18n._('Division'),
-                    allowBlank: true
-            }));
-        }
-        
+        firstRow.push(Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Division', {
+                name: 'division_id',
+                fieldLabel: this.app.i18n._('Division'),
+                allowBlank: true
+        }));
+
         firstRow.push({
             name: 'health_insurance',
             fieldName: 'health_insurance',
