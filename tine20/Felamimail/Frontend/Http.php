@@ -186,10 +186,11 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     protected function _outputMessagePart($_messageId, $_partId = NULL, $disposition = 'attachment', $validateImage = FALSE)
     {
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(0);
+        $isWinMailDat = strstr($_partId, 'winmail-');
         
         try {
             // fetch extracted winmail dat contents
-            if (strstr($_partId, 'winmail-')) {
+            if ($isWinMailDat) {
                 $partIndex = explode('winmail-', $_partId);
                 $partIndex = intval($partIndex[1]);
                 
@@ -206,6 +207,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 $this->_prepareHeader($file, $contentType);
                 
                 $stream = fopen($path . $file, 'r');
+                $filename = 'winmail.dat';
                 
             } else { // fetch normal attachment
                 $part = Felamimail_Controller_Message::getInstance()->getMessagePart($_messageId, $_partId);
@@ -247,7 +249,8 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 }
                 
             } else {
-                fpassthru($stream);
+                // TODO improve handling of "invalid byte sequence" warnings
+                @fpassthru($stream);
             }
             
             fclose($stream);
