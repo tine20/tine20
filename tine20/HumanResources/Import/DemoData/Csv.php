@@ -56,8 +56,7 @@ class HumanResources_Import_DemoData_Csv extends Tinebase_Import_Csv_Abstract
 
     protected function _inspectAfterImport($importedRecord)
     {
-        try
-        {
+        try {
             $event_id = Tinebase_Container::getInstance()->getContainerByName('Calendar_Model_Event', 'Events','shared')['event_id'];
             $contract_Model = new HumanResources_Model_Contract(array(
                 'start_date' => Tinebase_DateTime::now(),
@@ -67,8 +66,7 @@ class HumanResources_Import_DemoData_Csv extends Tinebase_Import_Csv_Abstract
                 'workingtime_json' => '{"days":[8,8,8,8,8,0,0]}'
             ));
             HumanResources_Controller_Contract::getInstance()->create($contract_Model);
-        }catch(Exception $e)
-        {
+        } catch(Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                 __METHOD__ . '::' . __LINE__ . ' Dont exist Calendar Container: Events');
         }

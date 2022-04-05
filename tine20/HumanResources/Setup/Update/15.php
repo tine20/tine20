@@ -239,12 +239,14 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
                 ], true),
             ]);
 
-        HumanResources_Controller_AttendanceRecorderDevice::getInstance()->update($tineWorkingTimeDevice);
+        try {
+            HumanResources_Controller_AttendanceRecorderDevice::getInstance()->update($tineWorkingTimeDevice);
+        } catch (Zend_Db_Exception $zde) {
+            // duplicate?
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $zde->getMessage());
+        }
 
         $this->addApplicationUpdate('HumanResources', '15.10', self::RELEASE015_UPDATE010);
     }
-
-    /**
-     * $
-     */
 }
