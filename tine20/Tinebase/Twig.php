@@ -63,7 +63,7 @@ class Tinebase_Twig
         }
 
         $options = [
-            'cache' => $cacheDir
+            'cache' => $cacheDir ? new Tinebase_Twig_ImprovedFileCache($cacheDir) : $cacheDir,
         ];
 
         if (isset($_options[self::TWIG_AUTOESCAPE])) {
