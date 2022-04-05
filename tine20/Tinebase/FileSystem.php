@@ -2272,7 +2272,7 @@ class Tinebase_FileSystem implements
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' create hash file: ' . $hashFile);
         while (!file_exists($hashFile)) {
-            $hashHandle = fopen($hashFile, 'x');
+            $hashHandle = @fopen($hashFile, 'x');
             if (! $hashHandle) {
                 if (file_exists($hashFile)) {
                     break;
