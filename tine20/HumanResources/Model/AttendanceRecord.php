@@ -56,6 +56,8 @@ class HumanResources_Model_AttendanceRecord extends Tinebase_Record_NewAbstract
         self::MODLOG_ACTIVE         => true,
         self::HAS_XPROPS            => true,
 
+        // DO NOT expose to (JSON) FE, there is currenlty no grants / account_id checking!
+
         self::APP_NAME              => HumanResources_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
 

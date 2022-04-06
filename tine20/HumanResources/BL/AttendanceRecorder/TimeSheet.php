@@ -25,6 +25,7 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
     protected $_staticTAid;
     protected $_allowOtherTAs;
     protected $_fillOtherDevices;
+    protected $_tsPublicRAII;
 
     public function __construct(HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig $_config)
     {
@@ -33,6 +34,8 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
             $this->_staticTAid = $_config->getIdFromProperty(HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_STATIC_TA);
         }
         $this->_allowOtherTAs = (bool)$_config->{HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_ALLOW_OTHER_TA};
+
+        $this->_tsPublicRAII = new Tinebase_RAII(Timetracker_Controller_Timesheet::getInstance()->assertPublicUsage());
     }
 
     /**
@@ -72,7 +75,7 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                             // shouldn't happen, we create faulty ts and be done with it, no tsId, no prevRecord set!
                             $record->{HumanResources_Model_AttendanceRecord::FLD_BLPROCESSED} = true;
                             $record->{HumanResources_Model_AttendanceRecord::FLD_STATUS} = HumanResources_Model_AttendanceRecord::STATUS_FAULTY;
-                            $this->createTimeSheet($record);
+                            $this->createTimeSheet($record, $record->{HumanResources_Model_AttendanceRecord::FLD_TYPE});
                         } else {
                             $ts = $this->createTimeSheet($record);
                             $tsId = $ts->getId();
@@ -173,7 +176,7 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
         return true;
     }
 
-    protected function createTimeSheet(HumanResources_Model_AttendanceRecord $record)
+    protected function createTimeSheet(HumanResources_Model_AttendanceRecord $record, ?string $type = null)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__);
 
@@ -199,7 +202,9 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
             'duration' => 0,
         ], true);
 
-        $ts->description = sprintf($translate->translate('Clock in: %1$s'), $ts->start_time);
+        $ts->description = sprintf($translate->translate($type ?
+            (HumanResources_Model_AttendanceRecord::TYPE_CLOCK_OUT === $type ? 'Clock out: %1$s' : 'Clock pause: %1$s')
+            : 'Clock in: %1$s'), $ts->start_time);
         if ($record->{HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID}) {
             $ts->{HumanResources_Model_FreeTimeType::TT_TS_SYSCF_CLOCK_OUT_REASON} = $record->getIdFromProperty(HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID);
         }
