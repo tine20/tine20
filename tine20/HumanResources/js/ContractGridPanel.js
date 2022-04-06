@@ -67,26 +67,28 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * will be called in Edit Dialog Mode
      */
     fillBottomToolbar: function() {
-        this.action_deleteRecord.initialConfig.actionUpdater = function(action) {
-            var selection = this.getGrid().getSelectionModel().getSelections();
-            if (selection.length != 1) {
-                action.disable();
-                return;
-            } else {
-                var record = selection[0];
+        _.each([this.action_editInNewWindow, this.action_deleteRecord], (action) => {
+            action.initialConfig.actionUpdater = function (action) {
+                var selection = this.getGrid().getSelectionModel().getSelections();
+                if (selection.length != 1) {
+                    action.disable();
+                    return;
+                } else {
+                    var record = selection[0];
+                }
+                if (!record) {
+                    action.disable();
+                    return;
+                }
+
+                if (record.id.length == 13) {
+                    action.enable();
+                    return;
+                }
+
+                action.setDisabled(!(record.get('is_editable') == true)); // may be undefined
             }
-            if (! record) {
-                action.disable();
-                return;
-            }
-            
-            if (record.id.length == 13) {
-                action.enable();
-                return;
-            }
-            
-            action.setDisabled(! (record.get('is_editable') == true)); // may be undefined
-        }
+        });
         
         var tbar = this.getBottomToolbar();
         tbar.addButton(new Ext.Button(this.action_editInNewWindow));
