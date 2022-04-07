@@ -90,14 +90,15 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
 
         $folderToSelect = isset($params->folder) ? $params->folder : 'INBOX';
         $selectParams = $capabilities && in_array('CONDSTORE', $capabilities['capabilities']) ? ['(CONDSTORE)'] : [];
-
         try {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Selecting folder ' . $folderToSelect);
 
             $this->selectFolder($folderToSelect, $selectParams);
         } catch (Zend_Mail_Storage_Exception $zmse) {
-            throw new Felamimail_Exception_IMAPFolderNotFound('Could not select ' . $folderToSelect . '(' . $zmse->getMessage() . ')');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Could not select ' . $folderToSelect
+                . ' (' . $zmse->getMessage() . ')');
         }
     }
     
