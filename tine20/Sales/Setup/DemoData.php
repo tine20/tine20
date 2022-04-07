@@ -806,11 +806,12 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         : array('Management', 'IT', 'Marketing', 'Public Relations', 'Production', 'Administration')
         ;
 
-        foreach($divisionsArray as $divisionName) {
+        foreach ($divisionsArray as $divisionName) {
             try {
                 HumanResources_Controller_Division::getInstance()->create(new HumanResources_Model_Division(array('title' => $divisionName)));
             } catch (Zend_Db_Statement_Exception $e) {
-            } catch (Tinebase_Exception_Duplicate $e) {}
+            } catch (Tinebase_Exception_Duplicate $e) {
+            } catch (Tinebase_Exception_SystemGeneric $e) {}
         }
 
         $this->_loadCostCentersAndDivisions();
