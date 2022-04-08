@@ -1187,11 +1187,15 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($_ids instanceof $this->_modelName) {
             $_ids = (array)$_ids->getId();
         }
-        
+
+        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+
+        $forUpdateRaii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_backend);
         // make sure we use same grants as search (sql calced grants vs search based grants)
         $records = $this->search(new Calendar_Model_EventFilter(array(
             array('field' => 'id', 'operator' => 'in', 'value' => $_ids)
         )));
+        unset($forUpdateRaii);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " Deleting " . count($records) . ' with range ' . $range . ' ...');
@@ -1200,55 +1204,47 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if ($record->isRecurException() && in_array($range, array(Calendar_Model_Event::RANGE_ALL, Calendar_Model_Event::RANGE_THISANDFUTURE))) {
                 $this->_deleteExdateRange($record, $range);
             }
-            
-            try {
-                $db = $this->_backend->getAdapter();
-                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-                
-                // delete if delete grant is present
-                if ($this->_doContainerACLChecks === FALSE || $record->hasGrant(Tinebase_Model_Grants::GRANT_DELETE)) {
-                    // NOTE delete needs to update sequence otherwise iTIP based protocolls ignore the delete
-                    $record->status = Calendar_Model_Event::STATUS_CANCELED;
-                    $this->_touch($record);
-                    if ($record->isRecurException()) {
-                        try {
-                            $baseEvent = $this->getRecurBaseEvent($record);
-                            $this->_touch($baseEvent);
-                        } catch (Tinebase_Exception_NotFound $tnfe) {
-                            // base Event might be gone already
-                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                                . " BaseEvent of exdate {$record->uid} to delete not found ");
 
-                        }
-                    }
-                    parent::delete($record);
-                }
-                
-                // otherwise update status for user to DECLINED
-                else if ($record->attendee instanceof Tinebase_Record_RecordSet) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no deleteGrant for event: " . $record->id . ", updating own status to DECLINED only");
-                    $ownContact = Tinebase_Core::getUser()->contact_id;
-                    foreach ($record->attendee as $attender) {
-                        if ($attender->user_id == $ownContact && in_array($attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
-                            $attender->status = Calendar_Model_Attender::STATUS_DECLINED;
-                            $this->attenderStatusUpdate($record, $attender, $attender->status_authkey);
-                        }
-                    }
-                }
-                
-                // increase display container content sequence for all attendee of deleted event
-                if ($record->attendee instanceof Tinebase_Record_RecordSet) {
-                    foreach ($record->attendee as $attender) {
-                        $this->_increaseDisplayContainerContentSequence($attender, $record, Tinebase_Model_ContainerContent::ACTION_DELETE);
+            // delete if delete grant is present
+            if ($this->_doContainerACLChecks === FALSE || $record->hasGrant(Tinebase_Model_Grants::GRANT_DELETE)) {
+                // NOTE delete needs to update sequence otherwise iTIP based protocolls ignore the delete
+                $record->status = Calendar_Model_Event::STATUS_CANCELED;
+                $this->_touch($record);
+                if ($record->isRecurException()) {
+                    try {
+                        $baseEvent = $this->getRecurBaseEvent($record);
+                        $this->_touch($baseEvent);
+                    } catch (Tinebase_Exception_NotFound $tnfe) {
+                        // base Event might be gone already
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . " BaseEvent of exdate {$record->uid} to delete not found ");
+
                     }
                 }
-                
-                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            } catch (Exception $e) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-                throw $e;
+                parent::delete($record);
+            }
+
+            // otherwise update status for user to DECLINED
+            else if ($record->attendee instanceof Tinebase_Record_RecordSet) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no deleteGrant for event: " . $record->id . ", updating own status to DECLINED only");
+                $ownContact = Tinebase_Core::getUser()->contact_id;
+                foreach ($record->attendee as $attender) {
+                    if ($attender->user_id == $ownContact && in_array($attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
+                        $attender->status = Calendar_Model_Attender::STATUS_DECLINED;
+                        $this->attenderStatusUpdate($record, $attender, $attender->status_authkey);
+                    }
+                }
+            }
+
+            // increase display container content sequence for all attendee of deleted event
+            if ($record->attendee instanceof Tinebase_Record_RecordSet) {
+                foreach ($record->attendee as $attender) {
+                    $this->_increaseDisplayContainerContentSequence($attender, $record, Tinebase_Model_ContainerContent::ACTION_DELETE);
+                }
             }
         }
+
+        $transaction->release();
     }
     
     /**
