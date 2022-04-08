@@ -1383,6 +1383,100 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         }
     }
 
+    public function testWTSGrants()
+    {
+        $employee = $this->_getEmployee('rwright');
+        $contractController = HumanResources_Controller_Contract::getInstance();
+        $employeeController = HumanResources_Controller_Employee::getInstance();
+        $employee = $employeeController->create($employee);
+        $contract = $this->_getContract();
+        $contract->employee_id = $employee->getId();
+
+        $feastCalendar = $this->_getFeastCalendar();
+        $contract->feast_calendar_id = $feastCalendar->getId();
+        $contractController->create($contract);
+
+        $wts40h = $this->_getWorkingTimeScheme40();
+        $this->assertNotNull($wts40h);
+
+        $wtsCtrl = HumanResources_Controller_WorkingTimeScheme::getInstance();
+        $result = $wtsCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            HumanResources_Model_WorkingTimeScheme::class, [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $wts40h->getId()]
+        ]))->getFirstRecord();
+        $this->assertNotNull($result);
+        $wtsCtrl->get($wts40h->getId());
+
+        Tinebase_Core::setUser($this->_personas['rwright']);
+        $result = $wtsCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            HumanResources_Model_WorkingTimeScheme::class, [
+            ['field' => 'id', 'operator' => 'equals', 'value' => $wts40h->getId()]
+        ]))->getFirstRecord();
+        $this->assertNull($result);
+        try {
+            $wtsCtrl->get($wts40h->getId());
+            $this->fail('expected access denied exception');
+        } catch (Tinebase_Exception_AccessDenied $tead) {}
+
+        Tinebase_Core::setUser($this->_personas['pwulf']);
+        $result = $wtsCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            HumanResources_Model_WorkingTimeScheme::class, [
+            ['field' => 'id', 'operator' => 'equals', 'value' => $wts40h->getId()]
+        ]))->getFirstRecord();
+        $this->assertNull($result);
+        try {
+            $wtsCtrl->get($wts40h->getId());
+            $this->fail('expected access denied exception');
+        } catch (Tinebase_Exception_AccessDenied $tead) {}
+
+        Tinebase_Core::setUser($this->_originalTestUser);
+        $this->division->grants->addRecord(new HumanResources_Model_DivisionGrants([
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id' => $this->_personas['rwright']->getId(),
+            HumanResources_Model_DivisionGrants::READ_OWN_DATA => true,
+        ]));
+        $this->division->grants->addRecord(new HumanResources_Model_DivisionGrants([
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id' => $this->_personas['sclever']->getId(),
+            HumanResources_Model_DivisionGrants::READ_OWN_DATA => true,
+        ]));
+        $this->division->grants->addRecord(new HumanResources_Model_DivisionGrants([
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id' => $this->_personas['pwulf']->getId(),
+            HumanResources_Model_DivisionGrants::READ_BASIC_EMPLOYEE_DATA => true,
+        ]));
+
+        $this->division = HumanResources_Controller_Division::getInstance()->update($this->division);
+        Tinebase_Container::getInstance()->resetClassCache();
+
+        Tinebase_Core::setUser($this->_personas['rwright']);
+        $result = $wtsCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            HumanResources_Model_WorkingTimeScheme::class, [
+            ['field' => 'id', 'operator' => 'equals', 'value' => $wts40h->getId()]
+        ]))->getFirstRecord();
+        $this->assertNotNull($result);
+        $wtsCtrl->get($wts40h->getId());
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        $result = $wtsCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            HumanResources_Model_WorkingTimeScheme::class, [
+            ['field' => 'id', 'operator' => 'equals', 'value' => $wts40h->getId()]
+        ]))->getFirstRecord();
+        $this->assertNull($result);
+        try {
+            $wtsCtrl->get($wts40h->getId());
+            $this->fail('expected access denied exception');
+        } catch (Tinebase_Exception_AccessDenied $tead) {}
+
+        Tinebase_Core::setUser($this->_personas['pwulf']);
+        $result = $wtsCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            HumanResources_Model_WorkingTimeScheme::class, [
+            ['field' => 'id', 'operator' => 'equals', 'value' => $wts40h->getId()]
+        ]))->getFirstRecord();
+        $this->assertNotNull($result);
+        $wtsCtrl->get($wts40h->getId());
+    }
+
     public function testSearchDivisionWithoutGrants()
     {
         $title = Tinebase_Record_Abstract::generateUID(10);
