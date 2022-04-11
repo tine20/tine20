@@ -1418,7 +1418,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $this->fail('expected access denied exception');
         } catch (Tinebase_Exception_AccessDenied $tead) {}
 
-        Tinebase_Core::setUser($this->_personas['pwulf']);
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
         $result = $wtsCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             HumanResources_Model_WorkingTimeScheme::class, [
             ['field' => 'id', 'operator' => 'equals', 'value' => $wts40h->getId()]
@@ -1442,7 +1442,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         ]));
         $this->division->grants->addRecord(new HumanResources_Model_DivisionGrants([
             'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-            'account_id' => $this->_personas['pwulf']->getId(),
+            'account_id' => $this->_personas['jmcblack']->getId(),
             HumanResources_Model_DivisionGrants::READ_BASIC_EMPLOYEE_DATA => true,
         ]));
 
@@ -1468,7 +1468,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $this->fail('expected access denied exception');
         } catch (Tinebase_Exception_AccessDenied $tead) {}
 
-        Tinebase_Core::setUser($this->_personas['pwulf']);
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
         $result = $wtsCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             HumanResources_Model_WorkingTimeScheme::class, [
             ['field' => 'id', 'operator' => 'equals', 'value' => $wts40h->getId()]
