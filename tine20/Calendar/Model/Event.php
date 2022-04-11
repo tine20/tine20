@@ -508,6 +508,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 Tinebase_Core::getUser()->contact_id == ($this->organizer instanceof Addressbook_Model_Contact ? $this->organizer->getId() : $this->organizer) ||
                 // I'm attendee
                 Calendar_Model_Attender::getOwnAttender($this->attendee);
+        } else if ($hasGrant || (Tinebase_Core::getUser()->contact_id == ($this->organizer instanceof Addressbook_Model_Contact ? $this->organizer->getId() : $this->organizer) && $_grant == Tinebase_Model_Grants::GRANT_DELETE)) {
+            //I have the grand or I'm organizer
+            $hasGrant = true;
         }
         
         return $hasGrant;
