@@ -75,6 +75,7 @@ Tine.HumanResources.EmployeeEditDialogFreeTimeGridPanel = Ext.extend(Tine.widget
         this.i18nEmptyText = this.i18nEmptyText || String.format(this.app.i18n._("There could not be found any {0}. Please try to change your filter-criteria or view-options."), this.i18nRecordsName);        
 
         this.recordClass = Tine.HumanResources.Model.FreeTime;
+        this.recordProxy = Tine.HumanResources.freetimeBackend;
         this.modelConfig = this.recordClass.getModelConfiguration();
 
         Tine.HumanResources.EmployeeEditDialogFreeTimeGridPanel.superclass.initComponent.call(this);
