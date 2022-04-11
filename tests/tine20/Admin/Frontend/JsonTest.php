@@ -580,11 +580,12 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
             . print_r($modifications->toArray(), true));
         $firstModification = new Tinebase_Record_Diff(json_decode($modifications->getFirstRecord()->new_value, true));
         static::assertTrue(isset($firstModification->diff['account_grants']), 'expect account_grants to be set');
-        static::assertEquals(1, count($firstModification->diff), 'expect only account_grants to be set');
+        static::assertTrue(isset($firstModification->diff['seq']), 'expect seq to be set');
+        static::assertEquals(2, count($firstModification->diff), 'expect only account_grants to be set');
         $secondModification = new Tinebase_Record_Diff(json_decode($modifications->getLastRecord()->new_value,
             true));
         static::assertTrue(isset($secondModification->diff['name']), 'expect name to be set');
-        static::assertEquals(2, count($secondModification->diff));
+        static::assertEquals(3, count($secondModification->diff));
 
         // check history of updated container
         $tfj = new Tinebase_Frontend_Json();

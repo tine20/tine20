@@ -148,17 +148,17 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
 
         try {
             HumanResources_Controller_FreeTime::getInstance()->get($freeTime->getId());
-            $this->fail('pwulf should not see jsmith data');
+            $this->fail('jsmith should not see pwulf data');
         } catch (Tinebase_Exception_AccessDenied $tead) {}
 
         try {
             HumanResources_Controller_Account::getInstance()->get($freeTime->account_id);
-            $this->fail('pwulf should not see jsmith data');
+            $this->fail('jsmith should not see pwulf data');
         } catch (Tinebase_Exception_AccessDenied $tead) {}
 
         try {
             HumanResources_Controller_Employee::getInstance()->get($freeTime->employee_id);
-            $this->fail('pwulf should not see jsmith data');
+            $this->fail('jsmith should not see pwulf data');
         } catch (Tinebase_Exception_AccessDenied $tead) {}
 
         $grants = Tinebase_Container::getInstance()->getGrantsOfContainer(

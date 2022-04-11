@@ -31,7 +31,7 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
      * set up tests
      */
     public function setUp(): void
-{
+    {
         parent::setUp();
 
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
@@ -342,7 +342,7 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
         try {
             $this->jsonFE->deleteResources([$resource['id']]);
             if (!$shouldSucceed) {
-                static::fail('we should not have permission to update the resource');
+                static::fail('we should not have permission to delete the resource');
             }
             try {
                 $this->jsonFE->getResource($resource['id']);
@@ -410,7 +410,7 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
         $this->selfReset['_originalTestUser'] = $this->_originalTestUser;
         $this->selfReset['_testCalendar'] = $this->_testCalendar;
         $this->_originalTestUser = $this->_getPersona('pwulf');
-        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        Tinebase_Core::setUser($this->_originalTestUser);
         $this->_testCalendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container([
             'name'           => 'PHPUnit shared Calender container',
             'type'           => Tinebase_Model_Container::TYPE_SHARED,
@@ -426,7 +426,7 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
         $this->_testCalendar = $this->selfReset['_testCalendar'];
         $this->_testUserContact = $this->selfReset['_testUserContact'];
         $this->_originalTestUser = $this->selfReset['_originalTestUser'];
-        Tinebase_Core::set(Tinebase_Core::USER, $this->selfReset['_originalTestUser']);
+        Tinebase_Core::setUser($this->selfReset['_originalTestUser']);
     }
 
     protected function _preRemoveACLsFromTestContainer()

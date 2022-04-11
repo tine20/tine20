@@ -39,8 +39,9 @@ class Calendar_Model_ExternalInvitationGrants extends Tinebase_Model_Grants
             $_accountId,
             $_grant
     ) {
-        $_select->where($_select->getAdapter()->quoteIdentifier('container.xprops') . ' NOT LIKE "%' .
-            Calendar_Controller::XPROP_EXTERNAL_INVITATION_CALENDAR . '%"');
+        $xprops = $_select->getAdapter()->quoteIdentifier('container.xprops');
+        $_select->where('(' . $xprops . ' NOT LIKE "%' . Calendar_Controller::XPROP_EXTERNAL_INVITATION_CALENDAR .
+            '%" OR ' . $xprops . ' IS NULL)');
     }
 
     protected static $_modelConfiguration = null;
