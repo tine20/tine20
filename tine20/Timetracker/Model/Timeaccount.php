@@ -863,4 +863,15 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
 
         return false;
     }
+
+    public function setAccountGrants(Tinebase_Record_Interface $grants)
+    {
+        /** @var Tinebase_Model_Grants $grants */
+        if (Tinebase_Core::getUser()->hasRight(Timetracker_Config::APP_NAME, Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS)) {
+            foreach ($grants::getAllGrants() as $grant) {
+                $grants->{$grant} = true;
+            }
+        }
+        parent::setAccountGrants($grants);
+    }
 }

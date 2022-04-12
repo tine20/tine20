@@ -426,6 +426,12 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
 
     public function setAccountGrants(Tinebase_Record_Interface $grants)
     {
+        /** @var Tinebase_Model_Grants $grants */
+        if (Tinebase_Core::getUser()->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::MANAGE_EMPLOYEE)) {
+            foreach ($grants::getAllGrants() as $grant) {
+                $grants->{$grant} = true;
+            }
+        }
         if ($grants->{HumanResources_Model_DivisionGrants::READ_OWN_DATA} &&
                 $this->getIdFromProperty('account_id') !== Tinebase_Core::getUser()->getId()) {
             $grants->{HumanResources_Model_DivisionGrants::READ_OWN_DATA} = false;
