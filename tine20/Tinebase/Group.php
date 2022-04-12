@@ -391,7 +391,6 @@ class Tinebase_Group
             'description'   => 'Group of administrative accounts',
             'account_only'  => true,
         ));
-        Tinebase_Timemachine_ModificationLog::setRecordMetaData($adminGroup, 'create');
         Tinebase_Group::getInstance()->addGroup($adminGroup);
 
         $defaultUserGroupName = (Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY))
@@ -402,7 +401,6 @@ class Tinebase_Group
             'description'   => 'Group of user accounts',
             'account_only'  => true,
         ));
-        Tinebase_Timemachine_ModificationLog::setRecordMetaData($userGroup, 'create');
         Tinebase_Group::getInstance()->addGroup($userGroup);
 
         $defaultAnonymousGroupName =
@@ -415,7 +413,6 @@ class Tinebase_Group
             'visibility'    => Tinebase_Model_Group::VISIBILITY_HIDDEN,
             'account_only'  => true,
         ));
-        Tinebase_Timemachine_ModificationLog::setRecordMetaData($anonymousGroup, 'create');
         Tinebase_Group::getInstance()->addGroup($anonymousGroup);
     }
 

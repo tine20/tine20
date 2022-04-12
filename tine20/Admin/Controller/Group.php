@@ -172,8 +172,6 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
                 $this->createOrUpdateList($_group);
             }
 
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($_group, 'create');
-
             $group = Tinebase_Group::getInstance()->addGroup($_group);
 
             if (!empty($_group['members'])) {
