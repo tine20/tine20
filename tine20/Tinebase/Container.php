@@ -389,13 +389,16 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             }
         }
 
+        $container = $this->get($containerId);
         $newGrants = $this->getGrantsOfContainer($containerId, true);
         $this->_writeModLog(
-            new Tinebase_Model_Container(array('id' => $containerId, 'account_grants' => $newGrants), true),
-            new Tinebase_Model_Container(array('id' => $containerId, 'account_grants' => $containerGrants), true)
+            new Tinebase_Model_Container(array('id' => $containerId, 'account_grants' => $newGrants, 'seq' => $container->seq + 1), true),
+            new Tinebase_Model_Container(array('id' => $containerId, 'seq' => $container->seq), true)
         );
 
-        $this->_setRecordMetaDataAndUpdate($containerId, 'update');
+        $this->updateMultiple([$container->getId()], ['seq' => $container->seq + 1]);
+
+        $this->_clearCache($containerId);
         
         return true;
     }
@@ -437,26 +440,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         }
         
         return $ret;
-    }
-    
-    /**
-     * set modified timestamp for container
-     * 
-     * @param int|Tinebase_Model_Container $container
-     * @param string                       $action    one of {create|update|delete}
-     * @param boolean $fireEvent
-     * @return Tinebase_Model_Container
-     */
-    protected function _setRecordMetaDataAndUpdate($container, $action, $fireEvent = true)
-    {
-        if (! $container instanceof Tinebase_Model_Container) {
-            $container = $this->getContainerById($container);
-        }
-        Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($container, $action, $container);
-        
-        $this->_clearCache($container);
-        
-        return $this->update($container, true, $fireEvent);
     }
 
     /**
@@ -1031,7 +1014,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     public static function addGrantsSqlCallback($_select, $iteration)
     {
         $db = $_select->getAdapter();
-        $_select->join(array(
+        $_select->joinLeft(array(
             /* table  */ 'container_acl' . $iteration => SQL_TABLE_PREFIX . 'container_acl'),
             /* on     */ $db->quoteIdentifier('container_acl' . $iteration . '.container_id') . ' = ' . $db->quoteIdentifier('container.id'),
             array()
@@ -1209,8 +1192,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Deleting container id ' . $containerId . ' ...');
 
-        $deletedContainer = NULL;
-
         if ($_ignoreAcl !== TRUE) {
             if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::GRANT_ADMIN) && (
                     !isset($container->xprops()['Calendar']['Resource']['resource_id']) ||
@@ -1239,7 +1220,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             $this->_writeModLog(null, $container);
 
             $this->deleteContainerContents($container, $_ignoreAcl);
-            $deletedContainer = $this->_setRecordMetaDataAndUpdate($container, 'delete');
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($container,
+                Tinebase_Controller_Record_Abstract::ACTION_DELETE);
+            $deletedContainer = $this->update($container, true, false, false);
 
             $event = new Tinebase_Event_Record_Delete();
             $event->observable = $deletedContainer;
@@ -1392,7 +1375,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         $container->name = $_containerName;
         
-        return $this->_setRecordMetaDataAndUpdate($container, 'update');
+        return $this->update($container);
     }
 
     /**
@@ -1417,7 +1400,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         $container->color = $_color;
         
-        return $this->_setRecordMetaDataAndUpdate($container, 'update');
+        return $this->update($container, 'update');
     }
     
     /**
@@ -1772,13 +1755,16 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 }
             }
 
+            $container = $this->get($containerId);
             $newGrants = $this->getGrantsOfContainer($containerId, true);
             $this->_writeModLog(
-                new Tinebase_Model_Container(array('id' => $containerId, 'account_grants' => $newGrants), true),
-                new Tinebase_Model_Container(array('id' => $containerId), true)
+                new Tinebase_Model_Container(array('id' => $containerId, 'account_grants' => $newGrants, 'seq' => $container->seq + 1), true),
+                new Tinebase_Model_Container(array('id' => $containerId, 'seq' => $container->seq), true)
             );
 
-            $this->_setRecordMetaDataAndUpdate($containerId, 'update', false);
+            $this->updateMultiple([$container->getId()], ['seq' => $container->seq + 1]);
+
+            $this->_clearCache($containerId);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
@@ -2154,9 +2140,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * @param Tinebase_Record_Interface $_record
      * @param boolean $_updateDeleted = false
      * @param boolean $_fireEvent = true
+     * @param boolean $_setMetaData = true
      * @return Tinebase_Record_Interface Record|NULL
      */
-    public function update(Tinebase_Record_Interface $_record, $_updateDeleted = false, $_fireEvent = true)
+    public function update(Tinebase_Record_Interface $_record, $_updateDeleted = false, $_fireEvent = true, $_setMetaData = true)
     {
         $this->_clearCache($_record);
 
@@ -2164,6 +2151,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         // use get (avoids cache) or getContainerById, guess its better to avoid the cache
         $oldContainer = $this->get($_record->getId(), $_updateDeleted);
+        if ($_setMetaData) {
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record,
+                Tinebase_Controller_Record_Abstract::ACTION_UPDATE, $oldContainer);
+        }
 
         try {
             $result = parent::update($_record);

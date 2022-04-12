@@ -174,11 +174,12 @@ class Tinebase_ContainerTest extends TestCase
      */
     public function testSetContainerName()
     {
-        $container = $this->_instance->setContainerName($this->objects['initialContainer'], 'renamed container');
+        $oldContainer = $this->_instance->get($this->objects['initialContainer']->getId());
+        $container = $this->_instance->setContainerName($oldContainer->getId(), 'renamed container');
         
         $this->assertEquals('Tinebase_Model_Container', get_class($container), 'wrong type');
         $this->assertEquals('renamed container', $container->name);
-        $this->assertEquals(2, $container->seq);
+        $this->assertEquals($oldContainer->seq + 1, $container->seq);
         $this->_validateOwnerId($container);
         $this->_validatePath($container);
     }

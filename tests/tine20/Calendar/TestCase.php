@@ -63,8 +63,7 @@ abstract class Calendar_TestCase extends TestCase
         parent::setUp();
         
         $this->_backend = new Calendar_Backend_Sql();
-        
-        $this->_personas = Zend_Registry::get('personas');
+
         foreach ($this->_personas as $loginName => $user) {
             $defaultCalendarId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $user->getId());
             $this->_personasContacts[$loginName] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId());

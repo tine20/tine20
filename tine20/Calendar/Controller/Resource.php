@@ -396,7 +396,9 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
                     $user->hasGrant($_record->container_id, Calendar_Model_ResourceGrants::RESOURCE_ADMIN);
                 break;
             case self::ACTION_DELETE:
-                $hasGrant = $user->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
+                $hasGrant = ($user->hasGrant($_record->container_id, Calendar_Model_ResourceGrants::RESOURCE_READ) ||
+                    $user->hasGrant($_record->container_id, Calendar_Model_ResourceGrants::RESOURCE_ADMIN)) &&
+                    $user->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
                 break;
         }
 

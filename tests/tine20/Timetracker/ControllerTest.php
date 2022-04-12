@@ -143,12 +143,10 @@ class Timetracker_ControllerTest extends TestCase
     
     /************ test functions follow **************/
 
-    /**
-     * test to create TS with book_own grant
-     *
-     */
     public function testNoGrantsValidatorDefaultValue()
     {
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
+
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
@@ -159,13 +157,11 @@ class Timetracker_ControllerTest extends TestCase
         $this->assertEquals($grants->{Timetracker_Model_TimeaccountGrants::BOOK_OWN}, array(FALSE));
         $this->assertEquals($grants->{Timetracker_Model_TimeaccountGrants::BOOK_ALL}, array(FALSE));
     }
-    
-    /**
-     * test to create TS with book_own grant
-     *
-     */
+
     public function testNoGrantsTS()
     {
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
+
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
@@ -182,6 +178,9 @@ class Timetracker_ControllerTest extends TestCase
      */
     public function testBookOwnGrantTS()
     {
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
+
+        $this->_objects['timesheet']['account_id'] = $this->_personas['jmcblack']->getId();
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
@@ -197,6 +196,8 @@ class Timetracker_ControllerTest extends TestCase
      */
     public function testBookAllGrantTS()
     {
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
+
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
@@ -212,6 +213,8 @@ class Timetracker_ControllerTest extends TestCase
      */
     public function testManageClearingGrantTS()
     {
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
+
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'      => Tinebase_Core::getUser()->getId(),
             'account_type'    => 'user',
@@ -232,6 +235,8 @@ class Timetracker_ControllerTest extends TestCase
      */
     public function testManageClearingGrantTSNotSet()
     {
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
+
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'      => Tinebase_Core::getUser()->getId(),
             'account_type'    => 'user',
@@ -252,6 +257,8 @@ class Timetracker_ControllerTest extends TestCase
      */
     public function testManageAllGrantTS()
     {
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
+
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
@@ -267,6 +274,8 @@ class Timetracker_ControllerTest extends TestCase
      */
     public function testSearchTA()
     {
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
+
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
@@ -282,6 +291,8 @@ class Timetracker_ControllerTest extends TestCase
      */
     public function testSearchTAWithNoRights()
     {
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
+
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
@@ -296,6 +307,8 @@ class Timetracker_ControllerTest extends TestCase
      */
     public function testSearchTABookable()
     {
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
+
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
@@ -311,6 +324,9 @@ class Timetracker_ControllerTest extends TestCase
      */
     public function testSearchTS()
     {
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
+
+        $this->_objects['timesheet']['account_id'] = $this->_personas['jmcblack']->getId();
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
@@ -337,7 +353,9 @@ class Timetracker_ControllerTest extends TestCase
     public function testSearchTSExport()
     {
         $ts = $this->_timesheetController->create($this->_objects['timesheet']);
-        
+
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
+
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
