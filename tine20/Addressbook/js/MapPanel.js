@@ -88,7 +88,8 @@ Tine.Addressbook.MapPanel = Ext.extend(Ext.Panel, {
      * 
      * @param {Tine.Addressbook.Model.Contact} record
      */
-    onRecordLoad: function (record) {
+    onRecordLoad: async function (record) {
+        const {default: MapPanel} = await import(/* webpackChunkName: "Tinebase/js/MapPanel" */ 'Tinebase/js/widgets/MapPanel.js');
         this.record = record;
         
         var adrOne = ! Ext.isEmpty(this.record.get('adr_one_lon')) && ! Ext.isEmpty(this.record.get('adr_one_lat')),
@@ -97,10 +98,10 @@ Tine.Addressbook.MapPanel = Ext.extend(Ext.Panel, {
             btnOne = Ext.getCmp(this.idPrefix + 'tglbtn' + 'companyMap'),
             btnTwo = Ext.getCmp(this.idPrefix + 'tglbtn' + 'privateMap');
         
-           // if we have coordinates for company address add map panel
+        // if we have coordinates for company address add map panel
         if (adrOne && ! this.companyMap) {
             Tine.log.debug('Add company address map');
-            this.companyMap = new Tine.widgets.MapPanel({
+            this.companyMap = new MapPanel({
                 map: 'companyMap',
                 layout: 'fit',
                 zoom: 15,
@@ -121,7 +122,7 @@ Tine.Addressbook.MapPanel = Ext.extend(Ext.Panel, {
         // if we have coordinates for private address add map panel
         if (adrTwo && ! this.privateMap) {
             Tine.log.debug('Add private address map');
-            this.privateMap = new Tine.widgets.MapPanel({
+            this.privateMap = new MapPanel({
                 map: 'privateMap',
                 layout: 'fit',
                 zoom: 15,

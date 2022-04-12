@@ -63,7 +63,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         // fields used for private and company address
         $this->_addressFields = array('locality', 'postalcode', 'street', 'countryname');
         
-        $this->_setGeoDataForContacts = Tinebase_Config::getInstance()->get(Tinebase_Config::GEO_SERVICE, TRUE);
+        $this->_setGeoDataForContacts = Tinebase_Config::getInstance()->get(Tinebase_Config::USE_NOMINATIM_SERVICE, TRUE);
         if (! $this->_setGeoDataForContacts) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Geolocation service disabled with config option.');
@@ -923,7 +923,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     protected function _getNominatimService(): Zend_Service_Nominatim
     {
         $httpClient = Tinebase_Core::getHttpClient();
-        $url = Tinebase_Config::getInstance()->{Tinebase_Config::GEO_SERVICE_URL};
+        $url = Tinebase_Config::getInstance()->{Tinebase_Config::NOMINATIM_SERVICE_URL};
         if ($url && substr($url, -1) !== '/') {
             // Nominatim service needs a trailing slash
             $url .= '/';
