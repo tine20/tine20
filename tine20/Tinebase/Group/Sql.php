@@ -248,9 +248,13 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
 
         if (!empty(array_diff($oldGroupMembers, $newGroupMembers)) || !empty(array_diff($newGroupMembers, $oldGroupMembers)))
         {
-            $oldGroup = new Tinebase_Model_Group(array('id' => $groupId, 'members' => $oldGroupMembers), true);
-            $newGroup = new Tinebase_Model_Group(array('id' => $groupId, 'members' => $newGroupMembers), true);
+            $group = $this->getGroupByPropertyFromSqlBackend('id', $groupId);
+            $oldGroup = new Tinebase_Model_Group(array('id' => $groupId, 'members' => $oldGroupMembers, 'seq' => $group->seq + 1), true);
+            $newGroup = new Tinebase_Model_Group(array('id' => $groupId, 'members' => $newGroupMembers, 'seq' => $group->seq), true);
             $this->_writeModLog($newGroup, $oldGroup);
+
+            $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $groupId);
+            $this->groupsTable->update(['seq' => $group->seq + 1], $where);
         }
     }
     
@@ -414,9 +418,13 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
 
             if (!empty(array_diff($oldGroupMembers, $newGroupMembers)) || !empty(array_diff($newGroupMembers, $oldGroupMembers)))
             {
-                $oldGroup = new Tinebase_Model_Group(array('id' => $groupId, 'members' => $oldGroupMembers), true);
-                $newGroup = new Tinebase_Model_Group(array('id' => $groupId, 'members' => $newGroupMembers), true);
+                $group = $this->getGroupByPropertyFromSqlBackend('id', $groupId);
+                $oldGroup = new Tinebase_Model_Group(array('id' => $groupId, 'members' => $oldGroupMembers, 'seq' => $group->seq + 1), true);
+                $newGroup = new Tinebase_Model_Group(array('id' => $groupId, 'members' => $newGroupMembers, 'seq' => $group->seq), true);
                 $this->_writeModLog($newGroup, $oldGroup);
+
+                $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $groupId);
+                $this->groupsTable->update(['seq' => $group->seq + 1], $where);
             }
         }
         
@@ -466,9 +474,13 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
 
         if (!empty(array_diff($oldGroupMembers, $newGroupMembers)) || !empty(array_diff($newGroupMembers, $oldGroupMembers)))
         {
-            $oldGroup = new Tinebase_Model_Group(array('id' => $groupId, 'members' => $oldGroupMembers), true);
-            $newGroup = new Tinebase_Model_Group(array('id' => $groupId, 'members' => $newGroupMembers), true);
+            $group = $this->getGroupByPropertyFromSqlBackend('id', $groupId);
+            $oldGroup = new Tinebase_Model_Group(array('id' => $groupId, 'members' => $oldGroupMembers, 'seq' => $group->seq + 1), true);
+            $newGroup = new Tinebase_Model_Group(array('id' => $groupId, 'members' => $newGroupMembers, 'seq' => $group->seq), true);
             $this->_writeModLog($newGroup, $oldGroup);
+
+            $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $groupId);
+            $this->groupsTable->update(['seq' => $group->seq + 1], $where);
         }
     }
     
@@ -515,6 +527,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function addGroupInSqlBackend(Tinebase_Model_Group $_group)
     {
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_group, 'create');
+
         if(!$_group->isValid()) {
             throw new Tinebase_Exception_Record_Validation('invalid group object');
         }
@@ -588,6 +602,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_group);
 
         $oldGroup = $this->getGroupById($groupId);
+
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_group, 'update', $oldGroup);
 
         if (empty($_group->list_id)) {
             $_group->visibility = Tinebase_Model_Group::VISIBILITY_HIDDEN;
@@ -708,6 +724,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $this->groupsTable->delete($where);
 
         foreach($groups as $group) {
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($group, 'delete', $group);
             $this->_writeModLog(null, $group);
         }
     }
@@ -914,7 +931,6 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
                     $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
                     $record = new Tinebase_Model_Group($diff->diff);
                     Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);
-                    Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'create');
                     $this->addGroup($record);
                     break;
 
