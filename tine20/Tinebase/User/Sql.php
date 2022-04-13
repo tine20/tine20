@@ -640,7 +640,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
         
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        
+        $oldUser = $this->getUserByPropertyFromSqlBackend('accountId', $accountId);
+
+        $accountData['seq'] = $oldUser->seq + 1;
         switch($_status) {
             case Tinebase_Model_User::ACCOUNT_STATUS_ENABLED:
                 $accountData[$this->rowNameMapping['loginFailures']]  = 0;
@@ -663,7 +665,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             
             default:
                 throw new Tinebase_Exception_InvalidArgument('$_status can be only enabled, disabled or expired');
-                break;
         }
 
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
@@ -677,8 +678,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         $result = $accountsTable->update($accountData, $where);
 
-        $oldUser = new Tinebase_Model_FullUser(array('accountId' => $accountId), true);
-        $newUser = new Tinebase_Model_FullUser(array('accountId' => $accountId, 'accountStatus' => $_status), true);
+        $oldUser = new Tinebase_Model_FullUser(array('accountId' => $accountId, 'seq' => $oldUser->seq), true);
+        $newUser = new Tinebase_Model_FullUser(array('accountId' => $accountId, 'accountStatus' => $_status, 'seq' => $oldUser->seq + 1), true);
         $this->_writeModLog($newUser, $oldUser);
 
         return $result;
@@ -697,7 +698,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
         
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        
+        $oldUser = $this->getUserByPropertyFromSqlBackend('accountId', $accountId);
+
+        $accountData['seq'] = $oldUser->seq + 1;
         if($_expiryDate instanceof DateTime) {
             $accountData['expires_at'] = $_expiryDate->get(Tinebase_Record_Abstract::ISO8601LONG);
         } else {
@@ -712,8 +715,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         $result = $accountsTable->update($accountData, $where);
 
-        $oldUser = new Tinebase_Model_FullUser(array('accountId' => $accountId), true);
-        $newUser = new Tinebase_Model_FullUser(array('accountId' => $accountId, 'accountExpires' => $accountData['expires_at']), true);
+        $oldUser = new Tinebase_Model_FullUser(array('accountId' => $accountId, 'seq' => $oldUser->seq), true);
+        $newUser = new Tinebase_Model_FullUser(array('accountId' => $accountId, 'accountExpires' => $accountData['expires_at'], 'seq' => $oldUser->seq + 1), true);
         $this->_writeModLog($newUser, $oldUser);
 
         return $result;
@@ -812,7 +815,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $this->rowNameMapping['accountFullName']     => $_contact->n_fn,
             $this->rowNameMapping['accountFirstName']    => $_contact->n_given,
             $this->rowNameMapping['accountLastName']     => $_contact->n_family,
-            $this->rowNameMapping['accountEmailAddress'] => $_contact->email
+            $this->rowNameMapping['accountEmailAddress'] => $_contact->email,
+            'seq' => $oldUser->seq + 1,
         );
         
         try {
@@ -829,6 +833,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             return $result;
 
         } catch (Exception $e) {
+            // TODO FIXME this is bad! we really shouldn't just roll back a transaction for which we are not responsible!
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw($e);
         }
@@ -1017,6 +1022,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $_user->contact_id = null;
         }
         $this->treatMFA($_user, $oldUser);
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, 'update', $oldUser);
         $accountData = $this->_recordToRawData($_user);
         // don't update id
         unset($accountData['id']);
@@ -1289,6 +1295,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $user->getId()),
         );
         $accountsTable->delete($where);
+        $user->seq = $user->seq + 1;
+        $this->_writeModLog(null, $user);
     }
 
     protected function _softDelete($user)
@@ -1300,8 +1308,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountsTable->update(array('deleted_by' => Tinebase_Core::getUser()->getId(),
             'deleted_time' => Tinebase_DateTime::now()->toString(),
             'is_deleted' => 1,
+            'seq' => $user->seq + 1,
             'status' => Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
             'visibility' => Tinebase_Model_User::VISIBILITY_HIDDEN), $where);
+        $user->seq = $user->seq + 1;
         $this->_writeModLog(null, $user);
     }
 
