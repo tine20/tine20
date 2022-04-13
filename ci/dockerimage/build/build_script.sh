@@ -151,9 +151,6 @@ function cleanupTinebase() {
   (cd ${TINE20ROOT}/tine20/library/ExtJS/src;     rm -rf $(ls | grep -v debug.js))
   (cd ${TINE20ROOT}/tine20/library/ExtJS;         rm -rf $(ls | grep -v adapter | grep -v ext-all-debug.js | grep -v ext-all.js | grep -v resources | grep -v src))
 
-  # cleanup OpenLayers
-  (cd ${TINE20ROOT}/tine20/library/OpenLayers;    rm -rf $(ls | grep -v img | grep -v license.txt | grep -v OpenLayers.js | grep -v theme))
-
   # cleanup qCal
   (cd ${TINE20ROOT}/tine20/library/qCal;  rm -rf docs tests)
 
