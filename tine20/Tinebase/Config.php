@@ -345,22 +345,28 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const ACCEPTEDTERMSVERSION = 'acceptedTermsVersion';
 
     /**
-     * Config key for using geo service
+     * Config key for using nominatim service
      * @var string
      */
-    const GEO_SERVICE = 'geoService';
+    const USE_NOMINATIM_SERVICE = 'useNominatimService';
 
     /**
-     * Config key for using geo service url
+     * Config key for nominatim service url
      * @var string
      */
-    const GEO_SERVICE_URL = 'geoServiceUrl';
+    const NOMINATIM_SERVICE_URL = 'nominatimServiceUrl';
 
     /**
-     * Config key for map panel in addressbook / include geoext code
+     * Config key for using map panel
      * @var string
      */
-    const GEO_SERVICE_MAPPANEL = 'mapPanel';
+    const USE_MAP_SERVICE = 'useMapService';
+
+    /**
+     * Config key for map service url
+     * @var string
+     */
+    const MAP_SERVICE_URL = 'mapServiceUrl';
 
     /**
      * disable ldap certificate check
@@ -1784,38 +1790,48 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
-        self::GEO_SERVICE => [
-            //_('Use Geolocation Services')
-            'label'                 => 'Use Geolocation Services',
-            //_('Use of external Geolocation services is allowed.')
-            'description'           => 'Use of external Geolocation services is allowed.',
+        self::USE_NOMINATIM_SERVICE => [
+            //_('Use Nomintim Geocoding Services')
+            'label'                 => 'Use Nomintim Geocoding Services',
+            //_('Use of external Nomintim Geocoding service is allowed.')
+            'description'           => 'Use of external Nomintim Geocoding service is allowed.',
             'type'                  => 'bool',
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
             'default'               => true,
         ],
-        self::GEO_SERVICE_MAPPANEL => [
-            //_('Show geo service map panel')
-            'label'                 => 'Show geo service map panel',
-            //_('Show geo service map panel in Contact dialog')
-            'description'           => 'Show geo service map panel in Contact dialog',
+        self::USE_MAP_SERVICE => [
+            //_('Use map service')
+            'label'                 => 'Use map service',
+            //_('Use map service')
+            'description'           => 'Use of external map services is allowed',
             'type'                  => 'bool',
             'clientRegistryInclude' => true,
             'setByAdminModule'      => true,
             'setBySetupModule'      => true,
             'default'               => true,
         ],
-        self::GEO_SERVICE_URL => [
-            //_('Geolocation Service URL')
-            'label'                 => 'Geolocation Service URL',
-            //_('Geolocation Service URL')
-            'description'           => 'Geolocation Service URL',
+        self::NOMINATIM_SERVICE_URL => [
+            //_('Nominatim Service URL')
+            'label'                 => 'Nominatim Service URL',
+            //_('Nominatim Service URL')
+            'description'           => 'Nominatim Service URL',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
             'default'               => 'https://nominatim.openstreetmap.org/',
+        ],self::MAP_SERVICE_URL => [
+            //_('Map Service URL')
+            'label'                 => 'Map Service URL',
+            //_('Map Service URL')
+            'description'           => 'Map Service URL',
+            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'default'               => 'https://tile.openstreetmap.org/',
         ],
         // TODO should this be added to LDAP config array/struct?
         self::LDAP_DISABLE_TLSREQCERT => array(

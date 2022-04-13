@@ -1227,10 +1227,6 @@
         {
           "text": "print.css",
           "path": "css/widgets/"
-        },
-        {
-          "text": "geoext-all.css",
-          "path": "../library/GeoExt/resources/css/"
         }
       ]
     }

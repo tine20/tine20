@@ -2,73 +2,103 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+ * @author      Cornelius weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2009-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
- 
-Ext.ns('Tine.widgets');
 
-/**
- * Widget to display maps
- *
- * @namespace   Tine.widgets
- * @class       Tine.widgets.MapPanel
- * @extends     GeoExt.MapPanel
- */
-Tine.widgets.MapPanel = Ext.extend(Ext.Panel, {
-    initComponent: function() {
+import flag from 'images/icon-set/icon_flag_full.svg';
+import {Map, View} from 'ol';
+import TileLayer from 'ol/layer/Tile';
+import VectorLayer from 'ol/layer/Vector';
+import XYZ from 'ol/source/XYZ';
+import VectorSource from "ol/source/Vector";
+import {fromLonLat} from "ol/proj";
+import {Style, Icon} from 'ol/style';
+import Feature from 'ol/Feature';
+import Point from 'ol/geom/Point';
 
-        Tine.widgets.MapPanel.superclass.initComponent.call(this);
+export default Ext.extend(Ext.Container, {
+    /**
+     * @cfg {Number}
+     */
+    zoom: null,
+    /**
+     * @cfg {Number}
+     */
+    lon: null,
+    /**
+     * @cfg {Number}
+     */
+    lat: null,
+
+    initComponent() {
+        this.mapServiceUrl = this.mapServiceUrl || Tine.Tinebase.configManager.get('mapServiceUrl', 'Tinebase');
+
+        this.on('afterrender', this.injectOL, this);
+        this.supr().initComponent.call(this);
     },
 
-    afterRender: function() {
-        var me = this;
-        require.ensure(["../../../library/OpenLayers/OpenLayers", "../../../library/GeoExt/script/GeoExt"], function() {
-            require("../../../library/OpenLayers/OpenLayers");
-            require("../../../library/GeoExt/script/GeoExt");
-
-            // fix OpenLayers script location to find images/themes/...
-            OpenLayers._getScriptLocation = function () {
-                return 'library/OpenLayers/';
-            };
-
-            me.geoExtPanel = new GeoExt.MapPanel({
-                zoom: me.zoom || 4,
-                map:  new OpenLayers.Map(),
-                layers: [
-                    new OpenLayers.Layer.OSM()
-                ]
-            });
-
-            me.add(me.geoExtPanel);
-            me.fireEvent('mapAdded', me);
-
-        }, 'Tinebase/js/OpenLayers');
-
-        Tine.widgets.MapPanel.superclass.afterRender.call(this);
-    },
-
-    setCenter: function(lon, lat) {
-        this.geoExtPanel.center = new OpenLayers.LonLat(lon, lat).transform(new OpenLayers.Projection("EPSG:4326"), this.geoExtPanel.map.getProjectionObject());
-        this.geoExtPanel.map.setCenter(this.center);
-
-        // add a marker
-        var size = new OpenLayers.Size(32,32);
-        var offset = new OpenLayers.Pixel(0, -size.h);
-        var icon = new OpenLayers.Icon('images/oxygen/32x32/actions/flag-red.png', size, offset);
-
-        var markers = new OpenLayers.Layer.Markers( "Markers" );
-        markers.addMarker(new OpenLayers.Marker(this.geoExtPanel.center, icon));
-        this.geoExtPanel.map.addLayer(markers);
-    },
-
-    beforeDestroy: function() {
-        if (this.geoExtPanel && this.geoExtPanel.map) {
-            delete this.geoExtPanel.map;
+    async injectOL() {
+        if(!this.center && this.lon && this.lat) {
+            this.center = fromLonLat(this.lon, this.lat);
+            _.defer(() => {this.addFlagLayer(this.lon, this.lat)});
         }
-        this.supr().beforeDestroy.apply(this, arguments);
+
+        this.olMap = new Map({
+            target: this.el.id,
+            layers: [
+                new TileLayer({
+                    source: new XYZ({
+                        url: this.mapServiceUrl.replace(/\/{0,1}$/, '/{z}/{x}/{y}.png')
+                    })
+                })
+            ],
+            view: new View({
+                center: this.center || fromLonLat([0, 0]),
+                zoom: this.zoom || 4
+            })
+        });
+
+        this.el.select('.ol-rotate').hide()
+        this.el.select('.ol-zoom').setStyle({margin: '10px 0px 10px 10px'})
+        this.fireEvent('mapAdded', this);
+    },
+
+    setCenter(lon, lat) {
+        this.center = fromLonLat([lon, lat]);
+        this.olMap.getView().setCenter(this.center);
+        this.addFlagLayer(lon, lat)
+    },
+
+    addFlagLayer(lon, lat) {
+        const iconFeature = new Feature({
+            geometry: new Point(fromLonLat([lon, lat])),
+        })
+
+        const iconStyle = new Style({
+            image: new Icon({
+                src: decodeURI(flag.replaceAll('"', '')),
+            })
+        });
+        iconFeature.setStyle(iconStyle);
+
+        const vectorSource = new VectorSource({
+            features: [iconFeature],
+        });
+
+        const vectorLayer = new VectorLayer({
+            source: vectorSource,
+        });
+        this.olMap.addLayer(vectorLayer);
+    },
+
+    setZoom(zoom) {
+        this.zoom = zoom;
+        this.olMap.getView().setZoom(this.zoom);
+    },
+
+    doLayout() {
+        this.supr().doLayout.apply(this, arguments);
+        this.olMap?.updateSize();
     }
 });
-
-Ext.reg('widget-mappanel', Tine.widgets.MapPanel);

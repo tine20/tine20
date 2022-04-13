@@ -39,7 +39,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     preferredAddressPrivateCheckbox: null,
 
     getFormItems: function () {
-        if (Tine.Tinebase.configManager.get('mapPanel') && Tine.widgets.MapPanel) {
+        if (Tine.Tinebase.configManager.get('useMapService')) {
             this.mapPanel = new Tine.Addressbook.MapPanel({
                 pos: 30,
                 layout: 'fit',

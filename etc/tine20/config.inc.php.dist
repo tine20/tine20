@@ -87,11 +87,11 @@ return array(
     /************************************************************************/
 
     /* AVAILABILITY MAP
-     * 'mapPanel': used in several files (among them,
+     * 'useMapService': used in several files (among them,
      * "ContactEditDialog.js", enables support to availability
      * contact map.
     */
-    'mapPanel' => 0,
+    'useMapService' => 0,
 
     /*************************************************************************
     /*--------------------------- DEVELOPMENT ------------------------------*/

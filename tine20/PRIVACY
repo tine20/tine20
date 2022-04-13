@@ -178,5 +178,5 @@ OpenStreetMap.org is a community dedicated to mapping and geolocation
 related topics. As of the nature of web-services, Tine 2.0 needs to
 send personal data to openstreetmap.org as input parameters for retrieving 
 maps or geolocations. To disable communications and features based on
-this services, you need to set the configuration option 'mapPanel' to 
+this services, you need to set the configuration option 'useMapService' to
 false in the installations config.inc.php.

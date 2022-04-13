@@ -487,9 +487,9 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             },
             items: [
                 Ext.applyIf({
-                    name: 'mapPanel',
+                    name: 'useMapService',
                     fieldLabel: this.app.i18n._('Map panel'),
-                    value: Tine.Setup.registry.get(this.registryKey)['mapPanel'],
+                    value: Tine.Setup.registry.get(this.registryKey)['useMapService'],
                     store: [[0, this.app.i18n._('disabled')], [1,this.app.i18n._('enabled')]]
                 }, commonComboConfig)
            ] 
