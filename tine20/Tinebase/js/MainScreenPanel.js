@@ -174,7 +174,7 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
             Tine.widgets.VersionCheck();
         }
         
-        if (Tine.Tinebase.registry.get('mustchangepw')) {
+        if (Tine.Tinebase.registry.get('mustchangepw') && Tine.Tinebase.configManager.get('changepw')) {
             var passwordDialog = new Tine.Tinebase.PasswordChangeDialog({
                 title: i18n._('Your password expired. Please enter a new user password:')
             });
