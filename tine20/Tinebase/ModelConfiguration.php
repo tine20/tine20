@@ -1111,7 +1111,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],*/
                 ];
             }
-        } else {
+        }
+        if (!$this->_containerProperty) {
             $this->_singularContainerMode = true;
             while ($this->_delegateAclField) {
                 if (!array_key_exists(self::FLD_ACCOUNT_GRANTS, $this->_fields)) {
