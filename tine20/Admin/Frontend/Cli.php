@@ -697,4 +697,31 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         return 0;
     }
+
+    /**
+     * Add all members from one group to another
+     * 
+     * @param Zend_Console_Getopt $opts
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function copyGroupmembersToDifferentGroup(Zend_Console_Getopt $opts)
+    {
+        $args = $this->_parseArgs($opts, array());
+        $gc = Admin_Controller_Group::getInstance();
+        $fromGroupId = $args['from'] ?? '';
+        $toGroupId = $args['to'] ?? '';
+        
+        if ($fromGroupId && $toGroupId) {
+            $fromGroupMembers = $gc->getGroupMembers($fromGroupId);
+            $toGroupMembers = $gc->getGroupMembers($toGroupId);
+            
+            foreach ($fromGroupMembers as $member) {
+                if (!in_array($member, $toGroupMembers)) {
+                    $gc->addGroupMember($toGroupId, $member);
+                }
+            }
+        } else {
+            echo "Args are missing\n";
+        }
+    }
 }
