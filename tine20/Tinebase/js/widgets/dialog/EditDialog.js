@@ -598,14 +598,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 var field = this.getForm().findField(key);
 
                 if (field) {
-                    if (Ext.isFunction(this.recordClass.getField(key).type)) {
-                        var foreignRecordClass = this.recordClass.getField(key).type;
-                        var record = new foreignRecordClass(value);
-                        field.selectedRecord = record;
-                        field.setValue(value, this.record);
-                        field.fireEvent('select');
-                    } else {
-                        field.setValue(value, this.record);
+                    if (value !== '###CURRENT###') {
+                        if (Ext.isFunction(this.recordClass.getField(key).type)) {
+                            var foreignRecordClass = this.recordClass.getField(key).type;
+                            var record = new foreignRecordClass(value);
+                            field.selectedRecord = record;
+                            field.setValue(value, this.record);
+                            field.fireEvent('select');
+                        } else {
+                            field.setValue(value, this.record);
+                        }
                     }
                     field.disable();
                 }
@@ -1020,7 +1022,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
 
         this.fixedFields.eachKey(function(field, value) {
-            this.record.set(field, value);
+            if (value !== '###CURRENT###') {
+                this.record.set(field, value);
+            }
         }, this);
 
         if (this.copyRecord) {

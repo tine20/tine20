@@ -6,6 +6,8 @@
  * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import waitFor from 'util/waitFor.es6';
+
 /* HumanResources_Model_AttendanceRecorderDevice */
 const FLD_ALLOW_MULTI_START = 'allowMultiStart';
 const FLD_ALLOW_PAUSE = 'allowPause';
@@ -41,6 +43,7 @@ const FLD_REFID = 'refId';
 
 const META_DATA = 'metaData';
 const CLOCK_OUT_GRACEFULLY = 'clockOutGracefully';
+const CLOCK_OUT_OTHERS = 'clockOutOthers';
 
 const attendanceRecorder = Ext.extend(Ext.Button, {
 
@@ -175,13 +178,13 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
                                 const type = _.get(record, 'data.xprops.HumanResources_Model_AttendanceRecord.type', TYPE_CLOCK_OUT);
 
                                 return `<div class="tine-row-action-icons">
-                                            <div class="tine-recordclass-gridicon ${type === TYPE_CLOCK_IN ? 'x-item-disabled' : ''} project-clock-in">&nbsp;</div>
-                                            <div class="tine-recordclass-gridicon ${!me.ptAllowPause || type !== TYPE_CLOCK_IN ? 'x-item-disabled' : ''} ${true || me.ptAllowPause ? '' : 'x-hidden'} project-clock-pause"></div>
-                                            <div class="tine-recordclass-gridicon ${type === TYPE_CLOCK_OUT ? 'x-item-disabled' : ''} project-clock-out">&nbsp;</div>
+                                            <div class="tine-recordclass-gridicon ${type === TYPE_CLOCK_IN ? 'x-item-disabled' : ''} project-clock-in" data-action="clockIn" ext:qtip="${me.app.i18n._('Start')}">&nbsp;</div>
+                                            <div class="tine-recordclass-gridicon ${!me.ptAllowPause || type !== TYPE_CLOCK_IN ? 'x-item-disabled' : ''} ${true || me.ptAllowPause ? '' : 'x-hidden'} project-clock-pause" data-action="clockPause" ext:qtip="${me.app.i18n._('Pause')}">&nbsp;</div>
+                                            <div class="tine-recordclass-gridicon ${type === TYPE_CLOCK_OUT ? 'x-item-disabled' : ''} project-clock-out" data-action="clockOut" ext:qtip="${me.app.i18n._('Stop')}">&nbsp;</div>
                                         </div>`;
                             }
                         }, {
-                            width: 40,
+                            width: 55,
                             // reziseable: false,
                             renderer: (value, metaData, record) => {
                                 const type = _.get(record, 'data.xprops.HumanResources_Model_AttendanceRecord.type', TYPE_CLOCK_OUT);
@@ -200,8 +203,10 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
                                     me.menu.timeAccountPickerGrid.view.refresh()
                                 }, 60000 - Math.floor(duration)%60000);
 
-                                return  Ext.ux.form.DurationSpinner.durationRenderer(duration, { baseUnit: 'milliseconds' }).replace(':',
-                                    `<span style="font-weight: bolder;" class="${type === TYPE_CLOCK_IN ? 'attendance-clock-blink' : 'attendance-clock-stale'}">\u2236</span>`);;
+                                return `<div class="tine-row-action-icons"><div style="float: left;">` + Ext.ux.form.DurationSpinner.durationRenderer(duration, { baseUnit: 'milliseconds' }).replace(':',
+                                        `<span style="font-weight: bolder;" class="${type === TYPE_CLOCK_IN ? 'attendance-clock-blink' : 'attendance-clock-stale'}">\u2236</span>`) + `
+                                        </div><div class="tine-recordclass-gridicon ${type === TYPE_CLOCK_OUT ? 'x-item-disabled' : ''} action_pencil" data-action="editTimesheet" ext:qtip="${me.app.i18n._('Edit Timesheet')}">&nbsp;</div>
+                                    </div>`;
                             }
                         })
                         return colModel;
@@ -381,34 +386,45 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
         if (el) {
             const row = this.menu.timeAccountPickerGrid.view.findRowIndex(el);
             const timeAccount = this.menu.timeAccountPickerGrid.store.getAt(row);
-            const action = Ext.fly(el).hasClass('project-clock-in') ? 'clockIn' : (Ext.fly(el).hasClass('project-clock-pause') ? 'clockPause' : 'clockOut');
-            _.defer(() => { Ext.fly(el).addClass('x-item-disabled') });
+            const timesheet = _.get(timeAccount, `data.xprops.HumanResources_Model_AttendanceRecord.top.xprops.metaData.Timetracker_Model_Timesheet`);
+            const action = el.dataset.action;
+            if (String(action).match(/^clock.*/)) {
+                _.defer(() => {
+                    Ext.fly(el).addClass('x-item-disabled')
+                });
 
-            if (action === 'clockIn' && !this.ptAllowMultiStart) {
-                // wtf - shoudn't this be handled by blpipe?
-                const open = _.find(this.menu.timeAccountPickerGrid.store.data.items, (ta) => { return _.get(ta, `data.xprops.HumanResources_Model_AttendanceRecord.top.${FLD_STATUS}`) === STATUS_OPEN});
-                if (open && open.id !== timeAccount.id) {
-                    await this.onWTClock('clockOut', {
-                        [FLD_DEVICE_ID]: SYSTEM_PROJECT_TIME_ID,
-                        [FLD_REFID]: _.get(open, `data.xprops.HumanResources_Model_AttendanceRecord.top.${FLD_REFID}`),
-                        xprops: {
-                            [META_DATA]: {
-                                'Timetracker_Model_Timeaccount': open.id }
+                let result;
+                if (action === 'clockOut') {
+                    Tine.Timetracker.TimesheetEditDialog.openWindow({
+                        record: timesheet,
+                        contentPanelConstructorInterceptor: async (config) => {
+                            await waitFor(() => { return !! result});
                         }
-                    }, this.actionProjectTime);
+                    });
                 }
-            }
+                result = await this.onWTClock(action, {
+                    [FLD_DEVICE_ID]: SYSTEM_PROJECT_TIME_ID,
+                    [FLD_REFID]: _.get(timeAccount, `data.xprops.HumanResources_Model_AttendanceRecord.top.${FLD_REFID}`),
+                    xprops: {
+                        [META_DATA]: {
+                            [CLOCK_OUT_OTHERS]: !(e.ctrlKey || e.shiftKey),
+                            'Timetracker_Model_Timeaccount': timeAccount.id
+                        }
+                    }
+                }, this.actionProjectTime);
+                this.actionProjectTime.setDisabled(false);
 
-            const result = await this.onWTClock(action, {
-                [FLD_DEVICE_ID]: SYSTEM_PROJECT_TIME_ID,
-                [FLD_REFID]: _.get(timeAccount, `data.xprops.HumanResources_Model_AttendanceRecord.top.${FLD_REFID}`),
-                xprops: {
-                    [META_DATA]: {
-                        [CLOCK_OUT_GRACEFULLY]: !(e.ctrlKey || e.shiftKey),
-                        'Timetracker_Model_Timeaccount': timeAccount.id }
-                }
-            }, this.actionProjectTime);
-            this.actionProjectTime.setDisabled(false);
+            } else if (action === 'editTimesheet') {
+                Tine.Timetracker.TimesheetEditDialog.openWindow({
+                    record: timesheet,
+                    fixedFields: {
+                        timeaccount_id: '###CURRENT###',
+                        duration: '###CURRENT###',
+                        account_id: '###CURRENT###',
+                        end_time: '###CURRENT###'
+                    }
+                });
+            }
         }
     },
 
@@ -416,9 +432,9 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
         const date = new Date();
         let wtStatus = this.wtType === TYPE_CLOCK_PAUSED ? `${this.app.i18n._('Away')}: ${this.app.i18n._hidden(this.freeTimeType.name)}`  : (this.wtType === TYPE_CLOCK_IN ?  this.app.i18n._('Clocked-in') : this.app.i18n._('Clocked-out'));
         this.menu.displayPanel.update(`
-<div class="attendance-clock-status">${wtStatus}</div>
-<div class="attendance-clock-msg attendance-clock-clock">${date.format('H')}<span class="attendance-clock-blink">\u2236</span>${date.format('i')}</div>
-`);
+            <div class="attendance-clock-status">${wtStatus}</div>
+            <div class="attendance-clock-msg attendance-clock-clock">${date.format('H')}<span class="attendance-clock-blink">\u2236</span>${date.format('i')}</div>
+        `);
         this.clockTimeout = window.setTimeout(this.showClock.createDelegate(this), 60000 - date.getSeconds()*1000 + date.getMilliseconds());
     },
 
