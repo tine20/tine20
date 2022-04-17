@@ -45,6 +45,7 @@ class HumanResources_Model_AttendanceRecord extends Tinebase_Record_NewAbstract
 
     const META_DATA = 'metaData';
     const CLOCK_OUT_GRACEFULLY = 'clockOutGracefully';
+    const CLOCK_OUT_OTHERS = 'clockOutOthers';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)

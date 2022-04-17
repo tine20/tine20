@@ -127,10 +127,11 @@ class DFCom_RecordHandler_TimeAccounting
                 case self::FUNCTION_KEY_CLOCKIN:
                 case self::FUNCTION_KEY_CLOCKOUT:
                 case self::FUNCTION_KEY_ABSENCE:
-
+                    
                     /** @var HumanResources_Model_AttendanceRecorderDevice $device */
                     $device = HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get(
                         HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID);
+                    $dateTime->setTimezone('UTC');
                     $cfg = (new HumanResources_Config_AttendanceRecorder())
                         ->setMetaData([
                             HumanResources_Config_AttendanceRecorder::METADATA_SOURCE => __METHOD__,
