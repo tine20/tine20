@@ -1338,6 +1338,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 //        if (this.store.getCount() > 0) {
 //            this.grid.getView().focusRow(0);
 //        }
+        
+        // update the latest filter here, make sure each gridPanel have their own latest filter
+        const containerFilter = _.find(_.get(store, 'reader.jsonData.filter[0].filters[0].filters', {}), {field: this.recordClass.getMeta('containerProperty')});
+        const operator = _.get(containerFilter, 'operator', '');
+        this.latestFilter = operator.match(/equals|in/) ? _.get(containerFilter, 'value', null) : null;
+        
         // restore selection
         if (Ext.isArray(options.preserveSelection)) {
             Ext.each(options.preserveSelection, function(record) {
@@ -1367,8 +1373,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     getFilteredContainers: function() {
         const containerFilter = _.find(_.get(this, 'store.reader.jsonData.filter[0].filters[0].filters', {}), {field: this.recordClass.getMeta('containerProperty')});
         const operator = _.get(containerFilter, 'operator', '');
-        const value = operator.match(/equals|in/) ? _.get(containerFilter, 'value', null) : null;
-
+        const filter = operator.match(/equals|in/) ? _.get(containerFilter, 'value', null) : null;
+        const value = this.latestFilter ?? filter;
+        
         return value && _.isArray(value) ? [value] : value;
     },
 
