@@ -110,6 +110,20 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
 
     public function rename(string $newPath)
     {
+        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_DELETE)) {
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to move file: ' . $this->_path);
+        }
+
+        if (!Tinebase_Core::getUser()->hasGrant(Tinebase_FileSystem::getInstance()->stat(dirname($newPath)),
+                Tinebase_Model_Grants::GRANT_ADD)) {
+            $destinationParentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath(dirname($newPath));
+            if (Tinebase_FileSystem::FOLDER_TYPE_SHARED !== $destinationParentPath->containerType ||
+                    !$destinationParentPath->isToplevelPath() ||
+                    !Tinebase_Core::getUser()->hasRight(Filemanager_Config::APP_NAME, Filemanager_Acl_Rights::MANAGE_SHARED_FOLDERS)) {
+                throw new Sabre\DAV\Exception\Forbidden('Forbidden to create file: ' . $newPath);
+            }
+        }
+
         if (!($result = Tinebase_FileSystem::getInstance()->rename($this->_path, $newPath))) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
         }
