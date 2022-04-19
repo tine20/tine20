@@ -250,6 +250,33 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertCount(0, $clockOut['faulty_clocks']);
     }
 
+    public function testClockOutOtherPT()
+    {
+        $this->_json->clockIn([
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID
+        ]);
+        $this->_json->clockIn([
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID
+        ]);
+        $result = $this->_json->clockIn([
+            HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID,
+            'xprops' => [
+                HumanResources_Model_AttendanceRecord::META_DATA => [
+                    HumanResources_Model_AttendanceRecord::CLOCK_OUT_OTHERS => true,
+                ],
+            ],
+        ]);
+        $this->assertCount(4, $result);
+        $this->assertArrayHasKey('clock_ins', $result);
+        $this->assertArrayHasKey('clock_outs', $result);
+        $this->assertArrayHasKey('clock_pauses', $result);
+        $this->assertArrayHasKey('faulty_clocks', $result);
+        $this->assertCount(1, $result['clock_ins']);
+        $this->assertCount(2, $result['clock_outs']);
+        $this->assertCount(0, $result['clock_pauses']);
+        $this->assertCount(0, $result['faulty_clocks']);
+    }
+
     public function testClockOutWorktimeStopsPT()
     {
         $this->_json->clockIn([
