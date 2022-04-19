@@ -149,6 +149,34 @@ class HumanResources_Controller_AttendanceRecorder
 
         $lastRecord = null;
         $openRecords = null;
+        if ($config->getDevice()->{HumanResources_Model_AttendanceRecorderDevice::FLD_ALLOW_MULTI_START} &&
+                isset($config->getMetaData()[HumanResources_Model_AttendanceRecord::CLOCK_OUT_OTHERS]) &&
+                $config->getMetaData()[HumanResources_Model_AttendanceRecord::CLOCK_OUT_OTHERS]) {
+            $openRecords = $this->getOpenRecords($config->getAccount()->getId(), $config->getDevice()->getId());
+            foreach ($openRecords as $openRecord) {
+                if ($openRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID} === $config->getRefId()) {
+                    continue;
+                }
+                $subConfig = clone $config;
+                $subConfig->setRefId($openRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID});
+                $subConfig->setStatus(HumanResources_Model_AttendanceRecord::STATUS_CLOSED);
+                $subConfig->setAutogen(true);
+                $subConfig->setMetaData(array_filter($subConfig->getMetaData() ?: [], function($key) {
+                    return $key === HumanResources_Config_AttendanceRecorder::METADATA_SOURCE;
+                }, ARRAY_FILTER_USE_KEY));
+                $subResult = $this->clockOut($subConfig);
+                $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_INS}->mergeById(
+                    $subResult->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_INS});
+                $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_OUTS}->mergeById(
+                    $subResult->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_OUTS});
+                $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_PAUSES}->mergeById(
+                    $subResult->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_PAUSES});
+                $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_FAULTY_CLOCKS}->mergeById(
+                    $subResult->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_FAULTY_CLOCKS});
+            }
+            $openRecords = null;
+        }
+
         if (null === $config->getRefId()) {
             if ($config->getDevice()->{HumanResources_Model_AttendanceRecorderDevice::FLD_ALLOW_MULTI_START}) {
                 $config->setRefId(Tinebase_Record_Abstract::generateUID());
@@ -202,13 +230,13 @@ class HumanResources_Controller_AttendanceRecorder
                 return $key === HumanResources_Config_AttendanceRecorder::METADATA_SOURCE;
             }, ARRAY_FILTER_USE_KEY));
             $subResult = $this->clockOut($subConfig);
-            $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_INS}->addRecords(
+            $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_INS}->mergeById(
                 $subResult->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_INS});
-            $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_OUTS}->addRecords(
+            $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_OUTS}->mergeById(
                 $subResult->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_OUTS});
-            $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_PAUSES}->addRecords(
+            $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_PAUSES}->mergeById(
                 $subResult->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_PAUSES});
-            $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_FAULTY_CLOCKS}->addRecords(
+            $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_FAULTY_CLOCKS}->mergeById(
                 $subResult->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_FAULTY_CLOCKS});
         }
 
