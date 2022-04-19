@@ -2257,13 +2257,16 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     {
         $result = $this->_createTestNode(
             'test.msg',
-            dirname(__FILE__) . '/../files/multipart_related.msg'
+            dirname(__FILE__) . '/../files/multipart_related_recipients.msg'
         );
 
         // fetch it & assert data
         $message = $this->_json->getMessageFromNode($result[0]['id']);
         self::assertEquals('Christof Gacki', $message['from_name']);
         self::assertEquals('c.gacki@metaways.de', $message['from_email']);
+        self::assertEquals(2, count($message['cc']));
+        self::assertEquals('c.weiss@metaways.de', $message['cc'][0]);
+        self::assertEquals('name@example.com', $message['cc'][1]);
         self::assertStringContainsString('wie gestern besprochen würde mich sehr freuen', $message['body']);
         self::assertEquals(Zend_Mime::TYPE_HTML, $message['body_content_type'], $message['body']);
         self::assertTrue(isset($message['attachments']), 'no attachments found: ' . print_r($message, true));

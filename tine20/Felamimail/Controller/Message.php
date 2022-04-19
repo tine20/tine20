@@ -14,7 +14,6 @@
 
 use Hfig\MAPI;
 use Hfig\MAPI\OLE\Pear;
-use Hfig\MAPI\Mime\Swiftmailer;
 
 /**
  * message controller for Felamimail
@@ -1392,7 +1391,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // @todo check if it's an email (.eml?)
         if ($node['contenttype'] === 'application/vnd.ms-outlook') {
             // message parsing and file IO are kept separate
-            $messageFactory = new MAPI\MapiMessageFactory(new Swiftmailer\Factory());
+            $messageFactory = new MAPI\MapiMessageFactory(new Felamimail_MAPI_Factory());
             $documentFactory = new Pear\DocumentFactory();
             
             $hashFile = Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash);
@@ -1403,11 +1402,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             // write it to cache
             $cacheId = sha1(self::class . $node['name']);
             Tinebase_Core::getCache()->save($content, $cacheId);
-
             $message = Felamimail_Model_Message::createFromMime($content);
             
             if ($message['body_content_type'] === 'text/html') {
-                $body = utf8_encode($parsedMessage->getBodyHTML());
+                $body = $parsedMessage->getBodyHTML();
+                $encoding = mb_detect_encoding($body);
+                if (! $encoding) {
+                    $body = utf8_encode($body);
+                }
                 $message->body = str_replace("\r", '', $body);
                 $message->body = $this->_purifyBodyContent($message->body);
             }
