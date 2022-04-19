@@ -68,10 +68,12 @@ class HumanResources_Controller_AttendanceRecorder
                 continue;
             }
             $deviceRecords = $blUndo->filter(HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID, $deviceId);
-            foreach ($device->{HumanResources_Model_AttendanceRecorderDevice::FLD_BLPIPE} as $blpipe) {
-                $blElem = $blpipe->configRecord->getNewBLElement();
-                if ($blElem instanceof HumanResources_BL_AttendanceRecorder_UndoInterface) {
-                    $blElem->undo($deviceRecords);
+            if ($deviceRecords->count() > 0) {
+                foreach ($device->{HumanResources_Model_AttendanceRecorderDevice::FLD_BLPIPE} as $blpipe) {
+                    $blElem = $blpipe->configRecord->getNewBLElement();
+                    if ($blElem instanceof HumanResources_BL_AttendanceRecorder_UndoInterface) {
+                        $blElem->undo($deviceRecords);
+                    }
                 }
             }
         }

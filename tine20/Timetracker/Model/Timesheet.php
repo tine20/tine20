@@ -18,6 +18,7 @@
  * @property integer $duration
  * @property Tinebase_DateTime $start_date
  * @property string $start_time
+ * @property string $end_time
  * @property string $timeaccount_id
  */
 class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sales_Model_Billable_Interface
