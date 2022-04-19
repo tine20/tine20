@@ -201,6 +201,9 @@ msgstr "Gruppenmitglieder"
 msgid "Domain is not allowed. Check your SMTP domain configuration."
 msgstr "Domäne ist nicht erlaubt. Bitte prüfen Sie Ihre SMTP-Domänen-Konfiguration."
 
+msgid "Allowed Domains"
+msgstr "Erlaubte Domänen"
+
 #: js/Tags.js:64 js/Roles.js:47 js/Groups.js:52
 msgid "Confirm"
 msgstr "Bestätigen"
