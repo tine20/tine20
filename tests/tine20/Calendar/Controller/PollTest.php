@@ -4,7 +4,7 @@
  *
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  */
 
@@ -42,7 +42,7 @@ class Calendar_Controller_PollTest extends TestCase
      * @see Calendar/Calendar_TestCase::setUp()
      */
     public function setUp(): void
-{
+    {
         parent::setUp();
 
         $this->_oldRequest = Tinebase_Core::get(Tinebase_Core::REQUEST);
@@ -55,7 +55,7 @@ class Calendar_Controller_PollTest extends TestCase
     }
 
     public function tearDown(): void
-{
+    {
         Tinebase_Core::set(Tinebase_Core::REQUEST, $this->_oldRequest);
         $this->jt->tearDown();
 
@@ -557,7 +557,6 @@ EOT;
 
         // its allowed for the moment
         $this->assertEquals(200, $response->getStatusCode());
-//        $responseData = json_decode($response->getBody(), true);
 
         $contact = Calendar_Model_Attender::resolveEmailToContact($requestData);
         $currentAttendee = new Calendar_Model_Attender([
@@ -579,9 +578,11 @@ EOT;
         foreach($responseData as $attendeeData) {
             $this->assertEquals($statusMap[$attendeeData['id']], $attendeeData['status']);
         }
-
     }
 
+    /**
+     * @group nodockerci
+     */
     public function testPublicApiAddAttenderNotification()
     {
         $this->_setMailDomainIfEmpty();
@@ -619,6 +620,8 @@ EOT;
      * testDefiniteEventNotification
      *
      * TODO add test case(s) for list/group/resource attendee
+     *
+     * @group nodockerci
      */
     public function testDefiniteEventNotification()
     {
@@ -637,19 +640,10 @@ EOT;
             list ($updatedEvent, $alternativeEvents) = $this->jt->testSetDefiniteEvent();
 
             $messages = static::getMessages();
-//            $message = current(array_filter($messages, function($message) {
-//                return $message->getRecipients()[0] == Zend_Registry::get('personas')['sclever']->accountEmailAddress;
-//            }));
-//            foreach($messages as $message) {
-//                echo $message->getSubject() . "\n";
-//                echo $message->getBodyText()->getContent();
-//                echo "\n -- \n\n";
-//            }
 
             static::assertTrue(isset($messages[1]), 'excepted message is not available');
             $message = $messages[1];
             $text = $message->getBodyText()->getContent();
-//            $html = $message->getBodyHtml()->getContent();
 
             $this->assertStringContainsString('has been closed', $text);
 
@@ -660,6 +654,9 @@ EOT;
         }
     }
 
+    /**
+     * @group nodockerci
+     */
     public function testSupressDeleteNotifications()
     {
         $this->_setMailDomainIfEmpty();
