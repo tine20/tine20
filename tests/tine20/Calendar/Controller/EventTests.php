@@ -842,6 +842,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedEvent->attendee[0]->status, 'updateing of other attedee must not set status');
     }
 
+    /**
+     * @group nodockerci
+     */
     public function testGroupMembershipChangeReflectsInAttendeeList()
     {
         $admGrpCtrl = Admin_Controller_Group::getInstance();
