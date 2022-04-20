@@ -139,6 +139,37 @@ class Tasks_JsonTest extends TestCase
     }
 
     /**
+     * test update task with alarm
+     * reshedule alarm for new due
+     */
+    public function testUpdateTaskWithAlarm()
+    {
+        $task = $this->_getTaskWithAlarm();
+
+        $persistentTaskData = $this->_backend->saveTask($task->toArray());
+        $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
+
+        $this->_checkAlarm($loadedTaskData);
+        $this->_sendAlarm();
+
+        // check alarm status
+        $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
+        $this->assertEquals(Tinebase_Model_Alarm::STATUS_SUCCESS, $loadedTaskData['alarms'][0]['sent_status']);
+        $this->assertEquals($loadedTaskData['due'], $loadedTaskData['alarms'][0]['alarm_time']);
+
+        // try to save task with new due (alarm should be moved according to new due and Task should be reactivated)
+        $due = new DateTime($loadedTaskData['due']);
+        $due->add(new DateInterval('P1D'));
+        $loadedTaskData['due'] = $due->format('Y-m-d H:i:s');
+        $persistentTaskData = $this->_backend->saveTask($loadedTaskData);
+
+        // check alarm status
+        $this->assertTrue(isset($persistentTaskData['alarms']));
+        $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $persistentTaskData['alarms'][0]['sent_status']);
+        $this->assertEquals($persistentTaskData['due'], $persistentTaskData['alarms'][0]['alarm_time']);
+    }
+
+    /**
      * send alarm via scheduler
      */
     protected function _sendAlarm()
