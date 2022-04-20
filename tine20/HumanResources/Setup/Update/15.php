@@ -24,6 +24,7 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE008 = __CLASS__ . '::update008';
     const RELEASE015_UPDATE009 = __CLASS__ . '::update009';
     const RELEASE015_UPDATE010 = __CLASS__ . '::update010';
+    const RELEASE015_UPDATE011 = __CLASS__ . '::update011';
 
     static protected $_allUpdates = [
         // we'll do some querys here and we want them done before any schema tool comes along to play
@@ -57,6 +58,10 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE009          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update009',
+            ],
+            self::RELEASE015_UPDATE011          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update011',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -226,18 +231,25 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
         $tineWorkingTimeDevice = HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get(
             HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID);
 
-        $tineWorkingTimeDevice->{HumanResources_Model_AttendanceRecorderDevice::FLD_PAUSES} =
-            new Tinebase_Record_RecordSet(HumanResources_Model_AttendanceRecorderDeviceRef::class, [
-                new HumanResources_Model_AttendanceRecorderDeviceRef([
-                    HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID => $tineProjectTimeDevice->getId(),
-                ], true),
-            ]);
-        $tineWorkingTimeDevice->{HumanResources_Model_AttendanceRecorderDevice::FLD_UNPAUSES} =
-            new Tinebase_Record_RecordSet(HumanResources_Model_AttendanceRecorderDeviceRef::class, [
-                new HumanResources_Model_AttendanceRecorderDeviceRef([
-                    HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID => $tineProjectTimeDevice->getId(),
-                ], true),
-            ]);
+        if (!$tineWorkingTimeDevice->{HumanResources_Model_AttendanceRecorderDevice::FLD_PAUSES} ||
+                $tineWorkingTimeDevice->{HumanResources_Model_AttendanceRecorderDevice::FLD_PAUSES}->count() < 1) {
+            $tineWorkingTimeDevice->{HumanResources_Model_AttendanceRecorderDevice::FLD_PAUSES} =
+                new Tinebase_Record_RecordSet(HumanResources_Model_AttendanceRecorderDeviceRef::class, [
+                    new HumanResources_Model_AttendanceRecorderDeviceRef([
+                        HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID => $tineProjectTimeDevice->getId(),
+                    ], true),
+                ]);
+        }
+
+        if (!$tineWorkingTimeDevice->{HumanResources_Model_AttendanceRecorderDevice::FLD_UNPAUSES} ||
+                $tineWorkingTimeDevice->{HumanResources_Model_AttendanceRecorderDevice::FLD_UNPAUSES}->count() < 1) {
+            $tineWorkingTimeDevice->{HumanResources_Model_AttendanceRecorderDevice::FLD_UNPAUSES} =
+                new Tinebase_Record_RecordSet(HumanResources_Model_AttendanceRecorderDeviceRef::class, [
+                    new HumanResources_Model_AttendanceRecorderDeviceRef([
+                        HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID => $tineProjectTimeDevice->getId(),
+                    ], true),
+                ]);
+        }
 
         try {
             HumanResources_Controller_AttendanceRecorderDevice::getInstance()->update($tineWorkingTimeDevice);
@@ -248,5 +260,14 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('HumanResources', '15.10', self::RELEASE015_UPDATE010);
+    }
+
+    public function update011()
+    {
+        Setup_SchemaTool::updateSchema([
+            HumanResources_Model_WTRCorrection::class,
+        ]);
+
+        $this->addApplicationUpdate('HumanResources', '15.11', self::RELEASE015_UPDATE011);
     }
 }
