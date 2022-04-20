@@ -93,7 +93,7 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
             //                            check that it exists"
             // -> maybe some doctrine problem?
             // -> we just try it again
-            Tinebase_Exception::log($e);
+            //Tinebase_Exception::log($e);
             Setup_SchemaTool::updateSchema([
                 Tinebase_Model_Tree_FileObject::class,
                 Tinebase_Model_Tree_Node::class
