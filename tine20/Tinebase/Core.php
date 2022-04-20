@@ -1750,8 +1750,16 @@ class Tinebase_Core
             });
         }
 
+        try {
+            $session = Tinebase_Session::getSessionNamespace();
+            unset($session->timezone);
+        } catch (Zend_Session_Exception $zse) {
+        }
+
+        Zend_Registry::set(self::PREFERENCES, []);
+        Zend_Registry::set(self::USERTIMEZONE, null);
         Zend_Registry::set(self::USER, $user);
-        
+
         // now that we have the right user => proper acls => flush all acls caches
         // MC not only flushes its cache, it recreates the already created models
         Tinebase_ModelConfiguration::resetAllCreatedModels();
@@ -1790,7 +1798,7 @@ class Tinebase_Core
      */
     public static function getUserTimezone()
     {
-        if (!self::isRegistered(self::USERTIMEZONE) || ($return = self::get(self::USERTIMEZONE)) === NULL) {
+        if (($return = self::get(self::USERTIMEZONE)) === NULL) {
             return Tinebase_Core::setupUserTimezone();
         }
         
