@@ -307,3 +307,39 @@ php-unit-all-tests-built-ĺdap-parallel:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-ldap-built/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_SCHEDULE != "false"
+
+php-unit-update-tests:
+  extends: .abstract_jobs.php_unit
+  variables:
+    ARG_IMAGE: test-source
+    ARG_COPY_SOURCE: "true"
+    NODE_TOTAL: 1
+    NODE_INDEX: 1
+  needs:
+    - docker_build_source
+  stage: test
+  timeout: 2h
+  interruptible: true
+  script:
+    - apk add --repository http://nl.alpinelinux.org/alpine/v3.14/main --repository http://nl.alpinelinux.org/alpine/v3.14/community php7-sodium
+    - cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20; git fetch --unshallow; git checkout 2021.11; 
+    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/copy_source.sh
+    - cd ${TINE20ROOT}/tine20
+    - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
+    - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --install SSO"
+    - cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20; git checkout 2022.11; 
+    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/copy_source.sh
+    - cd ${TINE20ROOT}/tine20
+    - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
+    - !reference [.abstract_jobs.php_unit, script]
+  rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_UPDATE_TESTS == "false"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-update-tests/
+    - if: $CI_COMMIT_BRANCH != "2020.11"
+      when: never
+    - if: $PHP_UNIT_UPDATE_TESTS == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_UPDATE_TESTS_MERGE_REQUEST == "true"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_UPDATE_TESTS_SCHEDULE == "true"
