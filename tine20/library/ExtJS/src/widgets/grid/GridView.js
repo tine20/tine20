@@ -133,6 +133,7 @@ viewConfig: {
      */
     columnsText : 'Columns',
 
+    resizingStrategy: 'fractional',
     /**
      * @cfg {String} selectedRowClass The CSS class applied to a selected row (defaults to <tt>'x-grid3-row-selected'</tt>). An
      * example overriding the default styling:
@@ -1171,6 +1172,7 @@ viewConfig: {
         var width = 0;
         var w;
         var c;
+        var iw=0;
         for (i = 0; i < colCount; i++){
             c = cm.getColumnAt(i);
             c.initialConfig = c.initialConfig || {... c};
@@ -1180,24 +1182,25 @@ viewConfig: {
                 extraCol = i;
                 cols.push(w);
                 width += w;
+                iw += cm.getColumnAt(i).initialConfig.width;
             }
         }
         var aec = this.autoExpand && this.grid.autoExpandColumn ? cm.getIndexById(this.grid.autoExpandColumn) : -1;
         var frac = (aw - cm.getTotalWidth())/width;
 
-        // var next = omitColumn ? cm.columns.indexOf(_.find(cm.columns, (c, i) => { return i > omitColumn && !c.hidden; })) : undefined;
-        // tw = cm.getTotalWidth(false);
-        // if (next) {
-        //     cm.setColumnWidth(next, cm.getColumnWidth(next)+aw-tw);
-        //     return;
-        // }
+        var next = omitColumn>=0 ? cm.config.indexOf(_.find(cm.config, (c, i) => { return i > omitColumn && !c.hidden; })) : undefined;
+        tw = cm.getTotalWidth(false);
+        if (this.resizingStrategy === 'neighbours' && next) {
+            cm.setColumnWidth(next, cm.getColumnWidth(next)+aw-tw);
+            return;
+        }
 
         while (cols.length){
             w = cols.pop();
             i = cols.pop();
             c = cm.getColumnAt(i);
             width = Math.max(this.grid.minColumnWidth, Math.floor(w + w*frac));
-            width = aec>=0 && !omitColumn>=0 && c.initialConfig.width ? Math.min(c.initialConfig.width, width) : width;
+            width = aec<0 && !omitColumn>=0 && c.initialConfig.width && iw<=aw ? Math.max(c.initialConfig.width, width) : width;
             cm.setColumnWidth(i, width, true);
         }
 

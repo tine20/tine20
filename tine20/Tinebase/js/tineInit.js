@@ -949,7 +949,7 @@ Tine.Tinebase.tineInit = {
 
         Ext.form.NumberField.prototype.decimalSeparator = Tine.Tinebase.registry.get('decimalSeparator');
         Ext.ux.form.NumberField.prototype.thousandSeparator = Tine.Tinebase.registry.get('thousandSeparator');
-
+        Ext.grid.GridView.prototype.resizingStrategy = Tine.Tinebase.registry.get('preferences')?.get('gridResizingStrategy');
 
         formatMessage.setup({
             locale: Tine.Tinebase.registry.get('locale').locale || 'en'

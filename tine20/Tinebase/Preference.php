@@ -40,6 +40,12 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
     const GRID_LOAD_MASK = 'gridLoadMask';
 
     /**
+     * grid resizing strategy
+     *
+     */
+    const GRID_RESIZING_STRATEGY = 'gridResizingStrategy';
+
+    /**
      * auto search on filter change
      * 
      */
@@ -103,6 +109,7 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 self::PAGE_SIZE,
                 self::GRID_STRIPE_ROWS,
                 self::GRID_LOAD_MASK,
+                self::GRID_RESIZING_STRATEGY,
                 self::FILTER_CHANGE_AUTO_SEARCH,
                 self::ADVANCED_SEARCH,
                 self::FILE_DBLCLICK_ACTION
@@ -132,6 +139,10 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
             self::GRID_LOAD_MASK  => array(
                 'label'         => $translate->_('Grid load mask'),
                 'description'   => $translate->_('Show load mask in grids'),
+            ),
+            self::GRID_RESIZING_STRATEGY  => array(
+                'label'         => $translate->_('Grid resizing strategy'),
+                'description'   => $translate->_('How to resize grid columns'),
             ),
             self::FILTER_CHANGE_AUTO_SEARCH  => array(
                 'label'         => $translate->_('Auto search on filter change'),
@@ -213,6 +224,20 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
                     </options>';
                   $preference->personal_only = FALSE;
+                break;
+            case self::GRID_RESIZING_STRATEGY:
+                $preference->value      = 'fractional';
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <option>
+                            <label>' . $translate->_('Right side columns fractional') . '</label>
+                            <value>fractional</value>
+                        </option>
+                        <option>
+                            <label>' . $translate->_('Neighbours only') . '</label>
+                            <value>neighbours</value>
+                        </option>
+                    </options>';
                 break;
             case self::GRID_LOAD_MASK:
                 $preference->value      = 0;
