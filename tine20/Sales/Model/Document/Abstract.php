@@ -438,7 +438,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             }
 
             if (0 === $addedPositions) {
-                throw new Tinebase_Exception_Record_Validation('no source positions found that could be transitioned');
+                throw new Tinebase_Exception_SystemGeneric('No source positions found that could be transitioned');
             }
 
             $this->{self::FLD_PRECURSOR_DOCUMENTS}->addRecord(new Tinebase_Model_DynamicRecordWrapper([
