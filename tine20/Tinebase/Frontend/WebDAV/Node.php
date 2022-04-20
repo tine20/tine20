@@ -94,12 +94,17 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
     public function setName($name) 
     {
         self::checkForbiddenFile($name);
-        
-        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_EDIT)) {
+
+        list($dirname,) = Sabre\DAV\URLUtil::splitPath($this->_path);
+
+        $parentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname);
+        if ($parentPath->isToplevelPath() && Tinebase_FileSystem::FOLDER_TYPE_SHARED === $parentPath->containerType) {
+            if (!Tinebase_Core::getUser()->hasGrant($this->_node, Tinebase_Model_Grants::GRANT_ADMIN)) {
+                throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
+            }
+        } elseif (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_EDIT)) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
         }
-        
-        list($dirname, $basename) = Sabre\DAV\URLUtil::splitPath($this->_path);
 
         if (!($result = Tinebase_FileSystem::getInstance()->rename($this->_path, $dirname . '/' . $name))) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
@@ -110,7 +115,13 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
 
     public function rename(string $newPath)
     {
-        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_DELETE)) {
+        list($dirname,) = Sabre\DAV\URLUtil::splitPath($this->_path);
+        $parentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname);
+        if ($parentPath->isToplevelPath() && Tinebase_FileSystem::FOLDER_TYPE_SHARED === $parentPath->containerType) {
+            if (!Tinebase_Core::getUser()->hasGrant($this->_node, Tinebase_Model_Grants::GRANT_DELETE)) {
+                throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
+            }
+        } elseif (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_DELETE)) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to move file: ' . $this->_path);
         }
 
