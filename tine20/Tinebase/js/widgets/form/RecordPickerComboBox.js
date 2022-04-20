@@ -204,7 +204,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
      */
     initTemplate: function() {
         if (! this.tpl) {
-            this.tpl = new Ext.XTemplate('<tpl for="."><div class="x-combo-list-item" ext:qtip="{[this.doubleEncode(values.description)]}">{[this.getTitle(values.' + this.recordClass.getMeta('idProperty') + ')]}</div></tpl>', {
+            this.tpl = new Ext.XTemplate('<tpl for="."><div class="x-combo-list-item" {[this.getQtip(values.' + this.recordClass.getMeta('idProperty') + ')]}>{[this.getTitle(values.' + this.recordClass.getMeta('idProperty') + ')]}</div></tpl>', {
                 getTitle: (function(id) {
                     const record = this.getStore().getById(id)
 
@@ -217,9 +217,25 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                     title = title && this.app ? this.app.i18n._hidden(title) : title;
 
                     return Ext.util.Format.htmlEncode(title)
+                }).createDelegate(this),
+                getQtip: (function(id) {
+                    const record = this.getStore().getById(id)
+                    const qtipText = this.getListItemQtip(record);
+                    return qtipText ? `ext:qtip="${Tine.Tinebase.common.doubleEncode(qtipText)}"` : '';
                 }).createDelegate(this)
             })
         }
+    },
+
+    getListItemQtip(record) {
+        let value = _.get(record, 'data.description', '');
+
+        if (this.ownLangPicker) {
+            const language = this.ownLangPicker.getValue();
+            value = _.get(_.find(value, { language }) || _.get(value, '[0]'), 'text', '');
+        }
+
+        return value;
     },
 
     // TODO re-init this.list if it goes away?
