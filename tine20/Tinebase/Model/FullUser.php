@@ -356,7 +356,10 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
      */
     protected function _sambaSamPasswordChangeNeeded()
     {
-        if ($this->sambaSAM instanceof Tinebase_Model_SAMUser 
+        if ($this->password_must_change) {
+            return true;
+        }
+        if ($this->sambaSAM instanceof Tinebase_Model_SAMUser
             && isset($this->sambaSAM->pwdMustChange) 
             && $this->sambaSAM->pwdMustChange instanceof DateTime) 
         {
@@ -381,7 +384,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
                 }
             }
         }
-        
+
         return false;
     }
     
@@ -392,7 +395,9 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
      */
     protected function _sqlPasswordChangeNeeded()
     {
-        if (empty($this->accountLastPasswordChange) || $this->password_must_change) return true;
+        if (empty($this->accountLastPasswordChange) || $this->password_must_change) {
+            return true;
+        }
 
         $passwordChangeDays = Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_POLICY_CHANGE_AFTER);
 

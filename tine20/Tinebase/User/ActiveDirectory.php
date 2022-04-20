@@ -248,6 +248,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         // update last modify timestamp in sql backend too
         $values = array(
             'last_password_change' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+            'password_must_change' => 0,
         );
         
         $where = array(
