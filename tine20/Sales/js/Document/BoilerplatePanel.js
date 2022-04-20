@@ -95,7 +95,7 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
             field.on('keyup', () => {
                 const boilerplate = this.store.getAt(this.store.findExact('name', name));
                 boilerplate.set('locally_changed', field.getValue() !== field.originalValue);
-                field.setFieldLabel(Tine.Tinebase.EncodingHelper.encode(boilerplate.getTitle()));
+                field.setFieldLabel(`${this.app.i18n._('Boilerplate')}: ${Tine.Tinebase.EncodingHelper.encode(boilerplate.getTitle())}`);
             });
             field[flagName] = true;
         }
