@@ -1527,11 +1527,14 @@ class Tinebase_FileSystem implements
 
                 $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($newPath);
                 $isPersonal = $pathRecord->isPersonalPath(Tinebase_Core::getUser());
-                if ($isPersonal || null === $node->acl_node || $newParent->acl_node !== $node->acl_node) {
+                $parentPathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($newParentPath);
+                $isChildOfShared = $parentPathRecord->isToplevelPath() && Tinebase_FileSystem::FOLDER_TYPE_SHARED ===
+                    $parentPathRecord->containerType;
+                if ($isPersonal || null === $node->acl_node || $newParent->acl_node !== $node->acl_node || $isChildOfShared) {
                     $oldAcl = $node->acl_node;
                     $node->acl_node = $newParent->acl_node;
                     if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
-                        if (null === $node->acl_node || $isPersonal) {
+                        if (null === $node->acl_node || $isPersonal || $isChildOfShared) {
                             switch ($pathRecord->containerType) {
                                 case self::FOLDER_TYPE_PERSONAL:
                                 case self::FOLDER_TYPE_SHARED:

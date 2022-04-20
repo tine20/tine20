@@ -494,6 +494,84 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertSame($newfNode->getId(), $fNode->getId());
     }
 
+    public function testMoveWithoutGrant()
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $fs->mkdir('Filemanager/folders/shared/unittestdirectory');
+
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'MOVE',
+            'REQUEST_URI' => '/webdav/Filemanager/shared/unittestdirectory',
+            'HTTP_DESTINATION' => '/webdav/Filemanager/shared/unittestdirectory1',
+        ));
+
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+
+        $this->assertSame('HTTP/1.1 403 Forbidden', $this->response->status);
+        $this->assertTrue($fs->isDir('Filemanager/folders/shared/unittestdirectory'));
+        $this->assertFalse($fs->fileExists('Filemanager/folders/shared/unittestdirectory1'));
+    }
+
+    public function testMoveWithoutGrant1()
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $fs->mkdir('Filemanager/folders/shared/unittestdirectory');
+        $fs->createAclNode('Filemanager/folders/shared/unittestdirectory1');
+
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'MOVE',
+            'REQUEST_URI' => '/webdav/Filemanager/shared/unittestdirectory',
+            'HTTP_DESTINATION' => '/webdav/Filemanager/shared/unittestdirectory1/foo',
+        ));
+
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+
+        $this->assertSame('HTTP/1.1 403 Forbidden', $this->response->status);
+        $this->assertTrue($fs->isDir('Filemanager/folders/shared/unittestdirectory'));
+        $this->assertFalse($fs->fileExists('Filemanager/folders/shared/unittestdirectory1/foo'));
+    }
+
+    public function testMoveWithGrant()
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $fs->createAclNode('Filemanager/folders/shared/unittestdirectory');
+
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'MOVE',
+            'REQUEST_URI' => '/webdav/Filemanager/shared/unittestdirectory',
+            'HTTP_DESTINATION' => '/webdav/Filemanager/shared/unittestdirectory1',
+        ));
+
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+
+        $this->assertSame('HTTP/1.1 201 Created', $this->response->status);
+        $this->assertFalse($fs->fileExists('Filemanager/folders/shared/unittestdirectory'));
+        $this->assertTrue($fs->isDir('Filemanager/folders/shared/unittestdirectory1'));
+    }
+
+    public function testMoveWithGrant1()
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $fs->createAclNode('Filemanager/folders/shared/unittestdirectory');
+        $fs->createAclNode('Filemanager/folders/shared/unittestdirectory1');
+
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'MOVE',
+            'REQUEST_URI' => '/webdav/Filemanager/shared/unittestdirectory',
+            'HTTP_DESTINATION' => '/webdav/Filemanager/shared/unittestdirectory1/foo',
+        ));
+
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+
+        $this->assertSame('HTTP/1.1 201 Created', $this->response->status);
+        $this->assertFalse($fs->fileExists('Filemanager/folders/shared/unittestdirectory'));
+        $this->assertTrue($fs->isDir('Filemanager/folders/shared/unittestdirectory1/foo'));
+    }
+
     public function testMove($destination = null)
     {
         $fs = Tinebase_FileSystem::getInstance();
