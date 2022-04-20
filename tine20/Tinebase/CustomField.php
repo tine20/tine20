@@ -162,11 +162,21 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         $this->_clearCache();
         $this->_backendConfig->setAllCFs();
         try {
+            /** @var Tinebase_Model_CustomField_Config $result */
             $result = $this->_backendConfig->update($_record);
+            if ($result->is_system) {
+                Tinebase_Application::getInstance()->getApplicationById($result->application_id);
+                /** @var Tinebase_Record_Interface $model */
+                $model = $result->model;
+                // clear the MC cache
+                $model::resetConfiguration();
+
+                Setup_SchemaTool::updateSchema([$model]);
+            }
         } finally {
             $this->_backendConfig->setNoSystemCFs();
         }
-        Tinebase_CustomField::getInstance()->setGrants($result, Tinebase_Model_CustomField_Grant::getAllGrants());
+
         return $result;
     }
 
