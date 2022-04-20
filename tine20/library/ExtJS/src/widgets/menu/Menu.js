@@ -504,7 +504,7 @@ Ext.menu.Menu = Ext.extend(Ext.Container, {
      * @param {Boolean} deep (optional) True to hide all parent menus recursively, if any (defaults to false)
      */
     hide : function(deep){
-        if (!this.isDestroyed) {
+        if (this.rendered && !this.isDestroyed) {
             this.deepHide = deep;
             Ext.menu.Menu.superclass.hide.call(this);
             delete this.deepHide;
