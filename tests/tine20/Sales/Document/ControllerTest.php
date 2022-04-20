@@ -76,21 +76,21 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         try {
             Sales_Controller_Document_Order::getInstance()->update($order);
             $this->fail('should not work without additional addresses');
-        } catch (Tinebase_Exception_Record_Validation $terv) {}
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {}
 
         $order->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID} = $customer->postal;
         $order->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID} = null;
         try {
             Sales_Controller_Document_Order::getInstance()->update($order);
             $this->fail('should not work without additional addresses');
-        } catch (Tinebase_Exception_Record_Validation $terv) {}
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {}
 
         $order->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID} = null;
         $order->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID} = $customer->postal;
         try {
             Sales_Controller_Document_Order::getInstance()->update($order);
             $this->fail('should not work without additional addresses');
-        } catch (Tinebase_Exception_Record_Validation $terv) {}
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {}
 
         $order->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID} = $customer->postal;
         $order->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID} = $customer->postal;

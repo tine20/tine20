@@ -181,7 +181,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         if (is_array($this->_bookRecordRequiredFields)) {
             foreach ($this->_bookRecordRequiredFields as $field) {
                 if (!$_record->{$field} && (null === $_oldRecord || $_record->__isset($field) || !$_oldRecord->{$field})) {
-                    throw new Tinebase_Exception_Record_Validation($field . ' needs to be set for a booked document');
+                    throw new Tinebase_Exception_SystemGeneric($field . ' needs to be set for a booked document');
                 }
             }
         }
