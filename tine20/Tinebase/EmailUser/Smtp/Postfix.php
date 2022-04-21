@@ -794,7 +794,13 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         $clientId = $this->_clientId;
         $mycnf = $backupDir . '/my.cnf';
         
-        $dbConfig = $this->_config['postfix'];
+        $subConfigKey = $this->_config['backend'] ?? $this->_subconfigKey;
+
+        if (! $this->_config[$subConfigKey]) {
+            throw new Tinebase_Exception_UnexpectedValue('subconfig"' . $subConfigKey . '" missing');
+        }
+        
+        $dbConfig = $this->_config[$subConfigKey];
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dbconfig : ' . print_r($dbConfig, true));
 
 
