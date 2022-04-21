@@ -299,6 +299,7 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
     {
         Setup_SchemaTool::updateSchema([
             Sales_Model_Product::class,
+            Tinebase_Model_CostCenter::class,
             Sales_Model_ProductLocalization::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.14', self::RELEASE015_UPDATE014);
