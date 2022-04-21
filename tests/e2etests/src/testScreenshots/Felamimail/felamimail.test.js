@@ -22,7 +22,7 @@ describe('MainScreen', () => {
     });
 
     test('choose grid fields', async () => {
-        await expect(page).toMatchElement('span', {text: 'Tine 2.0'});
+        await expect(page).toMatchElement('span', {text: 'tine ® Admin'});
         //await app.click('.ext-ux-grid-gridviewmenuplugin-menuBtn.x-grid3-hd-btn');
         await page.click('.t-app-felamimail .ext-ux-grid-gridviewmenuplugin-menuBtn.x-grid3-hd-btn');
         await page.waitForSelector('.x-menu-list');

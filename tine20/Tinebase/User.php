@@ -1000,7 +1000,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         $result = $userBackend->getUserAttributes(array('entryUUID', 'userPassword'));
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' About to sync ' . count($result) . ' user passwords from LDAP to Tine 2.0.');
+            . ' About to sync ' . count($result) . ' user passwords from LDAP');
         
         $sqlBackend = Tinebase_User::factory(self::SQL);
         foreach ($result as $user) {
@@ -1022,10 +1022,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * <code>
      * $options = array(
      *  'adminLoginName'    => 'admin',
-     *  'adminPassword'     => 'lars',
-     *  'adminFirstName'    => 'Tine 2.0',
-     *  'adminLastName'     => 'Admin Account',
-     *  'adminEmailAddress' => 'admin@tine20domain.org',
+     *  'adminPassword'     => 'adminpw',
+     *  'adminFirstName'    => 'tine',
+     *  'adminLastName'     => 'Admin',
+     *  'adminEmailAddress' => 'admin@tinedomain.org',
      *  'expires'            => Tinebase_DateTime object
      * );
      * </code>
@@ -1083,9 +1083,9 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
         $adminLoginName     = $_options['adminLoginName'];
         $adminPassword      = $_options['adminPassword'];
-        $adminFirstName     = isset($_options['adminFirstName'])    ? $_options['adminFirstName'] : 'Tine 2.0';
-        $adminLastName      = isset($_options['adminLastName'])     ? $_options['adminLastName']  : 'Admin Account';
-        $adminEmailAddress  = ((isset($_options['adminEmailAddress']) || array_key_exists('adminEmailAddress', $_options))) ? $_options['adminEmailAddress'] : NULL;
+        $adminFirstName     = $_options['adminFirstName'] ?? Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_TITLE};
+        $adminLastName      = $_options['adminLastName'] ?? 'Admin';
+        $adminEmailAddress  = $_options['adminEmailAddress'] ?? null;
 
         // get admin & user groupss
         $adminGroup = $groupsBackend->getDefaultAdminGroup();

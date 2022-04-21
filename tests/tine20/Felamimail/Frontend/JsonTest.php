@@ -1986,7 +1986,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
         $complete = $this->_json->getMessage($message['id']);
         $this->assertTrue(isset($complete['headers']['reply-to']), print_r($complete, true));
-        $this->assertEquals('"Tine 2.0 Admin Account" <noreply@tine20.org>', $complete['headers']['reply-to']);
+        $this->assertEquals('"' . $complete['from_name'] . '" <noreply@tine20.org>', $complete['headers']['reply-to']);
     }
 
     /**
@@ -2005,7 +2005,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
         $complete = $this->_json->getMessage($message['id']);
         $this->assertTrue(isset($complete['headers']['reply-to']), print_r($complete, true));
-        $this->assertEquals('"Tine 2.0 Admin Account" <donotreply@tine20.org>', $complete['headers']['reply-to']);
+        $this->assertEquals('"' . $complete['from_name'] . '" <donotreply@tine20.org>', $complete['headers']['reply-to']);
     }
 
     /**

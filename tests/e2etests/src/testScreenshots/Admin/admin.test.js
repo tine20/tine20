@@ -15,7 +15,7 @@ describe('accounts', () => {
         await page.screenshot({path: 'screenshots/Administration/1_admin_benutzertabelle.png'});
     });
     test('choose grid fields', async () => {
-        await expect(page).toMatchElement('span', {text: 'Tine 2.0'});
+        await expect(page).toMatchElement('span', {text: 'tine ® Admin'});
         await page.click('.t-app-admin .ext-ux-grid-gridviewmenuplugin-menuBtn');
         await page.waitForSelector('.x-menu-list');
         await page.screenshot({

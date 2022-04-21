@@ -1169,11 +1169,13 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $updatedEvent = Calendar_Controller_Event::getInstance()->get($eventId);
         $this->assertEquals(Tinebase_DateTime::now()->addDay(2)->format('Y-m-d') . ' 11:00:00',
             $updatedEvent->dtstart->setTimezone($updatedEvent->originator_tz)->toString());
-
+        
         $messages = Calendar_Controller_EventNotificationsTests::getMessages();
+        $subject = quoted_printable_decode($messages[0]->getSubject());
+        
         $this->assertEquals(1, count($messages), 'exactly one mail should be send');
         $this->assertTrue(in_array('l.kneschke@caldav.org', $messages[0]->getRecipients()), 'organizer is not a receipient');
-        $this->assertStringContainsString('Tentative response', $messages[0]->getSubject(), 'wrong subject');
+        $this->assertStringContainsString('Tentative response', $subject, 'wrong subject');
         $this->assertStringContainsString('METHOD:REPLY', var_export($messages[0], TRUE), 'method missing');
         $this->assertStringContainsString('SEQUENCE:4', var_export($messages[0], TRUE), 'external sequence has not been keepted');
 
