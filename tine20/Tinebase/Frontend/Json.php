@@ -577,14 +577,18 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * login user with given username and password
      *
-     * @param string $username the username
+     * @param ?string $username the username
      * @param ?string $password the password
      * @param ?string $MFAUserConfigId config for mfa device to use
      * @param ?string $MFAPassword otp from mfa device
      * @return array
      */
-    public function login(string $username, ?string $password = null, ?string $MFAUserConfigId = null, ?string $MFAPassword = null): array
+    public function login(?string $username = null, ?string $password = null, ?string $MFAUserConfigId = null, ?string $MFAPassword = null): array
     {
+        if (empty($username)) {
+            return $this->_getLoginFailedResponse();
+        }
+
         try {
             Tinebase_Core::startCoreSession();
         } catch (Zend_Session_Exception $zse) {
