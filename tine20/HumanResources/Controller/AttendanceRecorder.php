@@ -564,7 +564,7 @@ class HumanResources_Controller_AttendanceRecorder
     protected function createAttendanceRecord(HumanResources_Config_AttendanceRecorder $config, string $type, ?HumanResources_Config_AttendanceRecorder $orgConfig = null): HumanResources_Model_AttendanceRecord
     {
         return new HumanResources_Model_AttendanceRecord([
-            HumanResources_Model_AttendanceRecord::FLD_TIMESTAMP => $config->getTimeStamp(),
+            HumanResources_Model_AttendanceRecord::FLD_TIMESTAMP => $config->getTimeStamp()->getClone(),
             HumanResources_Model_AttendanceRecord::FLD_TYPE => $type,
             HumanResources_Model_AttendanceRecord::FLD_ACCOUNT_ID => $config->getAccount()->getId(),
             HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => $config->getDevice()->getId(),

@@ -154,6 +154,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertGreaterThan(118, $newTs->getFirstRecord()->duration);
         $this->assertLessThan(122, $newTs->getFirstRecord()->duration);
     }
+
     public function testClockInProjectTime()
     {
         $ta = Timetracker_Controller_Timeaccount::getInstance()->create(new Timetracker_Model_Timeaccount([
