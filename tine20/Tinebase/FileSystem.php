@@ -2903,13 +2903,17 @@ class Tinebase_FileSystem implements
                 return $this->copyTempfile($tempFile->tempFile, $path, $deleteTempFileAfterCopy);
             }
         } else if ($tempFile instanceof Tinebase_Model_TempFile && file_exists($tempFile->path)) {
-            $tempStream = fopen($tempFile->path, 'r');
+            $tempStream = @fopen($tempFile->path, 'r');
         } else {
+            $tempStream = false;
+        }
+
+        if (! $tempStream) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' ' . print_r($tempFile, true));
             throw new Tinebase_Exception_UnexpectedValue('Unexpected tempfile value or file not found');
         }
-        
+
         $this->copyStream($tempStream, $path);
 
         // TODO revision properties need to be inherited
