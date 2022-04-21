@@ -105,12 +105,6 @@ TestAction.multiply(
      * Number of times to re-attempt delivery on failure of a call. Defaults to <tt>1</tt>.
      */
     maxRetries: 1,
-    
-    /**
-     * @cfg {Number} timeout
-     * The timeout to use for each request. Defaults to <tt>undefined</tt>.
-     */
-    timeout: undefined,
 
     constructor : function(config){
         Ext.direct.RemotingProvider.superclass.constructor.call(this, config);
@@ -225,16 +219,18 @@ TestAction.multiply(
             callback: this.onData,
             scope: this,
             ts: data,
-            timeout: this.timeout
+            timeout: 0
         }, callData;
 
         if(Ext.isArray(data)){
             callData = [];
             for(var i = 0, len = data.length; i < len; i++){
                 callData.push(this.getCallData(data[i]));
+                o.timeout += data[i].apiTimeout;
             }
         }else{
             callData = this.getCallData(data);
+            o.timeout += data.apiTimeout;
         }
 
         if(this.enableUrlEncode){
@@ -283,6 +279,7 @@ TestAction.multiply(
             args: args,
             action: c,
             method: m.name,
+            apiTimeout: (m.apiTimeout || 30) * 1000,
             data: data,
             cb: scope && Ext.isFunction(hs) ? hs.createDelegate(scope) : hs
         });
