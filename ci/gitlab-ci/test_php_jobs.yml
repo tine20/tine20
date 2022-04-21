@@ -334,8 +334,6 @@ php-unit-update-tests:
     - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
     - !reference [.abstract_jobs.php_unit, script]
   rules:
-    - if: $RUN_NO_TESTS == "true"
-      when: never
     - if: $PHP_UNIT_UPDATE_TESTS == "false"
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-update-tests/
