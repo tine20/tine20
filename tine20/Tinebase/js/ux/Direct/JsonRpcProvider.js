@@ -35,11 +35,6 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
      */
     useNamedParams: false,
 
-    /**
-     * @cfg {Number} timeout
-     */
-    timeout: 60000,
-    
     // private
     initAPI : function() {
         for (var method in this.services){
