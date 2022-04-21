@@ -4756,6 +4756,18 @@ msgstr "Lademaske"
 msgid "Show load mask in grids"
 msgstr "Zeige Lademaske in Listenansicht"
 
+msgid "Grid resizing strategy"
+msgstr "Spaltenbreiten-Anpassung in Listenansicht"
+
+msgid "How to resize grid columns"
+msgstr "Strategie zur Änderung von Spaltenbreiten"
+
+msgid "Right side columns fractional"
+msgstr "Rechts stehende Spalten anteilig anpassen"
+
+msgid "Neighbours only"
+msgstr "Nur Nachbarspalten anpassen"
+
 #: Preference.php:133
 msgid "Auto search on filter change"
 msgstr "Automatische Suche beim Filterwechsel"
