@@ -141,6 +141,9 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        if ($_record->due && $_oldRecord->due && date_format($_record->due, 'Y-m-d H:i:s') !== date_format($_oldRecord->due, 'Y-m-d H:i:s')) {
+            $_record = $this->_updateAlarms($_record, $_oldRecord);
+        }
         $this->_inspectTask($_record);
     }
     
@@ -265,5 +268,30 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
         }
         
         $this->_saveAlarms($_record);
+    }
+
+    /**
+     * re schedule Alarms to new due datetime and reactivate them if they where already sent
+     * 
+     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_Interface $_oldRecord
+     * @return Tinebase_Record_Interface
+     */
+    protected function _updateAlarms(Tinebase_Record_Interface $_record, Tinebase_Record_Interface $_oldRecord)
+    {
+        $dueDiff = $_oldRecord->due->diff($_record->due);
+        
+        if ($_record->alarms instanceof Tinebase_Record_RecordSet) {
+            foreach ($_record->alarms as $alarm) {
+                $alarm->alarm_time = $alarm->alarm_time->add($dueDiff);
+                if ($alarm->sent_status != 'pending') {
+                    $alarm->sent_status = 'pending';
+                    $alarm->sent_time = null;
+                    $alarm-> sent_message = null;
+                }
+            }
+        }
+        
+        return $_record;
     }
 }
