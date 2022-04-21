@@ -57,8 +57,9 @@ class Tinebase_ControllerTest extends TestCase
      */
     public function testGetIdByTitleProperty()
     {
-        $record = Addressbook_Controller_Contact::getInstance()->getRecordByTitleProperty('Admin Account, Tine 2.0');
-        self::assertEquals('Admin Account, Tine 2.0',$record->n_fileas);
+        $user = Tinebase_Core::getUser();
+        $record = Addressbook_Controller_Contact::getInstance()->getRecordByTitleProperty($user->accountDisplayName);
+        self::assertEquals($user->accountDisplayName, $record->n_fileas);
     }
 
     /**

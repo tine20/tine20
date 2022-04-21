@@ -14,7 +14,7 @@ describe('mainScreen', () => {
         for (let i = 0; i < Apps.length; i++) {
             try {
                 await page.waitForTimeout(500);
-                await expect(page).toClick('span', {text: 'Tine 2.0'});
+                await expect(page).toClick('span', {text: 'tine ® Admin'});
                 await page.waitForTimeout(500);
                 await expect(page).toClick('span', {text: Apps[i]});
             } catch (e) {
