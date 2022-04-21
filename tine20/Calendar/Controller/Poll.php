@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -572,13 +572,15 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             // NOTE: maybe we have different authkeys for some reason, so lets check that at least one matches
             if ($anonymousAccess && $currentCalUser) {
                 $authKeys = [];
-                foreach($alternative_dates as $date) {
-                    $authKeys[$date->id] = Calendar_Model_Attender::getAttendee($date->attendee, $currentCalUser)->status_authkey;
+                foreach ($alternative_dates as $date) {
+                    $attender = Calendar_Model_Attender::getAttendee($date->attendee, $currentCalUser);
+                    if ($attender) {
+                        $authKeys[$date->id] = $attender->status_authkey;
+                    }
                 }
                 if (! in_array($authKey, $authKeys)) {
                     throw new Tinebase_Exception_Record_NotAllowed('authkey mismatch');
                 }
-
             }
 
             // fill cache, cleanup status_authkeys
