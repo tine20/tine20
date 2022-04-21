@@ -2678,19 +2678,16 @@ class Setup_Controller
         if (isset($options['emailusers']) && $options['emailusers']) {
             $options['backupDir'] = $backupDir;
             
-            if (Tinebase_EmailUser::manages(Tinebase_Config::SMTP)) {
-                $smtpBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
-                $smtpBackend->backup($options);
+            foreach([Tinebase_Config::SMTP, Tinebase_Config::IMAP] as $backendConfig) {
+                if (! Tinebase_EmailUser::manages($backendConfig)) {
+                    Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 'backend : ' . $backendConfig . ' is not configured');
+                    continue;
+                }
+                
+                $backend = Tinebase_EmailUser::getInstance($backendConfig);
+                $backend->backup($options);
+                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Backup of ' . $backendConfig . ' email users successful');
             }
-            
-            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Backup of smtp email users successful');
-
-            if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
-                $imapBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-                $imapBackend->backup($options);
-            }
-
-            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Backup of imap email users successful');
         }
 
         $filesDir = isset($config->filesdir) ? $config->filesdir : false;
