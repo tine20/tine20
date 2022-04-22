@@ -40,7 +40,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         editDialog ? await editDialog.loadRecord(record) : null
                         window.postal.publish({
                             channel: "recordchange",
-                            topic: [app.appName, recordClass, 'update'].join('.'),
+                            topic: [app.appName, recordClass.getMeta('modelName'), 'update'].join('.'),
                             data: {...record.data}
                         });
                     } catch (e) {

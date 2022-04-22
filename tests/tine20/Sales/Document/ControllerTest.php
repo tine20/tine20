@@ -51,7 +51,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                         Sales_Model_Document_Invoice::class,
                     Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => $invoice,
                     Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS => null,
-                    Sales_Model_Document_TransitionSource::FLD_IS_STORNO => true,
+                    Sales_Model_Document_TransitionSource::FLD_IS_REVERSAL => true,
                 ]),
             ]
         ]));

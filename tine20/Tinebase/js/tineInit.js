@@ -214,6 +214,14 @@ Tine.Tinebase.tineInit = {
                 this.contextMenu.showAt(position);
             }
 
+            if (target?.dom?.dataset && target.dom.dataset.recordClass) {
+                e.stopEvent();
+                const EditDialog = Tine.widgets.dialog.EditDialog.getConstructor(target.dom.dataset.recordClass);
+                if (EditDialog?.openWindow) {
+                    EditDialog.openWindow({recordId: target.dom.dataset.recordId, record: {id: target.dom.dataset.recordId}});
+                }
+            }
+
             if (target && href && href !== '#') {
                 // open internal links in same window (use router)
                 if (window.isMainWindow === true) {

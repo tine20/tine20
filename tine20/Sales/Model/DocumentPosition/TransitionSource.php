@@ -21,7 +21,7 @@ class Sales_Model_DocumentPosition_TransitionSource extends Tinebase_Record_NewA
 
     public const FLD_SOURCE_DOCUMENT_POSITION_MODEL = 'sourceDocumentPositionModel';
     public const FLD_SOURCE_DOCUMENT_POSITION = 'sourceDocumentPosition';
-    public const FLD_IS_STORNO = 'isStorno';
+    public const FLD_IS_REVERSAL = 'isReversal';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -47,7 +47,7 @@ class Sales_Model_DocumentPosition_TransitionSource extends Tinebase_Record_NewA
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
             ],
-            self::FLD_IS_STORNO                 => [
+            self::FLD_IS_REVERSAL                 => [
                 self::TYPE                          => self::TYPE_BOOLEAN,
                 self::INPUT_FILTERS                 => [Zend_Filter_Empty::class => false],
             ],

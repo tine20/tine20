@@ -457,7 +457,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             return;
         }
 
-        if ($transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_STORNO}) {
+        if ($transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL}) {
             $this->{self::FLD_UNIT_PRICE} = 0 - $this->{self::FLD_UNIT_PRICE};
             if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_POSITION_DISCOUNT_TYPE}) {
                 $this->{self::FLD_POSITION_DISCOUNT_SUM} = 0 - $this->{self::FLD_POSITION_DISCOUNT_SUM};
@@ -487,7 +487,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             $this->{self::FLD_QUANTITY} = $this->{self::FLD_QUANTITY} - $existingQuantities;
 
             $this->computePrice();
-        } elseif ($transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_STORNO}) {
+        } elseif ($transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL}) {
             $this->computePrice();
         }
     }

@@ -40,7 +40,7 @@
     background-image:url(../../images/icon-set/icon_purchase_invoice.svg) !important;
 }
 
-.action_reversal {
+.action_reversal, .SalesDocument_Invoice.SalesDocument_Reversal {
     background-image:url(../../images/icon-set/icon_invoice_cancle.svg) !important;
 }
 
@@ -88,12 +88,24 @@
     background-image:url(../../images/icon-set/icon_order_confirmation.svg) !important;
 }
 
+.SalesDocument_Order.SalesDocument_Reversal {
+    background-image:url(../../images/icon-set/icon_undo.svg) !important;
+}
+
 .SalesDocument_Offer, .SalesOffer {
     background-image:url(../../images/icon-set/icon_offer.svg) !important;
 }
 
+.SalesDocument_Offer.SalesDocument_Reversal {
+    background-image:url(../../images/icon-set/icon_undo.svg) !important;
+}
+
 .SalesDocument_Delivery {
     background-image:url(../../images/icon-set/icon_resource_trolly.svg) !important;
+}
+
+.SalesDocument_Delivery.SalesDocument_Reversal {
+    background-image:url(../../images/icon-set/icon_undo.svg) !important;
 }
 
 .sales-document-positiongrid-title {
