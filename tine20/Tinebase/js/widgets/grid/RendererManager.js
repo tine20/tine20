@@ -87,7 +87,7 @@ Tine.widgets.grid.RendererManager = function() {
                     recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName),
                     field = recordClass ? recordClass.getField(fieldName) : null,
                     fieldDefinition = Object.assign({}, field, _.get(field, 'fieldDefinition', {}), _.get(field, 'fieldDefinition.conifg', {}), _.get(field, 'fieldDefinition.uiconfig', {})),
-                    fieldType = fieldDefinition ? fieldDefinition.type : 'auto';
+                    fieldType = _.get(fieldDefinition, 'fieldDefinition.type', _.get(fieldDefinition, 'type', 'auto'));
             }
             switch (fieldType) {
                 case 'record':
