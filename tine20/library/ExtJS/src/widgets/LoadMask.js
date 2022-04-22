@@ -104,6 +104,9 @@ Ext.LoadMask.prototype = {
      */
     show: function(){
         this.onBeforeLoad();
+        return new Promise(resolve => {
+            window.setTimeout(resolve, 100);
+        })
     },
 
     /**

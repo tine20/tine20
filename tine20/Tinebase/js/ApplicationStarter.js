@@ -538,7 +538,8 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                             modelConfig: modelConfig,
                             app: Tine.Tinebase.appMgr.get(appName),
                             recordProxy: Tine[appName][recordProxyName],
-                            recordClass: Tine[appName].Model[modelName]
+                            recordClass: Tine[appName].Model[modelName],
+                            listenMessageBus: true
                         };
                         
                     if (! Tine[appName].hasOwnProperty(gridPanelName)) {

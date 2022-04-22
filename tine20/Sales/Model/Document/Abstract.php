@@ -415,7 +415,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     $sourcePosition = new Sales_Model_DocumentPosition_TransitionSource([
                         Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION => $position,
                         Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION_MODEL => get_class($position),
-                        Sales_Model_DocumentPosition_TransitionSource::FLD_IS_STORNO => $record->{Sales_Model_Document_TransitionSource::FLD_IS_STORNO},
+                        Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL => $record->{Sales_Model_Document_TransitionSource::FLD_IS_REVERSAL},
                     ]);
                     /** @var Sales_Model_DocumentPosition_Abstract $position */
                     $position = new $positionClass([], true);
