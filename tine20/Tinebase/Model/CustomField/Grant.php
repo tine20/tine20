@@ -59,8 +59,25 @@ class Tinebase_Model_CustomField_Grant extends Tinebase_Record_Abstract
                 Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP
             )),
         ),
-        'account_grant'     => array('presence' => 'required'),
+        'account_grant'     => array('allowEmpty' => TRUE),
+        'readGrant'   => array('presence' => 'required', 'default' => false,
+            array('InArray', array(true, false)), 'allowEmpty' => true),
+        'writeGrant'    => array('presence' => 'required', 'default' => false,
+            array('InArray', array(true, false)), 'allowEmpty' => true),
     );
+
+    /**
+     * overwrite default constructor as convinience for data from database
+     */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        if (is_array($_data) && isset($_data['account_grant'])) {
+            $rights = explode(',', $_data['account_grant']);
+            $_data['readGrant'] = in_array(self::GRANT_READ, $rights);
+            $_data['writeGrant']  = in_array(self::GRANT_WRITE, $rights);
+        }
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
     
     /**
      * get all possible grants

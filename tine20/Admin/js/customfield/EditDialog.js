@@ -89,6 +89,8 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this[this.fieldType + 'Config'] = this.record.get('definition')[this.fieldType + 'Config'];
             }
         }
+    
+        this.grantsGrid.getStore().loadData({results: this.record.get('grants')});
     },    
     
     /**
@@ -123,6 +125,11 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.record.data.definition[field + 'Config'] = this[field + 'Config'];
             }
         }, this);
+    
+        const grants = [];
+        this.grantsGrid.getStore().each(function(r) {grants.push(r.data)});
+    
+        this.record.set('grants', grants);
     },
     
     /**
@@ -365,6 +372,31 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             scope: this,
             handler: this.showStoreWindow
         });
+    
+        this.grantsGrid = new Tine.widgets.account.PickerGridPanel({
+            selectType: 'both',
+            title:  i18n._('Permissions'),
+            store: this.getGrantsStore(),
+            hasAccountPrefix: true,
+            configColumns: [
+                new Ext.ux.grid.CheckColumn({
+                   header: i18n._('View'),
+                    dataIndex: 'readGrant',
+                    width: 55
+                }),
+                new Ext.ux.grid.CheckColumn({
+                    header: i18n._('Use'),
+                    dataIndex: 'writeGrant',
+                    width: 55
+                })
+            ],  
+            selectTypeDefault: 'group',
+            disabled: false,
+            border: false,
+            frame: true,
+            flex: 1,
+            recordClass: Tine.Admin.Model.CustomFieldRight,
+        });
 
         return {
             layout: 'vbox',
@@ -508,7 +540,9 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 xtype: 'hidden',
                 name: 'value_search',
                 value: 0
-            }]
+            },
+             this.grantsGrid
+            ]
         };
     },
     
@@ -553,6 +587,24 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         return cfExists;
+    },
+    
+    /**
+     * get grants store
+     *
+     * @return Ext.data.JsonStore
+     */
+    getGrantsStore: function() {
+        if (! this.grantsStore) {
+            this.grantsStore = new Ext.data.JsonStore({
+                root: 'results',
+                totalProperty: 'totalcount',
+                // use account_id here because that simplifies the adding of new records with the search comboboxes
+                id: 'account_id',
+                fields: Tine.Admin.Model.CustomFieldRight
+            });
+        }
+        return this.grantsStore;
     }
 });
 
@@ -565,7 +617,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 Tine.Admin.CustomfieldEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: 500,
-        height: 500,
+        height: 700,
         name: Tine.Admin.CustomfieldEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Admin.CustomfieldEditDialog',
         contentPanelConstructorConfig: config

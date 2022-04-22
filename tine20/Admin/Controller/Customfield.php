@@ -96,7 +96,9 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
      */
     public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
-        return $this->_customfieldController->getCustomField($_id);
+        $customField = $this->_customfieldController->getCustomField($_id);
+        $customField->grants = $this->_customfieldController->getGrants($_id);
+        return $customField;
     }
     
     /**
@@ -163,5 +165,21 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
         $this->_customfieldController->clearCacheForConfig($updatedRecord);
+    }
+
+    /**
+     * inspect update of one record (before update)
+     *
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     * @throws Tinebase_Exception_Record_NotAllowed
+     *
+     * @todo if shared -> personal remove all admins except new owner
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        /** @var Tinebase_Model_CustomField_Config $_record */
+        Tinebase_CustomField::getInstance()->setGrants($_record, $_record->grants);
     }
 }
