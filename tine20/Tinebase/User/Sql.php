@@ -898,7 +898,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $method = 'inspect' . ucfirst($method) . 'User';
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Calling CRUD method ' . $method . ' in plugin ' . (is_object($plugin) ? get_class($plugin) : $plugin));
 
         // add email user xprops here if configured
