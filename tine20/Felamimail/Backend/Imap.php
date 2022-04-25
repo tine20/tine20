@@ -122,9 +122,10 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $connectTime = $timeEndConnect - $timeStartConnect;
         
         try {
-            //TODO: set at account config and use it here????
+            // TODO: set at account config and use it here?
             $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
-            if (is_object($imapConfig) && $imapConfig->backend === 'cyrus' && isset($imapConfig->cyrus['useProxyAuth']) && $imapConfig->cyrus['useProxyAuth']) {
+            if (is_object($imapConfig) && $imapConfig->backend === 'cyrus'
+                && isset($imapConfig->cyrus['useProxyAuth']) && $imapConfig->cyrus['useProxyAuth']) {
                 $params = array(
                     'authzid'   => $_params->user,
                     'authcid'   => $imapConfig->cyrus['admin'],
@@ -138,6 +139,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             throw new Felamimail_Exception_IMAPServiceUnavailable($e->getMessage());
         }
         if (! $loginResult) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Login with user ' . $_params->user . ' failed');
             throw new Felamimail_Exception_IMAPInvalidCredentials('Cannot login, user or password wrong.');
         }
         
