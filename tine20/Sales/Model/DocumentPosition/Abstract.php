@@ -235,6 +235,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::DISABLED                      => true,
                 self::SHY                           => true,
                 self::NULLABLE                      => true,
+                self::FILTER_DEFINITION             => [self::FILTER => Tinebase_Model_Filter_Text::class],
                 self::CONFIG                        => [
                     self::REF_MODEL_FIELD               => self::FLD_PRECURSOR_POSITION_MODEL,
                 ],
