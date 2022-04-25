@@ -7,7 +7,6 @@
     <label>Employee Device List</label>
     <type>export</type>
     <plugin>Tinebase_Export_CsvNew</plugin>
-    <filter>[{"field": "employment_begin"}]</filter>
     <icon_class>tinebase-action-export-csv</icon_class>
     <sort>
         <field>dfcom_id</field>

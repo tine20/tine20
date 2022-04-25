@@ -8,6 +8,9 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
+if (!Tinebase_Model_Filter_FilterGroup::$beStrict) {
+    throw new Exception('unittests need to set Tinebase_Model_Filter_FilterGroup::$beStrict');
+}
 /**
  * all server tests
  * 
