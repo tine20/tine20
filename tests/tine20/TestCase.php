@@ -149,10 +149,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             Tinebase_Core::setUser($this->_originalTestUser);
         }
 
-        if (in_array(Tinebase_User::getConfiguredBackend(), array(Tinebase_User::LDAP, Tinebase_User::ACTIVEDIRECTORY))) {
-            $this->_deleteUsers();
-            $this->_deleteGroups();
-        }
+        $this->_deleteUsers();
+        $this->_deleteGroups();
+
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(false);
         if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
