@@ -38,7 +38,30 @@ Tine.Tasks.Application = Ext.extend(Tine.Tinebase.Application, {
     /**
      * auto hook text i18n._('New Task')
      */
-    addButtonText: 'New Task'
+    addButtonText: 'New Task',
+    
+    routes: {
+        'Task/(.*)': 'openInNewWindow'
+    },
+    
+    async openInNewWindow(id) {
+        await Tine.Tasks.getTask(id)
+            .then((result) => {
+                const record = Tine.Tinebase.data.Record.setFromJson(result, Tine.Tasks.Model.Task);
+                const cp = this.getMainScreen().getCenterPanel();
+                cp.onEditInNewWindow.call(cp, {actionType: 'edit'}, record);
+            })
+            .catch((error) => {
+                Ext.Msg.show({
+                    title: 'Error',
+                    msg: error.message,
+                    buttons: Ext.MessageBox.OK,
+                    icon: Ext.MessageBox.ERROR
+                });
+            })
+        
+        window.location = window.location.href.replace(`/Task/${id}`, '');
+    }
 });
 
 // default mainscreen

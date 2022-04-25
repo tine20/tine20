@@ -115,8 +115,8 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         if (! this.title) {
             this.title = Tine.title;
         }
-        
-        this.windowManager = Ext.ux.PopupWindowMgr;
+    
+        this.manager = this.windowManager = Ext.ux.PopupWindowMgr;
 
         this.stateful = true;
         this.stateId = 'ux.popupwindow-' + this.contentPanelConstructor;

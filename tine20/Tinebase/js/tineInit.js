@@ -629,7 +629,16 @@ Tine.Tinebase.tineInit = {
                 Tine.Tinebase.router.setRoute(defaultApp.getRoute());
             }
         }});
-
+    
+        if (! window.isMainWindow) {
+            Tine.Tinebase.appMgr.apps.each((app) => {
+                const initRoutes = _.get(window, `Tine.${app.appName}.Application.prototype.initRoutes`);
+                if(_.isFunction(initRoutes)) {
+                    initRoutes.call(app);
+                }
+            })
+        }
+        
         var route = Tine.Tinebase.router.getRoute(),
             winConfig = Ext.ux.PopupWindowMgr.get(window);
 
