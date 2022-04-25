@@ -6,7 +6,7 @@
  * @subpackage  BL
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -92,7 +92,7 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
             $_data->result->working_time_total += $workingTimeTarget;
             $_data->result->working_time_actual += $workingTimeTarget;
         } elseif ($_data->freeTimes) {
-            $_data->freeTimes->sort(function($r1, $r2) {
+            $_data->freeTimes->sort(function ($r1, $r2) {
                 if ($r1->type->wage_type === HumanResources_Model_WageType::ID_SICK && $r2->type->wage_type !==
                     HumanResources_Model_WageType::ID_SICK) return 1;
                 if ($r1->type->wage_type === HumanResources_Model_WageType::ID_VACATION && $r2->type->wage_type !==
@@ -100,17 +100,23 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
                     HumanResources_Model_WageType::ID_VACATION) return 1;
                 return strcmp((string)$r1->getId(), (string)$r2->getId());
             });
-            $wageType = $_data->freeTimes->getFirstRecord()->type->wage_type;
-            if ($workingTimeTarget > 0) {
-                $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
-                    'id' => Tinebase_Record_Abstract::generateUID(),
-                    HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => $wageType,
-                    HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $workingTimeTarget,
-                ]));
+            if ($_data->freeTimes->getFirstRecord()->type) {
+                $wageType = $_data->freeTimes->getFirstRecord()->type->wage_type;
+                if ($workingTimeTarget > 0) {
+                    $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
+                        'id' => Tinebase_Record_Abstract::generateUID(),
+                        HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => $wageType,
+                        HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $workingTimeTarget,
+                    ]));
+                }
+                $_data->result->system_remark = $this->getWageType($wageType)->name;
+                $_data->result->working_time_total += $workingTimeTarget;
+                $_data->result->working_time_actual += $workingTimeTarget;
+            } elseif (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' "type" missing from freeTime: '
+                    . print_r($_data->freeTimes->getFirstRecord()->toArray(), true));
             }
-            $_data->result->system_remark = $this->getWageType($wageType)->name;
-            $_data->result->working_time_total += $workingTimeTarget;
-            $_data->result->working_time_actual += $workingTimeTarget;
         }
     }
 
