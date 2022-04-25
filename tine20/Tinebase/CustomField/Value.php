@@ -41,6 +41,10 @@ class Tinebase_CustomField_Value
      */
     public function __toString()
     {
+        if (empty($this->_value)) {
+            return ($this->_callback)($this->_value);
+        }
+
         $type = strtolower($this->_definition['type']);
         try {
             switch ($type) {
