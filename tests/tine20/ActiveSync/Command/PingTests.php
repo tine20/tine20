@@ -4,7 +4,7 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -330,7 +330,8 @@ class ActiveSync_Command_PingTests extends TestCase
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-            <Ping xmlns="uri:Ping"><HeartBeatInterval>10</HeartBeatInterval><Folders><Folder><Id>' . $folder->serverId . '</Id><Class>Email</Class></Folder></Folders></Ping>'
+            <Ping xmlns="uri:Ping"><HeartBeatInterval>10</HeartBeatInterval><Folders><Folder><Id>' . $folder->serverId
+            . '</Id><Class>Email</Class></Folder></Folders></Ping>'
         );
         
         // add test email message to folder
@@ -343,14 +344,14 @@ class ActiveSync_Command_PingTests extends TestCase
         $ping->handle();
         $responseDoc = $ping->getResponse();
         $responseDoc->formatOutput = true;
-        //echo $responseDoc->saveXML();
-        
+
         $xpath = new DomXPath($responseDoc);
         $xpath->registerNamespace('Ping', 'uri:Ping');
         
         $nodes = $xpath->query('//Ping:Ping/Ping:Status');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertEquals(Syncroton_Command_Ping::STATUS_CHANGES_FOUND, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        $this->assertEquals(Syncroton_Command_Ping::STATUS_CHANGES_FOUND, $nodes->item(0)->nodeValue,
+            $responseDoc->saveXML());
         
         $nodes = $xpath->query('//Ping:Ping/Ping:Folders/Ping:Folder');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -72,6 +72,13 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         }
         
         return self::$_instance;
+    }
+
+    public static function destroyInstance()
+    {
+        // also destroy backend instance if set
+        Felamimail_Controller_Account::destroyInstance();
+        self::$_instance = null;
     }
 
     /**

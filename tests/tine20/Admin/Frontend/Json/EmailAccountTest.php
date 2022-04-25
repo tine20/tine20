@@ -5,7 +5,7 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -35,7 +35,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         $this->_skipWithoutEmailSystemAccountConfig();
 
         parent::setUp();
@@ -44,7 +44,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
     }
 
     protected function tearDown(): void
-{
+    {
         foreach ($this->_emailAccounts as $account) {
             try {
                 $this->_json->deleteEmailAccounts([is_array($account) ? $account['id'] : $account->getId()]);
@@ -61,6 +61,9 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         }
 
         parent::tearDown();
+
+        // remove instance to prevent acl pollution
+        Admin_Controller_EmailAccount::destroyInstance();
     }
     
     public function testEmailAccountApi()

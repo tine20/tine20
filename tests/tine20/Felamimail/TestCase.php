@@ -117,7 +117,7 @@ abstract class Felamimail_TestCase extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         parent::setUp();
 
         Felamimail_Controller_Account::destroyInstance();
@@ -152,7 +152,7 @@ abstract class Felamimail_TestCase extends TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Tearing down ...');
 
@@ -221,10 +221,13 @@ abstract class Felamimail_TestCase extends TestCase
             }
         }
 
-            parent::tearDown();
+        parent::tearDown();
 
         // needed to clear cache of containers
         Tinebase_Container::getInstance()->resetClassCache();
+
+        // remove instance to prevent acl pollution
+        Admin_Controller_EmailAccount::destroyInstance();
     }
 
     /**
