@@ -20,11 +20,14 @@
 class HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig extends Tinebase_Record_NewAbstract implements
     Tinebase_BL_ElementConfigInterface
 {
-    const MODEL_NAME_PART = 'BLAttendanceRecorder_TimeSheetConfig';
+    public const MODEL_NAME_PART = 'BLAttendanceRecorder_TimeSheetConfig';
 
-    const FLD_STATIC_TA = 'static_ta';
-    const FLD_ALLOW_OTHER_TA = 'allow_other_ta';
-    const FLD_FILL_GAPS_OF_DEVICES = 'fill_gaps_of_devices';
+    public const FLD_STATIC_TA = 'static_ta';
+    public const FLD_ALLOW_OTHER_TA = 'allow_other_ta';
+    public const FLD_FILL_GAPS_OF_DEVICES = 'fill_gaps_of_devices';
+    public const FLD_ROUNDING_BY_CLOCK = 'rounding_by_clock';
+    public const FLD_ROUNDING_PAUSE_THRESHOLD = 'rounding_pause_threshold';
+    public const FLD_ROUNDING_TO_MIN = 'rounding_to_min';
 
     protected static $_modelConfiguration = [
         self::APP_NAME      => HumanResources_Config::APP_NAME,
@@ -48,6 +51,18 @@ class HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig extends Tinebase
                     self::MODEL_NAME                => HumanResources_Model_AttendanceRecorderDevice::MODEL_NAME_PART,
                     self::STORAGE                   => self::TYPE_JSON_REFID,
                 ],
+            ],
+            self::FLD_ROUNDING_BY_CLOCK     => [
+                self::TYPE                      => self::TYPE_BOOLEAN,
+                self::INPUT_FILTERS             => [
+                    Zend_Filter_Empty::class        => 0,
+                ],
+            ],
+            self::FLD_ROUNDING_PAUSE_THRESHOLD => [
+                self::TYPE                      => self::TYPE_INTEGER,
+            ],
+            self::FLD_ROUNDING_TO_MIN       => [
+                self::TYPE                      => self::TYPE_INTEGER,
             ],
         ],
     ];

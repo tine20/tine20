@@ -58,4 +58,85 @@ class HumanResources_Controller_AttendanceControllerTests extends HumanResources
             ->{HumanResources_Model_AttendanceRecorderDevice::FLD_STARTS}->getFirstRecord()
             ->getIdFromProperty(HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID));
     }
+
+    public function testRounding()
+    {
+        /** @var HumanResources_Model_AttendanceRecorderDevice $ptDevice */
+        $ptDevice = HumanResources_Controller_AttendanceRecorderDevice::getInstance()
+            ->get(HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID);
+        /** @var HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig $blCfg */
+        $blCfg = $ptDevice->{HumanResources_Model_AttendanceRecorderDevice::FLD_BLPIPE}->getFirstRecord()
+            ->{HumanResources_Model_BLAttendanceRecorder_Config::FLDS_CONFIG_RECORD};
+        $blCfg->{HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_ROUNDING_TO_MIN} = 15;
+        $blCfg->{HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_ROUNDING_BY_CLOCK} = true;
+        $blCfg->{HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_ROUNDING_PAUSE_THRESHOLD} = 55;
+        /** @var HumanResources_Model_AttendanceRecorderDevice $ptDevice */
+        $ptDevice = HumanResources_Controller_AttendanceRecorderDevice::getInstance()->update($ptDevice);
+
+        $ta = Timetracker_Controller_Timeaccount::getInstance()->create(new Timetracker_Model_Timeaccount([
+            'title' => 'unittest',
+        ]));
+
+        $dt = Tinebase_DateTime::now()->setTime(15, 3, 10, 0);
+        $result = HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($ptDevice)
+            ->setAccount($this->_personas['sclever'])
+            ->setMetaData([Timetracker_Model_Timeaccount::class => $ta->getId()])
+            ->setTimeStamp($dt->getClone())
+        );
+        /** @var HumanResources_Model_AttendanceRecord $aRecord */
+        $aRecord = $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_INS}
+            ->find(HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID, $ptDevice->getId());
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockPause((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($ptDevice)
+            ->setAccount($this->_personas['sclever'])
+            ->setMetaData([Timetracker_Model_Timeaccount::class => $ta->getId()])
+            ->setTimeStamp($dt->getClone()->setSecond(11))
+            ->setRefId($aRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID})
+        );
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($ptDevice)
+            ->setAccount($this->_personas['sclever'])
+            ->setMetaData([Timetracker_Model_Timeaccount::class => $ta->getId()])
+            ->setTimeStamp($dt->getClone()->addHour(1))
+            ->setRefId($aRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID})
+        );
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockPause((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($ptDevice)
+            ->setAccount($this->_personas['sclever'])
+            ->setMetaData([Timetracker_Model_Timeaccount::class => $ta->getId()])
+            ->setTimeStamp($dt->getClone()->addHour(1))
+            ->setRefId($aRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID})
+        );
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($ptDevice)
+            ->setAccount($this->_personas['sclever'])
+            ->setMetaData([Timetracker_Model_Timeaccount::class => $ta->getId()])
+            ->setTimeStamp($dt->getClone()->addHour(1)->addMinute(2))
+            ->setRefId($aRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID})
+        );
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($ptDevice)
+            ->setAccount($this->_personas['sclever'])
+            ->setMetaData([Timetracker_Model_Timeaccount::class => $ta->getId()])
+            ->setTimeStamp($dt->getClone()->addHour(1)->addMinute(12))
+            ->setRefId($aRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID})
+        );
+
+        HumanResources_Controller_AttendanceRecorder::runBLPipes();
+
+        $ts = Timetracker_Controller_Timesheet::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Timetracker_Model_Timesheet::class, [
+            ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $ta->getId()],
+        ]));
+        $this->assertSame(1, $ts->count());
+        $ts = $ts->getFirstRecord();
+        $this->assertSame('Clock in: 17:03:10 Clock pause: 17:03:11 Clock in: 18:03:10 Clock pause: 18:03:10 Clock in: 18:05:10 Clock out: 18:15:10', $ts->description);
+        $this->assertSame(45, (int)$ts->duration);
+    }
 }
