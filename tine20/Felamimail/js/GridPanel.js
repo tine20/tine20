@@ -1743,7 +1743,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 const mainCardPanel = isPopupWindow ? win.Tine.Tinebase.viewport.tineViewportMaincardpanel : await config.window.afterIsRendered();
                 isPopupWindow ? mainCardPanel.get(0).hide() : null;
     
-                const mask = new win.Ext.LoadMask(mainCardPanel.el, { msg: this.app.i18n._('Creating Task...') });
+                const mask = new win.Ext.LoadMask(mainCardPanel.el, {
+                    msg: Tine.Tinebase.appMgr.isEnabled('Tasks') ? Tine.Tinebase.appMgr.get('Tasks').i18n._('Creating new Task...') : 'Creating new Task...'
+                });
                 await mask.show();
                 
                 const messageData = msg.data;

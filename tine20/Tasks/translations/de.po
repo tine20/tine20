@@ -326,3 +326,7 @@ msgstr "Gemeinsame Aufgaben-Favoriten verwalten"
 #: Acl/Rights.php:102
 msgid "Create or update shared tasks favorites"
 msgstr "Gemeinsame Aufgaben-Favoriten erstellen oder bearbeiten"
+
+msgid "Creating new Task..."
+msgstr "Erstelle neue Aufgabe..."
+
