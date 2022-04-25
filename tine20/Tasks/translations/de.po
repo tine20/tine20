@@ -25,6 +25,9 @@ msgstr ""
 msgid "Add New Task"
 msgstr "Neue Aufgabe hinzufügen"
 
+msgid "Create New Task"
+msgstr "Als neue Aufgabe hinzufügen"
+
 #: js/TaskEditDialog.js:140
 msgid "You have to supply a due date, because an alarm ist set!"
 msgstr "Sie müssen ein Fälligkeitsdatum angeben, da ein Alarm gesetzt wurde!"

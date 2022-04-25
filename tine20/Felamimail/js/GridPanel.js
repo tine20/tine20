@@ -417,7 +417,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.action_addTask = new Ext.Action({
             requiredGrant: 'readGrant',
-            text: Tine.Tinebase.appMgr.isEnabled('Tasks') ? Tine.Tinebase.appMgr.get('Tasks').i18n._('Add New Task') : '',
+            text: Tine.Tinebase.appMgr.isEnabled('Tasks') ? Tine.Tinebase.appMgr.get('Tasks').i18n._('Create New Task') : '',
             handler: this.onCreateTask,
             iconCls: 'action_addTask',
             scope: this,
@@ -440,9 +440,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_printPreview,
             this.action_copyRecord,
             this.action_moveRecord,
+            this.action_addTask,
             this.action_spam,
-            this.action_ham,
-            this.action_addTask
+            this.action_ham
         ]);
         
         this.contextMenu = new Ext.menu.Menu({
@@ -460,9 +460,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 this.action_moveRecord,
                 this.action_deleteRecord,
                 this.action_fileRecord,
+                this.action_addTask,
                 this.action_spam,
-                this.action_ham,
-                this.action_addTask
+                this.action_ham
             ],
         });
     },
@@ -1723,25 +1723,66 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onCreateTask: function(button, event) {
         const sm = this.getGrid().getSelectionModel();
         const msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection();
-        
-        if (msgs.length > 1) {
+
+        if (msgs.length !== 1) {
             return ;
         }
         
-        msgs.each(function(msg) {
-            if (msg?.data) {
-                const data = msg?.data;
-                const body = Tine.Tinebase.common.html2text(data?.body);
-                const record = Tine.Tinebase.data.Record.setFromJson(Ext.apply(Tine.Tasks.Model.Task.getDefaultData(),
-                    {
-                        summary: data?.subject,
-                        description: body
-                    }), Tine.Tasks.Model.Task);
-                record.setId(0);
+        const msg = msgs.items[0];
+        
+        if (! msg?.data) {
+            return ;
+        }
+        
+        this.setIconClass('x-btn-wait');
+
+        const popupWindow = Tine.Tasks.TaskEditDialog.openWindow({
+            contentPanelConstructorInterceptor: async (config) => {
+                const isPopupWindow = config.window.popup;
+                const win = isPopupWindow ? config.window.popup : window;
+                const mainCardPanel = isPopupWindow ? win.Tine.Tinebase.viewport.tineViewportMaincardpanel : await config.window.afterIsRendered();
+                isPopupWindow ? mainCardPanel.get(0).hide() : null;
+    
+                const mask = new win.Ext.LoadMask(mainCardPanel.el, { msg: this.app.i18n._('Creating Task...') });
+                await mask.show();
                 
-                const popupWindow = Tine.Tasks.TaskEditDialog.openWindow({
-                    record: record
-                });
+                const messageData = msg.data;
+                const body = Tine.Tinebase.common.html2text(messageData?.body || '');
+                const subject = messageData?.subject ?? '';
+                config.record = Tine.Tinebase.data.Record.setFromJson(await Tine.Tasks.saveTask(Ext.apply(Tine.Tasks.Model.Task.getDefaultData(), {
+                    summary: subject,
+                    description: body
+                })), Tine.Tasks.Model.Task);
+    
+                const messageFilter = [{
+                    field: 'id',
+                    operator: 'in',
+                    value: [msg.data.id]
+                }];
+
+                const locations = [{
+                    type: 'attachment',
+                    model: 'Tasks_Model_Task',
+                    record_id: config.record.data,
+                    record_title: config.record.getTitle()
+                }];
+                
+                await Tine.Felamimail.fileMessages(messageFilter, locations)
+                    .catch((error) => {
+                        win.Ext.Msg.show({
+                            title: this.app.formatMessage('Error'),
+                            msg: error.message,
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.ERROR
+                        });
+                    })
+    
+                config.listeners = {
+                    single: true,
+                    load: function() {
+                        mask.hide();
+                    }
+                };
             }
         });
     },
