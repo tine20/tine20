@@ -1569,7 +1569,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     $isLastInvoice = false;
                     if ('0' === $this->_backend->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                         Sales_Model_Invoice::class, [
-                            ['field' => 'contract_id', 'operator' => 'equals', 'value' => $contract->getId()],
+                            ['field' => 'contract', 'operator' => 'equals', 'value' => $contract->getId()],
                             ['field' => 'id', 'operator' => 'notin', 'value' => $_ids],
                         ]
                     ))) {

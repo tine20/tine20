@@ -582,7 +582,10 @@ class Courses_JsonTest extends TestCase
         $filter = Tinebase_PersistentFilter::getInstance()->getFilterById(
             Tinebase_Core::getPreference('Courses')->getValueForUser(Courses_Preference::DEFAULTPERSISTENTFILTER, $teacher->getId())
         );
-        $this->assertEquals(array(array('field' => 'name', 'operator' => 'equals', 'value' => $course['name'])), $filter->toArray());
+        $this->assertEquals([
+            ['field' => 'is_deleted', 'operator' => 'equals', 'value' => '0'],
+            ['field' => 'name', 'operator' => 'equals', 'value' => $course['name']],
+        ], $filter->toArray());
     }
     
     /**

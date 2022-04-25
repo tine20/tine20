@@ -674,7 +674,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             ? array('field' => 'status', 'operator' => 'equals', 'value' => $status)
             : array();
 
-        $filter = new Tinebase_Model_FullUserFilter(array($statusFilter));
+        $filter = new Tinebase_Model_FullUserFilter($statusFilter ? array($statusFilter) : $statusFilter);
 
         return $backend->searchCount($filter);
     }
