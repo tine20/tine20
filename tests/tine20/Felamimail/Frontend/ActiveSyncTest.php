@@ -214,14 +214,12 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
     {
         $testMessageId = Tinebase_Record_Abstract::generateUID();
         
-        $message = $this->_emailTestClass->messageTestHelper(
+        return $this->_emailTestClass->messageTestHelper(
             $emailFile,
             $testMessageId,
             null,
             array('X-Tine20TestMessage: ' . $headerToReplace, 'X-Tine20TestMessage: ' . $testMessageId)
         );
-        
-        return $message;
     }
 
     public function testDeleteMessageToTrashWithTrashDeleted()
