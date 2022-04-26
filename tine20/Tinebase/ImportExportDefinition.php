@@ -222,7 +222,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
      * 
      * @param Tinebase_Model_ImportExportDefinition $_definition
      * @param array $_additionalOptions additional options
-     * @return Zend_Config_Xml
+     * @return Zend_Config_Xml|boolean
      */
     public static function getOptionsAsZendConfigXml(Tinebase_Model_ImportExportDefinition $_definition, $_additionalOptions = array())
     {
