@@ -60,6 +60,10 @@
     background-image:url(../../images/icon-set/icon_contractmanager_edit.svg) !important;
 }
 
+.action_track {
+    background-image:url(../../images/icon-set/icon_address_structure.svg) !important;
+}
+
 .preview-panel-symbolcompare.wide {width: 160px}
 .preview-panel-customer { margin: 5px 2px 5px 5px; width: 32%; min-width: 200px}
 .preview-panel-description.preview-panel-customer {width: 22%; min-width: 200px}
@@ -115,4 +119,8 @@
 .sales-document-positiongrid-description {
     padding-top: 2px;
     white-space: normal;
+}
+
+.SalesTracExpandPositions {
+    background-image:url(../../images/icon-set/icon_list_unselect.svg) !important;
 }
