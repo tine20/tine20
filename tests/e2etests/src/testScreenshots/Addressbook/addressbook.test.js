@@ -11,7 +11,7 @@ beforeAll(async () => {
 describe('Contacts', () => {
     describe('Test MainPage', () => {
         test('choose grid fields', async () => {
-            await expect(page).toMatchElement('span', {text: 'tine ® Admin'});
+            await expect(page).toMatchElement('span', {text: process.env.TEST_USER});
             await expect(page).toMatchElement('.t-app-addressbook .ext-ux-grid-gridviewmenuplugin-menuBtn');
             await page.click('.t-app-addressbook .ext-ux-grid-gridviewmenuplugin-menuBtn');
             await page.waitForSelector('.x-menu-list');
@@ -178,12 +178,12 @@ describe('Contacts', () => {
 
             try {
                 await expect(page).toClick('#Addressbook_Contact_Tree span', {
-                text: 'tine ® Admins personal addressbook',
+                text: process.env.TEST_USER +'s persönliches Adressbuch',
                 button: 'right'
             });
             } catch (e) {
                 await expect(page).toClick('#Addressbook_Contact_Tree span', {
-                    text: 'tine ® Admins persönliches Adressbuch',
+                    text: process.env.TEST_USER +'s persönliches Adressbuch',
                     button: 'right'
                 });
             }
