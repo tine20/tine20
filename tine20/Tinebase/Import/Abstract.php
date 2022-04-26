@@ -1298,6 +1298,13 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     public static function getOptionsArrayFromDefinition($_definition, $_options)
     {
         $options = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($_definition, $_options);
+        if ($options === false) {
+            // try again
+            $options = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($_definition, $_options);
+            if ($options === false) {
+                throw new Tinebase_Exception('could not fetch config');
+            }
+        }
         $optionsArray = $options->toArray();
         if (! isset($optionsArray['model'])) {
             $optionsArray['model'] = $_definition->model;
