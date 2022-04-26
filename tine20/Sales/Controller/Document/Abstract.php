@@ -246,12 +246,12 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             ]));
         }
 
-        $filterArray = [
+        $filterArray = [[
             'condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_OR,
             'filters' => [],
-        ];
+        ]];
         foreach ($documentIds as $documentId) {
-            $filterArray['filters'][] =
+            $filterArray[0]['filters'][] =
                 ['field' => Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS, 'operator' => 'contains',
                     'value' => '"' . $documentId . '"'];
         }
