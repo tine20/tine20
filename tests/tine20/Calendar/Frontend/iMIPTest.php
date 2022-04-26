@@ -93,6 +93,9 @@ class Calendar_Frontend_iMIPTest extends TestCase
         }
 
         parent::tearDown();
+
+        // remove instance to prevent acl pollution
+        Admin_Controller_EmailAccount::destroyInstance();
     }
 
     public function testExternalInvitationToOneOfARecurSeries()

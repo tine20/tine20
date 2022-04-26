@@ -1253,6 +1253,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         if (! $account) {
             $account = Admin_Controller_EmailAccount::getInstance()->getSystemAccount(Tinebase_Core::getUser());
+            // remove instance to prevent acl pollution
+            Admin_Controller_EmailAccount::destroyInstance();
         }
 
         Felamimail_Backend_ImapFactory::reset();

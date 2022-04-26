@@ -5,7 +5,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -40,7 +40,7 @@ class Addressbook_Controller_ListTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         parent::setUp();
 
         $this->_instance = Addressbook_Controller_List::getInstance();
@@ -147,7 +147,7 @@ class Addressbook_Controller_ListTest extends TestCase
     }
 
     protected function tearDown(): void
-{
+    {
         foreach ([$this->objects['contact1'], $this->objects['contact2']] as $contact) {
             try {
                 Addressbook_Controller_Contact::getInstance()->delete([$contact->getId()]);
@@ -156,6 +156,9 @@ class Addressbook_Controller_ListTest extends TestCase
         }
 
         parent::tearDown();
+
+        // remove instance to prevent acl pollution
+        Admin_Controller_EmailAccount::destroyInstance();
     }
 
     /**
@@ -223,7 +226,8 @@ class Addressbook_Controller_ListTest extends TestCase
     /**
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function testDeleteMailingList() {
+    public function testDeleteMailingList()
+    {
         $this->_skipIfXpropsUserIdDeactivated();
 
         $list = $this->_createAdbMailingList();

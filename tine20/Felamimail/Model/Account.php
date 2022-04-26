@@ -801,7 +801,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
             } elseif ($this->type === self::TYPE_SHARED || $this->type === self::TYPE_ADB_LIST) {
                 $credentialCachePwd = Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY};
             } else {
-                throw new Tinebase_Exception_UnexpectedValue('type ' . $this->type . ' unknown');
+                throw new Tinebase_Exception_UnexpectedValue('type ' . $this->type . ' unknown or empty');
             }
 
             // TYPE_SYSTEM + TYPE_USER_INTERNAL never has its own credential cache, it uses the users one
