@@ -68,6 +68,47 @@ class Admin_Controller_UserTest extends TestCase
         $this->testAddUserWithAlreadyExistingEmailData('update');
     }
 
+    public function testAddAccountWithMFAConfigSMS()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::MFA, new Tinebase_Config_KeyField([
+            'records' => new Tinebase_Record_RecordSet(Tinebase_Model_MFA_Config::class, [[
+            Tinebase_Model_MFA_Config::FLD_ID => 'unittest',
+            Tinebase_Model_MFA_Config::FLD_USER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_SmsUserConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_GenericSmsConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS =>
+                Tinebase_Auth_MFA_GenericSmsAdapter::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG => [
+                Tinebase_Model_MFA_GenericSmsConfig::FLD_URL => 'https://shoo.tld/restapi/message',
+                Tinebase_Model_MFA_GenericSmsConfig::FLD_BODY => '{"encoding":"auto","body":"{{ message }}","originator":"{{ app.branding.title }}","recipients":["{{ cellphonenumber }}"],"route":"2345"}',
+                Tinebase_Model_MFA_GenericSmsConfig::FLD_METHOD => 'POST',
+                Tinebase_Model_MFA_GenericSmsConfig::FLD_HEADERS => [
+                    'Auth-Bearer' => 'unittesttokenshaaaaalalala'
+                ],
+                Tinebase_Model_MFA_GenericSmsConfig::FLD_PIN_TTL => 600,
+                Tinebase_Model_MFA_GenericSmsConfig::FLD_PIN_LENGTH => 6,
+            ]
+        ]])
+        ]));
+
+        $user = $this->_createUserWithEmailAccount([
+            'mfa_configs' => [[
+                Tinebase_Model_MFA_UserConfig::FLD_ID => 'userunittest',
+                Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'unittest',
+                Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS => Tinebase_Model_MFA_SmsUserConfig::class,
+                Tinebase_Model_MFA_UserConfig::FLD_CONFIG => [
+                    Tinebase_Model_MFA_SmsUserConfig::FLD_CELLPHONENUMBER => '01234567890',
+                ]
+            ]]
+        ]);
+
+        $this->assertInstanceOf(Tinebase_Record_RecordSet::class, $user->mfa_configs);
+        $this->assertInstanceOf(Tinebase_Model_MFA_UserConfig::class, $user->mfa_configs->getFirstRecord());
+        $this->assertSame(Addressbook_Model_Contact::normalizeTelephoneNum('01234567890'), $user->mfa_configs->getFirstRecord()
+            ->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->{Tinebase_Model_MFA_SmsUserConfig::FLD_CELLPHONENUMBER});
+    }
+
     public function testAddAccountWithMFAConfigs()
     {
         $user = $this->_createUserWithEmailAccount([
