@@ -39,6 +39,8 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
      * @throws Tinebase_Exception_Backend_Database_LockTimeout
      * @throws Tinebase_Exception_NotFound
      * @throws Exception
+     *
+     * @refactor this should return a defined type - see \Admin_Frontend_Json::saveQuota
      */
     public function updateQuota(string $application, $recordData = null, array $additionalData = [])
     {
