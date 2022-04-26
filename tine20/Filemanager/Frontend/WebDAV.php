@@ -122,8 +122,11 @@ class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
     public function getPath()
     {
         $pathParts = $this->_getPathParts();
-        if ('webdav' === $pathParts[0]) $pathParts = array_slice($pathParts, 1);
-        if (Filemanager_Config::APP_NAME === $pathParts[0]) $pathParts = array_slice($pathParts, 1);
+        if (!empty($pathParts) && 'webdav' === $pathParts[0]) $pathParts = array_slice($pathParts, 1);
+        if (!empty($pathParts) && Filemanager_Config::APP_NAME === $pathParts[0]) $pathParts = array_slice($pathParts, 1);
+        if (empty($pathParts)) {
+            return Tinebase_FileSystem::getInstance()->getApplicationBasePath(Filemanager_Config::APP_NAME);
+        }
         if (Tinebase_FileSystem::FOLDER_TYPE_SHARED === $pathParts[0]) {
             $pathParts = array_slice($pathParts, 1);
             return Tinebase_FileSystem::getInstance()->getApplicationBasePath(Filemanager_Config::APP_NAME,
