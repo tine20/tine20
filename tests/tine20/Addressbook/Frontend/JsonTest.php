@@ -567,7 +567,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $paging['dir'] = 'DESC';
 
         $searchResult = $this->_uit->searchContacts(
-            ['field' => 'container_id', 'operator' => 'equals', 'value' => $this->container->id], $paging);
+            [['field' => 'container_id', 'operator' => 'equals', 'value' => $this->container->id]], $paging);
         static::assertEquals('changed value', $searchResult['results'][0]['customfields'][$cf->name]);
         static::assertTrue(!isset($searchResult['results'][1]['customfields']) ||
             !isset($searchResult['results'][1]['customfields'][$cf->name]));
@@ -2528,13 +2528,13 @@ Steuernummer 33/111/32212";
             [
                 'field' => 'list_role_id',
                 'operator' => 'definedBy?condition=and&setOperator=oneOf',
-                'value' => [
+                'value' => [[
                     'field' => 'id',
                     'operator' => 'in',
                     'value' => [
                         $list['memberroles'][0]['list_role_id']['id']
                     ]
-                ]
+                ]]
             ]
         ];
 
@@ -2626,6 +2626,11 @@ Steuernummer 33/111/32212";
      */
     public function testSearchEmailAddresss()
     {
+        $list = Addressbook_Controller_List::getInstance()->getAll()->getFirstRecord();
+        if (empty($list->email)) {
+            $list->email = 'somelistemail@' . TestServer::getPrimaryMailDomain();
+            Addressbook_Controller_List::getInstance()->update($list);
+        }
         Addressbook_Controller_List::destroyInstance();
         $result = $this->_uit->searchEmailAddresss([
             ["condition" => "OR", "filters" => [["condition" => "AND", "filters" => [

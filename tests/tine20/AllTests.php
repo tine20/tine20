@@ -11,6 +11,9 @@
 // needed for bootstrap / autoloader
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
+if (!Tinebase_Model_Filter_FilterGroup::$beStrict) {
+    throw new Exception('unittests need to set Tinebase_Model_Filter_FilterGroup::$beStrict');
+}
 /**
  * @package     Tinebase
  */
