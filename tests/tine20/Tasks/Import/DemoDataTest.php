@@ -40,7 +40,7 @@ class Tasks_Import_DemoDataTest extends TestCase
         $importer->importDemodata();
 
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Tasks_Model_Task', [
-            ['field' => 'containerProperty', 'operator' => 'equals', 'value' => $this->_importContainer->getId()]
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $this->_importContainer->getId()]
         ]);
         $result = Tasks_Controller_Task::getInstance()->search($filter);
         self::assertGreaterThanOrEqual(2, count($result), print_r($result->toArray(), true));

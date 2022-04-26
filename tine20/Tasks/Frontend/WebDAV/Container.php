@@ -138,14 +138,6 @@ class Tasks_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract
                 'operator'  => 'equals',
                 'value'     => $this->_container->getId()
             ),
-            array(
-                'field'     => 'period', 
-                'operator'  => 'within', 
-                'value'     => array(
-                    'from'  => Tinebase_DateTime::now()->subWeek(4),
-                    'until' => Tinebase_DateTime::now()->addYear(4)
-                )
-            )
         ));
 
         /**

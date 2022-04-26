@@ -547,11 +547,6 @@ class Timetracker_ControllerTest extends TestCase
                 'operator' => 'contains', 
                 'value' => 'blabla'
             ),
-            array(
-                'field' => 'containerType', 
-                'operator' => 'equals', 
-                'value' => Tinebase_Model_Container::TYPE_SHARED
-            ),  
         ));
         
         if ($bookable) {

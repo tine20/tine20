@@ -17,7 +17,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
     protected $_recordsToDelete = array();
 
     public function setUp(): void
-{
+    {
         Tinebase_Application::getInstance()->setApplicationStatus(array(
             Tinebase_Application::getInstance()->getApplicationByName('ExampleApplication')->getId()
         ), Tinebase_Application::ENABLED);
@@ -28,7 +28,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
     }
 
     protected function tearDown(): void
-{
+    {
         if (count($this->_recordsToDelete) > 0)
         {
             $this->_json->deleteExampleRecords(array_keys($this->_recordsToDelete));
@@ -148,6 +148,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
             array('field' => 'description', 'operator' => 'contains', 'value' => 'description fulltext words search')
         );
         $searchDefaultFilter = $this->_getFilter();
+        unset($searchDefaultFilter[2]);
         $mergedSearchFilter = array_merge($searchIDFilter, $searchDefaultFilter);
         
         $returned = $this->_json->searchExampleRecords($mergedSearchFilter, $this->_getPaging());

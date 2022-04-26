@@ -220,11 +220,6 @@ abstract class Timetracker_AbstractTest extends TestCase
                 'operator' => 'contains',
                 'value' => 'blabla'
             ),
-            array(
-                'field' => 'containerType',
-                'operator' => 'equals',
-                'value' => Tinebase_Model_Container::TYPE_SHARED
-            ),
         );
 
         if (! $_showClosed) {

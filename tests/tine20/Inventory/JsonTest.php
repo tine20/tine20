@@ -71,6 +71,7 @@ class Inventory_JsonTest extends Inventory_TestCase
         
         $searchIDFilter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $inventoryRecordID));
         $searchDefaultFilter = $this->_getFilter();
+        unset($searchDefaultFilter[2]);
         $mergedSearchFilter = array_merge($searchIDFilter, $searchDefaultFilter);
         
         $returned = $this->_json->searchInventoryItems($searchDefaultFilter, $this->_getPaging());

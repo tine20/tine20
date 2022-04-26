@@ -1844,7 +1844,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             array('field' => 'recursive', 'operator' => 'equals',   'value' => 1),
             array('field' => 'path',      'operator' => 'equals',   'value' => '/'),
             array('field' => 'query',     'operator' => 'contains', 'value' => 'color'),
-        'AND');
+        );
         
         $result = $this->_getUit()->searchNodes($filter, array('sort' => 'name', 'start' => 0, 'limit' => 0));
         $this->assertEquals(3, count($result['results']), '3 files should have been found!');

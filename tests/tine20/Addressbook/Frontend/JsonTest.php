@@ -171,7 +171,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $paging = $this->objects['paging'];
 
         $filter = array(
-            array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => '/all'),
         );
         $contacts = $this->_uit->searchContacts($filter, $paging);
 
@@ -280,7 +280,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $paging = $this->objects['paging'];
         $paging['start'] = -50;
         $filter = array(
-            array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => '/all'),
         );
 
         $contacts = $this->_uit->searchContacts($filter, $paging);
@@ -724,27 +724,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $paging = $this->objects['paging'];
 
         $filter = array(
-            array('field' => 'containerType', 'operator' => 'equals', 'value' => 'singleContainer'),
-            array('field' => 'container', 'operator' => 'equals', 'value' => $this->container->id),
-        );
-        $contacts = $this->_uit->searchContacts($filter, $paging);
-
-        $this->assertGreaterThan(0, $contacts['totalcount']);
-    }
-
-    /**
-     * try to get contacts by owner / container_id
-     *
-     */
-    public function testGetContactsByOwner()
-    {
-        $this->_addContact();
-
-        $paging = $this->objects['paging'];
-
-        $filter = array(
-            array('field' => 'containerType', 'operator' => 'equals', 'value' => 'personal'),
-            array('field' => 'owner', 'operator' => 'equals', 'value' => Zend_Registry::get('currentAccount')->getId()),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->container->id),
         );
         $contacts = $this->_uit->searchContacts($filter, $paging);
 

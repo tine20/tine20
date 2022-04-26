@@ -144,10 +144,6 @@ class Projects_JsonTest extends TestCase
                                         "id": "ext-record-1073"
                                     },
                                     {
-                                        "field": ":id",
-                                        "operator": "AND"
-                                    },
-                                    {
                                         "field": ":relation_type",
                                         "operator": "in",
                                         "value": [
@@ -263,8 +259,8 @@ class Projects_JsonTest extends TestCase
     {
         $filterJson = '[{"condition":"OR","filters":'
             . '[{"condition":"AND","filters":[{"field":"contact","operator":"AND","value":'
-                . '[{"field":"relation_type","operator":"in","value":["COWORKER","RESPONSIBLE"],"id":"ext-record-62"},'
-                . '{"field":":id","operator":"AND"}],"id":"ext-record-23"},'
+                . '[{"field":"relation_type","operator":"in","value":["COWORKER","RESPONSIBLE"],"id":"ext-record-62"}]'
+                . ',"id":"ext-record-23"},'
                 . '{"field":"status","operator":"notin","value":["COMPLETED","CANCELLED"],"id":"ext-record-78","label":"statusfilter"}],"id":"ext-comp-1088","label":"filter1"}'
             . ',{"condition":"AND","filters":[{"field":"query","operator":"contains","value":"","id":"ext-record-94"}],"id":"ext-comp-1209","label":"filter2"}]}]';
         $result = $this->_json->searchProjects(Zend_Json::decode($filterJson), array());

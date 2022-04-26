@@ -32,7 +32,7 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
         
         foreach($this->_testEmailContacts as $email) {
             $contactIdsToDelete = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(array(
-                array('field' => 'containerType', 'operator' => 'equals', 'value' => 'all'),
+                array('field' => 'container_id', 'operator' => 'equals', 'value' => '/all'),
                 array('field' => 'email',      'operator'  => 'equals', 'value' => $email)
             )), null, false, true);
             
