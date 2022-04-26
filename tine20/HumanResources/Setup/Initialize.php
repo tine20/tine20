@@ -211,13 +211,13 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
             array_merge($commonValues, array(
                 'name' => "All Free Times this year", // _('All Free Times this year')
                 'description' => "All Free Times this year", // _('All Free Times this year')
-                'filters' => [
+                'filters' => [[
                     'condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_OR,
                     'filters' => [
                         ['field' => 'firstday_date', 'operator' => 'within', 'value' => 'yearThis'],
                         ['field' => 'lastday_date', 'operator' => 'within', 'value' => 'yearThis'],
                     ],
-                ],
+                ]],
             ))
         ));
 
@@ -225,13 +225,13 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
             array_merge($commonValues, array(
                 'name' => "All Free Times next year", // _('All Free Times next year')
                 'description' => "All Free Times next year", // _('All Free Times next year')
-                'filters' => [
+                'filters' => [[
                     'condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_OR,
                     'filters' => [
                         ['field' => 'firstday_date', 'operator' => 'within', 'value' => 'yearNext'],
                         ['field' => 'lastday_date', 'operator' => 'within', 'value' => 'yearNext'],
                     ],
-                ],
+                ]],
             ))
         ));
 

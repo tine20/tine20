@@ -212,7 +212,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
     {
         $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID} = Sales_Controller_Document_Customer::getInstance()
             ->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Customer::class, [
-                'field' => Sales_Model_Document_Customer::FLD_DOCUMENT_ID, 'operator' => 'equals', 'value' => $_record->getId(),
+                ['field' => Sales_Model_Document_Customer::FLD_DOCUMENT_ID, 'operator' => 'equals', 'value' => $_record->getId()],
             ]))->getFirstRecord();
         parent::_deleteRecord($_record);
     }
