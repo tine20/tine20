@@ -1455,7 +1455,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function saveQuota(string $application, $recordData = null, array $additionalData = [])
     {
         parent::_setRequestContext(Admin_Controller_Quota::getInstance());
-        return Admin_Controller_Quota::getInstance()->updateQuota($application, $recordData, $additionalData);
+        $result = Admin_Controller_Quota::getInstance()->updateQuota($application, $recordData, $additionalData);
+        // FIXME updateQuota should return a defined type ... this is very ugly
+        return (is_object($result) && method_exists($result, 'toArray')) ? $result->toArray() : $result;
     }
 
     /**
