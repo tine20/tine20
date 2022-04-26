@@ -32,7 +32,9 @@ class Tasks_Import_Csv extends Tinebase_Import_Csv_Generic
     {
         $result = parent::_doConversions($_data);
 
-
+        if (isset($this->_options['container_id'])) {
+            $result['container_id'] = $this->_options['container_id'];
+        }
 
         return $result;
     }

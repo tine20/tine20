@@ -110,7 +110,7 @@ class Timetracker_FilterTest extends Timetracker_AbstractTest
         // test generic relation filter
         $f = new Timetracker_Model_TimeaccountFilter(array(array('field' => 'foreignRecord', 'operator' => 'AND', 'value' =>
             array('appName' => 'Sales', 'linkType' => 'relation', 'modelName' => 'Contract',
-                'filters' => array('field' => 'query', 'operator' => 'contains', 'value' => 'TA1'))
+                'filters' => [array('field' => 'query', 'operator' => 'contains', 'value' => 'testRelateTimeaccount')])
         )));
         $result = $this->_timeaccountController->search($f);
         $this->assertEquals(1, $result->count());

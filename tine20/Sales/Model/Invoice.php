@@ -166,7 +166,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 'name' => Sales_Config::INVOICE_TYPE
             ),
             'is_auto' => array(
-                'type' => 'bool',
+                'type' => self::TYPE_BOOLEAN,
                 'label' => NULL
             ),
             'price_net' => array(

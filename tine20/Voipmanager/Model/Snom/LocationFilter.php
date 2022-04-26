@@ -37,6 +37,7 @@ class Voipmanager_Model_Snom_LocationFilter extends Tinebase_Model_Filter_Filter
                 'fields' => array('firmware_interval', 'update_policy', 'admin_mode', 'ntp_server', 'http_user', 'description')
             )
         ),
+        'name'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'firmware_interval' => array('filter' => 'Tinebase_Model_Filter_Text'),
         'update_policy'     => array('filter' => 'Tinebase_Model_Filter_Text'),
         'admin_mode'        => array('filter' => 'Tinebase_Model_Filter_Text'),

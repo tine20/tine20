@@ -409,7 +409,7 @@ class Voipmanager_JsonTest extends \PHPUnit\Framework\TestCase
         $asteriskVoicemailData = $this->_json->saveAsteriskVoicemail($asteriskVoicemail->toArray());
         
         // search & check
-        $search = $this->_json->searchAsteriskVoicemails($this->_getAsteriskVoicemailFilter($asteriskVoicemail->context), $this->_getPaging());
+        $search = $this->_json->searchAsteriskVoicemails($this->_getAsteriskVoicemailFilter($asteriskVoicemail->context_id), $this->_getPaging());
         $this->assertEquals($asteriskVoicemail->context, $search['results'][0]['context']);
         $this->assertEquals(1, $search['totalcount']);
     }
@@ -441,7 +441,7 @@ class Voipmanager_JsonTest extends \PHPUnit\Framework\TestCase
     {
         return array(
             array(
-                'field'    => 'context', 
+                'field'    => 'context_id',
                 'operator' => 'contains', 
                 'value'    => $_name
             )

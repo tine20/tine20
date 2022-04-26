@@ -43,6 +43,7 @@ class Courses_Model_CourseFilter extends Tinebase_Model_Filter_FilterGroup
                 'controller'        => 'Tinebase_Department', 
             )
         ),
+        'is_deleted'     => ['filter' => Tinebase_Model_Filter_Bool::class],
         'internet'       => array('filter' => 'Tinebase_Model_Filter_Text'),
         //'group_id'       => array('filter' => 'Tinebase_Model_Filter_ForeignId', 'options' => array('filtergroup' => 'Tinebase_Model_GroupFilter', 'controller' => 'Tinebase_Group')),
     );

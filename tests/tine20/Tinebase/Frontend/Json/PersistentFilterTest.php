@@ -625,9 +625,9 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId(),
             'desciption' => '',
             'filters' => [
-                ['field' => 'query', 'operator' => 'contains', 'test'],
-                ['field' => 'path', 'operator' => 'equals', '/personal/tine20admin']
-            ]
+                ['field' => 'query', 'operator' => 'contains', 'value' => 'test'],
+                ['field' => 'path', 'operator' => 'equals', 'value' => '/personal/tine20admin'],
+            ],
         ];
 
         $result = $this->_uit->savePersistentFilter($filter);

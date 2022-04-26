@@ -646,7 +646,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 'from' => Tinebase_DateTime::now(),
                 'until' => Tinebase_DateTime::now()->addMonth(24)
             )),
-            array('field' => 'rrule_contraints', 'operator' => 'notnull', 'value' => NULL)
+            array('field' => 'rrule_constraints', 'operator' => 'notnull', 'value' => NULL)
         )), NULL, 'id');
 
         // update each

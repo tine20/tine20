@@ -208,24 +208,6 @@ class Addressbook_ControllerTest extends TestCase
      * try to get count of contacts
      *
      */
-    public function testGetCountByOwner()
-    {
-        $contact = $this->_addContact();
-        
-        $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'query',         'operator' => 'contains', 'value' => $contact->n_family),
-            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
-            array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
-        ));
-        $count = $this->_instance->searchCount($filter);
-        
-        $this->assertEquals(1, $count);
-    }
-    
-    /**
-     * try to get count of contacts
-     *
-     */
     public function testGetCountByAddressbookId()
     {
         $contact = $this->_addContact();
@@ -239,7 +221,7 @@ class Addressbook_ControllerTest extends TestCase
         $container = $personalContainer[0];
         
         $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'all'),
+            array('field' => 'container_id', 'operator' => 'equals',   'value' => '/all'),
         ));
         $filter->container = array($container->getId());
         $count = $this->_instance->searchCount($filter);
@@ -257,7 +239,7 @@ class Addressbook_ControllerTest extends TestCase
         
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'query',         'operator' => 'contains', 'value' => $contact->n_family),
-            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'all'),
+            array('field' => 'container_id', 'operator' => 'equals',   'value' => '/all'),
         ));
         $count = $this->_instance->searchCount($filter);
         
@@ -467,14 +449,12 @@ class Addressbook_ControllerTest extends TestCase
         
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'container_id',  'operator' => 'equals',   'value' => $contact->container_id),
-            array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));
         $count1 = $this->_instance->searchCount($filter);
         
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'creation_time', 'operator' => 'inweek',   'value' => 0),
             array('field' => 'container_id',  'operator' => 'equals',   'value' => $contact->container_id),
-            array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));
         $count2 = $this->_instance->searchCount($filter);
         $this->assertEquals($count1, $count2);

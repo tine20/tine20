@@ -16,64 +16,100 @@ class Tinebase_FilterSyncTokenTest extends TestCase
     public function testFilterHash()
     {
         $contactFilter = new Addressbook_Model_ContactFilter([
-            ['id' => 1]
+            ['field' => 'id', 'operator' => 'equals', 'value' => 1],
         ]);
         $contactFilter1 = new Addressbook_Model_ContactFilter([
-            ['id' => 1]
+            ['field' => 'id', 'operator' => 'equals', 'value' => 1],
         ]);
         static::assertSame($contactFilter->hash(), $contactFilter1->hash());
 
 
         $eventFilter = new Calendar_Model_EventFilter([
-            ['id' => 1]
+            ['field' => 'id', 'operator' => 'equals', 'value' => 1]
         ]);
         static::assertNotSame($contactFilter->hash(), $eventFilter->hash());
 
 
         $contactFilter = new Addressbook_Model_ContactFilter([
-            ['n_given' => 'a'],
-            ['id' => 1],
+            ['field' => 'n_given', 'operator' => 'equals', 'value' => 'a'],
+            ['field' => 'id', 'operator' => 'equals', 'value' => 1],
         ]);
         $contactFilter1 = new Addressbook_Model_ContactFilter([
-            ['id' => 1],
-            ['n_given' => 'a'],
+            ['field' => 'id', 'operator' => 'equals', 'value' => 1],
+            ['field' => 'n_given', 'operator' => 'equals', 'value' => 'a'],
         ]);
         static::assertSame($contactFilter->hash(), $contactFilter1->hash());
 
 
         $contactFilter = new Addressbook_Model_ContactFilter([
-            ['n_given' => 'a'],
+            ['field' => 'n_given', 'operator' => 'equals', 'value' => 'a'],
             [
-                ['n_given' => 'a'],
-                ['id' => 1],
+                'condition' => 'AND',
+                'filters' => [
+                    ['field' => 'n_given', 'operator' => 'equals', 'value' => 'a'],
+                    ['field' => 'id', 'operator' => 'equals', 'value' => 1],
+                ],
             ],
-            ['id' => 1],
+            ['field' => 'id', 'operator' => 'equals', 'value' => 1],
         ]);
         $contactFilter1 = new Addressbook_Model_ContactFilter([
-            ['id' => 1],
-            ['n_given' => 'a'],
+            ['field' => 'id', 'operator' => 'equals', 'value' => 1],
+            ['field' => 'n_given', 'operator' => 'equals', 'value' => 'a'],
             [
-                ['id' => 1],
-                ['n_given' => 'a'],
+                'condition' => 'AND',
+                'filters' => [
+                    ['field' => 'id', 'operator' => 'equals', 'value' => 1],
+                    ['field' => 'n_given', 'operator' => 'equals', 'value' => 'a'],
+                ],
             ],
         ]);
         static::assertSame($contactFilter->hash(), $contactFilter1->hash());
 
+        $contactFilter = new Addressbook_Model_ContactFilter([
+            ['field' => 'n_given', 'operator' => 'equals', 'value' => 'a'],
+            [
+                'condition' => 'AND',
+                'filters' => [
+                    ['field' => 'n_given', 'operator' => 'equals', 'value' => 'a'],
+                    ['field' => 'id', 'operator' => 'equals', 'value' => 1],
+                ],
+            ],
+            ['field' => 'id', 'operator' => 'equals', 'value' => 1],
+        ]);
+        $contactFilter1 = new Addressbook_Model_ContactFilter([
+            ['field' => 'id', 'operator' => 'equals', 'value' => 1],
+            ['field' => 'n_given', 'operator' => 'equals', 'value' => 'a'],
+            [
+                'condition' => 'AND',
+                'filters' => [
+                    ['field' => 'id', 'operator' => 'equals', 'value' => 1],
+                    ['field' => 'n_given', 'operator' => 'equals', 'value' => 'b'],
+                ],
+            ],
+        ]);
+        static::assertNotSame($contactFilter->hash(), $contactFilter1->hash());
+
 
         $contactFilter = new Addressbook_Model_ContactFilter([
-            ['n_given' => 'a'],
+            ['field' => 'n_given', 'operator' => 'equals', 'value' => 'a'],
             [
-                ['n_given' => 'a'],
-                ['id' => 1],
+                'condition' => 'AND',
+                'filters' => [
+                    ['field' => 'n_given', 'operator' => 'equals', 'value' => 'a'],
+                    ['field' => 'id', 'operator' => 'equals', 'value' => 1],
+                ],
             ],
-            ['id' => 1],
+            ['field' => 'id', 'operator' => 'equals', 'value' => 1],
         ], Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
         $contactFilter1 = new Addressbook_Model_ContactFilter([
-            ['id' => 1],
-            ['n_given' => 'a'],
+            ['field' => 'id', 'operator' => 'equals', 'value' => 1],
+            ['field' => 'n_given', 'operator' => 'equals', 'value' => 'a'],
             [
-                ['id' => 1],
-                ['n_given' => 'a'],
+                'condition' => 'AND',
+                'filters' => [
+                    ['field' => 'id', 'operator' => 'equals', 'value' => 1],
+                    ['field' => 'n_given', 'operator' => 'equals', 'value' => 'a'],
+                ],
             ],
         ], Tinebase_Model_Filter_FilterGroup::CONDITION_AND);
         static::assertNotSame($contactFilter->hash(), $contactFilter1->hash());
