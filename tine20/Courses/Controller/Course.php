@@ -670,8 +670,16 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             . ' Creating new member for ' . $course->name);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . print_r($course->toArray(), TRUE));
+
+        $userCfg = $this->_getNewUserConfig($course);
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::ACCOUNT_TWIG}->{Tinebase_Config::ACCOUNT_TWIG_LOGIN}) {
+            Tinebase_Model_User::setTwigContext(['course' => $course]);
+            $user->accountLoginName = $user->applyAccountTwig('accountLoginName', Tinebase_Config::getInstance()
+                ->{Tinebase_Config::ACCOUNT_TWIG}->{Tinebase_Config::ACCOUNT_TWIG_LOGIN});
+            unset($userCfg['accountLoginNamePrefix']);
+        }
         
-        $password = $user->applyOptionsAndGeneratePassword($this->_getNewUserConfig($course));
+        $password = $user->applyOptionsAndGeneratePassword($userCfg);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' ' . print_r($user->toArray(), TRUE));
         $newMember = $this->_userController->create($user, $password, $password);
