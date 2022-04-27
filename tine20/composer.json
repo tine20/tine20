@@ -101,7 +101,7 @@
     "nikic/fast-route": "^1.2",
     "nl.idaas/openid-server": "^0.1.7",
     "php-http/curl-client": "^2.1",
-    "phpoffice/phpexcel": "1.8.2pl2 as 1.8.2",
+    "phpoffice/phpexcel": "1.8.2pl3 as 1.8.2",
     "phpoffice/phpspreadsheet": "1.18.0pl1 as 1.18.0",
     "phpoffice/phpword": "^0.18",
     "psr/http-server-middleware": "^1.0",
