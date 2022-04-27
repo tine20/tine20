@@ -182,7 +182,8 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $group = new Tinebase_Model_Group(array(), TRUE);
         $group->setFromJsonInUsersTimezone($recordData);
         $memberData = isset($recordData['members']) ? $recordData['members'] : [];
-        
+
+        parent::_setRequestContext(Admin_Controller_User::getInstance());
         $savedRecord = $this->_controller->saveCourseAndGroup($course, $group, $memberData);
 
         return $this->_recordToJson($savedRecord);
