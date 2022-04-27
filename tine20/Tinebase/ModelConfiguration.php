@@ -1845,7 +1845,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 }
                 if (!isset($fieldDef[self::CONFIG][self::RECORD_CLASS_NAME])) {
                     if (! isset($fieldDef[self::CONFIG]['appName'])) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__
                             . '::' . __LINE__ . ' appName missing in config for field ' . $fieldKey . ' '
                             . print_r($fieldDef, true));
                         break;
