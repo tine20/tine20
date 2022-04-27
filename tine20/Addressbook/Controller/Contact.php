@@ -1404,6 +1404,148 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * get contacts be email arrays
+     *
+     * the result are mixed with contact and list
+     *
+     * @param array $emails
+     * @param array $names
+     * @param array $types
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function getContactsByEmailArrays(array $emails, array $names, array $types = []): array
+    {
+        $result = [];
+        $contactFilters = [];
+        $listFilters = [['field' => 'type', 'operator' => 'equals', 'value' => 'group']];
+        $emails = array_filter($emails);
+        $names = array_filter($names);
+        $types = array_filter($types);
+        
+        if (count($emails) > 0) {
+            $contactFilters[] = [
+                'condition' => 'OR',
+                'filters' => [
+                    ['field' => 'email', 'operator' => 'in', 'value' => $emails],
+                    ['field' => 'email_home', 'operator' => 'in', 'value' => $emails]
+                ]
+            ];
+            $listFilters[] = ['field' => 'email', 'operator' => 'in', 'value' => $emails];
+        }
+
+        if (count($names) > 0) {
+            $contactFilters[] = [
+                'condition' => 'OR',
+                'filters' => [
+                    ['field' => 'n_fileas', 'operator' => 'in', 'value' => $names],
+                    ['field' => 'n_fn', 'operator' => 'in', 'value' => $names]
+                ]
+            ];
+            $listFilters[] = ['field' => 'name', 'operator' => 'in', 'value' => $names];
+        }
+
+        if (count($types) > 0) {
+            $contactFilters[] = [
+                'condition' => 'AND',
+                'filters' => [
+                    ['field' => 'type', 'operator' => 'in', 'value' => $types],
+                ]
+            ];
+        }
+        
+        if (count($contactFilters) > 0) {
+            $contactResult = Addressbook_Controller_Contact::getInstance()->search(
+                new Addressbook_Model_ContactFilter($contactFilters),
+                new Tinebase_Model_Pagination([
+                    'sort' => 'type', // prefer user over contact
+                    'dir' => 'DESC',
+                ]));
+            $result = array_merge($result, $contactResult->toArray());
+        }
+        
+        if (count($listFilters) > 1) {
+            $listResult = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter($listFilters));
+            $result = array_merge($result, $listResult->toArray());
+        }
+
+        return $result;
+    }
+
+    /**
+     * get contacts recipient token
+     * 
+     * - get recipient token recursively
+     * - mailTypes is also the token fetching priority
+     * 
+     * @param array $contacts
+     * @return array
+     */
+    public function getContactsRecipientToken(array $contacts): array
+    {
+        $contacts = isset($contacts['id']) ? [$contacts] : $contacts;
+        $mailTypes =  ['email', 'email_home'];
+        $possibleAddresses = [];
+        
+        foreach ($contacts as $contact) {
+            if ($contact['type'] === 'group') {
+                $listMemberEmails = [];
+
+                foreach ($contact['members'] as $member) {
+                    $memberContact = Addressbook_Controller_Contact::getInstance()->get($member);
+                    $memberPossibleAddresses = $this->getContactsRecipientToken([$memberContact->toArray()]);
+                    
+                    // some members might have no email , here will fetch email_home instead
+                    if ($address = current($memberPossibleAddresses)) {
+                        $listMemberEmails[]  = $address;
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . " list member : " . $memberContact->n_fileas . " has no contact emails, skip.");
+                    }
+                }
+                
+                if (count($listMemberEmails) === 0) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . " list : " . $contact['name'] . " has no emails, skip.");
+                    continue;
+                }
+                
+                $useAsMailinglist = isset($contact['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST])
+                    && $contact['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] == 1;
+                
+                $possibleAddresses[] = [
+                    "n_fileas" => $contact["name"] ?? '',
+                    "name" => $contact["name"] ?? '',
+                    "type" =>  $useAsMailinglist ? 'mailingList' : $contact["type"],
+                    "email" => $contact['email'],
+                    "email_type" =>  '',
+                    "record_id" => $contact['id'],
+                    "emails" => $listMemberEmails
+                ];
+            } else {
+                foreach ($mailTypes as $emailType) {
+                    if (empty($contact[$emailType])) {
+                        continue;
+                    }
+
+                    $possibleAddresses[] = [
+                        "n_fileas" => $contact["n_fileas"] ?? '',
+                        "name" => $contact["n_fn"] ?? '',
+                        "type" =>  $contact["type"] ?? '',
+                        "email" => $contact[$emailType],
+                        "email_type" =>  $emailType,
+                        "record_id" => $contact['id']
+                    ];
+                }
+            }
+        }
+        
+        return  $possibleAddresses;
+    }
+
+    /**
      * Unset Personal data of a contact
      * 
      * @param Addressbook_Model_Contact $contact

@@ -2652,6 +2652,27 @@ Steuernummer 33/111/32212";
     }
 
     /**
+     * test Search Contacts By Recipient data
+     *
+     */
+    public function testSearchContactsByRecipientsToken()
+    {
+        Addressbook_Controller_List::destroyInstance();
+        $recipientData = [
+            [
+                "n_fileas" => '',
+                "name" => Tinebase_Core::getUser()->accountFullName,
+                "type" =>  '',
+                "email" => Tinebase_Core::getUser()->accountEmailAddress,
+                "email_type" =>  '',
+            ]
+        ];
+        $result = $this->_uit->searchContactsByRecipientsToken($recipientData);
+
+        static::assertEquals(1, $result['totalcount']);
+    }
+
+    /**
      * test with maillinglist
      */
     public function testSearchEmailAddresssWithMailinglist()
@@ -2666,7 +2687,7 @@ Steuernummer 33/111/32212";
             ]], []);
 
         static::assertEquals(1, $result['totalcount'], 'no results found');
-        static::assertEquals($list['email'], $result['results'][0]['emails'][0]);
+        static::assertEquals($list['email'], $result['results'][0]['email']);
 
         // Felamimail searchAccounts should not return mailinglist
         $ffj = new Felamimail_Frontend_Json();

@@ -1120,6 +1120,12 @@ td.x-date-mp-sel a,
   }
   & .x-combo-list-inner {
     border-color: black;
+
+    & .search-item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
   }
 }
 
@@ -1192,4 +1198,29 @@ td.x-date-mp-sel a,
 .x-accordion-hd .x-tool-toggle-over {
   background-position: 0 1px !important;
   background-size: 16px !important;
+}
+
+/* contact*/
+
+.tinebase-contact-link {
+  cursor: pointer;
+  color: black;
+  padding-left: 5px;
+  padding-right: 15px;
+}
+
+span:hover.tinebase-contact-link {
+  color: #4444ff;
+  background-image: url(../../images/icon-set/icon_arrow_down.svg) !important;
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: 10px 10px;
+}
+
+.tinebase-contact-link-wait {
+  margin-top: 2px;
+  margin-left: 2px;
+  height: 10px;
+  float: right;
+  width: 10px;
 }

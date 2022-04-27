@@ -223,11 +223,12 @@ Tine.Addressbook.contactBackend = new Tine.Tinebase.data.RecordProxy({
  * email address model
  */
 Tine.Addressbook.Model.EmailAddress = Tine.Tinebase.data.Record.create([
-   {name: 'n_fileas'},
-   {name: 'emails'},
-   {name: 'email'},
-   {name: 'email_home'}, 
-    {name: 'type'}
+    {name: 'n_fileas'},
+    {name: 'name'},
+    {name: 'email_type'},
+    {name: 'email'}, 
+    {name: 'type'},
+    {name: 'record_id'}
 ], {
     appName: 'Addressbook',
     modelName: 'EmailAddress',
@@ -242,12 +243,12 @@ Tine.Addressbook.Model.EmailAddress = Tine.Tinebase.data.Record.create([
     copyOmitFields: ['group_id'],
 
     getPreferredEmail: function(preferred) {
-        var emails = this.get("emails");
+        preferred = preferred || 'email';
+        const other = preferred === 'email' ? 'email_home' : 'email';
+    
         if (! this.get("email") && ! this.get("email_home")) {
             return this.get("emails");
         } else {
-            var preferred = preferred || 'email',
-            other = preferred == 'email' ? 'email_home' : 'email';
             return (this.get(preferred) || this.get(other));
         }
     }

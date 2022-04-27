@@ -465,7 +465,7 @@ Tine.Tinebase.common = {
         }
         var _ = window.lodash,
             type, iconCls, displayName, email;
-        
+
         if (accountObject.accountDisplayName) {
             type = _.get(record, 'data.account_type', 'user');
             displayName = accountObject.accountDisplayName;
@@ -812,8 +812,62 @@ Tine.Tinebase.common = {
      * @param {String} text
      * @param {Ext.Element|Function} cb
      */
-    findEmail: function(text, cb, scope) {
-        return text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
+    findEmailData: function(text, cb, scope) {
+        const matches = text.match(/(:(?<email>[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+))(:(?<name>.*))?/mi);
+        return matches?.groups ?? null;
+    },
+    
+    /**
+     * find contacts by email string
+     * 
+     * return recipients token
+     *
+     * @param address
+     */
+    findContactsByEmailString: async function (address) {
+        const result = [];
+        
+        if (!address || address === '') {
+            return result;
+        }
+        
+        import(/* webpackChunkName: "Tinebase/js/email-addresses" */ 'email-addresses').then((addrs) => {
+            const parsed = addrs.parseAddressList(address.replace(';', ','));
+        });
+        const matches = address.match(/(?<email>([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+))/g);
+        debugger
+        let emails = _.split(address, '>,');
+        
+        const emailArray = _.map(emails, (address) => {
+            const parsed = addressparser.parse(address.replace(/,/g, '\\\\,'));
+            let contact = {
+                'email': parsed && parsed[0]?.address ? parsed[0]?.address : '',
+                'email_type': '',
+                'type': '',
+                'n_fileas': '',
+                'name': parsed && parsed[0]?.name ? parsed[0]?.name : '',
+                'record_id': ''
+            };
+            
+            if (contact['email'] !== '') {
+                return contact;
+            }
+        });
+        
+        const {results: contacts} = await Tine.Addressbook.searchContactsByRecipientsToken(emailArray);
+        
+        _.each(emailArray, (address) => {
+            const existingAddress = _.find(contacts, function (contact) {
+                return address.email === contact['email'];
+            });
+            
+            address = existingAddress ?? address;
+            if (address) {
+                result.push(address);
+            }
+        });
+        
+        return result;
     },
 
     /**

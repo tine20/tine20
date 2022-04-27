@@ -280,6 +280,13 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     protected function _getAdditionalHeaders($message)
     {
         $additionalHeaders = ($message && ! empty($message->bcc)) ? array('Bcc' => $message->bcc) : array();
+        
+        if (isset($additionalHeaders['Bcc'])) {
+            foreach($additionalHeaders['Bcc'] as &$recipient) {
+                $recipient = $recipient['email'] ?? $recipient;
+            }
+        }
+
         return $additionalHeaders;
     }
     
@@ -557,9 +564,10 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         foreach (array('to', 'cc', 'bcc') as $type) {
             if (isset($_message->{$type})) {
                 foreach((array) $_message->{$type} as $address) {
-
-                    $punyCodedAddress = Tinebase_Helper::convertDomainToPunycode($address);
-
+                    $email = $address['email'] ?? $address;
+                    $name = $address['n_fileas'] ?? '';
+                    $punyCodedAddress = Tinebase_Helper::convertDomainToPunycode($email);
+                    
                     if (! preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $punyCodedAddress)) {
                         $invalidEmailAddresses[] = $address;
                         continue;
@@ -570,11 +578,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                     
                     switch($type) {
                         case 'to':
-                            $_mail->addTo($punyCodedAddress);
+                            $_mail->addTo($punyCodedAddress, $name);
                             $nonPrivateRecipients[] = $punyCodedAddress;
                             break;
                         case 'cc':
-                            $_mail->addCc($punyCodedAddress);
+                            $_mail->addCc($punyCodedAddress, $name);
                             $nonPrivateRecipients[] = $punyCodedAddress;
                             break;
                         case 'bcc':

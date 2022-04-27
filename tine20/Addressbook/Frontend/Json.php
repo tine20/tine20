@@ -123,28 +123,20 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchEmailAddresss($filter, $paging)
     {
-        $results = array();
+        $results = [];
         $contactPaging = $this->_preparePaginationParameter($paging);
         // type user should have higher priority than type contact
         $contactPaging->sort = ['type', 'n_fn']; // Field are not named the same for contacts and lists
         $contactPaging->dir = ['DESC', 'ASC']; 
         
         $contacts = $this->_search($filter, $contactPaging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
-
-        $emailFields = ['n_fileas', 'email', 'email_home', 'type'];
-        foreach ($contacts["results"] as $contact) {
-            $emailData = [];
-            foreach ($emailFields as $field) {
-                if (isset($contact[$field])) {
-                    $emailData[$field] = $contact[$field];
-                }
-            }
-            array_push($results, $emailData);
-        }
-
+        
+        $possibleAddresses =  Addressbook_Controller_Contact::getInstance()->getContactsRecipientToken($contacts["results"]);
+        $results = array_merge($results, $possibleAddresses);
+        
         $dont_add = false;
         if (isset($paging["start"])) {
-            $paging["start"] = $paging["start"] - $contacts["totalcount"] + count($results);
+            //todo: improve paging handling?
             $paging["limit"] = $paging["limit"] - count($results);
             if (($paging["limit"] <= 0) || ($paging["start"] < 0)) {
                 $dont_add = true;
@@ -170,23 +162,9 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $lists = $this->_search($filter, $paging, Addressbook_Controller_List::getInstance(),
                 'Addressbook_Model_ListFilter');
             if (!$dont_add) {
-                foreach ($lists["results"] as $list) {
-                    if (isset($list['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST])
-                        && $list['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] == 1
-                    ) {
-                        array_push($results, array(
-                            "n_fileas" => $list["name"], 
-                            "emails" => [$list['email']], 
-                            "type" => Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST,
-                        ));
-                    } else if (! empty($list["emails"])) {
-                        array_push($results, array(
-                            "n_fileas" => $list["name"], 
-                            "emails" => $list["emails"],  
-                            "type" => $list["type"]
-                        ));
-                    }
-                }
+                // list should always return its emails,
+                $possibleAddresses =  Addressbook_Controller_Contact::getInstance()->getContactsRecipientToken($lists["results"]);
+                $results = array_merge($results, $possibleAddresses);
             }
         } finally {
             if (false === $oldFeatureValue) {
@@ -197,6 +175,42 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         return array("results" => $results, "totalcount" => $lists["totalcount"]+$contacts["totalcount"]);
+    }
+
+    /**
+     * Search list and contact by recipient token data
+     *
+     * @param array $addressData
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function searchContactsByRecipientsToken(array $addressData): array
+    {
+        $results = [];
+ 
+        if (count($addressData) > 0) {
+            $emails = array_map(function($address) {return $address['email'];}, $addressData);
+            $names = array_map(function($address) {return $address['name'];}, $addressData);
+            // need to filter modified type from client
+            $types = array_map(function ($address) {
+                if ($address['type'] === '' || strpos($address['type'], 'Member') !== false) {
+                    return null;
+                }
+
+                if ($address['type'] === 'mailingList') {
+                    $address['type'] = 'group';
+                }
+
+                return $address['type'];
+            }, $addressData);
+
+            $contacts = Addressbook_Controller_Contact::getInstance()->getContactsByEmailArrays($emails, $names, $types);
+            
+            $possibleAddresses = Addressbook_Controller_Contact::getInstance()->getContactsRecipientToken($contacts);
+            $results = array_merge($results, $possibleAddresses);
+        }
+        
+        return array("results" => $results, "totalcount" => count($results));
     }
 
     /**

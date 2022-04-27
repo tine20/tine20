@@ -221,7 +221,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         lastname = nameSplit[1];
                     }
 
-                    id += Ext.util.Format.htmlEncode(':' + Ext.util.Format.trim(firstname) + ':' + Ext.util.Format.trim(lastname));
+                    id += Ext.util.Format.htmlEncode(':' + Ext.util.Format.trim(name));
                     result = '<a id="' + id + '" class="tinebase-email-link">' + result + '</a>'
                     
                     return result;
