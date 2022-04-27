@@ -133,6 +133,16 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                     ]
                 ],
             ],
+            'email_query'           => [
+                'filter'            => Tinebase_Model_Filter_Query::class,
+                'title'             => 'Email', // _('Email')
+                'options'           => [
+                    'fields'            => [
+                        'email',
+                    ]
+                ],
+            ],
+
         ),
 
         'fields'            => array(

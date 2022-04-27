@@ -91,6 +91,7 @@ class SSO_Model_RelyingParty extends Tinebase_Record_Abstract
             ],
             self::FLD_CONFIG_CLASS      => [
                 self::TYPE                  => self::TYPE_MODEL,
+                self::FILTER_DEFINITION     => [self::FILTER => Tinebase_Model_Filter_Text::class],
                 self::CONFIG                    => [
                     self::AVAILABLE_MODELS              => [
                         SSO_Model_OAuthOIdRPConfig::class,

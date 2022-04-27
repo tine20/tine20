@@ -17,3 +17,5 @@ Zend_Session::setOptions(array(
     'use_cookies'      => 0,
     'use_only_cookies' => 0
 ));
+
+Tinebase_Model_Filter_FilterGroup::$beStrict = true;

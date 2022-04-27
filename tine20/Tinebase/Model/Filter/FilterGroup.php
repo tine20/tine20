@@ -184,6 +184,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     protected $_parent = null;
 
     protected $_isInSetFromUser = false;
+
+    public static $beStrict = false;
     
     /******************************** functions ********************************/
     
@@ -360,6 +362,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     protected function _createForeignRecordFilterFromArray($_filterData)
     {
         if (! isset($_filterData['value']['filters'])) {
+            if (self::$beStrict) {
+                throw new Tinebase_Exception_Record_DefinitionFailure('filter syntax problem ' . print_r($_filterData, true));
+            }
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
                 __METHOD__ . '::' . __LINE__
                 . ' Skipping filter (foreign record filter syntax problem) -> '
@@ -404,6 +409,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
 //                }
                 break;
             default:
+                if (self::$beStrict) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure('filter syntax problem ' . print_r($_filterData, true));
+                }
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                     __METHOD__ . '::' . __LINE__
                     . ' Skipping filter (foreign record filter syntax problem) -> '
@@ -463,6 +471,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             if (isset($_filterData['field']) && strpos($_filterData['field'], '#') === 0) {
                 $this->_addCustomFieldFilter($_filterData);
             } else {
+                if (self::$beStrict) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure('no model found for ' . print_r($_filterData, true));
+                }
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . '[' . static::class . '] Skipping filter (no filter model defined) ' . print_r($_filterData, true));
             }

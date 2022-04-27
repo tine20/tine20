@@ -634,9 +634,11 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
 
         // get backend record
         $backend = new Tinebase_PersistentFilter_Backend_Sql();
-        $filterData = $backend->getRawDataByProperty($result['id'], 'id');
+        $backend->getRawDataByProperty($result['id'], 'id');
 
-        $searchResult = $this->_uit->searchPersistentFilter($filterData, NULL);
+        $searchResult = $this->_uit->searchPersistentFilter([
+            ['field' => 'name', 'operator' => 'equals', 'value' => 'test']
+        ], NULL);
         $this->assertEquals(1, $searchResult['totalcount']);
 
     }
