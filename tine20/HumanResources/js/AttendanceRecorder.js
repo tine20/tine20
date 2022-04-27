@@ -63,6 +63,8 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
     iconCls: 'attendance-clock',
     stateful: true,
     stateId: 'attendance-clock',
+    cls: 'attendance-clock-menu-button',
+
 
     // properties
     ptAllowPause: true,
@@ -308,6 +310,9 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
 
         this.menu.timeAccountPickerGrid.store.resumeEvents();
         this.menu.timeAccountPickerGrid.view.refresh();
+
+        this.el.removeClass(_.get(this.el.dom.className.match(/(attendance-clock-menu-button-[_a-z]+)/), [0]));
+        this.el.addClass(`attendance-clock-menu-button-${this.wtType}`);
     },
 
     async onWTClock(fn, options, btn) {

@@ -95,8 +95,46 @@
     margin: -2px 2px -2px 0;
 }
 
+.attendance-clock-menu-button.x-btn {
+    filter: none;
+}
+
+.attendance-clock-menu-button .x-btn-arrow {
+    background-image: none !important;
+    width: 30px;
+    padding-right: 0px !important;
+}
+
+.attendance-clock-menu-button .x-btn-arrow button {
+    float: right;
+    mask-image:url('../../images/icon-set/icon_arrow_down.svg') !important;
+    mask-size: 10px;
+    mask-repeat: no-repeat;
+    mask-position: 5px center;
+    -webkit-mask-image:url('../../images/icon-set/icon_arrow_down.svg') !important;
+    -webkit-mask-size: 10px;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: 5px center;
+    background-color: white;
+}
 .attendance-clock {
-    background-image:url(../../images/icon-set/icon_attendanceclock.svg) !important;
+    mask-image:url(../../images/icon-set/icon_attendanceclock.svg) !important;
+    mask-size: 17px 17px;
+    -webkit-mask-image:url(../../images/icon-set/icon_attendanceclock.svg) !important;
+    -webkit-mask-size: 17px 17px;
+    background-color: white;
+}
+
+.attendance-clock-menu-button-clock_in .attendance-clock{
+    background-color: #9af56e;
+}
+
+.attendance-clock-menu-button-clock_paused .attendance-clock{
+    background-color: #edd107;
+}
+
+.attendance-clock-menu-button-clock_out .attendance-clock{
+    background-color: #f7a18f;
 }
 
 .clock-in {
