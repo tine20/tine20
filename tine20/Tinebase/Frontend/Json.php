@@ -958,10 +958,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $userApplications = Tinebase_Core::getUser()->getApplications(/* $_anyRight */ TRUE);
             $clientConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 /** @noinspection PhpUndefinedFieldInspection */
-                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-               . ' User applications to fetch registry for: ' . print_r($userApplications->name, TRUE));
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+               . ' User applications to fetch registry for: [' . implode(',', $userApplications->name) . ']');
 
             /** @noinspection PhpUndefinedFieldInspection */
             if (! in_array('Tinebase', $userApplications->name)) {
