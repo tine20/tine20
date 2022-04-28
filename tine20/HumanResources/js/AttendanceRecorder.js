@@ -171,10 +171,24 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
                     hideHeaders: true,
                     enableBbar: false,
                     editDialogClass: false,
+                    contextMenuItems: ['-', new Ext.Action({
+                        text: this.app.i18n._('Create Timesheet'),
+                        iconCls: 'TimetrackerTimesheet',
+                        handler: () => {
+                            const timeAccount = this.menu.timeAccountPickerGrid.selModel.getSelected();
+                            const timeSheet = Object.assign(Tine.Timetracker.Model.Timesheet.getDefaultData(), {
+                                timeaccount_id: timeAccount,
+                                id: 0
+                            });
+                            Tine.Timetracker.TimesheetEditDialog.openWindow({
+                                record: timeSheet
+                            });
+                        }
+                    })],
                     getColumnModel: function() {
                         const colModel = Tine.widgets.grid.PickerGridPanel.prototype.getColumnModel.call(this);
                         colModel.columns.unshift({
-                            width: 65,
+                            width: 40,
                             id: 'buttons',
                             renderer: (value, metaData, record) => {
                                 const type = _.get(record, 'data.xprops.HumanResources_Model_AttendanceRecord.type', TYPE_CLOCK_OUT);
@@ -186,7 +200,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
                                         </div>`;
                             }
                         }, {
-                            width: 55,
+                            width: 35,
                             // reziseable: false,
                             renderer: (value, metaData, record) => {
                                 const type = _.get(record, 'data.xprops.HumanResources_Model_AttendanceRecord.type', TYPE_CLOCK_OUT);
@@ -393,13 +407,16 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
             const timeAccount = this.menu.timeAccountPickerGrid.store.getAt(row);
             const timesheet = _.get(timeAccount, `data.xprops.HumanResources_Model_AttendanceRecord.top.xprops.metaData.Timetracker_Model_Timesheet`);
             const action = el.dataset.action;
+            const multiStart = e.ctrlKey || e.shiftKey;
+
             if (String(action).match(/^clock.*/)) {
                 _.defer(() => {
                     Ext.fly(el).addClass('x-item-disabled')
                 });
 
                 let result;
-                if (action === 'clockOut') {
+                const openTimesheet = (timeAccount) => {
+                    const timesheet = _.get(timeAccount, `data.xprops.HumanResources_Model_AttendanceRecord.top.xprops.metaData.Timetracker_Model_Timesheet`);
                     Tine.Timetracker.TimesheetEditDialog.openWindow({
                         record: timesheet,
                         contentPanelConstructorInterceptor: async (config) => {
@@ -407,12 +424,20 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
                         }
                     });
                 }
+                if (action === 'clockOut') {
+                    openTimesheet(timeAccount);
+                }
+                const clockedId = _.filter(this.menu.timeAccountPickerGrid.store.data.items, (timeAccount) => { return _.get(timeAccount, 'data.xprops.HumanResources_Model_AttendanceRecord.type') === TYPE_CLOCK_IN});
+                if (action === 'clockIn' && clockedId.length && !multiStart) {
+                    clockedId.forEach(openTimesheet);
+                }
+
                 result = await this.onWTClock(action, {
                     [FLD_DEVICE_ID]: SYSTEM_PROJECT_TIME_ID,
                     [FLD_REFID]: _.get(timeAccount, `data.xprops.HumanResources_Model_AttendanceRecord.top.${FLD_REFID}`),
                     xprops: {
                         [META_DATA]: {
-                            [CLOCK_OUT_OTHERS]: !(e.ctrlKey || e.shiftKey),
+                            [CLOCK_OUT_OTHERS]: !multiStart,
                             'Timetracker_Model_Timeaccount': timeAccount.id
                         }
                     }
