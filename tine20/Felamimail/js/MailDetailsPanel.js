@@ -477,9 +477,20 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         }
                     ]
                 });
+                
+                const actionUpdater = new Tine.widgets.ActionUpdater({
+                    recordClass: Tine.Felamimail.Model.Attachment,
+                    evalGrants: false,
+                    actions: menu
+                });
+                actionUpdater.updateActions(attachments.map((attachmentData) => {
+                    return Tine.Tinebase.data.Record.setFromJson(Object.assign(attachmentData, {
+                        id: `${messageId}:${attachmentData.partId}`,
+                        messageId
+                    }), Tine.Felamimail.Model.Attachment);
+                }), messageId);
+
                 menu.showAt(e.getXY());
-
-
                 break;
             case 'span[class=tinebase-showheaders-link]':
                 // show headers
