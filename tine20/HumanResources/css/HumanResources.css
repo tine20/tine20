@@ -95,8 +95,36 @@
     margin: -2px 2px -2px 0;
 }
 
+.attendance-clock-menu-button.x-btn {
+    filter: none;
+}
+
+.attendance-clock-menu-button div.x-btn-arrow {
+    background-color: white !important;
+}
+
+.attendance-clock-menu-button button {
+    color: white !important;
+}
+
 .attendance-clock {
-    background-image:url(../../images/icon-set/icon_attendanceclock.svg) !important;
+    mask-image:url(../../images/icon-set/icon_attendanceclock.svg) !important;
+    mask-size: 17px 17px;
+    -webkit-mask-image:url(../../images/icon-set/icon_attendanceclock.svg) !important;
+    -webkit-mask-size: 17px 17px;
+    background-color: white;
+}
+
+.attendance-clock-menu-button-clock_in .attendance-clock{
+    background-color: #9af56e;
+}
+
+.attendance-clock-menu-button-clock_paused .attendance-clock{
+    background-color: #edd107;
+}
+
+.attendance-clock-menu-button-clock_out .attendance-clock{
+    background-color: #f7a18f;
 }
 
 .clock-in {

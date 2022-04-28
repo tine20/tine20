@@ -147,6 +147,26 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
     width: 32px;
     height: 32px;
 }
+
+.x-btn-mc em.x-btn-arrow, .x-toolbar .x-btn-mc em.x-btn-split {
+    background-image: none !important;
+    .x-btn-arrow {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        width: 15px;
+        height: 100%;
+        mask-image:url('../../images/icon-set/icon_arrow_down.svg') !important;
+        mask-size: 10px;
+        mask-repeat: no-repeat;
+        mask-position: 2px center;
+        -webkit-mask-image:url('../../images/icon-set/icon_arrow_down.svg') !important;
+        -webkit-mask-size: 10px;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-position: 2px center;
+        background-color: black;
+    }
+}
 /* END svg fixes */
 
 .action_rename {
@@ -606,26 +626,32 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
 }
 */
 
-.tine-mainscreen-mainmenu .x-toolbar {
-    background-color: #EBF3FD;
-    border: none;
-    background-image: url(../../images/apptabs-bg.png);
-}
+.tine-mainscreen-mainmenu {
+    .x-toolbar {
+        background-color: #EBF3FD;
+        border: none;
+        background-image: url(../../images/apptabs-bg.png);
+    }
 
-.tine-mainscreen-mainmenu .x-toolbar .x-btn td {
-    background: none;
-    border: none;
-}
+    .x-toolbar .x-btn td {
+        background: none;
+        border: none;
+    }
 
-.tine-mainscreen-mainmenu .x-toolbar-ct {
-    margin-top: -2px;
-}
+    .x-toolbar-ct {
+        margin-top: -2px;
+    }
 
-.tine-mainscreen-mainmenu .x-btn-over td.x-btn-mc,
-.tine-mainscreen-mainmenu .x-btn-over td.x-btn-mc button{
-    text-decoration: underline;
-}
+    .x-btn-over td.x-btn-mc,
+    .x-btn-over td.x-btn-mc button {
+        text-decoration: underline;
+    }
 
+    .x-btn tr:first-child,
+    .x-btn tr:last-child {
+        display: none;
+    }
+}
 .x-btn-group-bwrap .x-toolbar-cell{
     vertical-align: top;
 }
@@ -635,7 +661,6 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
     background-size: 16px 16px;
 }
 
-.x-btn-image.tine-favicon,
 span .x-tab-strip-text.tine-favicon {
     background-position-y: 2px !important;
     background-size: 15px 15px !important;

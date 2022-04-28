@@ -33,7 +33,7 @@ describe('usersettings', () => {
     let newPage;
     let settings;
     test('open usersettings', async () => {
-        await page.click('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon');
+        await page.click('.x-btn-image.tine-grid-row-action-icon.renderer_accountUserIcon');
         await page.waitForTimeout(2000);
         settings = await page.$$('.x-menu.x-menu-floating.x-layer .x-menu-item-icon.action_adminMode');
         await settings[1].hover();
