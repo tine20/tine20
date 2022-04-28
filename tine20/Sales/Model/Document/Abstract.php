@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -56,6 +56,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     public const FLD_COST_CENTER_ID = 'cost_center_id';
     public const FLD_COST_BEARER_ID = 'cost_bearer_id'; // ist auch ein cost center
     public const FLD_DESCRIPTION = 'description';
+
+    public const FLD_REVERSAL_STATUS = 'reversal_status';
 
     // ORDER:
     //  - INVOICE_RECIPIENT_ID // abweichende Rechnungsadresse, RECIPIENT_ID wenn leer
@@ -350,11 +352,16 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 ],
                 self::NULLABLE                      => true,
             ],
-            self::FLD_DESCRIPTION                      => [
+            self::FLD_DESCRIPTION               => [
                 self::LABEL                         => 'Internal Note', //_('Internal Note')
                 self::TYPE                          => self::TYPE_TEXT,
                 self::NULLABLE                      => true,
                 self::QUERY_FILTER                  => true,
+            ],
+            self::FLD_REVERSAL_STATUS           => [
+                self::LABEL                         => 'Reversal Status', // _('Reversal Status')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Sales_Config::DOCUMENT_REVERSAL_STATUS,
             ],
         ]
     ];
@@ -396,6 +403,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         $this->{self::FLD_PRECURSOR_DOCUMENTS} = new Tinebase_Record_RecordSet(Tinebase_Model_DynamicRecordWrapper::class, []);
         $this->{self::FLD_POSITIONS} = new Tinebase_Record_RecordSet($positionClass, []);
+        $isReversal = false;
 
         /** @var Sales_Model_Document_TransitionSource $record */
         foreach ($transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS} as $record) {
@@ -404,6 +412,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             }
 
             $addedPositions = 0;
+            $isReversal = $isReversal || (bool)$record->{Sales_Model_Document_TransitionSource::FLD_IS_REVERSAL};
 
             // if the positions for this document are not specified, we take all of them
             if (empty($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}) ||
@@ -435,6 +444,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     $position->transitionFrom($sourcePosition);
                     $this->{self::FLD_POSITIONS}->addRecord($position);
                     ++$addedPositions;
+                    $isReversal = $isReversal || (bool)$sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL};
                 }
             }
 
@@ -455,12 +465,32 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         // for the time being we keep this simple, this is a TODO FIXME!!!
         $sourceDocument = $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->getFirstRecord()
             ->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT};
-        $this->{self::FLD_INVOICE_DISCOUNT_SUM} = $sourceDocument->{self::FLD_INVOICE_DISCOUNT_SUM};
-        $this->{self::FLD_INVOICE_DISCOUNT_PERCENTAGE} = $sourceDocument->{self::FLD_INVOICE_DISCOUNT_PERCENTAGE};
-        $this->{self::FLD_INVOICE_DISCOUNT_TYPE} = $sourceDocument->{self::FLD_INVOICE_DISCOUNT_TYPE};
-        $this->{self::FLD_CUSTOMER_ID} = $sourceDocument->{self::FLD_CUSTOMER_ID};
-        $this->{self::FLD_RECIPIENT_ID} = $sourceDocument->{self::FLD_RECIPIENT_ID};
+        $properties = [
+            self::FLD_DOCUMENT_LANGUAGE,
+            self::FLD_DOCUMENT_CATEGORY,
+            self::FLD_CUSTOMER_ID,
+            self::FLD_CONTACT_ID,
+            self::FLD_RECIPIENT_ID,
+            self::FLD_DOCUMENT_TITLE,
+            self::FLD_CUSTOMER_REFERENCE,
+            self::FLD_INVOICE_DISCOUNT_PERCENTAGE,
+            self::FLD_INVOICE_DISCOUNT_SUM,
+            self::FLD_INVOICE_DISCOUNT_TYPE,
+            self::FLD_COST_BEARER_ID,
+            self::FLD_COST_CENTER_ID,
+            self::FLD_DESCRIPTION,
+        ];
+        foreach ($properties as $property) {
+            if ($this->has($property) && $sourceDocument->has($property)) {
+                $this->{$property} = $sourceDocument->{$property};
+            }
+        }
 
+        if ($isReversal) {
+            $translation = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
+                new Zend_Locale($this->{self::FLD_DOCUMENT_LANGUAGE}));
+            $this->{self::FLD_DOCUMENT_TITLE} = $translation->_('Reversal') . ': ' . $this->{self::FLD_DOCUMENT_TITLE};
+        }
 
         $this->{static::$_statusField} = Sales_Config::getInstance()->{static::$_statusConfigKey}->default;
         $this->{self::FLD_DOCUMENT_DATE} = Tinebase_DateTime::now();

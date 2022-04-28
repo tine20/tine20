@@ -114,7 +114,15 @@ class Sales_Config extends Tinebase_Config_Abstract
     const LANGUAGES_AVAILABLE = 'languagesAvailable';
 
     const VARIABLE_POSITION_FLAG = 'subProductPositionFlag';
-    
+
+    /**
+     * reversal status
+     */
+    public const DOCUMENT_REVERSAL_STATUS = 'reversalStatus';
+    public const DOCUMENT_REVERSAL_STATUS_NOT_REVERSED = 'notReversed';
+    public const DOCUMENT_REVERSAL_STATUS_PARTIALLY_REVERSED = 'partiallyReversed';
+    public const DOCUMENT_REVERSAL_STATUS_REVERSED = 'reversed';
+
     /**
      * offer status
      * 
@@ -212,6 +220,40 @@ class Sales_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => 12
         ),
+        self::DOCUMENT_REVERSAL_STATUS => [
+            //_('Reversal Status')
+            self::LABEL              => 'Reversal Status',
+            //_('Possible Reversal Status')
+            self::DESCRIPTION        => 'Possible Reversal Status',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                self::RECORDS => [
+                    [
+                        'id' => self::DOCUMENT_REVERSAL_STATUS_NOT_REVERSED,
+                        //_('Not reversed')
+                        'value' => 'Not reversed',
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => self::DOCUMENT_REVERSAL_STATUS_PARTIALLY_REVERSED,
+                        //_('Partially reversed')
+                        'value' => 'Partially reversed',
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => self::DOCUMENT_REVERSAL_STATUS_REVERSED,
+                        //_('Reversed')
+                        'value' => 'Reversed',
+                        'icon' => null,
+                        'system' => true,
+                    ],
+                ],
+                self::DEFAULT_STR => self::DOCUMENT_REVERSAL_STATUS_NOT_REVERSED,
+            ],
+        ],
         self::DOCUMENT_OFFER_STATUS => [
             //_('Offer Status')
             self::LABEL              => 'Offer Status',
