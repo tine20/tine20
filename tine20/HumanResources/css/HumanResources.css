@@ -99,24 +99,14 @@
     filter: none;
 }
 
-.attendance-clock-menu-button .x-btn-arrow {
-    background-image: none !important;
-    width: 30px;
-    padding-right: 0px !important;
+.attendance-clock-menu-button div.x-btn-arrow {
+    background-color: white !important;
 }
 
-.attendance-clock-menu-button .x-btn-arrow button {
-    float: right;
-    mask-image:url('../../images/icon-set/icon_arrow_down.svg') !important;
-    mask-size: 10px;
-    mask-repeat: no-repeat;
-    mask-position: 5px center;
-    -webkit-mask-image:url('../../images/icon-set/icon_arrow_down.svg') !important;
-    -webkit-mask-size: 10px;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: 5px center;
-    background-color: white;
+.attendance-clock-menu-button button {
+    color: white !important;
 }
+
 .attendance-clock {
     mask-image:url(../../images/icon-set/icon_attendanceclock.svg) !important;
     mask-size: 17px 17px;
