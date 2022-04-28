@@ -237,7 +237,9 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             $user->accountEmailAddress = $_record->email;
             Admin_Controller_User::getInstance()->update($user);
         }
-        $this->updateAccountEmailUsers($_record);
+        if($_record->type !== Felamimail_Model_Account::TYPE_USER) {
+            $this->updateAccountEmailUsers($_record);
+        }
     }
 
     /**
