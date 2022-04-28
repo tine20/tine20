@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  MFA
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -53,6 +53,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
 
     const FLD_COST_CENTER_ID = 'payment_cost_center_id'; // aus document od. item übernehmen, config bestimmt wer vorfahrt hat und ob user überschreiben kann
     const FLD_COST_BEARER_ID = 'payment_cost_bearer_id'; // aus document od. item übernehmen, config bestimmt wer vorfahrt hat, und ob user überschreiben kann
+    const FLD_REVERSAL = 'reversal';
 
     //const FLD_XPROPS = 'xprops'; // z.B. entfaltungsart von Bundle od. Set merken
 
@@ -374,6 +375,10 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::NULLABLE                      => true,
                 self::SHY                           => true,
             ],
+            self::FLD_REVERSAL                  => [
+                self::TYPE                          => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL                   => false,
+            ],
         ]
     ];
 
@@ -448,6 +453,8 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             }
         }
 
+        $this->{self::FLD_REVERSAL} =
+            (bool)$transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL};
         $this->{self::FLD_PRECURSOR_POSITION_MODEL} =
             $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION_MODEL};
         $this->{self::FLD_PRECURSOR_POSITION} =

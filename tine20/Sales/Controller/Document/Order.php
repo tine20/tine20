@@ -7,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -29,14 +29,14 @@ class Sales_Controller_Document_Order extends Sales_Controller_Document_Abstract
         Sales_Model_Document_Order::FLD_COST_CENTER_ID,
         Sales_Model_Document_Order::FLD_COST_BEARER_ID,
         Sales_Model_Document_Order::FLD_DESCRIPTION,
+        Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID,
+        Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID,
         'tags', 'attachments', 'relations',
     ];
 
     protected $_bookRecordRequiredFields = [
         Sales_Model_Document_Order::FLD_CUSTOMER_ID,
         Sales_Model_Document_Order::FLD_RECIPIENT_ID,
-        Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID,
-        Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID,
     ];
 
 
