@@ -627,7 +627,6 @@ class HumanResources_Controller_AttendanceRecorder
 
     public static function runBLPipes($accountId = null): void
     {
-        $transaction = Tinebase_RAII::getTransactionManagerRAII();
         $deviceCtrl = HumanResources_Controller_AttendanceRecorderDevice::getInstance();
         $recordCtrl = HumanResources_Controller_AttendanceRecord::getInstance();
 
@@ -637,6 +636,8 @@ class HumanResources_Controller_AttendanceRecorder
             if (0 === $device->{HumanResources_Model_AttendanceRecorderDevice::FLD_BLPIPE}->count()) {
                 continue;
             }
+
+            $transaction = Tinebase_RAII::getTransactionManagerRAII();
 
             /** @var Tinebase_Backend_Sql_Abstract $backend */
             $backend = $recordCtrl->getBackend();
@@ -653,6 +654,7 @@ class HumanResources_Controller_AttendanceRecorder
             unset($selectForUpdate);
 
             if (0 === $data->count()) {
+                $transaction->release();
                 continue;
             }
             $data = new HumanResources_BL_AttendanceRecorder_Data($data);
@@ -666,8 +668,8 @@ class HumanResources_Controller_AttendanceRecorder
                     $recordCtrl->update($record);
                 }
             }
-        }
 
-        $transaction->release();
+            $transaction->release();
+        }
     }
 }

@@ -56,10 +56,9 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
         /** @var HumanResources_BL_AttendanceRecorder_Data $_data */
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__);
 
-        $oldUser = Tinebase_Core::getUser();
-        $userRaii = new Tinebase_RAII(function() use ($oldUser) {
-            Tinebase_Core::setUser($oldUser);
-        });
+        $employeeRaii = new Tinebase_RAII(HumanResources_Controller_Employee::getInstance()->assertPublicUsage());
+        $timesheetRaii = new Tinebase_RAII(Timetracker_Controller_Timesheet::getInstance()->assertPublicUsage());
+        $timeaccountRaii = new Tinebase_RAII(Timetracker_Controller_Timeaccount::getInstance()->assertPublicUsage());
 
         foreach (array_unique($_data->data->{HumanResources_Model_AttendanceRecord::FLD_ACCOUNT_ID}) as $accountId) {
             if (Tinebase_Core::getUser()->getId() !== $accountId) {
@@ -89,7 +88,10 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                             $ts = Timetracker_Controller_Timesheet::getInstance()->get($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['id']);
                             $prevRecord = $record;
                             continue;
-                        } catch (Tinebase_Exception_NotFound $tenf) {}
+                        } catch (Tinebase_Exception_NotFound $tenf) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ts not found!');
+                        }
                     }
                     if (!$ts) {
                         if (HumanResources_Model_AttendanceRecord::TYPE_CLOCK_IN !== $record->{HumanResources_Model_AttendanceRecord::FLD_TYPE}) {
@@ -181,7 +183,9 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
             }
         }
 
-        unset($userRaii);
+        unset($employeeRaii);
+        unset($timesheetRaii);
+        unset($timeaccountRaii);
     }
 
     protected function updateTimeSheet(Timetracker_Model_Timesheet $ts, HumanResources_Model_AttendanceRecord $record, HumanResources_Model_AttendanceRecord $prevRecord): bool

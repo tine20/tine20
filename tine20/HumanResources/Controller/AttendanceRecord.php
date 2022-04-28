@@ -35,5 +35,6 @@ class HumanResources_Controller_AttendanceRecord extends Tinebase_Controller_Rec
         $this->_modelName = HumanResources_Model_AttendanceRecord::class;
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
+        $this->_duplicateCheck = false;
     }
 }
