@@ -50,7 +50,7 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 3,
+        self::VERSION => 4,
         self::MODLOG_ACTIVE => true,
         self::IS_DEPENDENT => true,
 
@@ -219,7 +219,7 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null]
             ],
             self::FLD_PLZ => [
-                self::TYPE => self::TYPE_INTEGER,
+                self::TYPE => self::TYPE_STRING,
                 self::LABEL => 'plz', // _('plz')
                 self::NULLABLE => true,
                 self::VALIDATORS => [
