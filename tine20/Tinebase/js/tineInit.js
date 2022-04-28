@@ -324,6 +324,16 @@ Tine.Tinebase.tineInit = {
                     // the content elements come from the initial html so they are displayed fastly
                     contentEl: Ext.select('div[class^=tine-viewport-]')
                 }]
+            },
+            async setWaitText(text) {
+                const msgEl = this.el.child('.tine-viewport-waittext') || this.el.child('.tine-viewport-waitcycle').wrap({cls: 'tine-viewport-waitbox'}).createChild({cls: 'tine-viewport-waittext'});
+                let msg = '';
+                return [...text].asyncForEach(async (chr) => {
+                    msg += chr;
+                    msgEl.update(msg);
+                    return new Promise((resolve) => setTimeout(resolve, 20));
+                });
+
             }
         });
     },

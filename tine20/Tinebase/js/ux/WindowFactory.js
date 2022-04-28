@@ -146,6 +146,18 @@ Ext.ux.WindowFactory.prototype = {
      getCenterPanel: async function (config, win) {
         config.contentPanelConstructorConfig = config.contentPanelConstructorConfig || {};
 
+        config.contentPanelConstructorConfig.setWaitText = async (text) => {
+            const w = config.contentPanelConstructorConfig.window;
+            const isPopupWindow = w.popup;
+            const win = isPopupWindow ? w.popup : window;
+            const mainCardPanel = isPopupWindow ? win.Tine.Tinebase.viewport.tineViewportMaincardpanel : await w.afterIsRendered();
+            isPopupWindow ? mainCardPanel.get(0).hide() : null;
+
+            const mask = new win.Ext.LoadMask(mainCardPanel.el, { msg: text });
+            await mask.show();
+            return mask;
+        }
+
         // place a reference to current window class in the itemConstructor.
         // this may be overwritten depending on concrete window implementation
         config.contentPanelConstructorConfig.window = win || config.window || config;
