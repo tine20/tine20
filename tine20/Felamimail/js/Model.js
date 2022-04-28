@@ -770,3 +770,22 @@ Tine.Felamimail.Model.Flag = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mode
     containerName: 'Flag list',
     containersName: 'Flag lists'    
 });
+
+Tine.Felamimail.Model.Attachment = Tine.Tinebase.data.Record.create([
+    { name: 'id' }, // messageId:partId
+    { name: 'messageId' },
+    { name: 'cid' },
+    { name: 'content-type' },
+    { name: 'description' },
+    { name: 'filename' },
+    { name: 'partId' },
+    { name: 'size' }
+], {
+    appName: 'Felamimail',
+    modelName: 'Attachment',
+    idProperty: 'partId',
+    titleProperty: 'fileName',
+    // ngettext('Attachment', 'Attachments', n);
+    recordName: 'Attachment',
+    recordsName: 'Attachments'
+});
