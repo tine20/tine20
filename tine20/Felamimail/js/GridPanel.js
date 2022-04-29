@@ -716,7 +716,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var result = '';
         
         if (value == 1) {
-            result = '<img class="FelamimailFlagIcon" src="images/oxygen/16x16/actions/attach.png">';
+            result = '<div class="action_attach tine-grid-row-action-icon" />';
         }
         
         return result;
@@ -1322,9 +1322,40 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             Tine.Felamimail.MessageFileAction.locationClickHandler(fileLocation.model, fileLocation.record_id);
 
             e.stopEvent();
-        }
+        } else if (e.getTarget('.action_attach')) {
+            if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
+                const me = this;
 
-        Tine.Felamimail.GridPanel.superclass.onRowClick.apply(this, arguments);
+                Tine.Filemanager.QuickLookPanel.openWindow({
+                    record: this.getStore().getAt(row),
+                    initialApp: this.app,
+                    sm: grid.getSelectionModel(),
+                    handleAttachments: async function() {
+                        this.cardPanel.layout.setActiveItem(0); // wait cycle
+                        if (this.record.constructor.hasField('attachments')) {
+                            // new mail -> fetch body with fmail attachments
+                            const body = await Tine.Felamimail.getMessage(this.record.id);
+                            this.attachments = _.map(body.attachments, (attachmentData) => {
+                                return Tine.Tinebase.data.Record.setFromJson(Object.assign(attachmentData, {
+                                    id: `${this.record.id}:${attachmentData.partId}`,
+                                    messageId: this.record.id
+                                }), Tine.Felamimail.Model.Attachment);
+                            });
+                            this.record.set('attachments', this.attachments);
+                            this.record = this.attachments[0];
+                        }
+
+                        if (this.record.constructor !== Tine.Tinebase.Model.Tree_Node) {
+                            // convert fmail attachment to attachmentCache attachment
+                            const attachmentCache = await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', this.record.get('messageId'), this.record.get('partId')].join(':'));
+                            this.record = this.attachments[this.attachments.indexOf(this.record)] = new Tine.Tinebase.Model.Tree_Node(attachmentCache.attachments[0]);
+                        }
+                    }
+                });
+            }
+        } else {
+            Tine.Felamimail.GridPanel.superclass.onRowClick.apply(this, arguments);
+        }
     },
 
     @keydown(['ctrl+o', 'enter'])

@@ -68,13 +68,12 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
 
         this.items = [{
             ref: 'cardPanel',
-            html: '<b>' + this.app.i18n._('Loading preview ...') + '</b>',
             xtype: 'panel',
             layout: 'card',
             activeItem: 0,
             frame: false,
-            border: false
-            // @todo scrollbar, ...?
+            border: false,
+            items: [{keep: true, html: '<div class="tine-viewport-waitcycle">&nbsp;</div>'}]
         }];
 
         this.fbar = ['->', this.action_close];
@@ -107,17 +106,11 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
     /**
      * fetch/manage preview panels for records by content-type
      */
-    loadPreviewPanel: function () {
+    loadPreviewPanel: async function () {
         let previewPanel = null;
         let previewPanelXtype = null;
 
-        // cope with attachments
-        if (this.record.constructor.hasField('attachments')) {
-            this.attachments = _.map(this.record.get('attachments'), (attachment)=> {
-                return new Tine.Tinebase.Model.Tree_Node(attachment);
-            });
-            this.record = this.attachments[0] || new Tine.Tinebase.Model.Tree_Node({name: ''});
-        }
+        await this.handleAttachments();
         
         this.window.setTitle(this.record.get('name'));
 
@@ -152,7 +145,17 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
 
         Ext.ux.layout.CardLayout.helper.setActiveCardPanelItem(this.cardPanel, previewPanel, true);
     },
-    
+
+    async handleAttachments() {
+        // cope with attachments
+        if (this.record.constructor.hasField('attachments')) {
+            this.attachments = _.map(this.record.get('attachments'), (attachment)=> {
+                return new Tine.Tinebase.Model.Tree_Node(attachment);
+            });
+            this.record = this.attachments[0] || new Tine.Tinebase.Model.Tree_Node({name: ''});
+        }
+    },
+
     /**
      * navigate previews
      *
