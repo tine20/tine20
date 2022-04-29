@@ -141,7 +141,23 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         return $result;
     }
-    
+
+    /**
+     * Get multiple entries
+     *
+     * @param string|array $_id Ids
+     * @param array $_containerIds all allowed container ids that are added to getMultiple query
+     * @return Tinebase_Record_RecordSet
+     *
+     * @todo get custom fields here as well
+     */
+    public function getMultiple($_id, $_containerIds = NULL)
+    {
+        return $this->search(new Calendar_Model_EventFilter([
+            ['field' => 'id', 'operator' => 'in', 'value' => (array)$_id],
+        ]));
+    }
+
     /**
      * Calendar optimized search function
      * 
