@@ -162,19 +162,18 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
      * @param e
      */
     onNavigate: function(e) {
+        const key = e.getKey();
+        if ([e.LEFT, e.RIGHT].indexOf(key) >= 0) {
+            return this.onNavigateAttachment(key === e.LEFT ? -1 : +1);
+        }
+
         if (this.sm) {
-            switch (e.getKey()) {
+            switch (key) {
                 case e.DOWN:
                     this.sm.selectNext();
                     break;
                 case e.UP:
                     this.sm.selectPrevious();
-                    break;
-                case e.LEFT:
-                    return this.onNavigateAttachment(-1);
-                    break;
-                case e.RIGHT:
-                    return this.onNavigateAttachment(+1);
                     break;
                 default:
                     break;

@@ -1330,27 +1330,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     record: this.getStore().getAt(row),
                     initialApp: this.app,
                     sm: grid.getSelectionModel(),
-                    handleAttachments: async function() {
-                        this.cardPanel.layout.setActiveItem(0); // wait cycle
-                        if (this.record.constructor.hasField('attachments')) {
-                            // new mail -> fetch body with fmail attachments
-                            const body = await Tine.Felamimail.getMessage(this.record.id);
-                            this.attachments = _.map(body.attachments, (attachmentData) => {
-                                return Tine.Tinebase.data.Record.setFromJson(Object.assign(attachmentData, {
-                                    id: `${this.record.id}:${attachmentData.partId}`,
-                                    messageId: this.record.id
-                                }), Tine.Felamimail.Model.Attachment);
-                            });
-                            this.record.set('attachments', this.attachments);
-                            this.record = this.attachments[0];
-                        }
-
-                        if (this.record.constructor !== Tine.Tinebase.Model.Tree_Node) {
-                            // convert fmail attachment to attachmentCache attachment
-                            const attachmentCache = await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', this.record.get('messageId'), this.record.get('partId')].join(':'));
-                            this.record = this.attachments[this.attachments.indexOf(this.record)] = new Tine.Tinebase.Model.Tree_Node(attachmentCache.attachments[0]);
-                        }
-                    }
+                    handleAttachments: Tine.Felamimail.MailDetailsPanel.prototype.quicklookHandleAttachments
                 });
             }
         } else {
