@@ -1229,10 +1229,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @return {Promise<record>}
      */
     async applyChanges() {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             this.on('update', resolve, this, {single: true, buffer: 10});
+            this.on('requestException', (exception) => {
+                _.defer(() => {reject(exception)});
+                return false;
+            }, this, {single: true, buffer: 10});
             this.onApplyChanges(false);
-        })
+        });
     },
 
     /**
@@ -1451,21 +1455,22 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     onRequestFailed: function(exception) {
         this.saving = false;
+        if(this.fireEvent('requestException', exception) !== false) {
 
-        if (this.exceptionHandlingMap && this.exceptionHandlingMap[exception.code] && typeof this.exceptionHandlingMap[exception.code] === 'function') {
-            this.exceptionHandlingMap[exception.code](exception);
+            if (this.exceptionHandlingMap && this.exceptionHandlingMap[exception.code] && typeof this.exceptionHandlingMap[exception.code] === 'function') {
+                this.exceptionHandlingMap[exception.code](exception);
 
-        } else if (exception.code == 629) {
-            this.onDuplicateException.apply(this, arguments);
+            } else if (exception.code == 629) {
+                this.onDuplicateException.apply(this, arguments);
 
-        } else if (exception.code === 650) {
-            Tine.Tinebase.ExceptionHandler.handleRequestException(exception, function() {
-                this.onAfterApplyChanges(true);
-            }, this);
-    
-        } else {
-            Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
-    
+            } else if (exception.code === 650) {
+                Tine.Tinebase.ExceptionHandler.handleRequestException(exception, function () {
+                    this.onAfterApplyChanges(true);
+                }, this);
+
+            } else {
+                Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+            }
         }
 
         this.hideLoadMask();

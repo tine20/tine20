@@ -32,8 +32,14 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         ) !== 'yes') {
             return false;
         }
-        _.delay(() => {
-            this.onApplyChanges();
+        _.delay(async () => {
+            try {
+                await this.applyChanges()
+            } catch (exception) {
+                Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+                this.getForm().findField(this.statusFieldName).setValue(this.record.modified[this.statusFieldName]);
+            }
+
         }, 150);
     },
 
