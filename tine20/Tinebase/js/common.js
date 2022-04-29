@@ -773,7 +773,7 @@ Tine.Tinebase.common = {
      * @returns {String}
      */
     html2text: function(html) {
-        text = html.replace(/\n/g, ' ')
+        const text = html.replace(/\n/g, ' ')
             .replace(/(<br[^>]*>)/g, '\n--br')
             .replace(/(<li[^>]*>)/g, '\n * ')
             .replace(/<(blockquote|div|dl|dt|dd|form|h1|h2|h3|h4|h5|h6|hr|p|pre|table|tr|td|li|section|header|footer)[^>]*>(?!\s*\<\/\1\>)/g, '\n--block')
