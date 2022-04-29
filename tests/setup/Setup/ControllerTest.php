@@ -265,6 +265,9 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
         $this->_uit->uninstallApplications(array('Tinebase'));
         $this->assertTrue($this->_uit->setupRequired());
         Tinebase_Core::unsetUser();
+
+        $tables = Tinebase_Core::getDb()->query('SHOW TABLES LIKE "' . SQL_TABLE_PREFIX . '%"')->fetchAll();
+        $this->assertSame(0, count($tables), 'not all tables uninstalled: ' . print_r($tables, true));
     }
     
     /**
