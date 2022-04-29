@@ -345,8 +345,13 @@ span.x-tab-strip-text.tine-favicon {
   padding: 0;
 }
 
-.x-toolbar-more-icon {
+.x-btn-mc em.x-btn-arrow .x-toolbar-more-icon {
   background-image: url('../../images/icon-set/icon_dblarrow_right.svg') !important;
+  + div.x-btn-arrow {
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+    background-color: transparent !important;
+  }
 }
 /* MAIN NORTH TOOLBAR */
 .tine-mainscreen-centerpanel-north {
