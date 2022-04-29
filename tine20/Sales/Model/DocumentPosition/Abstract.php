@@ -54,6 +54,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
     const FLD_COST_CENTER_ID = 'payment_cost_center_id'; // aus document od. item übernehmen, config bestimmt wer vorfahrt hat und ob user überschreiben kann
     const FLD_COST_BEARER_ID = 'payment_cost_bearer_id'; // aus document od. item übernehmen, config bestimmt wer vorfahrt hat, und ob user überschreiben kann
     const FLD_REVERSAL = 'reversal';
+    const FLD_IS_REVERSED = 'is_reversed';
 
     //const FLD_XPROPS = 'xprops'; // z.B. entfaltungsart von Bundle od. Set merken
 
@@ -378,6 +379,16 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             self::FLD_REVERSAL                  => [
                 self::TYPE                          => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL                   => false,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+            ],
+            self::FLD_IS_REVERSED               => [
+                self::TYPE                          => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL                   => false,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
         ]
     ];
@@ -459,6 +470,18 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION_MODEL};
         $this->{self::FLD_PRECURSOR_POSITION} =
             $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION};
+
+        if ($this->{self::FLD_REVERSAL}) {
+            $translation = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
+                new Zend_Locale($this->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE}));
+            $this->{self::FLD_TITLE} = $translation->_('Reversal') . ': ' . $this->{self::FLD_TITLE};
+            $positions = $this->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_POSITIONS};
+            $positions->getById($this->getId())->{Sales_Model_DocumentPosition_Abstract::FLD_IS_REVERSED} = true;
+
+            // make document_id dirty
+            $this->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_POSITIONS} = $positions;
+        }
+
         $this->__unset($this->getIdProperty());
 
         if (!$this->isProduct()) {
