@@ -311,9 +311,10 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
             // records per timeaccount
             records = _.sortBy(records);
             const top = _.last(records);
+            const bottom = _.first(records);
             const timeAccountId = _.get(_.compact(_.uniq(_.map(records, `xprops.${META_DATA}.Timetracker_Model_Timeaccount`))), [0]);
             const record = this.menu.timeAccountPickerGrid.store.getById(timeAccountId);
-            record.set('xprops', Object.assign(record.get('xprops') || {}, { HumanResources_Model_AttendanceRecord: { top, records,
+            record.set('xprops', Object.assign(record.get('xprops') || {}, { HumanResources_Model_AttendanceRecord: { top, bottom, records,
                 type: _.get(top, FLD_TYPE, TYPE_CLOCK_OUT),
             }}));
         });
@@ -405,7 +406,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
         if (el) {
             const row = this.menu.timeAccountPickerGrid.view.findRowIndex(el);
             const timeAccount = this.menu.timeAccountPickerGrid.store.getAt(row);
-            const timesheet = _.get(timeAccount, `data.xprops.HumanResources_Model_AttendanceRecord.top.xprops.metaData.Timetracker_Model_Timesheet`);
+            const timesheet = _.get(timeAccount, `data.xprops.HumanResources_Model_AttendanceRecord.bottom.xprops.metaData.Timetracker_Model_Timesheet`);
             const action = el.dataset.action;
             const multiStart = e.ctrlKey || e.shiftKey;
 
@@ -416,7 +417,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
 
                 let result;
                 const openTimesheet = (timeAccount) => {
-                    const timesheet = _.get(timeAccount, `data.xprops.HumanResources_Model_AttendanceRecord.top.xprops.metaData.Timetracker_Model_Timesheet`);
+                    const timesheet = _.get(timeAccount, `data.xprops.HumanResources_Model_AttendanceRecord.bottom.xprops.metaData.Timetracker_Model_Timesheet`);
                     Tine.Timetracker.TimesheetEditDialog.openWindow({
                         record: timesheet,
                         contentPanelConstructorInterceptor: async (config) => {
