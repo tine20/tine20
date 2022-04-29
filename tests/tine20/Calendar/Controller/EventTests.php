@@ -2614,6 +2614,47 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         } catch (Tinebase_Exception_NotFound $tenf) {}
     }
 
+    public function testRoleRights()
+    {
+        $newRole = Tinebase_Role::getInstance()->create(new Tinebase_Model_Role([
+            'name' => 'unittest',
+        ]));
+        $newRole->members = [[
+            'id' => '',
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+            'account_id' => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
+        ]];
+        Tinebase_Role::getInstance()->update($newRole);
+        Tinebase_Acl_Roles::getInstance()->resetClassCache();
+
+        $sharedContainer = $this->_getTestContainer('Calendar', Calendar_Model_Event::class, true);
+        $event = $this->_getEvent();
+        $event->container_id = $sharedContainer->getId();
+        $createdEvent = $this->_controller->create($event);
+
+        Tinebase_Container::getInstance()->setGrants($sharedContainer, new Tinebase_Record_RecordSet(
+            Tinebase_Model_Grants::class, [[
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE,
+            'account_id' => $newRole->getId(),
+            //'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+            //'account_id' => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
+            Tinebase_Model_Grants::GRANT_READ => true,
+            Tinebase_Model_Grants::GRANT_EDIT => true,
+            Tinebase_Model_Grants::GRANT_ADMIN => true,
+            Tinebase_Model_Grants::GRANT_ADD => true,
+        ]]), true, false);
+
+        Tinebase_Core::setUser($this->_getPersona('sclever'));
+        $scleverEvent = $this->_controller->get($createdEvent->getId());
+        $this->assertTrue($scleverEvent->{Tinebase_Model_Grants::GRANT_DELETE});
+        $scleverEvent = $this->_controller->search(new Calendar_Model_EventFilter([['field' => 'id', 'operator' => 'equals', 'value' => $createdEvent->getId()]]))->getFirstRecord();
+        $this->assertNotNull($scleverEvent);
+        $this->assertTrue($scleverEvent->{Tinebase_Model_Grants::GRANT_DELETE});
+        $scleverEvent = $this->_controller->getMultiple([$createdEvent->getId()])->getFirstRecord();
+        $this->assertNotNull($scleverEvent);
+        $this->assertTrue($scleverEvent->{Tinebase_Model_Grants::GRANT_DELETE});
+    }
+
     public function testGetPrivateEventInSharedContainer()
     {
         $sharedContainer = $this->_getTestContainer('Calendar', Calendar_Model_Event::class, true);
