@@ -112,7 +112,13 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
         $flags = (array) $_flags;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_mode. ' flags: ' . print_r($_flags, TRUE));
-        
+
+        if ($_messages instanceof Tinebase_Model_Filter_FilterGroup) {
+            $ids = $this->search($_messages, null, false, true);
+            $_messages = new Felamimail_Model_MessageFilter([
+                ['field' => 'id', 'operator' => 'in', 'value' => $ids],
+            ]);
+        }
         // only get the first 100 messages if we got a filtergroup
         $pagination = ($_messages instanceof Tinebase_Model_Filter_FilterGroup) ? new Tinebase_Model_Pagination(array('sort' => 'folder_id', 'start' => 0, 'limit' => 100)) : NULL;
         $messagesToUpdate = $this->_convertToRecordSet($_messages, TRUE, $pagination);

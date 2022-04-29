@@ -218,30 +218,24 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         }
 
         if ($_filterData['field'] == 'flags') {
-            $havingColumn = ($db instanceof Zend_Db_Adapter_Pdo_Pgsql)
-                ? Tinebase_Backend_Sql_Command::factory($db)->getAggregate($foreignTables['flags']['table']  . '.flag')
-                : 'flags';
-            if ($_filterData['operator'] == 'equals' || $_filterData['operator'] == 'contains') {
-                $_select->having($db->quoteInto($havingColumn . ' LIKE ?', $value));
-            } else if ($_filterData['operator'] == 'in' || $_filterData['operator'] == 'notin') {
-                if (empty($value)) {
-                    $whereString = 'flags IS NULL';
+            if (!is_array($_filterData['value'])) {
+                $_filterData['value'] = [$_filterData['value']];
+            }
+            $flagCount = 0;
+            $orConditions = '';
+            foreach ($_filterData['value'] as $value) {
+                $correl = $tablename . '_' . ++$flagCount;
+                $_select->joinLeft([$correl => SQL_TABLE_PREFIX . $tablename], $_backend->getTableName() . '.id = ' . $correl . '.message_id AND ' . $correl . $db->quoteInto('.flag = ?', $value) , []);
+                if ($_filterData['operator'] == 'equals' || $_filterData['operator'] == 'contains') {
+                    $_select->where($correl . '.message_id IS NOT NULL');
+                } elseif ($_filterData['operator'] == 'in') {
+                    $orConditions .= ($orConditions ? ' OR ' : '') . $correl . '.message_id IS NOT NULL';
                 } else {
-                    $value = (array) $value;
-                    $where = array();
-                    $op = ($_filterData['operator'] == 'in') ? 'LIKE' : 'NOT LIKE';
-                    $opImplode = ($_filterData['operator'] == 'in') ? ' OR ' : ' AND ';
-                    foreach ($value as $flag) {
-                        $where[] = $db->quoteInto('flags ' . $op . ' ?', $flag);
-                    }
-                    $whereString = implode($opImplode, $where);
-                    if ($_filterData['operator'] == 'notin') {
-                        $whereString = '(' . $whereString . ') OR flags IS NULL';
-                    }
+                    $_select->where($correl . '.message_id IS NULL');
                 }
-                $_select->having(str_replace('flags', $havingColumn, $whereString));
-            } else {
-                $_select->having($db->quoteInto($havingColumn . ' NOT LIKE ? OR ' . $havingColumn . ' IS NULL', $value));
+            }
+            if ($orConditions) {
+                $_select->where('(' . $orConditions . ')');
             }
         } elseif (!empty($_filterData['value'])) {
             $_select->where(

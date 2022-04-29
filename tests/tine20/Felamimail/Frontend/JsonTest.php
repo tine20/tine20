@@ -736,7 +736,9 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
      */
     public function testMarkFolderRead()
     {
+        $this->_sendMessage();
         $inboxBefore = $this->_getFolder('INBOX');
+        $this->assertGreaterThan(0, $inboxBefore->cache_unreadcount);
         $filter = array(array(
             'field' => 'folder_id', 'operator' => 'equals', 'value' => $inboxBefore->getId()
         ), array(
