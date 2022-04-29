@@ -1314,6 +1314,29 @@ div.x-btn-wait,
     height: 32px;
 }
 
+.tine-viewport-waitbox {
+    height: 32px;
+    width: fit-content;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    div {
+        display: inline-block;
+    }
+    .tine-viewport-waitcycle {
+        position: initial;
+    }
+
+    .tine-viewport-waittext {
+        transform: translate(10px, 6px);
+        white-space: nowrap;
+        padding-top: 0px;
+        display: inline-block;
+    }
+}
 .x-tree-node-el.x-tree-node-loading img.x-tree-node-icon,
 .x-item-disabled .x-tbar-loading,
 .x-btn-wait {
