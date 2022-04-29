@@ -1920,6 +1920,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        $_record = $this->_updateGeoLocations($_record);
         Calendar_Controller_Poll::getInstance()->inspectBeforeCreateEvent($_record);
         parent::_inspectBeforeCreate($_record);
     }
@@ -1933,6 +1934,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        $_record = $this->_updateGeoLocations($_record);
+        
         if ($this->_skipRecurAdoptions) {
             return;
         }
@@ -1996,6 +1999,23 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
 
         Calendar_Controller_Poll::getInstance()->inspectBeforeUpdateEvent($_record, $_oldRecord);
+    }
+
+    protected function _updateGeoLocations(Calendar_Model_Event $_record)
+    {
+        if ($_record->location_record && is_string($_record->location_record)) {
+            $locationContact = Addressbook_Controller_Contact::getInstance()->get($_record->location_record);
+
+            if ($locationContact->preferred_address == 0) {
+                $_record->adr_lon = $locationContact->adr_one_lon ?: null;
+                $_record->adr_lat = $locationContact->adr_one_lat ?: null;
+            } else {
+                $_record->adr_lon = $locationContact->adr_two_lon ?: null;
+                $_record->adr_lat = $locationContact->adr_two_lat ?: null;
+            }
+        }
+        
+        return $_record;
     }
 
     /**

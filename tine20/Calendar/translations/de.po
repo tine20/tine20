@@ -91,7 +91,7 @@ msgstr "Außer"
 msgid "during events in the calendars"
 msgstr "während Terminen in den Kalendern"
 
-#: js/RrulePanel.js:409 Model/Event.php:428 Model/Event.php:430
+#: js/RrulePanel.js:409 Model/Event.php:428 Model/Event.php:431
 msgid "End"
 msgstr "Ende"
 
@@ -155,51 +155,51 @@ msgstr "im"
 
 #: js/Printer/EventRecord.js:14 js/GridView.js:252 js/Model.js:377
 #: js/EventEditDialog.js:94 js/ContactEventsGridPanel.js:113
-#: Model/Event.php:436 js/Model.js:385 Model/Event.php:438
+#: Model/Event.php:436 js/Model.js:386 Model/Event.php:439
 msgid "Summary"
 msgstr "Thema"
 
 #: js/Printer/EventRecord.js:18 js/GridView.js:266 js/PerspectiveCombo.js:127
 #: js/EventDetailsPanel.js:204 js/Model.js:401 js/EventEditDialog.js:394
-#: Config.php:324 Model/Event.php:433 js/Model.js:409 js/EventEditDialog.js:408
-#: Model/Event.php:435
+#: Config.php:324 Model/Event.php:433 js/Model.js:411 js/EventEditDialog.js:427
+#: Model/Event.php:436
 msgid "Organizer"
 msgstr "Organisator"
 
 #: js/Printer/EventRecord.js:21 js/GridView.js:273 js/Model.js:379
 #: js/Model.js:1092 js/ResourceEditDialog.js:129 js/EventEditDialog.js:282
-#: Model/Event.php:431 js/Model.js:387 js/Model.js:1101
-#: js/ResourceEditDialog.js:149 js/EventEditDialog.js:284 Model/Event.php:433
+#: Model/Event.php:431 js/Model.js:389 js/Model.js:1102
+#: js/ResourceEditDialog.js:143 js/EventEditDialog.js:303 Model/Event.php:434
 msgid "Description"
 msgstr "Beschreibung"
 
 #: js/Printer/EventRecord.js:30 js/GridView.js:260 js/Model.js:378
 #: js/ResourceEditDialog.js:109 js/EventEditDialog.js:139
-#: js/ResourcesGridPanel.js:87 Model/Event.php:432 js/Model.js:386
-#: js/ResourceEditDialog.js:129 js/ResourcesGridPanel.js:100
-#: Model/Event.php:434 Model/Resource.php:90
+#: js/ResourcesGridPanel.js:87 Model/Event.php:432 js/Model.js:387
+#: js/ResourceEditDialog.js:123 js/ResourcesGridPanel.js:94 Model/Event.php:435
+#: Model/Resource.php:89
 msgid "Location"
 msgstr "Lokalität"
 
 #: js/Printer/EventRecord.js:34 js/GridView.js:218 js/EventDetailsPanel.js:179
 #: js/EventEditDialog.js:145 js/ContactEventsGridPanel.js:119
-#: Preference.php:163
+#: Preference.php:163 js/EventEditDialog.js:164
 msgid "Start Time"
 msgstr "Beginn"
 
 #: js/Printer/EventRecord.js:38 js/GridView.js:224 js/EventDetailsPanel.js:184
-#: js/EventEditDialog.js:160 Preference.php:167 js/EventEditDialog.js:161
+#: js/EventEditDialog.js:160 Preference.php:167 js/EventEditDialog.js:180
 msgid "End Time"
 msgstr "Ende"
 
 #: js/Printer/EventRecord.js:44 js/AttendeeFilterModel.js:35 js/WestPanel.js:95
 #: js/EventDetailsPanel.js:222 js/Model.js:614 js/AttendeeGridPanel.js:114
-#: js/EventContextAttendeesItem.js:113 Config.php:323 js/Model.js:622
+#: js/EventContextAttendeesItem.js:113 Config.php:323 js/Model.js:624
 msgid "Attendee"
 msgstr "Teilnehmer"
 
 #: js/Printer/Base.js:74 js/GridView.js:230 js/SearchCombo.js:227
-#: js/EventEditDialog.js:154 js/EventEditDialog.js:155
+#: js/EventEditDialog.js:154 js/EventEditDialog.js:174
 msgid "whole day"
 msgstr "ganztägig"
 
@@ -290,7 +290,7 @@ msgstr "Neuer Termin"
 #: js/Application.js:32 js/Model.js:80 Model/Poll.php:52 Setup/setup.xml:4
 #: tempExtract/vueStrings.js:64
 #: tempExtract/dbc3c96e4005ab09bd934bef7fc3183a/word/document.xml:2
-#: js/Model.js:82
+#: js/Model.js:83
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] "Kalender"
@@ -626,12 +626,12 @@ msgid "Cancel this action"
 msgstr "Diese Aktion abbrechen"
 
 #: js/MainScreenCenterPanel.js:1757 js/EventEditDialog.js:210
-#: js/MainScreenCenterPanel.js:1761 js/EventEditDialog.js:212
+#: js/MainScreenCenterPanel.js:1761 js/EventEditDialog.js:231
 msgid "Update Status for all Attendee?"
 msgstr "Status für alle Teilnehmer ändern?"
 
 #: js/MainScreenCenterPanel.js:1758 js/EventEditDialog.js:211
-#: js/MainScreenCenterPanel.js:1762 js/EventEditDialog.js:213
+#: js/MainScreenCenterPanel.js:1762 js/EventEditDialog.js:232
 msgid ""
 "You are about to change the status of the event itself and not just your own "
 "status. Do you really want to change the event status for all attendee?"
@@ -656,7 +656,7 @@ msgid "Attachments"
 msgstr "Anhänge"
 
 #: js/GridView.js:203 js/Model/ResourceGrants.js:109 js/EventEditDialog.js:238
-#: Config.php:360 js/Model/ResourceGrants.js:113 js/EventEditDialog.js:240
+#: Config.php:360 js/EventEditDialog.js:259
 msgid "Private"
 msgstr "Privat"
 
@@ -665,7 +665,7 @@ msgid "Tags"
 msgstr "Tags"
 
 #: js/GridView.js:236 js/EventDetailsPanel.js:189 js/Model.js:413
-#: Model/Event.php:429 js/Model.js:421 Model/Event.php:431
+#: Model/Event.php:429 js/Model.js:423 Model/Event.php:432
 msgid "Blocking"
 msgstr "Blockierend"
 
@@ -819,7 +819,7 @@ msgid "Ok"
 msgstr "Ok"
 
 #: js/FreeTimeSearchDialog.js:130 js/EventEditDialog.js:368
-#: js/EventEditDialog.js:378
+#: js/EventEditDialog.js:397
 msgid "Free Time Search"
 msgstr "Termin finden"
 
@@ -887,112 +887,111 @@ msgstr "KW"
 msgid "{0} more..."
 msgstr "{0} weitere..."
 
-#: js/Model/ResourceGrants.js:35 js/Model/ResourceGrants.js:36
+#: js/Model/ResourceGrants.js:35
 msgid "Resource Grant"
 msgid_plural "Resource Grants"
 msgstr[0] "Ressourcen Recht"
 msgstr[1] "Ressourcen Rechte"
 
-#: js/Model/ResourceGrants.js:80 js/Model/ResourceGrants.js:82
+#: js/Model/ResourceGrants.js:80
 msgid "Invite Resource"
 msgstr "Ressource einladen"
 
-#: js/Model/ResourceGrants.js:81 js/Model/ResourceGrants.js:83
+#: js/Model/ResourceGrants.js:81
 msgid "The grant to invite the resource to an event"
 msgstr "Das Recht die Ressource zu einem Termin einzuladen"
 
-#: js/Model/ResourceGrants.js:82 js/Model/ResourceGrants.js:86
+#: js/Model/ResourceGrants.js:82
 msgid "Read Resource"
 msgstr "Ressource lesen"
 
-#: js/Model/ResourceGrants.js:83 js/Model/ResourceGrants.js:87
+#: js/Model/ResourceGrants.js:83
 msgid "The grant to read the resource itself"
 msgstr "Das Recht die Ressource als solche zu sehen"
 
 #: js/Model/ResourceGrants.js:84 js/AttendeeGridPanel.js:581
-#: js/TreePanel.js:151 js/TreePanel.js:177 js/Model/ResourceGrants.js:88
-#: js/AttendeeGridPanel.js:607
+#: js/TreePanel.js:151 js/TreePanel.js:177 js/AttendeeGridPanel.js:594
 msgid "Edit Resource"
 msgstr "Ressource bearbeiten"
 
-#: js/Model/ResourceGrants.js:85 js/Model/ResourceGrants.js:89
+#: js/Model/ResourceGrants.js:85
 msgid "The grant to edit the resource itself"
 msgstr "Das Recht die Ressource als solche zu bearbeiten"
 
-#: js/Model/ResourceGrants.js:86 js/Model/ResourceGrants.js:90
+#: js/Model/ResourceGrants.js:86
 msgid "Export Resource"
 msgstr "Ressource exportieren"
 
-#: js/Model/ResourceGrants.js:87 js/Model/ResourceGrants.js:91
+#: js/Model/ResourceGrants.js:87
 msgid "The grant to export the resource itself"
 msgstr "Das Recht die Ressource als solche zu exportieren"
 
-#: js/Model/ResourceGrants.js:88 js/Model/ResourceGrants.js:92
+#: js/Model/ResourceGrants.js:88
 msgid "Sync Resource"
 msgstr "Ressource synchronisieren"
 
-#: js/Model/ResourceGrants.js:89 js/Model/ResourceGrants.js:93
+#: js/Model/ResourceGrants.js:89
 msgid "The grant to synchronise the resource itself"
 msgstr "Das Recht die Ressource als solche zu synchronisieren"
 
-#: js/Model/ResourceGrants.js:90 js/Model/ResourceGrants.js:94
+#: js/Model/ResourceGrants.js:90
 msgid "Resource Admin"
 msgstr "Ressource Administrieren"
 
-#: js/Model/ResourceGrants.js:91 js/Model/ResourceGrants.js:95
+#: js/Model/ResourceGrants.js:91
 msgid "The grant to administrate the resource itself"
 msgstr "Das Recht die Ressource als solche zu administrieren"
 
-#: js/Model/ResourceGrants.js:92 js/Model/ResourceGrants.js:96
+#: js/Model/ResourceGrants.js:92
 msgid "Add Events"
 msgstr "Termine hinzufügen"
 
-#: js/Model/ResourceGrants.js:93 js/Model/ResourceGrants.js:97
+#: js/Model/ResourceGrants.js:93
 msgid "The grant to directly add events into this resource calendar"
 msgstr "Das Recht Termine direkt im Ressourcen-Kalender anzulegen"
 
-#: js/Model/ResourceGrants.js:94 js/Model/ResourceGrants.js:98
+#: js/Model/ResourceGrants.js:94
 msgid "Read Events"
 msgstr "Termine lesen"
 
-#: js/Model/ResourceGrants.js:95 js/Model/ResourceGrants.js:99
+#: js/Model/ResourceGrants.js:95
 msgid "The grant to read events from this resource calendar"
 msgstr "Das Recht Termine aus Ressourcen-Kalender zu lesen"
 
-#: js/Model/ResourceGrants.js:96 js/Model/ResourceGrants.js:100
+#: js/Model/ResourceGrants.js:96
 msgid "Export Events"
 msgstr "Termine exportieren"
 
-#: js/Model/ResourceGrants.js:97 js/Model/ResourceGrants.js:101
+#: js/Model/ResourceGrants.js:97
 msgid "The grant to export events from this resource calendar"
 msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu exportieren"
 
-#: js/Model/ResourceGrants.js:98 js/Model/ResourceGrants.js:102
+#: js/Model/ResourceGrants.js:98
 msgid "Sync Events"
 msgstr "Termine synchronisieren"
 
-#: js/Model/ResourceGrants.js:99 js/Model/ResourceGrants.js:103
+#: js/Model/ResourceGrants.js:99
 msgid ""
 "The grant to synchronise events from this resource calendar. Need Read "
 "Events Grant"
 msgstr ""
 
-#: js/Model/ResourceGrants.js:100 js/Model/ResourceGrants.js:104
+#: js/Model/ResourceGrants.js:100
 msgid "Events Free Busy"
 msgstr "Termine Frei/Belegt Informationen"
 
-#: js/Model/ResourceGrants.js:101 js/Model/ResourceGrants.js:105
+#: js/Model/ResourceGrants.js:101
 msgid ""
 "The grant to get free/busy information of events from this resource calendar"
 msgstr ""
 "Das Recht Frei/Belegt Informationen von Terminen aus dem Ressourcen-Kalender "
 "zu erhalten"
 
-#: js/Model/ResourceGrants.js:102 js/Model/ResourceGrants.js:106
+#: js/Model/ResourceGrants.js:102
 msgid "Edit Events"
 msgstr "Termine bearbeiten"
 
-#: js/Model/ResourceGrants.js:103 js/Model/ResourceGrants.js:107
+#: js/Model/ResourceGrants.js:103
 msgid ""
 "The grant to respond to event invitations of this resource and to edit "
 "events directly saved in this resource calendar"
@@ -1000,24 +999,24 @@ msgstr ""
 "Das Recht auf Termin-Einladungen dieser Ressource zu antworten und Termine "
 "aus dem Ressourcen-Kalender zu bearbeiten"
 
-#: js/Model/ResourceGrants.js:104 js/Model/ResourceGrants.js:108
+#: js/Model/ResourceGrants.js:104
 msgid "Delete Events"
 msgstr "Termine löschen"
 
-#: js/Model/ResourceGrants.js:105 js/Model/ResourceGrants.js:109
+#: js/Model/ResourceGrants.js:105
 msgid "The grant to delete events directly stored in this resource calendar"
 msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu löschen"
 
-#: js/Model/ResourceGrants.js:107 js/Model/ResourceGrants.js:111
+#: js/Model/ResourceGrants.js:107
 msgid "Free Busy"
 msgstr "Frei Belegt"
 
-#: js/Model/ResourceGrants.js:108 js/Model/ResourceGrants.js:112
+#: js/Model/ResourceGrants.js:108
 msgid "The grant to get free/busy information of events in this calendar"
 msgstr ""
 "Das Recht Frei/Belegt Informationen von Terminen diesem Kalender zu erhalten"
 
-#: js/Model/ResourceGrants.js:110 js/Model/ResourceGrants.js:114
+#: js/Model/ResourceGrants.js:110
 msgid "The grant to access events marked as private in this calendar"
 msgstr ""
 "Das Recht Terminen aus diesem Kalender zu sehen die als privat markiert sind"
@@ -1043,7 +1042,7 @@ msgstr "Rolle wählen"
 #: js/EventEditDialog.js:197 js/ContactEventsGridPanel.js:126
 #: Model/Event.php:435
 #: tempExtract/9b23472d356e595dcb727748e70132a2/xl/sharedStrings.xml:2
-#: js/Model.js:412 js/EventEditDialog.js:199 Model/Event.php:437
+#: js/Model.js:414 js/EventEditDialog.js:218 Model/Event.php:438
 msgid "Status"
 msgstr "Status"
 
@@ -1068,8 +1067,8 @@ msgstr "Suche ..."
 msgid "Search Event"
 msgstr "Suche Termin"
 
-#: js/SearchCombo.js:85 js/Model.js:75 js/Model.js:618 js/Model.js:77
-#: js/Model.js:626
+#: js/SearchCombo.js:85 js/Model.js:75 js/Model.js:618 js/Model.js:78
+#: js/Model.js:628
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Termin"
@@ -1080,7 +1079,7 @@ msgid "Additional Tags ..."
 msgstr "Zusätzliche Tags ..."
 
 #: js/PerspectiveCombo.js:84 js/EventEditDialog.js:222
-#: js/EventEditDialog.js:224
+#: js/EventEditDialog.js:243
 msgid "non-blocking"
 msgstr "nicht-blockierend"
 
@@ -1090,18 +1089,14 @@ msgstr "Angezeigt in"
 
 #: js/EventDetailsPanel.js:29 js/AttendeeGridPanel.js:859
 #: js/AttendeeGridPanel.js:883 js/AttendeeGridPanel.js:894
-#: js/AttendeeGridPanel.js:919 js/AttendeeGridPanel.js:885
-#: js/AttendeeGridPanel.js:909 js/AttendeeGridPanel.js:920
-#: js/AttendeeGridPanel.js:945
+#: js/AttendeeGridPanel.js:919 js/AttendeeGridPanel.js:907
+#: js/AttendeeGridPanel.js:918 js/AttendeeGridPanel.js:943
 msgid "No Information"
 msgstr "Keine Angabe"
 
 #: js/EventDetailsPanel.js:200
 msgid "Event Location"
 msgstr "Termin Ort"
-
-msgid "Resource Location"
-msgstr "Ressourcen Ort"
 
 #: js/PagingToolbar.js:678
 msgid "From"
@@ -1112,150 +1107,150 @@ msgid "until"
 msgstr "bis"
 
 #: js/Model.js:75 js/Model.js:618 js/ContactEventsGridPanel.js:50
-#: js/Model.js:77 js/Model.js:626
+#: js/Model.js:78 js/Model.js:628
 msgid "Events"
 msgstr "Termine"
 
-#: js/Model.js:80 js/Model.js:82
+#: js/Model.js:80 js/Model.js:83
 msgid "Calendars"
 msgstr "Kalender"
 
-#: js/Model.js:376 js/Model.js:1088 js/Model.js:384 js/Model.js:1097
+#: js/Model.js:376 js/Model.js:1088 js/Model.js:385 js/Model.js:1098
 msgid "Quick Search"
 msgstr "Schnellsuche"
 
-#: js/Model.js:380 js/Model.js:388
+#: js/Model.js:380 js/Model.js:390
 msgid "GENDER_Calendar"
 msgstr "male"
 
-#: js/Model.js:384 js/Model.js:392
+#: js/Model.js:384 js/Model.js:394
 msgid "Attendee Status"
 msgstr "Teilnehmerstatus"
 
-#: js/Model.js:385 js/Model.js:393
+#: js/Model.js:385 js/Model.js:395
 msgid "GENDER_Attendee Status"
 msgstr "male"
 
-#: js/Model.js:394 js/Model.js:402
+#: js/Model.js:394 js/Model.js:404
 msgid "Attendee Role"
 msgstr "Teilnehmer Rolle"
 
-#: js/Model.js:395 js/Model.js:403
+#: js/Model.js:395 js/Model.js:405
 msgid "GENDER_Attendee Role"
 msgstr "female"
 
-#: js/Model.js:405 js/Model.js:413
+#: js/Model.js:405 js/Model.js:415
 msgid "GENDER_Status"
 msgstr "male"
 
-#: js/Model.js:414 js/Model.js:422
+#: js/Model.js:414 js/Model.js:424
 msgid "GENDER_Blocking"
 msgstr "other"
 
-#: js/Model.js:422 Model/Event.php:430 js/Model.js:430 Model/Event.php:432
+#: js/Model.js:422 Model/Event.php:430 js/Model.js:432 Model/Event.php:433
 msgid "Classification"
 msgstr "Klassifikation"
 
-#: js/Model.js:423 js/Model.js:431
+#: js/Model.js:423 js/Model.js:433
 msgid "GENDER_Classification"
 msgstr "female"
 
-#: js/Model.js:438
+#: js/Model.js:440
 msgid "Last Modified Time"
 msgstr "Letztes Modifikationsdatum"
 
-#: js/Model.js:439
+#: js/Model.js:441
 msgid "Last Modified By"
 msgstr "Zuletzt geändert von"
 
-#: js/Model.js:440
+#: js/Model.js:442
 msgid "Creation Time"
 msgstr "Erstelldatum"
 
-#: js/Model.js:441
+#: js/Model.js:443
 msgid "Created By"
 msgstr "Erstellt von"
 
-#: js/Model.js:445 js/Model.js:453
+#: js/Model.js:445 js/Model.js:455
 msgid "Unknown date"
 msgstr "Unbekanntes Datum"
 
-#: js/Model.js:448 js/Model.js:456
+#: js/Model.js:448 js/Model.js:458
 #, python-brace-format
 msgid "{0} {1} o'clock"
 msgstr "{0} {1} Uhr"
 
-#: js/Model.js:456 js/Model.js:464
+#: js/Model.js:456 js/Model.js:466
 msgid "Event (as attendee)"
 msgstr "Termin (als Teilnehmer)"
 
-#: js/Model.js:463 js/Model.js:471
+#: js/Model.js:463 js/Model.js:473
 msgid "Event (as organizer)"
 msgstr "Termin (als Organisator)"
 
-#: js/Model.js:473 js/Model.js:481
+#: js/Model.js:473 js/Model.js:483
 msgid "Event attendee"
 msgstr "Terminteilnehmer"
 
-#: js/Model.js:614 js/Model.js:622
+#: js/Model.js:614 js/Model.js:624
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Teilnehmer/in"
 msgstr[1] "Teilnehmende"
 
 #: js/Model.js:1027 js/AttendeeGridPanel.js:169 Config.php:439
-#: Model/Attender.php:299 js/Model.js:1036 Model/Attender.php:297
+#: Model/Attender.php:299 js/Model.js:1037 Model/Attender.php:297
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Ressource"
 msgstr[1] "Ressourcen"
 
-#: js/Model.js:1027 Controller.php:462 js/Model.js:1036
+#: js/Model.js:1027 Controller.php:462 js/Model.js:1037
 msgid "Resources"
 msgstr "Ressourcen"
 
-#: js/Model.js:1072 js/Model.js:1081
+#: js/Model.js:1072 js/Model.js:1082
 msgid "Anyone"
 msgstr "Jeder"
 
 #: js/Model.js:1089 js/AttendeeGridPanel.js:244 js/ResourceEditDialog.js:69
 #: js/ResourcesGridPanel.js:44 Model/Poll.php:70
 #: tempExtract/9b23472d356e595dcb727748e70132a2/xl/sharedStrings.xml:2
-#: js/Model.js:1098
+#: js/Model.js:1099
 msgid "Name"
 msgstr "Name"
 
 #: js/Model.js:1090 js/ResourceEditDialog.js:85 js/ResourcesGridPanel.js:50
-#: js/Model.js:1099
+#: js/Model.js:1100
 msgid "Calendar Hierarchy/Name"
 msgstr "Kalender Hierarchie/Name"
 
 #: js/Model.js:1091 js/ResourceEditDialog.js:74 js/ResourcesGridPanel.js:56
 #: tempExtract/9b23472d356e595dcb727748e70132a2/xl/sharedStrings.xml:2
-#: js/Model.js:1100
+#: js/Model.js:1101
 msgid "Email"
 msgstr "E-Mail"
 
 #: js/Model.js:1093 js/ResourceEditDialog.js:103 js/ResourcesGridPanel.js:69
 #: tempExtract/9b23472d356e595dcb727748e70132a2/xl/sharedStrings.xml:2
-#: js/Model.js:1102 js/ResourceEditDialog.js:109
+#: js/Model.js:1103
 msgid "Maximum number of attendee"
 msgstr "Maximale Teilnehmeranzahl"
 
 #: js/Model.js:1095 js/AttendeeGridPanel.js:235 js/ResourceEditDialog.js:81
 #: js/ResourcesGridPanel.js:62
 #: tempExtract/9b23472d356e595dcb727748e70132a2/xl/sharedStrings.xml:2
-#: js/Model.js:1104
+#: js/Model.js:1105
 msgid "Type"
 msgstr "Typ"
 
-#: js/Model.js:1102 js/ResourceEditDialog.js:93 js/Model.js:1111
+#: js/Model.js:1102 js/ResourceEditDialog.js:93 js/Model.js:1112
 msgid "Default attendee status"
 msgstr "Standard Teilnehmer Status"
 
 #: js/Model.js:1109 js/ResourceEditDialog.js:99 js/ResourcesGridPanel.js:83
 #: tempExtract/9b23472d356e595dcb727748e70132a2/xl/sharedStrings.xml:2
-#: js/Model.js:1118 js/ResourceEditDialog.js:105 js/ResourcesGridPanel.js:89
+#: js/Model.js:1119
 msgid "Busy Type"
 msgstr "Belegt Typ"
 
@@ -1308,36 +1303,36 @@ msgstr ""
 msgid "Member of Group"
 msgstr "Mitglied der Gruppe"
 
-#: js/AttendeeGridPanel.js:398 js/AttendeeGridPanel.js:408
+#: js/AttendeeGridPanel.js:398
 msgid "Loading Groupmembers..."
 msgstr "Lade Gruppenmitglieder..."
 
-#: js/AttendeeGridPanel.js:533 js/AttendeeGridPanel.js:549
+#: js/AttendeeGridPanel.js:533
 msgid "Remove Attender"
 msgstr "Teilnehmer/in entfernen"
 
-#: js/AttendeeGridPanel.js:564
+#: js/AttendeeGridPanel.js:548
 msgid "Use as event location"
 msgstr "Als Terminort übernehmen"
 
-#: js/AttendeeGridPanel.js:553 js/AttendeeGridPanel.js:579
+#: js/AttendeeGridPanel.js:553 js/AttendeeGridPanel.js:565
 msgid "Compose email"
 msgstr "E-Mail verfassen"
 
-#: js/AttendeeGridPanel.js:562 js/AttendeeGridPanel.js:588
+#: js/AttendeeGridPanel.js:562 js/AttendeeGridPanel.js:574
 #, python-brace-format
 msgid "Poll URL: {0}"
 msgstr "Umfrage Link: {0}"
 
-#: js/AttendeeGridPanel.js:582 js/TreePanel.js:178 js/AttendeeGridPanel.js:608
+#: js/AttendeeGridPanel.js:582 js/TreePanel.js:178 js/AttendeeGridPanel.js:595
 msgid "View Resource"
 msgstr "Ressource ansehen"
 
-#: js/AttendeeGridPanel.js:870 js/AttendeeGridPanel.js:896
+#: js/AttendeeGridPanel.js:870 js/AttendeeGridPanel.js:894
 msgid "(as a group member)"
 msgstr "(als Gruppenmitglied)"
 
-#: js/AttendeeGridPanel.js:967 js/AttendeeGridPanel.js:993
+#: js/AttendeeGridPanel.js:967 js/AttendeeGridPanel.js:991
 msgid "External Attendee"
 msgstr "Externer Teilnehmer"
 
@@ -1420,20 +1415,20 @@ msgstr "Ein eingeladener Teilnehmer hat auf die Einladung geantwortet."
 msgid "Unsupported method"
 msgstr "Method wird nicht unterstützt"
 
-#: js/ResourceEditDialog.js:119 js/ResourceEditDialog.js:139
+#: js/ResourceEditDialog.js:119 js/ResourceEditDialog.js:133
 msgid "Suppress notification"
 msgstr "Benachrichtigungen unterdrücken"
 
 #: js/ResourceEditDialog.js:124 js/ResourcesGridPanel.js:94
-#: js/ResourceEditDialog.js:144 js/ResourcesGridPanel.js:107
+#: js/ResourceEditDialog.js:138 js/ResourcesGridPanel.js:101
 msgid "Color"
 msgstr "Farbe"
 
-#: js/ResourceEditDialog.js:130 js/ResourceEditDialog.js:150
+#: js/ResourceEditDialog.js:130 js/ResourceEditDialog.js:144
 msgid "Enter description..."
 msgstr "Bitte geben Sie eine Beschreibung an."
 
-#: js/ResourceEditDialog.js:155 js/ResourceEditDialog.js:175
+#: js/ResourceEditDialog.js:155 js/ResourceEditDialog.js:169
 msgid "Grants"
 msgstr "Zugriffsrechte"
 
@@ -1498,33 +1493,33 @@ msgstr "Farbe nach Ressource"
 msgid "View"
 msgstr "Ansicht"
 
-#: js/EventEditDialog.js:177 js/EventEditDialog.js:179
+#: js/EventEditDialog.js:177 js/EventEditDialog.js:198
 msgid "Saved in"
 msgstr "Gespeichert in"
 
-#: js/EventEditDialog.js:296 js/EventEditDialog.js:306
+#: js/EventEditDialog.js:296 js/EventEditDialog.js:325
 msgid "Enter description"
 msgstr "Bitte geben Sie eine Beschreibung an."
 
-#: js/EventEditDialog.js:343 js/EventEditDialog.js:353
-#: js/EventEditDialog.js:653
+#: js/EventEditDialog.js:343 js/EventEditDialog.js:372
+#: js/EventEditDialog.js:680
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen werden unterdrückt"
 
-#: js/EventEditDialog.js:376 js/EventEditDialog.js:386
-#: js/EventEditDialog.js:654
+#: js/EventEditDialog.js:376 js/EventEditDialog.js:405
+#: js/EventEditDialog.js:681
 msgid "Notifications are enabled"
 msgstr "Benachrichtigungen werden nicht unterdrückt"
 
-#: js/EventEditDialog.js:383 js/EventEditDialog.js:396
+#: js/EventEditDialog.js:383 js/EventEditDialog.js:415
 msgid "Print Event"
 msgstr "Termin Drucken"
 
-#: js/EventEditDialog.js:617 js/EventEditDialog.js:664
+#: js/EventEditDialog.js:617 js/EventEditDialog.js:691
 msgid "Send Notification?"
 msgstr "Benachrichtigung senden?"
 
-#: js/EventEditDialog.js:618 js/EventEditDialog.js:665
+#: js/EventEditDialog.js:618 js/EventEditDialog.js:692
 msgid ""
 "Changes to this event might send notifications. Press the button "
 "\"Notifcation are enabled\" to switch to \"Notification are disabled\""
@@ -1533,23 +1528,23 @@ msgstr ""
 "die Taste \"Benachrichtigung werden nicht unterdrückt\", um zu "
 "\"Benachrichtigung werden unterdrückt\" zu wechseln."
 
-#: js/EventEditDialog.js:657 js/EventEditDialog.js:705
+#: js/EventEditDialog.js:657 js/EventEditDialog.js:732
 msgid "End date is not valid"
 msgstr "Endzeitpunkt ist ungültig."
 
-#: js/EventEditDialog.js:660 js/EventEditDialog.js:708
+#: js/EventEditDialog.js:660 js/EventEditDialog.js:735
 msgid "End date must be after start date"
 msgstr "Der Endzeitpunkt muss nach dem Zeitpunkt des Beginns liegen"
 
-#: js/EventEditDialog.js:666 js/EventEditDialog.js:714
+#: js/EventEditDialog.js:666 js/EventEditDialog.js:741
 msgid "End time is not allowed to be after the configured time."
 msgstr "Die Endzeit darf nicht hinter der konfigurierten Zeit liegen."
 
-#: js/EventEditDialog.js:702 js/EventEditDialog.js:750
+#: js/EventEditDialog.js:702 js/EventEditDialog.js:777
 msgid "Start date is not valid"
 msgstr "Zeitpunkt den Beginns ist ungültig."
 
-#: js/EventEditDialog.js:709 js/EventEditDialog.js:757
+#: js/EventEditDialog.js:709 js/EventEditDialog.js:784
 msgid "Start date is not allowed to be before the configured time."
 msgstr "Das Startdatum darf nicht vor der konfigurierten Zeit liegen."
 
@@ -1590,7 +1585,7 @@ msgstr "Weitere Teilnehmer ..."
 msgid "Default Status"
 msgstr "Standard Status"
 
-#: js/ResourcesGridPanel.js:147 js/ResourcesGridPanel.js:170
+#: js/ResourcesGridPanel.js:141 js/ResourcesGridPanel.js:164
 msgid "No Access"
 msgstr "Kein Zugriff"
 
@@ -2409,27 +2404,27 @@ msgstr "."
 msgid "th"
 msgstr "."
 
-#: Model/Event.php:427 Model/Event.php:429
+#: Model/Event.php:427 Model/Event.php:430
 msgid "Start"
 msgstr "Start"
 
-#: Model/Event.php:434 Model/Event.php:436
+#: Model/Event.php:434 Model/Event.php:437
 msgid "Priority"
 msgstr "Priorität"
 
-#: Model/Event.php:437 Model/Event.php:439
+#: Model/Event.php:437 Model/Event.php:440
 msgid "Url"
 msgstr "Url"
 
-#: Model/Event.php:438 Model/Event.php:440
+#: Model/Event.php:438 Model/Event.php:441
 msgid "Recurrance rule"
 msgstr "Wiederholungsregel"
 
-#: Model/Event.php:439 Model/Event.php:441
+#: Model/Event.php:439 Model/Event.php:442
 msgid "Is all day event"
 msgstr "Ganztages-Termin"
 
-#: Model/Event.php:440 Model/Event.php:442
+#: Model/Event.php:440 Model/Event.php:443
 msgid "Organizer timezone"
 msgstr "Zeitzone des Organisators"
 
@@ -2501,7 +2496,7 @@ msgstr ""
 msgid "Resource Management"
 msgstr "Ressourcen Verwaltung"
 
-#: Controller/Event.php:2246 Controller/Event.php:2265
+#: Controller/Event.php:2246 Controller/Event.php:2279
 msgid ""
 "The new recurrence rule is unpredictable. Please choose a valid recurrence "
 "rule"
@@ -2700,8 +2695,8 @@ msgid_plural "Relations"
 msgstr[0] "Verknüpfung"
 msgstr[1] "Verknüpfungen"
 
-#: js/ResourceEditDialog.js:115 js/ResourcesGridPanel.js:93
-#: Model/Resource.php:89
+#: js/ResourceEditDialog.js:109 js/ResourcesGridPanel.js:87
+#: Model/Resource.php:88
 msgid "Site"
 msgstr "Standort"
 
@@ -2811,23 +2806,30 @@ msgstr "Änderungen an diesem Termin könnten Benachrichtigungen verschicken."
 msgid "Disable notification for external attendeers"
 msgstr "Deaktiviere Benachrichtigung für externe Teilnehmer"
 
-#: js/Model/ResourceGrants.js:84
-msgid "Resource status"
-msgstr "Ressourcen Status ändern"
-
-#: js/Model/ResourceGrants.js:85
-msgid "The grant to set the resource attendee status"
-msgstr "Das Recht den Teilnehmer Status der Ressource zu setzen"
-
-#: js/EventDetailsPanel.js:236 js/EventEditDialog.js:295
+#: js/EventDetailsPanel.js:236 js/EventEditDialog.js:314
 msgid "URL"
 msgstr "URL"
 
-#: js/ResourceEditDialog.js:99
+#: js/Model.js:388
+msgid "Location Contact"
+msgstr "Kontakt der Lokalität"
+
+#: js/AttendeeGridPanel.js:605
+msgid "use as location"
+msgstr "Ressourcen Lokalität als Terminort übernehmen"
+
+msgid "Resource Location"
+msgstr "Ressourcen Ort"
+
+msgid "Resource status"
+msgstr "Ressourcen Status ändern"
+
+msgid "The grant to set the resource attendee status"
+msgstr "Das Recht den Teilnehmer Status der Ressource zu setzen"
+
 msgid "Default attendee status with status grant"
 msgstr "Standard Teilnehmer Status mit Status Recht"
 
-#: js/ResourcesGridPanel.js:83
 msgid "Default Status with status grant"
 msgstr "Standard Teilnehmer Status mit Status Recht"
 

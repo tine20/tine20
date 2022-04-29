@@ -30,6 +30,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     { name: 'adr_lon' },
     { name: 'adr_lat' },
     { name: 'location' },
+    { name: 'location_record' },
     { name: 'organizer' },
     { name: 'priority' },
     { name: 'status' },
@@ -403,6 +404,7 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
         {label: i18n._('Quick Search'), field: 'query', operators: ['contains']},
         {label: app.i18n._('Summary'), field: 'summary'},
         {label: app.i18n._('Location'), field: 'location'},
+        {filtertype: 'addressbook.contact', field: 'location_record', label: app.i18n._('Location Contact')},
         {label: app.i18n._('Description'), field: 'description', operators: ['contains', 'notcontains']},
         // _('GENDER_Calendar')
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Calendar.Model.Event, /*defaultOperator: 'in',*/ defaultValue: {path: Tine.Tinebase.container.getMyNodePath()}},
