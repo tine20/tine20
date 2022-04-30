@@ -716,7 +716,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var result = '';
         
         if (value == 1) {
-            result = '<img class="FelamimailFlagIcon" src="images/oxygen/16x16/actions/attach.png">';
+            result = '<div class="action_attach tine-grid-row-action-icon" />';
         }
         
         return result;
@@ -1322,9 +1322,20 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             Tine.Felamimail.MessageFileAction.locationClickHandler(fileLocation.model, fileLocation.record_id);
 
             e.stopEvent();
-        }
+        } else if (e.getTarget('.action_attach')) {
+            if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
+                const me = this;
 
-        Tine.Felamimail.GridPanel.superclass.onRowClick.apply(this, arguments);
+                Tine.Filemanager.QuickLookPanel.openWindow({
+                    record: this.getStore().getAt(row),
+                    initialApp: this.app,
+                    sm: grid.getSelectionModel(),
+                    handleAttachments: Tine.Felamimail.MailDetailsPanel.prototype.quicklookHandleAttachments
+                });
+            }
+        } else {
+            Tine.Felamimail.GridPanel.superclass.onRowClick.apply(this, arguments);
+        }
     },
 
     @keydown(['ctrl+o', 'enter'])

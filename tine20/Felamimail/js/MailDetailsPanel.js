@@ -374,6 +374,19 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                                 });
                             }
                         }, {
+                            text: this.app.i18n._('Preview'),
+                            iconCls: 'action_preview',
+                            hidden: !attachments.length || !Tine.Tinebase.appMgr.isEnabled('Filemanager')
+                                || (_.get(attachments, '[0]content-type') === 'message/rfc822' && attachments.length === 1),
+                            handler: () => {
+                                Tine.Filemanager.QuickLookPanel.openWindow({
+                                    record: this.record,
+                                    initialApp: this.app,
+                                    handleAttachments: this.quicklookHandleAttachments,
+                                    initialAttachmentIdx: idx
+                                });
+                            }
+                        }, {
                             xtype: 'menuseparator',
                             hidden: attachments.length !== 1 || _.get(attachments, '[0]content-type') !== 'message/rfc822'
                         }, {
@@ -532,6 +545,28 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     }
                 }
                 break;
+        }
+    },
+
+    quicklookHandleAttachments: async function() {
+        this.cardPanel.layout.setActiveItem(0); // wait cycle
+        if (this.record.constructor.hasField('attachments')) {
+            // new mail -> fetch body with fmail attachments
+            const body = await Tine.Felamimail.getMessage(this.record.id);
+            this.attachments = _.map(body.attachments, (attachmentData) => {
+                return Tine.Tinebase.data.Record.setFromJson(Object.assign(attachmentData, {
+                    id: `${this.record.id}:${attachmentData.partId}`,
+                    messageId: this.record.id
+                }), Tine.Felamimail.Model.Attachment);
+            });
+            this.record.set('attachments', body.attachments);
+            this.record = this.attachments[_.isNumber(this.initialAttachmentIdx) ? this.initialAttachmentIdx : 0];
+        }
+
+        if (this.record.constructor !== Tine.Tinebase.Model.Tree_Node) {
+            // convert fmail attachment to attachmentCache attachment
+            const attachmentCache = await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', this.record.get('messageId'), this.record.get('partId')].join(':'));
+            this.record = this.attachments[this.attachments.indexOf(this.record)] = new Tine.Tinebase.Model.Tree_Node(attachmentCache.attachments[0]);
         }
     },
 
