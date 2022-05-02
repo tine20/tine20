@@ -4051,16 +4051,6 @@ parameters:
 			path: tine20/HumanResources/BL/DailyWTReport/BreakTime.php
 
 		-
-			message: "#^Binary operation \"\\-\" between string and 1 results in an error\\.$#"
-			count: 1
-			path: tine20/HumanResources/BL/DailyWTReport/PopulateReport.php
-
-		-
-			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
-			count: 2
-			path: tine20/HumanResources/BL/DailyWTReport/PopulateReport.php
-
-		-
 			message: "#^Binary operation \"\\+\" between string and 1 results in an error\\.$#"
 			count: 1
 			path: tine20/HumanResources/Config.php
