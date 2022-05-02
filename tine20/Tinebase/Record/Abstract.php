@@ -865,6 +865,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      * @param mixed $_offset
      * @return boolean
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($_offset)
     {
         return isset($this->_properties[$_offset]);
@@ -887,6 +888,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      * @param mixed $_offset
      * @param mixed $_value
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($_offset, $_value)
     {
         $this->__set($_offset, $_value);
@@ -898,6 +900,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      * @param mixed $_offset
      * @throws Tinebase_Exception_Record_NotAllowed
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($_offset)
     {
         throw new Tinebase_Exception_Record_NotAllowed('Unsetting of properties is not allowed');
@@ -906,6 +909,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     /**
      * required by IteratorAggregate interface
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new ArrayIterator($this->_properties);
