@@ -174,7 +174,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
 
-        return array("results" => $results, "totalcount" => $lists["totalcount"]+$contacts["totalcount"]);
+        return array("results" => $results, "totalcount" => count($results));
     }
 
     /**
