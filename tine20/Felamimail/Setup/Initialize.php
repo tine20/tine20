@@ -25,6 +25,7 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
     static protected $_userRoleRights = array(
         Tinebase_Acl_Rights::RUN,
         Felamimail_Acl_Rights::MANAGE_ACCOUNTS,
+        Felamimail_Acl_Rights::ADD_ACCOUNTS,
     );
 
     /**
