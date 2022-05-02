@@ -69,6 +69,7 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
                         }
                         // here we loose record.json data from old record! -> update existing record? vs. have preserveJSON props? // not a problem?
                         this.field.setValue(record);
+                        this.field.fireEvent('select', this.field, record);
                     },
                     'cancel': () => {
                         if (new Date().getTime() - 1000 < this.field.blurOnSelectLastRun) return;
