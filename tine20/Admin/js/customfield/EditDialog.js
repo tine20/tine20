@@ -391,6 +391,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 })
             ],  
             selectTypeDefault: 'group',
+            selectRole: true,
             disabled: false,
             border: false,
             frame: true,
