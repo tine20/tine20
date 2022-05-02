@@ -362,6 +362,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Reversal Status', // _('Reversal Status')
                 self::TYPE                          => self::TYPE_KEY_FIELD,
                 self::NAME                          => Sales_Config::DOCUMENT_REVERSAL_STATUS,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
         ]
     ];
@@ -419,8 +422,18 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}->count() === 0) {
                 $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS} =
                     new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_TransitionSource::class, []);
+
+                if ($record->{Sales_Model_Document_TransitionSource::FLD_IS_REVERSAL}) {
+                    $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
+                        ->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS} = Sales_Config::DOCUMENT_REVERSAL_STATUS_REVERSED;
+                }
+
                 foreach ($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
                              ->{Sales_Model_Document_Abstract::FLD_POSITIONS} as $position) {
+
+                    /** now this is important! we need to reference the same object here, so it gets dirty and we can update it if required */
+                    $position->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID} =
+                        $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT};
 
                     $sourcePosition = new Sales_Model_DocumentPosition_TransitionSource([
                         Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION => $position,
@@ -432,19 +445,43 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     try {
                         $position->transitionFrom($sourcePosition);
                         $this->{self::FLD_POSITIONS}->addRecord($position);
+                        $position->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID} = null;
                         ++$addedPositions;
                     } catch (Tinebase_Exception_Record_Validation $e) {
                     }
+                    $sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}
+                        ->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID} = null;
                 }
 
             } else {
                 foreach ($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS} as $sourcePosition) {
+
+                    if (!$record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
+                            ->{Sales_Model_Document_Abstract::FLD_POSITIONS}->getById($sourcePosition
+                            ->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}->getID())) {
+                        throw new Tinebase_Exception_UnexpectedValue('sourcePosition in transition not found in source document!');
+                    }
+
+                    /** now this is important! we need to reference the same object here, so it gets dirty and we can update it if required */
+                    $sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}
+                        ->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID} =
+                            $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT};
+
                     /** @var Sales_Model_DocumentPosition_Abstract $position */
                     $position = new $positionClass([], true);
                     $position->transitionFrom($sourcePosition);
                     $this->{self::FLD_POSITIONS}->addRecord($position);
+                    $position->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID} = null;
+                    $sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}
+                        ->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID} = null;
                     ++$addedPositions;
                     $isReversal = $isReversal || (bool)$sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL};
+
+                    if ($sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL} && $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
+                                ->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS} !== Sales_Config::DOCUMENT_REVERSAL_STATUS_REVERSED) {
+                        $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
+                            ->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS} = Sales_Config::DOCUMENT_REVERSAL_STATUS_PARTIALLY_REVERSED;
+                    }
                 }
             }
 
@@ -458,8 +495,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 Tinebase_Model_DynamicRecordWrapper::FLD_RECORD =>
                     $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT},
             ]));
-
-            //$this->{self::FLD_TAGS} = array_merge($this->{self::FLD_TAGS}, $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}->{self::FLD_TAGS});
         }
 
         // for the time being we keep this simple, this is a TODO FIXME!!!
