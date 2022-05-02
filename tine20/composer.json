@@ -129,7 +129,7 @@
   "require-dev": {
     "laminas/laminas-psr7bridge": "^1",
     "phing/phing": "2.16.*",
-    "phpstan/phpstan": "^0.12.99",
+    "phpstan/phpstan": "^1.6",
     "phpunit/phpunit": "^8.5",
     "tedivm/jshrink": "~1.0"
   },
