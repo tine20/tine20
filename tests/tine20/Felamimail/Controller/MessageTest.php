@@ -122,6 +122,12 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         }
     }
 
+    public static function tearDownAfterClass(): void
+    {
+        Felamimail_Backend_ImapFactory::reset();
+        parent::tearDownAfterClass();
+    }
+
     /********************************* test funcs *************************************/
     
     /**
