@@ -1068,8 +1068,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $this->sendNotifications($sendNotifications);
         $updatedEvent->mute = $_record->mute;
         if ($this->_sendNotifications) {
-            $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
+            $this->doSendNotifications(clone $updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
         }
+        
+        $this->_checkGrant($updatedEvent, self::ACTION_GET, false);
 
         return $updatedEvent;
     }
