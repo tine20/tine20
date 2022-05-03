@@ -3043,12 +3043,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             ],
             self::DEFAULT_STR           => [
                 'records'                   => [
-                    [
-                        Tinebase_Model_AuthTokenChannelConfig::FLDS_NAME => Tinebase_Export_Abstract::class . '::expressiveApi',
-                    ]
+                    [ Tinebase_Model_AuthTokenChannelConfig::FLDS_NAME => 'broadcasthub', ],
+                    [ Tinebase_Model_AuthTokenChannelConfig::FLDS_NAME => Tinebase_Export_Abstract::class . '::expressiveApi', ],
                 ],
             ],
-            self::CLIENTREGISTRYINCLUDE => true,
+            self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => false,
         ],
