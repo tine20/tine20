@@ -141,10 +141,8 @@ class Setup_Controller
      * check system/php requirements (env + ext check)
      *
      * @return array
-     *
-     * @todo add message to results array
      */
-    public function checkRequirements()
+    public function checkRequirements(): array
     {
         $envCheck = $this->environmentCheck();
         
@@ -184,7 +182,7 @@ class Setup_Controller
         $tika = Tinebase_Config::getInstance()->{Tinebase_Config::FULLTEXT}->{Tinebase_Config::FULLTEXT_TIKAJAR}? 'tika' : '';
 
         if ( (empty($tnef) && empty($ytnef)) || empty($tika)) {
-            $result['result'] = array(
+            $result['result'][] = array(
                 'key' => 'OptionalBinaries',
                 'value' => FALSE,
                 'message' => 'The following optional binaries are missing: ' .
@@ -194,7 +192,7 @@ class Setup_Controller
             return $result;
         }
         
-        $result['result'] = array(
+        $result['result'][] = array(
             'key' => 'OptionalBinaries',
             'value' => TRUE,
             'message' => 'The following optional binaries are available: ' . 
