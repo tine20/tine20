@@ -82,8 +82,8 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
 
     routes: {
         'showEvent/(.*)': 'showEvent',
-        'pollFBView/(.*)/(.*)/(.*)': 'pollFBView' // hack: as we have no local storage window manager yet
-
+        'pollFBView/(.*)/(.*)/(.*)': 'pollFBView', // hack: as we have no local storage window manager yet
+        'Event/(.*)': 'openInNewWindow'
     },
 
     /**
@@ -165,5 +165,24 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
                 Ext.Msg.alert(this.i18n._('Event not found'), this.i18n._("The Event was deleted in the meantime or you don't have access rights to it."));
             }
         });
+    },
+    
+    async openInNewWindow(id) {
+        await Tine.Calendar.getEvent(id)
+            .then((result) => {
+                const record = Tine.Tinebase.data.Record.setFromJson(result, Tine.Calendar.Model.Event);
+                const cp = this.getMainScreen().getCenterPanel();
+                cp.onEditInNewWindow.call(cp, {actionType: 'edit'}, record);
+            })
+            .catch((error) => {
+                Ext.Msg.show({
+                    title: 'Error',
+                    msg: error.message,
+                    buttons: Ext.MessageBox.OK,
+                    icon: Ext.MessageBox.ERROR
+                });
+            })
+        
+        window.location = window.location.href.replace(`/Event/${id}`, '');
     }
 });
