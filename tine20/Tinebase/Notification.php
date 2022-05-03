@@ -80,16 +80,19 @@ class Tinebase_Notification
      * @param string                    $_messagePlain
      * @param string                    $_messageHtml
      * @param string|array              $_attachments
+     * @param bool                      $_fireEvent
      * @throws Tinebase_Exception
      * 
      * @todo improve exception handling: collect all messages / exceptions / failed email addresses / ...
      */
-    public function send($_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachments = NULL)
+    public function send($_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachments = NULL, $_fireEvent = false)
     {
         $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         
         $exception = NULL;
         $sentContactIds = array();
+        $recipientEmails = [];
+        
         /** @var Addressbook_Model_Contact $recipient */
         foreach ($_recipients as $recipient) {
             try {
@@ -105,7 +108,10 @@ class Tinebase_Notification
                 }
                 if (! in_array($recipient->getId(), $sentContactIds)) {
                     $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml, $_attachments);
-                    $sentContactIds[] = $recipient->getId();
+                    if ($recipient->getId()) {
+                        $sentContactIds[] = $recipient->getId();
+                    }
+                    $recipientEmails[] = $recipient->email;
                 }
             } catch (Exception $e) {
                 $exception = $e;
@@ -121,6 +127,16 @@ class Tinebase_Notification
         if ($exception !== NULL) {
             // throw exception in the end when all recipients have been processed
             throw $exception;
+        }
+
+        if ($_fireEvent) {
+            $event = new Tinebase_Event_Notification();
+            $event->updater = $_updater->accountEmailAddress;
+            $event->recipients = $recipientEmails;
+            $event->subject = $_subject;
+            $event->messagePlain = $_messagePlain;
+
+            Tinebase_Event::fireEvent($event);
         }
     }
 }

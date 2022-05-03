@@ -1028,7 +1028,14 @@ class Tinebase_FileSystemTest extends TestCase
         $this->_controller->update($node);
         $this->_controller->notifyQuota();
         $messages = $this->getMessages();
-        static::assertEquals(1, count($messages), 'should have received one notification email');
+        $senders = Tinebase_FileSystem::getInstance()->getNotificationSenders($node);
+        $totalCount = 0;
+        foreach ($senders as $sender) {
+            $recipients = Tinebase_FileSystem::getInstance()->getQuotaNotificationRecipients($sender, false);
+            $totalCount += count($recipients);
+        }
+        
+        static::assertEquals($totalCount, count($messages), 'should have received ' . $totalCount . ' notification emails');
         /** @var Tinebase_Mail $message */
         $message = $messages[0];
         static::assertEquals('filemanager quota notification', $message->getSubject());

@@ -828,6 +828,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const QUOTA_TOTALINMB = 'totalInMB';
     const QUOTA_FILESYSTEM_TOTALINMB = 'filesystemTotalInMB';
     const QUOTA_TOTALBYUSERINMB = 'totalByUserInMB';
+    const QUOTA_NOTIFICATION_ADDRESSES = 'quotaNotificationAddresses';
 
     const SSO = 'sso';
     const SSO_ACTIVE = 'active';
@@ -2922,6 +2923,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'setBySetupModule'      => false,
                     'default'               => false,
                 ),
+                self::QUOTA_NOTIFICATION_ADDRESSES => [
+                    //_('Quota notification addresses')
+                    self::LABEL                 => 'Quota notification addresses',
+                    //_('Addresses for sending quota notification email')
+                    self::DESCRIPTION           => 'Addresses for sending quota notification email',
+                    self::TYPE                  => self::TYPE_ARRAY,
+                    self::DEFAULT_STR           => [],
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => true
+                ]
             ),
             'default'               => array(),
         ),
