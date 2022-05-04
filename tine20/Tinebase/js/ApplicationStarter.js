@@ -457,7 +457,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                                 if (! dd.hasOwnProperty(modelConfig.containerProperty)) {
                                     var app = Tine.Tinebase.appMgr.get(appName),
                                         registry = app.getRegistry(),
-                                        ctp = app.getMainScreen().getWestPanel().getContainerTreePanel();
+                                        ctp = app.getMainScreen()?.getWestPanel().getContainerTreePanel();
 
                                     var container = (ctp && Ext.isFunction(ctp.getDefaultContainer) ? ctp.getDefaultContainer() : null)
                                         || (registry ? registry.get("default" + modelName + "Container") : null);
