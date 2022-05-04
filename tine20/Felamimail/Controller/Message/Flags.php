@@ -47,7 +47,7 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
         $this->_backend = new Felamimail_Backend_Cache_Sql_Message();
 
         if (Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_TINE20_FLAG)) {
-            self::$_allowedFlags['Tine20'] = '\Tine20';
+            self::$_allowedFlags['Tine20'] = 'Tine20';
         }
     }
     
