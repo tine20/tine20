@@ -537,10 +537,10 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'default'               => false,
         ),
         self::DISABLE_EXTERNAL_NOTIFICATIONS => array(
-            //_('Disable notification for external organizers')
-            'label'                 => 'Disable notification for external organizers',
-            //_('Disable notification for external organizers')
-            'description'           => 'Disable notification for external organizers',
+            //_('Disable notification for external attendee')
+            'label'                 => 'Disable notification for external attendee',
+            //_('Disable notification for external attendee')
+            'description'           => 'Disable notification for external attendee',
             'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
             'clientRegistryInclude' => false,
             'setByAdminModule'      => true,
