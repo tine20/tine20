@@ -306,8 +306,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         const isOwn = Tine.Tinebase.registry.get('currentAccount').accountId === accountId;
         const processStatusPicker = this.getForm().findField('process_status')
         const processStatus = processStatusPicker.getValue();
-        const allowUpdate = grants.adminGrant || grants.manageBillableGrant || grants.bookAllGrant || (isOwn && grants.bookOwnGrant) ||
-            (processStatus === 'REQUESTED' && (isNewRecord || (isOwn && grants.requestOwnGrant)));
+        const allowUpdate = grants.adminGrant || grants.manageBillableGrant || grants.bookAllGrant || (isOwn && grants.bookOwnGrant)
+            || (processStatus === 'REQUESTED' && (isNewRecord || (isOwn && grants.requestOwnGrant)))
+            || Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts')
+            || Tine.Tinebase.common.hasRight('admin', 'Timetracker');
 
         this.getForm().findField('account_id').setDisabled(! (grants.bookAllGrant ||grants.adminGrant));
         processStatusPicker.setDisabled(!(grants.manageBillableGrant || grants.bookAllGrant || (isOwn && grants.bookOwnGrant) || grants.adminGrant));
