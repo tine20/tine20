@@ -43,7 +43,12 @@ class Timetracker_Config extends Tinebase_Config_Abstract
     const TS_PROCESS_STATUS_REQUESTED = 'REQUESTED';
     const TS_PROCESS_STATUS_ACCEPTED = 'ACCEPTED';
     const TS_PROCESS_STATUS_DECLINED = 'DECLINED';
-    
+
+    const ACCOUNTING_TIME_ROUNDING_MINUTES = 'accountingTimeRoundingMinutes';
+    const ACCOUNTING_TIME_ROUNDING_METHOD = 'accountingTimeRoundingMethod';
+    const ACCOUNTING_TIME_ROUNDING_METHOD_CEIL = 'ceil';
+    const ACCOUNTING_TIME_ROUNDING_METHOD_FLOOR = 'floor';
+    const ACCOUNTING_TIME_ROUNDING_METHOD_ROUND = 'round';
 
     /**
      * @var array
@@ -110,6 +115,16 @@ class Timetracker_Config extends Tinebase_Config_Abstract
                 ],
                 self::DEFAULT_STR           => self::TS_PROCESS_STATUS_ACCEPTED,
             ],
+        ],
+        self::ACCOUNTING_TIME_ROUNDING_MINUTES => [
+            self::TYPE                  => self::TYPE_INT,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => 15
+        ],
+        self::ACCOUNTING_TIME_ROUNDING_METHOD => [
+            self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => self::ACCOUNTING_TIME_ROUNDING_METHOD_CEIL,
         ],
     ];
 
