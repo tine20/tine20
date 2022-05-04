@@ -134,6 +134,7 @@ abstract class Timetracker_AbstractTest extends TestCase
             'description' => 'blabla',
             'duration' => 30,
             'accounting_time' => 15,
+            'accounting_time_factor' => 1,
             'timeaccount_id' => NULL,
             'start_date' => NULL
         ];
