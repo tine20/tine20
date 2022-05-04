@@ -1546,7 +1546,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
 
-    public function getWebAuthnAuthenticateOptionsForMFA(string $accountLoginName, string $mfaId)
+    /**
+     * @param string|null $accountLoginName
+     * @param string|null $mfaId
+     * @return array
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getWebAuthnAuthenticateOptionsForMFA(?string $accountLoginName = null, ?string $mfaId = null): array
     {
         $account = Tinebase_User::getInstance()->getFullUserByLoginName($accountLoginName);
         
