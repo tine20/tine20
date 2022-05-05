@@ -283,12 +283,14 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
         
         if ($_record->alarms instanceof Tinebase_Record_RecordSet) {
             foreach ($_record->alarms as $alarm) {
-                $alarm->alarm_time = $alarm->alarm_time->add($dueDiff);
-                if ($alarm->sent_status != 'pending') {
-                    $alarm->sent_status = 'pending';
-                    $alarm->sent_time = null;
-                    $alarm-> sent_message = null;
-                }
+               if ($alarm->alarm_time && $alarm->options == '{"custom":false}') {
+                   $alarm->alarm_time = $alarm->alarm_time->add($dueDiff);
+                   if ($alarm->sent_status != 'pending') {
+                       $alarm->sent_status = 'pending';
+                       $alarm->sent_time = null;
+                       $alarm-> sent_message = null;
+                   }
+               }
             }
         }
         
