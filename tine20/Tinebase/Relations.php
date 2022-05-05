@@ -558,9 +558,19 @@ class Tinebase_Relations
      */
     protected function resolveAppRecords($_relations, $_ignoreACL = FALSE)
     {
+        static $recursionIds = [];
+
+        $unsetIds = [];
+        $recursionRAII = new Tinebase_RAII(function() use (&$unsetIds, &$recursionIds) {
+            $recursionIds = array_diff($recursionIds, $unsetIds);
+        });
+
         // separate relations by model
         $modelMap = array();
         foreach ($_relations as $relation) {
+            if (in_array($relation->getId(), $recursionIds)) continue;
+            $unsetIds[] = $relation->getId();
+            $recursionIds[] = $relation->getId();
             if (!(isset($modelMap[$relation->related_model]) || array_key_exists($relation->related_model, $modelMap))) {
                 $modelMap[$relation->related_model] = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
             }
@@ -633,6 +643,8 @@ class Tinebase_Relations
                 }
             }
         }
+
+        unset($recursionRAII);
     }
     
     /**
