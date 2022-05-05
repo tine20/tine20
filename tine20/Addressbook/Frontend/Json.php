@@ -190,10 +190,10 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
  
         if (count($addressData) > 0) {
             $emails = array_map(function($address) {
-                return $address ? $address['email'] : null;
+                return !empty($address['email']) ? $address['email'] : null;
             }, $addressData);
             $names = array_map(function($address) {
-                return $address ? $address['email'] : null;
+                return !empty($address['name']) ? $address['name'] : null;
             }, $addressData);
             // need to filter modified type from client
             $types = array_map(function ($address) {
