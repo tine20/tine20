@@ -835,10 +835,9 @@ Tine.Tinebase.common = {
             const parsed = addrs.parseAddressList(address.replace(';', ','));
         });
         const matches = address.match(/(?<email>([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+))/g);
-        debugger
+
         let emails = _.split(address, '>,');
-        
-        const emailArray = _.map(emails, (address) => {
+        let emailArray = _.map(emails, (address) => {
             const parsed = addressparser.parse(address.replace(/,/g, '\\\\,'));
             let contact = {
                 'email': parsed && parsed[0]?.address ? parsed[0]?.address : '',
@@ -853,6 +852,7 @@ Tine.Tinebase.common = {
                 return contact;
             }
         });
+        emailArray = _.filter(emailArray);
         
         const {results: contacts} = await Tine.Addressbook.searchContactsByRecipientsToken(emailArray);
         

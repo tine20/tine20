@@ -189,11 +189,15 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $results = [];
  
         if (count($addressData) > 0) {
-            $emails = array_map(function($address) {return $address['email'];}, $addressData);
-            $names = array_map(function($address) {return $address['name'];}, $addressData);
+            $emails = array_map(function($address) {
+                return !empty($address['email']) ? $address['email'] : null;
+            }, $addressData);
+            $names = array_map(function($address) {
+                return !empty($address['name']) ? $address['name'] : null;
+            }, $addressData);
             // need to filter modified type from client
             $types = array_map(function ($address) {
-                if ($address['type'] === '' || strpos($address['type'], 'Member') !== false) {
+                if (! $address || $address['type'] === '' || strpos($address['type'], 'Member') !== false) {
                     return null;
                 }
 
