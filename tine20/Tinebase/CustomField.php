@@ -693,6 +693,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */
     protected function _resolveCustomFieldsValues(Tinebase_Record_RecordSet $_customFields, Tinebase_Record_RecordSet $_configs)
     {
+        static $recursionIds = [];
+
         /** @var Tinebase_Model_CustomField_Config $config */
         foreach ($_configs as $config) {
             $type = strtolower($config->definition->type);
@@ -717,13 +719,16 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                         }
                         $ids = $tmpIds;
                     }
-                    $ids = array_unique($ids);
 
                     // prevent recursion
+                    $ids = array_diff(array_unique($ids), $recursionIds);
+                    if (count($ids) === 0) continue;
                     $current = $controller->resolveCustomfields(false);
                     try {
+                        $recursionIds = array_merge($recursionIds, $ids);
                         $result = $controller->getMultiple($ids);
                     } finally {
+                        $recursionIds = array_diff($recursionIds, $ids);
                         $controller->resolveCustomfields($current);
                     }
 
