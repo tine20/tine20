@@ -189,7 +189,8 @@ Ext.namespace('Tine.Tasks');
                     }], [new Ext.ux.form.DateTimeField({
                             defaultTime: '12:00',
                             fieldLabel: this.app.i18n._('Due date'),
-                            name: 'due'
+                            name: 'due',
+                            listeners: {scope: this, change: this.validateDue},
                         }), 
                         new Tine.Tinebase.widgets.keyfield.ComboBox({
                             fieldLabel: this.app.i18n._('Priority'),
@@ -261,7 +262,16 @@ Ext.namespace('Tine.Tasks');
             }), this.alarmPanel
             ]
         };
-    }
+    },
+
+     validateDue: function() {
+         var dueField = this.getForm().findField('due'),
+             due = dueField.getValue();
+         
+         if (Ext.isDate(due) && due.getTime() - Date.now() <= 0) {
+             dueField.markInvalid(this.app.i18n._('Attention: This due date is in the past!'));
+         }
+     }
 });
 
 /**

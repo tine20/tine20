@@ -25,6 +25,9 @@ msgstr ""
 msgid "Add New Task"
 msgstr "Neue Aufgabe hinzufügen"
 
+msgid "Create New Task"
+msgstr "Als neue Aufgabe hinzufügen"
+
 #: js/TaskEditDialog.js:140
 msgid "You have to supply a due date, because an alarm ist set!"
 msgstr "Sie müssen ein Fälligkeitsdatum angeben, da ein Alarm gesetzt wurde!"
@@ -323,3 +326,9 @@ msgstr "Gemeinsame Aufgaben-Favoriten verwalten"
 #: Acl/Rights.php:102
 msgid "Create or update shared tasks favorites"
 msgstr "Gemeinsame Aufgaben-Favoriten erstellen oder bearbeiten"
+
+msgid "Creating new Task..."
+msgstr "Erstelle neue Aufgabe..."
+
+msgid "Attention: This due date is in the past!"
+msgstr "Achtung: Das Fälligkeitsdatum liegt in der Vergangenheit!"
