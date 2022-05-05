@@ -78,8 +78,9 @@ class Tinebase_Model_MFA_UserConfig extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'MFA Device Config', // _('MFA Device Config')
                 self::CONFIG                        => [
                     self::REF_MODEL_FIELD               => self::FLD_CONFIG_CLASS,
+                    self::PERSISTENT                    => true,
                 ],
-                    self::VALIDATORS            => [
+                self::VALIDATORS            => [
                         Zend_Filter_Input::ALLOW_EMPTY => false,
                         Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
