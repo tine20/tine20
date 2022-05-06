@@ -563,11 +563,17 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // remove possible harmful utf-8 chars
         // TODO should not be enabled by default (configurable?)
         $subjectAndMail = Tinebase_Helper::mbConvertTo($message->from_email . '_' . $subject, 'ASCII');
-        return str_replace(' ', '_', $message->received->toString('Y-m-d'))
+        $fileName = Tinebase_Model_Tree_Node::sanitizeName(str_replace(' ', '_', $message->received->toString('Y-m-d'))
             . '_' . mb_substr($subjectAndMail, 0, 245)
             . '_' . mb_substr(md5($message->messageuid
             . $message->folder_id), 0, 10)
-            . '.eml';
+            . '.eml');
+
+        if (class_exists('EFile_Config') && Tinebase_Application::getInstance()->isInstalled(EFile_Config::APP_NAME)) {
+            str_replace((array)EFile_Config::getInstance()->{EFile_Config::NODE_NAME_DENIED_SUBSTRINGS}, '-', $fileName);
+        }
+
+        return $fileName;
     }
 
     /**

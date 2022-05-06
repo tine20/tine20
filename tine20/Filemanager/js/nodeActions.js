@@ -178,6 +178,13 @@ Tine.Filemanager.nodeActions.CreateFolder = {
             }));
             
             gridWdgt.newInlineRecord(newRecord, 'name', async (localRecord) => {
+                let text = localRecord.get('name');
+                let forbidden = /[\/\\\:*?"<>|]/;
+                if (forbidden.test(text)) {
+                    Ext.Msg.alert(String.format(app.i18n._('Not renamed {0}'), nodeName), app.i18n._('Illegal characters: ') + forbidden);
+                    return;
+                }
+
                 return await Tine.Filemanager.nodeBackend.createFolder(`${currentPath}${localRecord.get('name')}/`)
                     .catch((e) => {
                         window.postal.publish({
@@ -196,6 +203,12 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                 if (currentFolderNode && btn === 'ok') {
                     if (!text) {
                         Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), String.format(app.i18n._('You have to supply a {0} name!'), nodeName));
+                        return;
+                    }
+
+                    let forbidden = /[\/\\\:*?"<>|]/;
+                    if (forbidden.test(text)) {
+                        Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), app.i18n._('Illegal characters: ') + forbidden);
                         return;
                     }
 
@@ -285,6 +298,12 @@ Tine.Filemanager.nodeActions.Rename = {
                 if (btn === 'ok') {
                     if (!text) {
                         Ext.Msg.alert(String.format(i18n._('Not renamed {0}'), nodeName), String.format(i18n._('You have to supply a {0} name!'), nodeName));
+                        return;
+                    }
+
+                    let forbidden = /[\/\\\:*?"<>|]/;
+                    if (forbidden.test(text)) {
+                        Ext.Msg.alert(String.format(app.i18n._('Not renamed {0}'), nodeName), app.i18n._('Illegal characters: ') + forbidden);
                         return;
                     }
 
