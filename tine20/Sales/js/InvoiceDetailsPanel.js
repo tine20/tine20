@@ -160,7 +160,7 @@ Tine.Sales.InvoiceDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
 
                     var renderer = Tine.widgets.grid.RendererManager.get('Sales', 'Invoice', key);
                     if (renderer) {
-                        return renderer(value[key], key, that.record);
+                        return renderer(value[key], {}, that.record);
                     } else {
                         return '';
                     }

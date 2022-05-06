@@ -118,8 +118,8 @@ Tine.Tinebase.common = {
      * @return {String} localised date
      */
     dateRenderer: function (date, metadata) {
-        if (metadata) {
-            metadata.css = metadata.css + ' tine-gird-cell-date';
+        if (_.isObject(metadata)) {
+            metadata.css = (metadata.css || '') + ' tine-gird-cell-date';
         }
 
         var dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
