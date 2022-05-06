@@ -91,7 +91,7 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
         {
             $this->_additionalColumns['emails'] = new Zend_Db_Expr('(' .
                 $this->_db->select()
-                    ->from($this->_tablePrefix . 'addressbook', array($this->_dbCommand->getAggregate('email')))
+                    ->from($this->_tablePrefix . 'addressbook', array(new Zend_Db_Expr('GROUP_CONCAT(DISTINCT IF(LENGTH(email)>0, email, email_home))')))
                     ->where($this->_db->quoteIdentifier('id') . ' IN ?', $this->_db->select()
                         ->from(array('addressbook_list_members' => $this->_tablePrefix . 'addressbook_list_members'), array('contact_id'))
                         ->where($this->_db->quoteIdentifier('addressbook_list_members.list_id') . ' = ' . $this->_db->quoteIdentifier('addressbook_lists.id'))
