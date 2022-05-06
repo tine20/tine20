@@ -634,7 +634,10 @@ Tine.Tinebase.tineInit = {
             Tine.Tinebase.appMgr.apps.each((app) => {
                 const initRoutes = _.get(window, `Tine.${app.appName}.Application.prototype.initRoutes`);
                 if(_.isFunction(initRoutes)) {
-                    initRoutes.call(app);
+                    initRoutes.call(Object.assign({
+                        appName: app.appName,
+                        routes: app.routes
+                    }, _.get(window, `Tine.${app.appName}.Application.prototype`)));
                 }
             })
         }
