@@ -595,7 +595,10 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 
         if (count($invalidEmailAddresses) > 0) {
             $translation = Tinebase_Translation::getTranslation('Felamimail');
-            $messageText = '<' . implode(',', $invalidEmailAddresses) . '>: ' . $translation->_('Invalid address format');
+            $invalidEmails = array_map(function($address) {
+                return $address['email'] ?? $address;
+            }, $invalidEmailAddresses);
+            $messageText = '<' . implode(',', $invalidEmails) . '>: ' . $translation->_('Invalid address format');
             throw new Tinebase_Exception_SystemGeneric($messageText);
         }
         
