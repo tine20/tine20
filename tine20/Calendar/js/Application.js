@@ -168,21 +168,23 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
     },
     
     async openInNewWindow(id) {
-        await Tine.Calendar.getEvent(id)
-            .then((result) => {
-                const record = Tine.Tinebase.data.Record.setFromJson(result, Tine.Calendar.Model.Event);
-                const cp = this.getMainScreen().getCenterPanel();
-                cp.onEditInNewWindow.call(cp, {actionType: 'edit'}, record);
-            })
-            .catch((error) => {
-                Ext.Msg.show({
-                    title: 'Error',
-                    msg: error.message,
-                    buttons: Ext.MessageBox.OK,
-                    icon: Ext.MessageBox.ERROR
-                });
-            })
-        
-        window.location = window.location.href.replace(`/Event/${id}`, '');
+        if (window.isMainWindow) {
+            await Tine.Calendar.getEvent(id)
+                .then((result) => {
+                    const record = Tine.Tinebase.data.Record.setFromJson(result, Tine.Calendar.Model.Event);
+                    const cp = this.getMainScreen().getCenterPanel();
+                    cp.onEditInNewWindow.call(cp, {actionType: 'edit'}, record);
+                })
+                .catch((error) => {
+                    Ext.Msg.show({
+                        title: 'Error',
+                        msg: error.message,
+                        buttons: Ext.MessageBox.OK,
+                        icon: Ext.MessageBox.ERROR
+                    });
+                })
+    
+            window.location = window.location.href.replace(`/Event/${id}`, '');
+        }
     }
 });
