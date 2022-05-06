@@ -96,4 +96,9 @@ class Tinebase_Config_KeyFieldRecord extends Tinebase_Record_Abstract
     {
         return static::$translation ? static::$translation->getAdapter()->_($this->value) : $this->value;
     }
+
+    public function getTitle()
+    {
+        return $this->value;
+    }
 }
