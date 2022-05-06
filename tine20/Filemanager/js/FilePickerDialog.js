@@ -34,7 +34,10 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
      * A constraint allows to alter the selection behaviour of the picker, for example only allow to select files.
      * By default, file and folder are allowed to be selected, the concrete implementation needs to define it's purpose
      */
-    constraint: null,
+    constraint: function (name) {
+        let forbidden = /[\/\\\:*?"<>|]/;
+        return !forbidden.test(name);
+    },
 
     /**
      * @cfg {Array} requiredGrants
