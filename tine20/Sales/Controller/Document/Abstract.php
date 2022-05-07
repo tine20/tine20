@@ -345,6 +345,15 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         /** @var Sales_Model_Document_Abstract $result */
         $result = $ctrl->create($targetDocument);
 
+        foreach ($transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS} as $sourceDocument) {
+            if ($sourceDocument->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}->isDirty()) {
+                /** @var Tinebase_Controller_Record_Abstract $ctrl */
+                $ctrl = Tinebase_Core::getApplicationInstance(
+                    $sourceDocument->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL});
+                $ctrl->update($sourceDocument->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT});
+            }
+        }
+
         $transactionRAII->release();
 
         return $result;

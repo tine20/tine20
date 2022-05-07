@@ -53,11 +53,6 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
         // Search Lists and Contacts
         this.recordClass = Tine.Addressbook.Model.EmailAddress;
         this.recordProxy = Tine.Addressbook.emailAddressBackend;
-
-        // add additional filter to show only contacts with email addresses
-        this.additionalFilters = [
-            {field: 'email_query', operator: 'contains', value: '@' }
-        ];
         
         this.tpl = new Ext.XTemplate(
             '<tpl for="."><div class="search-item">',

@@ -118,8 +118,8 @@ Tine.Tinebase.common = {
      * @return {String} localised date
      */
     dateRenderer: function (date, metadata) {
-        if (metadata) {
-            metadata.css = metadata.css + ' tine-gird-cell-date';
+        if (_.isObject(metadata)) {
+            metadata.css = (metadata.css || '') + ' tine-gird-cell-date';
         }
 
         var dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
@@ -835,10 +835,9 @@ Tine.Tinebase.common = {
             const parsed = addrs.parseAddressList(address.replace(';', ','));
         });
         const matches = address.match(/(?<email>([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+))/g);
-        debugger
+
         let emails = _.split(address, '>,');
-        
-        const emailArray = _.map(emails, (address) => {
+        let emailArray = _.map(emails, (address) => {
             const parsed = addressparser.parse(address.replace(/,/g, '\\\\,'));
             let contact = {
                 'email': parsed && parsed[0]?.address ? parsed[0]?.address : '',
@@ -853,6 +852,7 @@ Tine.Tinebase.common = {
                 return contact;
             }
         });
+        emailArray = _.filter(emailArray);
         
         const {results: contacts} = await Tine.Addressbook.searchContactsByRecipientsToken(emailArray);
         
@@ -912,28 +912,41 @@ Tine.Tinebase.common = {
      * @return {Boolean}
      */
     checkEmailDomain: function(email) {
-        Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - email: ' + email);
-
-        if (! Tine.Tinebase.registry.get('primarydomain') || ! email) {
-            Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - no primarydomain config found or no mail given');
+        const allowedDomains = this.getAllowedDomains();
+    
+        if (! email || ! allowedDomains) {
+            if (! email) {
+                Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - no mail given');
+            }
             return true;
         }
-
-        var allowedDomains = [Tine.Tinebase.registry.get('primarydomain')],
-            emailDomain = email.split('@')[1];
-
+        
+        Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - email: ' + email);
+        
+        const emailDomain = email.split('@')[1];
+        return (allowedDomains.indexOf(emailDomain) !== -1);
+    },
+    
+    getAllowedDomains: function() {
+        if (! Tine.Tinebase.registry.get('primarydomain')) {
+            Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - no primarydomain config found');
+            return null;
+        }
+    
+        let allowedDomains = [Tine.Tinebase.registry.get('primarydomain')];
+    
         if (Ext.isString(Tine.Tinebase.registry.get('secondarydomains'))) {
             allowedDomains = allowedDomains.concat(Tine.Tinebase.registry.get('secondarydomains').split(','));
         }
-
+    
         if (Ext.isString(Tine.Tinebase.registry.get('additionaldomains'))) {
             allowedDomains = allowedDomains.concat(Tine.Tinebase.registry.get('additionaldomains').split(','));
         }
-
+    
         Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - allowedDomains:');
         Tine.log.debug(allowedDomains);
-
-        return (allowedDomains.indexOf(emailDomain) !== -1);
+        
+        return allowedDomains;
     },
 
     getMimeIconCls: function(mimeType) {

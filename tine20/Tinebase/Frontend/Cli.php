@@ -2197,6 +2197,74 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         return 0;
     }
 
+    public function syncFileTreeFromBackupDB(Zend_Console_Getopt $opts)
+    {
+        $this->_checkAdminRight();
+
+        exit('this is a dangerous operation');
+
+        $data = $this->_parseArgs($opts);
+        if (!isset($data['dbname']) || empty($data['dbname'])) {
+            echo 'mandatory argument "dbname" missing' . PHP_EOL;
+            return 1;
+        }
+        if (!isset($data['rootNodeId']) || empty($data['rootNodeId'])) {
+            echo 'mandatory argument "rootNodeId" missing' . PHP_EOL;
+            return 1;
+        }
+
+        $config = Tinebase_Core::getConfig();
+        $oldDbName = $config->database->dbname;
+        $oldUsername = $config->database->username;
+        $oldPassword = $config->database->password;
+        $config->database->dbname = $data['dbname'];
+        if (isset($data['rootNodeId']))
+            $config->database->username = $data['username'];
+        if (isset($data['rootNodeId']))
+            $config->database->password = $data['password'];
+        Tinebase_Core::set(Tinebase_Core::DB, null);
+        Tinebase_Core::getDb();
+        Tinebase_FileSystem::getInstance()->resetBackends();
+
+        $node = Tinebase_FileSystem::getInstance()->get($data['rootNodeId']);
+        if ($node->acl_node === $node->getId()) {
+            Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($node);
+        }
+        $records = new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class, [$node]);
+        $func = function ($id, $func) use ($records) {
+            foreach (Tinebase_FileSystem::getInstance()->getTreeNodeChildren($id) as $node) {
+                if ($node->type !== \Tinebase_Model_Tree_FileObject::TYPE_FOLDER) continue;
+                if ($node->acl_node === $node->getId()) {
+                    Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($node);
+                }
+                $records->addRecord($node);
+                $func($node->getId(), $func);
+            }
+        };
+        $func($data['rootNodeId'], $func);
+
+        $config->database->dbname = $oldDbName;
+        $config->database->username = $oldUsername;
+        $config->database->password = $oldPassword;
+        Tinebase_Core::set(Tinebase_Core::DB, null);
+        Tinebase_Core::getDb();
+        Tinebase_FileSystem::getInstance()->resetBackends();
+        Tinebase_Tree_NodeGrants::destroyInstance();
+
+        Tinebase_FileSystem::getInstance()->rmdir(Tinebase_FileSystem::getInstance()->getPathOfNode($records->getFirstRecord(), true), true);
+
+        foreach ($records as $record) {
+            try {
+                Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->create(clone $record);
+            } catch (Exception $e) {
+                Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->update(clone $record);
+            }
+            if ($record->acl_node === $record->getId()) {
+                Tinebase_Tree_NodeGrants::getInstance()->setGrants($record);
+            }
+        }
+    }
+
     /**
      * utility function to be adjusted for the needs at hand at the time of usage
      */

@@ -189,7 +189,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Tinebase.common.assertComparable(xprops);
         this.record.set('xprops', xprops);
     },
-    
     /**
      * need to unset localized datetime fields before saving
      * 
@@ -208,33 +207,48 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Boolean}
      */
     isValid: function() {
-        var result = Tine.Admin.UserEditDialog.superclass.isValid.call(this);
-        if (! result) {
-            return false;
-        }
-        
-        if (Tine.Tinebase.registry.get('manageSmtpEmailUser')) {
-            var emailValue = this.getForm().findField('accountEmailAddress').getValue();
-            if (! Tine.Tinebase.common.checkEmailDomain(emailValue)) {
-                result = false;
-                this.getForm().markInvalid([{
-                    id: 'accountEmailAddress',
-                    msg: this.app.i18n._("Domain is not allowed. Check your SMTP domain configuration.")
-                }]);
-            }
-        }
+        return  Tine.Admin.UserEditDialog.superclass.isValid.call(this).then((result) => {
+            let errorMessages = '';
+            
+            if (Tine.Tinebase.registry.get('manageSmtpEmailUser')) {
+                const emailValue = this.getForm().findField('accountEmailAddress').getValue();
+                if (! Tine.Tinebase.common.checkEmailDomain(emailValue)) {
+                    let errorMessage = this.app.i18n._("Domain is not allowed. Check your SMTP domain configuration.") + '<br>';
+                    errorMessage += '<br>' + this.app.i18n._("Allowed Domains") + ': <br>';
+                    
+                    const allowDomains = Tine.Tinebase.common.getAllowedDomains();
 
-        if (Tine.Tinebase.appMgr.get('Admin').featureEnabled('featurePreventSpecialCharInLoginName')) {
-            if (! this.validateLoginName(this.getForm().findField('accountLoginName').getValue())) {
-                result = false;
-                this.getForm().markInvalid([{
-                    id: 'accountLoginName',
-                    msg: this.app.i18n._("Special characters are not allowed in login name.")
-                }]);
+                    _.each(allowDomains, (domain) => {
+                        if (domain !== '') {
+                            errorMessage += '<b> - ' + domain + '</b><br>';
+                        }
+                    })
+                    
+                    errorMessages += errorMessage;
+                    
+                    this.getForm().markInvalid([{
+                        id: 'accountEmailAddress',
+                        msg: errorMessage
+                    }]);
+                }
             }
-        }
-        
-        return result;
+
+            if (Tine.Tinebase.appMgr.get('Admin').featureEnabled('featurePreventSpecialCharInLoginName')) {
+                if (! this.validateLoginName(this.getForm().findField('accountLoginName').getValue())) {
+                    const errorMessage = this.app.i18n._("Special characters are not allowed in login name.");
+                    errorMessages += errorMessage;
+                    this.getForm().markInvalid([{
+                        id: 'accountLoginName',
+                        msg: errorMessage
+                    }]);
+                }
+            }
+            if (errorMessages !== '') {
+                return Promise.reject(errorMessages);
+            } else {
+                return result;
+            }
+        });
     },
     
     /**

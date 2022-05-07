@@ -419,6 +419,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->_listOfRecords);
@@ -429,6 +430,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * 
      * @return iterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new ArrayIterator($this->_listOfRecords);
@@ -437,6 +439,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * required by ArrayAccess interface
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($_offset)
     {
         return isset($this->_listOfRecords[$_offset]);
@@ -460,6 +463,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * required by ArrayAccess interface
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($_offset, $_value)
     {
         if (! $_value instanceof $this->_recordClass) {
@@ -509,6 +513,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * required by ArrayAccess interface
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($_offset)
     {
         $id = $this->_listOfRecords[$_offset]->getId();

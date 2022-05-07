@@ -623,7 +623,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals(1, $search['totalcount']);
         $this->assertEquals(1, count($search['results']));
         $this->assertEquals(30, $search['totalsum'], 'totalsum mismatch');
-        $this->assertEquals(15, $search['totalsumbillable'], 'totalsumbillable mismatch');
+        $this->assertEquals(30, $search['totalsumbillable'], 'totalsumbillable mismatch');
     }
 
     /**
@@ -651,9 +651,11 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     {
         $today = Tinebase_DateTime::now();
         $lastDayOfMonth = new Tinebase_DateTime('last day of this month');
-        if ($today->get(Tinebase_DateTime::MODIFIER_HOUR) === 23
-            && $today->get(Tinebase_DateTime::MODIFIER_DAY) === $lastDayOfMonth->get(Tinebase_DateTime::MODIFIER_DAY)) {
-            self::markTestSkipped('this fails on the last day of the current month');
+        if (((int)$today->get(Tinebase_DateTime::MODIFIER_HOUR) > 21
+            && $today->get(Tinebase_DateTime::MODIFIER_DAY) === $lastDayOfMonth->get(Tinebase_DateTime::MODIFIER_DAY))
+            || ((int)$today->get(Tinebase_DateTime::MODIFIER_HOUR) < 3
+                && (int)$today->get(Tinebase_DateTime::MODIFIER_DAY) === 1)){
+            self::markTestSkipped('this fails around the last/first day of the current month');
         }
         $lastMonth = $today->setDate($today->get('Y'), $today->get('m') - 1, 1);
         $this->_createTsAndSearch($lastMonth, 'monthLast');
@@ -786,7 +788,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             $this->_getPaging()
         );
         $this->assertEquals(60, $search['totalsum'], 'totalsum mismatch ' . print_r($search, true));
-        $this->assertEquals(15, $search['totalsumbillable'], 'totalsumbillable mismatch ' . print_r($search, true));
+        $this->assertEquals(30, $search['totalsumbillable'], 'totalsumbillable mismatch ' . print_r($search, true));
     }
 
     /**

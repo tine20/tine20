@@ -716,7 +716,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var result = '';
         
         if (value == 1) {
-            result = '<img class="FelamimailFlagIcon" src="images/oxygen/16x16/actions/attach.png">';
+            result = '<div class="action_attach tine-grid-row-action-icon" />';
         }
         
         return result;
@@ -1322,9 +1322,20 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             Tine.Felamimail.MessageFileAction.locationClickHandler(fileLocation.model, fileLocation.record_id);
 
             e.stopEvent();
-        }
+        } else if (e.getTarget('.action_attach')) {
+            if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
+                const me = this;
 
-        Tine.Felamimail.GridPanel.superclass.onRowClick.apply(this, arguments);
+                Tine.Filemanager.QuickLookPanel.openWindow({
+                    record: this.getStore().getAt(row),
+                    initialApp: this.app,
+                    sm: grid.getSelectionModel(),
+                    handleAttachments: Tine.Felamimail.MailDetailsPanel.prototype.quicklookHandleAttachments
+                });
+            }
+        } else {
+            Tine.Felamimail.GridPanel.superclass.onRowClick.apply(this, arguments);
+        }
     },
 
     @keydown(['ctrl+o', 'enter'])
@@ -1738,15 +1749,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         const popupWindow = Tine.Tasks.TaskEditDialog.openWindow({
             contentPanelConstructorInterceptor: async (config) => {
-                const isPopupWindow = config.window.popup;
-                const win = isPopupWindow ? config.window.popup : window;
-                const mainCardPanel = isPopupWindow ? win.Tine.Tinebase.viewport.tineViewportMaincardpanel : await config.window.afterIsRendered();
-                isPopupWindow ? mainCardPanel.get(0).hide() : null;
-    
-                const mask = new win.Ext.LoadMask(mainCardPanel.el, {
-                    msg: Tine.Tinebase.appMgr.isEnabled('Tasks') ? Tine.Tinebase.appMgr.get('Tasks').i18n._('Creating new Task...') : 'Creating new Task...'
-                });
-                await mask.show();
+                const waitingText = Tine.Tinebase.appMgr.isEnabled('Tasks') ? Tine.Tinebase.appMgr.get('Tasks').i18n._('Creating new Task...') : 'Creating new Task...';
+                const mask = await config.setWaitText(waitingText);
                 
                 const messageData = msg.data;
                 const body = Tine.Tinebase.common.html2text(messageData?.body || '');
@@ -1756,6 +1760,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     description: body
                 })), Tine.Tasks.Model.Task);
     
+                // a quick hack to prevent duplicated popupwindow
+                config.window.manager.unregister(config.window);
+                config.window.id = config.window.name = Tine.Tasks.TaskEditDialog.prototype.windowNamePrefix + config.record.id;
+                config.window.manager.register(config.window);
+                
                 const messageFilter = [{
                     field: 'id',
                     operator: 'in',

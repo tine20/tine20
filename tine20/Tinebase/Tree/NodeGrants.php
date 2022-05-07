@@ -18,6 +18,8 @@
  */
 class Tinebase_Tree_NodeGrants extends Tinebase_Controller_Record_Grants
 {
+    use Tinebase_Controller_SingletonTrait;
+
     /**
      * application name
      *
@@ -71,18 +73,13 @@ class Tinebase_Tree_NodeGrants extends Tinebase_Controller_Record_Grants
      * @var string acl record property for join with acl table
      */
     protected $_aclIdProperty = 'acl_node';
-
-    /**
-     * @var Tinebase_Tree_NodeGrants
-     */
-    private static $_instance = NULL;
     
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct()
+    protected function __construct()
     {
         $this->_backend = new Tinebase_Tree_Node();
         $this->_grantsBackend = new Tinebase_Backend_Sql_Grants(array(
@@ -90,26 +87,5 @@ class Tinebase_Tree_NodeGrants extends Tinebase_Controller_Record_Grants
             'tableName' => 'tree_node_acl',
             'recordTable' => 'tree_node'
         ));
-    }
-
-    /**
-     * don't clone. Use the singleton.
-     */
-    private function __clone() 
-    {
-    }
-    
-    /**
-     * singleton
-     *
-     * @return Tinebase_Tree_NodeGrants
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_Tree_NodeGrants();
-        }
-        
-        return self::$_instance;
     }
 }

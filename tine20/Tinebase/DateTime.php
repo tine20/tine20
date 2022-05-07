@@ -152,19 +152,18 @@ class Tinebase_DateTime extends DateTime
      *  sec, min, hour, day, week, month, year. For later versions check DateTime::add docu.
      *  Returns the modified DateTime object or FALSE on failure.
      *  
-     *  For compability with Zend_Date, if $_interval is a DateTime, the timestamp of this datetime 
+     *  For compatibility with Zend_Date, if $_interval is a DateTime, the timestamp of this datetime
      *  will be added
      *
      * @param  integer|DateTime|DateInterval    $_interval    Date or datepart to add
-     * @param  string                           $part    OPTIONAL Part of the date to add, if null the timestamp is added
-     * @return Tinebase_DateTime
+     * @param  string                           $_part    OPTIONAL Part of the date to add, if null the timestamp is added
+     * @return Tinebase_DateTime|DateTime
      */
+    #[\ReturnTypeWillChange]
     public function add($_interval, $_part = self::MODIFIER_SECOND)
     {
         if ($_interval instanceof DateInterval) {
             return parent::add($_interval);
-//        } else if ($_interval instanceof DateIntervalLight) {
-//            
         } else if ($_interval instanceof DateTime) {
             $_interval = $_interval->get('U');
             $_part = self::MODIFIER_SECOND;
@@ -417,6 +416,7 @@ class Tinebase_DateTime extends DateTime
      * @see DateTime::setDate()
      * @note PHP 5.3.0 changed the return value on success from NULL to DateTime.
      */
+    #[\ReturnTypeWillChange]
     public function setDate($year ,$month ,$day)
     {
         parent::setDate($year ,$month ,$day);
@@ -429,6 +429,7 @@ class Tinebase_DateTime extends DateTime
      * @note PHP 5.3.0 changed the return value on success from NULL to DateTime.
      * @note PHP 7.1 added param $microseconds
      */
+    #[\ReturnTypeWillChange]
     public function setTime($hour, $minute, $second = 0, $microseconds = null)
     {
         if (PHP_VERSION_ID < 70100) {
@@ -443,7 +444,9 @@ class Tinebase_DateTime extends DateTime
      * (non-PHPdoc)
      * @see DateTime::setISODate()
      * @note PHP 5.3.0 changed the return value on success from NULL to DateTime.
+     *
      */
+    #[\ReturnTypeWillChange]
     public function setISODate($year ,$week, $day = 1)
     {
         parent::setISODate($year ,$week, $day);
@@ -462,6 +465,7 @@ class Tinebase_DateTime extends DateTime
      * @param  string                           $part    OPTIONAL Part of the date to substract, if null the timestamp is substracted
      * @return Tinebase_DateTime
      */
+    #[\ReturnTypeWillChange]
     public function sub($_interval, $_part = self::MODIFIER_SECOND)
     {
         if ($_interval instanceof DateInterval) {
@@ -563,6 +567,7 @@ class Tinebase_DateTime extends DateTime
      * @param  string $modify A date/time string. Valid formats are explained in Date and Time Formats.
      * @return Tinebase_DateTime $this
      */
+    #[\ReturnTypeWillChange]
     public function modify($modify)
     {
         parent::modify($modify);
@@ -680,6 +685,7 @@ class Tinebase_DateTime extends DateTime
      * @param  string|DateTimeZone  $_timezone  timezone for date calculation
      * @return Tinebase_DateTime    $this
      */
+    #[\ReturnTypeWillChange]
     public function setTimezone($_timezone)
     {
         if ($this->_hasTime === FALSE) $date = $this->format('Y-m-d');

@@ -32,7 +32,7 @@
  *  A: Check: Check individual grants on a event (record) basis.
  *            This is required for create/update/delete actions and done by 
  *            this controllers _checkGrant method.
- *  B: Seach: From the grants perspective this is a multi step process
+ *  B: Search: From the grants perspective this is a multi step process
  *            1. fetch all records with appropriate grants from backend
  *            2. cleanup records user has only free/busy grant for
  * 
@@ -1068,8 +1068,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $this->sendNotifications($sendNotifications);
         $updatedEvent->mute = $_record->mute;
         if ($this->_sendNotifications) {
-            $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
+            $this->doSendNotifications(clone $updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
         }
+        
+        $this->_checkGrant($updatedEvent, self::ACTION_GET, false);
 
         return $updatedEvent;
     }
@@ -1302,7 +1304,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $newRrule = $newBaseEvent->rrule;
 
         if (! $rrule) {
-            throw new Tinebase_Exception_InvalidArgument('No rrule in baseevent found!');
+            $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+            throw new Tinebase_Exception_SystemGeneric($translation->_('No RRULE found in base event!'));
         }
 
         if ((string)$rrule === (string)$newRrule) {

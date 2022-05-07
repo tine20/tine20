@@ -594,6 +594,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      * @param mixed $_offset
      * @return boolean
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($_offset)
     {
         return isset($this->_data[$_offset]);
@@ -617,6 +618,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      * @param mixed $_value
      * @throws Tinebase_Exception_Record_Validation
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($_offset, $_value)
     {
         $this->__set($_offset, $_value);
@@ -629,6 +631,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      * @throws Tinebase_Exception_UnexpectedValue
      * @throws Tinebase_Exception_Record_Validation
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($_offset)
     {
         $this->__unset($_offset);
@@ -637,6 +640,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
     /**
      * required by IteratorAggregate interface
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new ArrayIterator($this->_data);

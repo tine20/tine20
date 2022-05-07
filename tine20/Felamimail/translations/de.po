@@ -749,6 +749,9 @@ msgstr "Nachricht verfassen:"
 msgid "Attachments"
 msgstr "Anhänge"
 
+msgid "Preview"
+msgstr "Vorschau"
+
 #: js/MessageEditDialog.js:1325 js/MessageEditDialog.js:1335
 #: js/MessageEditDialog.js:1387 js/AccountEditDialog.js:374
 #: js/AccountEditDialog.js:417 js/AccountEditDialog.js:432

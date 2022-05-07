@@ -1154,8 +1154,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     }
     
     ###### iterator interface ###########
+    #[\ReturnTypeWillChange]
     public function rewind() {
-        reset($this->_filterObjects);
+        return reset($this->_filterObjects);
     }
 
     public function current() {
@@ -1166,10 +1167,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         return key($this->_filterObjects);
     }
 
+    #[\ReturnTypeWillChange]
     public function next() {
         return next($this->_filterObjects);
     }
 
+    #[\ReturnTypeWillChange]
     public function valid() {
         return $this->current() !== false;
     }

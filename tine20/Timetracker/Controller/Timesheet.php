@@ -184,8 +184,8 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 $end = $end->modify('+1 days');
             }
 
-            $duration = $end->diff($start);
-            $_record->duration = $duration->h * 60 + $duration->i;
+            $dtDiff = $end->diff($start);
+            $_record->duration = $duration = $dtDiff->h * 60 + $dtDiff->i;
         } else if (isset($duration) && isset($start)){
             // If duration and start is set calculate the end
             $start = new dateTime($_record->start_date . ' ' . $start);
@@ -201,8 +201,21 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             $_record->start_time = $start->format('H:i');
         }
 
-        if (!isset($_record->accounting_time)) {
-            $_record->accounting_time = $_record->duration;
+        $_record->accounting_time = $duration = intval($duration);
+        if ($duration > 0) {
+            $factor = $_record->accounting_time_factor;
+            if (null === $factor || '' === $factor) {
+                $factor = $_record->accounting_time_factor = 1;
+            }
+            $method = Timetracker_Config::getInstance()->{Timetracker_Config::ACCOUNTING_TIME_ROUNDING_METHOD};
+            if (!in_array($method, ['ceil', 'floor', 'round'])) {
+                $method = 'ceil';
+            }
+            $minutes = intval(Timetracker_Config::getInstance()->{Timetracker_Config::ACCOUNTING_TIME_ROUNDING_MINUTES});
+            if ($minutes < 1 || $minutes > 60) {
+                $minutes = 15;
+            }
+            $_record->accounting_time = $method($duration * (float)$factor / $minutes) * $minutes;
         }
     }
     

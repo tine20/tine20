@@ -1016,8 +1016,8 @@ msgstr "Kontingent bearbeiten"
 msgid "Edit {0} Quota"
 msgstr "{0} Kontingent bearbeiten"
 
-msgid "Manage total Filesystem Quota"
-msgstr "Gesamte Dateimanager Quota verwalten"
+msgid "Manage Total Quota"
+msgstr "Gesamte Quota verwalten"
 
 msgid "Total quota"
 msgstr "Gesamte Quota"
@@ -1367,8 +1367,8 @@ msgstr "Dateiordner und Dateien löschen"
 msgid "Delete Email accounts"
 msgstr "E-Mail-Konten löschen"
 
-msgid "Manage Total Quota"
-msgstr "Gesamte Quota verwalten"
+msgid "Allowed Domains"
+msgstr "Erlaubte Domänen"
 
 msgid "enable application"
 msgstr "Anwendung aktivieren"
@@ -1576,3 +1576,6 @@ msgstr "E-Mail"
 
 msgid "E-Mail Accounts"
 msgstr "E-Mail Konten"
+
+msgid "Manage total Filesystem Quota"
+msgstr "Gesamte Dateimanager Quota verwalten"

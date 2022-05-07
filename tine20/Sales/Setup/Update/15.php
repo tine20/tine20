@@ -29,6 +29,7 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE013 = __CLASS__ . '::update013';
     const RELEASE015_UPDATE014 = __CLASS__ . '::update014';
     const RELEASE015_UPDATE015 = __CLASS__ . '::update015';
+    const RELEASE015_UPDATE016 = __CLASS__ . '::update016';
 
 
     static protected $_allUpdates = [
@@ -91,6 +92,10 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE015          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update015',
+            ],
+            self::RELEASE015_UPDATE016          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update016',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -323,5 +328,16 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             Sales_Model_DocumentPosition_Order::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.15', self::RELEASE015_UPDATE015);
+    }
+
+    public function update016()
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_DocumentPosition_Delivery::class,
+            Sales_Model_DocumentPosition_Invoice::class,
+            Sales_Model_DocumentPosition_Offer::class,
+            Sales_Model_DocumentPosition_Order::class,
+        ]);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.16', self::RELEASE015_UPDATE016);
     }
 }

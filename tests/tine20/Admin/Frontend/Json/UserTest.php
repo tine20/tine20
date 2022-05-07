@@ -539,6 +539,30 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
             'aliases not correct: ' . print_r($updatedUser['emailUser'], true));
     }
 
+    public function testSetMFA()
+    {
+        $this->_createAreaLockConfig();
+
+        $user = $this->_personas['sclever']->toArray();
+        $user['mfa_configs'] = [[
+            'id' => Tinebase_Record_Abstract::generateUID(),
+            Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'pin',
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS => Tinebase_Model_MFA_PinUserConfig::class,
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG => [
+                Tinebase_Model_MFA_PinUserConfig::FLD_PIN => '123456',
+            ],
+        ]];
+
+        $savedUser = $this->_json->saveUser($user);
+
+        $this->assertCount(1, $savedUser['mfa_configs']);
+        $this->assertEmpty($savedUser['mfa_configs'][0][Tinebase_Model_MFA_UserConfig::FLD_CONFIG]
+        [Tinebase_Model_MFA_PinUserConfig::FLD_PIN]);
+
+        $sclever = Tinebase_User::getInstance()->getFullUserById($savedUser['accountId']);
+        $this->assertNotEmpty($sclever->mfa_configs->getFirstRecord()->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->getHashedPin());
+    }
+    
     /**
      * test set expired status
      */

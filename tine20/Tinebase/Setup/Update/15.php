@@ -23,6 +23,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE007 = __CLASS__ . '::update007';
     const RELEASE015_UPDATE008 = __CLASS__ . '::update008';
     const RELEASE015_UPDATE009 = __CLASS__ . '::update009';
+    const RELEASE015_UPDATE010 = __CLASS__ . '::update010';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE       => [
@@ -58,6 +59,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE009          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update009',
+            ],
+            self::RELEASE015_UPDATE010          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update010',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -172,5 +177,29 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.9', self::RELEASE015_UPDATE009);
+    }
+    
+    public function update010()
+    {
+        $tables = [];
+        foreach (Tinebase_Application::getInstance()->getApplications() as $app) {
+            $tables = array_merge($tables, Tinebase_Application::getInstance()->getApplicationTables($app));
+        }
+
+        $models = Tinebase_Application::getInstance()->getModelsOfAllApplications(true);
+        asort($models);
+        /** @var Tinebase_Record_Interface $model */
+        foreach ($models as $model) {
+            if (!($mc = $model::getConfiguration()) || !($tableName = $mc->getTableName())) {
+                continue;
+            }
+
+            if (!in_array($tableName, $tables)) {
+                list($app) = explode('_', $model);
+                Tinebase_Application::getInstance()->addApplicationTable($app, $tableName, $mc->getVersion() ?: 1);
+            }
+        }
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.10', self::RELEASE015_UPDATE010);
     }
 }

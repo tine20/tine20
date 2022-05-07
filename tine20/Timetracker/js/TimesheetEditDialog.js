@@ -204,12 +204,13 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
 
     calculateAccountingTime: function() {
-        const roundValue = Tine.Tinebase.configManager.get('accountTimeRoundValue', 'Tinebase') || 15;
-        
+        const roundingMinutes = Tine.Tinebase.configManager.get('accountingTimeRoundingMinutes', 'Timetracker') || 15;
+        const roundingMethod = Tine.Tinebase.configManager.get('accountingTimeRoundingMethod', 'Timetracker') || 'round';
+
         if (!this.useMultiple) {
             const factor = this.getForm().findField('accounting_time_factor').getValue();
             const duration = this.getForm().findField('duration').getValue();
-            const accountingTime = Math.round(factor * duration / roundValue) * roundValue;
+            const accountingTime = Math[roundingMethod](factor * duration / roundingMinutes) * roundingMinutes;
             
             if (factor !== this.factor) {
                 this.factor = factor;
@@ -305,8 +306,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         const isOwn = Tine.Tinebase.registry.get('currentAccount').accountId === accountId;
         const processStatusPicker = this.getForm().findField('process_status')
         const processStatus = processStatusPicker.getValue();
-        const allowUpdate = grants.adminGrant || grants.manageBillableGrant || grants.bookAllGrant || (isOwn && grants.bookOwnGrant) ||
-            (processStatus === 'REQUESTED' && (isNewRecord || (isOwn && grants.requestOwnGrant)));
+        const allowUpdate = grants.adminGrant || grants.manageBillableGrant || grants.bookAllGrant || (isOwn && grants.bookOwnGrant)
+            || (processStatus === 'REQUESTED' && (isNewRecord || (isOwn && grants.requestOwnGrant)))
+            || Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts')
+            || Tine.Tinebase.common.hasRight('admin', 'Timetracker');
 
         this.getForm().findField('account_id').setDisabled(! (grants.bookAllGrant ||grants.adminGrant));
         processStatusPicker.setDisabled(!(grants.manageBillableGrant || grants.bookAllGrant || (isOwn && grants.bookOwnGrant) || grants.adminGrant));

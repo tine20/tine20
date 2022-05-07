@@ -64,4 +64,40 @@ class Tinebase_Frontend_Json_AreaLockTest extends TestCase
             'config' => []
         ]], $registryException['mfaUserConfigs']);
     }
+
+    public function testGetPossibleMFAs()
+    {
+        $this->_createAreaLockConfig();
+
+        $result = (new Tinebase_Frontend_Json_AreaLock())->getSelfServiceableMFAs();
+        $this->assertCount(1, $result);
+        $this->assertSame('pin', $result[0]['mfa_config_id']);
+        $this->assertSame(Tinebase_Model_MFA_PinUserConfig::class, $result[0]['config_class']);
+    }
+
+    public function testSaveMFAUserConfig()
+    {
+        $this->_createAreaLockConfig();
+        $areaLockFE = new Tinebase_Frontend_Json_AreaLock();
+
+        $userCfg = [
+            Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'pin',
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS => Tinebase_Model_MFA_PinUserConfig::class,
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG => [
+                Tinebase_Model_MFA_PinUserConfig::FLD_PIN => '123456',
+            ],
+        ];
+
+        try {
+            $areaLockFE->saveMFAUserConfig('pin', $userCfg);
+            $this->fail(Tinebase_Exception_AreaLocked::class . ' expected');
+        } catch (Tinebase_Exception_AreaLocked $e) {}
+
+        try {
+            $areaLockFE->saveMFAUserConfig('pin', $userCfg, 'asdfas');
+            $this->fail(Tinebase_Exception_AreaUnlockFailed::class . ' expected');
+        } catch (Tinebase_Exception_AreaUnlockFailed $e) {}
+
+        $this->assertTrue($areaLockFE->saveMFAUserConfig('pin', $userCfg, '123456'));
+    }
 }

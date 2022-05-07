@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Adapter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <c.weiss@metaways.de>
  */
 
@@ -91,5 +91,63 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
         }
 
         return $result;
+    }
+
+    public function getSelfServiceableMFAs(): array
+    {
+        return (new Admin_Frontend_Json())->getPossibleMFAs(Tinebase_Core::getUser()->getId());
+    }
+
+    public function saveMFAUserConfig(string $mfaId, array $mfaUserConfig, ?string $MFAPassword = null): bool
+    {
+        $mfaUserConfig['id'] = Tinebase_Record_NewAbstract::generateUID();
+        $userCfg = new Tinebase_Model_MFA_UserConfig($mfaUserConfig);
+        if ($mfaId !== $userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID}) {
+            throw new Tinebase_Exception_UnexpectedValue('mfaId doesn\'t match user configs mfa id');
+        }
+        $mfa = Tinebase_Auth_MFA::getInstance($mfaId);
+
+        // we need to test the unsaved mfa user config here, so we clone it and the user
+        // then we get it ready, that's a bit tedious sadly
+        $testUserCfg = clone $userCfg;
+        /** @var Tinebase_Model_FullUser $user */
+        $user = clone Tinebase_Core::getUser();
+        if (!$user->mfa_configs) {
+            $user->mfa_configs = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
+        }
+        $user->mfa_configs->addRecord($testUserCfg);
+
+        // do the tedious task of getting the mfa user config "ready"
+        try {
+            $testUserCfg->updateUserNewRecordCallback($user, Tinebase_Core::getUser());
+            $testUserCfg->runConvertToData();
+            $user->mfa_configs->removeById($testUserCfg->getId());
+            $testUserCfg = new Tinebase_Model_MFA_UserConfig($testUserCfg->toArray());
+            $testUserCfg->runConvertToRecord();
+            $user->mfa_configs->addRecord($testUserCfg);
+
+            // test the mfa user config
+            if (null !== $MFAPassword) {
+                if (!$mfa->validate($MFAPassword, $testUserCfg)) {
+                    throw new Tinebase_Exception_AreaUnlockFailed('mfa password wrong');
+                }
+            } else {
+                $mfa->sendOut($testUserCfg);
+                throw new Tinebase_Exception_AreaLocked('mfa send out triggered');
+            }
+        } finally {
+            // clean up, eventually we created something persistent
+            $testUserCfg->updateUserOldRecordCallback($user, Tinebase_Core::getUser());
+        }
+
+        // no exception? persist the mfa user config
+        $user = clone Tinebase_Core::getUser();
+        if (!$user->mfa_configs) {
+            $user->mfa_configs = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
+        }
+        $user->mfa_configs->addRecord($userCfg);
+        Tinebase_User::getInstance()->updateUser($user);
+
+        return true;
     }
 }

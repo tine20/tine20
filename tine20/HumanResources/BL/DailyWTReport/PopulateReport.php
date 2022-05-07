@@ -18,9 +18,9 @@
 class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_ElementInterface
 {
     /** @var HumanResources_Model_BLDailyWTReport_PopulateReportConfig */
-    protected $_config;
+    protected HumanResources_Model_BLDailyWTReport_PopulateReportConfig $_config;
 
-    protected $wageTypes = [];
+    protected array $wageTypes = [];
 
     public function __construct(HumanResources_Model_BLDailyWTReport_PopulateReportConfig $_config)
     {
@@ -72,11 +72,11 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
         $_data->result->working_time_total = $timeWorked + $_data->result->working_time_correction;
         $_data->result->break_time_net = $timePaused;
 
-        $dayOfWeek = $_data->date->format('w') - 1;
+        $dayOfWeek = (int) $_data->date->format('w') - 1;
         if ($dayOfWeek === -1) $dayOfWeek = 6;
         $_data->result->working_time_target = $_data->workingTimeModel
             ->{HumanResources_Model_WorkingTimeScheme::FLDS_JSON}['days'][$dayOfWeek];
-        $workingTimeTarget = $_data->result->working_time_target +
+        $workingTimeTarget = (int) $_data->result->working_time_target +
             ($_data->result->working_time_target_correction ?: 0);
 
         if ($_data->feastTimes) {
@@ -100,7 +100,7 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
                     HumanResources_Model_WageType::ID_VACATION) return 1;
                 return strcmp((string)$r1->getId(), (string)$r2->getId());
             });
-            if ($_data->freeTimes->getFirstRecord()->type) {
+            if ($_data->freeTimes->getFirstRecord()->type instanceof HumanResources_Model_FreeTimeType) {
                 $wageType = $_data->freeTimes->getFirstRecord()->type->wage_type;
                 if ($workingTimeTarget > 0) {
                     $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
@@ -132,6 +132,7 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
             return $this->wageTypes[$id];
         }
 
+        /** @var HumanResources_Model_WageType $wageType */
         $wageType = HumanResources_Controller_WageType::getInstance()->get($id);
         $this->wageTypes[$id] = $wageType;
         return $wageType;

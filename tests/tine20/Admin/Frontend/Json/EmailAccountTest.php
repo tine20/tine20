@@ -753,6 +753,8 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
     public function testConvertInternalToSharedToUserInternalEmailAccount()
     {
         $user = $this->_createUserWithEmailAccount();
+        $systemAccount = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
+        $this->_emailAccounts[] = $systemAccount;
         $sharedAccount = $this->testConvertUserInternalEmailAccount($user);
         $this->_emailAccounts[] = $sharedAccount;
         $sharedAccount['user_id'] = $user->getId();

@@ -6,29 +6,24 @@ parameters:
 			path: tine20/ActiveSync/Controller.php
 
 		-
-			message: "#^Parameter \\$_class of method ActiveSync_Controller_Device\\:\\:setDeviceContentFilter\\(\\) has invalid typehint type unknown_type\\.$#"
+			message: "#^Parameter \\$_class of method ActiveSync_Controller_Device\\:\\:setDeviceContentFilter\\(\\) has invalid type unknown_type\\.$#"
 			count: 1
 			path: tine20/ActiveSync/Controller/Device.php
 
 		-
-			message: "#^Parameter \\$_deviceId of method ActiveSync_Controller_Device\\:\\:setDeviceContentFilter\\(\\) has invalid typehint type unknown_type\\.$#"
+			message: "#^Parameter \\$_deviceId of method ActiveSync_Controller_Device\\:\\:setDeviceContentFilter\\(\\) has invalid type unknown_type\\.$#"
 			count: 1
 			path: tine20/ActiveSync/Controller/Device.php
 
 		-
-			message: "#^Parameter \\$_filterId of method ActiveSync_Controller_Device\\:\\:setDeviceContentFilter\\(\\) has invalid typehint type unknown_type\\.$#"
+			message: "#^Parameter \\$_filterId of method ActiveSync_Controller_Device\\:\\:setDeviceContentFilter\\(\\) has invalid type unknown_type\\.$#"
 			count: 1
 			path: tine20/ActiveSync/Controller/Device.php
 
 		-
-			message: "#^Access to an undefined property Syncroton_Model_IDevice\\:\\:\\$devicetype\\.$#"
-			count: 3
-			path: tine20/ActiveSync/Frontend/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Syncroton_Model_IDevice\\:\\:\\$model\\.$#"
-			count: 3
-			path: tine20/ActiveSync/Frontend/Abstract.php
+			message: "#^Variable \\$_filterId in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: tine20/ActiveSync/Controller/Device.php
 
 		-
 			message: "#^Access to an undefined property Syncroton_Model_IFolder\\:\\:\\$displayName\\.$#"
@@ -52,7 +47,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Syncroton_Model_SyncCollection\\:\\:\\$collectionId\\.$#"
-			count: 1
+			count: 2
 			path: tine20/ActiveSync/Frontend/Abstract.php
 
 		-
@@ -71,12 +66,12 @@ parameters:
 			path: tine20/ActiveSync/Frontend/Abstract.php
 
 		-
-			message: "#^Parameter \\$collectionData of method ActiveSync_Frontend_Abstract\\:\\:deleteEntry\\(\\) has invalid typehint type unknown_type\\.$#"
+			message: "#^Parameter \\$collectionData of method ActiveSync_Frontend_Abstract\\:\\:deleteEntry\\(\\) has invalid type unknown_type\\.$#"
 			count: 1
 			path: tine20/ActiveSync/Frontend/Abstract.php
 
 		-
-			message: "#^Parameter \\$fileReference of method ActiveSync_Frontend_Abstract\\:\\:getFileReference\\(\\) has invalid typehint type unknown_type\\.$#"
+			message: "#^Parameter \\$fileReference of method ActiveSync_Frontend_Abstract\\:\\:getFileReference\\(\\) has invalid type unknown_type\\.$#"
 			count: 1
 			path: tine20/ActiveSync/Frontend/Abstract.php
 
@@ -97,6 +92,16 @@ parameters:
 
 		-
 			message: "#^Call to method save\\(\\) on an unknown class Zend_CacheCore\\.$#"
+			count: 1
+			path: tine20/ActiveSync/TimezoneConverter.php
+
+		-
+			message: "#^Method ActiveSync_TimezoneConverter\\:\\:_getOffsetsTemplate\\(\\) has invalid return type unknown_type\\.$#"
+			count: 1
+			path: tine20/ActiveSync/TimezoneConverter.php
+
+		-
+			message: "#^Method ActiveSync_TimezoneConverter\\:\\:_validateOffsets\\(\\) has invalid return type unknown_type\\.$#"
 			count: 1
 			path: tine20/ActiveSync/TimezoneConverter.php
 
@@ -131,7 +136,7 @@ parameters:
 			path: tine20/ActiveSync/TimezoneConverter.php
 
 		-
-			message: "#^Parameter \\$_expectedTimezone of method ActiveSync_TimezoneConverter\\:\\:getListOfTimezones\\(\\) has invalid typehint type optional\\.$#"
+			message: "#^Parameter \\$_expectedTimezone of method ActiveSync_TimezoneConverter\\:\\:getListOfTimezones\\(\\) has invalid type optional\\.$#"
 			count: 1
 			path: tine20/ActiveSync/TimezoneConverter.php
 
@@ -142,16 +147,6 @@ parameters:
 
 		-
 			message: "#^Result of method ActiveSync_TimezoneConverter\\:\\:_checkTimezone\\(\\) \\(void\\) is used\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^Return typehint of method ActiveSync_TimezoneConverter\\:\\:_getOffsetsTemplate\\(\\) has invalid type unknown_type\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^Return typehint of method ActiveSync_TimezoneConverter\\:\\:_validateOffsets\\(\\) has invalid type unknown_type\\.$#"
 			count: 1
 			path: tine20/ActiveSync/TimezoneConverter.php
 
@@ -182,6 +177,11 @@ parameters:
 
 		-
 			message: "#^Method Addressbook_Backend_Ldap\\:\\:create\\(\\) should return Tinebase_Record_Interface but return statement is missing\\.$#"
+			count: 1
+			path: tine20/Addressbook/Backend/Ldap.php
+
+		-
+			message: "#^Method Addressbook_Backend_Ldap\\:\\:getMultiple\\(\\) has invalid return type Tinebase_RecordSet\\.$#"
 			count: 1
 			path: tine20/Addressbook/Backend/Ldap.php
 
@@ -231,11 +231,6 @@ parameters:
 			path: tine20/Addressbook/Backend/Ldap.php
 
 		-
-			message: "#^Return typehint of method Addressbook_Backend_Ldap\\:\\:getMultiple\\(\\) has invalid type Tinebase_RecordSet\\.$#"
-			count: 1
-			path: tine20/Addressbook/Backend/Ldap.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(mixed\\[int\\|Tinebase_Model_User\\] \\$_account   the accountd object\\)\\: Unexpected token \"\\[\", expected variable at offset 81$#"
 			count: 1
 			path: tine20/Addressbook/Controller.php
@@ -277,6 +272,11 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$shortname\\)\\: Unexpected token \"\\$shortname\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Addressbook/Controller/Contact.php
+
+		-
+			message: "#^Variable \\$countryname in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: tine20/Addressbook/Controller/Contact.php
 
@@ -366,7 +366,7 @@ parameters:
 			path: tine20/Addressbook/Convert/Contact/VCard/KDE.php
 
 		-
-			message: "#^Parameter \\$blob of method Addressbook_Convert_Contact_VCard_Telefonbuch\\:\\:toTine20Model\\(\\) has invalid typehint type stream\\.$#"
+			message: "#^Parameter \\$blob of method Addressbook_Convert_Contact_VCard_Telefonbuch\\:\\:toTine20Model\\(\\) has invalid type stream\\.$#"
 			count: 1
 			path: tine20/Addressbook/Convert/Contact/VCard/Telefonbuch.php
 
@@ -381,7 +381,7 @@ parameters:
 			path: tine20/Addressbook/Convert/Contact/VCard/WebDAVCollaborator.php
 
 		-
-			message: "#^Return typehint of method Addressbook_Convert_Contact_VCard_WebDAVCollaborator\\:\\:fromTine20Model\\(\\) has invalid type Sabre_VObject_Component\\.$#"
+			message: "#^Method Addressbook_Convert_Contact_VCard_WebDAVCollaborator\\:\\:fromTine20Model\\(\\) has invalid return type Sabre_VObject_Component\\.$#"
 			count: 1
 			path: tine20/Addressbook/Convert/Contact/VCard/WebDAVCollaborator.php
 
@@ -411,16 +411,6 @@ parameters:
 			path: tine20/Addressbook/Export/Pdf.php
 
 		-
-			message: "#^Access to an undefined property Syncroton_Model_EmailBody\\:\\:\\$data\\.$#"
-			count: 1
-			path: tine20/Addressbook/Frontend/ActiveSync.php
-
-		-
-			message: "#^Access to an undefined property Syncroton_Model_IDevice\\:\\:\\$devicetype\\.$#"
-			count: 3
-			path: tine20/Addressbook/Frontend/ActiveSync.php
-
-		-
 			message: "#^Access to an undefined property Syncroton_Model_StoreResponse\\:\\:\\$total\\.$#"
 			count: 1
 			path: tine20/Addressbook/Frontend/ActiveSync.php
@@ -436,7 +426,7 @@ parameters:
 			path: tine20/Addressbook/Frontend/ActiveSync.php
 
 		-
-			message: "#^Return typehint of method Addressbook_Frontend_CardDAV_AllContacts\\:\\:getChildren\\(\\) has invalid type Sabre\\\\DAV\\\\DAV\\\\INode\\.$#"
+			message: "#^Method Addressbook_Frontend_CardDAV_AllContacts\\:\\:getChildren\\(\\) has invalid return type Sabre\\\\DAV\\\\DAV\\\\INode\\.$#"
 			count: 1
 			path: tine20/Addressbook/Frontend/CardDAV/AllContacts.php
 
@@ -561,18 +551,23 @@ parameters:
 			path: tine20/Addressbook/Setup/Initialize.php
 
 		-
-			message: "#^Method Addressbook_Setup_Update_Release11\\:\\:update_15\\(\\) should return Set but return statement is missing\\.$#"
+			message: "#^Method Addressbook_Setup_Update_Release11\\:\\:update_15\\(\\) has invalid return type Set\\.$#"
 			count: 1
 			path: tine20/Addressbook/Setup/Update/Release11.php
 
 		-
-			message: "#^Return typehint of method Addressbook_Setup_Update_Release11\\:\\:update_15\\(\\) has invalid type Set\\.$#"
+			message: "#^Method Addressbook_Setup_Update_Release11\\:\\:update_15\\(\\) should return Set but return statement is missing\\.$#"
 			count: 1
 			path: tine20/Addressbook/Setup/Update/Release11.php
 
 		-
 			message: "#^Class Tinebase_Exception_NotImplemented constructor invoked with 0 parameters, 1\\-2 required\\.$#"
 			count: 3
+			path: tine20/Admin/Backend/SambaMachine.php
+
+		-
+			message: "#^Method Admin_Backend_SambaMachine\\:\\:getMultiple\\(\\) has invalid return type Tinebase_RecordSet\\.$#"
+			count: 1
 			path: tine20/Admin/Backend/SambaMachine.php
 
 		-
@@ -591,9 +586,24 @@ parameters:
 			path: tine20/Admin/Backend/SambaMachine.php
 
 		-
-			message: "#^Return typehint of method Admin_Backend_SambaMachine\\:\\:getMultiple\\(\\) has invalid type Tinebase_RecordSet\\.$#"
+			message: "#^PHPDoc tag @var for constant Admin_Config\\:\\:APPS_TO_SHOW with type array is incompatible with value 'appsToShow'\\.$#"
 			count: 1
-			path: tine20/Admin/Backend/SambaMachine.php
+			path: tine20/Admin/Config.php
+
+		-
+			message: "#^PHPDoc tag @var for constant Admin_Config\\:\\:DEFAULT_PASSWORD_MUST_CHANGE with type bool is incompatible with value 'defaultPasswordMust…'\\.$#"
+			count: 1
+			path: tine20/Admin/Config.php
+
+		-
+			message: "#^PHPDoc tag @var for constant Admin_Config\\:\\:MODULES_TO_SHOW with type array is incompatible with value 'modulesToShow'\\.$#"
+			count: 1
+			path: tine20/Admin/Config.php
+
+		-
+			message: "#^PHPDoc tag @var for constant Admin_Config\\:\\:QUOTA_ALLOW_TOTALINMB_MANAGEMNET with type bool is incompatible with value 'quotaAllowTotalInMB…'\\.$#"
+			count: 1
+			path: tine20/Admin/Config.php
 
 		-
 			message: "#^Method Admin_Controller_AccessLog\\:\\:delete\\(\\) should return Tinebase_Record_RecordSet but return statement is missing\\.$#"
@@ -611,14 +621,19 @@ parameters:
 			path: tine20/Admin/Controller/AccessLog.php
 
 		-
-			message: "#^Parameter \\$_filter of method Admin_Controller_AccessLog\\:\\:search\\(\\) has invalid typehint type optional\\.$#"
+			message: "#^Parameter \\$_filter of method Admin_Controller_AccessLog\\:\\:search\\(\\) has invalid type optional\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/AccessLog.php
 
 		-
-			message: "#^Parameter \\$_pagination of method Admin_Controller_AccessLog\\:\\:search\\(\\) has invalid typehint type optional\\.$#"
+			message: "#^Parameter \\$_pagination of method Admin_Controller_AccessLog\\:\\:search\\(\\) has invalid type optional\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/AccessLog.php
+
+		-
+			message: "#^Method Admin_Controller_Application\\:\\:search\\(\\) has invalid return type Tinebase_RecordSet_Application\\.$#"
+			count: 1
+			path: tine20/Admin/Controller/Application.php
 
 		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_dir$#"
@@ -642,11 +657,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_start$#"
-			count: 1
-			path: tine20/Admin/Controller/Application.php
-
-		-
-			message: "#^Return typehint of method Admin_Controller_Application\\:\\:search\\(\\) has invalid type Tinebase_RecordSet_Application\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/Application.php
 
@@ -676,12 +686,12 @@ parameters:
 			path: tine20/Admin/Controller/Config.php
 
 		-
-			message: "#^Parameter \\$_filter of method Admin_Controller_Config\\:\\:search\\(\\) has invalid typehint type optional\\.$#"
+			message: "#^Parameter \\$_filter of method Admin_Controller_Config\\:\\:search\\(\\) has invalid type optional\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/Config.php
 
 		-
-			message: "#^Parameter \\$_pagination of method Admin_Controller_Config\\:\\:search\\(\\) has invalid typehint type optional\\.$#"
+			message: "#^Parameter \\$_pagination of method Admin_Controller_Config\\:\\:search\\(\\) has invalid type optional\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/Config.php
 
@@ -734,11 +744,6 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(array array of record identifiers\\)\\: Unexpected token \"array\", expected variable at offset 68$#"
 			count: 1
 			path: tine20/Admin/Controller/Customfield.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_User_Plugin_Abstract\\:\\:getEmailuser\\(\\)\\.$#"
-			count: 2
-			path: tine20/Admin/Controller/EmailAccount.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(array array of record identifiers\\)\\: Unexpected token \"array\", expected variable at offset 147$#"
@@ -891,12 +896,12 @@ parameters:
 			path: tine20/Admin/Controller/Tags.php
 
 		-
-			message: "#^Parameter \\$_filter of method Admin_Controller_Tags\\:\\:search_\\(\\) has invalid typehint type optional\\.$#"
+			message: "#^Parameter \\$_filter of method Admin_Controller_Tags\\:\\:search_\\(\\) has invalid type optional\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/Tags.php
 
 		-
-			message: "#^Parameter \\$_pagination of method Admin_Controller_Tags\\:\\:search_\\(\\) has invalid typehint type optional\\.$#"
+			message: "#^Parameter \\$_pagination of method Admin_Controller_Tags\\:\\:search_\\(\\) has invalid type optional\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/Tags.php
 
@@ -981,11 +986,6 @@ parameters:
 			path: tine20/Admin/Frontend/Json.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(array  &\\$_items array of arrays which contain a type and id property\\)\\: Unexpected token \"&\", expected variable at offset 104$#"
-			count: 1
-			path: tine20/Admin/Frontend/Json.php
-
-		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_dir$#"
 			count: 3
 			path: tine20/Admin/Frontend/Json.php
@@ -1021,9 +1021,19 @@ parameters:
 			path: tine20/Admin/Frontend/Json.php
 
 		-
+			message: "#^Variable \\$members in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: tine20/Admin/Import/Group/Csv.php
+
+		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$importedRecord\\)\\: Unexpected token \"\\$importedRecord\", expected type at offset 63$#"
 			count: 1
 			path: tine20/Admin/Import/Role/Csv.php
+
+		-
+			message: "#^Variable \\$password in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: tine20/Admin/Setup/DemoData.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_Log\\:\\:NOTICE\\(\\)\\.$#"
@@ -1049,6 +1059,11 @@ parameters:
 			message: "#^Variable \\$sql might not be defined\\.$#"
 			count: 2
 			path: tine20/Calendar/Backend/Sql.php
+
+		-
+			message: "#^PHPDoc tag @var for constant Calendar_Config\\:\\:DAYS_VIEW_MOUSE_WHEEL_INCREMENT with type int is incompatible with value 'daysviewwheelincrem…'\\.$#"
+			count: 1
+			path: tine20/Calendar/Config.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:moveEventsToContainer\\(\\)\\.$#"
@@ -1098,21 +1113,6 @@ parameters:
 		-
 			message: "#^Access to an undefined property object\\:\\:\\$uid\\.$#"
 			count: 1
-			path: tine20/Calendar/Controller/Event.php
-
-		-
-			message: "#^Binary operation \"\\-\" between string and 1 results in an error\\.$#"
-			count: 2
-			path: tine20/Calendar/Controller/Event.php
-
-		-
-			message: "#^Binary operation \"\\-\" between string and int results in an error\\.$#"
-			count: 2
-			path: tine20/Calendar/Controller/Event.php
-
-		-
-			message: "#^Binary operation \"\\-\" between string and string results in an error\\.$#"
-			count: 2
 			path: tine20/Calendar/Controller/Event.php
 
 		-
@@ -1306,7 +1306,7 @@ parameters:
 			path: tine20/Calendar/Controller/EventNotifications.php
 
 		-
-			message: "#^Parameter \\$updater of method Calendar_Controller_EventNotifications\\:\\:_createVCalendar\\(\\) has invalid typehint type Tinebase_Model_FullAccount\\.$#"
+			message: "#^Parameter \\$updater of method Calendar_Controller_EventNotifications\\:\\:_createVCalendar\\(\\) has invalid type Tinebase_Model_FullAccount\\.$#"
 			count: 1
 			path: tine20/Calendar/Controller/EventNotifications.php
 
@@ -1536,7 +1536,7 @@ parameters:
 			path: tine20/Calendar/Frontend/CalDAV/Dropbox.php
 
 		-
-			message: "#^Return typehint of method Calendar_Frontend_CalDAV_Dropbox\\:\\:getChildren\\(\\) has invalid type Sabre\\\\DAV\\\\DAV\\\\INode\\.$#"
+			message: "#^Method Calendar_Frontend_CalDAV_Dropbox\\:\\:getChildren\\(\\) has invalid return type Sabre\\\\DAV\\\\DAV\\\\INode\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/Dropbox.php
 
@@ -1646,7 +1646,7 @@ parameters:
 			path: tine20/Calendar/Frontend/CalDAV/ScheduleInbox.php
 
 		-
-			message: "#^Return typehint of method Calendar_Frontend_CalDAV_ScheduleInbox\\:\\:getChildren\\(\\) has invalid type Sabre\\\\DAV\\\\DAV\\\\INode\\.$#"
+			message: "#^Method Calendar_Frontend_CalDAV_ScheduleInbox\\:\\:getChildren\\(\\) has invalid return type Sabre\\\\DAV\\\\DAV\\\\INode\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/ScheduleInbox.php
 
@@ -1821,12 +1821,22 @@ parameters:
 			path: tine20/Calendar/Frontend/WebDAV/Event.php
 
 		-
-			message: "#^Parameter \\$attachment of method Calendar_Frontend_WebDAV_Event\\:\\:addAttachment\\(\\) has invalid typehint type stream\\.$#"
+			message: "#^Method Calendar_Frontend_WebDAV_Event\\:\\:get\\(\\) has invalid return type stream\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/WebDAV/Event.php
 
 		-
-			message: "#^Parameter \\$vobjectData of method Calendar_Frontend_WebDAV_Event\\:\\:create\\(\\) has invalid typehint type stream\\.$#"
+			message: "#^Method Calendar_Frontend_WebDAV_Event\\:\\:getLastModified\\(\\) has invalid return type time\\.$#"
+			count: 1
+			path: tine20/Calendar/Frontend/WebDAV/Event.php
+
+		-
+			message: "#^Parameter \\$attachment of method Calendar_Frontend_WebDAV_Event\\:\\:addAttachment\\(\\) has invalid type stream\\.$#"
+			count: 1
+			path: tine20/Calendar/Frontend/WebDAV/Event.php
+
+		-
+			message: "#^Parameter \\$vobjectData of method Calendar_Frontend_WebDAV_Event\\:\\:create\\(\\) has invalid type stream\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/WebDAV/Event.php
 
@@ -1837,16 +1847,6 @@ parameters:
 
 		-
 			message: "#^Result of method Calendar_Frontend_WebDAV_Event\\:\\:put\\(\\) \\(void\\) is used\\.$#"
-			count: 1
-			path: tine20/Calendar/Frontend/WebDAV/Event.php
-
-		-
-			message: "#^Return typehint of method Calendar_Frontend_WebDAV_Event\\:\\:get\\(\\) has invalid type stream\\.$#"
-			count: 1
-			path: tine20/Calendar/Frontend/WebDAV/Event.php
-
-		-
-			message: "#^Return typehint of method Calendar_Frontend_WebDAV_Event\\:\\:getLastModified\\(\\) has invalid type time\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/WebDAV/Event.php
 
@@ -1951,22 +1951,22 @@ parameters:
 			path: tine20/Calendar/Import/CalDav/Client.php
 
 		-
-			message: "#^Parameter \\$calendarUri of method Calendar_Import_CalDav_Client\\:\\:findContainerForCalendar\\(\\) has invalid typehint type unknown\\.$#"
+			message: "#^Parameter \\$calendarUri of method Calendar_Import_CalDav_Client\\:\\:findContainerForCalendar\\(\\) has invalid type unknown\\.$#"
 			count: 1
 			path: tine20/Calendar/Import/CalDav/Client.php
 
 		-
-			message: "#^Parameter \\$defaultCalendarsName of method Calendar_Import_CalDav_Client\\:\\:findContainerForCalendar\\(\\) has invalid typehint type unknown\\.$#"
+			message: "#^Parameter \\$defaultCalendarsName of method Calendar_Import_CalDav_Client\\:\\:findContainerForCalendar\\(\\) has invalid type unknown\\.$#"
 			count: 1
 			path: tine20/Calendar/Import/CalDav/Client.php
 
 		-
-			message: "#^Parameter \\$displayname of method Calendar_Import_CalDav_Client\\:\\:findContainerForCalendar\\(\\) has invalid typehint type unknown\\.$#"
+			message: "#^Parameter \\$displayname of method Calendar_Import_CalDav_Client\\:\\:findContainerForCalendar\\(\\) has invalid type unknown\\.$#"
 			count: 1
 			path: tine20/Calendar/Import/CalDav/Client.php
 
 		-
-			message: "#^Parameter \\$type of method Calendar_Import_CalDav_Client\\:\\:findContainerForCalendar\\(\\) has invalid typehint type unknown\\.$#"
+			message: "#^Parameter \\$type of method Calendar_Import_CalDav_Client\\:\\:findContainerForCalendar\\(\\) has invalid type unknown\\.$#"
 			count: 1
 			path: tine20/Calendar/Import/CalDav/Client.php
 
@@ -2306,7 +2306,7 @@ parameters:
 			path: tine20/Calendar/Model/Rrule.php
 
 		-
-			message: "#^Parameter \\$_diff of method Calendar_Model_Rrule\\:\\:addUTCDateDstFix\\(\\) has invalid typehint type DateTimeInterval\\.$#"
+			message: "#^Parameter \\$_diff of method Calendar_Model_Rrule\\:\\:addUTCDateDstFix\\(\\) has invalid type DateTimeInterval\\.$#"
 			count: 1
 			path: tine20/Calendar/Model/Rrule.php
 
@@ -2501,6 +2501,11 @@ parameters:
 			path: tine20/Calendar/Setup/Update/Release11.php
 
 		-
+			message: "#^File ends with a trailing whitespace\\. This may cause problems when running the code in the web browser\\. Remove the closing \\?\\> mark or remove the whitespace\\.$#"
+			count: 1
+			path: tine20/Calendar/views/eventNotification.php
+
+		-
 			message: "#^Variable \\$this might not be defined\\.$#"
 			count: 40
 			path: tine20/Calendar/views/eventNotification.php
@@ -2561,6 +2566,11 @@ parameters:
 			path: tine20/Crm/Controller.php
 
 		-
+			message: "#^Unsafe access to private property Crm_Controller\\:\\:\\$_instance through static\\:\\:\\.$#"
+			count: 3
+			path: tine20/Crm/Controller.php
+
+		-
 			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:getGroupCountForField\\(\\)\\.$#"
 			count: 3
 			path: tine20/Crm/Controller/Lead.php
@@ -2597,6 +2607,16 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param for parameter \\$_translate with type int is incompatible with native type Zend_Translate\\.$#"
+			count: 1
+			path: tine20/Crm/Export/Pdf.php
+
+		-
+			message: "#^Variable \\$productRelations in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: tine20/Crm/Export/Pdf.php
+
+		-
+			message: "#^Variable \\$taskRelations in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: tine20/Crm/Export/Pdf.php
 
@@ -2656,6 +2676,11 @@ parameters:
 			path: tine20/Crm/Model/Lead.php
 
 		-
+			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
+			count: 1
+			path: tine20/Crm/Model/Lead.php
+
+		-
 			message: "#^PHPDoc tag @var does not specify variable name\\.$#"
 			count: 1
 			path: tine20/Crm/Model/Lead.php
@@ -2711,14 +2736,19 @@ parameters:
 			path: tine20/DFCom/Controller/Device.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Log\\:\\:WARN\\(\\)\\.$#"
-			count: 1
+			message: "#^Unsafe access to private property DFCom_Controller_Device\\:\\:\\$_instance through static\\:\\:\\.$#"
+			count: 3
 			path: tine20/DFCom/Controller/Device.php
 
 		-
-			message: "#^Undefined variable\\: \\$setupAuthKey$#"
-			count: 1
-			path: tine20/DFCom/Controller/Device.php
+			message: "#^Unsafe access to private property DFCom_Controller_DeviceList\\:\\:\\$_instance through static\\:\\:\\.$#"
+			count: 3
+			path: tine20/DFCom/Controller/DeviceList.php
+
+		-
+			message: "#^Unsafe access to private property DFCom_Controller_DeviceRecord\\:\\:\\$_instance through static\\:\\:\\.$#"
+			count: 3
+			path: tine20/DFCom/Controller/DeviceRecord.php
 
 		-
 			message: "#^Class DFCom_Model_DeviceResponse does not have a constructor and must be instantiated without any parameters\\.$#"
@@ -2876,31 +2906,6 @@ parameters:
 			path: tine20/DFCom/RecordHandler/TimeAccounting.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/DFCom/Setup/Update/13.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$bool\\)\\: Unexpected token \"\\$bool\", expected type at offset 18$#"
-			count: 2
-			path: tine20/EFile/Controller.php
-
-		-
-			message: "#^Static method EFile_Controller\\:\\:getApplicationNode\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: tine20/EFile/Controller.php
-
-		-
-			message: "#^Array has 2 duplicate keys with value 2 \\(\\\\Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadataInfo\\:\\:MANY_TO_ONE, \\\\Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadataInfo\\:\\:MANY_TO_ONE\\)\\.$#"
-			count: 1
-			path: tine20/EFile/Model/FileMetadata.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/EFile/Setup/Update/1.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(mixed\\[int\\|Tinebase_Model_User\\] \\$_account   the account object\\)\\: Unexpected token \"\\[\", expected variable at offset 81$#"
 			count: 1
 			path: tine20/ExampleApplication/Controller.php
@@ -2936,13 +2941,18 @@ parameters:
 			path: tine20/Felamimail/Backend/Imap.php
 
 		-
-			message: "#^Cannot access property \\$port on array\\.$#"
+			message: "#^Cannot access property \\$folder on array\\.$#"
 			count: 1
 			path: tine20/Felamimail/Backend/Imap.php
 
 		-
+			message: "#^Cannot access property \\$port on array\\.$#"
+			count: 2
+			path: tine20/Felamimail/Backend/Imap.php
+
+		-
 			message: "#^Cannot access property \\$ssl on array\\.$#"
-			count: 1
+			count: 2
 			path: tine20/Felamimail/Backend/Imap.php
 
 		-
@@ -3106,18 +3116,23 @@ parameters:
 			path: tine20/Felamimail/Controller/Folder.php
 
 		-
+			message: "#^Method Felamimail_Controller_Folder\\:\\:getMultiple\\(\\) has invalid return type Tinebase_RecordSet\\.$#"
+			count: 1
+			path: tine20/Felamimail/Controller/Folder.php
+
+		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_account$#"
 			count: 1
 			path: tine20/Felamimail/Controller/Folder.php
 
 		-
-			message: "#^Return typehint of method Felamimail_Controller_Folder\\:\\:getMultiple\\(\\) has invalid type Tinebase_RecordSet\\.$#"
+			message: "#^Variable \\$_folder in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
-			path: tine20/Felamimail/Controller/Folder.php
+			path: tine20/Felamimail/Controller/Message.php
 
 		-
 			message: "#^Access to an undefined property Felamimail_Controller_Message_File\\:\\:\\$_modelControllers\\.$#"
-			count: 3
+			count: 2
 			path: tine20/Felamimail/Controller/Message/File.php
 
 		-
@@ -3346,21 +3361,6 @@ parameters:
 			path: tine20/Felamimail/Frontend/ActiveSync.php
 
 		-
-			message: "#^Access to an undefined property Syncroton_Model_EmailBody\\:\\:\\$data\\.$#"
-			count: 1
-			path: tine20/Felamimail/Frontend/ActiveSync.php
-
-		-
-			message: "#^Access to an undefined property Syncroton_Model_EmailBody\\:\\:\\$preview\\.$#"
-			count: 1
-			path: tine20/Felamimail/Frontend/ActiveSync.php
-
-		-
-			message: "#^Access to an undefined property Syncroton_Model_EmailBody\\:\\:\\$truncated\\.$#"
-			count: 2
-			path: tine20/Felamimail/Frontend/ActiveSync.php
-
-		-
 			message: "#^Access to an undefined property Syncroton_Model_IFolder\\:\\:\\$displayName\\.$#"
 			count: 2
 			path: tine20/Felamimail/Frontend/ActiveSync.php
@@ -3372,12 +3372,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Syncroton_Model_StoreRequest\\:\\:\\$options\\.$#"
-			count: 4
-			path: tine20/Felamimail/Frontend/ActiveSync.php
-
-		-
-			message: "#^Access to an undefined property Syncroton_Model_StoreRequest\\:\\:\\$query\\.$#"
-			count: 1
+			count: 3
 			path: tine20/Felamimail/Frontend/ActiveSync.php
 
 		-
@@ -3406,11 +3401,6 @@ parameters:
 			path: tine20/Felamimail/Frontend/ActiveSync.php
 
 		-
-			message: "#^Cannot access property \\$type on Syncroton_Model_EmailBody\\|void\\.$#"
-			count: 3
-			path: tine20/Felamimail/Frontend/ActiveSync.php
-
-		-
 			message: "#^Instantiated class ActiveSync_Exception_FolderNotFound not found\\.$#"
 			count: 1
 			path: tine20/Felamimail/Frontend/ActiveSync.php
@@ -3436,17 +3426,17 @@ parameters:
 			path: tine20/Felamimail/Frontend/ActiveSync.php
 
 		-
-			message: "#^Parameter \\$_endTimeStamp of method Felamimail_Frontend_ActiveSync\\:\\:getChangedEntries\\(\\) has invalid typehint type unknown_type\\.$#"
+			message: "#^Parameter \\$_endTimeStamp of method Felamimail_Frontend_ActiveSync\\:\\:getChangedEntries\\(\\) has invalid type unknown_type\\.$#"
 			count: 1
 			path: tine20/Felamimail/Frontend/ActiveSync.php
 
 		-
-			message: "#^Parameter \\$_startTimeStamp of method Felamimail_Frontend_ActiveSync\\:\\:getChangedEntries\\(\\) has invalid typehint type unknown_type\\.$#"
+			message: "#^Parameter \\$_startTimeStamp of method Felamimail_Frontend_ActiveSync\\:\\:getChangedEntries\\(\\) has invalid type unknown_type\\.$#"
 			count: 1
 			path: tine20/Felamimail/Frontend/ActiveSync.php
 
 		-
-			message: "#^Parameter \\$fileReference of method Felamimail_Frontend_ActiveSync\\:\\:getFileReference\\(\\) has invalid typehint type unknown_type\\.$#"
+			message: "#^Parameter \\$fileReference of method Felamimail_Frontend_ActiveSync\\:\\:getFileReference\\(\\) has invalid type unknown_type\\.$#"
 			count: 1
 			path: tine20/Felamimail/Frontend/ActiveSync.php
 
@@ -3457,11 +3447,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$id\\)\\: Unexpected token \"\\$id\", expected type at offset 141$#"
-			count: 1
-			path: tine20/Felamimail/Frontend/Http.php
-
-		-
-			message: "#^Variable \\$filename might not be defined\\.$#"
 			count: 1
 			path: tine20/Felamimail/Frontend/Http.php
 
@@ -3516,12 +3501,12 @@ parameters:
 			path: tine20/Felamimail/HTMLPurifier/URIFilter/TransformURI.php
 
 		-
-			message: "#^Parameter \\$errno of method HTMLPurifier_URIScheme_cid\\:\\:muteErrorHandler\\(\\) has invalid typehint type unknown_type\\.$#"
+			message: "#^Parameter \\$errno of method HTMLPurifier_URIScheme_cid\\:\\:muteErrorHandler\\(\\) has invalid type unknown_type\\.$#"
 			count: 1
 			path: tine20/Felamimail/HTMLPurifier/URIScheme/cid.php
 
 		-
-			message: "#^Parameter \\$errstr of method HTMLPurifier_URIScheme_cid\\:\\:muteErrorHandler\\(\\) has invalid typehint type unknown_type\\.$#"
+			message: "#^Parameter \\$errstr of method HTMLPurifier_URIScheme_cid\\:\\:muteErrorHandler\\(\\) has invalid type unknown_type\\.$#"
 			count: 1
 			path: tine20/Felamimail/HTMLPurifier/URIScheme/cid.php
 
@@ -3846,12 +3831,12 @@ parameters:
 			path: tine20/Filemanager/Controller/Node.php
 
 		-
-			message: "#^Parameter \\$_action of method Filemanager_Controller_Node\\:\\:search\\(\\) has invalid typehint type optional\\.$#"
+			message: "#^Parameter \\$_action of method Filemanager_Controller_Node\\:\\:search\\(\\) has invalid type optional\\.$#"
 			count: 1
 			path: tine20/Filemanager/Controller/Node.php
 
 		-
-			message: "#^Parameter \\$_action of method Filemanager_Controller_Node\\:\\:searchCount\\(\\) has invalid typehint type optional\\.$#"
+			message: "#^Parameter \\$_action of method Filemanager_Controller_Node\\:\\:searchCount\\(\\) has invalid type optional\\.$#"
 			count: 1
 			path: tine20/Filemanager/Controller/Node.php
 
@@ -4051,21 +4036,6 @@ parameters:
 			path: tine20/HumanResources/BL/DailyWTReport/BreakTime.php
 
 		-
-			message: "#^Binary operation \"\\-\" between string and 1 results in an error\\.$#"
-			count: 1
-			path: tine20/HumanResources/BL/DailyWTReport/PopulateReport.php
-
-		-
-			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
-			count: 2
-			path: tine20/HumanResources/BL/DailyWTReport/PopulateReport.php
-
-		-
-			message: "#^Binary operation \"\\+\" between string and 1 results in an error\\.$#"
-			count: 1
-			path: tine20/HumanResources/Config.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(array config\\)\\: Unexpected token \"config\", expected variable at offset 55$#"
 			count: 1
 			path: tine20/HumanResources/Controller.php
@@ -4081,12 +4051,12 @@ parameters:
 			path: tine20/HumanResources/Controller/Account.php
 
 		-
-			message: "#^Parameter \\$year of method HumanResources_Controller_Account\\:\\:getByEmployeeYear\\(\\) has invalid typehint type Date\\.$#"
+			message: "#^Parameter \\$year of method HumanResources_Controller_Account\\:\\:getByEmployeeYear\\(\\) has invalid type Date\\.$#"
 			count: 1
 			path: tine20/HumanResources/Controller/Account.php
 
 		-
-			message: "#^Parameter \\$year of method HumanResources_Controller_Account\\:\\:getByEmployeeYear\\(\\) has invalid typehint type strig\\.$#"
+			message: "#^Parameter \\$year of method HumanResources_Controller_Account\\:\\:getByEmployeeYear\\(\\) has invalid type strig\\.$#"
 			count: 1
 			path: tine20/HumanResources/Controller/Account.php
 
@@ -4116,7 +4086,7 @@ parameters:
 			path: tine20/HumanResources/Controller/Employee.php
 
 		-
-			message: "#^Parameter \\$_record of method HumanResources_Controller_Employee\\:\\:_recordArraysToId\\(\\) has invalid typehint type unknown\\.$#"
+			message: "#^Parameter \\$_record of method HumanResources_Controller_Employee\\:\\:_recordArraysToId\\(\\) has invalid type unknown\\.$#"
 			count: 1
 			path: tine20/HumanResources/Controller/Employee.php
 
@@ -4131,12 +4101,12 @@ parameters:
 			path: tine20/HumanResources/Controller/FreeTime.php
 
 		-
-			message: "#^Parameter \\$month of method HumanResources_Controller_MonthlyWTReport\\:\\:getByEmployeeMonth\\(\\) has invalid typehint type Date\\.$#"
+			message: "#^Parameter \\$month of method HumanResources_Controller_MonthlyWTReport\\:\\:getByEmployeeMonth\\(\\) has invalid type Date\\.$#"
 			count: 1
 			path: tine20/HumanResources/Controller/MonthlyWTReport.php
 
 		-
-			message: "#^Parameter \\$month of method HumanResources_Controller_MonthlyWTReport\\:\\:getByEmployeeMonth\\(\\) has invalid typehint type strig\\.$#"
+			message: "#^Parameter \\$month of method HumanResources_Controller_MonthlyWTReport\\:\\:getByEmployeeMonth\\(\\) has invalid type strig\\.$#"
 			count: 1
 			path: tine20/HumanResources/Controller/MonthlyWTReport.php
 
@@ -4421,12 +4391,12 @@ parameters:
 			path: tine20/HumanResources/Setup/DemoData.php
 
 		-
-			message: "#^Binary operation \"\\-\" between string and 2 results in an error\\.$#"
+			message: "#^PHPDoc tag @param has invalid value \\(string\\)\\: Unexpected token \"\\\\n     \\* \", expected variable at offset 55$#"
 			count: 1
 			path: tine20/HumanResources/Setup/DemoData.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(string\\)\\: Unexpected token \"\\\\n     \\* \", expected variable at offset 55$#"
+			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
 			count: 1
 			path: tine20/HumanResources/Setup/DemoData.php
 
@@ -4446,12 +4416,17 @@ parameters:
 			path: tine20/Inventory/Controller.php
 
 		-
+			message: "#^Unsafe access to private property Inventory_Controller_InventoryItem\\:\\:\\$_instance through static\\:\\:\\.$#"
+			count: 3
+			path: tine20/Inventory/Controller/InventoryItem.php
+
+		-
 			message: "#^Access to an undefined property Phone_Backend_Asterisk\\:\\:\\$_db\\.$#"
 			count: 1
 			path: tine20/Phone/Backend/Asterisk.php
 
 		-
-			message: "#^Return typehint of method Phone_Backend_Factory\\:\\:factory\\(\\) has invalid type Phone_Backend_Interface\\.$#"
+			message: "#^Method Phone_Backend_Factory\\:\\:factory\\(\\) has invalid return type Phone_Backend_Interface\\.$#"
 			count: 1
 			path: tine20/Phone/Backend/Factory.php
 
@@ -4536,16 +4511,6 @@ parameters:
 			path: tine20/SSO/Facade/SAML/AuthSimple.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(array &\\$state Information about the current authentication\\.\\)\\: Unexpected token \"&\", expected variable at offset 244$#"
-			count: 1
-			path: tine20/SSO/Facade/SAML/AuthSource.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(array &\\$state Information about the current logout operation\\.\\)\\: Unexpected token \"&\", expected variable at offset 559$#"
-			count: 1
-			path: tine20/SSO/Facade/SAML/AuthSource.php
-
-		-
 			message: "#^Access to an undefined property Zend_Session_Namespace\\:\\:\\$data\\.$#"
 			count: 3
 			path: tine20/SSO/Facade/SAML/Session.php
@@ -4581,7 +4546,7 @@ parameters:
 			path: tine20/Sales/Controller/Contract.php
 
 		-
-			message: "#^Parameter \\$update of method Sales_Controller_Contract\\:\\:transferBillingInformation\\(\\) has invalid typehint type boolen\\.$#"
+			message: "#^Parameter \\$update of method Sales_Controller_Contract\\:\\:transferBillingInformation\\(\\) has invalid type boolen\\.$#"
 			count: 1
 			path: tine20/Sales/Controller/Contract.php
 
@@ -4632,16 +4597,6 @@ parameters:
 
 		-
 			message: "#^Constant id not found\\.$#"
-			count: 1
-			path: tine20/Sales/Controller/Invoice.php
-
-		-
-			message: "#^Method Sales_Controller_Invoice\\:\\:_findCurrentCostCenter\\(\\) should return Sales_Model_CostCenter\\|null but return statement is missing\\.$#"
-			count: 1
-			path: tine20/Sales/Controller/Invoice.php
-
-		-
-			message: "#^Method Sales_Controller_Invoice\\:\\:_findCurrentCustomer\\(\\) should return Sales_Model_Customer\\|null but return statement is missing\\.$#"
 			count: 1
 			path: tine20/Sales/Controller/Invoice.php
 
@@ -4716,11 +4671,6 @@ parameters:
 			path: tine20/Sales/Controller/PurchaseInvoice.php
 
 		-
-			message: "#^Method Sales_Controller_PurchaseInvoice\\:\\:_findCurrentCostCenter\\(\\) should return Sales_Model_CostCenter\\|null but return statement is missing\\.$#"
-			count: 1
-			path: tine20/Sales/Controller/PurchaseInvoice.php
-
-		-
 			message: "#^Method Sales_Controller_PurchaseInvoice\\:\\:_findCurrentCustomer\\(\\) should return Sales_Model_Customer\\|null but return statement is missing\\.$#"
 			count: 1
 			path: tine20/Sales/Controller/PurchaseInvoice.php
@@ -4781,7 +4731,7 @@ parameters:
 			path: tine20/Sales/Frontend/Cli.php
 
 		-
-			message: "#^Comparison operation \"\\=\\=\" between array\\<int, string\\>&nonEmpty and 3 results in an error\\.$#"
+			message: "#^Comparison operation \"\\=\\=\" between non\\-empty\\-array\\<int, string\\> and 3 results in an error\\.$#"
 			count: 1
 			path: tine20/Sales/Frontend/Cli.php
 
@@ -5046,17 +4996,17 @@ parameters:
 			path: tine20/Setup/Backend/Schema/Abstract.php
 
 		-
+			message: "#^Method Setup_Backend_Schema_Field_Abstract\\:\\:equals\\(\\) has invalid return type unknown_type\\.$#"
+			count: 1
+			path: tine20/Setup/Backend/Schema/Field/Abstract.php
+
+		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_declaration$#"
 			count: 1
 			path: tine20/Setup/Backend/Schema/Field/Abstract.php
 
 		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$field$#"
-			count: 1
-			path: tine20/Setup/Backend/Schema/Field/Abstract.php
-
-		-
-			message: "#^Return typehint of method Setup_Backend_Schema_Field_Abstract\\:\\:equals\\(\\) has invalid type unknown_type\\.$#"
 			count: 1
 			path: tine20/Setup/Backend/Schema/Field/Abstract.php
 
@@ -5246,30 +5196,28 @@ parameters:
 			path: tine20/Setup/Controller.php
 
 		-
-			message:
-				"""
-					#^PHPDoc tag @param has invalid value \\(\\$options array\\(
-					     'backupDir'  \\=\\> string // location of backup to restore
-					     'config'     \\=\\> bool   // restore config
-					     'db'         \\=\\> bool   // restore database
-					     'files'      \\=\\> bool   // restore files
-					   \\)\\)\\: Unexpected token "\\$options", expected type at offset 40$#
-				"""
+			message: """
+				#^PHPDoc tag @param has invalid value \\(\\$options array\\(
+				     'backupDir'  \\=\\> string // location of backup to restore
+				     'config'     \\=\\> bool   // restore config
+				     'db'         \\=\\> bool   // restore database
+				     'files'      \\=\\> bool   // restore files
+				   \\)\\)\\: Unexpected token "\\$options", expected type at offset 40$#
+			"""
 			count: 1
 			path: tine20/Setup/Controller.php
 
 		-
-			message:
-				"""
-					#^PHPDoc tag @param has invalid value \\(\\$options array\\(
-					     'backupDir'  \\=\\> string // where to store the backup
-					     'noTimestamp \\=\\> bool   // don't append timestamp to backup dir
-					     'config'     \\=\\> bool   // backup config
-					     'db'         \\=\\> bool   // backup database
-					     'files'      \\=\\> bool   // backup files
-					     'novalidate' \\=\\> bool   // do not validate sql backup
-					   \\)\\)\\: Unexpected token "\\$options", expected type at offset 39$#
-				"""
+			message: """
+				#^PHPDoc tag @param has invalid value \\(\\$options array\\(
+				     'backupDir'  \\=\\> string // where to store the backup
+				     'noTimestamp \\=\\> bool   // don't append timestamp to backup dir
+				     'config'     \\=\\> bool   // backup config
+				     'db'         \\=\\> bool   // backup database
+				     'files'      \\=\\> bool   // backup files
+				     'novalidate' \\=\\> bool   // do not validate sql backup
+				   \\)\\)\\: Unexpected token "\\$options", expected type at offset 39$#
+			"""
 			count: 1
 			path: tine20/Setup/Controller.php
 
@@ -5429,7 +5377,7 @@ parameters:
 			path: tine20/Setup/Frontend/Json.php
 
 		-
-			message: "#^Parameter \\$options of method Setup_Frontend_Json\\:\\:installApplications\\(\\) has invalid typehint type optional\\.$#"
+			message: "#^Parameter \\$options of method Setup_Frontend_Json\\:\\:installApplications\\(\\) has invalid type optional\\.$#"
 			count: 1
 			path: tine20/Setup/Frontend/Json.php
 
@@ -5444,12 +5392,12 @@ parameters:
 			path: tine20/Setup/SchemaTool.php
 
 		-
-			message: "#^Parameter \\$_options of method Setup_Uninitialize\\:\\:_uninitialize\\(\\) has invalid typehint type optional\\.$#"
+			message: "#^Parameter \\$_options of method Setup_Uninitialize\\:\\:_uninitialize\\(\\) has invalid type optional\\.$#"
 			count: 1
 			path: tine20/Setup/Uninitialize.php
 
 		-
-			message: "#^Parameter \\$_options of method Setup_Uninitialize\\:\\:uninitialize\\(\\) has invalid typehint type optional\\.$#"
+			message: "#^Parameter \\$_options of method Setup_Uninitialize\\:\\:uninitialize\\(\\) has invalid type optional\\.$#"
 			count: 1
 			path: tine20/Setup/Uninitialize.php
 
@@ -5579,14 +5527,9 @@ parameters:
 			path: tine20/Tasks/Convert/Task/VCalendar/Thunderbird.php
 
 		-
-			message: "#^Parameter \\$_vevent of method Tasks_Convert_Task_VCalendar_Thunderbird\\:\\:_addEventAttendee\\(\\) has invalid typehint type Sabre_VObject_Component\\.$#"
+			message: "#^Parameter \\$_vevent of method Tasks_Convert_Task_VCalendar_Thunderbird\\:\\:_addEventAttendee\\(\\) has invalid type Sabre_VObject_Component\\.$#"
 			count: 1
 			path: tine20/Tasks/Convert/Task/VCalendar/Thunderbird.php
-
-		-
-			message: "#^Access to an undefined property Syncroton_Model_EmailBody\\:\\:\\$data\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/ActiveSync.php
 
 		-
 			message: "#^Access to an undefined property Syncroton_Model_IEntry\\:\\:\\$dateCompleted\\.$#"
@@ -5634,12 +5577,12 @@ parameters:
 			path: tine20/Tasks/Setup/MigrateFromEgw14.php
 
 		-
-			message: "#^Return typehint of method Tasks_Setup_MigrateFromTine14\\:\\:getClass\\(\\) has invalid type id\\.$#"
+			message: "#^Method Tasks_Setup_MigrateFromTine14\\:\\:getClass\\(\\) has invalid return type id\\.$#"
 			count: 1
 			path: tine20/Tasks/Setup/MigrateFromEgw14.php
 
 		-
-			message: "#^Return typehint of method Tasks_Setup_MigrateFromTine14\\:\\:getStatus\\(\\) has invalid type id\\.$#"
+			message: "#^Method Tasks_Setup_MigrateFromTine14\\:\\:getStatus\\(\\) has invalid return type id\\.$#"
 			count: 1
 			path: tine20/Tasks/Setup/MigrateFromEgw14.php
 
@@ -5754,7 +5697,12 @@ parameters:
 			path: tine20/Timetracker/Setup/Import/Egw14.php
 
 		-
-			message: "#^Parameter \\$_text of method Timetracker_Setup_Import_Egw14\\:\\:_encode\\(\\) has invalid typehint type unknown_type\\.$#"
+			message: "#^Parameter \\$_text of method Timetracker_Setup_Import_Egw14\\:\\:_encode\\(\\) has invalid type unknown_type\\.$#"
+			count: 1
+			path: tine20/Timetracker/Setup/Import/Egw14.php
+
+		-
+			message: "#^Variable \\$_parentData in empty\\(\\) is never defined\\.$#"
 			count: 1
 			path: tine20/Timetracker/Setup/Import/Egw14.php
 
@@ -5874,7 +5822,7 @@ parameters:
 			path: tine20/Tinebase/ActionQueue/Backend/Redis.php
 
 		-
-			message: "#^Comparison operation \"\\<\" between \\(array\\|float\\|int\\) and int results in an error\\.$#"
+			message: "#^Comparison operation \"\\<\" between \\(array\\|float\\|int\\) and int\\<1, max\\> results in an error\\.$#"
 			count: 1
 			path: tine20/Tinebase/ActionQueue/Backend/Redis.php
 
@@ -5934,12 +5882,12 @@ parameters:
 			path: tine20/Tinebase/Auth.php
 
 		-
-			message: "#^Parameter \\$_backendType of method Tinebase_Auth\\:\\:getBackendConfigurationDefaults\\(\\) has invalid typehint type optional\\.$#"
+			message: "#^Parameter \\$_backendType of method Tinebase_Auth\\:\\:getBackendConfigurationDefaults\\(\\) has invalid type optional\\.$#"
 			count: 1
 			path: tine20/Tinebase/Auth.php
 
 		-
-			message: "#^Parameter \\$_key of method Tinebase_Auth\\:\\:deleteBackendConfiguration\\(\\) has invalid typehint type optional\\.$#"
+			message: "#^Parameter \\$_key of method Tinebase_Auth\\:\\:deleteBackendConfiguration\\(\\) has invalid type optional\\.$#"
 			count: 1
 			path: tine20/Tinebase/Auth.php
 
@@ -5956,6 +5904,11 @@ parameters:
 		-
 			message: "#^Access to an undefined property Zend_Session_Namespace\\:\\:\\$credentialCache\\.$#"
 			count: 2
+			path: tine20/Tinebase/Auth/CredentialCache.php
+
+		-
+			message: "#^Constant MCRYPT_DEV_URANDOM not found\\.$#"
+			count: 1
 			path: tine20/Tinebase/Auth/CredentialCache.php
 
 		-
@@ -6054,11 +6007,6 @@ parameters:
 			path: tine20/Tinebase/Backend/Sql/Abstract.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(array &\\$_recordArray\\)\\: Unexpected token \"&\", expected variable at offset 117$#"
-			count: 1
-			path: tine20/Tinebase/Backend/Sql/Abstract.php
-
-		-
 			message: "#^Variable \\$fieldsFilter might not be defined\\.$#"
 			count: 1
 			path: tine20/Tinebase/Backend/Sql/Abstract.php
@@ -6127,6 +6075,11 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(\\$method\\)\\: Unexpected token \"\\$method\", expected type at offset 196$#"
 			count: 1
 			path: tine20/Tinebase/Cache/PerRequest.php
+
+		-
+			message: "#^PHPDoc tag @var for constant Tinebase_Config\\:\\:SYNC_USER_DELETE_AFTER with type bool is incompatible with value 'syncUserDeleteAfter'\\.$#"
+			count: 1
+			path: tine20/Tinebase/Config.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$cachedConfigData\\)\\: Unexpected token \"\\$cachedConfigData\", expected type at offset 91$#"
@@ -6299,11 +6252,6 @@ parameters:
 			path: tine20/Tinebase/Controller/Event.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_communityNumber\\)\\: Unexpected token \"\\$_communityNumber\", expected type at offset 18$#"
-			count: 1
-			path: tine20/Tinebase/Controller/MunicipalityKey.php
-
-		-
 			message: "#^Access to an undefined property Tinebase_ModelConfiguration\\:\\:\\$controllerHookBeforeUpdate\\.$#"
 			count: 1
 			path: tine20/Tinebase/Controller/Record/Abstract.php
@@ -6330,11 +6278,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Tinebase_Controller_Record_Abstract\\:\\:doGrantChecks\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Controller/Record/Abstract.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Controller_Record_Interface\\|Tinebase_Controller_SearchInterface\\:\\:unDelete\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Controller/Record/Abstract.php
 
@@ -6385,6 +6328,11 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$toggle$#"
+			count: 1
+			path: tine20/Tinebase/Controller/Record/Abstract.php
+
+		-
+			message: "#^Variable \\$_origRecord in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: tine20/Tinebase/Controller/Record/Abstract.php
 
@@ -6659,6 +6607,11 @@ parameters:
 			path: tine20/Tinebase/CustomField.php
 
 		-
+			message: "#^Unsafe access to private property Tinebase_CustomField\\:\\:\\$_instance through static\\:\\:\\.$#"
+			count: 3
+			path: tine20/Tinebase/CustomField.php
+
+		-
 			message: "#^Variable \\$record in PHPDoc tag @var does not match assigned variable \\$model\\.$#"
 			count: 1
 			path: tine20/Tinebase/CustomField/Config.php
@@ -6690,7 +6643,7 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$part$#"
-			count: 8
+			count: 7
 			path: tine20/Tinebase/DateTime.php
 
 		-
@@ -6831,6 +6784,16 @@ parameters:
 		-
 			message: "#^Constructor of class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema has an unused parameter \\$_options\\.$#"
 			count: 1
+			path: tine20/Tinebase/EmailUser/Smtp/LdapSimpleMailSchema.php
+
+		-
+			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
+			count: 2
+			path: tine20/Tinebase/EmailUser/Smtp/LdapSimpleMailSchema.php
+
+		-
+			message: "#^PHPDoc tag @var does not specify variable name\\.$#"
+			count: 2
 			path: tine20/Tinebase/EmailUser/Smtp/LdapSimpleMailSchema.php
 
 		-
@@ -7029,6 +6992,11 @@ parameters:
 			path: tine20/Tinebase/Export/Abstract.php
 
 		-
+			message: "#^Variable \\$customFieldConfigs in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: tine20/Tinebase/Export/Abstract.php
+
+		-
 			message: "#^Access to an undefined property Zend_Config\\:\\:\\$type\\.$#"
 			count: 1
 			path: tine20/Tinebase/Export/AbstractDeprecated.php
@@ -7064,17 +7032,17 @@ parameters:
 			path: tine20/Tinebase/Export/Csv.php
 
 		-
-			message: "#^Parameter \\$delimiter of method Tinebase_Export_Csv\\:\\:fputcsv\\(\\) has invalid typehint type char\\.$#"
+			message: "#^Parameter \\$delimiter of method Tinebase_Export_Csv\\:\\:fputcsv\\(\\) has invalid type char\\.$#"
 			count: 1
 			path: tine20/Tinebase/Export/Csv.php
 
 		-
-			message: "#^Parameter \\$enclosure of method Tinebase_Export_Csv\\:\\:fputcsv\\(\\) has invalid typehint type char\\.$#"
+			message: "#^Parameter \\$enclosure of method Tinebase_Export_Csv\\:\\:fputcsv\\(\\) has invalid type char\\.$#"
 			count: 1
 			path: tine20/Tinebase/Export/Csv.php
 
 		-
-			message: "#^Parameter \\$escapeEnclosure of method Tinebase_Export_Csv\\:\\:fputcsv\\(\\) has invalid typehint type char\\.$#"
+			message: "#^Parameter \\$escapeEnclosure of method Tinebase_Export_Csv\\:\\:fputcsv\\(\\) has invalid type char\\.$#"
 			count: 1
 			path: tine20/Tinebase/Export/Csv.php
 
@@ -7094,17 +7062,17 @@ parameters:
 			path: tine20/Tinebase/Export/CsvNew.php
 
 		-
-			message: "#^Parameter \\$delimiter of method Tinebase_Export_CsvNew\\:\\:fputcsv\\(\\) has invalid typehint type char\\.$#"
+			message: "#^Parameter \\$delimiter of method Tinebase_Export_CsvNew\\:\\:fputcsv\\(\\) has invalid type char\\.$#"
 			count: 1
 			path: tine20/Tinebase/Export/CsvNew.php
 
 		-
-			message: "#^Parameter \\$enclosure of method Tinebase_Export_CsvNew\\:\\:fputcsv\\(\\) has invalid typehint type char\\.$#"
+			message: "#^Parameter \\$enclosure of method Tinebase_Export_CsvNew\\:\\:fputcsv\\(\\) has invalid type char\\.$#"
 			count: 1
 			path: tine20/Tinebase/Export/CsvNew.php
 
 		-
-			message: "#^Parameter \\$escapeEnclosure of method Tinebase_Export_CsvNew\\:\\:fputcsv\\(\\) has invalid typehint type char\\.$#"
+			message: "#^Parameter \\$escapeEnclosure of method Tinebase_Export_CsvNew\\:\\:fputcsv\\(\\) has invalid type char\\.$#"
 			count: 1
 			path: tine20/Tinebase/Export/CsvNew.php
 
@@ -7164,6 +7132,11 @@ parameters:
 			path: tine20/Tinebase/Export/Pdf.php
 
 		-
+			message: "#^Variable \\$_notes in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: tine20/Tinebase/Export/Pdf.php
+
+		-
 			message: "#^Access to an undefined property Tinebase_Export_Report_Abstract\\:\\:\\$_exportClass\\.$#"
 			count: 1
 			path: tine20/Tinebase/Export/Report/Abstract.php
@@ -7172,11 +7145,6 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(\\$exportFiles\\)\\: Unexpected token \"\\$exportFiles\", expected type at offset 18$#"
 			count: 1
 			path: tine20/Tinebase/Export/Report/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$replace\\.$#"
-			count: 1
-			path: tine20/Tinebase/Export/Richtext/Doc.php
 
 		-
 			message: "#^Access to an undefined property object\\:\\:\\$replacement\\.$#"
@@ -7240,7 +7208,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Config\\:\\:\\$type\\.$#"
-			count: 8
+			count: 7
 			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
 
 		-
@@ -7390,11 +7358,6 @@ parameters:
 
 		-
 			message: "#^Variable \\$fileObject in PHPDoc tag @var does not exist\\.$#"
-			count: 1
-			path: tine20/Tinebase/FileSystem.php
-
-		-
-			message: "#^Variable \\$transactionId might not be defined\\.$#"
 			count: 1
 			path: tine20/Tinebase/FileSystem.php
 
@@ -7779,7 +7742,7 @@ parameters:
 			path: tine20/Tinebase/Frontend/Http.php
 
 		-
-			message: "#^Parameter \\$application of method Tinebase_Frontend_Http\\:\\:getImage\\(\\) has invalid typehint type unknown_type\\.$#"
+			message: "#^Parameter \\$application of method Tinebase_Frontend_Http\\:\\:getImage\\(\\) has invalid type unknown_type\\.$#"
 			count: 1
 			path: tine20/Tinebase/Frontend/Http.php
 
@@ -7939,6 +7902,11 @@ parameters:
 			path: tine20/Tinebase/Frontend/Json/Abstract.php
 
 		-
+			message: "#^Variable \\$decodedFilter in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: tine20/Tinebase/Frontend/Json/Abstract.php
+
+		-
 			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:move\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Frontend/Json/Container.php
@@ -8039,27 +8007,27 @@ parameters:
 			path: tine20/Tinebase/Group/Abstract.php
 
 		-
+			message: "#^Method Tinebase_Group_Abstract\\:\\:addGroupMember\\(\\) has invalid return type unknown\\.$#"
+			count: 1
+			path: tine20/Tinebase/Group/Abstract.php
+
+		-
+			message: "#^Method Tinebase_Group_Abstract\\:\\:removeGroupMember\\(\\) has invalid return type unknown\\.$#"
+			count: 1
+			path: tine20/Tinebase/Group/Abstract.php
+
+		-
+			message: "#^Method Tinebase_Group_Abstract\\:\\:setGroupMembers\\(\\) has invalid return type unknown\\.$#"
+			count: 1
+			path: tine20/Tinebase/Group/Abstract.php
+
+		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_account$#"
 			count: 1
 			path: tine20/Tinebase/Group/Abstract.php
 
 		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_groupName$#"
-			count: 1
-			path: tine20/Tinebase/Group/Abstract.php
-
-		-
-			message: "#^Return typehint of method Tinebase_Group_Abstract\\:\\:addGroupMember\\(\\) has invalid type unknown\\.$#"
-			count: 1
-			path: tine20/Tinebase/Group/Abstract.php
-
-		-
-			message: "#^Return typehint of method Tinebase_Group_Abstract\\:\\:removeGroupMember\\(\\) has invalid type unknown\\.$#"
-			count: 1
-			path: tine20/Tinebase/Group/Abstract.php
-
-		-
-			message: "#^Return typehint of method Tinebase_Group_Abstract\\:\\:setGroupMembers\\(\\) has invalid type unknown\\.$#"
 			count: 1
 			path: tine20/Tinebase/Group/Abstract.php
 
@@ -8124,7 +8092,17 @@ parameters:
 			path: tine20/Tinebase/Group/Sql.php
 
 		-
+			message: "#^Method Tinebase_Group_Sql\\:\\:addGroupMember\\(\\) has invalid return type unknown\\.$#"
+			count: 1
+			path: tine20/Tinebase/Group/Sql.php
+
+		-
 			message: "#^Method Tinebase_Group_Sql\\:\\:addGroupMember\\(\\) should return unknown but return statement is missing\\.$#"
+			count: 1
+			path: tine20/Tinebase/Group/Sql.php
+
+		-
+			message: "#^Method Tinebase_Group_Sql\\:\\:removeGroupMember\\(\\) has invalid return type unknown\\.$#"
 			count: 1
 			path: tine20/Tinebase/Group/Sql.php
 
@@ -8144,18 +8122,28 @@ parameters:
 			path: tine20/Tinebase/Group/Sql.php
 
 		-
-			message: "#^Return typehint of method Tinebase_Group_Sql\\:\\:addGroupMember\\(\\) has invalid type unknown\\.$#"
-			count: 1
-			path: tine20/Tinebase/Group/Sql.php
-
-		-
-			message: "#^Return typehint of method Tinebase_Group_Sql\\:\\:removeGroupMember\\(\\) has invalid type unknown\\.$#"
-			count: 1
-			path: tine20/Tinebase/Group/Sql.php
-
-		-
 			message: "#^Class Tinebase_Exception_AccessDenied constructor invoked with 0 parameters, 1\\-2 required\\.$#"
 			count: 6
+			path: tine20/Tinebase/Group/Typo3.php
+
+		-
+			message: "#^Method Tinebase_Group_Typo3\\:\\:addGroup\\(\\) has invalid return type unknown\\.$#"
+			count: 1
+			path: tine20/Tinebase/Group/Typo3.php
+
+		-
+			message: "#^Method Tinebase_Group_Typo3\\:\\:addGroupMember\\(\\) has invalid return type unknown\\.$#"
+			count: 1
+			path: tine20/Tinebase/Group/Typo3.php
+
+		-
+			message: "#^Method Tinebase_Group_Typo3\\:\\:removeGroupMember\\(\\) has invalid return type unknown\\.$#"
+			count: 1
+			path: tine20/Tinebase/Group/Typo3.php
+
+		-
+			message: "#^Method Tinebase_Group_Typo3\\:\\:setGroupMembers\\(\\) has invalid return type unknown\\.$#"
+			count: 1
 			path: tine20/Tinebase/Group/Typo3.php
 
 		-
@@ -8165,26 +8153,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_groupName$#"
-			count: 1
-			path: tine20/Tinebase/Group/Typo3.php
-
-		-
-			message: "#^Return typehint of method Tinebase_Group_Typo3\\:\\:addGroup\\(\\) has invalid type unknown\\.$#"
-			count: 1
-			path: tine20/Tinebase/Group/Typo3.php
-
-		-
-			message: "#^Return typehint of method Tinebase_Group_Typo3\\:\\:addGroupMember\\(\\) has invalid type unknown\\.$#"
-			count: 1
-			path: tine20/Tinebase/Group/Typo3.php
-
-		-
-			message: "#^Return typehint of method Tinebase_Group_Typo3\\:\\:removeGroupMember\\(\\) has invalid type unknown\\.$#"
-			count: 1
-			path: tine20/Tinebase/Group/Typo3.php
-
-		-
-			message: "#^Return typehint of method Tinebase_Group_Typo3\\:\\:setGroupMembers\\(\\) has invalid type unknown\\.$#"
 			count: 1
 			path: tine20/Tinebase/Group/Typo3.php
 
@@ -8202,11 +8170,6 @@ parameters:
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_value$#"
 			count: 1
 			path: tine20/Tinebase/Helper.php
-
-		-
-			message: "#^Binary operation \"\\-\" between string and 1 results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Helper/Algorithm/TerminationDeadline.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$automaticContractExtensionInMonths\\)\\: Unexpected token \"\\$automaticContractExtensionInMonths\", expected type at offset 102$#"
@@ -8324,8 +8287,23 @@ parameters:
 			path: tine20/Tinebase/Import/Abstract.php
 
 		-
+			message: "#^Variable \\$_data in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: tine20/Tinebase/Import/Abstract.php
+
+		-
 			message: "#^Variable \\$duplicateRecord might not be defined\\.$#"
 			count: 2
+			path: tine20/Tinebase/Import/Abstract.php
+
+		-
+			message: "#^Variable \\$filterValueToAdd in empty\\(\\) is never defined\\.$#"
+			count: 1
+			path: tine20/Tinebase/Import/Abstract.php
+
+		-
+			message: "#^Variable \\$mappedData in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
 			path: tine20/Tinebase/Import/Abstract.php
 
 		-
@@ -8334,7 +8312,7 @@ parameters:
 			path: tine20/Tinebase/Import/CalDav/Client.php
 
 		-
-			message: "#^Parameter \\$body of method Tinebase_Import_CalDav_Client\\:\\:calDavRequest\\(\\) has invalid typehint type strubg\\.$#"
+			message: "#^Parameter \\$body of method Tinebase_Import_CalDav_Client\\:\\:calDavRequest\\(\\) has invalid type strubg\\.$#"
 			count: 1
 			path: tine20/Tinebase/Import/CalDav/Client.php
 
@@ -8355,41 +8333,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Tinebase_Import_Csv_Abstract\\:\\:\\$_nextTuesday\\.$#"
-			count: 1
-			path: tine20/Tinebase/Import/Csv/Abstract.php
-
-		-
-			message: "#^Binary operation \"\\+\" between 2 and string results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Import/Csv/Abstract.php
-
-		-
-			message: "#^Binary operation \"\\+\" between 6 and string results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Import/Csv/Abstract.php
-
-		-
-			message: "#^Binary operation \"\\-\" between string and 1 results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Import/Csv/Abstract.php
-
-		-
-			message: "#^Binary operation \"\\-\" between string and 2 results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Import/Csv/Abstract.php
-
-		-
-			message: "#^Binary operation \"\\-\" between string and 3 results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Import/Csv/Abstract.php
-
-		-
-			message: "#^Binary operation \"\\-\" between string and 4 results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Import/Csv/Abstract.php
-
-		-
-			message: "#^Binary operation \"\\-\" between string and 5 results in an error\\.$#"
 			count: 1
 			path: tine20/Tinebase/Import/Csv/Abstract.php
 
@@ -8419,7 +8362,7 @@ parameters:
 			path: tine20/Tinebase/Import/Interface.php
 
 		-
-			message: "#^Parameter \\$_resource of method Tinebase_Import_Interface\\:\\:import\\(\\) has invalid typehint type stream\\.$#"
+			message: "#^Parameter \\$_resource of method Tinebase_Import_Interface\\:\\:import\\(\\) has invalid type stream\\.$#"
 			count: 1
 			path: tine20/Tinebase/Import/Interface.php
 
@@ -8479,17 +8422,17 @@ parameters:
 			path: tine20/Tinebase/Ldap.php
 
 		-
+			message: "#^Method Tinebase_Ldap\\:\\:fetchBinaryAttribute\\(\\) has invalid return type blob\\.$#"
+			count: 1
+			path: tine20/Tinebase/Ldap.php
+
+		-
 			message: "#^PHPDoc tag @return has invalid value \\(@see Zend_Ldap\\)\\: Unexpected token \"@see\", expected type at offset 82$#"
 			count: 1
 			path: tine20/Tinebase/Ldap.php
 
 		-
 			message: "#^Result of method Zend_Ldap\\:\\:__construct\\(\\) \\(void\\) is used\\.$#"
-			count: 1
-			path: tine20/Tinebase/Ldap.php
-
-		-
-			message: "#^Return typehint of method Tinebase_Ldap\\:\\:fetchBinaryAttribute\\(\\) has invalid type blob\\.$#"
 			count: 1
 			path: tine20/Tinebase/Ldap.php
 
@@ -8884,11 +8827,6 @@ parameters:
 			path: tine20/Tinebase/Model/Converter/JsonRecordSet.php
 
 		-
-			message: "#^Variable \\$data might not be defined\\.$#"
-			count: 1
-			path: tine20/Tinebase/Model/Converter/JsonRecordSet.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$blob\\)\\: Unexpected token \"\\$blob\", expected type at offset 18$#"
 			count: 1
 			path: tine20/Tinebase/Model/Converter/Record.php
@@ -9049,11 +8987,6 @@ parameters:
 			path: tine20/Tinebase/Model/Filter/Container.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(mixed &\\$_value\\)\\: Unexpected token \"&\", expected variable at offset 64$#"
-			count: 1
-			path: tine20/Tinebase/Model/Filter/Container.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:get\\(\\)\\.$#"
 			count: 2
 			path: tine20/Tinebase/Model/Filter/CustomField.php
@@ -9094,16 +9027,6 @@ parameters:
 			path: tine20/Tinebase/Model/Filter/GrantsFilterGroup.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Log\\:\\:DEBUG\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Model/Filter/Id.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Log\\:\\:NOTICE\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Model/Filter/Id.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:search\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Model/Filter/Query.php
@@ -9117,6 +9040,16 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(\\$condition\\)\\: Unexpected token \"\\$condition\", expected type at offset 113$#"
 			count: 1
 			path: tine20/Tinebase/Model/Filter/Query.php
+
+		-
+			message: "#^Variable \\$nodes in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: tine20/Tinebase/Model/Filter/RecordAttachment.php
+
+		-
+			message: "#^Variable \\$recordNodes in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: tine20/Tinebase/Model/Filter/RecordAttachment.php
 
 		-
 			message: "#^PHPDoc tag @property has invalid value \\(Tinebase_DateTime          created\\)\\: Unexpected token \"created\", expected variable at offset 297$#"
@@ -10124,12 +10057,12 @@ parameters:
 			path: tine20/Tinebase/ModelConfiguration.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(array &\\$fieldDef\\)\\: Unexpected token \"&\", expected variable at offset 103$#"
+			message: "#^PHPDoc tag @param has invalid value \\(string name of property\\)\\: Unexpected token \"name\", expected variable at offset 62$#"
 			count: 1
 			path: tine20/Tinebase/ModelConfiguration.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(string name of property\\)\\: Unexpected token \"name\", expected variable at offset 62$#"
+			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
 			count: 1
 			path: tine20/Tinebase/ModelConfiguration.php
 
@@ -10137,6 +10070,11 @@ parameters:
 			message: "#^Property Tinebase_ModelConfiguration\\:\\:\\$_splitButton has unknown class boolen as its type\\.$#"
 			count: 1
 			path: tine20/Tinebase/ModelConfiguration.php
+
+		-
+			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
+			count: 1
+			path: tine20/Tinebase/NewModelConfiguration.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Adapter_Pdo_Mysql\\:\\:\\$table_prefix\\.$#"
@@ -10169,12 +10107,12 @@ parameters:
 			path: tine20/Tinebase/Notes.php
 
 		-
-			message: "#^Parameter \\$_userId of method Tinebase_Notes\\:\\:addSystemNote\\(\\) has invalid typehint type Tinebase_Mode_User\\.$#"
+			message: "#^Parameter \\$_userId of method Tinebase_Notes\\:\\:addSystemNote\\(\\) has invalid type Tinebase_Mode_User\\.$#"
 			count: 1
 			path: tine20/Tinebase/Notes.php
 
 		-
-			message: "#^Parameter \\$onlyNonSystemNotes of method Tinebase_Notes\\:\\:getNoteTypes\\(\\) has invalid typehint type optional\\.$#"
+			message: "#^Parameter \\$onlyNonSystemNotes of method Tinebase_Notes\\:\\:getNoteTypes\\(\\) has invalid type optional\\.$#"
 			count: 1
 			path: tine20/Tinebase/Notes.php
 
@@ -10200,21 +10138,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_id\\)\\: Unexpected token \"\\$_id\", expected type at offset 74$#"
-			count: 1
-			path: tine20/Tinebase/OpenId/Provider/Storage.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(string &\\$expires expiration UNIX time\\)\\: Unexpected token \"&\", expected variable at offset 340$#"
-			count: 1
-			path: tine20/Tinebase/OpenId/Provider/Storage.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(string &\\$macFunc HMAC function \\(sha1 or sha256\\)\\)\\: Unexpected token \"&\", expected variable at offset 234$#"
-			count: 1
-			path: tine20/Tinebase/OpenId/Provider/Storage.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(string &\\$secret shared secret\\)\\: Unexpected token \"&\", expected variable at offset 296$#"
 			count: 1
 			path: tine20/Tinebase/OpenId/Provider/Storage.php
 
@@ -10349,16 +10272,6 @@ parameters:
 			path: tine20/Tinebase/Record/Abstract.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(array &\\$_data\\)\\: Unexpected token \"&\", expected variable at offset 109$#"
-			count: 1
-			path: tine20/Tinebase/Record/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(array &\\$_toConvert\\)\\: Unexpected token \"&\", expected variable at offset 93$#"
-			count: 1
-			path: tine20/Tinebase/Record/Abstract.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(string Tinebase_DateTime\\:\\:ISO8601 representation of a datetime filed\\)\\: Unexpected token \"Tinebase_DateTime\", expected variable at offset 320$#"
 			count: 1
 			path: tine20/Tinebase/Record/Abstract.php
@@ -10460,7 +10373,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Tinebase_Record_Expander_DataRequest_Relation\\:\\:\\$_ids\\.$#"
-			count: 4
+			count: 3
 			path: tine20/Tinebase/Record/Expander/DataRequest/Relation.php
 
 		-
@@ -10500,11 +10413,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_throwExceptionOnInvalidData\\)\\: Unexpected token \"\\$_throwExceptionOnInvalidData\", expected type at offset 74$#"
-			count: 1
-			path: tine20/Tinebase/Record/NewAbstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(array &\\$_toConvert\\)\\: Unexpected token \"&\", expected variable at offset 93$#"
 			count: 1
 			path: tine20/Tinebase/Record/NewAbstract.php
 
@@ -10584,7 +10492,7 @@ parameters:
 			path: tine20/Tinebase/Record/PersistentObserver.php
 
 		-
-			message: "#^Parameter \\$_field of method Tinebase_Record_RecordSet\\:\\:_getMatchingRecords\\(\\) has invalid typehint type function\\.$#"
+			message: "#^Parameter \\$_field of method Tinebase_Record_RecordSet\\:\\:_getMatchingRecords\\(\\) has invalid type function\\.$#"
 			count: 1
 			path: tine20/Tinebase/Record/RecordSet.php
 
@@ -10699,7 +10607,7 @@ parameters:
 			path: tine20/Tinebase/SambaSAM.php
 
 		-
-			message: "#^Return typehint of method Tinebase_SambaSAM\\:\\:factory\\(\\) has invalid type Tinebase_SambaSAM_Abstract\\.$#"
+			message: "#^Method Tinebase_SambaSAM\\:\\:factory\\(\\) has invalid return type Tinebase_SambaSAM_Abstract\\.$#"
 			count: 1
 			path: tine20/Tinebase/SambaSAM.php
 
@@ -10809,17 +10717,17 @@ parameters:
 			path: tine20/Tinebase/Server/Json.php
 
 		-
+			message: "#^Method Tinebase_Server_Json\\:\\:_handle\\(\\) has invalid return type JSON\\.$#"
+			count: 1
+			path: tine20/Tinebase/Server/Json.php
+
+		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$data\\)\\: Unexpected token \"\\$data\", expected type at offset 18$#"
 			count: 1
 			path: tine20/Tinebase/Server/Json.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$request\\)\\: Unexpected token \"\\$request\", expected type at offset 100$#"
-			count: 1
-			path: tine20/Tinebase/Server/Json.php
-
-		-
-			message: "#^Return typehint of method Tinebase_Server_Json\\:\\:_handle\\(\\) has invalid type JSON\\.$#"
 			count: 1
 			path: tine20/Tinebase/Server/Json.php
 
@@ -10914,7 +10822,7 @@ parameters:
 			path: tine20/Tinebase/Session/Abstract.php
 
 		-
-			message: "#^Parameter \\$_namespace of method Tinebase_Session_Abstract\\:\\:_getSessionNamespace\\(\\) has invalid typehint type unknown\\.$#"
+			message: "#^Parameter \\$_namespace of method Tinebase_Session_Abstract\\:\\:_getSessionNamespace\\(\\) has invalid type unknown\\.$#"
 			count: 1
 			path: tine20/Tinebase/Session/Abstract.php
 
@@ -10954,42 +10862,7 @@ parameters:
 			path: tine20/Tinebase/Setup/DemoData/Abstract.php
 
 		-
-			message: "#^Binary operation \"\\+\" between 2 and string results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/DemoData/Abstract.php
-
-		-
-			message: "#^Binary operation \"\\+\" between 6 and string results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/DemoData/Abstract.php
-
-		-
-			message: "#^Binary operation \"\\-\" between string and 1 results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/DemoData/Abstract.php
-
-		-
-			message: "#^Binary operation \"\\-\" between string and 2 results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/DemoData/Abstract.php
-
-		-
-			message: "#^Binary operation \"\\-\" between string and 3 results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/DemoData/Abstract.php
-
-		-
-			message: "#^Binary operation \"\\-\" between string and 4 results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/DemoData/Abstract.php
-
-		-
-			message: "#^Binary operation \"\\-\" between string and 5 results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Setup/DemoData/Abstract.php
-
-		-
-			message: "#^Return typehint of method Tinebase_Setup_DemoData_Abstract\\:\\:getRequiredApplications\\(\\) has invalid type multitype\\.$#"
+			message: "#^Method Tinebase_Setup_DemoData_Abstract\\:\\:getRequiredApplications\\(\\) has invalid return type multitype\\.$#"
 			count: 1
 			path: tine20/Tinebase/Setup/DemoData/Abstract.php
 
@@ -11229,6 +11102,11 @@ parameters:
 			path: tine20/Tinebase/State.php
 
 		-
+			message: "#^Variable \\$tags in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: tine20/Tinebase/Tags.php
+
+		-
 			message: "#^Call to an undefined method Tinebase_Log\\:\\:DEBUG\\(\\)\\.$#"
 			count: 3
 			path: tine20/Tinebase/TempFile.php
@@ -11250,6 +11128,11 @@ parameters:
 
 		-
 			message: "#^Method Tinebase_Timemachine_Abstract\\:\\:getModified\\(\\) should return array but return statement is missing\\.$#"
+			count: 1
+			path: tine20/Tinebase/Timemachine/Abstract.php
+
+		-
+			message: "#^Method Tinebase_Timemachine_Abstract\\:\\:getRecord\\(\\) has invalid return type Tinebase_Record\\.$#"
 			count: 1
 			path: tine20/Tinebase/Timemachine/Abstract.php
 
@@ -11319,24 +11202,24 @@ parameters:
 			path: tine20/Tinebase/Timemachine/Abstract.php
 
 		-
-			message: "#^Parameter \\$_filter of method Tinebase_Timemachine_Abstract\\:\\:getCreated\\(\\) has invalid typehint type Tinebase_Record_Filter\\.$#"
+			message: "#^Parameter \\$_filter of method Tinebase_Timemachine_Abstract\\:\\:getCreated\\(\\) has invalid type Tinebase_Record_Filter\\.$#"
 			count: 1
 			path: tine20/Tinebase/Timemachine/Abstract.php
 
 		-
-			message: "#^Parameter \\$_filter of method Tinebase_Timemachine_Abstract\\:\\:getDeleted\\(\\) has invalid typehint type Tinebase_Record_Filter\\.$#"
+			message: "#^Parameter \\$_filter of method Tinebase_Timemachine_Abstract\\:\\:getDeleted\\(\\) has invalid type Tinebase_Record_Filter\\.$#"
 			count: 1
 			path: tine20/Tinebase/Timemachine/Abstract.php
 
 		-
-			message: "#^Parameter \\$_filter of method Tinebase_Timemachine_Abstract\\:\\:getModified\\(\\) has invalid typehint type Tinebase_Record_Filter\\.$#"
+			message: "#^Parameter \\$_filter of method Tinebase_Timemachine_Abstract\\:\\:getModified\\(\\) has invalid type Tinebase_Record_Filter\\.$#"
 			count: 1
 			path: tine20/Tinebase/Timemachine/Abstract.php
 
 		-
-			message: "#^Return typehint of method Tinebase_Timemachine_Abstract\\:\\:getRecord\\(\\) has invalid type Tinebase_Record\\.$#"
+			message: "#^Method Tinebase_Timemachine_Interface\\:\\:getRecord\\(\\) has invalid return type Tinebase_Record\\.$#"
 			count: 1
-			path: tine20/Tinebase/Timemachine/Abstract.php
+			path: tine20/Tinebase/Timemachine/Interface.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(Tinebase_DateTime _at\\)\\: Unexpected token \"_at\", expected variable at offset 132$#"
@@ -11394,22 +11277,17 @@ parameters:
 			path: tine20/Tinebase/Timemachine/Interface.php
 
 		-
-			message: "#^Parameter \\$_filter of method Tinebase_Timemachine_Interface\\:\\:getCreated\\(\\) has invalid typehint type Tinebase_Record_Filter\\.$#"
+			message: "#^Parameter \\$_filter of method Tinebase_Timemachine_Interface\\:\\:getCreated\\(\\) has invalid type Tinebase_Record_Filter\\.$#"
 			count: 1
 			path: tine20/Tinebase/Timemachine/Interface.php
 
 		-
-			message: "#^Parameter \\$_filter of method Tinebase_Timemachine_Interface\\:\\:getDeleted\\(\\) has invalid typehint type Tinebase_Record_Filter\\.$#"
+			message: "#^Parameter \\$_filter of method Tinebase_Timemachine_Interface\\:\\:getDeleted\\(\\) has invalid type Tinebase_Record_Filter\\.$#"
 			count: 1
 			path: tine20/Tinebase/Timemachine/Interface.php
 
 		-
-			message: "#^Parameter \\$_filter of method Tinebase_Timemachine_Interface\\:\\:getModified\\(\\) has invalid typehint type Tinebase_Record_Filter\\.$#"
-			count: 1
-			path: tine20/Tinebase/Timemachine/Interface.php
-
-		-
-			message: "#^Return typehint of method Tinebase_Timemachine_Interface\\:\\:getRecord\\(\\) has invalid type Tinebase_Record\\.$#"
+			message: "#^Parameter \\$_filter of method Tinebase_Timemachine_Interface\\:\\:getModified\\(\\) has invalid type Tinebase_Record_Filter\\.$#"
 			count: 1
 			path: tine20/Tinebase/Timemachine/Interface.php
 
@@ -11481,6 +11359,16 @@ parameters:
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$bool\\)\\: Unexpected token \"\\$bool\", expected type at offset 18$#"
 			count: 1
+			path: tine20/Tinebase/TransactionManager.php
+
+		-
+			message: "#^Unsafe access to private property Tinebase_TransactionManager\\:\\:\\$_insideCallBack through static\\:\\:\\.$#"
+			count: 4
+			path: tine20/Tinebase/TransactionManager.php
+
+		-
+			message: "#^Unsafe access to private property Tinebase_TransactionManager\\:\\:\\$_rollBackOccurred through static\\:\\:\\.$#"
+			count: 3
 			path: tine20/Tinebase/TransactionManager.php
 
 		-
@@ -11577,11 +11465,6 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(\\$alternativeLoginName\\)\\: Unexpected token \"\\$alternativeLoginName\", expected type at offset 170$#"
 			count: 1
 			path: tine20/Tinebase/User/Plugin/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_User_Plugin_LdapAbstract\\:\\:\\$_config\\.$#"
-			count: 8
-			path: tine20/Tinebase/User/Plugin/LdapAbstract.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$accountEmailAddress\\)\\: Unexpected token \"\\$accountEmailAddress\", expected type at offset 75$#"
@@ -11719,12 +11602,12 @@ parameters:
 			path: tine20/Tinebase/WebDav/Container/Abstract.php
 
 		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$vcardData$#"
+			message: "#^Method Tinebase_WebDav_Container_Abstract\\:\\:getLastModified\\(\\) has invalid return type time\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Container/Abstract.php
 
 		-
-			message: "#^Return typehint of method Tinebase_WebDav_Container_Abstract\\:\\:getLastModified\\(\\) has invalid type time\\.$#"
+			message: "#^PHPDoc tag @param references unknown parameter\\: \\$vcardData$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Container/Abstract.php
 
@@ -11759,7 +11642,7 @@ parameters:
 			path: tine20/Tinebase/WebDav/Plugin/ExpandedPropertiesReport.php
 
 		-
-			message: "#^Parameter \\$node of method Tinebase_WebDav_Plugin_ExpandedPropertiesReport\\:\\:beforeGetProperties\\(\\) has invalid typehint type DAV\\\\INode\\.$#"
+			message: "#^Parameter \\$node of method Tinebase_WebDav_Plugin_ExpandedPropertiesReport\\:\\:beforeGetProperties\\(\\) has invalid type DAV\\\\INode\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Plugin/ExpandedPropertiesReport.php
 
@@ -11874,12 +11757,12 @@ parameters:
 			path: tine20/Tinebase/WebDav/Plugin/SyncToken.php
 
 		-
-			message: "#^Return typehint of method Tinebase_WebDav_Principal\\:\\:getChild\\(\\) has invalid type Sabre\\\\DAV\\\\DAV\\\\INode\\.$#"
+			message: "#^Method Tinebase_WebDav_Principal\\:\\:getChild\\(\\) has invalid return type Sabre\\\\DAV\\\\DAV\\\\INode\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Principal.php
 
 		-
-			message: "#^Return typehint of method Tinebase_WebDav_Principal\\:\\:getChildren\\(\\) has invalid type Sabre\\\\DAV\\\\DAV\\\\INode\\.$#"
+			message: "#^Method Tinebase_WebDav_Principal\\:\\:getChildren\\(\\) has invalid return type Sabre\\\\DAV\\\\DAV\\\\INode\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Principal.php
 
@@ -11919,12 +11802,17 @@ parameters:
 			path: tine20/Tinebase/views/userInfoPage.php
 
 		-
+			message: "#^Method Voipmanager_Backend_Snom_Phone\\:\\:deleteACLs\\(\\) has invalid return type query\\.$#"
+			count: 1
+			path: tine20/Voipmanager/Backend/Snom/Phone.php
+
+		-
 			message: "#^PHPDoc tag @param has invalid value \\(string\\| \\$_accountId\\)\\: Unexpected token \"\\$_accountId\", expected type at offset 111$#"
 			count: 1
 			path: tine20/Voipmanager/Backend/Snom/Phone.php
 
 		-
-			message: "#^Return typehint of method Voipmanager_Backend_Snom_Phone\\:\\:deleteACLs\\(\\) has invalid type query\\.$#"
+			message: "#^Variable \\$_validPhoneIds in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: tine20/Voipmanager/Backend/Snom/Phone.php
 
@@ -11939,7 +11827,7 @@ parameters:
 			path: tine20/Voipmanager/Backend/Snom/Xml.php
 
 		-
-			message: "#^Parameter \\$_db of method Voipmanager_Backend_Snom_Xml\\:\\:__construct\\(\\) has invalid typehint type optional\\.$#"
+			message: "#^Parameter \\$_db of method Voipmanager_Backend_Snom_Xml\\:\\:__construct\\(\\) has invalid type optional\\.$#"
 			count: 1
 			path: tine20/Voipmanager/Backend/Snom/Xml.php
 
@@ -12019,16 +11907,15 @@ parameters:
 			path: tine20/Voipmanager/Frontend/Asterisk/CallForward.php
 
 		-
-			message: "#^Return typehint of method Voipmanager_Frontend_Asterisk_CallForward\\:\\:_getRedirect\\(\\) has invalid type Voipmanager_Model_Asterisk_Redirect\\.$#"
+			message: "#^Method Voipmanager_Frontend_Asterisk_CallForward\\:\\:_getRedirect\\(\\) has invalid return type Voipmanager_Model_Asterisk_Redirect\\.$#"
 			count: 1
 			path: tine20/Voipmanager/Frontend/Asterisk/CallForward.php
 
 		-
-			message:
-				"""
-					#^Binary operation "\\." between '
-					            Tine…' and array results in an error\\.$#
-				"""
+			message: """
+				#^Binary operation "\\." between '
+				            Tine…' and array results in an error\\.$#
+			"""
 			count: 1
 			path: tine20/Voipmanager/Frontend/Http.php
 
@@ -12038,9 +11925,14 @@ parameters:
 			path: tine20/Voipmanager/Frontend/Http.php
 
 		-
-			message: "#^Return typehint of method Voipmanager_Frontend_Json\\:\\:updatePropertiesAsteriskSipPeer\\(\\) has invalid type updated\\.$#"
+			message: "#^Method Voipmanager_Frontend_Json\\:\\:updatePropertiesAsteriskSipPeer\\(\\) has invalid return type updated\\.$#"
 			count: 1
 			path: tine20/Voipmanager/Frontend/Json.php
+
+		-
+			message: "#^Variable \\$_validPhoneIds in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: tine20/Voipmanager/Model/Snom/PhoneFilter.php
 
 		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_phoneSettingId$#"
@@ -12053,7 +11945,7 @@ parameters:
 			path: tine20/Voipmanager/Model/Snom/Setting.php
 
 		-
-			message: "#^Parameter \\$_settingId of method Voipmanager_Model_Snom_Setting\\:\\:convertSnomSettingIdToInt\\(\\) has invalid typehint type Voipmanager_Model_Setting\\.$#"
+			message: "#^Parameter \\$_settingId of method Voipmanager_Model_Snom_Setting\\:\\:convertSnomSettingIdToInt\\(\\) has invalid type Voipmanager_Model_Setting\\.$#"
 			count: 1
 			path: tine20/Voipmanager/Model/Snom/Setting.php
 
@@ -12063,7 +11955,7 @@ parameters:
 			path: tine20/Voipmanager/Model/Snom/Template.php
 
 		-
-			message: "#^Parameter \\$_templateId of method Voipmanager_Model_Snom_Template\\:\\:convertSnomTemplateIdToInt\\(\\) has invalid typehint type Voipmanager_Model_Template\\.$#"
+			message: "#^Parameter \\$_templateId of method Voipmanager_Model_Snom_Template\\:\\:convertSnomTemplateIdToInt\\(\\) has invalid type Voipmanager_Model_Template\\.$#"
 			count: 1
 			path: tine20/Voipmanager/Model/Snom/Template.php
 
@@ -12083,7 +11975,7 @@ parameters:
 			path: tine20/Voipmanager/Server/Plugin.php
 
 		-
-			message: "#^Parameter \\$body of method Voipmanager_Server_Snom\\:\\:handle\\(\\) has invalid typehint type stream\\.$#"
+			message: "#^Parameter \\$body of method Voipmanager_Server_Snom\\:\\:handle\\(\\) has invalid type stream\\.$#"
 			count: 1
 			path: tine20/Voipmanager/Server/Snom.php
 
@@ -12091,6 +11983,31 @@ parameters:
 			message: "#^Property Voipmanager_Server_Snom\\:\\:\\$_body has unknown class stream as its type\\.$#"
 			count: 1
 			path: tine20/Voipmanager/Server/Snom.php
+
+		-
+			message: "#^Function generateNewTranslationFile not found\\.$#"
+			count: 5
+			path: tine20/langHelper.php
+
+		-
+			message: "#^Function generateNewTranslationFiles not found\\.$#"
+			count: 1
+			path: tine20/langHelper.php
+
+		-
+			message: "#^Function getPluralForm not found\\.$#"
+			count: 5
+			path: tine20/langHelper.php
+
+		-
+			message: "#^Function gitAdd not found\\.$#"
+			count: 1
+			path: tine20/langHelper.php
+
+		-
+			message: "#^Function statistics not found\\.$#"
+			count: 1
+			path: tine20/langHelper.php
 
 		-
 			message: "#^Variable \\$_verbose might not be defined\\.$#"
