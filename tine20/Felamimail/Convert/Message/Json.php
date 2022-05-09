@@ -101,8 +101,13 @@ class Felamimail_Convert_Message_Json extends Tinebase_Convert_Json
             if ($record->folder_id) {
                 $headers = Felamimail_Controller_Message::getInstance()->getMessageHeaders($record, null, true);
                 
-                if (isset($headers[$type])) {
-                    $addressList = Tinebase_Mail::parseAdresslist($headers[$type]);
+                if (! empty($headers[$type])) {
+                    if (is_string($headers[$type])) {
+                        $addressList = Tinebase_Mail::parseAdresslist($headers[$type]);
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                            __METHOD__ . '::' . __LINE__ . 'Can not resolve recipient header with type : ' . $type . ' . skip : ' . print_r($headers[$type], true));
+                    }
                 }
             }
 
