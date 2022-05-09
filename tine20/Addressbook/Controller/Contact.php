@@ -1420,7 +1420,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     {
         $result = [];
         $contactFilters = [];
-        $listFilters = [['field' => 'type', 'operator' => 'equals', 'value' => 'group']];
+        $listFilters = [['field' => 'type', 'operator' => 'in', 'value' => ['group', 'list']]];
         $emails = array_filter($emails);
         $names = array_filter($names);
         $types = array_filter($types);
@@ -1490,7 +1490,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $possibleAddresses = [];
         
         foreach ($contacts as $contact) {
-            if ($contact['type'] === 'group') {
+            if (in_array($contact['type'], ['group', 'list'])) {
                 $listMemberEmails = [];
 
                 foreach ($contact['members'] as $member) {

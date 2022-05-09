@@ -163,6 +163,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.pageSize = parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10) || this.pageSize;
 
         this.store = new Tine.Tinebase.data.RecordStore({
+            remoteSort: true,
             readOnly: true,
             proxy: this.recordProxy || undefined,
             totalProperty: this.totalProperty,
