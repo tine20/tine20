@@ -493,7 +493,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         
         const contactCtxMenu = await Tine.Tinebase.tineInit.getEmailContextMenu(targetInput, contact.email, contact.name, contact.type);
         let index = 0;
-      
+        
         switch (contact.type) {
             case 'mailingList':
                 const item = new Ext.Action({
@@ -855,8 +855,16 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
         const updatedRecipients = [];
         const duplicatedRecipients = [];
+    
+        if (index > -1 && oldRecord.get('address') !== '') {
+            this.store.remove(oldRecord);
+        }
 
         _.each(recipients, async (recipient) => {
+            if (!recipient.email) {
+                return;
+            }
+            
             const existingRecipient = this.store.findBy(function (record) {
                 const addressData = record.get('address') ?? '';
                     if (addressData !== ''
@@ -877,10 +885,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.lastEditedRecord = record;
             }
         })
-    
-        if (index > -1 && oldRecord.get('address') !== '') {
-            this.store.remove(oldRecord);
-        }
         
         if (updatedRecipients.length > 0) {
             if (index > -1) {
