@@ -99,5 +99,40 @@ class Tinebase_Frontend_Json_AreaLockTest extends TestCase
         } catch (Tinebase_Exception_AreaUnlockFailed $e) {}
 
         $this->assertTrue($areaLockFE->saveMFAUserConfig('pin', $userCfg, '123456'));
+
+        $user = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
+        $pinCfg = clone ($user->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID, 'pin'));
+
+        $pinCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->{Tinebase_Model_MFA_PinUserConfig::FLD_PIN} = '7890';
+        $pinCfg = $pinCfg->toArray();
+        try {
+            $areaLockFE->saveMFAUserConfig('pin', $pinCfg);
+            $this->fail(Tinebase_Exception_AreaLocked::class . ' expected');
+        } catch (Tinebase_Exception_AreaLocked $e) {}
+
+        try {
+            $areaLockFE->saveMFAUserConfig('pin', $pinCfg, 'asdfas');
+            $this->fail(Tinebase_Exception_AreaUnlockFailed::class . ' expected');
+        } catch (Tinebase_Exception_AreaUnlockFailed $e) {}
+
+        $this->assertTrue($areaLockFE->saveMFAUserConfig('pin', $pinCfg, '7890'));
+        $user = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
+        $pinCfg = $user->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID, 'pin');
+        $this->assertTrue(Tinebase_Auth_MFA::getInstance('pin')->validate('7890', $pinCfg));
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        Tinebase_Core::setUser($user);
+
+        $this->assertSame([], $areaLockFE->deleteMFAUserConfigs(['foo']));
+        $user = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
+        $pinCfg = $user->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID, 'pin');
+        $this->assertNotNull($pinCfg);
+
+        $this->assertSame([$pinCfg->getId()], $areaLockFE->deleteMFAUserConfigs([$pinCfg->getId()]));
+        $user = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
+        $this->assertNull($user->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID, 'pin'));
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        Tinebase_Core::setUser($user);
     }
 }
