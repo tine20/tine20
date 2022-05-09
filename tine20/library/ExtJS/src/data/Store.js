@@ -1351,9 +1351,13 @@ myStore.reload(lastOptions);
     sortData : function(f, direction){
         direction = direction || 'ASC';
         var st = this.fields.get(f).sortType;
-        var fn = function(r1, r2){
+        var locale = Tine.Tinebase.registry.get('locale').locale;
+        var fn = st !== Ext.data.SortTypes.asUCString ? function(r1, r2){
             var v1 = st(r1.data[f]), v2 = st(r2.data[f]);
             return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
+        } : function(r1, r2){
+            var v1 = st(r1.data[f]), v2 = st(r2.data[f]);
+            return v1.localeCompare(v2,locale);
         };
         this.data.sort(direction, fn);
         if(this.snapshot && this.snapshot != this.data){
