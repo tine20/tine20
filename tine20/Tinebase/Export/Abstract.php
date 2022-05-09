@@ -1072,7 +1072,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 foreach ($userFields as $field) {
                     foreach ($_records->{$field} as $idx => $value) {
                         if (is_array($value)) {
-                            $_records->getByIndex($idx)->{$field} = new Tinebase_Model_FullUser($value);
+                            $_records->getByIndex($idx)->{$field} = new Tinebase_Model_FullUser($value, true);
                         }
                     }
                 }
