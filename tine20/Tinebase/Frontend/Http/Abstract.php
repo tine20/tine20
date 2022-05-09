@@ -129,6 +129,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             if ($e->getMessage() === 'Format ' . $format . ' not supported.') {
                 throw $e;
             }
+            Tinebase_Exception::log($e);
             $export = new Tinebase_Export_ErrorReport($e, $_options);
             $format = 'txt';
             $switchFormat = 'error';
@@ -136,6 +137,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             if (strpos(get_class($e), 'Zend_Db') === 0) {
                 throw $e;
             }
+            Tinebase_Exception::log($e);
             $export = new Tinebase_Export_ErrorReport($e, $_options);
             $format = 'txt';
             $switchFormat = 'error';
