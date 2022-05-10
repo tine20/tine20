@@ -98,9 +98,32 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
         return (new Admin_Frontend_Json())->getPossibleMFAs(Tinebase_Core::getUser()->getId());
     }
 
+    public function deleteMFAUserConfigs(array $userConfigIds): array
+    {
+        $user = clone Tinebase_Core::getUser();
+        if (!$user->mfa_configs) {
+            return [];
+        }
+        $result = [];
+
+        foreach ($userConfigIds as $id) {
+            if (!$user->mfa_configs->getById($id)) continue;
+            $user->mfa_configs->removeById($id);
+            $result[] = $id;
+        }
+
+        if (!empty($result)) {
+            Tinebase_User::getInstance()->updateUser($user);
+        }
+
+        return $result;
+    }
+
     public function saveMFAUserConfig(string $mfaId, array $mfaUserConfig, ?string $MFAPassword = null): bool
     {
-        $mfaUserConfig['id'] = Tinebase_Record_NewAbstract::generateUID();
+        if (!isset($mfaUserConfig['id']) ||  empty($mfaUserConfig['id'])) {
+            $mfaUserConfig['id'] = Tinebase_Record_NewAbstract::generateUID();
+        }
         $userCfg = new Tinebase_Model_MFA_UserConfig($mfaUserConfig);
         if ($mfaId !== $userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID}) {
             throw new Tinebase_Exception_UnexpectedValue('mfaId doesn\'t match user configs mfa id');
@@ -115,6 +138,7 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
         if (!$user->mfa_configs) {
             $user->mfa_configs = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
         }
+        $user->mfa_configs->removeById($userCfg->getId());
         $user->mfa_configs->addRecord($testUserCfg);
 
         // do the tedious task of getting the mfa user config "ready"
@@ -129,15 +153,19 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
             // test the mfa user config
             if (null !== $MFAPassword) {
                 if (!$mfa->validate($MFAPassword, $testUserCfg)) {
-                    throw new Tinebase_Exception_AreaUnlockFailed('mfa password wrong');
+                    $e = new Tinebase_Exception_AreaUnlockFailed('mfa password wrong');
+                    $e->setMFAUserConfigs(new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class, [$userCfg]));
+                    throw $e;
                 }
             } else {
                 $mfa->sendOut($testUserCfg);
-                throw new Tinebase_Exception_AreaLocked('mfa send out triggered');
+                $e = new Tinebase_Exception_AreaLocked('mfa send out triggered');
+                $e->setMFAUserConfigs(new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class, [$userCfg]));
+                throw $e;
             }
         } finally {
             // clean up, eventually we created something persistent
-            $testUserCfg->updateUserOldRecordCallback($user, Tinebase_Core::getUser());
+            $testUserCfg->updateUserOldRecordCallback(Tinebase_Core::getUser(), $user);
         }
 
         // no exception? persist the mfa user config
@@ -145,6 +173,7 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
         if (!$user->mfa_configs) {
             $user->mfa_configs = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
         }
+        $user->mfa_configs->removeById($userCfg->getId());
         $user->mfa_configs->addRecord($userCfg);
         Tinebase_User::getInstance()->updateUser($user);
 
