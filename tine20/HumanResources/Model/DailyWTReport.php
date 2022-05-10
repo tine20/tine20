@@ -72,7 +72,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        'version' => 3,
+        'version' => 4,
         'recordName' => 'Daily Working Time Report',
         'recordsName' => 'Daily Working Time Reports', // ngettext('Daily Working Time Report', 'Daily Working Time Reports', n)
         'containerProperty' => null,
@@ -305,7 +305,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
             // z.b. krankheit, urlaub, feiertag (bei regelarbeit leer)
             'system_remark' => [
                 self::LABEL                 => 'System Remark', // _('System Remark')
-                self::TYPE                  => 'string',
+                self::TYPE                  => 'text',
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::NULLABLE              => true,
                 self::UI_CONFIG             => [
