@@ -2327,7 +2327,8 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         if (! $hasGrant) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No permissions to ' . $_action . ' in container ' . $_record->container_id);
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' No permissions to ' . $_action . ' in container ' . print_r($_record->container_id, true));
             if ($_throw) {
                 throw new Tinebase_Exception_AccessDenied($_errorMessage);
             }
