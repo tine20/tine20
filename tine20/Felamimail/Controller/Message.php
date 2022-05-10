@@ -6,9 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo        parse mail body and add <a> to telephone numbers?
+ * @copyright   Copyright (c) 2009-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 
@@ -963,8 +961,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message = $_messageId;
         }
 
-        $cache = Tinebase_Core::get('cache');
-        $cacheId = 'getMessageHeaders' . $message->getId() . str_replace('.', '', $_partId);
+        $cache = Tinebase_Core::getCache();
+        $cacheId = Tinebase_Helper::convertCacheId(
+            'getMessageHeaders' . $message->getId() . str_replace('.', '', $_partId)
+        );
         if ($cache->test($cacheId)) {
             return $cache->load($cacheId);
         }
@@ -975,8 +975,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         try {
             $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
         } catch (Zend_Mail_Storage_Exception $zmse) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getMessage());
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getTraceAsString());
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
+                . __LINE__ . ' ' . $zmse->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' ' . $zmse->getTraceAsString());
             throw new Felamimail_Exception_IMAPMessageNotFound('Folder not found');
         }
 
