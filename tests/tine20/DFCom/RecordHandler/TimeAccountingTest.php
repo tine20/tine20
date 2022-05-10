@@ -59,7 +59,7 @@ class DFCom_RecordHandler_TimeAccountingTest extends TestCase
         HumanResources_Controller_AttendanceRecorder::runBLPipes();
 
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->getAll()
-            ->filter('start_time', '09:20:16');
+            ->filter('start_time', '09:20:00');
         $this->assertCount(1, $timesheets, 'timesheet not created');
         $timesheet = $timesheets->getFirstRecord();
         $this->assertEquals(0, $timesheet->duration);
@@ -83,7 +83,7 @@ class DFCom_RecordHandler_TimeAccountingTest extends TestCase
         HumanResources_Controller_AttendanceRecorder::runBLPipes();
 
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->getAll()
-            ->filter('start_time', '09:20:16');
+            ->filter('start_time', '09:20:00');
         $this->assertCount(1, $timesheets, 'timesheet not created');
         $timesheet = $timesheets->getFirstRecord();
         $this->assertEquals(192, $timesheet->duration);
@@ -109,14 +109,14 @@ class DFCom_RecordHandler_TimeAccountingTest extends TestCase
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->getAll();
 
         $orphaned = $timesheets
-            ->filter('start_time', '09:20:16')
+            ->filter('start_time', '09:20:00')
             ->getFirstRecord();
 
         $this->assertTrue(!!$orphaned->need_for_clarification);
         $this->assertEquals(221, $orphaned->duration);
 
         $new = $timesheets
-            ->filter('start_time', '13:01:22')
+            ->filter('start_time', '13:01:00')
             ->getFirstRecord();
 
         $this->assertEquals(0, $new->duration);

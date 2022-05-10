@@ -128,7 +128,7 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                                     $absenceClockOut = new Tinebase_DateTime($absenceTS->start_date . ' ' . $absenceTS->start_time, Tinebase_Core::getUserTimezone());
 
                                     while ($absenceClockOut->format('Y-m-d') !== $absenceClockIn->format('Y-m-d')) {
-                                        $absenceTS->end_time = '23:59:59';
+                                        $absenceTS->end_time = '23:59:00';
                                         if ($absenceTS->getId()) {
                                             $absenceTS = Timetracker_Controller_Timesheet::getInstance()->update($absenceTS);
                                             $ids[$absenceTS->getId()] = $absenceTS->seq == 2 ? 2 : false;
@@ -142,7 +142,7 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                                         $absenceTS->description = '';
                                     }
 
-                                    $absenceTS->end_time = $absenceClockIn->format('H:i:s');
+                                    $absenceTS->end_time = $absenceClockIn->format('H:i:00');
                                     $absenceTS->description = $absenceTS->description . ' ' .
                                         sprintf(Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)->_('Clock in: %1$s'),
                                             $absenceTS->end_time);
@@ -234,8 +234,8 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                         'account_id' => $record->getIdFromProperty(HumanResources_Model_AttendanceRecord::FLD_ACCOUNT_ID),
                         'timeaccount_id' => $fttTAId,
                         'start_date' => $startDate,
-                        'start_time' => $startDate->format('H:i:s'),
-                        'end_time' => $startDate->format('H:i:s'),
+                        'start_time' => $startDate->format('H:i:00'),
+                        'end_time' => $startDate->format('H:i:00'),
                         'duration' => 0,
                         HumanResources_Model_FreeTimeType::TT_TS_SYSCF_CLOCK_OUT_REASON => $fttId,
                         'description' => sprintf($translate->_('Clock out: %1$s'), $startDate->format('H:i:s')),
@@ -319,8 +319,8 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
         $slot = current($slots);
         $ts->start_date = $slot['start']->format('Y-m-d');
         if (count($slots) === 1) {
-            $ts->start_time = $slot['start']->format('H:i:s');
-            $ts->end_time = $slot['end']->format('H:i:s');
+            $ts->start_time = $slot['start']->format('H:i:00');
+            $ts->end_time = $slot['end']->format('H:i:00');
             $ts->duration = 0;
         } else {
             $ts->start_time = null;
@@ -419,14 +419,14 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
             'account_id' => $record->getIdFromProperty(HumanResources_Model_AttendanceRecord::FLD_ACCOUNT_ID),
             'timeaccount_id' => $taId,
             'start_date' => $date,
-            'start_time' => $date->format('H:i:s'),
-            'end_time' => $date->format('H:i:s'),
+            'start_time' => $date->format('H:i:00'),
+            'end_time' => $date->format('H:i:00'),
             'duration' => 0,
         ], true);
 
         $ts->description = sprintf($translate->_($type ?
             (HumanResources_Model_AttendanceRecord::TYPE_CLOCK_OUT === $type ? 'Clock out: %1$s' : 'Clock pause: %1$s')
-            : 'Clock in: %1$s'), $ts->start_time);
+            : 'Clock in: %1$s'), $date->format('H:i:s'),);
         if ($record->{HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID}) {
             $ts->{HumanResources_Model_FreeTimeType::TT_TS_SYSCF_CLOCK_OUT_REASON} = $record->getIdFromProperty(HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID);
         }
