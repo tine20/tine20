@@ -1420,7 +1420,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     {
         $result = [];
         $contactFilters = [];
-        $listFilters = [['field' => 'type', 'operator' => 'in', 'value' => ['group', 'list']]];
+        $listFilters = [];
         $emails = array_filter($emails);
         $names = array_filter($names);
         $types = array_filter($types);
@@ -1466,7 +1466,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $result = array_merge($result, $contactResult->toArray());
         }
         
-        if (count($listFilters) > 1) {
+        if (count($listFilters) > 0) {
             $listResult = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter($listFilters));
             $result = array_merge($result, $listResult->toArray());
         }
@@ -1493,23 +1493,33 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             if (in_array($contact['type'], ['group', 'list'])) {
                 $listMemberEmails = [];
 
-                foreach ($contact['members'] as $member) {
-                    $memberContact = Addressbook_Controller_Contact::getInstance()->get($member);
-                    $memberPossibleAddresses = $this->getContactsRecipientToken([$memberContact->toArray()]);
-                    
-                    // some members might have no email , here will fetch email_home instead
-                    if ($address = current($memberPossibleAddresses)) {
-                        $listMemberEmails[]  = $address;
-                    } else {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . " list member : " . $memberContact->n_fileas . " has no contact emails, skip.");
+                if (isset($contact['members']) && count($contact['members']) > 0) {
+                    try {
+                        $memberContacts = Addressbook_Controller_Contact::getInstance()->getMultiple($contact['members']);
+                        foreach ($memberContacts as $memberContact) {
+                            $memberPossibleAddresses = $this->getContactsRecipientToken([$memberContact->toArray()]);
+                            if (count($memberPossibleAddresses) === 0) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                    . " list member : " . $memberContact->n_fileas . " has no contact emails, skip.");
+                                continue;
+                            }
+                            
+                            $preferredEmail = $memberContact->getPreferredEmailAddress();
+                            foreach ($memberPossibleAddresses as $memberPossibleAddress) {
+                                if ($preferredEmail === $memberPossibleAddress['email']) {
+                                    $listMemberEmails[]  = $memberPossibleAddress;
+                                }
+                            }
+                        }
+                    } catch (Exception $e) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                            . ' get members failed : ' . $e->getMessage());
                     }
                 }
                 
                 if (count($listMemberEmails) === 0) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . " list : " . $contact['name'] . " has no emails, skip.");
-                    continue;
+                        . " list : " . $contact['name'] . " has no member emails found");
                 }
                 
                 $useAsMailinglist = isset($contact['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST])
@@ -1519,7 +1529,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                     "n_fileas" => $contact["name"] ?? '',
                     "name" => $contact["name"] ?? '',
                     "type" =>  $useAsMailinglist ? 'mailingList' : $contact["type"],
-                    "email" => $contact['email'],
+                    "email" => $contact['email'] ?? '',
                     "email_type" =>  '',
                     "record_id" => $contact['id'],
                     "emails" => $listMemberEmails
