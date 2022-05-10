@@ -85,7 +85,7 @@ class Tinebase_Model_MFA_PinUserConfig extends Tinebase_Auth_MFA_AbstractUserCon
 
     public function updateUserOldRecordCallback(Tinebase_Model_FullUser $newUser, Tinebase_Model_FullUser $oldUser, Tinebase_Model_MFA_UserConfig $userCfg)
     {
-        if ($newCfg = $newUser->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_ID,
+        if ($newUser->mfa_configs && $newCfg = $newUser->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_ID,
                 $userCfg->{Tinebase_Model_MFA_UserConfig::FLD_ID})) {
             $newCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->{self::FLD_HASHED_PIN} =
                 $this->getHashedPin();

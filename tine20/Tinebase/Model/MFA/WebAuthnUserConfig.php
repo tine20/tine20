@@ -51,6 +51,12 @@ class Tinebase_Model_MFA_WebAuthnUserConfig extends Tinebase_Auth_MFA_AbstractUs
         $this->{self::FLD_PUBLIC_KEY_DATA} = null;
     }
 
+    /** TODO
+     *
+     *  IMPLEMENT REMOVAL?
+     *
+     */
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
