@@ -383,7 +383,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                                     record: this.record,
                                     initialApp: this.app,
                                     handleAttachments: this.quicklookHandleAttachments,
-                                    initialAttachmentIdx: idx
+                                    initialAttachmentIdx: +idx
                                 });
                             }
                         }, {
@@ -560,12 +560,12 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 }), Tine.Felamimail.Model.Attachment);
             });
             this.record.set('attachments', body.attachments);
-            this.record = this.attachments[_.isNumber(this.initialAttachmentIdx) ? this.initialAttachmentIdx : 0];
+            this.record = this.attachments[_.isNaN(this.initialAttachmentIdx) ? 0 : this.initialAttachmentIdx];
         }
 
         if (this.record.constructor !== Tine.Tinebase.Model.Tree_Node) {
             // convert fmail attachment to attachmentCache attachment
-            const attachmentCache = await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', this.record.get('messageId'), this.record.get('partId')].join(':'));
+            const attachmentCache = await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', this.record.get('messageId'), this.record.get('partId')].join(':'), true);
             this.record = this.attachments[this.attachments.indexOf(this.record)] = new Tine.Tinebase.Model.Tree_Node(attachmentCache.attachments[0]);
         }
     },
