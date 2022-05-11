@@ -247,7 +247,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * TODO improve this
      */
     setStoreFromArray: function(data) {
-        this.store.clearData();
+        this.store.removeAll();
 
         for (var i = data.length-1; i >=0; --i) {
             var recordData = {}

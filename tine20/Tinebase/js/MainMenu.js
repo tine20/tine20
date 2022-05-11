@@ -7,6 +7,8 @@
  */
 Ext.ns('Tine.Tinebase');
 
+import './MFA/DeviceSelfServiceDialog';
+
 /**
  * Tine 2.0 jsclient main menu
  * 
@@ -100,13 +102,10 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                 this.action_editProfile,
                 this.action_showPreferencesDialog,
                 this.action_notificationPermissions,
-                this.action_changePassword
+                this.action_changePassword,
+                this.action_manageMFADevices
             ];
 
-            if (Tine.Tinebase.registry.get('secondFactorPinChangeAllowed')) {
-                this.userActions = this.userActions.concat(this.action_changePin);
-            }
-            
             if (Tine.Tinebase.registry.get('userAccountChanged')) {
                 this.action_returnToOriginalUser = new Tine.widgets.account.ChangeAccountAction({
                     returnToOriginalUser: true,
@@ -190,11 +189,10 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             iconCls: 'action_password'
         });
 
-        this.action_changePin = new Ext.Action({
-            text: i18n._('Change PIN'),
-            handler: this.onChangePin,
-            //disabled: (! Tine.Tinebase.configManager.get('changepin')),
-            iconCls: 'action_password'
+        this.action_manageMFADevices = new Ext.Action({
+            text: i18n._('Manage MFA Devices'),
+            handler: this.onManageMFADevices,
+            iconCls: 'action_mfa'
         });
 
         this.action_logout = new Ext.Action({
@@ -259,11 +257,8 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
     /**
      * @private
      */
-    onChangePin: function() {
-        var passwordDialog = new Tine.Tinebase.PasswordChangeDialog({
-            pwType: 'pin',
-        });
-        passwordDialog.show();
+    onManageMFADevices: function() {
+        Tine.Tinebase.MFA.DeviceSelfServiceDialog.openWindow({});
     },
 
     /**
