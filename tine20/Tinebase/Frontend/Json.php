@@ -1547,8 +1547,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * @param string|null $accountLoginName
-     * @param string|null $mfaId
+     * @param ?string $accountLoginName
+     * @param ?string $mfaId
      * @return array
      * @throws Tinebase_Exception_Backend
      * @throws Tinebase_Exception_NotFound
