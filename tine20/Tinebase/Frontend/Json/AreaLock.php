@@ -79,7 +79,7 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
             });
         }
         if ($mfas instanceof Tinebase_Record_RecordSet &&
-                ($mfaUserConfigs = Tinebase_Core::getUser()->mfa_configs) instanceof Tinebase_Record_RecordSet) {
+                ($mfaUserConfigs = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId())->mfa_configs) instanceof Tinebase_Record_RecordSet) {
             $mfaUserConfigs = $mfaUserConfigs->filter(function ($val) use ($mfas) {
                 return $mfas->find(Tinebase_Model_MFA_Config::FLD_ID,
                     $val->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID}) !== null;
@@ -100,7 +100,7 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
 
     public function deleteMFAUserConfigs(array $userConfigIds): array
     {
-        $user = clone Tinebase_Core::getUser();
+        $user = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
         if (!$user->mfa_configs) {
             return [];
         }

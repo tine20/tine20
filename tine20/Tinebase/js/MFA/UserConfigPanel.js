@@ -30,7 +30,7 @@ class UserConfigPanel extends Tine.Tinebase.BL.BLConfigPanel {
         // load dynamic list of possible mfa devices for user
         return new Promise((async (resolve) => {
             const me = this;
-            const mfaDevices = await Tine.Admin.getPossibleMFAs(this.account.getId());
+            const mfaDevices =  _.get(Tine, 'Admin.getPossibleMFAs') ? await Tine.Admin.getPossibleMFAs(this.account.getId()) : await Tine.Tinebase_AreaLock.getSelfServiceableMFAs();
             const arr = _.map(mfaDevices, (record) => {
                 // we use mfa_config_id as id here as config_class is not unique!
                 return [record.mfa_config_id, deviceTypeRenderer(record.config_class, {}, record)];
