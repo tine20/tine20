@@ -70,6 +70,10 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Filemanager.NodeEditDialog.superclass.onRecordLoad.apply(this, arguments);
 
         this.window.setTitle(this.getFittingTypeTranslation(true));
+
+        if (this.record.data.type !== 'folder') {
+            this.grantsPanel.setDisabled(true);
+        }
     },
     
     afterRender: function () {
@@ -116,10 +120,6 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             app: this.app,
             editDialog: this
         });
-
-        if (this.record.data.type !== 'folder') {
-            this.grantsPanel.setDisabled(true);
-        }
 
         var revisionPanel = {};
 

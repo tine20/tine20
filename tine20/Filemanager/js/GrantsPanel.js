@@ -36,6 +36,14 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
             boxLabel: this.app.i18n._('This folder has its own grants'),
             listeners: {scope: this, check: this.onOwnGrantsCheck}
         });
+        this.inheritAclNodePathInfo = new Ext.Component({
+            style: {
+                marginTop: '10px',
+                width: 'auto',
+                minHeight: '15px'
+            },
+        });
+
         this.hasOwnRightsDescription = new Ext.form.Label({
             text: this.app.i18n._("Grants of a folder also apply recursively to all sub folders unless they have their own grants.")
         });
@@ -60,7 +68,6 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
 
         this.items = [{
             layout: 'vbox',
-            align: 'stretch',
             pack: 'start',
             border: false,
             items: [{
@@ -72,7 +79,8 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
                     this.hasOwnGrantsCheckbox,
                     this.hasOwnRightsDescription,
                     this.pinProtectionCheckbox,
-                    this.pinProtectionDescription
+                    this.pinProtectionDescription,
+                    this.inheritAclNodePathInfo,
                 ]},
                 this.grantsGrid
             ]
@@ -83,31 +91,85 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
 
     onOwnGrantsCheck: function(cb, checked) {
         this.grantsGrid.setReadOnly(!checked);
+        
+        if (this.editDialog) {
+            if (checked) {
+                this.grantsGrid.getStore().loadData({results: this.aclNodeOwnGrants});
+            } else {
+                const grants = this.inheriteAclNodeRecord ? this.inheriteAclNodeRecord.get('grants') : this.aclNodeOwnGrants;
+                this.grantsGrid.getStore().loadData({results: grants});
+            }
+            this.renderAclNodePathInfo(!checked);
+        }
     },
 
-    onRecordLoad: function(editDialog, record, ticketFn) {
-        var _ = window.lodash,
-            path = record.get('path'),
-            evalGrants = editDialog.evalGrants,
-            hasOwnGrants = record.get('acl_node') == record.id,
-            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant),
-            ownGrantsReadOnly = record.get('type') != 'folder' ||
-                !lodash.get(record, 'data.account_grants.adminGrant', false) ||
-                path.match(/^\/personal(\/[^/]+){0,2}\/$/) ||
-                path.match(/^\/shared(\/[^/]+){0,1}\/$/);
-        
-        const pinProtectionReadOnly = record.get('type') !== 'folder' ||!record.data?.account_grants?.adminGrant;
-        
+    onRecordLoad: async function (editDialog, record, ticketFn) {
+        const path = record.get('path');
+        const evalGrants = editDialog.evalGrants;
+        const hasOwnGrants = record.get('acl_node') && record.get('acl_node') === record.id;
+        const hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
+        const ownGrantsReadOnly = (record.get('type') !== 'folder' ||
+            !_.get(record, 'data.account_grants.adminGrant', false) ||
+            path.match(/^\/personal(\/[^/]+){0,2}\/$/) ||
+            path.match(/^\/shared(\/[^/]+){0,1}\/$/)) ?? false;
+    
+        const pinProtectionReadOnly = record.get('type') !== 'folder' || !record.data?.account_grants?.adminGrant;
+        this.aclNodeOwnGrants = record.get('grants');
         this.hasOwnGrantsCheckbox.setValue(hasOwnGrants);
         this.hasOwnGrantsCheckbox.setReadOnly(ownGrantsReadOnly);
-        this.pinProtectionCheckbox.setValue(record.get('pin_protected_node') ? true : false);
+        this.pinProtectionCheckbox.setValue(!!record.get('pin_protected_node'));
         this.pinProtectionCheckbox.setReadOnly(pinProtectionReadOnly);
-
+    
         this.grantsGrid.useGrant('admin', !!String(record.get('path')).match(/^\/shared/));
         this.grantsGrid.getStore().loadData({results: record.data.grants});
-
+        
+        let defaultInheritAclNode = !hasOwnGrants ? record.get('acl_node') : null;
+        // always prepare parent's acl node
+        if (record?.data?.parent_id) {
+            await Tine.Filemanager.getNode(record?.data?.parent_id).then((result) => {
+                this.parentNode = Tine.Tinebase.data.Record.setFromJson(result, Tine.Filemanager.Model.Node);
+            });
+        }
+        
+        if (hasOwnGrants || ! record.get('acl_node')) {
+            defaultInheritAclNode = this.parentNode.get('acl_node');
+        } 
+        
+        if(defaultInheritAclNode) {
+            await Tine.Filemanager.getNode(defaultInheritAclNode).then((result) => {
+                this.inheriteAclNodeRecord = Tine.Tinebase.data.Record.setFromJson(result, Tine.Filemanager.Model.Node);
+            });
+            if (!hasOwnGrants) {
+                this.renderAclNodePathInfo(true);
+            }
+        }
+        
         this.setReadOnly(!hasRequiredGrant);
         this.grantsGrid.setReadOnly(!hasOwnGrants || !hasRequiredGrant);
+    },
+    
+    renderAclNodePathInfo(checked) {
+        let text = '&nbsp;';
+        if (checked && this.inheriteAclNodeRecord) {
+            const location = {
+                model: "Filemanager_Model_Node",
+                record_id: this.inheriteAclNodeRecord.data,
+                record_title: this.inheriteAclNodeRecord.get('path'),
+                type: "node"
+            }
+            text = this.app.formatMessage('Grants are inherited from {locationsHtml} as follows', {
+                locationsHtml: Tine.Felamimail.MessageFileAction.getFileLocationText([location], ', ')
+            });
+        }
+        
+        this.inheritAclNodePathInfo.show();
+        
+        if (this.inheritAclNodePathInfo.rendered) {
+            this.inheritAclNodePathInfo.update(text);
+        } else {
+            this.inheritAclNodePathInfo.html = text;
+        }
+        return text;
     },
 
     // grants-grid only - checkboxes have own state
@@ -117,12 +179,16 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
     },
 
     onRecordUpdate: function(editDialog, record) {
-        var acl_node = this.hasOwnGrantsCheckbox.getValue() ? record.id : null,
-            grants = [],
-            pin_protected_node = this.pinProtectionCheckbox.getValue() ? true : false;
-
+        const acl_node = this.hasOwnGrantsCheckbox.getValue() ? record.id : null;
+        const pin_protected_node = !!this.pinProtectionCheckbox.getValue();
+        let grants = [];
+    
         this.grantsGrid.getStore().each(function(r) {grants.push(r.data)});
 
+        if (acl_node) {
+            this.aclNodeOwnGrants = grants;
+        }
+        
         record.set('acl_node', acl_node);
         record.set('grants', grants);
         record.set('pin_protected_node', pin_protected_node ? acl_node : null);

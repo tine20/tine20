@@ -482,6 +482,9 @@ msgstr "Berechtigungen"
 msgid "This folder has its own grants"
 msgstr "Dieser Ordner hat eigene Berechtigungen"
 
+msgid "Grants are inherited from {locationsHtml} as follows"
+msgstr "Berechtigungen geerbt von {locationsHtml} wie folgt"
+
 #: js/GrantsPanel.js:40
 msgid "Grants of a folder also apply recursively to all sub folders unless they have their own grants."
 msgstr "Rechte eines Ordners gelten auch rekursiv für alle Unterordner, es sei denn, sie verfügen über eigene Rechte."
