@@ -95,7 +95,16 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
 
     public function getSelfServiceableMFAs(): array
     {
-        return (new Admin_Frontend_Json())->getPossibleMFAs(Tinebase_Core::getUser()->getId());
+        $userMFAs = (new Admin_Frontend_Json())->getPossibleMFAs(Tinebase_Core::getUser()->getId());
+        $mfas = Tinebase_Config::getInstance()->{Tinebase_Config::MFA};
+
+        foreach ($userMFAs as $id => $mfa) {
+            if (!$mfas->records->getById($mfa['mfa_config_id'])->{Tinebase_Model_MFA_Config::FLD_ALLOW_SELF_SERVICE}) {
+                unset($userMFAs[$id]);
+            }
+        }
+
+        return $userMFAs;
     }
 
     public function deleteMFAUserConfigs(array $userConfigIds): array
@@ -106,8 +115,12 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
         }
         $result = [];
 
+        $mfas = Tinebase_Config::getInstance()->{Tinebase_Config::MFA};
         foreach ($userConfigIds as $id) {
-            if (!$user->mfa_configs->getById($id)) continue;
+            if (!($userMFA = $user->mfa_configs->getById($id)) ||
+                    !$mfas->records->getById($userMFA->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
+                        ->{Tinebase_Model_MFA_Config::FLD_ALLOW_SELF_SERVICE}) continue;
+
             $user->mfa_configs->removeById($id);
             $result[] = $id;
         }
@@ -129,6 +142,10 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
             throw new Tinebase_Exception_UnexpectedValue('mfaId doesn\'t match user configs mfa id');
         }
         $mfa = Tinebase_Auth_MFA::getInstance($mfaId);
+        if (!Tinebase_Config::getInstance()->{Tinebase_Config::MFA}->records->getById($mfaId)
+                ->{Tinebase_Model_MFA_Config::FLD_ALLOW_SELF_SERVICE}) {
+            throw new Tinebase_Exception_AccessDenied('mfa is not self serviceable');
+        }
 
         // we need to test the unsaved mfa user config here, so we clone it and the user
         // then we get it ready, that's a bit tedious sadly
@@ -138,7 +155,12 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
         if (!$user->mfa_configs) {
             $user->mfa_configs = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
         }
-        $user->mfa_configs->removeById($userCfg->getId());
+        if ($existingCfg = $user->mfa_configs->getById($userCfg->getId())) {
+            if ($existingCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID} !== $mfaId) {
+                throw new Tinebase_Exception_UnexpectedValue('can not change mfa type on existing mfa user config');
+            }
+            $user->mfa_configs->removeById($userCfg->getId());
+        }
         $user->mfa_configs->addRecord($testUserCfg);
 
         // do the tedious task of getting the mfa user config "ready"

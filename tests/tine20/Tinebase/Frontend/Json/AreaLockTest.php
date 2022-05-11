@@ -70,6 +70,14 @@ class Tinebase_Frontend_Json_AreaLockTest extends TestCase
         $this->_createAreaLockConfig();
 
         $result = (new Tinebase_Frontend_Json_AreaLock())->getSelfServiceableMFAs();
+        $this->assertCount(0, $result);
+    }
+
+    public function testGetPossibleMFAs1()
+    {
+        $this->_createAreaLockConfig([], [Tinebase_Model_MFA_Config::FLD_ALLOW_SELF_SERVICE => true]);
+
+        $result = (new Tinebase_Frontend_Json_AreaLock())->getSelfServiceableMFAs();
         $this->assertCount(1, $result);
         $this->assertSame('pin', $result[0]['mfa_config_id']);
         $this->assertSame(Tinebase_Model_MFA_PinUserConfig::class, $result[0]['config_class']);
@@ -77,7 +85,7 @@ class Tinebase_Frontend_Json_AreaLockTest extends TestCase
 
     public function testSaveMFAUserConfig()
     {
-        $this->_createAreaLockConfig();
+        $this->_createAreaLockConfig([], [Tinebase_Model_MFA_Config::FLD_ALLOW_SELF_SERVICE => true]);
         $areaLockFE = new Tinebase_Frontend_Json_AreaLock();
 
         $userCfg = [

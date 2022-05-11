@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  MFA
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -24,6 +24,7 @@ class Tinebase_Model_MFA_Config extends Tinebase_Record_NewAbstract
     const FLD_PROVIDER_CONFIG_CLASS = 'provider_config_class';
     const FLD_PROVIDER_CONFIG = 'provider_config';
     const FLD_USER_CONFIG_CLASS = 'user_config_class';
+    const FLD_ALLOW_SELF_SERVICE = 'allow_self_service';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -52,6 +53,9 @@ class Tinebase_Model_MFA_Config extends Tinebase_Record_NewAbstract
             ],
             self::FLD_USER_CONFIG_CLASS     => [
                 self::TYPE                      => self::TYPE_STRING,
+            ],
+            self::FLD_ALLOW_SELF_SERVICE    => [
+                self::TYPE                      => self::TYPE_BOOLEAN,
             ],
         ]
     ];
