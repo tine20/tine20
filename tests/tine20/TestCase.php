@@ -145,6 +145,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown(): void
     {
+        if (($u = Tinebase_Core::getUser()) instanceof Tinebase_Model_FullUser && $u->mfa_configs) {
+            $u->mfa_configs->removeById('userpin');
+        }
         if ($this->_originalTestUser instanceof Tinebase_Model_User) {
             Tinebase_Core::setUser($this->_originalTestUser);
         }
