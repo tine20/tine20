@@ -498,7 +498,7 @@ class Tinebase_Mail extends Zend_Mail
             if (preg_match('/convert\.quoted-printable-decode/', $e->getMessage())) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Trying workaround for http://bugs.php.net/50363.');
                 $body = quoted_printable_decode(stream_get_contents($zmp->getRawStream()));
-                $body = iconv($charset, 'utf-8', $body);
+                $body = @iconv($charset, 'utf-8', $body);
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Try again with fallback encoding.');
                 $zmp->appendDecodeFilter(self::_getDecodeFilter());
