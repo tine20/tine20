@@ -415,39 +415,17 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $adbController->setRequestContext($context);
         }
     }
-    
 
-    
     /**
     * get contact information from string by parsing it using predefined rules
     *
     * @param string $address
     * @return array
     */
-    public function parseAddressData($address)
+    public function parseAddressData(string $address): array
     {
         if (preg_match('/^http/', $address)) {
-            $vcard = file_get_contents($address);
-
-            // Could not load file from remote
-            if ($vcard === false) {
-                return array('exceptions' => "Cannot get file from remote.");
-            }
-
-            $converter = Addressbook_Convert_Contact_VCard_Factory::factory(
-                strpos($address, 'dastelefonbuch')
-                ? Addressbook_Convert_Contact_VCard_Factory::CLIENT_TELEFONBUCH
-                : Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC
-            );
-
-            $record = $converter->toTine20Model($vcard);
-            $contactData = $this->_recordToJson($record);
-
-            if (array_key_exists('jpegphoto', $contactData)) {
-                unset($contactData['jpegphoto']);
-            }
-
-            return array('contact' => $contactData);
+            return $this->_parseAddressFromUrl($address);
         } else {
             $result = Addressbook_Controller_Contact::getInstance()->parseAddressData($address);
             $contactData = $this->_recordToJson($result['contact']);
@@ -466,7 +444,40 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             );
         }
     }
-    
+
+    /**
+     * @param string $addressUrl
+     * @return array|array[]|string[]
+     */
+    protected function _parseAddressFromUrl(string $addressUrl): array
+    {
+        $vcard = file_get_contents($addressUrl);
+
+        // Could not load file from remote
+        if ($vcard === false) {
+            return ['exceptions' => 'Cannot get file from remote'];
+        }
+
+        $converter = Addressbook_Convert_Contact_VCard_Factory::factory(
+            strpos($addressUrl, 'dastelefonbuch')
+                ? Addressbook_Convert_Contact_VCard_Factory::CLIENT_TELEFONBUCH
+                : Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC
+        );
+
+        try {
+            $record = $converter->toTine20Model($vcard);
+        } catch (Sabre\VObject\ParseException $svpe) {
+            return ['exceptions' => $svpe->getMessage()];
+        }
+        $contactData = $this->_recordToJson($record);
+
+        if (array_key_exists('jpegphoto', $contactData)) {
+            unset($contactData['jpegphoto']);
+        }
+
+        return array('contact' => $contactData);
+    }
+
     /**
      * get default addressbook
      * 
