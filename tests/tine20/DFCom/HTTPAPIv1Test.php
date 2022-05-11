@@ -223,7 +223,7 @@ class DFCom_HTTPAPIv1Test extends TestCase
 
         // assert timesheet got created
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->getAll()
-            ->filter('start_time', '17:20:16');
+            ->filter('start_time', '17:20:00');
         $this->assertCount(1, $timesheets, 'timesheet not created');
     }
 
