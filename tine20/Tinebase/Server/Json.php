@@ -458,7 +458,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         if (method_exists($request, 'getId') && null !== ($id = $request->getId())) {
             $response->setId($id);
         }
-        if (null !== ($version = $request->getVersion())) {
+        if ($request && null !== ($version = $request->getVersion())) {
             $response->setVersion($version);
         }
     
