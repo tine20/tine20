@@ -124,8 +124,6 @@ class DFCom_RecordHandler_TimeAccountingTest extends TestCase
 
     public function testDeferedStop()
     {
-        $this->markTestSkipped('FIXME soon!');
-        
         $this->testConcurrentStart();
 
         $event = $this->getTestEvent([
@@ -145,14 +143,14 @@ class DFCom_RecordHandler_TimeAccountingTest extends TestCase
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->getAll();
 
         $first = $timesheets
-            ->filter('start_time', '09:20:16')
+            ->filter('start_time', '09:20:00')
             ->getFirstRecord();
 
         $this->assertTrue(!!$first->need_for_clarification);
         $this->assertEquals(221, $first->duration);
 
         $second = $timesheets
-            ->filter('start_time', '13:01:22')
+            ->filter('start_time', '13:01:00')
             ->getFirstRecord();
 
         $this->assertEquals(282, $second->duration);
@@ -173,14 +171,14 @@ class DFCom_RecordHandler_TimeAccountingTest extends TestCase
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->getAll();
 
         $first = $timesheets
-            ->filter('start_time', '09:20:16')
+            ->filter('start_time', '09:20:00')
             ->getFirstRecord();
 
         $this->assertFalse(!!$first->need_for_clarification);
         $this->assertEquals(192, $first->duration);
 
         $second = $timesheets
-            ->filter('start_time', '13:01:22')
+            ->filter('start_time', '13:01:00')
             ->getFirstRecord();
 
         $this->assertEquals(282, $second->duration);

@@ -14,6 +14,10 @@
     background-image:url(../../images/icon-set/Icon_key.svg) !important;
 }
 
+.action_mfa {
+    background-image:url(../../images/icon-set/icon_key_groups.svg) !important;
+}
+
 .AdminIconCls {
     background-image:url(../../images/icon-set/icon_settings.svg) !important;
 }
