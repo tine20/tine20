@@ -132,6 +132,27 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
         return $result;
     }
 
+    public function updateMFAUserConfigMetaData(array $mfaUserConfig): bool
+    {
+        $mfaUserConfig = array_intersect_key($mfaUserConfig,
+            ['id' => null, Tinebase_Model_MFA_UserConfig::FLD_NOTE => null]);
+
+        $user = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
+        if (!isset($mfaUserConfig['id']) || !$user->mfa_configs ||
+                !($userCfg = $user->mfa_configs->getById($mfaUserConfig['id']))) {
+            throw new Tinebase_Exception_NotFound('no user cfg found');
+        }
+
+        unset($mfaUserConfig['id']);
+        foreach ($mfaUserConfig as $prop => $value) {
+            $userCfg->{$prop} = $value;
+        }
+
+        Tinebase_User::getInstance()->updateUser($user);
+
+        return true;
+    }
+
     public function saveMFAUserConfig(string $mfaId, array $mfaUserConfig, ?string $MFAPassword = null): bool
     {
         if (!isset($mfaUserConfig['id']) ||  empty($mfaUserConfig['id'])) {
@@ -151,7 +172,7 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
         // then we get it ready, that's a bit tedious sadly
         $testUserCfg = clone $userCfg;
         /** @var Tinebase_Model_FullUser $user */
-        $user = clone Tinebase_Core::getUser();
+        $user = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
         if (!$user->mfa_configs) {
             $user->mfa_configs = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
         }
@@ -165,7 +186,7 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
 
         // do the tedious task of getting the mfa user config "ready"
         try {
-            $testUserCfg->updateUserNewRecordCallback($user, Tinebase_Core::getUser());
+            $testUserCfg->updateUserNewRecordCallback($user, Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId()));
             $testUserCfg->runConvertToData();
             $user->mfa_configs->removeById($testUserCfg->getId());
             $testUserCfg = new Tinebase_Model_MFA_UserConfig($testUserCfg->toArray());
@@ -187,11 +208,11 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
             }
         } finally {
             // clean up, eventually we created something persistent
-            $testUserCfg->updateUserOldRecordCallback(Tinebase_Core::getUser(), $user);
+            $testUserCfg->updateUserOldRecordCallback(Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId()), $user);
         }
 
         // no exception? persist the mfa user config
-        $user = clone Tinebase_Core::getUser();
+        $user = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
         if (!$user->mfa_configs) {
             $user->mfa_configs = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
         }
