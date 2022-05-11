@@ -25,9 +25,6 @@ msgstr ""
 msgid "Add New Task"
 msgstr "Neue Aufgabe hinzufügen"
 
-msgid "Create New Task"
-msgstr "Als neue Aufgabe hinzufügen"
-
 #: js/TaskEditDialog.js:140
 msgid "You have to supply a due date, because an alarm ist set!"
 msgstr "Sie müssen ein Fälligkeitsdatum angeben, da ein Alarm gesetzt wurde!"
@@ -46,7 +43,7 @@ msgstr "Priorität"
 
 #: js/TaskEditDialog.js:202 Model/Task.php:116 Model/Task.php:309
 msgid "Organizer"
-msgstr "Verantwortlich"
+msgstr "Organisator"
 
 #: js/TaskEditDialog.js:203
 msgid "Add Responsible ..."
@@ -195,8 +192,13 @@ msgid "Tasks status available"
 msgstr "Verfügbare Taskstatus"
 
 #: Config.php:40
-msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
-msgstr "Verfügbare Aufgabenstatus. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
+msgid ""
+"Possible tasks status. Please note that additional attendee status might "
+"impact other Tasks systems on export or syncronisation."
+msgstr ""
+"Verfügbare Aufgabenstatus. Bitte beachten Sie, dass zusätzliche Werte beim "
+"Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt "
+"werden könnten."
 
 #: Config.php:48
 msgid "No response"
@@ -215,8 +217,12 @@ msgid "Task priorities available"
 msgstr "Verfügbare Aufgabenprioritäten"
 
 #: Config.php:59
-msgid "Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation."
-msgstr "Verfügbare Aufgabenprioritäten. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
+msgid ""
+"Possible task priorities. Please note that additional priorities might "
+"impact other Tasks systems on export or syncronisation."
+msgstr ""
+"Verfügbare Aufgabenprioritäten. Please note that additional attendee status "
+"might impact other Tasks systems on export or syncronisation."
 
 #: Config.php:66
 msgid "low"
@@ -327,6 +333,11 @@ msgstr "Gemeinsame Aufgaben-Favoriten verwalten"
 msgid "Create or update shared tasks favorites"
 msgstr "Gemeinsame Aufgaben-Favoriten erstellen oder bearbeiten"
 
+msgid "Create New Task"
+msgstr "Als neue Aufgabe hinzufügen"
+
 msgid "Creating new Task..."
 msgstr "Erstelle neue Aufgabe..."
 
+msgid "Attention: This due date is in the past!"
+msgstr "Achtung: Das Fälligkeitsdatum liegt in der Vergangenheit!"
