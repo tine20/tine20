@@ -30,4 +30,6 @@ class Admin_Event_UpdateAccount extends Tinebase_Event_Abstract
      * @var Tinebase_Model_FullUser
      */
     public $oldAccount;
+
+    public $pwd;
 }
