@@ -211,7 +211,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         $this->_checkLoginNameLength($_user);
         $this->_checkPrimaryGroupExistance($_user);
-        $deactivated = false;
 
         $this->_checkSystemEmailAccountCreation($_user, $oldUser, $_password);
         $this->_checkSystemEmailAccountDuplicate($_user, $oldUser);
@@ -256,6 +255,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $event = new Admin_Event_UpdateAccount;
         $event->account = $user;
         $event->oldAccount = $oldUser;
+        $event->pwd = $_password;
         Tinebase_Event::fireEvent($event);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {

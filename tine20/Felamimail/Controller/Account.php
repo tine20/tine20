@@ -2199,10 +2199,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     /**
      * @param Tinebase_Model_FullUser $user
      * @param Tinebase_Model_FullUser $oldUser
+     * @param ?string $pwd
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function updateSystemAccount(Tinebase_Model_FullUser $user, Tinebase_Model_FullUser $oldUser)
+    public function updateSystemAccount(Tinebase_Model_FullUser $user, Tinebase_Model_FullUser $oldUser, ?string $pwd = null)
     {
         $checks = Felamimail_Controller_Account::getInstance()->doContainerACLChecks(false);
         $systemaccount = null;
@@ -2221,6 +2222,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             if ($systemaccount && $systemaccount->name === $oldUser->accountEmailAddress) {
                 $systemaccount->name = $user->accountEmailAddress;
                 $updateSystemAccount = true;
+            }
+            if (! $systemaccount && !empty($user->accountEmailAddress)) {
+                $this->createSystemAccount($user, $pwd);
             }
         }
 

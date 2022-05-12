@@ -4,7 +4,7 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -161,13 +161,13 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
 
         try {
             $account = $this->_json->saveUser($accountData);
-            $this->fail('Updating an account with existing login name should throw exception: ' . print_r($account, TRUE));
+            self::fail('Updating an account with existing login name should throw exception: ' . print_r($account, TRUE));
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
-            $this->assertEquals('Login name already exists. Please choose another one.', $tesg->getMessage());
+            self::assertEquals('Login name already exists. Please choose another one.', $tesg->getMessage());
         }
     }
 
-    public function testSaveAccountWithoutEmail()
+    public function testSaveAccountWithAndWithoutEmail()
     {
         $this->_skipWithoutEmailSystemAccountConfig();
 
@@ -187,18 +187,27 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $accountData['emailUser'] = $emailUser;
         $accountData['accountEmailAddress'] = null;
         $account = $this->_json->saveUser($accountData);
-
-        self::assertEmpty($account['accountEmailAddress']);
-
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
-            ['field' => 'user_id', 'operator' => 'equals', 'value' => $account['accountId']]
-        ]);
-        $emailAccounts = Admin_Controller_EmailAccount::getInstance()->search($filter);
-        self::assertCount(0, $emailAccounts,'empty mail account created: ' . print_r($emailAccounts->toArray(), true));
-
         // assert no email account has been created
         self::assertFalse(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP]), 'imap user found!');
         self::assertFalse(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_SMTP]), 'smtp user found!');
+        self::assertEmpty($account['accountEmailAddress']);
+
+        if (Tinebase_Application::getInstance()->isInstalled('Felamimail')) {
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                ['field' => 'user_id', 'operator' => 'equals', 'value' => $account['accountId']]
+            ]);
+            $emailAccounts = Admin_Controller_EmailAccount::getInstance()->search($filter);
+            self::assertCount(0, $emailAccounts, 'empty mail account created: ' . print_r($emailAccounts->toArray(), true));
+
+            // add email address -> accounts should be created
+            $account['accountEmailAddress'] = $account['accountLoginName'] . '@' . TestServer::getPrimaryMailDomain();
+            $account['accountPassword'] = Tinebase_Record_Abstract::generateUID('20');
+            $account = $this->_json->saveUser($account);
+            self::assertTrue(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP]), 'imap user not found!');
+            self::assertTrue(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_SMTP]), 'smtp user not found!');
+            $emailAccounts = Admin_Controller_EmailAccount::getInstance()->search($filter);
+            self::assertCount(1, $emailAccounts);
+        }
     }
 
     /**
