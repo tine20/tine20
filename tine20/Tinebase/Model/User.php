@@ -27,6 +27,8 @@
  */
 class Tinebase_Model_User extends Tinebase_Record_Abstract
 {
+    public const MODEL_NAME_PART = 'User';
+
     /**
      * const to describe current account accountId independent
      * 

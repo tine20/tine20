@@ -33,8 +33,8 @@ class Tinebase_Model_MFA_UserConfig extends Tinebase_Record_NewAbstract
     protected static $_modelConfiguration = [
         self::APP_NAME                      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
-        self::RECORD_NAME                   => 'Second factor config for user', // ngettext('Second factor config for user', 'Second factor configs for user', n)
-        self::RECORDS_NAME                  => 'Second factor configs for user',
+        self::RECORD_NAME                   => 'MFA Device Config', // ngettext('MFA Device Config', 'MFA Device Configs', n)
+        self::RECORDS_NAME                  => 'MFA Device Configs',
         self::TITLE_PROPERTY                => self::FLD_CONFIG,
 
         self::FIELDS                        => [
