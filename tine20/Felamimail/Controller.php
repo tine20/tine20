@@ -145,7 +145,7 @@ class Felamimail_Controller extends Tinebase_Controller_Event
     public function handleAccountLogin(Tinebase_Model_FullUser $_account, $pwd)
     {
         if (Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}
-            && ! empty($_account->email)
+            && ! empty($_account->accountEmailAddress)
         ) {
             // this is sort of a weird flag to make addSystemAccount do its actual work
             $_account->imapUser = new Tinebase_Model_EmailUser(null, true);

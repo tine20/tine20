@@ -35,8 +35,8 @@ class Tinebase_ControllerTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+    {
+        parent::setUp();
         $this->_instance = Tinebase_Controller::getInstance();
     }
 
@@ -47,9 +47,9 @@ class Tinebase_ControllerTest extends TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
         Tinebase_Config::getInstance()->maintenanceMode = 0;
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        parent::tearDown();
     }
 
     /**
@@ -99,6 +99,29 @@ class Tinebase_ControllerTest extends TestCase
     public function testMaintenanceModeLoginFailAll()
     {
         $this->testMaintenanceModeLoginFail(Tinebase_Config::MAINTENANCE_MODE_ALL);
+    }
+
+    public function testLoginCreateMailaccount()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+            ['field' => 'user_id', 'operator' => 'equals', 'value' => $this->_personas['sclever']->getId()]
+        ]);
+        $emailAccounts = Admin_Controller_EmailAccount::getInstance()->search($filter);
+        Admin_Controller_EmailAccount::getInstance()->delete($emailAccounts->getArrayOfIds());
+
+        $this->_instance->login(
+            'sclever',
+            Tinebase_Helper::array_value('password', TestServer::getInstance()->getTestCredentials()),
+            new Tinebase_Http_Request()
+        );
+        Tinebase_Core::setUser($this->_originalTestUser);
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+            ['field' => 'user_id', 'operator' => 'equals', 'value' => $this->_personas['sclever']->getId()]
+        ]);
+        $emailAccounts = Admin_Controller_EmailAccount::getInstance()->search($filter);
+        self::assertEquals(1, count($emailAccounts));
     }
 
     /**
