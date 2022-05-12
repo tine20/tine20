@@ -6,7 +6,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,6 +18,7 @@
 class Tinebase_Import_MunicipalityKey extends Tinebase_Import_Xls_Abstract
 {
     protected $_gebietsstand = null;
+    protected $_bevoelkerungsstand = null;
 
     /**
      * constructs a new importer from given config
@@ -28,6 +29,23 @@ class Tinebase_Import_MunicipalityKey extends Tinebase_Import_Xls_Abstract
     {
         parent::__construct($_options);
         
+    }
+
+    /**
+     * do something before the import
+     *
+     * @param mixed $_resource
+     */
+    protected function _beforeImport($_resource = NULL)
+    {
+        parent::_beforeImport($_resource);
+
+        if (null === $this->_bevoelkerungsstand && $this->_worksheet && $this->_worksheet->cellExists('J5') &&
+                preg_match('/(\d\d)\.(\d\d)\.(\d\d\d\d)/',
+                    $this->_worksheet->getCell('J5')->getValue(), $m)) {
+            $this->_bevoelkerungsstand = new Tinebase_DateTime($m[3] . '-' . $m[2] . '-' . $m[1]);
+            $this->_bevoelkerungsstand->hasTime(false);
+        }
     }
 
     /**
@@ -75,9 +93,13 @@ class Tinebase_Import_MunicipalityKey extends Tinebase_Import_Xls_Abstract
             if (null === $this->_gebietsstand) {
                 throw new Tinebase_Exception_UnexpectedValue('could not find Gebietsstand in import data and none provided by importer');
             }
+            if (null === $this->_bevoelkerungsstand) {
+                throw new Tinebase_Exception_UnexpectedValue('could not find Bevölkerungsstand in import data and none provided by importer');
+            }
             $_record->{Tinebase_Model_MunicipalityKey::FLD_ARS_COMBINED} =
                 $_record->arsLand . $_record->arsRB . $_record->arsKreis . $_record->arsVB . $_record->arsGem;
             $_record->{Tinebase_Model_MunicipalityKey::FLD_GEBIETSSTAND} = $this->_gebietsstand;
+            $_record->{Tinebase_Model_MunicipalityKey::FLD_BEVOELKERUNGSSTAND} = $this->_bevoelkerungsstand;
             $filter->getFilter(Tinebase_Model_MunicipalityKey::FLD_ARS_COMBINED)->setValue(
                 $_record->{Tinebase_Model_MunicipalityKey::FLD_ARS_COMBINED}
             );
