@@ -276,6 +276,10 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             text: String.format(i18n._('Edit {0}'), this.recordName),
             hidden: !this.recordClass || !(this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass)),
             scope: this,
+            disabled: true,
+            actionUpdater: function(action, grants, records) {
+                action.setDisabled(!records.length);
+            },
             handler: () => {
                 const record = this.selModel.getSelected();
                 const row = this.store.indexOf(record);

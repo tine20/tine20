@@ -17,10 +17,12 @@ Tine.Tinebase.MFA.DeviceSelfServiceDialog = Ext.extend(Tine.Tinebase.dialog.Dial
 
     initComponent() {
         this.MFAPanel = new UserConfigPanel({
+            selfServiceMode: true,
+            enableBbar: true,
             flex: 1,
             selfService: true,
             title: false,
-            account: Tine.Tinebase.data.Record.setFromJson(Tine.Tinebase.registry.get('currentAccount'), Tine.Tinebase.Model.Account),
+            account: Tine.Tinebase.data.Record.setFromJson(Tine.Tinebase.registry.get('currentAccount'), Tine.Tinebase.Model.User),
             editDialog: this,
             tbar: [this.refresh = new Ext.Toolbar.Button({
                 tooltip: Ext.PagingToolbar.prototype.refreshText,
@@ -29,6 +31,13 @@ Tine.Tinebase.MFA.DeviceSelfServiceDialog = Ext.extend(Tine.Tinebase.dialog.Dial
                 handler: this.loadMFADevices,
                 scope: this
             })]
+        });
+
+        _.assign(_.find(this.MFAPanel.colModel.columns, {dataIndex: 'note'}), {
+            width: 200
+        });
+        _.assign(_.find(this.MFAPanel.colModel.columns, {dataIndex: this.MFAPanel.classNameField}), {
+            width: 170
         });
 
         // @TODO: explain stuff?
@@ -42,15 +51,17 @@ Tine.Tinebase.MFA.DeviceSelfServiceDialog = Ext.extend(Tine.Tinebase.dialog.Dial
             const record = records[0];
             this.saveMFADevice(record);
         });
-        this.MFAPanel.store.on('update', (store, record, ) => {
-            this.saveMFADevice(record);
+
+        this.MFAPanel.store.on('update', async (store, record, ) => {
+            this.refresh.disable();
+            const userConfigData = await Tine.Tinebase_AreaLock.updateMFAUserConfigMetaData({... record.data});
+            await this.loadMFADevices();
         });
+
         this.MFAPanel.store.on('remove', async (store, record, ) => {
-            if (! record.isLocal) {
-                this.refresh.disable();
-                await Tine.Tinebase_AreaLock.deleteMFAUserConfigs([record.id]);
-                this.refresh.enable();
-            }
+            this.refresh.disable();
+            await Tine.Tinebase_AreaLock.deleteMFAUserConfigs([record.id]);
+            this.refresh.enable();
         });
     },
 
@@ -64,13 +75,7 @@ Tine.Tinebase.MFA.DeviceSelfServiceDialog = Ext.extend(Tine.Tinebase.dialog.Dial
     },
 
     async saveMFADevice(record, MFAPassword) {
-        // if (! this.loadMask) {
-        //     this.loadMask = new Ext.LoadMask(this.getEl(), {msg: this.app.i18n._("Transferring MFA Device...")});
-        // }
-        // await this.loadMask.show();
-
         try {
-            record.isLoacl = true;
             this.refresh.disable();
             const userConfigData = await Tine.Tinebase_AreaLock.saveMFAUserConfig(record.get('mfa_config_id'), {... record.data}, MFAPassword);
             await this.loadMFADevices();
@@ -81,7 +86,7 @@ Tine.Tinebase.MFA.DeviceSelfServiceDialog = Ext.extend(Tine.Tinebase.dialog.Dial
                     return Tine.Tinebase.areaLocks.unlock(exception.data.area, {
                         mfaDevices: exception.data.mfaUserConfigs,
                         USERABORTMethod: () => {
-                            this.MFAPanel.store.remove(record);
+                            this.loadMFADevices();
                         },
                         unlockMethod: (areaName, MFAUserConfigId, MFAPassword) => {
                             this.saveMFADevice(record, MFAPassword);
@@ -94,7 +99,7 @@ Tine.Tinebase.MFA.DeviceSelfServiceDialog = Ext.extend(Tine.Tinebase.dialog.Dial
                             this.saveMFADevice(record);
                         },
                         USERABORTMethod: () => {
-                            this.MFAPanel.store.remove(record);
+                            this.loadMFADevices();
                         }
                     });
                     break;
@@ -110,7 +115,7 @@ Tine.Tinebase.MFA.DeviceSelfServiceDialog.openWindow = function(config) {
     const id = config.recordId ?? config.record?.id ?? 0;
     return Tine.WindowFactory.getWindow({
         width: 640,
-        height: 450,
+        height: 400,
         name: Tine.Tinebase.MFA.DeviceSelfServiceDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Tinebase.MFA.DeviceSelfServiceDialog',
         contentPanelConstructorConfig: config,

@@ -4981,6 +4981,12 @@ msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihr Passwort "
 "eingeben."
 
+msgid "Manage MFA Devices"
+msgstr "MFA Geräte verwalten"
+
+msgid "Add new MFA Device"
+msgstr "Neues MFA Gerät zufügen"
+
 msgid "Choose MFA Deivce"
 msgstr "MFA Gerät auswählen"
 
@@ -5129,7 +5135,9 @@ msgid "MFA Device Type"
 msgstr "MFA Gerätetyp"
 
 msgid "MFA Device Config"
-msgstr "MFA Gerätekonfiguration"
+msgid_plural "MFA Device Configs"
+msgstr[0] "MFA Gerätekonfiguration"
+msgstr[1] "MFA Gerätekonfigurationen"
 
 msgid "Invalid authentication"
 msgstr "Authentifikation fehlgeschlagen"
