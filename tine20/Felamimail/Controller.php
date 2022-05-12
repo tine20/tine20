@@ -104,7 +104,7 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                 if (Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}
                     ->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}) {
                     Felamimail_Controller_Account::getInstance()->updateSystemAccount(
-                        $_eventObject->account, $_eventObject->oldAccount);
+                        $_eventObject->account, $_eventObject->oldAccount, $_eventObject->pwd);
                 }
                 break;
             case Tinebase_Event_User_DeleteAccount::class:
