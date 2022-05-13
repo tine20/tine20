@@ -103,6 +103,7 @@ class Tinebase_ControllerTest extends TestCase
 
     public function testLoginCreateMailaccount()
     {
+        $this->_skipIfLDAPBackend();
         $this->_skipWithoutEmailSystemAccountConfig();
 
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
