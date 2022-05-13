@@ -1138,7 +1138,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         // force set last selected field
                         this.getForm().items.each(function(item) {
                             if (item.hasFocus) {
-                                item.setValue(item.getRawValue(), this.record);
+                                item.onBlur();
                             }
                         }, this);
                     }
