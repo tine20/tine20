@@ -22,7 +22,7 @@ class Sales_Export_Product extends Tinebase_Export_CsvNew
      */
     protected function _convertToString($_value)
     {
-        if ($_value instanceof Tinebase_Record_RecordSetFast && $_value->getRecordClassName() === Sales_Model_ProductLocalization::class) {
+        if ($_value instanceof Tinebase_Record_RecordSet && $_value->getRecordClassName() === Sales_Model_ProductLocalization::class) {
             // TODO generalize & use default language if not in config
             $lang = $this->_config->language ?: 'en';
             $langValue = $_value->filter('language', $lang)->getFirstRecord();
