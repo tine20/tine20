@@ -889,6 +889,7 @@ Tine.Tinebase.tineInit = {
         Tine.log.info('tineInit::clearRegistry');
         if (Ext.isFunction(store.namespace)) {
             store.namespace(Tine.Tinebase.tineInit.lsPrefix).clearAll();
+            store.namespace(Tine.Tinebase.tineInit.lsPrefix).clearAll();
         }
     },
 
