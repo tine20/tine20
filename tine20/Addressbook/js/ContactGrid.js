@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
- 
+
 Ext.ns('Tine.Addressbook');
 
 /**
@@ -173,6 +173,7 @@ Tine.Addressbook.ContactGridPanel.countryRenderer = function(data) {
     data = Locale.getTranslationData('CountryList', data);
     return Ext.util.Format.htmlEncode(data);
 };
+
 
 /**
  * Column renderer adb preferred_address field
