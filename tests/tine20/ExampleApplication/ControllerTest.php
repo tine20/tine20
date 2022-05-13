@@ -150,5 +150,27 @@ class ExampleApplication_ControllerTest extends ExampleApplication_TestCase
         static::assertSame($this->_personas['pwulf']->contact_id, $updatedRecord
             ->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE}
             ->{ExampleApplication_Model_OneToOne::FLD_ADB_RECORD});
+
+        // dependent record should be deleted when it is not a record 
+        $updatedRecord->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE} = '';
+        $updatedRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->update($updatedRecord);
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $expander->expand(new Tinebase_Record_RecordSet(ExampleApplication_Model_ExampleRecord::class, [$updatedRecord]));
+
+        static::assertNull($updatedRecord->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE});
+
+        // dependent record should be created again
+        $updatedRecord->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE} = new ExampleApplication_Model_OneToOne([
+            ExampleApplication_Model_OneToOne::FLD_EXAMPLE_RECORD => $updatedRecord->getId(),
+            ExampleApplication_Model_OneToOne::FLD_NAME => 'recreate test'
+        ]);
+
+        $updatedRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->update($updatedRecord);
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $expander->expand(new Tinebase_Record_RecordSet(ExampleApplication_Model_ExampleRecord::class, [$updatedRecord]));
+
+        static::assertSame('recreate test', $updatedRecord
+            ->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE}
+            ->{ExampleApplication_Model_OneToOne::FLD_NAME}, 'dependent record should be created again');
     }
 }

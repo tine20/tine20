@@ -14,8 +14,15 @@
 class ExampleApplication_Setup_Update_15 extends Setup_Update_Abstract
 {
     const RELEASE015_UPDATE000 = __CLASS__ . '::update000';
+    const RELEASE015_UPDATE001 = __CLASS__ . '::update001';
 
     static protected $_allUpdates = [
+        self::PRIO_NORMAL_APP_STRUCTURE       => [
+            self::RELEASE015_UPDATE001          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update001',
+            ],
+        ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE015_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
@@ -27,5 +34,14 @@ class ExampleApplication_Setup_Update_15 extends Setup_Update_Abstract
     public function update000()
     {
         $this->addApplicationUpdate('ExampleApplication', '15.0', self::RELEASE015_UPDATE000);
+    }
+    
+    public function update001()
+    {
+        $db = Tinebase_Core::getDb();
+        $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'example_onetoone SET deleted_time = "1970-01-01 00:00:00" WHERE deleted_time IS NULL');
+        
+        Setup_SchemaTool::updateSchema([ExampleApplication_Model_OneToOne::class]);
+        $this->addApplicationUpdate('ExampleApplication', '15.1', self::RELEASE015_UPDATE001);
     }
 }
