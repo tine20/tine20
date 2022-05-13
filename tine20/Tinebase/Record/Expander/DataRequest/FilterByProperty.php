@@ -13,11 +13,40 @@
 class Tinebase_Record_Expander_DataRequest_FilterByProperty extends Tinebase_Record_Expander_DataRequest
 {
     protected $property;
+    protected $additionalFilters;
+    protected $paging;
 
     public function __construct($prio, $controller, $property, $ids, $callback, $getDeleted = false)
     {
         $this->property = $property;
         parent::__construct($prio, $controller, $ids, $callback, $getDeleted);
+    }
+
+    public function setAdditionalFilter(?array $filters): self
+    {
+        $this->additionalFilters = $filters;
+        return $this;
+    }
+
+    public function setPaging(?Tinebase_Model_Pagination $page): self
+    {
+        if ($page && ($page->limit || $page->start)) {
+            throw new Tinebase_Exception_NotImplemented('yep, that\'s right, not implemented yet');
+        }
+        $this->paging = $page;
+        return $this;
+    }
+
+    public function getKey(): string
+    {
+        if (null === $this->additionalFilters && null === $this->paging) {
+            return parent::getKey();
+        }
+        return Tinebase_Helper::arrayHash(array_merge(
+            $this->additionalFilters ?: [],
+            $this->paging ? $this->paging->toArray() : [],
+            [parent::getKey()]
+        ));
     }
 
     public function getData()
@@ -33,14 +62,14 @@ class Tinebase_Record_Expander_DataRequest_FilterByProperty extends Tinebase_Rec
         $data = static::_getInstancesFromCache($model, $cacheKey, $this->ids, $this->_getDeleted);
 
         if (!empty($this->ids)) {
-            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, array_merge([
                 ['field' => $this->property, 'operator' => 'in', 'value' => $this->ids]
-            ]);
+            ], (array)$this->additionalFilters));
             if ($this->_getDeleted) {
                 $filter->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals',
                     Tinebase_Model_Filter_Bool::VALUE_NOTSET));
             }
-            $newRecords = $this->controller->search($filter);
+            $newRecords = $this->controller->search($filter, $this->paging);
             static::_addInstancesToCache($cacheKey, $newRecords, $this->_getDeleted);
             $data->mergeById($newRecords);
         }
