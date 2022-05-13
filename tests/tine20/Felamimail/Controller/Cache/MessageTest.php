@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR 
 /**
  * Test class for Felamimail_Controller_Cache_*
  */
-class Felamimail_Controller_Cache_MessageTest extends \PHPUnit\Framework\TestCase
+class Felamimail_Controller_Cache_MessageTest extends TestCase
 {
     /**
      * @var Felamimail_Controller_Cache_Message
@@ -93,7 +93,7 @@ class Felamimail_Controller_Cache_MessageTest extends \PHPUnit\Framework\TestCas
         $this->_emailTestClass = new Felamimail_Controller_MessageTest();
         $this->_emailTestClass->setup();
         
-        $this->_testUser   = Tinebase_Core::getUser();
+        $this->_testUser = Tinebase_Core::getUser();
     }
 
     /**
@@ -119,7 +119,7 @@ class Felamimail_Controller_Cache_MessageTest extends \PHPUnit\Framework\TestCas
         
         // reset user if changed
         if (is_object($this->_testUser) && Tinebase_Core::getUser()->getId() !== $this->_testUser->getId()) {
-            Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
+            Tinebase_Core::setUser($this->_testUser);
         }
     }
     
@@ -392,16 +392,23 @@ class Felamimail_Controller_Cache_MessageTest extends \PHPUnit\Framework\TestCas
      */
     public function testGetFolderStatusOfOtherUser()
     {
-        $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
-        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
-        Tinebase_Core::set(Tinebase_Core::USER, $sclever);
-        
         $filter = new Felamimail_Model_FolderFilter(array(
             array('field' => 'id', 'operator' => 'in', 'value' => array($this->_getFolder()->getId()))
         ));
-        $status = $this->_controller->getFolderStatus($filter);
+        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+        // fetch current folder status
+        Tinebase_Core::setUser($sclever);
+        $oldStatus = $this->_controller->getFolderStatus($filter);
 
-        $this->assertEquals(0, count($status), 'no folders should be found for update');
+        // switch back to test user and append new message
+        Tinebase_Core::setUser($this->_testUser);
+        $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
+
+        // fetch current folder status for sclever again
+        Tinebase_Core::setUser($sclever);
+        $status = $this->_controller->getFolderStatus($filter);
+        $this->assertEquals(count($oldStatus), count($status), 'no folders should be found for update: '
+            . print_r($status->toArray(), true));
     }
 
     public function testAddMessageToCache()
