@@ -39,14 +39,6 @@ class Tinebase_Record_Expander_DataRequest
         $this->_merged = true;
     }
 
-    public function getKey(): string
-    {
-        if (null === $this->controller) {
-            return 'null';
-        }
-        return get_class($this->controller);
-    }
-
     public function getData()
     {
         if ($this->_merged) {

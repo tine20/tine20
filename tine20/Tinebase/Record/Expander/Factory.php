@@ -56,10 +56,9 @@ class Tinebase_Record_Expander_Factory
                     $prio = Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_CONTAINER;
                 }
             case MCC::TYPE_RECORD:
-                if (isset($fieldDef[MCC::CONFIG][MCC::REF_ID_FIELD])) {
-                    $_definition['fieldDefConfig'] = $fieldDef[MCC::CONFIG];
-                    return new Tinebase_Record_Expander_RefIdProperty($propModel, $_property, $_definition,
-                        $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD, true);
+                if (isset($fieldDef[MCC::CONFIG][MCC::DEPENDENT_RECORDS]) && $fieldDef[MCC::CONFIG][MCC::DEPENDENT_RECORDS]) {
+                    return new Tinebase_Record_Expander_DependentRecordProperty($fieldDef, $propModel, $_property, $_definition,
+                        $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
                 }
                 return new Tinebase_Record_Expander_RecordProperty($propModel, $_property, $_definition, $_rootExpander,
                      $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
