@@ -13,10 +13,10 @@
     box-sizing: border-box;
     background-size: 11px;
     width: 17px;
-    height: 15px;
+    height: 18px;
     position: absolute;
     right: 0px;
-    top: 5px;
+    top: 4px;
 }
 
 .x-grid-editor .x-form-trigger.x-form-trigger-plugin {
