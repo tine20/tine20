@@ -7,7 +7,8 @@
  * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
- 
+
+import {preferredAddressRender} from '../../Addressbook/js/renderers'
 Ext.namespace('Tine.Crm');
 
 /**
@@ -60,14 +61,8 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             label: this.app.i18n._('Web'),
             dataField: 'url'
         }, {
-            label: this.app.i18n._('Street'),
-            dataField: 'adr_one_street'
-        }, {
-            label: this.app.i18n._('Postalcode'),
-            dataField: 'adr_one_postalcode'
-        }, {
-            label: this.app.i18n._('City'),
-            dataField: 'adr_one_locality'
+            label: this.app.i18n._('Address'),
+            dataField: 'adress'
         }];
         var labelMarkup = '<label class="x-form-item x-form-item-label">';
         
@@ -85,6 +80,9 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                             } else {
                                 a.push(labelMarkup + fields[j].label + ':</label> '  + Ext.util.Format.htmlEncode(data[fields[j].dataField]));
                             }
+                        }
+                        if(fields[j].dataField == 'adress') {
+                            a.push(labelMarkup + fields[j].label + ':</label> ' + preferredAddressRender(null, null, data));
                         }
                     }
                     a.push('');

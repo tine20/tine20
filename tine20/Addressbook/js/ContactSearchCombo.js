@@ -9,6 +9,7 @@
  *
  */
 
+import {preferredAddressRender} from './renderers'
 Ext.ns('Tine.Addressbook');
 
 /**
@@ -136,8 +137,7 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
                             '<td style="min-width: 20px;">{[Tine.Addressbook.ContactGridPanel.contactTypeRenderer(null, null, values)]}</td>',
                             '<td width="30%"><b>{[Tine.Addressbook.ContactGridPanel.displayNameRenderer(values.n_fileas)]}</b><br/>' +
                                 '{[Tine.Tinebase.EncodingHelper.encode(values.org_name)]}<br/>{[this.encode(values.org_unit)]}</td>',
-                            '<td width="25%">{[Tine.Tinebase.EncodingHelper.encode(values.adr_one_street)]}<br/>',
-                                '{[Tine.Tinebase.EncodingHelper.encode(values.adr_one_postalcode)]} {[this.encode(values.adr_one_locality)]}<br/>' +
+                            '<td width="25%">{[this.preferredAddressRender(null, null, values)]}<br/>' +
                                 '{[this.encode(values.email)]}</td>',
                             '<td width="25%">{[Tine.Tinebase.EncodingHelper.encode(values.tel_work)]}<br/>{[Tine.Tinebase.EncodingHelper.encode(values.tel_cell)]}</td>',
                             '<td width="50px">',
@@ -147,7 +147,8 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
                     '</table>',
                     '{[Tine.widgets.path.pathsRenderer(values.paths, this.getLastQuery())]}',
                 '</div></tpl>', {
-                    getLastQuery: this.getLastQuery.createDelegate(this)
+                    getLastQuery: this.getLastQuery.createDelegate(this),
+                    preferredAddressRender
                 }
             );
         }

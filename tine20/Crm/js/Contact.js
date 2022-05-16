@@ -8,7 +8,8 @@
  *
  * TODO         use Tine.widgets.grid.LinkGridPanel
  */
- 
+
+import {preferredAddressRender} from '../../Addressbook/js/renderers'
 Ext.ns('Tine.Crm.Contact');
 
 /**
@@ -228,17 +229,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         return formated_return;
                     }
                 },
-                {id:'contact_one', header: this.app.i18n._("Address"), dataIndex: 'adr_one_locality', width: 140, sortable: false, renderer: function(val, meta, record) {
-                        var adr_one_street     = Ext.isEmpty(record.data.adr_one_street) === false ? record.data.adr_one_street : ' ';
-                        var adr_one_postalcode = Ext.isEmpty(record.data.adr_one_postalcode) === false ? record.data.adr_one_postalcode : ' ';
-                        var adr_one_locality   = Ext.isEmpty(record.data.adr_one_locality) === false ? record.data.adr_one_locality : ' ';
-                        var formated_return =  
-                            Ext.util.Format.htmlEncode(adr_one_street) + '<br />' + 
-                            Ext.util.Format.htmlEncode(adr_one_postalcode) + ' ' + Ext.util.Format.htmlEncode(adr_one_locality);
-                    
-                        return formated_return;
-                    }
-                },
+                {id:'contact_one', header: this.app.i18n._("Address"), dataIndex: 'adr_one_locality', width: 140, sortable: false, renderer: preferredAddressRender},
                 {id:'tel_work', header: this.app.i18n._("Data"), dataIndex: 'tel_work', width: 140, sortable: false, renderer: function(val, meta, record) {
                         var translation = new Locale.Gettext();
                         translation.textdomain('Crm');
