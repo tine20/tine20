@@ -1466,6 +1466,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         foreach (['to', 'cc', 'bcc'] as $type) {
             if (isset($message->{$type})) {
                 foreach ($message->{$type} as $recipient) {
+                    $recipient = $recipient['email'] ?? $recipient;
                     $converted = Felamimail_Message::convertAddresses($recipient);
                     $emailAddresses = array_merge($emailAddresses, $converted);
                 }
