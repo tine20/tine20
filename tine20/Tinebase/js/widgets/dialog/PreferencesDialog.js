@@ -262,11 +262,14 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                 
                 // update registry
                 this.updateRegistry(Ext.util.JSON.decode(response.responseText).results);
-                
+
                 if (closeWindow) {
                     this.purgeListeners();
                     this.window.close();
                 }
+
+                // reload mainWindow
+                Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.common.reload();
             },
             failure: function (response) {
                 Ext.MessageBox.alert(i18n._('Errors'), i18n._('Saving of preferences failed.'));

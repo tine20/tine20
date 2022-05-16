@@ -6,6 +6,11 @@
  * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+// @see https://github.com/ericmorand/twing/issues/332
+// #if process.env.NODE_ENV !== 'unittest'
+import getTwingEnv from "twingEnv";
+// #endif
+
 Ext.ns('Tine.Calendar', 'Tine.Calendar.Model');
 
 /**
@@ -192,7 +197,21 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     },
 
     getTitle: function() {
-        return this.get('summary') + (this.hasPoll() ? '\u00A0\uFFFD' : '');
+        if (! this.constructor.titleTwing) {
+            const app = Tine.Tinebase.appMgr.get(this.appName);
+            const template = app.getRegistry().get('preferences').get('webEventTitleTemplate');
+            const twingEnv = getTwingEnv();
+            const loader = twingEnv.getLoader();
+
+            loader.setTemplate(
+                this.constructor.getPhpClassName() + 'Title',
+                app.i18n._hidden(template)
+            );
+
+            this.constructor.titleTwing = twingEnv;
+        }
+
+        return this.constructor.titleTwing.render(this.constructor.getPhpClassName() + 'Title', this.data) + (this.hasPoll() ? '\u00A0\uFFFD' : '');
     },
 
     isRescheduled: function (event) {
@@ -1038,8 +1057,7 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
 
     initData: function() {
         if (Tine.Tinebase.common.hasRight('manage', 'Calendar', 'resources')) {
-            var _ = window.lodash
-            account_grants = _.get(this, this.grantsPath, {});
+            const account_grants = _.get(this, this.grantsPath, {});
 
             _.assign(account_grants, {
                 'resourceInviteGrant': true,
