@@ -1203,6 +1203,45 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     }
 
     /**
+     * testSaveMessageWithMixedRecipients
+     *
+     */
+    public function testSaveMessageWithMixedRecipients()
+    {
+        $messageToSave = $this->_getMessageData();
+        $messageToSave['to'] = [
+            [
+                "email" => Tinebase_Core::getUser()->accountEmailAddress,
+                "name" => '',
+                "type" =>  '',
+                "n_fileas" => '',
+                "email_type" =>  '',
+                "record_id" => ''
+            ], 'test String <testString@mail.test>',
+            'test String 2 <testString2@mail.test>; test String 3 <testString3@mail.test>',
+            [
+                'email' => 'testArray@mail.test',
+                'name' => 'test'
+            ]
+        ];
+        $messageToSave['bcc'] = array('bccaddress@email.org', 'bccaddress2@email.org');
+
+        $this->_getFolder($this->_account->drafts_folder);
+        $this->_json->saveMessageInFolder($this->_account->drafts_folder, $messageToSave);
+        $this->_foldersToClear = array($this->_account->drafts_folder);
+
+        // check if message is in drafts folder and recipients are present
+        $message = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->drafts_folder);
+        self::assertEquals($messageToSave['subject'], $message['subject']);
+        self::assertEquals($messageToSave['to'][0]['email'], $message['to'][0], 'recipient not found');
+        self::assertEquals('teststring@mail.test', $message['to'][1], 'recipient not found');
+        self::assertEquals('teststring2@mail.test', $message['to'][2], 'recipient not found');
+        self::assertEquals('teststring3@mail.test', $message['to'][3], 'recipient not found');
+        self::assertEquals(2, count($message['bcc']), 'bcc recipient not found: ' . print_r($message, TRUE));
+        self::assertStringContainsString('bccaddress', $message['bcc'][0], 'bcc recipient not found');
+    }
+
+    /**
      * testSendReadingConfirmation
      *
      * @see 0007736: ask user before sending reading confirmation

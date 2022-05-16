@@ -854,7 +854,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
                 }
                 foreach ($recordData[$field] as $addresses) {
                     if (is_array($addresses)) {
-                        if (! empty($addresses['email']) && $addresses['type'] !== 'group') {
+                        if (! empty($addresses['email'])) {
                             $email = $addresses;
                         } else if (count($addresses) === 1) {
                             // the first element could be an email address
@@ -869,27 +869,23 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
                         $email = $addresses;
                     }
                     
-                    // todo: do we really want to support multi emails in a single field?
                     if (! is_array($email)) {
-                       if (substr_count($email, '@') > 1) {
-                           $delimiter = strpos($email,';') !== false ? ';' : ',';
-                           $recipients = array_merge($recipients, explode($delimiter, $email));
-                       } else {
-                           // single recipient
-                           $recipients[] =  $this->sanitizeMailAddress($email);
-                       }
-
-                        foreach ($recipients as $key => &$recipient) {
-                            // extract email address if name and address given
-                            if (preg_match('/(.*)<(.*)>/', $recipient, $matches) > 0) {
-                                $recipient = $this->sanitizeMailAddress($matches[2]);
-                            }
-                            if (empty($recipient)) {
-                                unset($recipients[$key]);
-                            }
-                            $recipient = trim($recipient);
+                        if (substr_count($email, '@') > 1) {
+                            $delimiter = strpos($email, ';') !== false ? ';' : ',';
+                            $emails = explode($delimiter, $email);
+                        } else {
+                            // single recipient
+                            $emails = [$email];
                         }
-                        unset($recipient);
+                        
+                       foreach ($emails as $email) {
+                           // extract email address if name and address given
+                           $converted = Felamimail_Message::convertAddresses($email);
+                           if (!empty($converted[0]['email'])) {
+                               $converted[0]['email'] = $this->sanitizeMailAddress($converted[0]['email']);
+                               $recipients[] = $converted[0];
+                           }
+                       }
                     } else {
                         $recipients[] = $email;
                     }

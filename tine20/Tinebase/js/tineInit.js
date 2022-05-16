@@ -1152,6 +1152,9 @@ Tine.Tinebase.tineInit = {
         Tine.log.info('tineInit::clearRegistry');
         if (Ext.isFunction(store.namespace)) {
             store.namespace(Tine.Tinebase.tineInit.lsPrefix).clearAll();
+            // FIXME need to call this twice - as the first clearAll does not clear everything
+            //       we should remove/replace the store lib ...
+            store.namespace(Tine.Tinebase.tineInit.lsPrefix).clearAll();
             await waitFor(() => {
                 return ! store.namespace(Tine.Tinebase.tineInit.lsPrefix).has('Tinebase.registry.version')
             });

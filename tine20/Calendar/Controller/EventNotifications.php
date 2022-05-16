@@ -734,6 +734,13 @@
         $converter->setMethod($method);
         $converter->setCalendarUser($attendee);
 
+        if ($event->isRecurException()) {
+            try {
+                $event = Calendar_Controller_Event::getInstance()->get($event->base_event_id);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+            }
+        }
         $vcalendar = $converter->fromTine20Model($event);
         
         foreach ($vcalendar->children() as $component) {
