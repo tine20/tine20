@@ -1,4 +1,4 @@
 <?php
 return [
-    'geoService' => false,
+    'useNominatimService' => false,
 ];
