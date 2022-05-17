@@ -27,6 +27,7 @@ parameters:
       analyse:
         - 'tine20/library'
         - 'tine20/vendor*'
+        - 'tests'
       analyseAndScan:
         # TODO fix problems with the following classes
         - 'tine20/Tinebase/User/Typo3.php'
