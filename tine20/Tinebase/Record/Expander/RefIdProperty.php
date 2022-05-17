@@ -6,7 +6,7 @@
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2020-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -26,45 +26,40 @@ class Tinebase_Record_Expander_RefIdProperty extends Tinebase_Record_Expander_Pr
         parent::__construct($_model, $_property, $_expanderDefinition, $_rootExpander, $_prio);
     }
 
-    // this is against the whole concept of expanders :-/ what can we do?!
     protected function _lookForDataToFetch(Tinebase_Record_RecordSet $_records)
     {
-        $dataFound = new Tinebase_Record_RecordSet($this->_model);
-        /** @var Tinebase_Controller_Record_Abstract $ctrl */
-        $ctrl = Tinebase_Core::getApplicationInstance($this->_model, '', true);
-        $filter = [['field' => $this->_mccCfg[MCC::REF_ID_FIELD], 'operator' => 'equals', 'value' => null]];
-        if (isset($this->_mccCfg[MCC::ADD_FILTERS])) {
-            $filter = array_merge($filter, $this->_mccCfg[MCC::ADD_FILTERS]);
-        }
-        foreach ($_records as $record) {
-            $filter[0]['value'] = $record->getId();
-            if ($this->_singleRecord) {
-                if (!$record->{$this->_property} instanceof Tinebase_Record_Interface) {
-                    $record->{$this->_property} = $ctrl->search(
-                        Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_model, $filter),
-                        isset($this->_mccCfg[MCC::PAGING]) ? new Tinebase_Model_Pagination($this->_mccCfg[MCC::PAGING]) :
-                            null)->getFirstRecord();
-                }
-                if ($record->{$this->_property} instanceof Tinebase_Record_Interface) {
-                    $dataFound->addRecord($record->{$this->_property});
-                }
-            } else {
-                if (!$record->{$this->_property} instanceof Tinebase_Record_RecordSet) {
-                    $record->{$this->_property} = $ctrl->search(
-                        Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_model, $filter),
-                        isset($this->_mccCfg[MCC::PAGING]) ? new Tinebase_Model_Pagination($this->_mccCfg[MCC::PAGING]) :
-                            null);
-                }
-                $dataFound->mergeById($record->{$this->_property});
-            }
-        }
-
-        if ($dataFound->count() > 0) {
-            $this->expand($dataFound);
+        $this->_addRecordsToProcess($_records);
+        $ids = $_records->getArrayOfIds();
+        if (!empty($ids)) {
+            $self = $this; // we should do weak refs here to avoid circular references -> memory leak. ... this is one!
+            $this->_rootExpander->_registerDataToFetch((new Tinebase_Record_Expander_DataRequest_FilterByProperty(
+                $this->_prio, Tinebase_Core::getApplicationInstance($this->_mccCfg[MCC::RECORD_CLASS_NAME], '', true),
+                $this->_mccCfg[MCC::REF_ID_FIELD], $ids,
+                // workaround: [$this, '_setData'] doesn't work, even so it should!
+                function($_data) use($self) {$self->_setData($_data);}, $this->_getDeleted))
+                ->setAdditionalFilter(isset($this->_mccCfg[MCC::ADD_FILTERS]) ? $this->_mccCfg[MCC::ADD_FILTERS] : null)
+                ->setPaging(isset($this->_mccCfg[MCC::PAGING]) ? new Tinebase_Model_Pagination($this->_mccCfg[MCC::PAGING]) : null)
+                ->setFilterOptions(isset($this->_mccCfg[MCC::FILTER_OPTIONS]) ? $this->_mccCfg[MCC::FILTER_OPTIONS] : null)
+            );
         }
     }
 
     protected function _setData(Tinebase_Record_RecordSet $_data)
     {
+       $expandData = new Tinebase_Record_RecordSet($_data->getRecordClassName());
+
+        /** @var Tinebase_Record_Abstract $record */
+        foreach ($this->_recordsToProcess as $record) {
+            if (($record->{$this->_property} =
+                    $_data->filter($this->_mccCfg[MCC::REF_ID_FIELD], $record->getId()))->count() > 0) {
+                $expandData->mergeById($record->{$this->_property});
+            }
+            if ($this->_singleRecord) {
+                $record->{$this->_property} = $record->{$this->_property}->getFirstRecord();
+            }
+        }
+
+        // TODO we should delay this expanding until the current run of \Tinebase_Record_Expander::_fetchData finished!
+        $this->expand($expandData);
     }
 }

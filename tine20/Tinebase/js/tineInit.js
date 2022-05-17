@@ -373,7 +373,7 @@ Tine.Tinebase.tineInit = {
         });
     
         let items = [];
-        if (type === 'group' || type ===  'mailingList') {
+        if (type === 'group' || type ===  'mailingList' || type ===  'list') {
             items = await this.getListContextMenuItems(email, name);
         } else {
             items = await this.getContactContextMenuItems(target, email, name);
@@ -441,8 +441,8 @@ Tine.Tinebase.tineInit = {
         if (name && name !== '') {
             filters.push({
                 condition: "OR", filters: [
-                    {field: 'n_fn', operator: 'equals', value: name},
-                    {field: 'n_fileas', operator: 'equals', value: name}
+                    {field: 'n_fn', operator: 'contains', value: name},
+                    {field: 'n_fileas', operator: 'contains', value: name}
                 ]
             });
         }

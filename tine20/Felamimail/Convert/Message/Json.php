@@ -129,7 +129,7 @@ class Felamimail_Convert_Message_Json extends Tinebase_Convert_Json
                     
                     $possibleAddresses = Addressbook_Controller_Contact::getInstance()->getContactsRecipientToken($contacts);
                     foreach ($possibleAddresses as $possibleAddress) {
-                        if ($parsedEmail['address'] === $possibleAddress['email']) {
+                        if ($parsedEmail['address'] === $possibleAddress['email'] && $parsedEmail['name'] === $possibleAddress['n_fileas']) {
                             $address = $possibleAddress;
                         }
                     }

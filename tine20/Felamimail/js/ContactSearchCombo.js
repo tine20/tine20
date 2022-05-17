@@ -192,7 +192,12 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
                 tip = 'System Group';
                 iconClass = 'Group';
                 break;
+            case 'list':
+                tip = 'Group';
+                iconClass = 'List';
+                break;
             case 'groupMember':
+            case 'listMember':
                 tip = 'Group Member';
                 iconClass = 'GroupMember';
                 break;
