@@ -1865,6 +1865,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         foreach ($idsToDelete as $id) {
             $cache->remove($id);
         }
+
+        // also clear all entries tagged with this container_ID
+        $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, ['container_' . $containerId]);
         
         $this->resetClassCache();
     }

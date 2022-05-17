@@ -4,7 +4,7 @@
  *
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -92,6 +92,25 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals($timeaccountData['id'], $timeaccountUpdated['id']);
         $this->assertEquals($timeaccountData['description'], $timeaccountUpdated['description']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timeaccountUpdated['last_modified_by']['accountId']);
+
+        // cleanup
+        $this->_json->deleteTimeaccounts($timeaccountData['id']);
+    }
+
+    /**
+     * try to update a Timeaccount - only grants
+     */
+    public function testUpdateTimeaccountGrants()
+    {
+        $timeaccount = $this->_getTimeaccount();
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
+
+        // update Timeaccount
+        $timeaccountData['grants'] = array_merge($timeaccountData['grants'], $this->_getGrants());;
+        $timeaccountUpdated = $this->_json->saveTimeaccount($timeaccountData);
+
+        // check
+        self::assertcount(2, $timeaccountUpdated['grants'], 'grants have not been updated');
 
         // cleanup
         $this->_json->deleteTimeaccounts($timeaccountData['id']);
