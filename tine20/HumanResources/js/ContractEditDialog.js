@@ -62,12 +62,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     initComponent: function() {
         Tine.HumanResources.ContractEditDialog.superclass.initComponent.call(this);
     },
-    
-    /**
-     * executed after record got updated from proxy, if json Data is given, it's used
-     * 
-     * @private
-     */
+
     onRecordLoad: function() {
         // interrupt process flow until dialog is rendered
         if (! this.rendered) {
