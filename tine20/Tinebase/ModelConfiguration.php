@@ -1652,7 +1652,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 break;
             case 'user':
                 $fieldDef['config'] = array(
-                    'refIdField'              => 'id',
                     'length'                  => 40,
                     'appName'                 => 'Tinebase',
                     'modelName'               => 'User',
