@@ -6,7 +6,7 @@
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -76,18 +76,14 @@ class Tinebase_Record_Expander extends Tinebase_Record_Expander_Abstract
 
     protected function _registerDataToFetch(Tinebase_Record_Expander_DataRequest $_dataRequest)
     {
-        if (null === $_dataRequest->controller) {
-            $cClass = 'null';
-        } else {
-            $cClass = get_class($_dataRequest->controller);
-        }
+        $key = $_dataRequest->getKey();
         if (!isset($this->_dataToFetch[$_dataRequest->prio])) {
             $this->_dataToFetch[$_dataRequest->prio] = [];
         }
-        if (!isset($this->_dataToFetch[$_dataRequest->prio][$cClass])) {
-            $this->_dataToFetch[$_dataRequest->prio][$cClass] = [];
+        if (!isset($this->_dataToFetch[$_dataRequest->prio][$key])) {
+            $this->_dataToFetch[$_dataRequest->prio][$key] = [];
         }
-        $this->_dataToFetch[$_dataRequest->prio][$cClass][] = $_dataRequest;
+        $this->_dataToFetch[$_dataRequest->prio][$key][] = $_dataRequest;
     }
 
     protected function _lookForDataToFetch(Tinebase_Record_RecordSet $_records)
