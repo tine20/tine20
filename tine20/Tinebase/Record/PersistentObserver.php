@@ -112,7 +112,13 @@ class Tinebase_Record_PersistentObserver
 
                 /** @var Tinebase_Controller_Record_Abstract $controller */
                 if (!isset($this->_controllerCache[$observer->observer_model])) {
-                    $controller = Tinebase_Core::getApplicationInstance($observer->observer_model, '', true);
+                    try {
+                        $controller = Tinebase_Core::getApplicationInstance($observer->observer_model, '', true);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' ' . $tenf->getMessage());
+                        continue;
+                    }
                     $this->_controllerCache[$observer->observer_model] = $controller;
                 } else {
                     $controller = $this->_controllerCache[$observer->observer_model];
