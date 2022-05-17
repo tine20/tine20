@@ -107,6 +107,8 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      */
     const FIXED_CALENDARS = 'fixedCalendars';
 
+    const WEB_EVENT_TITLE_TEMPLATE = 'webEventTitleTemplate';
+
     /**
      * @var string application
      */
@@ -127,6 +129,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DAYSVIEW_TIME_VISIBLE,
             self::DEFAULTCALENDAR,
             self::DEFAULTPERSISTENTFILTER,
+            self:: WEB_EVENT_TITLE_TEMPLATE,
             self::NOTIFICATION_LEVEL,
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS,
             self::SEND_NOTIFICATION_FOR_TENTATIVE,
@@ -183,6 +186,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 'label'         => $translate->_('Default Favorite'),
                 'description'   => $translate->_('The default favorite which is loaded on calendar startup'),
             ),
+            self:: WEB_EVENT_TITLE_TEMPLATE => [
+                'label'         => $translate->_('Web Event Title Template'),
+                'description'   => $translate->_('How to build event titles in web ui.'),
+            ],
             self::NOTIFICATION_LEVEL => array(
                 'label'         => $translate->_('Get Notification Emails'),
                 'description'   => $translate->_('The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to "Never"'),
@@ -308,6 +315,36 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 break;
             case self::DEFAULTPERSISTENTFILTER:
                 $preference->value          = Tinebase_PersistentFilter::getPreferenceValues('Calendar', $_accountId, "All my events");
+                break;
+            case self:: WEB_EVENT_TITLE_TEMPLATE:
+                $translate = Tinebase_Translation::getTranslation($this->_application);
+                $preference->value      = '{{ summary }}';
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <option>
+                            <value>{{ summary }}</value>
+                            <label>'. $translate->_('Summary') . '</label>
+                        </option>
+                        <option>
+                            <value>{{ summary }} - {{ organizer.n_fileas }}</value>
+                            <label>'. $translate->_('Summary - Organizer') . '</label>
+                        </option>
+                        <option>
+                            <value>{{ summary }}
+{{ description }}</value>
+                            <label>'. $translate->_('Summary ⏎ Description') . '</label>
+                        </option>
+                        <option>
+                            <value>{{ summary }} - {{ location }}</value>
+                            <label>'. $translate->_('Summary - Location') . '</label>
+                        </option>
+                        <option>
+                            <value>{{ summary }}
+{{ organizer.n_fileas }}
+{{ location }}</value>
+                            <label>'. $translate->_('Summary ⏎ Organizer ⏎ Location') . '</label>
+                        </option>
+                    </options>';
                 break;
             case self::NOTIFICATION_LEVEL:
                 $translate = Tinebase_Translation::getTranslation($this->_application);
