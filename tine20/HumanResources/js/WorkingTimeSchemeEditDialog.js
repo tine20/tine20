@@ -46,16 +46,11 @@ Tine.HumanResources.WorkingTimeSchemeEditDialog = Ext.extend(Tine.widgets.dialog
         this.recordClass = Tine.HumanResources.Model.WorkingTimeScheme;
         Tine.HumanResources.WorkingTimeSchemeEditDialog.superclass.initComponent.call(this);
     },
-    
-    /**
-     * executed after record got updated from proxy, if json Data is given, it's used
-     * 
-     * @private
-     */
-    onRecordLoad: function(jsonData) {
+
+    onRecordLoad: function() {
         Tine.HumanResources.WorkingTimeSchemeEditDialog.superclass.onRecordLoad.call(this);
         
-        var jsonData = jsonData || this.record.get('json') || null;
+        var jsonData = this.record.get('json') || null;
         if (Ext.isString(jsonData)) {
             jsonData = Ext.decode(jsonData);
         }
