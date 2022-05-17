@@ -2718,6 +2718,25 @@ Steuernummer 33/111/32212";
     }
 
     /**
+     * test with maillinglist
+     */
+    public function testSearchEmailAddresssGroup()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+
+        $list = $this->testCreateListWithMemberAndRole();
+        
+        $result = $this->_uit->searchEmailAddresss([
+            ["condition" => "OR", "filters" => [["condition" => "AND", "filters" => [
+                ["field" => "name_email_query", "operator" => "contains", "value" => $list['name']]
+            ]], ["field" => "path", "operator" => "contains", "value" => ""]]]
+        ], ["sort" => "name", "dir" => "ASC", "start" => 0, "limit" => 50]);
+
+        static::assertEquals(1, $result['totalcount'], 'no results found');
+        static::assertEquals($list['email'], $result['results'][0]['email']);
+    }
+
+    /**
      * testSaveContactWithAreaLockedRelation
      */
     public function testSaveContactWithAreaLockedRelation()

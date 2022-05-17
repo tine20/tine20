@@ -432,7 +432,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         const contact = value.data ?? '';
         let recipients = [contact];
         
-        if (contact?.type === 'group') {
+        if (contact?.email === '' && (contact?.type === 'group' || contact?.type === 'list')) {
             recipients = await this.resolveGroupContact(contact);
         }
         
@@ -492,46 +492,58 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         
         const contactCtxMenu = await Tine.Tinebase.tineInit.getEmailContextMenu(targetInput, contact.email, contact.name, contact.type);
-        let index = 0;
-        
-        switch (contact.type) {
-            case 'mailingList':
-                const item = new Ext.Action({
-                    text: app.i18n._('Resolve to single contact'),
-                    iconCls: '',
-                    handler: async (item) => {
-                        const contacts = await this.resolveGroupContact(contact);
-                        await this.updateRecipientsToken(record, contacts, record.get('type'), true);
-                    },
-                });
-    
-                contactCtxMenu.insert(index, item);
-                index ++;
-                break;
-            default :
-                const {results : contacts} = await Tine.Addressbook.searchContactsByRecipientsToken([contact]);
-                
-                _.each(contacts, (emailData) => {
-                    const selected = emailData.email === contact.email;
-                    const emailItem = new Ext.Action({
-                        text: `[${emailData.email_type}] -- ${emailData.email}`,
-                        iconCls: selected ? 'action_enable' : '',
+
+        const adb = Tine.Tinebase.appMgr.get('Addressbook');
+        if (adb) {
+            let index = 0;
+            switch (contact.type) {
+                case 'mailingList':
+                case 'group':
+                case 'list':
+                    const item = new Ext.Action({
+                        text: app.i18n._('Resolve to single contact'),
+                        iconCls: '',
                         handler: async (item) => {
-                            if (! selected) {
-                                const newSelectedContact = _.find(contacts, (contact) => {return item.text.includes(contact.email)});
-                                await this.updateRecipientsToken(record, [newSelectedContact], record.get('type'));
-                            }
+                            const contacts = await this.resolveGroupContact(contact);
+                            await this.updateRecipientsToken(record, contacts, record.get('type'), true);
                         },
                     });
-    
-                    contactCtxMenu.insert(index, emailItem);
+                    contactCtxMenu.insert(index, item);
                     index ++;
-                });
-                break;
-        }
-    
-        if (index > 0) {
-            contactCtxMenu.insert(index, '-');
+                    break;
+                default :
+                    const {results : contacts} = await Tine.Addressbook.searchContactsByRecipientsToken([contact]);
+                    const options = [];
+                    _.each(contacts, (emailData) => {
+                        const selected = emailData.email === contact.email;
+                        const emailType = emailData?.email_type === 'email' ? adb.i18n._('E-Mail') : adb.i18n._('E-Mail (private)');
+                        const displayTitle = `${emailType} -- ${emailData.email}`;
+                        
+                        if (options.includes(displayTitle)) {
+                            return;
+                        }
+                        
+                        const emailItem = new Ext.Action({
+                            text: displayTitle,
+                            iconCls: selected ? 'action_enable' : '',
+                            handler: async (item) => {
+                                if (! selected) {
+                                    const newSelectedContact = _.find(contacts, (contact) => {return item.text.includes(contact.email)});
+                                    await this.updateRecipientsToken(record, [newSelectedContact], record.get('type'));
+                                }
+                            },
+                        });
+                
+                        contactCtxMenu.insert(index, emailItem);
+                        options.push(displayTitle);
+                        index ++;
+                    });
+                    break;
+            }
+            
+            if (index > 0) {
+                contactCtxMenu.insert(index, '-');
+            }
         }
         
         contactCtxMenu.addMenuItem(this.action_remove);
@@ -551,7 +563,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             return recipients;
         }
         
-        if(contact.type === 'group' || contact.type === 'mailingList') {
+        if(contact.type === 'group' || contact.type === 'mailingList' || contact.type === 'list') {
             if (contact.name !== '' || contact.email !== '') {
                 const {results: contacts} = await Tine.Addressbook.searchContactsByRecipientsToken([contact]);
                 const group = contact;
