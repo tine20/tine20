@@ -127,8 +127,16 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
         $field = $db->quoteIdentifier('timeaccount_id');
         $where = $db->quoteInto("$field IN (?)", empty($this->_validTimeaccounts) ? array('') : $this->_validTimeaccounts);
         
-        // get timeaccounts with BOOK_OWN right (get only if no manual filter is set)
-        $bookOwnTS = Timetracker_Controller_Timeaccount::getInstance()->getRecordsByAcl(Timetracker_Model_TimeaccountGrants::BOOK_OWN, TRUE);
+        // get timeaccounts with *_OWN right
+        $bookOwnTS = [];
+        foreach ([
+                    Timetracker_Model_TimeaccountGrants::BOOK_OWN,
+                    Timetracker_Model_TimeaccountGrants::READ_OWN,
+                    Timetracker_Model_TimeaccountGrants::REQUEST_OWN,
+                ] as $grant) {
+            $bookOwnTS = array_merge($bookOwnTS, Timetracker_Controller_Timeaccount::getInstance()->getRecordsByAcl($grant, true));
+        }
+        $bookOwnTS = array_unique($bookOwnTS);
         if (! empty($bookOwnTS)) {
             $where .= ' OR (' . $db->quoteInto($field . ' IN (?)', $bookOwnTS)
                 . ' AND ' . $db->quoteInto($db->quoteIdentifier('account_id'). ' = ?', Tinebase_Core::getUser()->getId()) .')';

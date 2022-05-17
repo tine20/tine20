@@ -269,20 +269,29 @@ class Timetracker_ControllerTest extends TestCase
     }
     
     /**
-     * test to search TAs (view_all)
-     *
+     * test to search TAs
      */
     public function testSearchTA()
     {
         Tinebase_Core::setUser($this->_personas['jmcblack']);
 
-        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
-            'account_id'    => Tinebase_Core::getUser()->getId(),
-            'account_type'  => 'user',
-            Timetracker_Model_TimeaccountGrants::VIEW_ALL      => TRUE,
-        )));
-        
-        $this->_grantTestHelper($grants, 'searchTA', 1);
+        foreach ([
+                     Timetracker_Model_TimeaccountGrants::BOOK_ALL,
+                     Timetracker_Model_TimeaccountGrants::BOOK_OWN,
+                     Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE,
+                     Timetracker_Model_TimeaccountGrants::READ_OWN,
+                     Timetracker_Model_TimeaccountGrants::REQUEST_OWN,
+                     Timetracker_Model_TimeaccountGrants::VIEW_ALL,
+                     Tinebase_Model_Grants::GRANT_ADMIN,
+                 ] as $grant) {
+            $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+                'account_id' => Tinebase_Core::getUser()->getId(),
+                'account_type' => 'user',
+                $grant => TRUE,
+            )));
+
+            $this->_grantTestHelper($grants, 'searchTA', 1);
+        }
     }
 
     /**
@@ -302,25 +311,7 @@ class Timetracker_ControllerTest extends TestCase
     }
 
     /**
-     * test to search TAs (book_own)
-     *
-     */
-    public function testSearchTABookable()
-    {
-        Tinebase_Core::setUser($this->_personas['jmcblack']);
-
-        $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
-            'account_id'    => Tinebase_Core::getUser()->getId(),
-            'account_type'  => 'user',
-            Timetracker_Model_TimeaccountGrants::BOOK_OWN      => TRUE,            
-        )));
-        
-        $this->_grantTestHelper($grants, 'search_bookable', 1);
-    }
-
-    /**
      * test to search TSs (view_all)
-     *
      */
     public function testSearchTS()
     {
@@ -344,6 +335,175 @@ class Timetracker_ControllerTest extends TestCase
 
         $result = $this->_timesheetController->search($filter)->toArray();
         $this->assertArrayHasKey('is_billable_combined', $result[0]);
+    }
+
+    public function testSearchOwnTSNoGrant()
+    {
+        $this->_objects['timesheet']['account_id'] = $this->_personas['jmcblack']->getId();
+        $ts = $this->_timesheetController->create($this->_objects['timesheet']);
+
+        $this->_timeaccountController->setGrants(
+            $this->_objects['timeaccount'],
+            new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+                'account_id'    => $this->_personas['jmcblack']->getId(),
+                'account_type'  => 'user',
+            ))),
+            true
+        );
+
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
+
+        $result = $this->_timesheetController->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Timetracker_Model_Timesheet::class, [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $ts->getId()],
+        ]));
+        $this->assertSame(0, $result->count());
+    }
+
+    public function testSearchOwnTS()
+    {
+        $this->_objects['timesheet']['account_id'] = $this->_personas['jmcblack']->getId();
+        $ts = null;
+
+        foreach ([
+                     Timetracker_Model_TimeaccountGrants::BOOK_ALL,
+                     Timetracker_Model_TimeaccountGrants::BOOK_OWN,
+                     Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE,
+                     Timetracker_Model_TimeaccountGrants::READ_OWN,
+                     Timetracker_Model_TimeaccountGrants::REQUEST_OWN,
+                     Timetracker_Model_TimeaccountGrants::VIEW_ALL,
+                     Tinebase_Model_Grants::GRANT_ADMIN,
+                 ] as $grant) {
+            Tinebase_Core::setUser($this->_originalTestUser);
+            $this->_timeaccountController->setGrants(
+                $this->_objects['timeaccount'],
+                new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+                    'account_id' => $this->_originalTestUser->getId(),
+                    'account_type' => 'user',
+                    Tinebase_Model_Grants::GRANT_ADMIN => true,
+                ))),
+                true
+            );
+            if (null !== $ts) {
+                $this->_timesheetController->delete($ts);
+                $this->_objects['timesheet']->setId(null);
+            }
+
+            $ts = $this->_timesheetController->create($this->_objects['timesheet']);
+
+            $this->_timeaccountController->setGrants(
+                $this->_objects['timeaccount'],
+                new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+                    'account_id' => $this->_personas['jmcblack']->getId(),
+                    'account_type' => 'user',
+                    $grant => true,
+                ))),
+                true
+            );
+
+            Tinebase_Core::setUser($this->_personas['jmcblack']);
+
+            $result = $this->_timesheetController->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                Timetracker_Model_Timesheet::class, [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $ts->getId()],
+            ]));
+            $this->assertSame(1, $result->count(), 'grant fail for: ' . $grant);
+        }
+    }
+
+    public function testSearchOtherTSNoFind()
+    {
+        $this->_objects['timesheet']['account_id'] = $this->_personas['sclever']->getId();
+        $ts = null;
+
+        foreach ([
+                     Timetracker_Model_TimeaccountGrants::BOOK_OWN,
+                     Timetracker_Model_TimeaccountGrants::READ_OWN,
+                     Timetracker_Model_TimeaccountGrants::REQUEST_OWN,
+                 ] as $grant) {
+            Tinebase_Core::setUser($this->_originalTestUser);
+            $this->_timeaccountController->setGrants(
+                $this->_objects['timeaccount'],
+                new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+                    'account_id' => $this->_originalTestUser->getId(),
+                    'account_type' => 'user',
+                    Tinebase_Model_Grants::GRANT_ADMIN => true,
+                ))),
+                true
+            );
+            if (null !== $ts) {
+                $this->_timesheetController->delete($ts);
+                $this->_objects['timesheet']->setId(null);
+            }
+
+            $ts = $this->_timesheetController->create($this->_objects['timesheet']);
+
+            $this->_timeaccountController->setGrants(
+                $this->_objects['timeaccount'],
+                new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+                    'account_id' => $this->_personas['jmcblack']->getId(),
+                    'account_type' => 'user',
+                    $grant => true,
+                ))),
+                true
+            );
+
+            Tinebase_Core::setUser($this->_personas['jmcblack']);
+
+            $result = $this->_timesheetController->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                Timetracker_Model_Timesheet::class, [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $ts->getId()],
+            ]));
+            $this->assertSame(0, $result->count(), 'grant fail for: ' . $grant);
+        }
+    }
+
+    public function testSearchOtherTSFind()
+    {
+        $this->_objects['timesheet']['account_id'] = $this->_personas['sclever']->getId();
+        $ts = null;
+
+        foreach ([
+                     Timetracker_Model_TimeaccountGrants::BOOK_ALL,
+                     Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE,
+                     Timetracker_Model_TimeaccountGrants::VIEW_ALL,
+                     Tinebase_Model_Grants::GRANT_ADMIN,
+                 ] as $grant) {
+            Tinebase_Core::setUser($this->_originalTestUser);
+            $this->_timeaccountController->setGrants(
+                $this->_objects['timeaccount'],
+                new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+                    'account_id' => $this->_originalTestUser->getId(),
+                    'account_type' => 'user',
+                    Tinebase_Model_Grants::GRANT_ADMIN => true,
+                ))),
+                true
+            );
+            if (null !== $ts) {
+                $this->_timesheetController->delete($ts);
+                $this->_objects['timesheet']->setId(null);
+            }
+
+            $ts = $this->_timesheetController->create($this->_objects['timesheet']);
+
+            $this->_timeaccountController->setGrants(
+                $this->_objects['timeaccount'],
+                new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
+                    'account_id' => $this->_personas['jmcblack']->getId(),
+                    'account_type' => 'user',
+                    $grant => true,
+                ))),
+                true
+            );
+
+            Tinebase_Core::setUser($this->_personas['jmcblack']);
+
+            $result = $this->_timesheetController->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                Timetracker_Model_Timesheet::class, [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $ts->getId()],
+            ]));
+            $this->assertSame(1, $result->count(), 'grant fail for: ' . $grant);
+        }
     }
 
     /**
