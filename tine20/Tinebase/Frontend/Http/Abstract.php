@@ -49,7 +49,8 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' in format ' . $format .
+            __METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' (' . get_class($export) . ')'
+                . ' in format ' . $format .
             ' / options: ' . print_r($_options, TRUE)
         );
 
