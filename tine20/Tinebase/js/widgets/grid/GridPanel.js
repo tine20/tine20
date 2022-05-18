@@ -209,6 +209,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     autoRefreshInterval: 300,
 
     /**
+     * @cfg {Boolean} listen for message bus updates
+     */
+    listenMessageBus: true,
+
+    /**
      * @cfg {Boolean} hasFavoritesPanel 
      */
     hasFavoritesPanel: true,
