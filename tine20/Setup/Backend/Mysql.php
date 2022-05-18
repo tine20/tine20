@@ -431,7 +431,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     /**
      * Backup Database
      *
-     * @param $option
+     * @param array $option
      */
     public function backup($option)
     {
@@ -439,31 +439,36 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
 
         // hide password from shell via my.cnf
         $mycnf = $backupDir . '/my.cnf';
-        $this->createMyConf($mycnf, $this->_config->database);
+        $dbName = $this->_config->database->dbname;
 
-        $ignoreTables = '';
-        if (count($option['structTables']) > 0) {
-            $structDump = 'mysqldump --defaults-extra-file=' . $mycnf . ' --no-data --no-tablespaces ' .
-                escapeshellarg($this->_config->database->dbname);
-            foreach($option['structTables'] as $table) {
-                $structDump .= ' ' . escapeshellarg($table);
-                $ignoreTables .= '--ignore-table=' . escapeshellarg($this->_config->database->dbname . '.' . $table) . ' ';
+        try {
+            $this->createMyConf($mycnf, $this->_config->database);
+
+            $ignoreTables = '';
+            if (count($option['structTables']) > 0) {
+                $structDump = 'mysqldump --defaults-extra-file=' . $mycnf . ' --no-data --no-tablespaces ' .
+                    escapeshellarg($dbName);
+                foreach ($option['structTables'] as $table) {
+                    $structDump .= ' ' . escapeshellarg($table);
+                    $ignoreTables .= '--ignore-table=' . escapeshellarg($dbName . '.' . $table) . ' ';
+                }
+            } else {
+                $structDump = false;
             }
-        } else {
-            $structDump = false;
+
+            $cmd = ($structDump !== false ? '{ ' : '')
+                . 'mysqldump --defaults-extra-file=$mycnf'
+                . ' ' . $ignoreTables
+                . ' --single-transaction --max_allowed_packet=512M'
+                . ' --opt --no-tablespaces --default-character-set=utf8mb4'
+                . ' ' . escapeshellarg($dbName)
+                . ($structDump !== false ? '; ' . $structDump . '; }' : '')
+                . ' | bzip2 > $backupDir/tine20_mysql.sql.bz2';
+
+            exec($cmd);
+        } finally {
+            unlink($mycnf);
         }
-
-        $cmd = ($structDump!==false?'{ ':'')
-              ."mysqldump --defaults-extra-file=$mycnf "
-              .$ignoreTables
-              ."--single-transaction --max_allowed_packet=512M "
-              ."--opt --no-tablespaces "
-              . escapeshellarg($this->_config->database->dbname)
-              . ($structDump!==false?'; ' . $structDump . '; }':'')
-              ." | bzip2 > $backupDir/tine20_mysql.sql.bz2";
-
-        exec($cmd);
-        unlink($mycnf);
 
         if (! $option['novalidate']) {
             // validate all tables have been dumped
