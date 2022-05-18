@@ -106,11 +106,11 @@ class HumanResources_Model_DivisionGrants extends Tinebase_Model_Grants
             ],
             self::CREATE_CHANGE_REQUEST => [
                 self::LABEL         => 'Create change requests', // _('Create change requests')
-                self::DESCRIPTION   => 'The grant to create free times and working time reports change requests and see basic employee, contract and account data for all employees in this division.', // _('The grant to create free times and working time reports change requests for all employees in this division.')
+                self::DESCRIPTION   => 'The grant to create free times and working time reports change requests for all employees in this division (implies read of basic employee, contract and account data).', // _('The grant to create free times and working time reports change requests for all employees in this division (implies read of basic employee, contract and account data).')
             ],
             self::UPDATE_CHANGE_REQUEST => [
                 self::LABEL         => 'Update change requests', // _('Update change requests')
-                self::DESCRIPTION   => 'The grant to update free times and working time reports change requests and see basic employee, contract and account data for all employees in this division.', // _('The grant to update free times and working time reports change requests for all employees in this division.')
+                self::DESCRIPTION   => 'The grant to update free times and working time reports change requests for all employees in this division (implies read of basic employee, contract and account data).', // _('The grant to update free times and working time reports change requests for all employees in this division (implies read of basic employee, contract and account data).')
             ],
             self::GRANT_ADMIN => [
                 self::LABEL         => 'Admin', // _('Admin')
