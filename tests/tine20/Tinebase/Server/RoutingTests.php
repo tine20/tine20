@@ -27,6 +27,10 @@ class Tinebase_Server_RoutingTests extends TestCase
      */
     public function testExampleApplicationPublicTestRoute()
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('ExampleApplication')) {
+            self::markTestSkipped('Test needs ExampleApplication');
+        }
+
         Tinebase_Application::getInstance()->setApplicationStatus(Tinebase_Application::getInstance()
             ->getApplicationByName('ExampleApplication'), Tinebase_Application::ENABLED);
 
@@ -65,6 +69,10 @@ class Tinebase_Server_RoutingTests extends TestCase
      */
     public function testExampleApplicationAuthTestRoute()
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('ExampleApplication')) {
+            self::markTestSkipped('Test needs ExampleApplication');
+        }
+
         Tinebase_Application::getInstance()->setApplicationStatus(Tinebase_Application::getInstance()
             ->getApplicationByName('ExampleApplication'), Tinebase_Application::ENABLED);
 
