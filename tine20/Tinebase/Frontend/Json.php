@@ -1627,7 +1627,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Tinebase_Model_AuthToken::class, [
                 ['field' => Tinebase_Model_AuthToken::FLD_AUTH_TOKEN, 'operator' => 'equals', 'value' => $token]
             ]
-        ))->getFirstRecord();
+        ))->filter(Tinebase_Model_AuthToken::FLD_AUTH_TOKEN, $token,)->getFirstRecord();
 
         if ($t && in_array($channel, $t->{Tinebase_Model_AuthToken::FLD_CHANNELS})) {
             return $t->toArray();
