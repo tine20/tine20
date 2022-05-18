@@ -319,11 +319,6 @@ class Tinebase_ApplicationTest extends TestCase
                 Crm_Model_LeadState::class,
                 Crm_Model_LeadType::class,
             ),
-            'ExampleApplication' => array(
-                ExampleApplication_Model_ExampleRecord::class,
-                ExampleApplication_Model_OneToOne::class,
-                ExampleApplication_Model_Status::class,
-            ),
             'Felamimail' => array(
                 Felamimail_Model_Account::class,
                 Felamimail_Model_AccountGrants::class,
@@ -599,6 +594,10 @@ class Tinebase_ApplicationTest extends TestCase
 
     public function testInstallApplicationWithId()
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('ExampleApplication')) {
+            self::markTestSkipped('Test needs ExampleApplication');
+        }
+
         $this->_testNeedsTransaction();
 
         Setup_Core::set(Setup_Core::CHECKDB, true);
