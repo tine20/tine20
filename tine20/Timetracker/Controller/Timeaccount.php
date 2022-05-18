@@ -176,10 +176,12 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
                 $hasGrant = (
                     $hasGrant
                     || Timetracker_Controller_Timeaccount::getInstance()->hasGrant($_record->getId(), array(
-                        Timetracker_Model_TimeaccountGrants::VIEW_ALL, 
-                        Timetracker_Model_TimeaccountGrants::BOOK_OWN, 
-                        Timetracker_Model_TimeaccountGrants::BOOK_ALL, 
+                        Timetracker_Model_TimeaccountGrants::BOOK_ALL,
+                        Timetracker_Model_TimeaccountGrants::BOOK_OWN,
                         Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE,
+                        Timetracker_Model_TimeaccountGrants::READ_OWN,
+                        Timetracker_Model_TimeaccountGrants::REQUEST_OWN,
+                        Timetracker_Model_TimeaccountGrants::VIEW_ALL,
                     ))
                 );
             case 'delete':
@@ -210,8 +212,11 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
         switch ($_action) {
             case 'get':
                 $_filter->setRequiredGrants(array(
-                    Timetracker_Model_TimeaccountGrants::BOOK_OWN,
                     Timetracker_Model_TimeaccountGrants::BOOK_ALL,
+                    Timetracker_Model_TimeaccountGrants::BOOK_OWN,
+                    Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE,
+                    Timetracker_Model_TimeaccountGrants::READ_OWN,
+                    Timetracker_Model_TimeaccountGrants::REQUEST_OWN,
                     Timetracker_Model_TimeaccountGrants::VIEW_ALL,
                     Tinebase_Model_Grants::GRANT_ADMIN,
                 ));

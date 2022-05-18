@@ -459,8 +459,8 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         switch ($_action) {
             case 'get':
                 $_filter->setRequiredGrants(array(
-                    Timetracker_Model_TimeaccountGrants::BOOK_OWN,
                     Timetracker_Model_TimeaccountGrants::BOOK_ALL,
+                    Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE,
                     Timetracker_Model_TimeaccountGrants::VIEW_ALL,
                     Tinebase_Model_Grants::GRANT_ADMIN,
                 ));

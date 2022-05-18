@@ -1599,6 +1599,12 @@ msgstr "Standard Favorit"
 msgid "The default favorite which is loaded on calendar startup"
 msgstr "Der Standard Favorit der beim öffnen des Kalenders geladen wird"
 
+msgid "Web Event Title Template"
+msgstr "Termin Titel Template"
+
+msgid "How to build event titles in web ui."
+msgstr "Wie der Titel in der Web-Anwendung gebildet wird."
+
 #: Preference.php:187
 msgid "Get Notification Emails"
 msgstr "Empfangen von Benachrichtigungs-E-Mails"
@@ -1705,6 +1711,18 @@ msgid "Calendars always selected regardless of all filter parameters."
 msgstr ""
 "Kalender die immer angezeigt werden, unabhängig von den eingestellten "
 "Filtern."
+
+msgid "Summary - Organizer"
+msgstr "Thema - Organisator"
+
+msgid "Summary ⏎ Description"
+msgstr "Thema ⏎ Beschreibung"
+
+msgid "Summary - Location"
+msgstr "Thema - Lokalität"
+
+msgid "Summary ⏎ Organizer ⏎ Location"
+msgstr "Thema ⏎ Organisator ⏎ Lokalität"
 
 #: Preference.php:315
 msgid "Never"

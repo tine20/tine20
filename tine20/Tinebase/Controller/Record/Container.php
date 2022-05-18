@@ -269,7 +269,7 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
      * @return Tinebase_Record_RecordSet
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function getRecordGrants($_record, $_ignoreACL = FALSE)
+    public function getRecordGrants($_record, $_ignoreACL = false): Tinebase_Record_RecordSet
     {
         if (! $_ignoreACL) {
             if (! $this->_hasManageRight()) {
@@ -285,9 +285,9 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
             . $_record->getId() . $_ignoreACL . $container->last_modified_time);
         $result = $cache->load($cacheId);
 
-        if ($result === FALSE) {
+        if ($result === false) {
             $result = Tinebase_Container::getInstance()->getGrantsOfContainer($container, true);
-            $cache->save($result, $cacheId, array('container'));
+            $cache->save($result, $cacheId, ['container', 'container_' . $_record->container_id]);
         }
 
         return $result;
