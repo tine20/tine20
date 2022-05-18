@@ -171,6 +171,10 @@ class Tinebase_ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testApplicationDefaultConfig()
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('ExampleApplication')) {
+            self::markTestSkipped('Test needs ExampleApplication');
+        }
+
         $defaultConfigFile = $this->_getExampleApplicationCustomDefaultConfig();
 
         $this->assertFalse(file_exists($defaultConfigFile), 'test needs to be recoded because Example Application default config exists');
@@ -207,6 +211,10 @@ class Tinebase_ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testFeatureEnabled()
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('ExampleApplication')) {
+            self::markTestSkipped('Test needs ExampleApplication');
+        }
+
         $customConfigFilename = $this->_getExampleApplicationCustomDefaultConfig();
 
         $this->assertFalse(file_exists($customConfigFilename), 'test needs to be recoded because Example Application default config exists');
@@ -323,6 +331,10 @@ class Tinebase_ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testConfigStructure()
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('ExampleApplication')) {
+            self::markTestSkipped('Test needs ExampleApplication');
+        }
+
         $defaultConfigFile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'tine20'
             . DIRECTORY_SEPARATOR . 'ExampleApplication' . DIRECTORY_SEPARATOR . 'config.inc.php';
 

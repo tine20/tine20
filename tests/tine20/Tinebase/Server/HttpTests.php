@@ -24,6 +24,10 @@ class Tinebase_Server_HttpTests extends TestCase
      */
     public function testHandleRequestForDynamicAPI($returnFileLocation = false)
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('ExampleApplication')) {
+            self::markTestSkipped('Test needs ExampleApplication');
+        }
+
         $server = new Tinebase_Server_Http();
         $request = $this->_getRequest();
 
