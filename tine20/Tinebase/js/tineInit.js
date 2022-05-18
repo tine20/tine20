@@ -13,6 +13,8 @@
 /*global Ext, Tine, google, OpenLayers, Locale, */
 
 import waitFor from 'util/waitFor.es6';
+import initBroadcastClient from './broadcastClient'
+
 var EventEmitter = require('events');
 
 /** ------------------------- Ext.ux Initialisation ------------------------ **/
@@ -1067,6 +1069,9 @@ Tine.Tinebase.tineInit = {
 
         if (Tine.Tinebase.registry.get('currentAccount')) {
             Tine.Tinebase.tineInit.initAppMgr();
+            if (window.isMainWindow && Tine.Tinebase.configManager.get('broadcasthub')?.active) {
+                initBroadcastClient();
+            }
         }
 
         Tine.Tinebase.tineInit.initUploadMgr();
