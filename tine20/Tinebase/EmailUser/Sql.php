@@ -845,6 +845,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
 
         //create the dump via mysqldump with --where to select the data we want to export
         $cmd = "mysqldump --defaults-extra-file=$mycnf "
+            ."--no-create-info "
             ."--single-transaction --max_allowed_packet=512M "
             ."--opt --no-tablespaces "
             . escapeshellarg($this->_config['dbname']) . ' '
@@ -855,6 +856,6 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'exec commend ' . print_r($cmd, true));
         exec($cmd, $output);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'backexecoutput ' . print_r($output, true));
-
+        unlink($mycnf);
     }
 }
