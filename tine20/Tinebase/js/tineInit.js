@@ -215,11 +215,12 @@ Tine.Tinebase.tineInit = {
                 this.contextMenu.showAt(position);
             }
 
-            if (target?.dom?.dataset && target.dom.dataset.recordClass) {
+            const result = Tine.Tinebase.common.findRecordFromTarget(target);
+            if (result) {
                 e.stopEvent();
-                const EditDialog = Tine.widgets.dialog.EditDialog.getConstructor(target.dom.dataset.recordClass);
+                const EditDialog = Tine.widgets.dialog.EditDialog.getConstructor(result.recordClass);
                 if (EditDialog?.openWindow) {
-                    EditDialog.openWindow({recordId: target.dom.dataset.recordId, record: {id: target.dom.dataset.recordId}});
+                    EditDialog.openWindow({recordId: result.recordId, record: {id: result.recordId}});
                 }
             }
 

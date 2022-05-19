@@ -805,6 +805,36 @@ Tine.Tinebase.common = {
             }
         }, 'Tinebase/js/linkify');
     },
+    
+    /**
+     * find record from target
+     *
+     * @param target
+     */
+    findRecordFromTarget: function(target) {
+        let result = null;
+        // find record from dataset
+        if (target?.dom?.dataset && target.dom.dataset.recordClass) {
+            result = {
+                recordClass: target.dom.dataset.recordClass,
+                recordId: target.dom.dataset.recordId
+            };
+        }
+    
+        // find record from deeplink
+        const urlRegex = '^' + _.escapeRegExp(Tine.Tinebase.common.getUrl());
+        const recordRegex = '#\/(?<appName>[a-zA-Z]+)\/(?<modelName>[a-zA-Z]+)\/(?<recordId>[a-z0-9]+)';
+        const regex = new RegExp(`${urlRegex}${recordRegex}`);
+        const matches = target?.dom?.href.match(regex);
+        if (matches?.groups?.appName && matches?.groups?.modelName && matches?.groups?.recordId) {
+            result = {
+                recordClass: `${matches.groups.appName}_Model_${matches.groups.modelName}`,
+                recordId: matches.groups.recordId
+            };
+        }
+        
+        return result;
+    },
 
     /**
      * linkify text
