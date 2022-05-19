@@ -48,7 +48,9 @@ Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
      * @cfg multiselectField
      */
     multiselectFieldConfig: null,
-    
+
+    gridLayerComboLabelField: 'name',
+
     /**
      * record picker
      * 
@@ -226,7 +228,8 @@ Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
             app: this.app,
             filter: filter,
             value: filter.data.value ? filter.data.value : this.defaultValue,
-            renderTo: el
+            renderTo: el,
+            labelField: this.gridLayerComboLabelField
         }, this.multiselectFieldConfig));
     }
 });

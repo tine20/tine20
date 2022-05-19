@@ -396,6 +396,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
             'container_id' => $this->container->id,
             'notes' => array($note),
             'tel_cell_private' => '+49TELCELLPRIVATE',
+            'adr_one_countryname' => 'GB',
         );
     }
 
@@ -2565,6 +2566,27 @@ Steuernummer 33/111/32212";
         $result = $this->_uit->searchContacts($filter, array());
 
         $this->assertEquals(1, $result['totalcount']);
+    }
+
+    public function testSearchContactByCountryFilter()
+    {
+        $this->_addContact();
+
+        $filter = array(
+            array('field' => 'adr_one_countryname', 'operator' => 'in', 'value' => ['GB'])
+        );
+
+        $result = $this->_uit->searchContacts($filter, array());
+
+        $this->assertGreaterThanOrEqual(1, $result['totalcount']);
+        $countryFilter = $result['filter'][0];
+        $this->assertTrue(is_array(['value']), print_r($countryFilter, true));
+        $this->assertTrue(is_array($countryFilter['value'][0]), 'value item should be an array: '
+            . print_r($countryFilter, true));
+        $this->assertTrue(array_key_exists('shortName', $countryFilter['value'][0]), 'value should have shortName index: '
+            . print_r($countryFilter, true));
+        $this->assertEquals('GB', $countryFilter['value'][0]['shortName'],
+            print_r($countryFilter, true));
     }
 
     /**
