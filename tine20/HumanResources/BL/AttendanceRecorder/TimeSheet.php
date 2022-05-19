@@ -377,10 +377,12 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                 } else {
                     $slot['start']->setMinute(
                         $this->_roundingToMin * floor($slot['start']->format('i') / $this->_roundingToMin));
-                    $slot['end']->setMinute(
-                        $end = ($this->_roundingToMin * ceil($slot['end']->format('i') / $this->_roundingToMin)) % 60);
-                    if (0 === $end) {
-                        $slot['end']->addHour(1);
+                    if (0 !== (int)$slot['end']->format('i')) {
+                        $slot['end']->setMinute(
+                            $end = ($this->_roundingToMin * ceil($slot['end']->format('i') / $this->_roundingToMin)) % 60);
+                        if (0 === $end) {
+                            $slot['end']->addHour(1);
+                        }
                     }
                 }
             } else {
