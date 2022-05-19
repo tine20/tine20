@@ -13,96 +13,1391 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/HumanResources.js:26
+#: Exception/ContractDates.php:26
+msgid "Negative Timespace"
+msgstr ""
+
+#: Exception/ContractDates.php:31
+msgid "The start date of the contract must be before the end date!"
+msgstr ""
+
+#: Exception/RemainingNotBookable.php:26
+msgid "Not allowed!"
+msgstr ""
+
+#: Exception/RemainingNotBookable.php:31
+msgid ""
+"It's only allowed to book remaining vacation days from years in the past!"
+msgstr ""
+
+#: Exception/NoCurrentContract.php:33
+msgid "No current contract!"
+msgstr ""
+
+#: Exception/NoCurrentContract.php:38
+msgid "A current contract could not be found!"
+msgstr ""
+
+#: Exception/ContractNotEditable.php:26
+msgid "Contract not editable"
+msgstr ""
+
+#: Exception/ContractNotEditable.php:31
+msgid ""
+"You are not allowed to change the record if a vacation has been booked "
+"already!"
+msgstr ""
+
+#: Exception/NoAccount.php:26
+msgid "No personal account found"
+msgstr ""
+
+#: Exception/NoAccount.php:31
+msgid "An existing personal account could not be found. Please create one!"
+msgstr ""
+
+#: Exception/NoContract.php:26
+msgid "No contract could be found."
+msgstr ""
+
+#: Exception/NoContract.php:31
+msgid "Please create a contract for this employee!"
+msgstr ""
+
+#: Exception/NeedsYear.php:26
+msgid "No or no valid year given"
+msgstr ""
+
+#: Exception/NeedsYear.php:31
+msgid "Please use a valid year!"
+msgstr ""
+
+#: Exception/ContractOverlap.php:26
+msgid "Contracts overlap"
+msgstr ""
+
+#: Exception/ContractOverlap.php:31
+msgid "The contracts must not overlap!"
+msgstr ""
+
+#: Acl/Rights.php:71
+msgid "Add Divisions"
+msgstr ""
+
+#: Acl/Rights.php:72
+msgid "Add new divisions"
+msgstr ""
+
+#: Acl/Rights.php:75
+msgid "Manage all Employee"
+msgstr ""
+
+#: Acl/Rights.php:76
+msgid "Manage all employee regardless configured division grants."
+msgstr ""
+
+#: Acl/Rights.php:79
+msgid "Manage Streams"
+msgstr ""
+
+#: Acl/Rights.php:80
+msgid "Show and edit working streams"
+msgstr ""
+
+#: Acl/Rights.php:83
+msgid "Manage working times"
+msgstr ""
+
+#: Acl/Rights.php:84
+msgid "Manage all working times regardless configured division grants."
+msgstr ""
+
+#: BL/AttendanceRecorder/TimeSheet.php:147
+#: BL/AttendanceRecorder/TimeSheet.php:253
+#: BL/AttendanceRecorder/TimeSheet.php:429
+msgid "Clock in: %1$s"
+msgstr ""
+
+#: BL/AttendanceRecorder/TimeSheet.php:241
+#: BL/AttendanceRecorder/TimeSheet.php:246
+msgid "Clock out: %1$s"
+msgstr ""
+
+#: BL/AttendanceRecorder/TimeSheet.php:262
+msgid "Clock pause: %1$s"
+msgstr ""
+
+#: Export/definitions/monthlyWTReport.xml:4
+msgid "Monthly Report"
+msgstr ""
+
+#: Controller.php:74
+msgid "You do not have admin rights on HumanResources"
+msgstr ""
+
+#: Controller.php:107
+msgid "Wage types"
+msgstr ""
+
+#: Controller.php:114
+msgid "Free time types"
+msgstr ""
+
+#: Controller.php:122 Model/Contract.php:139 Model/WorkingTimeScheme.php:51
+msgid "Working time scheme"
+msgid_plural "Working time schemes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Controller/WorkingTimeScheme.php:204
+msgid "HR Empoyee Working Time"
+msgstr ""
+
+#: Controller/DailyWTReport.php:290
+msgid "No valid contract for this date"
+msgstr ""
+
+#: Controller/DailyWTReport.php:311
+msgid ""
+"No valid blpipe for the working time scheme of this contract for this date"
+msgstr ""
+
+#: Controller/DailyWTReport.php:371 Controller/DailyWTReport.php:383
+msgid "unexpected error: "
+msgstr ""
+
+#: Controller/DailyWTReport.php:742
+msgid "daily wt reports can't be created"
+msgstr ""
+
+#: Controller/DailyWTReport.php:778 Controller/MonthlyWTReport.php:240
+msgid "It is not allowed to update a cleared report"
+msgstr ""
+
+#: Controller/MonthlyWTReport.php:208
+msgid "monthly wt reports can't be created"
+msgstr ""
+
+#: Controller/MonthlyWTReport.php:268
+msgid "previous months need to be cleared first"
+msgstr ""
+
+#: Controller/MonthlyWTReport.php:291
+msgid "following months need to be uncleared first"
+msgstr ""
+
+#: Model/Account.php:35 js/FreeTimeEditDialog.js:258
+msgid "Personal account"
+msgid_plural "Personal accounts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Account.php:36
+msgid "GENDER_Personal account"
+msgstr ""
+
+#: Model/Account.php:53
+msgid "Quick search"
+msgstr ""
+
+#: Model/Account.php:95 js/AccountGridPanel.js:41
+msgid "Year"
+msgstr ""
+
+#: Model/Account.php:101 Model/WTRCorrection.php:106 Model/FreeTime.php:130
+#: Model/Stream.php:105 Model/WageType.php:95 Model/Employee.php:92
+#: Model/FreeTimeType.php:114 js/EmployeeEditDialog.js:506
+#: js/AccountEditDialog.js:151
+msgid "Description"
+msgstr ""
+
+#: Model/Account.php:102 js/AccountEditDialog.js:142
+msgid "Miscellaneous"
+msgstr ""
+
+#: Model/Division.php:32
+msgid "GENDER_Division"
+msgstr ""
+
+#: Model/Division.php:33 Model/Employee.php:334 js/EmployeeEditDialog.js:144
+msgid "Division"
+msgid_plural "Divisions"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Division.php:61 Model/WTRCorrection.php:98 Model/Stream.php:98
+#: Model/WorkingTimeScheme.php:67 Model/Employee.php:193
+msgid "Title"
+msgstr ""
+
+#: Model/Contract.php:42 js/ContractGridPanel.js:42
+#: js/ContractEditDialog.js:237 js/ContractEditDialog.js:251
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Contract.php:43
+msgid "GENDER_Contract"
+msgstr ""
+
+#: Model/Contract.php:82 Model/WTRCorrection.php:66 Model/FreeTime.php:98
+#: Model/CostCenter.php:73 Model/Employee.php:38 Model/MonthlyWTReport.php:120
+#: js/FreeTimeEditDialog.js:81 js/EmployeeEditDialog.js:190
+#: js/EmployeeEditDialog.js:203 js/FreeTimeEmployeeFilter.js:31
+msgid "Employee"
+msgid_plural "Employees"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Contract.php:95 Model/CostCenter.php:96 js/ContractEditDialog.js:257
+msgid "Start Date"
+msgstr ""
+
+#: Model/Contract.php:106 js/ContractEditDialog.js:258
+msgid "End Date"
+msgstr ""
+
+#: Model/Contract.php:112 js/EmployeeEditDialogFreeTimeGridPanel.js:70
+#: js/EmployeeEditDialogFreeTimeGridPanel.js:71
+msgid "Vacation Days"
+msgstr ""
+
+#: Model/Contract.php:120
+msgid "Feast Calendar"
+msgstr ""
+
+#: Model/WTRCorrection.php:33
+msgid "GENDER_Working time correction"
+msgstr ""
+
+#: Model/WTRCorrection.php:34 js/WTRCorrectionPicker.js:16
+msgid "Working time corrections"
+msgid_plural "Working time corrections"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/WTRCorrection.php:114 js/WTRCorrectionPicker.js:17
+msgid "Correction"
+msgstr ""
+
+#: Model/WTRCorrection.php:122 Model/FreeTime.php:137 Model/FreeTime.php:145
+msgid "Status"
+msgstr ""
+
+#: Model/FreeTime.php:36 js/FreeTimeEditDialog.js:82
+#: js/FreeTimeEditDialog.js:84
+msgid "Free Time"
+msgid_plural "Free Times"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/FreeTime.php:37
+msgid "GENDER_Free Time"
+msgstr ""
+
+#: Model/FreeTime.php:110 Model/Employee.php:85
+msgid "Account"
+msgstr ""
+
+#: Model/FreeTime.php:121 Model/FreeTimeType.php:61
+msgid "Absence reason"
+msgid_plural "Absence reasons"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/FreeTime.php:154
+msgid "First Day"
+msgstr ""
+
+#: Model/FreeTime.php:160
+msgid "Last Day"
+msgstr ""
+
+#: Model/FreeTime.php:166
+msgid "Days Count"
+msgstr ""
+
+#: Model/FreeTime.php:175
+msgid "Free Days"
+msgstr ""
+
+#: Model/CostCenter.php:34 Model/CostCenter.php:85
+#: js/CostCenterGridPanel.js:126
+msgid "Cost Center"
+msgid_plural "Cost Centers"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/DivisionGrants.php:76
+msgid "Read own data"
+msgstr ""
+
+#: Model/DivisionGrants.php:77
+msgid ""
+"The grant to read own basic employee data, accounts, free times and working "
+"time reports."
+msgstr ""
+
+#: Model/DivisionGrants.php:80
+msgid "Read basic employee"
+msgstr ""
+
+#: Model/DivisionGrants.php:81
+msgid ""
+"The grant to read basic employees data for all employees in this division."
+msgstr ""
+
+#: Model/DivisionGrants.php:84
+msgid "Read employee"
+msgstr ""
+
+#: Model/DivisionGrants.php:85
+msgid ""
+"The grant to read full employees data, accounts, contracts and free times "
+"for all employees in this division."
+msgstr ""
+
+#: Model/DivisionGrants.php:88
+msgid "Update employee"
+msgstr ""
+
+#: Model/DivisionGrants.php:89
+msgid ""
+"The grant to update full employees data, accounts, contracts and free times "
+"for all employees in this division."
+msgstr ""
+
+#: Model/DivisionGrants.php:92
+msgid "Read time data"
+msgstr ""
+
+#: Model/DivisionGrants.php:93
+msgid ""
+"The grant to read working time reports for all employees in this division."
+msgstr ""
+
+#: Model/DivisionGrants.php:96
+msgid "Update time data"
+msgstr ""
+
+#: Model/DivisionGrants.php:97
+msgid ""
+"The grant to update working time reports for all employees in this division."
+msgstr ""
+
+#: Model/DivisionGrants.php:100
+msgid "Create own change requests"
+msgstr ""
+
+#: Model/DivisionGrants.php:101
+msgid ""
+"The grant to create own free times and working time reports change requests."
+msgstr ""
+
+#: Model/DivisionGrants.php:104
+msgid "Read change requests"
+msgstr ""
+
+#: Model/DivisionGrants.php:105
+msgid ""
+"The grant to read free times and working time reports change requests for "
+"all employees in this division."
+msgstr ""
+
+#: Model/DivisionGrants.php:108
+msgid "Create change requests"
+msgstr ""
+
+#: Model/DivisionGrants.php:109
+msgid ""
+"The grant to create free times and working time reports change requests for "
+"all employees in this division (implies read of basic employee, contract and "
+"account data)."
+msgstr ""
+
+#: Model/DivisionGrants.php:112
+msgid "Update change requests"
+msgstr ""
+
+#: Model/DivisionGrants.php:113
+msgid ""
+"The grant to update free times and working time reports change requests for "
+"all employees in this division (implies read of basic employee, contract and "
+"account data)."
+msgstr ""
+
+#: Model/DivisionGrants.php:116
+msgid "Admin"
+msgstr ""
+
+#: Model/DivisionGrants.php:117
+msgid ""
+"The grant to administrate this division (implies all other grants and the "
+"grant to set grants as well)."
+msgstr ""
+
+#: Model/Stream.php:50
+msgid "GENDER_Stream"
+msgstr ""
+
+#: Model/Stream.php:51
+msgid "Stream"
+msgid_plural "Streams"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Stream.php:111 Model/WorkingTimeScheme.php:74
+#: Model/BLDailyWTReport/LimitWorkingTimeConfig.php:60
+#: js/WorkingTimeSchemeEditDialog.js:208
+msgid "Type"
+msgstr ""
+
+#: Model/Stream.php:117
+msgid "Board Info"
+msgstr ""
+
+#: Model/Stream.php:123
+msgid "Stream Modalities"
+msgstr ""
+
+#: Model/Stream.php:135
+msgid "Responsibles"
+msgstr ""
+
+#: Model/Stream.php:148
+msgid "Timeaccounts"
+msgstr ""
+
+#: Model/WageType.php:60
+msgid "GENDER_Wage type"
+msgstr ""
+
+#: Model/WageType.php:61 Model/FreeTimeType.php:132
+msgid "Wage type"
+msgid_plural "Wage types"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/WageType.php:84 Model/FreeTimeType.php:103
+msgid "Abbreviation"
+msgstr ""
+
+#: Model/WageType.php:90 Model/FreeTimeType.php:109
+#: js/FreeTimePlanningWestPanel.js:46
+msgid "Name"
+msgstr ""
+
+#: Model/WageType.php:102 Model/FreeTimeType.php:121
+msgid "System"
+msgstr ""
+
+#: Model/WageType.php:111
+msgid "Factor (%)"
+msgstr ""
+
+#: Model/WageType.php:117
+msgid "Additional Wage"
+msgstr ""
+
+#: Model/WorkingTimeScheme.php:50
+msgid "GENDER_Working time scheme"
+msgstr ""
+
+#: Model/StreamModality.php:56
+msgid "GENDER_Modality"
+msgstr ""
+
+#: Model/StreamModality.php:57
+msgid "Modality"
+msgid_plural "Modalities"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/StreamModality.php:103 Model/StreamModalReport.php:93
+msgid "Start"
+msgstr ""
+
+#: Model/StreamModality.php:112 Model/StreamModalReport.php:98
+msgid "End"
+msgstr ""
+
+#: Model/StreamModality.php:120
+msgid "Tracking Start"
+msgstr ""
+
+#: Model/StreamModality.php:125
+msgid "Tracking End"
+msgstr ""
+
+#: Model/StreamModality.php:130 Model/StreamModalReport.php:103
+msgid "Interval"
+msgstr ""
+
+#: Model/StreamModality.php:139 Model/StreamModalReport.php:108
+msgid "Number of Intervals"
+msgstr ""
+
+#: Model/StreamModality.php:147
+msgid "Hours per Interval"
+msgstr ""
+
+#: Model/StreamModality.php:152 Model/StreamModalReport.php:123
+msgid "Closed"
+msgstr ""
+
+#: Model/StreamModality.php:157
+msgid "Stream Modality Reports"
+msgstr ""
+
+#: Model/Employee.php:37
+msgid "GENDER_Employee"
+msgstr ""
+
+#: Model/Employee.php:66
+msgid "Is employed"
+msgstr ""
+
+#: Model/Employee.php:78
+msgid "Number"
+msgstr ""
+
+#: Model/Employee.php:102 js/EmployeeEditDialog.js:347
+msgid "Country"
+msgstr ""
+
+#: Model/Employee.php:103
+msgid "Germany"
+msgstr ""
+
+#: Model/Employee.php:113
+msgid "Locality"
+msgstr ""
+
+#: Model/Employee.php:123
+msgid "Postalcode"
+msgstr ""
+
+#: Model/Employee.php:133
+msgid "Region"
+msgstr ""
+
+#: Model/Employee.php:143
+msgid "Street"
+msgstr ""
+
+#: Model/Employee.php:153
+msgid "Street 2"
+msgstr ""
+
+#: Model/Employee.php:163
+msgid "E-Mail"
+msgstr ""
+
+#: Model/Employee.php:173
+msgid "Telephone Number"
+msgstr ""
+
+#: Model/Employee.php:183
+msgid "Cell Phone Number"
+msgstr ""
+
+#: Model/Employee.php:198 js/EmployeeEditDialog.js:282
+msgid "Salutation"
+msgstr ""
+
+#: Model/Employee.php:203
+msgid "Last Name"
+msgstr ""
+
+#: Model/Employee.php:208
+msgid "First Name"
+msgstr ""
+
+#: Model/Employee.php:213
+msgid "Employee name"
+msgstr ""
+
+#: Model/Employee.php:220 js/EmployeeEditDialog.js:392
+msgid "Birthday"
+msgstr ""
+
+#: Model/Employee.php:230
+msgid "Account Holder"
+msgstr ""
+
+#: Model/Employee.php:240
+msgid "Account Number"
+msgstr ""
+
+#: Model/Employee.php:273
+msgid "Bank Name"
+msgstr ""
+
+#: Model/Employee.php:283
+msgid "Code Number"
+msgstr ""
+
+#: Model/Employee.php:294
+msgid "Employment begin"
+msgstr ""
+
+#: Model/Employee.php:304
+msgid "Employment end"
+msgstr ""
+
+#: Model/Employee.php:321
+msgid "Supervisor"
+msgstr ""
+
+#: Model/Employee.php:343 js/EmployeeEditDialog.js:151
+msgid "Health Insurance"
+msgstr ""
+
+#: Model/Employee.php:353
+msgid "Profession"
+msgstr ""
+
+#: Model/Employee.php:358
+msgid "Position"
+msgstr ""
+
+#: Model/Employee.php:364
+msgid "Contracts"
+msgstr ""
+
+#: Model/Employee.php:381
+msgid "Cost Centers"
+msgstr ""
+
+#: Model/BLDailyWTReport/WorkingTime.php:46
+msgid "Working time"
+msgstr ""
+
+#: Model/BLDailyWTReport/WorkingTime.php:47
+msgid "Working times"
+msgstr ""
+
+#: Model/BLDailyWTReport/LimitWorkingTimeConfig.php:47
+msgid "Work Time Limit"
+msgid_plural "Work Time Limits"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/BLDailyWTReport/LimitWorkingTimeConfig.php:48
+msgid ""
+"Working time is evaluated from {{start_time|date(\"H:i\")}} until {{end_time|"
+"date(\"H:i\")}}."
+msgstr ""
+
+#: Model/BLDailyWTReport/LimitWorkingTimeConfig.php:55
+#: Model/BLDailyWTReport/PopulateReportConfig.php:46
+msgid "Start time"
+msgstr ""
+
+#: Model/BLDailyWTReport/BreakTimeConfig.php:47
+msgid "Break Time"
+msgid_plural "Break Times"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/BLDailyWTReport/BreakTimeConfig.php:48
+msgid ""
+"After exceeding {{time_worked|date(\"H:i\", \"GMT\")}} of working time "
+"{{break_time|date(\"H:i\", \"GMT\")}} break time gets deducted automatically."
+msgstr ""
+
+#: Model/BLDailyWTReport/BreakTimeConfig.php:56
+msgid "Time worked"
+msgstr ""
+
+#: Model/BLDailyWTReport/BreakTimeConfig.php:62
+msgid "Break time"
+msgstr ""
+
+#: Model/FreeDay.php:35
+msgid "Free Day"
+msgid_plural "Free Days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/FreeDay.php:36
+msgid "GENDER_Free Day"
+msgstr ""
+
+#: Model/DailyWTReport.php:77
+msgid "GENDER_Daily Working Time Report"
+msgstr ""
+
+#: Model/DailyWTReport.php:78
+msgid "Daily Working Time Report"
+msgid_plural "Daily Working Time Reports"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/DailyWTReport.php:191
+msgid "Date"
+msgstr ""
+
+#: Model/DailyWTReport.php:202
+msgid "Evaluation Start Time"
+msgstr ""
+
+#: Model/DailyWTReport.php:211
+msgid "Evaluation End Time"
+msgstr ""
+
+#: Model/DailyWTReport.php:220
+msgid "Corrected Evaluation Start Time"
+msgstr ""
+
+#: Model/DailyWTReport.php:227
+msgid "Corrected Evaluation End Time"
+msgstr ""
+
+#: Model/DailyWTReport.php:237 Model/MonthlyWTReport.php:196
+msgid "Target Working Time"
+msgstr ""
+
+#: Model/DailyWTReport.php:248
+msgid "Target Working Time Correction"
+msgstr ""
+
+#: Model/DailyWTReport.php:258
+msgid "Break Time Net"
+msgstr ""
+
+#: Model/DailyWTReport.php:269
+msgid "Break Deduction Time"
+msgstr ""
+
+#: Model/DailyWTReport.php:278
+msgid "Working Times"
+msgstr ""
+
+#: Model/DailyWTReport.php:293 Model/MonthlyWTReport.php:186
+msgid "Actual Working Time"
+msgstr ""
+
+#: Model/DailyWTReport.php:303 Model/MonthlyWTReport.php:202
+msgid "Working Time Correction Requests"
+msgstr ""
+
+#: Model/DailyWTReport.php:321 Model/MonthlyWTReport.php:220
+msgid "Sum Accepted Working Time Correction"
+msgstr ""
+
+#: Model/DailyWTReport.php:329
+msgid "Total Working Time"
+msgstr ""
+
+#: Model/DailyWTReport.php:339
+msgid "System Remark"
+msgstr ""
+
+#: Model/DailyWTReport.php:349
+msgid "Remark"
+msgstr ""
+
+#: Model/DailyWTReport.php:357 Model/MonthlyWTReport.php:235
+msgid "Is Cleared"
+msgstr ""
+
+#: Model/DailyWTReport.php:368
+msgid "Calculation Error"
+msgstr ""
+
+#: Model/FreeTimeType.php:60
+msgid "GENDER_Absence reason"
+msgstr ""
+
+#: Model/FreeTimeType.php:139
+msgid "Allow Booking"
+msgstr ""
+
+#: Model/FreeTimeType.php:145
+msgid "Allow Planning"
+msgstr ""
+
+#: Model/FreeTimeType.php:151
+msgid "Enable Freetime Timetracking"
+msgstr ""
+
+#: Model/FreeTimeType.php:161
+msgid "Timeaccount"
+msgstr ""
+
+#: Model/FreeTimeType.php:168
+msgid "Color"
+msgstr ""
+
+#: Model/StreamModalReport.php:50
+msgid "GENDER_Modality Report"
+msgstr ""
+
+#: Model/StreamModalReport.php:51
+msgid "Modality Report"
+msgid_plural "Modality Reports"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/StreamModalReport.php:113
+msgid "Overflow In"
+msgstr ""
+
+#: Model/StreamModalReport.php:118
+msgid "Overflow Out"
+msgstr ""
+
+#: Model/MonthlyWTReport.php:59
+msgid "GENDER_Monthly Working Time Report"
+msgstr ""
+
+#: Model/MonthlyWTReport.php:60
+msgid "Monthly Working Time Report"
+msgid_plural "Monthly Working Time Reports"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/MonthlyWTReport.php:137
+msgid "Month"
+msgstr ""
+
+#: Model/MonthlyWTReport.php:150
+msgid "Daily Working Time Reports"
+msgstr ""
+
+#: Model/MonthlyWTReport.php:163
+msgid "Last Calculation"
+msgstr ""
+
+#: Model/MonthlyWTReport.php:176
+msgid "Working Time Balance Previous Month"
+msgstr ""
+
+#: Model/MonthlyWTReport.php:230
+msgid "Total Working Time Balance"
+msgstr ""
+
+#: Setup/Initialize.php:23
+msgid "[S] Sickness"
+msgstr ""
+
+#: Setup/Initialize.php:24
+msgid "[C] Sickness of Child"
+msgstr ""
+
+#: Setup/Initialize.php:25
+msgid "[7] Sick pay - Sickness from 7nth week on"
+msgstr ""
+
+#: Setup/Initialize.php:26
+msgid "[V] Vacation"
+msgstr ""
+
+#: Setup/Initialize.php:27
+msgid "[P] Special Vacation"
+msgstr ""
+
+#: Setup/Initialize.php:28
+msgid "[U] Unpaid Vacation"
+msgstr ""
+
+#: Setup/Initialize.php:29
+msgid "[S] Short Business trip"
+msgstr ""
+
+#: Setup/Initialize.php:30
+msgid "[B] Business trip"
+msgstr ""
+
+#: Setup/Initialize.php:31
+msgid "[D] Visit doctor"
+msgstr ""
+
+#: Setup/Initialize.php:32
+msgid "[F] Flex time reduction"
+msgstr ""
+
+#: Setup/Initialize.php:33
+msgid "[R] Break"
+msgstr ""
+
+#: Setup/Initialize.php:34
+msgid "[T] Training"
+msgstr ""
+
+#: Setup/Initialize.php:120
+msgid "Currently employed employees"
+msgstr ""
+
+#: Setup/Initialize.php:121
+msgid "Employees which are currently employed"
+msgstr ""
+
+#: Setup/Initialize.php:126
+msgid "All employees"
+msgstr ""
+
+#: Setup/Initialize.php:127
+msgid "All available employees"
+msgstr ""
+
+#: Setup/Initialize.php:135
+msgid "All accounts"
+msgstr ""
+
+#: Setup/Initialize.php:136
+msgid "All available accounts"
+msgstr ""
+
+#: Setup/Initialize.php:145
+msgid "All Divisions"
+msgstr ""
+
+#: Setup/Initialize.php:146
+msgid "All division records"
+msgstr ""
+
+#: Setup/Initialize.php:169 Setup/Initialize.php:170
+msgid "Daily WTR Corretions Requested"
+msgstr ""
+
+#: Setup/Initialize.php:182 Setup/Initialize.php:183
+msgid "Monthly WTR Corretions Requested"
+msgstr ""
+
+#: Setup/Initialize.php:204
+msgid "All Free Times"
+msgstr ""
+
+#: Setup/Initialize.php:205
+msgid "All free time records"
+msgstr ""
+
+#: Setup/Initialize.php:212 Setup/Initialize.php:213
+msgid "All Free Times this year"
+msgstr ""
+
+#: Setup/Initialize.php:226 Setup/Initialize.php:227
+msgid "All Free Times next year"
+msgstr ""
+
+#: Setup/Initialize.php:240 Setup/Initialize.php:241
+msgid "All Free Times requested"
+msgstr ""
+
+#: Setup/Initialize.php:291 Import/DemoData/Csv.php:83
+msgid "Full-time 40 hours"
+msgstr ""
+
+#: Setup/Initialize.php:299
+msgid "Full-time 37.5 hours"
+msgstr ""
+
+#: Setup/Initialize.php:307
+msgid "Part-time 20 hours"
+msgstr ""
+
+#: Setup/Initialize.php:333
+msgid "No wage"
+msgstr ""
+
+#: Setup/Initialize.php:334
+msgid "Salary"
+msgstr ""
+
+#: Setup/Initialize.php:335
+msgid "Business trip"
+msgstr ""
+
+#: Setup/Initialize.php:336
+msgid "Sunday bonus"
+msgstr ""
+
+#: Setup/Initialize.php:337
+msgid "Feast day"
+msgstr ""
+
+#: Setup/Initialize.php:338
+msgid "Feast day bonus"
+msgstr ""
+
+#: Setup/Initialize.php:339
+msgid "Overtime"
+msgstr ""
+
+#: Setup/Initialize.php:340
+msgid "Overtime bonus"
+msgstr ""
+
+#: Setup/Initialize.php:341
+msgid "Late shift bonus"
+msgstr ""
+
+#: Setup/Initialize.php:342
+msgid "Night bonus"
+msgstr ""
+
+#: Setup/Initialize.php:343 js/AccountEditDialog.js:95
+#: js/EmployeeEditDialogFreeTimeGridPanel.js:69
+msgid "Vacation"
+msgstr ""
+
+#: Setup/Initialize.php:344
+msgid "Special Vacation"
+msgstr ""
+
+#: Setup/Initialize.php:345
+msgid "Unpaid Vacation"
+msgstr ""
+
+#: Setup/Initialize.php:346 js/AccountEditDialog.js:111
+#: js/EmployeeEditDialogFreeTimeGridPanel.js:65
+msgid "Sickness"
+msgstr ""
+
+#: Setup/Initialize.php:347
+msgid "Sick pay - Sickness of Child"
+msgstr ""
+
+#: Setup/Initialize.php:348
+msgid "Sick pay - Sickness from 7nth week on"
+msgstr ""
+
+#: Setup/Initialize.php:349
+msgid "Break"
+msgstr ""
+
+#: Setup/Initialize.php:350
+msgid "Stand by"
+msgstr ""
+
+#: Setup/Initialize.php:351
+msgid "Special Payment"
+msgstr ""
+
+#: Config.php:95
+msgid "Sickness Status"
+msgstr ""
+
+#: Config.php:97
+msgid "Possible sickness status definitions"
+msgstr ""
+
+#: Config.php:104
+msgid "Excused"
+msgstr ""
+
+#: Config.php:105
+msgid "Unexcused"
+msgstr ""
+
+#: Config.php:112
+msgid "Vacation Status"
+msgstr ""
+
+#: Config.php:114
+msgid "Possible vacation status definitions"
+msgstr ""
+
+#: Config.php:121 Config.php:138 js/FreeTimeEditDialog.js:405
+msgid "Requested"
+msgstr ""
+
+#: Config.php:122 Config.php:139 js/FreeTimeEditDialog.js:412
+msgid "Accepted"
+msgstr ""
+
+#: Config.php:123 Config.php:140
+msgid "Declined"
+msgstr ""
+
+#: Config.php:130 Config.php:132
+msgid "Working Time Correction Status"
+msgstr ""
+
+#: Config.php:146
+msgid "Default Feast Calendar"
+msgstr ""
+
+#: Config.php:148
+msgid ""
+"Here you can define the default public holiday calendar used to set public "
+"holidays and other free days in datepicker"
+msgstr ""
+
+#: Config.php:155
+msgid "Enabled Features"
+msgstr ""
+
+#: Config.php:157
+msgid "Enabled Features in HumanResources Application."
+msgstr ""
+
+#: Config.php:165
+msgid "Calculate Daily Reports"
+msgstr ""
+
+#: Config.php:167
+msgid "Activate to calculate daily reports with a nightly scheduler job"
+msgstr ""
+
+#: Config.php:173
+msgid "Enable Streams"
+msgstr ""
+
+#: Config.php:175
+msgid "Activate working streams"
+msgstr ""
+
+#: Config.php:181
+msgid "Enable Working Time Tracking"
+msgstr ""
+
+#: Config.php:183
+msgid "Activate to enable working time tracking and reporting"
+msgstr ""
+
+#: Config.php:191 js/AdminPanel.js:231
+msgid "Vacation expires"
+msgstr ""
+
+#: Config.php:193
+msgid ""
+"Here you can define the day, when the vacation days taken from last year "
+"expires, the format is MM-DD."
+msgstr ""
+
+#: Config.php:201
+msgid "Report Templates Node ID"
+msgstr ""
+
+#: Config.php:210
+msgid "Timetracker Timeaccount for Workingtime Tracking"
+msgstr ""
+
+#: Config.php:219
+msgid "Stream Intervals available"
+msgstr ""
+
+#: Config.php:227
+msgid "Weekly"
+msgstr ""
+
+#: Config.php:228
+msgid "Monthly"
+msgstr ""
+
+#: Config.php:229
+msgid "Quarterly"
+msgstr ""
+
+#: Config.php:230
+msgid "Yearly"
+msgstr ""
+
+#: Config.php:235
+msgid "Stream Types available"
+msgstr ""
+
+#: Config.php:243
+msgid "Velocity Stream"
+msgstr ""
+
+#: Config.php:244
+msgid "Working Stream"
+msgstr ""
+
+#: Config.php:245
+msgid "Daily Business"
+msgstr ""
+
+#: js/HumanResources.js:33 js/Timetracker/hooks.js:11
 msgid "Free Time Planning"
 msgstr ""
 
-#: js/HumanResources.js:38
+#: js/HumanResources.js:45
 msgid "Human Resources"
 msgid_plural "Human Resources"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/HumanResources.js:71
+#: js/HumanResources.js:78
 msgid "Template"
 msgstr ""
 
-#: js/HumanResources.js:72
+#: js/HumanResources.js:79
 msgid "Individual"
 msgstr ""
 
-#: js/HumanResources.js:73
+#: js/HumanResources.js:80
 msgid "Shared"
 msgstr ""
 
-#: js/AccountEditDialog.js:56
-#, python-brace-format
-msgid "Edit {0} for {1} - {2}"
+#: js/ContractGridPanel.js:152
+msgid "Vacation in same period"
 msgstr ""
 
-#: js/AccountEditDialog.js:82
-msgid "Summary"
+#: js/ContractGridPanel.js:153
+msgid ""
+"There are some vacation days matching the period of the contract you added. "
+"After saving this employee, changing the contract is not possible anymore."
 msgstr ""
 
-#: js/AccountEditDialog.js:95
-msgid "Free Times"
+#: js/AdminPanel.js:64
+msgid "Cancel"
 msgstr ""
 
-#: js/AccountEditDialog.js:101
-msgid "Possible vaction days"
+#: js/AdminPanel.js:72
+msgid "OK"
 msgstr ""
 
-#: js/AccountEditDialog.js:102
-msgid "Remaining vaction days"
+#: js/AdminPanel.js:126
+msgid "Please use the following format: MM-DD"
 msgstr ""
 
-#: js/AccountEditDialog.js:103
-msgid "Taken vaction days"
+#: js/AdminPanel.js:219 js/ContractEditDialog.js:263
+msgid "Calendar"
 msgstr ""
 
-#: js/AccountEditDialog.js:110 js/FreeTimeGridPanel.js:63
-#: Setup/Initialize.php:159
-msgid "Sickness"
+#: js/AdminPanel.js:220 js/ContractEditDialog.js:264
+msgid "Calendars"
 msgstr ""
 
-#: js/AccountEditDialog.js:116
-msgid "Excused sickness days"
+#: js/MonthlyWTReportEditDialog.js:26
+msgid "Recalculate"
 msgstr ""
 
-#: js/AccountEditDialog.js:117
-msgid "Unexcused sickness days"
+#: js/FreeTimePlanningWestPanel.js:14
+msgid "Legend"
 msgstr ""
 
-#: js/AccountEditDialog.js:124 js/WorkingTimeSchemeEditDialog.js:217
-#: js/ContractEditDialog.js:280
+#: js/AttendanceRecorder.js:78
+msgid "Clock in"
+msgstr ""
+
+#: js/AttendanceRecorder.js:85
+msgid "Absence"
+msgstr ""
+
+#: js/AttendanceRecorder.js:93
+msgid "Clock out"
+msgstr ""
+
+#: js/AttendanceRecorder.js:100
+msgid "ESC"
+msgstr ""
+
+#: js/AttendanceRecorder.js:107 js/AttendanceRecorder.js:167
+msgid "Project Time"
+msgstr ""
+
+#: js/AttendanceRecorder.js:115
+msgid "Info"
+msgstr ""
+
+#: js/AttendanceRecorder.js:151 js/WorkingTimeSchemeEditDialog.js:217
+#: js/AccountEditDialog.js:125 js/ContractEditDialog.js:280
 msgid "Working Time"
 msgstr ""
 
-#: js/AccountEditDialog.js:130
-msgid "Days to work"
+#: js/AttendanceRecorder.js:175
+msgid "Create Timesheet"
 msgstr ""
 
-#: js/AccountEditDialog.js:131
-msgid "Hours to work"
+#: js/AttendanceRecorder.js:337
+msgid "Data saving is performed ..."
 msgstr ""
 
-#: js/AccountEditDialog.js:133
-msgid "Days to work after vacation and sickness"
+#: js/AttendanceRecorder.js:341
+msgid "Data saving successful!"
 msgstr ""
 
-#: js/AccountEditDialog.js:134
-msgid "Hours to work after vacation and sickness"
+#: js/AttendanceRecorder.js:387
+msgid "Data loading is performed ..."
 msgstr ""
 
-#: js/AccountEditDialog.js:141 Model/Account.php:102
-msgid "Miscellaneous"
+#: js/AttendanceRecorder.js:464
+msgid "Away"
 msgstr ""
 
-#: js/AccountEditDialog.js:150 js/EmployeeEditDialog.js:503
-#: js/FreeTimeEditDialog.js:435 Model/Account.php:101
-#: Model/FreeTimeType.php:121 Model/Stream.php:104 Model/Employee.php:102
-#: Model/WageType.php:95 Model/FreeTime.php:117
-msgid "Description"
+#: js/AttendanceRecorder.js:464
+msgid "Clocked-in"
+msgstr ""
+
+#: js/AttendanceRecorder.js:464
+msgid "Clocked-out"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:94
+#, python-brace-format
+msgid "Edit {0} for {1}"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:96
+#, python-brace-format
+msgid "Add {0} for {1}"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:152
+msgid "You have to select at least one day to save this freetime entry."
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:156
+msgid "No day selected"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:192
+msgid "WK"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:361
+msgid "Process status"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:368
+msgid "Type specific status"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:398
+msgid "Entitlement"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:419
+msgid "Remaining"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:429
+msgid "Days"
+msgstr ""
+
+#: js/FreeTimeEditDialog.js:453
+msgid "Select Days"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:110
+msgid "Account is disabled or deleted!"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:245
+msgid "Apply contact data on form"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:337
+msgid "Personal Information"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:400
+msgid "Internal Information"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:449
+msgid "Banking Information"
+msgstr ""
+
+#: js/EmployeeEditDialog.js:520
+msgid "Enter description"
 msgstr ""
 
 #: js/WorkingTimeSchemeEditDialog.js:167 js/ContractEditDialog.js:208
@@ -111,12 +1406,6 @@ msgstr ""
 
 #: js/WorkingTimeSchemeEditDialog.js:196 js/ContractEditDialog.js:288
 msgid "Working Time Schema"
-msgstr ""
-
-#: js/WorkingTimeSchemeEditDialog.js:208 Model/WorkingTimeScheme.php:74
-#: Model/BLDailyWTReport/LimitWorkingTimeConfig.php:60 Model/Stream.php:110
-#: Model/FreeTime.php:108
-msgid "Type"
 msgstr ""
 
 #: js/WorkingTimeSchemeEditDialog.js:210
@@ -160,271 +1449,84 @@ msgstr ""
 msgid "Sun."
 msgstr ""
 
-#: js/AdminPanel.js:64
-msgid "Cancel"
-msgstr ""
-
-#: js/AdminPanel.js:72
-msgid "OK"
-msgstr ""
-
-#: js/AdminPanel.js:126
-msgid "Please use the following format: MM-DD"
-msgstr ""
-
-#: js/AdminPanel.js:219 js/ContractEditDialog.js:263
-msgid "Calendar"
-msgstr ""
-
-#: js/AdminPanel.js:220 js/ContractEditDialog.js:264
-msgid "Calendars"
-msgstr ""
-
-#: js/AdminPanel.js:231 Config.php:175
-msgid "Vacation expires"
-msgstr ""
-
-#: js/FreeTimeEmployeeFilter.js:31 js/EmployeeEditDialog.js:188
-#: js/EmployeeEditDialog.js:201 js/FreeTimeEditDialog.js:79
-#: Model/MonthlyWTReport.php:103 Model/CostCenter.php:73 Model/Contract.php:80
-#: Model/Employee.php:38 Model/FreeTime.php:85
-msgid "Employee"
-msgid_plural "Employees"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/MonthlyWTReportEditDialog.js:26
-msgid "Recalculate"
-msgstr ""
-
-#: js/FreeTimePlanningPanel.js:333
+#: js/FreeTimePlanningPanel.js:349
 msgid "Loading free time planning data..."
 msgstr ""
 
-#: js/FreeTimePlanningPanel.js:348
+#: js/FreeTimePlanningPanel.js:364
 msgid "Add Free Time"
 msgstr ""
 
-#: js/FreeTimePlanningPanel.js:354
+#: js/FreeTimePlanningPanel.js:370
 msgid "Edit Free Time"
 msgstr ""
 
-#: js/FreeTimePlanningPanel.js:361
+#: js/FreeTimePlanningPanel.js:377
 msgid "Delete Free Time"
 msgstr ""
 
-#: js/FreeTimePlanningPanel.js:429
+#: js/FreeTimePlanningPanel.js:445
 msgid "Do you really want to delete the selected record?"
 msgid_plural "Do you really want to delete the selected records?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/FreeTimePlanningPanel.js:431
+#: js/FreeTimePlanningPanel.js:447
 msgid "Confirm"
 msgstr ""
 
-#: js/FreeTimeGridPanel.js:52
-msgid "Book as vacation"
-msgstr ""
-
-#: js/FreeTimeGridPanel.js:64 js/FreeTimeGridPanel.js:65
-msgid "Sickness Days"
-msgstr ""
-
-#: js/FreeTimeGridPanel.js:67 Setup/Initialize.php:156
-msgid "Vacation"
-msgstr ""
-
-#: js/FreeTimeGridPanel.js:68 js/FreeTimeGridPanel.js:69 Model/Contract.php:110
-msgid "Vacation Days"
-msgstr ""
-
-#: js/FreeTimeGridPanel.js:73
+#: js/AccountEditDialog.js:56
 #, python-brace-format
-msgid ""
-"There could not be found any {0}. Please try to change your filter-criteria "
-"or view-options."
+msgid "Edit {0} for {1} - {2}"
 msgstr ""
 
-#: js/FreeTimeGridPanel.js:126
-msgid "Could not book as vacation"
+#: js/AccountEditDialog.js:82
+msgid "Summary"
 msgstr ""
 
-#: js/FreeTimeGridPanel.js:127
-msgid ""
-"The unexcused sickness days could not be booked as vacation. There are not "
-"enough days left!"
+#: js/AccountEditDialog.js:101
+msgid "Possible vaction days"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:106
-msgid "Account is disabled or deleted!"
+#: js/AccountEditDialog.js:102
+msgid "Requested vaction days"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:141 Model/Employee.php:286
-msgid "Division"
+#: js/AccountEditDialog.js:103
+msgid "Taken vaction days"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:148 Model/Employee.php:295
-msgid "Health Insurance"
+#: js/AccountEditDialog.js:104
+msgid "Remaining vaction days"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:243
-msgid "Apply contact data on form"
+#: js/AccountEditDialog.js:117
+msgid "Excused sickness days"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:280 Model/Employee.php:177
-msgid "Salutation"
+#: js/AccountEditDialog.js:118
+msgid "Unexcused sickness days"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:334
-msgid "Personal Information"
+#: js/AccountEditDialog.js:131
+msgid "Days to work"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:344 Model/Employee.php:108
-msgid "Country"
+#: js/AccountEditDialog.js:132
+msgid "Hours to work"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:388 Model/Employee.php:199
-msgid "Birthday"
+#: js/AccountEditDialog.js:134
+msgid "Days to work after vacation and sickness"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:396
-msgid "Internal Information"
-msgstr ""
-
-#: js/EmployeeEditDialog.js:445 Model/Employee.php:53
-msgid "Banking Information"
-msgstr ""
-
-#: js/EmployeeEditDialog.js:517 js/FreeTimeEditDialog.js:449
-msgid "Enter description"
-msgstr ""
-
-#: js/FreeTimeEditDialog.js:80 js/FreeTimeEditDialog.js:82
-#: Model/FreeTime.php:37
-msgid "Free Time"
-msgid_plural "Free Times"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/FreeTimeEditDialog.js:87
-#, python-brace-format
-msgid "Edit {0} for {1}"
-msgstr ""
-
-#: js/FreeTimeEditDialog.js:89
-#, python-brace-format
-msgid "Add {0} for {1}"
-msgstr ""
-
-#: js/FreeTimeEditDialog.js:111
-msgid "You have to select at least one day to save this freetime entry."
-msgstr ""
-
-#: js/FreeTimeEditDialog.js:115
-msgid "No day selected"
-msgstr ""
-
-#: js/FreeTimeEditDialog.js:151
-msgid "WK"
-msgstr ""
-
-#: js/FreeTimeEditDialog.js:217 Model/Account.php:35
-msgid "Personal account"
-msgid_plural "Personal accounts"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/FreeTimeEditDialog.js:314 Model/FreeTime.php:124
-msgid "Status"
-msgstr ""
-
-#: js/FreeTimeEditDialog.js:354
-msgid "Remaining"
-msgstr ""
-
-#: js/FreeTimeEditDialog.js:379
-msgid "Freetime"
-msgstr ""
-
-#: js/FreeTimeEditDialog.js:391
-msgid "Days"
-msgstr ""
-
-#: js/FreeTimeEditDialog.js:416
-msgid "Select Days"
-msgstr ""
-
-#: js/DailyWTReportGridPanel.js:39
-msgid "Calculate all Reports"
-msgstr ""
-
-#: js/CostCenterGridPanel.js:58
-msgid "CostCenter"
-msgid_plural "CostCenters"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/CostCenterGridPanel.js:125 Model/CostCenter.php:34
-#: Model/CostCenter.php:85
-msgid "Cost Center"
-msgid_plural "Cost Centers"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/CostCenterGridPanel.js:128
-msgid "Startdate"
-msgstr ""
-
-#: js/ContractGridPanel.js:42 js/ContractEditDialog.js:237
-#: js/ContractEditDialog.js:251 Model/Contract.php:42
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/ContractGridPanel.js:150
-msgid "Vacation in same period"
-msgstr ""
-
-#: js/ContractGridPanel.js:151
-msgid ""
-"There are some vacation days matching the period of the contract you added. "
-"After saving this employee, changing the contract is not possible anymore."
-msgstr ""
-
-#: js/AccountGridPanel.js:37 Model/Account.php:95
-msgid "Year"
-msgstr ""
-
-#: js/AccountGridPanel.js:37
-msgid "Please enter the year you want to create accounts for:"
-msgstr ""
-
-#: js/AccountGridPanel.js:59
-msgid "Accounts have been created"
-msgstr ""
-
-#: js/AccountGridPanel.js:60
-#, python-brace-format
-msgid "{0} accounts for the year {1} have been created successfully!"
-msgstr ""
-
-#: js/AccountGridPanel.js:71
-msgid "Create new accounts"
+#: js/AccountEditDialog.js:135
+msgid "Hours to work after vacation and sickness"
 msgstr ""
 
 #: js/ContractEditDialog.js:83
 #, python-brace-format
 msgid "Edit {0}"
-msgstr ""
-
-#: js/ContractEditDialog.js:257 Model/CostCenter.php:96 Model/Contract.php:93
-msgid "Start Date"
-msgstr ""
-
-#: js/ContractEditDialog.js:258 Model/Contract.php:104
-msgid "End Date"
 msgstr ""
 
 #: js/ContractEditDialog.js:271
@@ -435,838 +1537,64 @@ msgstr ""
 msgid "Vacation days of one calendar year"
 msgstr ""
 
-#: Config.php:94
-msgid "Vacation Status"
+#: js/DailyWTReportGridPanel.js:40
+msgid "Calculate all Reports"
 msgstr ""
 
-#: Config.php:96
-msgid "Possible vacation status definitions"
+#: js/CostCenterGridPanel.js:58
+msgid "CostCenter"
+msgid_plural "CostCenters"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/CostCenterGridPanel.js:130
+msgid "Startdate"
 msgstr ""
 
-#: Config.php:103
-msgid "Requested"
+#: js/AccountGridPanel.js:41
+msgid "Please enter the year you want to create accounts for:"
 msgstr ""
 
-#: Config.php:104
-msgid "In process"
+#: js/AccountGridPanel.js:63
+msgid "Accounts have been created"
 msgstr ""
 
-#: Config.php:105
-msgid "Accepted"
+#: js/AccountGridPanel.js:64
+#, python-brace-format
+msgid "{0} accounts for the year {1} have been created successfully!"
 msgstr ""
 
-#: Config.php:106
-msgid "Declined"
+#: js/AccountGridPanel.js:75
+msgid "Create new accounts"
 msgstr ""
 
-#: Config.php:113
-msgid "Sickness Status"
+#: js/EmployeeEditDialogFreeTimeGridPanel.js:54
+msgid "Book as vacation"
 msgstr ""
 
-#: Config.php:115
-msgid "Possible sickness status definitions"
+#: js/EmployeeEditDialogFreeTimeGridPanel.js:66
+#: js/EmployeeEditDialogFreeTimeGridPanel.js:67
+msgid "Sickness Days"
 msgstr ""
 
-#: Config.php:122
-msgid "Excused"
-msgstr ""
-
-#: Config.php:123
-msgid "Unexcused"
-msgstr ""
-
-#: Config.php:130
-msgid "Default Feast Calendar"
-msgstr ""
-
-#: Config.php:132
+#: js/EmployeeEditDialogFreeTimeGridPanel.js:75
+#, python-brace-format
 msgid ""
-"Here you can define the default public holiday calendar used to set public "
-"holidays and other free days in datepicker"
+"There could not be found any {0}. Please try to change your filter-criteria "
+"or view-options."
 msgstr ""
 
-#: Config.php:139
-msgid "Enabled Features"
+#: js/EmployeeEditDialogFreeTimeGridPanel.js:132
+msgid "Could not book as vacation"
 msgstr ""
 
-#: Config.php:141
-msgid "Enabled Features in HumanResources Application."
-msgstr ""
-
-#: Config.php:149
-msgid "Calculate Daily Reports"
-msgstr ""
-
-#: Config.php:151
-msgid "Activate to calculate daily reports with a nightly scheduler job"
-msgstr ""
-
-#: Config.php:157
-msgid "Enable Streams"
-msgstr ""
-
-#: Config.php:159
-msgid "Activate working streams"
-msgstr ""
-
-#: Config.php:165
-msgid "Enable Working Time Tracking"
-msgstr ""
-
-#: Config.php:167
-msgid "Activate to enable working time tracking and reporting"
-msgstr ""
-
-#: Config.php:177
+#: js/EmployeeEditDialogFreeTimeGridPanel.js:133
 msgid ""
-"Here you can define the day, when the vacation days taken from last year "
-"expires, the format is MM-DD."
+"The unexcused sickness days could not be booked as vacation. There are not "
+"enough days left!"
 msgstr ""
 
-#: Config.php:185
-msgid "Report Templates Node ID"
-msgstr ""
-
-#: Config.php:194
-msgid "Timetracker Timeaccount for Workingtime Tracking"
-msgstr ""
-
-#: Config.php:203
-msgid "Stream Intervals available"
-msgstr ""
-
-#: Config.php:211
-msgid "Weekly"
-msgstr ""
-
-#: Config.php:212
-msgid "Monthly"
-msgstr ""
-
-#: Config.php:213
-msgid "Quarterly"
-msgstr ""
-
-#: Config.php:214
-msgid "Yearly"
-msgstr ""
-
-#: Config.php:219
-msgid "Stream Types available"
-msgstr ""
-
-#: Config.php:227
-msgid "Velocity Stream"
-msgstr ""
-
-#: Config.php:228
-msgid "Working Stream"
-msgstr ""
-
-#: Config.php:229
-msgid "Daily Business"
-msgstr ""
-
-#: Controller.php:74
-msgid "You do not have admin rights on HumanResources"
-msgstr ""
-
-#: Controller.php:107
-msgid "Wage types"
-msgstr ""
-
-#: Controller.php:114
-msgid "Free time types"
-msgstr ""
-
-#: Controller.php:122 Model/WorkingTimeScheme.php:51 Model/Contract.php:137
-msgid "Working time scheme"
-msgid_plural "Working time schemes"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Exception/NoCurrentContract.php:33
-msgid "No current contract!"
-msgstr ""
-
-#: Exception/NoCurrentContract.php:38
-msgid "A current contract could not be found!"
-msgstr ""
-
-#: Exception/NoContract.php:26
-msgid "No contract could be found."
-msgstr ""
-
-#: Exception/NoContract.php:31
-msgid "Please create a contract for this employee!"
-msgstr ""
-
-#: Exception/NoAccount.php:26
-msgid "No personal account found"
-msgstr ""
-
-#: Exception/NoAccount.php:31
-msgid "An existing personal account could not be found. Please create one!"
-msgstr ""
-
-#: Exception/RemainingNotBookable.php:26
-msgid "Not allowed!"
-msgstr ""
-
-#: Exception/RemainingNotBookable.php:31
-msgid ""
-"It's only allowed to book remaining vacation days from years in the past!"
-msgstr ""
-
-#: Exception/ContractOverlap.php:26
-msgid "Contracts overlap"
-msgstr ""
-
-#: Exception/ContractOverlap.php:31
-msgid "The contracts must not overlap!"
-msgstr ""
-
-#: Exception/ContractNotEditable.php:26
-msgid "Contract not editable"
-msgstr ""
-
-#: Exception/ContractNotEditable.php:31
-msgid ""
-"You are not allowed to change the record if a vacation has been booked "
-"already!"
-msgstr ""
-
-#: Exception/NeedsYear.php:26
-msgid "No or no valid year given"
-msgstr ""
-
-#: Exception/NeedsYear.php:31
-msgid "Please use a valid year!"
-msgstr ""
-
-#: Exception/ContractDates.php:26
-msgid "Negative Timespace"
-msgstr ""
-
-#: Exception/ContractDates.php:31
-msgid "The start date of the contract must be before the end date!"
-msgstr ""
-
-#: Export/definitions/monthlyWTReport.xml:4
-msgid "Monthly Report"
-msgstr ""
-
-#: Import/DemoData/Csv.php:85 Setup/Initialize.php:104
-msgid "Full-time 40 hours"
-msgstr ""
-
-#: Model/MonthlyWTReport.php:58
-msgid "Monthly Working Time Report"
-msgid_plural "Monthly Working Time Reports"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/MonthlyWTReport.php:120
-msgid "Month"
-msgstr ""
-
-#: Model/MonthlyWTReport.php:133
-msgid "Daily Working Time Reports"
-msgstr ""
-
-#: Model/MonthlyWTReport.php:151
-msgid "Working Time Balance Previous Month"
-msgstr ""
-
-#: Model/MonthlyWTReport.php:161 Model/DailyWTReport.php:276
-msgid "Actual Working Time"
-msgstr ""
-
-#: Model/MonthlyWTReport.php:171 Model/DailyWTReport.php:220
-msgid "Target Working Time"
-msgstr ""
-
-#: Model/MonthlyWTReport.php:178 Model/DailyWTReport.php:288
-msgid "Working Time Correction"
-msgstr ""
-
-#: Model/MonthlyWTReport.php:188
-msgid "Total Working Time Balance"
-msgstr ""
-
-#: Model/MonthlyWTReport.php:193 Model/DailyWTReport.php:324
-msgid "Is Cleared"
-msgstr ""
-
-#: Model/Account.php:53
-msgid "Quick search"
-msgstr ""
-
-#: Model/FreeTimeType.php:61
-msgid "Absence reason"
-msgid_plural "Absence reasons"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/FreeTimeType.php:103 Model/WageType.php:84
-msgid "Abbreviation"
-msgstr ""
-
-#: Model/FreeTimeType.php:109 Model/WageType.php:90
-msgid "Name"
-msgstr ""
-
-#: Model/FreeTimeType.php:116
-msgid "Color"
-msgstr ""
-
-#: Model/FreeTimeType.php:128 Model/WageType.php:102
-msgid "System"
-msgstr ""
-
-#: Model/FreeTimeType.php:139 Model/WageType.php:61
-msgid "Wage type"
-msgid_plural "Wage types"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/FreeTimeType.php:146
-msgid "Allow Booking"
-msgstr ""
-
-#: Model/FreeTimeType.php:152
-msgid "Allow Planning"
-msgstr ""
-
-#: Model/FreeTimeType.php:158
-msgid "Enable Freetime Timetracking"
-msgstr ""
-
-#: Model/FreeTimeType.php:168
-msgid "Timeaccount"
-msgstr ""
-
-#: Model/WorkingTimeScheme.php:67 Model/Stream.php:97 Model/Employee.php:172
-msgid "Title"
-msgstr ""
-
-#: Model/Contract.php:118
-msgid "Feast Calendar"
-msgstr ""
-
-#: Model/BLDailyWTReport/WorkingTime.php:46
-msgid "Working time"
-msgstr ""
-
-#: Model/BLDailyWTReport/WorkingTime.php:47
-msgid "Working times"
-msgstr ""
-
-#: Model/BLDailyWTReport/BreakTimeConfig.php:47
-msgid "Break Time"
-msgid_plural "Break Times"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/BLDailyWTReport/BreakTimeConfig.php:48
-msgid ""
-"After exceeding {{time_worked|date(\"H:i\", \"GMT\")}} of working time "
-"{{break_time|date(\"H:i\", \"GMT\")}} break time gets deducted automatically."
-msgstr ""
-
-#: Model/BLDailyWTReport/BreakTimeConfig.php:56
-msgid "Time worked"
-msgstr ""
-
-#: Model/BLDailyWTReport/BreakTimeConfig.php:62
-msgid "Break time"
-msgstr ""
-
-#: Model/BLDailyWTReport/LimitWorkingTimeConfig.php:47
-msgid "Work Time Limit"
-msgid_plural "Work Time Limits"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/BLDailyWTReport/LimitWorkingTimeConfig.php:48
-msgid ""
-"Working time is evaluated from {{start_time|date(\"H:i\")}} until {{end_time|"
-"date(\"H:i\")}}."
-msgstr ""
-
-#: Model/BLDailyWTReport/LimitWorkingTimeConfig.php:55
-#: Model/BLDailyWTReport/PopulateReportConfig.php:46
-msgid "Start time"
-msgstr ""
-
-#: Model/Stream.php:51
-msgid "Stream"
-msgid_plural "Streams"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/Stream.php:116
-msgid "Board Info"
-msgstr ""
-
-#: Model/Stream.php:122
-msgid "Stream Modalities"
-msgstr ""
-
-#: Model/Stream.php:134
-msgid "Responsibles"
-msgstr ""
-
-#: Model/Stream.php:147
-msgid "Timeaccounts"
-msgstr ""
-
-#: Model/StreamModalReport.php:51
-msgid "Modality Report"
-msgid_plural "Modality Reports"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/StreamModalReport.php:93 Model/StreamModality.php:103
-msgid "Start"
-msgstr ""
-
-#: Model/StreamModalReport.php:98 Model/StreamModality.php:112
-msgid "End"
-msgstr ""
-
-#: Model/StreamModalReport.php:103 Model/StreamModality.php:130
-msgid "Interval"
-msgstr ""
-
-#: Model/StreamModalReport.php:108 Model/StreamModality.php:139
-msgid "Number of Intervals"
-msgstr ""
-
-#: Model/StreamModalReport.php:113
-msgid "Overflow In"
-msgstr ""
-
-#: Model/StreamModalReport.php:118
-msgid "Overflow Out"
-msgstr ""
-
-#: Model/StreamModalReport.php:123 Model/StreamModality.php:152
-msgid "Closed"
-msgstr ""
-
-#: Model/FreeDay.php:35
-msgid "Free Day"
-msgid_plural "Free Days"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/Employee.php:54
-msgid "Private Information"
-msgstr ""
-
-#: Model/Employee.php:66
-msgid "Is employed"
-msgstr ""
-
-#: Model/Employee.php:78
-msgid "Number"
-msgstr ""
-
-#: Model/Employee.php:86 Model/FreeTime.php:97
-msgid "Account"
-msgstr ""
-
-#: Model/Employee.php:94
-msgid "Transponder Id"
-msgstr ""
-
-#: Model/Employee.php:110
-msgid "Germany"
-msgstr ""
-
-#: Model/Employee.php:116
-msgid "Locality"
-msgstr ""
-
-#: Model/Employee.php:123
-msgid "Postalcode"
-msgstr ""
-
-#: Model/Employee.php:130
-msgid "Region"
-msgstr ""
-
-#: Model/Employee.php:137
-msgid "Street"
-msgstr ""
-
-#: Model/Employee.php:144
-msgid "Street 2"
-msgstr ""
-
-#: Model/Employee.php:151
-msgid "E-Mail"
-msgstr ""
-
-#: Model/Employee.php:158
-msgid "Telephone Number"
-msgstr ""
-
-#: Model/Employee.php:165
-msgid "Cell Phone Number"
-msgstr ""
-
-#: Model/Employee.php:182
-msgid "Last Name"
-msgstr ""
-
-#: Model/Employee.php:187
-msgid "First Name"
-msgstr ""
-
-#: Model/Employee.php:192
-msgid "Employee name"
-msgstr ""
-
-#: Model/Employee.php:206
-msgid "Account Holder"
-msgstr ""
-
-#: Model/Employee.php:213
-msgid "Account Number"
-msgstr ""
-
-#: Model/Employee.php:237
-msgid "Bank Name"
-msgstr ""
-
-#: Model/Employee.php:244
-msgid "Code Number"
-msgstr ""
-
-#: Model/Employee.php:252
-msgid "Employment begin"
-msgstr ""
-
-#: Model/Employee.php:259
-msgid "Employment end"
-msgstr ""
-
-#: Model/Employee.php:273
-msgid "Supervisor"
-msgstr ""
-
-#: Model/Employee.php:301
-msgid "Profession"
-msgstr ""
-
-#: Model/Employee.php:306
-msgid "Position"
-msgstr ""
-
-#: Model/Employee.php:312
-msgid "Contracts"
-msgstr ""
-
-#: Model/Employee.php:326
-msgid "Cost Centers"
-msgstr ""
-
-#: Model/WageType.php:111
-msgid "Factor (%)"
-msgstr ""
-
-#: Model/WageType.php:117
-msgid "Additional Wage"
-msgstr ""
-
-#: Model/StreamModality.php:57
-msgid "Modality"
-msgid_plural "Modalities"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/StreamModality.php:120
-msgid "Tracking Start"
-msgstr ""
-
-#: Model/StreamModality.php:125
-msgid "Tracking End"
-msgstr ""
-
-#: Model/StreamModality.php:147
-msgid "Hours per Interval"
-msgstr ""
-
-#: Model/StreamModality.php:157
-msgid "Stream Modality Reports"
-msgstr ""
-
-#: Model/DailyWTReport.php:77
-msgid "Daily Working Time Report"
-msgid_plural "Daily Working Time Reports"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/DailyWTReport.php:174
-msgid "Date"
-msgstr ""
-
-#: Model/DailyWTReport.php:185
-msgid "Evaluation Start Time"
-msgstr ""
-
-#: Model/DailyWTReport.php:194
-msgid "Evaluation End Time"
-msgstr ""
-
-#: Model/DailyWTReport.php:203
-msgid "Corrected Evaluation Start Time"
-msgstr ""
-
-#: Model/DailyWTReport.php:210
-msgid "Corrected Evaluation End Time"
-msgstr ""
-
-#: Model/DailyWTReport.php:231
-msgid "Target Working Time Correction"
-msgstr ""
-
-#: Model/DailyWTReport.php:241
-msgid "Break Time Net"
-msgstr ""
-
-#: Model/DailyWTReport.php:252
-msgid "Break Deduction Time"
-msgstr ""
-
-#: Model/DailyWTReport.php:261
-msgid "Working Times"
-msgstr ""
-
-#: Model/DailyWTReport.php:296
-msgid "Total Working Time"
-msgstr ""
-
-#: Model/DailyWTReport.php:306
-msgid "System Remark"
-msgstr ""
-
-#: Model/DailyWTReport.php:316
-msgid "Remark"
-msgstr ""
-
-#: Model/DailyWTReport.php:335
-msgid "Calculation Error"
-msgstr ""
-
-#: Model/FreeTime.php:132
-msgid "First Day"
-msgstr ""
-
-#: Model/FreeTime.php:138
-msgid "Last Day"
-msgstr ""
-
-#: Model/FreeTime.php:144
-msgid "Days Count"
-msgstr ""
-
-#: Model/FreeTime.php:153
-msgid "Free Days"
-msgstr ""
-
-#: Controller/MonthlyWTReport.php:156
-msgid "monthly wt reports can't be created"
-msgstr ""
-
-#: Controller/MonthlyWTReport.php:186 Controller/DailyWTReport.php:637
-msgid "It is not allowed to update a cleared report"
-msgstr ""
-
-#: Controller/MonthlyWTReport.php:214
-msgid "previous months need to be cleared first"
-msgstr ""
-
-#: Controller/MonthlyWTReport.php:237
-msgid "following months need to be uncleared first"
-msgstr ""
-
-#: Controller/WorkingTimeScheme.php:94
-msgid "HR Empoyee Working Time"
-msgstr ""
-
-#: Controller/DailyWTReport.php:261
-msgid "No valid contract for this date"
-msgstr ""
-
-#: Controller/DailyWTReport.php:282
-msgid ""
-"No valid blpipe for the working time scheme of this contract for this date"
-msgstr ""
-
-#: Controller/DailyWTReport.php:342 Controller/DailyWTReport.php:354
-msgid "unexpected error: "
-msgstr ""
-
-#: Controller/DailyWTReport.php:603
-msgid "daily wt reports can't be created"
-msgstr ""
-
-#: Setup/Initialize.php:37
-msgid "Currently employed employees"
-msgstr ""
-
-#: Setup/Initialize.php:38
-msgid "Employees which are currently employed"
-msgstr ""
-
-#: Setup/Initialize.php:43
-msgid "All employees"
-msgstr ""
-
-#: Setup/Initialize.php:44
-msgid "All available employees"
-msgstr ""
-
-#: Setup/Initialize.php:56
-msgid "All accounts"
-msgstr ""
-
-#: Setup/Initialize.php:57
-msgid "All available accounts"
-msgstr ""
-
-#: Setup/Initialize.php:112
-msgid "Full-time 37.5 hours"
-msgstr ""
-
-#: Setup/Initialize.php:120
-msgid "Part-time 20 hours"
-msgstr ""
-
-#: Setup/Initialize.php:146
-msgid "No wage"
-msgstr ""
-
-#: Setup/Initialize.php:147
-msgid "Salary"
-msgstr ""
-
-#: Setup/Initialize.php:148
-msgid "Business trip"
-msgstr ""
-
-#: Setup/Initialize.php:149
-msgid "Sunday bonus"
-msgstr ""
-
-#: Setup/Initialize.php:150
-msgid "Feast day"
-msgstr ""
-
-#: Setup/Initialize.php:151
-msgid "Feast day bonus"
-msgstr ""
-
-#: Setup/Initialize.php:152
-msgid "Overtime"
-msgstr ""
-
-#: Setup/Initialize.php:153
-msgid "Overtime bonus"
-msgstr ""
-
-#: Setup/Initialize.php:154
-msgid "Late shift bonus"
-msgstr ""
-
-#: Setup/Initialize.php:155
-msgid "Night bonus"
-msgstr ""
-
-#: Setup/Initialize.php:157
-msgid "Special Vacation"
-msgstr ""
-
-#: Setup/Initialize.php:158
-msgid "Unpaid Vacation"
-msgstr ""
-
-#: Setup/Initialize.php:160
-msgid "Sick pay - Sickness of Child"
-msgstr ""
-
-#: Setup/Initialize.php:161
-msgid "Sick pay - Sickness from 7nth week on"
-msgstr ""
-
-#: Setup/Initialize.php:162
-msgid "Break"
-msgstr ""
-
-#: Setup/Initialize.php:163
-msgid "Stand by"
-msgstr ""
-
-#: Setup/Initialize.php:164
-msgid "Special Payment"
-msgstr ""
-
-#: Setup/Initialize.php:187
-msgid "[S] Sickness"
-msgstr ""
-
-#: Setup/Initialize.php:188
-msgid "[C] Sickness of Child"
-msgstr ""
-
-#: Setup/Initialize.php:189
-msgid "[7] Sick pay - Sickness from 7nth week on"
-msgstr ""
-
-#: Setup/Initialize.php:190
-msgid "[V] Vacation"
-msgstr ""
-
-#: Setup/Initialize.php:191
-msgid "[P] Special Vacation"
-msgstr ""
-
-#: Setup/Initialize.php:192
-msgid "[U] Unpaid Vacation"
-msgstr ""
-
-#: Setup/Initialize.php:193
-msgid "[S] Short Business trip"
-msgstr ""
-
-#: Setup/Initialize.php:194
-msgid "[B] Business trip"
-msgstr ""
-
-#: Setup/Initialize.php:195
-msgid "[D] Visit doctor"
-msgstr ""
-
-#: Setup/Initialize.php:196
-msgid "[F] Flex time reduction"
-msgstr ""
-
-#: Setup/Initialize.php:197
-msgid "[B] Break"
-msgstr ""
-
-#: Setup/Initialize.php:198
-msgid "[T] Training"
-msgstr ""
-
-#: Acl/Rights.php:93
-msgid "edit private employee data"
-msgstr ""
-
-#: Acl/Rights.php:94
-msgid ""
-"Edit birthday, account data and other private information of employee records"
+#: js/Timetracker/hooks.js:4 js/Timetracker/hooks.js:5
+#: js/Timetracker/hooks.js:6 js/Timetracker/hooks.js:13
+msgid "Workingtime Tracking"
 msgstr ""

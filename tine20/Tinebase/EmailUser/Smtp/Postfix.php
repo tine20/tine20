@@ -806,8 +806,9 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
 
         $mysqlBackEnd = new Setup_Backend_Mysql();
         $mysqlBackEnd->createMyConf($mycnf, new Zend_Config($dbConfig));
-        
+
         $cmd = "mysqldump --defaults-extra-file=$mycnf "
+            ."--no-create-info "
             ."--single-transaction --max_allowed_packet=512M "
             ."--opt --no-tablespaces "
             . escapeshellarg($dbConfig['dbname']) . ' '
@@ -820,16 +821,19 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'backexecoutput ' . print_r($output, true));
 
         //smtp_destinations (select all rows belonging to users that belong to our installation)
+        $where = "userid IN (SELECT userid FROM ". $this->_userTable . " WHERE client_idnr='" . $clientId . "')";
         $cmd = "mysqldump --defaults-extra-file=$mycnf "
+            ."--no-create-info "
             ."--single-transaction --max_allowed_packet=512M "
             ."--opt --no-tablespaces "
             . escapeshellarg($dbConfig['dbname']) . ' '
             . escapeshellarg($this->_destinationTable)
+            . ' --where="' . $where . '"'
             ." | bzip2 > $backupDir/tine20_postfix_destination.sql.bz2";
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'exec commend ' . print_r($cmd, true));
         exec($cmd, $output);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'backexecoutput ' . print_r($output, true));
-
+        unlink($mycnf);
     }
 }

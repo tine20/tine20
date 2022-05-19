@@ -171,12 +171,12 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                         fulfill(r);
                     },
                     failure: function (error) {
-                        reject(new Error(error));
+                        reject(new ServerError(error));
                     }
                 }));
             } catch (error) {
                 if (Ext.isFunction(reject)) {
-                    reject(new Error(options));
+                    reject(new ServerError(error));
                 }
             }
         });
@@ -262,7 +262,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                 }), additionalArguments);
             } catch (error) {
                 if (Ext.isFunction(reject)) {
-                    reject(new Error(options));
+                    reject(new ServerError(error));
                 }
             }
         });
@@ -316,12 +316,12 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                         fulfill(r);
                     },
                     failure: function (error) {
-                        reject(new Error(error));
+                        reject(new ServerError(error));
                     }
                 }), additionalArguments);
             } catch (error) {
                 if (Ext.isFunction(reject)) {
-                    reject(new Error(options));
+                    reject(new ServerError(error));
                 }
             }
         });

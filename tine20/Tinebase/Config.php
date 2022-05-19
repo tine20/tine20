@@ -91,6 +91,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
 
     const BROADCASTHUB = 'broadcasthub';
     const BROADCASTHUB_ACTIVE = 'active';
+    const BROADCASTHUB_URL = 'url';
     const BROADCASTHUB_REDIS = 'redis';
     const BROADCASTHUB_REDIS_HOST = 'host';
     const BROADCASTHUB_REDIS_PORT = 'port';
@@ -1723,6 +1724,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::TYPE                  => self::TYPE_BOOL,
                     self::CLIENTREGISTRYINCLUDE => true,
                     self::DEFAULT_STR           => false,
+                ],self::BROADCASTHUB_URL   => [
+                    self::TYPE                  => self::TYPE_STRING,
+                    self::CLIENTREGISTRYINCLUDE => true,
+                    self::DEFAULT_STR           => '//:4003',
                 ],
                 self::BROADCASTHUB_PUBSUBNAME => [
                     self::TYPE                  => self::TYPE_STRING,

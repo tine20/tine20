@@ -42,7 +42,7 @@ const colorLegend = Ext.extend(Ext.Panel, {
 
             getColumns() {
                 return [
-                    {id: 'type', header: this.app.i18n._('&nbsp;'), dataIndex: 'color', width: 10, hidden: false, renderer: Tine.Tinebase.common.colorRenderer,},
+                    {id: 'type', header: '&nbsp;', dataIndex: 'color', width: 10, hidden: false, renderer: Tine.Tinebase.common.colorRenderer,},
                     {id: 'name', header: this.app.i18n._('Name'), width: 100, sortable: true, dataIndex: 'name'}
                 ];
             },

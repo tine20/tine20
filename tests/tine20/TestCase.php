@@ -198,7 +198,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             } catch (Tinebase_Exception $e) {}
         }
 
-        Tinebase_Lock_UnitTestFix::clearLocks();
+        Tinebase_Lock::clearLocks();
 
         Felamimail_Controller_AccountMock::getInstance()->cleanUp();
     }

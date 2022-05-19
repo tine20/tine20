@@ -287,7 +287,7 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
 
         if ($result === false) {
             $result = Tinebase_Container::getInstance()->getGrantsOfContainer($container, true);
-            $cache->save($result, $cacheId, ['container', 'container_' . $_record->container_id]);
+            $cache->save($result, $cacheId, ['container', 'container_' . $container->getId()]);
         }
 
         return $result;

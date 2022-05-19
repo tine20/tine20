@@ -69,7 +69,7 @@ class HumanResources_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $rightDescriptions = array(
             self::ADD_DIVISIONS => array(
                 'text'          => $translate->_('Add Divisions'),
-                'description'   => $translate->_('Add, new divisions'),
+                'description'   => $translate->_('Add new divisions'),
             ),
             self::MANAGE_EMPLOYEE => array(
                 'text'          => $translate->_('Manage all Employee'),
