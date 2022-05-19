@@ -113,7 +113,7 @@ class Setup_Frontend_Cli
         } elseif(isset($_opts->egw14import)) {
             $this->_egw14Import($_opts);
         } elseif(isset($_opts->check_requirements)) {
-            $this->_checkRequirements($_opts);
+            $result = $this->_checkRequirements();
         } elseif(isset($_opts->setconfig)) {
             $this->_setConfig($_opts);
         } elseif(isset($_opts->clear_cache)) {
@@ -854,23 +854,24 @@ class Setup_Frontend_Cli
     /**
      * do the environment check
      *
-     * @return array
+     * @return int
      */
-    protected function _checkRequirements(Zend_Console_Getopt $_opts)
+    protected function _checkRequirements(): int
     {
         $results = Setup_Controller::getInstance()->checkRequirements();
         if ($results['success']) {
           echo "OK - All requirements are met\n";
-          echo $results['resultOptionalBinaries']['result']['message'] . "\n";
         } else {
           echo "ERRORS - The following requirements are not met: \n";
-          foreach ($results['results'] as $result) {
-            if (!empty($result['message'])) {
-              echo "- " . strip_tags($result['message']) . "\n";
-            }
-          }
-          echo $results['resultOptionalBinaries']['result']['message'] . "\n";
         }
+        foreach (['results', 'resultOptionalBinaries'] as $key) {
+            foreach ($results[$key] as $result) {
+                if (!empty($result['message'])) {
+                    echo "- " . strip_tags($result['message']) . "\n";
+                }
+            }
+        }
+        return $results['success'] ? 0 : 1;
     }
     
     /**
