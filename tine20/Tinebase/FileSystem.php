@@ -2919,15 +2919,11 @@ class Tinebase_FileSystem implements
 
         $this->copyStream($tempStream, $path);
 
-        // TODO revision properties need to be inherited
-
-        $node = $this->setAclFromParent($path);
-
         if ($tempFile instanceof Tinebase_Model_TempFile && $deleteTempFileAfterCopy) {
             Tinebase_TempFile::getInstance()->deleteTempFile($tempFile);
         }
 
-        return $node;
+        return $this->stat($path);
     }
 
     public function setAclFromParent($path, $ifNotNull = false)

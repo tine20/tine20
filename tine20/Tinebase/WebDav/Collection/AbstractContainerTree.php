@@ -1026,16 +1026,16 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                 $path = $this->_getTreeNodePath($containerType);
                 Tinebase_FileSystem::getInstance()->checkPathACL($path, 'add');
                 $statpath = $path->statpath . '/' . $properties['name'];
-                if ($path->isToplevelPath()) {
+                $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($statpath);
+                if ($path->isDefaultACLsPath()) {
                     try {
-                        $container = Tinebase_FileSystem::getInstance()->createAclNode($statpath);
+                        $container = Tinebase_FileSystem::getInstance()->createAclNode($statpath, $path->getDefaultAcls());
                     } catch (Tinebase_Exception_SystemGeneric $tesg) {
                         // node already exists
                         $container = Tinebase_FileSystem::getInstance()->stat($statpath);
                     }
                 } else {
                     $container = Tinebase_FileSystem::getInstance()->mkdir($statpath);
-                    Tinebase_FileSystem::getInstance()->setAclFromParent($statpath);
                 }
 
             } else {

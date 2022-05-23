@@ -795,6 +795,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FULLTEXT_QUERY_FILTER = 'queryFilter';
 
     const FILESYSTEM = 'filesystem';
+    const FILESYSTEM_DEFAULT_GRANTS = 'defaultGrants';
     const FILESYSTEM_MODLOGACTIVE = 'modLogActive';
     const FILESYSTEM_NUMKEEPREVISIONS = 'numKeepRevisions';
     const FILESYSTEM_MONTHKEEPREVISIONS = 'monthKeepRevisions';
@@ -2607,6 +2608,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'setBySetupModule'      => FALSE,
                     'default'               => FALSE,
                 ),
+                self::FILESYSTEM_DEFAULT_GRANTS => [
+                    self::LABEL                     => 'Filesystem default grants', // _('Filesystem default grants')
+                    self::DESCRIPTION               => 'Filesystem default grants', // _('Filesystem default grants')
+                    self::TYPE                      => self::TYPE_OBJECT,
+                    self::CLASSNAME                 => Tinebase_FileSystem_DefaultGrantsCfg::class,
+                    self::CLIENTREGISTRYINCLUDE     => false,
+                    self::SETBYADMINMODULE          => false,
+                    self::SETBYSETUPMODULE          => false,
+                    self::DEFAULT_STR               => [],
+                ],
                 self::FILESYSTEM_NUMKEEPREVISIONS => array(
                     //_('Filesystem number of revisions')
                     'label'                 => 'Filesystem number of revisions',
