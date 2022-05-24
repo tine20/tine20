@@ -382,8 +382,9 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
             proxy: this.mainStore.proxy,
             filterFn: filterFn,
             replaceRecord: function(o, n) {
-                var idx = this.indexOf(o);
-                this.remove(o);
+                var r = this.getById(o.id); // refetch record as it might be outdated in the meantime
+                var idx = this.indexOf(r);
+                this.remove(r);
                 this.insert(idx, n);
             }
         });

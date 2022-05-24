@@ -133,10 +133,20 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             refresh: true,
             autoRefresh: true
         }]);
-        
+
+        this.initMessageBus();
         Tine.Calendar.MainScreenCenterPanel.superclass.initComponent.call(this);
     },
-    
+
+    initMessageBus: function() {
+        this.postalSubscriptions = [];
+        this.postalSubscriptions.push(postal.subscribe({
+            channel: "recordchange",
+            topic: 'Calendar.Event.*',
+            callback: this.onRecordChanges.createDelegate(this)
+        }));
+    },
+
     initActions: function () {
         this.action_editInNewWindow = new Ext.Action({
             requiredGrant: 'readGrant',
@@ -939,7 +949,33 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             else this.onAddEvent(event, checkBusyConflicts, true);
         }
     },
-    
+
+    /**
+     * bus notified about record changes
+     */
+    onRecordChanges: async function(data, e) {
+        var panel = this.getCalendarPanel(this.activeView),
+            store = this.getStore(),
+            existingRecord = store.getById(data.id),
+            isSelected = existingRecord ? panel.getSelectionModel().isSelected(existingRecord): false;
+
+        if (existingRecord && e.topic.match(/\.update/)) {
+            const updatedRecord = Tine.Tinebase.data.Record.setFromJson(data, Tine.Calendar.Model.Event);
+            store.remove(existingRecord);
+            store.add([updatedRecord]);
+            if (isSelected) {
+                panel.getSelectionModel().select(updatedRecord);
+            }
+        } else if (existingRecord && e.topic.match(/\.delete/)) {
+            store.remove(existingRecord);
+        } else {
+            // we can't evaluate the filters on client side to check compute if this affects us
+            // so just lets reload
+            this.refresh({refresh: true});
+        }
+        this.updateEventActions();
+    },
+
     onAddEvent: function(event, checkBusyConflicts, pastChecked) {
         if(!pastChecked) {
             this.checkPastEvent(event, checkBusyConflicts, 'add');
@@ -1831,8 +1867,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     'loadexception': this.onStoreLoadException
                 },
                 replaceRecord: function(o, n) {
-                    var idx = this.indexOf(o);
-                    this.remove(o);
+                    var r = this.getById(o.id); // refetch record as it might be outdated in the meantime
+                    var idx = this.indexOf(r);
+                    this.remove(r);
                     this.insert(idx, n);
                 }
             });
@@ -1988,5 +2025,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             break;
         }
         miniCal.update(this.startDate, true, weekNumbers);
-    }
+    },
+
+    onDestroy: function() {
+        _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
+        return Tine.Calendar.MainScreenCenterPanel.superclass.onDestroy.call(this);
+    },
 });

@@ -13,7 +13,7 @@
 /*global Ext, Tine, google, OpenLayers, Locale, */
 
 import waitFor from 'util/waitFor.es6';
-import initBroadcastClient from './broadcastClient'
+import {init as initBroadcastClient} from './broadcastClient'
 
 var EventEmitter = require('events');
 

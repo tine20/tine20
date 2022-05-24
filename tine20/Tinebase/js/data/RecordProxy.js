@@ -8,6 +8,7 @@
  */
 
 import ServerError from './ServerError'
+import {startTransaction as startBroadcastTransaction} from '../broadcastClient'
 
 Ext.ns('Tine.Tinebase.data');
 
@@ -221,18 +222,24 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
      * @success {Ext.data.Record}
      */
     saveRecord: function(record, options, additionalArguments) {
+        const action = (!_.get(record, 'data.id') && _.get(record, 'data.id')) ||
+        (!_.get(record, 'data.creation_time') && this.recordClass.hasField && this.recordClass.hasField(('creation_time'))) ?
+            'create' : 'update';
+
+        const commitBroadcastTransaction = startBroadcastTransaction(record, action, options.timeout);
+
         options = options || {};
         options.params = options.params || {};
         options.beforeSuccess = function(response) {
-            if (! options.suppressBusEvents) {
-                let recordData = JSON.parse(response.responseText);
-                let action = (!_.get(record, 'data.id') && _.get(recordData, 'id')) ||
-                    (!_.get(record, 'data.creation_time') && _.get(recordData, 'creation_time')) ?
-                    'create' : 'update';
+            const serverRecord = this.recordReader(response);
+            _.defer(() => {
+                if (! options.suppressBusEvents) {
+                    this.postMessage(action, serverRecord.data);
+                }
+                commitBroadcastTransaction(serverRecord);
+            });
 
-                _.defer(_.bind(this.postMessage, this), action, recordData);
-            }
-            return [this.recordReader(response)];
+            return [serverRecord];
         };
         
         var p = options.params;
@@ -278,10 +285,16 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
      * @success 
      */
     deleteRecords: function(records, options, additionalArguments) {
+        const recordIds = this.getRecordIds(records);
+        const commitBroadcastTransactions = recordIds.map((recordId) => {
+            const record = new this.recordClass({}, recordId)
+            return _.partial(startBroadcastTransaction(record, 'delete', options.timeout), record);
+        });
+
         options = options || {};
         options.params = options.params || {};
         options.params.method = this.appName + '.delete' + this.modelName + 's';
-        options.params.ids = this.getRecordIds(records);
+        options.params.ids = recordIds;
         if (additionalArguments) {
             Ext.apply(options.params, additionalArguments);
         }
@@ -294,16 +307,20 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                 records = [records];
             }
 
-            if (! options.suppressBusEvents) {
-                _.each(records, function (record) {
-                    me.postMessage('delete', record.data);
-                });
-            }
+            _.defer(() => {
+                if (! options.suppressBusEvents) {
+                    _.each(records, function (record) {
+                        me.postMessage('delete', record.data);
+                    });
+                }
+                _.each(commitBroadcastTransactions, (t) => { t(); });
+            });
+
         };
 
         // increase timeout as this can take a long time (2 mins)
         options.timeout = this.deleteTimeout;
-        
+
         return this.doXHTTPRequest(options);
     },
 

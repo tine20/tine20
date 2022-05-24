@@ -117,6 +117,8 @@ Tine.Calendar.ParallelEventsRegistry.prototype = {
      */
     unregister: function(event) {
         var ri = event.parallelEventRegistry;
+        if (! ri) return;
+
         var frame = this.getFrame(ri.position);
 
         if (! this.skipIntegrityChecks) {
