@@ -274,8 +274,9 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
             // load: this.mainStore.load.createDelegate(this.mainStore),
             // proxy: this.store.proxy,
             replaceRecord: function(o, n) {
-                var idx = this.indexOf(o);
-                this.remove(o);
+                var r = this.getById(o.id); // refetch record as it might be outdated in the meantime
+                var idx = this.indexOf(r);
+                this.remove(r);
                 this.insert(idx, n);
             }
         });

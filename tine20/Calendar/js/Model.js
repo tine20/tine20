@@ -601,18 +601,7 @@ Tine.Calendar.Model.EventJsonBackend = Ext.extend(Tine.Tinebase.data.RecordProxy
     }
 });
 
-/*
- * default event backend
- */
-if (Tine.Tinebase.widgets) {
-    Tine.Calendar.backend = new Tine.Calendar.Model.EventJsonBackend({});
-} else {
-    Tine.Calendar.backend = new Tine.Tinebase.data.MemoryBackend({
-        appName: 'Calendar',
-        modelName: 'Event',
-        recordClass: Tine.Calendar.Model.Event
-    });
-}
+Tine.Calendar.eventBackend = Tine.Calendar.backend = new Tine.Calendar.Model.EventJsonBackend({});
 
 /**
  * @namespace Tine.Calendar.Model
