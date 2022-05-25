@@ -289,7 +289,9 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         
         $tempFileName = sha1(Tinebase_Core::getUser()->accountId . $chunkInfo['name'] . $chunkInfo['tempId']);
         
-        Tinebase_TempFile::getInstance()->createTempFile($path, $tempFileName, $chunkInfo['chunkId'] + 1);
+        $number = $chunkInfo['chunkId'] + 1;
+        $index = str_pad($number, strlen((string)$chunkInfo['totalCount']), '0', STR_PAD_LEFT);
+        Tinebase_TempFile::getInstance()->createTempFile($path, $tempFileName, $index);
         
         // check if the client sent all chunks
         $uploadedChunks = Tinebase_TempFile::getInstance()->search(
