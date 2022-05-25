@@ -42,7 +42,73 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
         
         $this->_backend = new Tinebase_WebDav_PrincipalBackend();
     }
-    
+
+    public function testPrincipalsWithBrokenGroupList()
+    {
+        $group = Admin_Controller_Group::getInstance()->create(new Tinebase_Model_Group([
+            'name' => 'unittest'
+        ]));
+
+        Tinebase_Group::getInstance()->addGroupMember($group->getId(), Tinebase_Core::getUser()->getId());
+        Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . 'addressbook_lists', 'id = "' . $group->list_id . '"');
+
+        $server = new Sabre\DAV\Server(new Tinebase_WebDav_Root());
+        $server->debugExceptions = true;
+
+        require_once 'vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
+
+        $response = new Sabre\HTTP\ResponseMock();
+        $server->httpResponse = $response;
+
+        $server->addPlugin(
+            new \Sabre\DAV\Auth\Plugin(new Tinebase_WebDav_Auth(), null)
+        );
+
+        $aclPlugin = new Tinebase_WebDav_Plugin_ACL();
+        $aclPlugin->defaultUsernamePath    = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
+        $aclPlugin->principalCollectionSet = array (Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS, Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS
+        );
+        $aclPlugin->principalSearchPropertySet = array(
+            '{DAV:}displayname'                                                   => 'Display name',
+            '{' . \Sabre\DAV\Server::NS_SABREDAV . '}email-address'               => 'Email address',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}email-address-set'  => 'Email addresses',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'         => 'First name',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'          => 'Last name',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV         . '}calendar-user-address-set' => 'Calendar user address set',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV         . '}calendar-user-type' => 'Calendar user type'
+        );
+
+        $server->addPlugin($aclPlugin);
+        $server->addPlugin(new Tinebase_WebDav_Plugin_ExpandedPropertiesReport());
+        $server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPlugin); // this plugin must be loaded before CalDAV plugin
+        $server->addPlugin(new Calendar_Frontend_CalDAV_FixMultiGet404Plugin()); // replacement for new \Sabre\CalDAV\Plugin());
+
+        $body = '<?xml version="1.0" encoding="UTF-8"?>
+<A:expand-property xmlns:A="DAV:">
+  <A:property name="calendar-proxy-write-for" namespace="http://calendarserver.org/ns/">
+    <A:property name="email-address-set" namespace="http://calendarserver.org/ns/"/>
+    <A:property name="displayname" namespace="DAV:"/>
+    <A:property name="calendar-user-address-set" namespace="urn:ietf:params:xml:ns:caldav"/>
+  </A:property>
+  <A:property name="calendar-proxy-read-for" namespace="http://calendarserver.org/ns/">
+    <A:property name="email-address-set" namespace="http://calendarserver.org/ns/"/>
+    <A:property name="displayname" namespace="DAV:"/>
+    <A:property name="calendar-user-address-set" namespace="urn:ietf:params:xml:ns:caldav"/>
+  </A:property>
+</A:expand-property>
+';
+
+        $request = new Sabre\HTTP\Request([
+            'REQUEST_METHOD' => 'REPORT',
+            'REQUEST_URI'    => '/principals/users/' . Tinebase_Core::getUser()->contact_id . '/',
+        ]);
+        $request->setBody($body);
+        $server->httpRequest = $request;
+        $server->exec();
+
+        $this->assertStringContainsString('<d:status>HTTP/1.1 200 OK</d:status>', $response->body);
+    }
+
     /**
      * test getPrincipalsByPrefix with groups prefix
      */
