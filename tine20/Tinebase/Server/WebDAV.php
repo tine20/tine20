@@ -239,10 +239,6 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                 new \Sabre\DAV\Auth\Plugin(new Tinebase_WebDav_Auth(), null)
             );
 
-            self::$_server->addPlugin(
-                new \Sabre\DAV\Auth\Plugin(new Tinebase_WebDav_Auth(), null)
-            );
-
             $aclPlugin = new Tinebase_WebDav_Plugin_ACL();
             $aclPlugin->defaultUsernamePath    = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
             $aclPlugin->principalCollectionSet = array (Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS, Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS
