@@ -439,10 +439,17 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                     
                     $groupIds = Tinebase_Group::getInstance()->getGroupMemberships($user);
                     $groups   = Tinebase_Group::getInstance()->getMultiple($groupIds);
+                    $oldListAclCheck = Addressbook_Controller_List::getInstance()->doContainerACLChecks(false);
+                    try {
+                        $lists = Addressbook_Controller_List::getInstance()->getMultiple(array_filter($groups->list_id), true);
+                    } finally {
+                        Addressbook_Controller_List::getInstance()->doContainerACLChecks($oldListAclCheck);
+                    }
 
                     /** @var Tinebase_Model_Group $group */
                     foreach ($groups as $group) {
-                        if ($group->list_id && (static::$_showHiddenGroups || $group->visibility == Tinebase_Model_Group::VISIBILITY_DISPLAYED)) {
+                        if ($group->list_id && (static::$_showHiddenGroups || $group->visibility == Tinebase_Model_Group::VISIBILITY_DISPLAYED) &&
+                                false !== $lists->getIndexById($group->list_id)) {
                             $result[] = self::PREFIX_GROUPS . '/' . $group->list_id;
                         }
                     }
