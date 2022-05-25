@@ -320,15 +320,18 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 width: 104,
                 menuDisabled: true,
                 header: 'type',
-                renderer: function(value) {
+                renderer: (value) => {
                     let result = '';
-                    const qtip = Ext.util.Format.htmlEncode(app.i18n._('Click here to set To/CC/BCC.'));
-                    const type = Ext.util.Format.capitalize(value);
-                    
-                    result = Ext.util.Format.htmlEncode(app.i18n._(`${type}:`));
-                    result = Tine.Tinebase.common.cellEditorHintRenderer(result);
-                    
-                    return '<div qtip="' + qtip +'">' + result + '</div>';
+                    if (this.record.get('massMailingFlag')) {
+                        const qtip = Ext.util.Format.htmlEncode(app.i18n._('A separate mail is send to each recipient.'));
+                        return `<div ext:qtip="${qtip}">${app.i18n._('Mass')}:</div>`;
+                    } else {
+                        const qtip = Ext.util.Format.htmlEncode(app.i18n._('Click here to set To/CC/BCC.'));
+                        const type = Ext.util.Format.capitalize(value);
+
+                        result = '<div ext:qtip="' + qtip + '">' + Ext.util.Format.htmlEncode(`${app.i18n._hidden(type)}:`) + '</div>';
+                        return Tine.Tinebase.common.cellEditorHintRenderer(result);
+                    }
                 },
                 editor: this.RecipientTypeCombo
             }, {
@@ -841,6 +844,10 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} o
      */
     onBeforeEdit: function(o) {
+        if (this.record.get('massMailingFlag')) {
+            o.cancel = true;
+            return;
+        }
         this.getView().el.select('.x-grid3-td-address-editing').removeClass('x-grid3-td-address-editing');
         Ext.fly(this.getView().getCell(o.row, o.column)).addClass('x-grid3-td-address-editing');
     },

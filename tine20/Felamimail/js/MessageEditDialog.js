@@ -863,6 +863,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this['AddressLoadMask'].show();
 
             Tine.Addressbook.searchContacts(filter, null, function (response) {
+                // @TODO: convert to tokens instead of mailAddresses (on client side)
                 var mailAddresses = Tine.Felamimail.GridPanelHook.prototype.getMailAddresses(response.results);
 
                 this.record.set(field, mailAddresses);
@@ -1028,7 +1029,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.record.set('massMailingFlag', active);
         this.recipientGrid.disableRecipientsCombo(active);
-        
+
+        // this.recipientGrid.store.each((r) => {r.set('type', 'BCC')});
+        this.recipientGrid.view.refresh();
+
         if (active) {
             this.massMailingInfoText.show();
             this.doLayout();

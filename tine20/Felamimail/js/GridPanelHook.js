@@ -269,6 +269,7 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
             var sm = this.getGridPanel().grid.getSelectionModel(),
                 mailAddresses = sm.isFilterSelect
                     ? null
+                    // @TODO: convert to tokens instead of mailAddresses (on client side)
                     : this.getMailAddresses(this.getGridPanel().grid.getSelectionModel().getSelections());
         } else {
             var sm = null,
@@ -290,7 +291,9 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
         }
 
         if (to == 'mass') {
+            to = 'bcc';
             record.set('massMailingFlag', true);
+            record.set('bcc', mailAddresses);
         }
 
         var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
