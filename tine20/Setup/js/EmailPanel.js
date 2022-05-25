@@ -487,8 +487,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
             listWidth     : 300,
             value         : 'pdo_mysql',
             store: [
-                ['pdo_mysql', 'MySQL'],
-                ['pdo_pgsql', 'PostgreSQL']
+                ['pdo_mysql', 'MySQL']
             ]
         }];
     },

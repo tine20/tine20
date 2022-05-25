@@ -489,7 +489,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     onRecordChanges: function(data, e) {
         var existingRecord = this.getRecordByData(data);
         
-        if (e.topic.match(/\.create/)) {
+        if (e.topic.match(/\.create/) && false) {
+            // we don't know if record belongs to filtering (e.g. form broadcast)
             this.onCreateRecord(data);
         }else if (existingRecord && e.topic.match(/\.update/)) {
             // NOTE: local mode saves again (and again...)
