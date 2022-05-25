@@ -956,6 +956,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             filterRecord = null;
             filterData = filters[i];
             filterModel = filterData.condition ? this.ownRecordFilterModel : this.filterModelMap[filterData.field];
+
+            if (! filterModel && String(filterData.field)[0] == ':') {
+                // filter group got expanded by server (e.g. by implicit filter)
+                filterData.field = filterData.field.replace(/^:/, '');
+                filterModel = this.filterModelMap[filterData.field];
+            }
             
             if (filterModel) {
                 if (filterData.id) {
