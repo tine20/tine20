@@ -385,7 +385,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         foreach ($filterObjects as $filter) {
             if ($filter instanceof Tinebase_Model_Filter_FilterGroup && !$filter instanceof Tinebase_Model_Filter_Query) {
                 $this->_filterGroupToArrayWithoutCondition($result, $filter, $_valueToJson);
-            } else {
+            } elseif (!$filter instanceof Tinebase_Model_Filter_Abstract || !$filter->isImplicit()) {
                 $result[] = $filter->toArray($_valueToJson);
             }
         }
