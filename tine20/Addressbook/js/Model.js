@@ -121,12 +121,12 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
      * @return {String}
      */
     getPreferredEmail: function(preferred) {
-        var preferred = preferred || 'email',
-            other = preferred == 'email' ? 'email_home' : 'email';
+        preferred = preferred || 'email';
+        const other = preferred === 'email' ? 'email_home' : 'email';
             
         return (this.get(preferred) || this.get(other));
     },
-
+    
     getTitle: function() {
         var result = this.get('n_fn');
 

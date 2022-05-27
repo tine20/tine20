@@ -863,9 +863,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this['AddressLoadMask'].show();
 
             Tine.Addressbook.searchContacts(filter, null, function (response) {
-                // @TODO: convert to tokens instead of mailAddresses (on client side)
-                var mailAddresses = Tine.Felamimail.GridPanelHook.prototype.getMailAddresses(response.results);
-
+                const mailAddresses = Tine.Felamimail.GridPanelHook.prototype.getMailAddresses(response.results);
                 this.record.set(field, mailAddresses);
                 this.recipientGrid.syncRecipientsToStore([field], this.record, true, false);
                 this['AddressLoadMask'].hide();
