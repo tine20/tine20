@@ -1363,8 +1363,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $this->assertArrayHasKey('filter', $result);
         $filters = $result['filter'][0]['filters'][0]['value']['filters'][0]['value']['filters'];
         // make sure the query filter is not getting expanded
-        $count = count($filters);
-        $this->assertTrue(2 <= $count && 3 >= $count, '2019.11 should find 2, 2020.11+ should find 3 filters, found: ' . $count);
+        $this->assertCount(1, $filters);
     }
 
     /**

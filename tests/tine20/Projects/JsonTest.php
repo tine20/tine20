@@ -185,12 +185,8 @@ class Projects_JsonTest extends TestCase
         // NOTE: this assertion is strange because the results vary between 3 and 4
         // maybe dependent on Addressbook_Controller_Contact::getInstance()->doContainerACLChecks()
         $filterValues = $search['filter'][1]['value'];
-        $this->assertTrue(
-            count($filterValues) === 3 || count($filterValues) === 4,
-            'filter values: ' . print_r($filterValues, true)
-        );
+        $this->assertCount(2, $filterValues, 'filter values: ' . print_r($filterValues, true));
         $this->assertEquals(':relation_type', $search['filter'][1]['value'][0]['field']);
-        $this->assertEquals(TRUE, $search['filter'][1]['value'][2]['implicit']);
         $this->assertEquals(Tinebase_Core::getUser()->contact_id, 
             $search['filter'][1]['value'][1]['value']['id'], 'currentContact not resolved');
         $this->assertTrue(! isset($search['filter'][2]['implicit']), 'implicit flag should not be set in container filter');
