@@ -22,6 +22,8 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
 {
     /** @var HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig */
     protected $_config;
+    /** @var Timetracker_Model_Timeaccount */
+    protected $_staticTA;
     protected $_staticTAid;
     protected $_allowOtherTAs;
     protected $_fillOtherDevices;
@@ -35,7 +37,11 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
     {
         $this->_config = $_config;
         if ($_config->{HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_STATIC_TA}) {
-            $this->_staticTAid = $_config->getIdFromProperty(HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_STATIC_TA);
+            if ($_config->{HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_STATIC_TA} instanceof Tinebase_Record_Interface) {
+                $this->_staticTA = $_config->{HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_STATIC_TA};
+            } else {
+                $this->_staticTAid = $_config->getIdFromProperty(HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_STATIC_TA);
+            }
         }
         $this->_allowOtherTAs = (bool)$_config->{HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_ALLOW_OTHER_TA};
 
@@ -72,8 +78,8 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                     Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
                         ['field' => 'account_id', 'operator' => 'equals', 'value' => $accountId]
                     ]))->getFirstRecord();
-                $this->_staticTAid = HumanResources_Controller_WorkingTimeScheme::getInstance()
-                    ->getWorkingTimeAccount($employee)->getId();
+                $this->_staticTA = HumanResources_Controller_WorkingTimeScheme::getInstance()
+                    ->getWorkingTimeAccount($employee);
             }
             $accountData = $_data->data->filter(HumanResources_Model_AttendanceRecord::FLD_ACCOUNT_ID, $accountId);
             foreach (array_unique($accountData->{HumanResources_Model_AttendanceRecord::FLD_REFID}) as $refId) {
@@ -224,15 +230,16 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                 $ftt = HumanResources_Controller_FreeTimeType::getInstance()->get($fttId);
                 if ($ftt->enable_timetracking) {
                     if ($ftt->timeaccount) {
-                        $fttTAId = $ftt->getIdFromProperty('timeaccount');
+                        $fttTA = Timetracker_Controller_Timeaccount::getInstance()->get($ftt->getIdFromProperty('timeaccount'));
                     } else {
-                        $fttTAId = $this->getTAId($record);
+                        $fttTA = $this->getTA($record);
                     }
                     $startDate = $record->{HumanResources_Model_AttendanceRecord::FLD_TIMESTAMP}->getClone()
                         ->setTimezone(Tinebase_Core::getUserTimezone());
                     $fttTS = Timetracker_Controller_Timesheet::getInstance()->create(new Timetracker_Model_Timesheet([
                         'account_id' => $record->getIdFromProperty(HumanResources_Model_AttendanceRecord::FLD_ACCOUNT_ID),
-                        'timeaccount_id' => $fttTAId,
+                        'timeaccount_id' => $fttTA->getId(),
+                        'is_billable' => $fttTA->is_billable,
                         'start_date' => $startDate,
                         'start_time' => $startDate->format('H:i:00'),
                         'end_time' => $startDate->format('H:i:00'),
@@ -394,14 +401,20 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
         }
     }
 
-    protected function getTAId(HumanResources_Model_AttendanceRecord $record): string
+    protected function getTA(HumanResources_Model_AttendanceRecord $record): Timetracker_Model_Timeaccount
     {
         // read config, not property here!
         if (!$this->_config->{HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_STATIC_TA} &&
                 isset($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timeaccount::class])) {
-            return $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timeaccount::class];
+            /** @var Timetracker_Model_Timeaccount $ta */
+            $ta = Timetracker_Controller_Timeaccount::getInstance()->get($record
+                ->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timeaccount::class]);
+            return $ta;
+        } elseif ($this->_staticTA) {
+            return $this->_staticTA;
         } else {
-            return $this->_staticTAid;
+            $this->_staticTA = Timetracker_Controller_Timeaccount::getInstance()->get($this->_staticTAid);
+            return $this->_staticTA;
         }
     }
 
@@ -413,13 +426,14 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
         if (null === $translate) {
             $translate = Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME);
         }
-        $taId = $this->getTAId($record);
+        $ta = $this->getTA($record);
 
         /** @var Tinebase_DateTime $date */
         $date = $record->{HumanResources_Model_AttendanceRecord::FLD_TIMESTAMP}->getClone()->setTimezone(Tinebase_Core::getUserTimezone());
         $ts = new Timetracker_Model_Timesheet([
             'account_id' => $record->getIdFromProperty(HumanResources_Model_AttendanceRecord::FLD_ACCOUNT_ID),
-            'timeaccount_id' => $taId,
+            'timeaccount_id' => $ta->getId(),
+            'is_billable' => $ta->is_billable,
             'start_date' => $date,
             'start_time' => $date->format('H:i:00'),
             'end_time' => $date->format('H:i:00'),
