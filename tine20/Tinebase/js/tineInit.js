@@ -1011,7 +1011,7 @@ Tine.Tinebase.tineInit = {
     /**
      * apply registry data
      */
-    onRegistryLoad: function() {
+    onRegistryLoad: async function() {
         if (! Tine.Tinebase.tineInit.onPreferenceChangeRegistered
             && Tine.Tinebase.registry.get('preferences')
             && Tine.Tinebase.registry.get('currentAccount')
@@ -1065,7 +1065,7 @@ Tine.Tinebase.tineInit = {
             locale: Tine.Tinebase.registry.get('locale').locale || 'en'
         });
 
-        Tine.Tinebase.tineInit.initState();
+        await Tine.Tinebase.tineInit.initState();
 
         if (Tine.Tinebase.registry.get('currentAccount')) {
             Tine.Tinebase.tineInit.initAppMgr();
@@ -1289,11 +1289,13 @@ Tine.Tinebase.tineInit = {
     /**
      * initialise state provider
      */
-    initState: function () {
+    initState: async function () {
         if (Tine.Tinebase.tineInit.stateful === true) {
             if (window.isMainWindow) {
                 // NOTE: IE is as always pain in the ass! cross window issues prohibit serialisation of state objects
-                Ext.state.Manager.setProvider(new Tine.Tinebase.StateProvider());
+                const provider = new Tine.Tinebase.StateProvider();
+                await provider.readRegistry();
+                Ext.state.Manager.setProvider(provider);
             } else {
                 var mainWindow = Ext.ux.PopupWindowMgr.getMainWindow();
                 Ext.state.Manager = mainWindow.Ext.state.Manager;

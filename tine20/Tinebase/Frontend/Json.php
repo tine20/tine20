@@ -923,7 +923,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'NoteTypes' => $this->getNoteTypes(),
             'manageImapEmailUser' => Tinebase_EmailUser::manages(Tinebase_Config::IMAP),
             'manageSmtpEmailUser' => $manageSmtpEmailUser,
-            'stateInfo' => Tinebase_State::getInstance()->loadStateInfo(),
             'mustchangepw' => $user->mustChangePassword(),
             'confirmLogout' => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
             'advancedSearch' => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, 0),
