@@ -305,6 +305,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             if ($this->_removeGroupMembers) {
                 foreach (Tinebase_Group::getInstance()->getGroupMembers($groupId) as $userId) {
                     try {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                            . ' Deleting group member ' . $userId);
                         Tinebase_User::getInstance()->deleteUser($userId);
                     } catch (Exception $e) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -313,6 +315,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                 }
             }
             try {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Deleting group ' . $groupId);
                 Tinebase_Group::getInstance()->deleteGroups($groupId);
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
