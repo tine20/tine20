@@ -62,6 +62,8 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
 
     protected $allowCorrectionUpdate = false;
 
+    public $iterationResult;
+
     /**
      * the constructor
      *
@@ -144,15 +146,22 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
 
         try {
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
-                ['field' => 'employment_end', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->subMonth(2)]
+                ['field' => 'employment_end', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->subMonth(2)],
             ], '', [Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL => true]);
+            $containerFilter = new Tinebase_Model_Filter_DelegatedAcl('division_id', null, null, [
+                'modelName' => HumanResources_Model_Employee::class
+            ]);
+            $containerFilter->setRequiredGrants([HumanResources_Model_DivisionGrants::UPDATE_TIME_DATA]);
+            $filter->addFilter($containerFilter);
+            $oFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, []);
+            $oFilter->addFilterGroup($filter);
             $iterator = new Tinebase_Record_Iterator(array(
                 'iteratable' => $this,
                 'controller' => HumanResources_Controller_Employee::getInstance(),
-                'filter' => $filter,
+                'filter' => $oFilter,
                 'function' => 'calculateReportsForEmployees',
             ));
-            $iterator->iterate($force);
+            $this->iterationResult = $iterator->iterate($force);
         } finally {
             Tinebase_Core::releaseMultiServerLock(__METHOD__);
         }
@@ -197,6 +206,9 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         Tinebase_DateTime $endDate = null,
         bool $force = false
     ) {
+        HumanResources_Controller_Employee::getInstance()->checkGrant($employee,
+            HumanResources_Model_DivisionGrants::UPDATE_TIME_DATA);
+
         // we should never run in FE context, so we reset the RC and use RAII to restate it
         $oldRC = $this->_requestContext;
         $that = $this;
