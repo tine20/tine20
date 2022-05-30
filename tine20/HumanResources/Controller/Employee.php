@@ -44,7 +44,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     {
         $this->_applicationName = 'HumanResources';
         $this->_backend = new HumanResources_Backend_Employee();
-        $this->_modelName = 'HumanResources_Model_Employee';
+        $this->_modelName = HumanResources_Model_Employee::class;
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = true;
         $this->_traitDelegateAclField = 'division_id';
