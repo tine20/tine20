@@ -59,14 +59,19 @@ abstract class Timetracker_AbstractTest extends TestCase
 
         Tinebase_Acl_Roles::getInstance()->resetClassCache();
 
-        if (count($this->_deleteTimeAccounts) > 0) {
-            Timetracker_Controller_Timeaccount::getInstance()->delete($this->_deleteTimeAccounts);
-        }
         if (count($this->_deleteTimeSheets) > 0) {
             Timetracker_Controller_Timesheet::getInstance()->delete($this->_deleteTimeSheets);
         }
+        if (count($this->_deleteTimeAccounts) > 0) {
+            try {
+                Timetracker_Controller_Timeaccount::getInstance()->setRequestContext(['confirm' => true]);
+                Timetracker_Controller_Timeaccount::getInstance()->delete($this->_deleteTimeAccounts);
+            } finally {
+                Timetracker_Controller_Timeaccount::getInstance()->setRequestContext([]);
+            }
+        }
         if (count($this->_deletePersistentFilters) > 0) {
-            Tinebase_PersistentFilter::getInstance()->delete($this->_deleteTimeSheets);
+            Tinebase_PersistentFilter::getInstance()->delete($this->_deletePersistentFilters);
         }
     }
 

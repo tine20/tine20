@@ -100,7 +100,8 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
         if ($timeAccounts->count() > 0) {
             $context = $this->getRequestContext();
 
-            if (! array_key_exists('confirm', $context['clientData']) && ! array_key_exists('confirm', $context)) {
+            if (!$context || (!array_key_exists('confirm', $context) &&
+                    (!isset($context['clientData']) || !array_key_exists('confirm', $context['clientData'])))) {
                 $translation = Tinebase_Translation::getTranslation($this->_applicationName);
                 $exception = new Tinebase_Exception_Confirmation(
                     $translation->_('Timeaccounts are still in use! Are you sure you want to delete them?'));
