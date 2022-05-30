@@ -24,6 +24,13 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
      * @var Tinebase_WebDav_PrincipalBackend
      */
     protected $_backend;
+
+    /**
+     * we want to keep group members as test user is added to a group that is going to be deleted after the test
+     *
+     * @var bool
+     */
+    protected $_removeGroupMembers = false;
     
     /**
      * Sets up the fixture.
@@ -41,7 +48,7 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
     public function testPrincipalsWithBrokenGroupList()
     {
         $group = Admin_Controller_Group::getInstance()->create(new Tinebase_Model_Group([
-            'name' => 'unittest'
+            'name' => 'unittest_' . Tinebase_Record_Abstract::generateUID(20)
         ]));
         $this->_groupIdsToDelete[] = $group->getId();
 

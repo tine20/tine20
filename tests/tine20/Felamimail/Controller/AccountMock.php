@@ -67,5 +67,6 @@ class Felamimail_Controller_AccountMock extends Felamimail_Controller_Account
         foreach ($this->createdAccounts as $account) {
             Tinebase_EmailUser_XpropsFacade::deleteEmailUsers($account);
         }
+        $this->createdAccounts = [];
     }
 }
