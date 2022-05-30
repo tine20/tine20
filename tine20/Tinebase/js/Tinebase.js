@@ -8,6 +8,9 @@
  * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+// safari < 15.4
+require('broadcastchannel-polyfill');
+
 // message bus
 var postal = require('postal');
 require('postal.federation');
