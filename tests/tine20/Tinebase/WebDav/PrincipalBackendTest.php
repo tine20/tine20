@@ -5,14 +5,9 @@
  * @package     Tinebase
  * @subpackage  Account
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_Group
@@ -37,7 +32,7 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         parent::setUp();
         
         $this->_backend = new Tinebase_WebDav_PrincipalBackend();
@@ -48,6 +43,7 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
         $group = Admin_Controller_Group::getInstance()->create(new Tinebase_Model_Group([
             'name' => 'unittest'
         ]));
+        $this->_groupIdsToDelete[] = $group->getId();
 
         Tinebase_Group::getInstance()->addGroupMember($group->getId(), Tinebase_Core::getUser()->getId());
         Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . 'addressbook_lists', 'id = "' . $group->list_id . '"');
