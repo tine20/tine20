@@ -121,6 +121,8 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
         'copyEditAction'    => true,
         self::CONTAINER_PROPERTY => self::FLDS_CONTAINER_ID,
         self::HAS_PERSONAL_CONTAINER => false,
+        'containerName'     => 'Definition Container',
+        'containersName'    => 'Definition Containers', // xnxgettext('Definition Container', 'Definition Containers', n)
 
 
         'appName'           => 'Tinebase',

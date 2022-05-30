@@ -25,8 +25,8 @@ Tine.Tinebase.ImportExportDefinitionEditDialog = Ext.extend(Tine.widgets.dialog.
     windowNamePrefix: 'ImportExportDefinitionEditWindow_',
     windowHeight: 700,
 
-    evalGrants: false,
-    showContainerSelector: false,
+    evalGrants: true,
+    showContainerSelector: true,
 
 
     getFormItems: function () {

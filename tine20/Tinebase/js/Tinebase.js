@@ -27,6 +27,8 @@ require('./MunicipalityKey/picker');
 require('./MunicipalityKey/grid');
 require('./MunicipalityKey/editDialog');
 
+require('./Model/ImportExportDefinition');
+
 
 // UI style >= 2019
 require('node-waves');
