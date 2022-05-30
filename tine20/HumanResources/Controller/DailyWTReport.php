@@ -206,8 +206,10 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         Tinebase_DateTime $endDate = null,
         bool $force = false
     ) {
-        HumanResources_Controller_Employee::getInstance()->checkGrant($employee,
-            HumanResources_Model_DivisionGrants::UPDATE_TIME_DATA);
+        if (HumanResources_Controller_Employee::getInstance()->doContainerACLChecks()) {
+            HumanResources_Controller_Employee::getInstance()->checkGrant($employee,
+                HumanResources_Model_DivisionGrants::UPDATE_TIME_DATA);
+        }
 
         // we should never run in FE context, so we reset the RC and use RAII to restate it
         $oldRC = $this->_requestContext;
@@ -271,9 +273,9 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
 
             // then we calculate each day in a transaction, see dailyTransaction
             try {
-                $monthlyWTR = $this->_getOrCreateMonthlyWTR();
-
                 $dailyTransaction = new Tinebase_TransactionManager_Handle();
+
+                $monthlyWTR = $this->_getOrCreateMonthlyWTR();
 
                 /** @var HumanResources_Model_DailyWTReport $oldReport */
                 $oldReport = null;
@@ -840,5 +842,67 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         }
 
         unset($raii);
+    }
+
+    /**
+     * implement logic for each controller in this function
+     *
+     * @param Tinebase_Event_Abstract $_eventObject
+     */
+    protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
+    {
+        switch (get_class($_eventObject)) {
+            case Tinebase_Event_Record_Update::class:
+                if ($_eventObject->observable instanceof Timetracker_Model_Timesheet) {
+                    if (! HumanResources_Config::getInstance()->featureEnabled(
+                            HumanResources_Config::FEATURE_CALCULATE_DAILY_REPORTS) &&
+                        ! HumanResources_Config::getInstance()->featureEnabled(
+                            HumanResources_Config::FEATURE_WORKING_TIME_ACCOUNTING)
+                    ) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                            __METHOD__ . '::' . __LINE__ . ' FEATURE_WORKING_TIME_ACCOUNTING/FEATURE_CALCULATE_DAILY_REPORTS disabled - Skipping.'
+                        );
+                        break;
+                    }
+
+                    // context async / sync
+                    $context = (array)HumanResources_Controller_DailyWTReport::getInstance()->getRequestContext();
+                    if (isset($context['tsSyncron'])) {
+                        $this->calculateReportsForAccountId($_eventObject->observable->account_id,
+                            $_eventObject->observable->start_date);
+                    } else {
+                        Tinebase_ActionQueue::getInstance()->queueAction(HumanResources_Controller_DailyWTReport::class
+                            . '.calculateReportsForAccountId', $_eventObject->observable->account_id,
+                            $_eventObject->observable->start_date);
+                    }
+
+                }
+                break;
+        }
+    }
+
+    public function calculateReportsForAccountId(string $accountId, string $date): void
+    {
+        $oldUser = Tinebase_Core::getUser();
+        if ($oldUser->accountLoginName !== Tinebase_User::SYSTEM_USER_CRON) {
+            $oldUserRaii = new Tinebase_RAII(function() use($oldUser) {
+                Tinebase_Core::setUser($oldUser);
+            });
+            $cronUser = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_CRON);
+            Tinebase_Core::setUser($cronUser);
+        }
+
+        /** @var HumanResources_Model_Employee $employee */
+        $employee = HumanResources_Controller_Employee::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            HumanResources_Model_Employee::class, [
+                ['field' => 'account_id', 'operator' => 'equals', 'value' => $accountId],
+            ]
+        ))->getFirstRecord();
+
+        if ($employee) {
+            $this->calculateReportsForEmployee($employee, new Tinebase_DateTime($date));
+        }
+
+        unset($oldUserRaii);
     }
 }

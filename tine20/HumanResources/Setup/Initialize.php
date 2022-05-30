@@ -5,7 +5,7 @@
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -397,11 +397,29 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
     {
         $scheduler = Tinebase_Core::getScheduler();
         HumanResources_Scheduler_Task::addCalculateDailyWorkingTimeReportsTask($scheduler);
+        HumanResources_Scheduler_Task::addAttendanceRecorderRunBLTask($scheduler);
     }
 
     protected function _initializeCORSystemCustomField()
     {
         static::addCORSystemCustomField();
+    }
+
+    protected function _initializePersistentObserver()
+    {
+        static::addPeristentObserverTT();
+    }
+
+    public static function addPeristentObserverTT()
+    {
+        Tinebase_Record_PersistentObserver::getInstance()->addObserver(
+            new Tinebase_Model_PersistentObserver([
+                'observable_model'      => Timetracker_Model_Timesheet::class,
+                'observer_model'        => HumanResources_Controller_DailyWTReport::class,
+                'observer_identifier'   => 'wtreport',
+                'observed_event'        => Tinebase_Event_Record_Update::class,
+            ])
+        );
     }
 
     public static function addCORSystemCustomField()
