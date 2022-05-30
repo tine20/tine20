@@ -14,56 +14,47 @@ Ext.ns('Tine.Tinebase');
  * @class       Tine.Tinebase.StateProvider
  * @extends     Ext.state.Provider
  */
-Tine.Tinebase.StateProvider = function(config) {
+Tine.Tinebase.StateProvider = function (config) {
     Tine.Tinebase.StateProvider.superclass.constructor.call(this);
     Ext.apply(this, config);
-    this.state = this.readRegistry();
 };
 
 Ext.extend(Tine.Tinebase.StateProvider, Ext.state.Provider, {
     
     // private
-    clear: function(name){
+    clear: async function (name) {
         // persistent clear
-        Tine.Tinebase.clearState(name);
-        
-        // store back in registry (as needed for popups)
-        var stateInfo = Tine.Tinebase.registry.get('stateInfo');
-        delete stateInfo[name];
-        
+        await Tine.Tinebase.clearState(name);
         Tine.Tinebase.StateProvider.superclass.clear.call(this, name);
     },
     
     // private
-    readRegistry: function() {
-        var states = {};
-        var stateInfo = Tine.Tinebase.registry.get('stateInfo');
-        for (var name in stateInfo) {
-            states[name] = this.decodeValue(stateInfo[name]);
-        };
+    readRegistry: async function () {
+        const states = {};
+        await Tine.Tinebase.loadState().then((stateInfo) => {
+            for (const name in stateInfo) {
+                states[name] = this.decodeValue(stateInfo[name]);
+            }
+        }).catch((e) => {});
         
+        this.state = states;
         return states;
     },
     
     // private
-    set: function(name, value) {
+    set: async function (name, value) {
         if (typeof value == "undefined" || value === null) {
-            this.clear(name);
+            await this.clear(name);
             return;
         }
-
-        var stateInfo = Tine.Tinebase.registry.get('stateInfo'),
-            encodedValue = this.encodeValue(value);
-
-        if (stateInfo[name] != encodedValue) {
-            // persistent save
-            Tine.Tinebase.setState(name, encodedValue);
-
-            // store back in registry (as needed for popups)
-            stateInfo[name] = encodedValue;
-            Tine.Tinebase.registry.set('stateInfo', stateInfo);
-        }
-
+        
+        const encodedValue = this.encodeValue(value);
+        await Tine.Tinebase.loadState().then(async (stateInfo) => {
+            if (stateInfo[name] !== encodedValue) {
+                // persistent save
+                await Tine.Tinebase.setState(name, encodedValue);
+            }
+        }).catch((e) => {});
         Tine.Tinebase.StateProvider.superclass.set.call(this, name, value);
     }
 });
