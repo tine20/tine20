@@ -131,6 +131,14 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
             'name' => 'importexport_definition',
         ],
 
+        self::FILTER_MODEL => [
+            self::FLDS_APPLICATION_ID => [
+                'filter' => Tinebase_Model_Filter_Text::class,
+                'label' => 'Application', // _('Application')
+                'jsConfig' => array('filtertype' => 'admin.application'),
+            ],
+        ],
+
         self::FIELDS        => [
             self::FLDS_APPLICATION_ID => [
                 self::TYPE => 'application',
