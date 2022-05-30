@@ -360,7 +360,8 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             }
             
             // check if timeaccount->is_billable is false => set default in fieldGrants to 0 and allow only managers to change it
-            if (!$timeaccount->is_billable) {
+            // if old record is billable, everybody can make it not billable
+            if (!$timeaccount->is_billable && (!$_oldRecord || !$_oldRecord->is_billable)) {
                 $this->_fieldGrants['is_billable']['default'] = 0;
                 $this->_fieldGrants['is_billable']['requiredGrant'] = Tinebase_Model_Grants::GRANT_ADMIN;
             }
