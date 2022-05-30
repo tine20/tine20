@@ -214,13 +214,13 @@ Tine.Tinebase.tineInit = {
                 this.contextMenu = await this.getEmailContextMenu(target, emailData?.email, emailData?.name);
                 this.contextMenu.showAt(position);
             }
-
-            const result = Tine.Tinebase.common.findRecordFromTarget(target);
-            if (result) {
+    
+            const [recordClass, recordId] = Tine.Tinebase.common.findRecordFromTarget(target);
+            if (recordClass && recordId) {
                 e.stopEvent();
-                const EditDialog = Tine.widgets.dialog.EditDialog.getConstructor(result.recordClass);
+                const EditDialog = Tine.widgets.dialog.EditDialog.getConstructor(recordClass);
                 if (EditDialog?.openWindow) {
-                    EditDialog.openWindow({recordId: result.recordId, record: {id: result.recordId}});
+                    EditDialog.openWindow({recordId: recordId, record: {id: recordId}});
                 }
             }
 
