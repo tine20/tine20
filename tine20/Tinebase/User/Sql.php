@@ -1277,7 +1277,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
     protected function _hardDelete($user)
     {
-
         $accountsTable          = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         $groupMembersTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
         $roleMembersTable       = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'role_accounts'));
