@@ -373,8 +373,6 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      */
     public function getUsersWithPref($_preferenceName, $_value, $_limitToUserIds = array())
     {
-        $result = array();
-
         $queryResult = $this->_getPrefs($_preferenceName);
 
         if (empty($queryResult)) {

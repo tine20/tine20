@@ -184,28 +184,34 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $this->deleteEmailAccountContact($_ids);
 
         $records = parent::delete($_ids);
-        $this->_updateDefaultAccountPreference($_ids);
+        $this->_updateDefaultAccountPreference($records);
         return $records;
     }
 
     /**
      * check if default account got deleted and set new default account
      *
-     * @param array $_ids
+     * @param Tinebase_Record_RecordSet $_accounts
      * @throws Tinebase_Exception_NotFound
      */
-    protected function _updateDefaultAccountPreference($_ids)
+    protected function _updateDefaultAccountPreference($_accounts)
     {
-        if (in_array(Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT}, (array) $_ids)) {
-            $accounts = $this->search();
-            if (count($accounts) > 0) {
-                $systemAccount = $accounts->filter('type', Tinebase_EmailUser_Model_Account::TYPE_SYSTEM);
-                $defaultAccountId = count($systemAccount) > 0 ? $systemAccount->getFirstRecord()->getId() : $accounts->getFirstRecord()->getId();
-            } else {
+        $pref = Tinebase_Core::getPreference($this->_applicationName);
+        foreach ($_accounts as $account) {
+            $usersWithPref = $pref->getUsersWithPref(Felamimail_Preference::DEFAULTACCOUNT, $account->getId());
+            foreach ($usersWithPref as $userId) {
                 $defaultAccountId = '';
-            }
+                if (Tinebase_Core::getUser()->getId() === $userId) {
+                    // try to find fallback default account
+                    $accounts = $this->search();
+                    if (count($accounts) > 0) {
+                        $systemAccount = $accounts->filter('type', Tinebase_EmailUser_Model_Account::TYPE_SYSTEM);
+                        $defaultAccountId = count($systemAccount) > 0 ? $systemAccount->getFirstRecord()->getId() : $accounts->getFirstRecord()->getId();
+                    }
+                }
 
-            Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} = $defaultAccountId;
+                $pref->setValueForUser(Felamimail_Preference::DEFAULTACCOUNT, $defaultAccountId, $userId);
+            }
         }
     }
 
@@ -2236,12 +2242,17 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             }
         }
         if ($user->accountEmailAddress !== $oldUser->accountEmailAddress) {
-            if (! $systemaccount) {
+            if (!$systemaccount) {
                 $systemaccount = Felamimail_Controller_Account::getInstance()->getSystemAccount($user);
             }
-            if ($systemaccount && $systemaccount->name === $oldUser->accountEmailAddress) {
-                $systemaccount->name = $user->accountEmailAddress;
-                $updateSystemAccount = true;
+            if ($systemaccount) {
+                if (empty($user->accountEmailAddress)) {
+                    Felamimail_Controller_Account::getInstance()->delete([$systemaccount->getId()]);
+                    $updateSystemAccount = false;
+                } elseif ($systemaccount->name === $oldUser->accountEmailAddress) {
+                    $systemaccount->name = $user->accountEmailAddress;
+                    $updateSystemAccount = true;
+                }
             }
             if (! $systemaccount && !empty($user->accountEmailAddress)) {
                 $this->createSystemAccount($user, $pwd);
