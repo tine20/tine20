@@ -409,6 +409,10 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         self::assertEquals($emailAccount->email, $updatedAccount['email']);
         $updatedUser = Tinebase_User::getInstance()->getFullUserById($user->getId());
         self::assertEquals($emailAccount->email, $updatedUser->accountEmailAddress);
+        $updatedUser->accountEmailAddress = '';
+        $updatedUserArray = $this->_json->saveUser($updatedUser->toArray());
+        self::assertEmpty($updatedUserArray['accountEmailAddress']);
+        self::assertNull(Admin_Controller_EmailAccount::getInstance()->getSystemAccount($updatedUser));
     }
 
     public function testSetSieveVacation()

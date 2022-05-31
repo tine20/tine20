@@ -257,8 +257,9 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 Ext.each(record.get('attendee'), function(attender) {
                     Tine.log.debug('Tine.Felamimail.Application::initGridPanelHooks/addMailFromRecord() - Calendar attender:');
                     Tine.log.debug(attender);
-                    if (attender.user_type == 'user' || attender.user_type == 'groupmember') {
-                        this.addMailFromAddressBook(mailAddresses, attender.user_id);
+                    if (attender.user_type === 'user' || attender.user_type === 'groupmember') {
+                        attender.user_id.type = 'user';
+                        this.addRecipientTokenFromContact(mailAddresses, attender.user_id);
                     }
                 }, this);
             }

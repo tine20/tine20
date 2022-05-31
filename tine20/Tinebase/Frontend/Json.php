@@ -788,6 +788,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
         
+        $importExportContainer = Tinebase_Config::getInstance()->get(Tinebase_Config::IMPORT_EXPORT_DEFAULT_CONTAINER);
+        $registryData['defaultImportExportContainer'] = $importExportContainer ? Tinebase_Container::getInstance()->get($importExportContainer)->toArray() : null;
+        
         return $registryData;
     }
 

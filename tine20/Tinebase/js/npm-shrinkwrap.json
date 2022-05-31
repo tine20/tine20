@@ -3296,6 +3296,11 @@
         "fill-range": "^7.0.1"
       }
     },
+    "broadcastchannel-polyfill": {
+      "version": "1.0.1",
+      "resolved": "https://registry.npmjs.org/broadcastchannel-polyfill/-/broadcastchannel-polyfill-1.0.1.tgz",
+      "integrity": "sha512-iooPAN913j4xfrIu5o+mDaks9UUDOBfgjn8SsuzysfXr/X+f8m9y5t8c5rAbW6P0LdUXBJx33zwN4Cs6b9BGRw=="
+    },
     "brorand": {
       "version": "1.1.0",
       "resolved": "https://registry.npmjs.org/brorand/-/brorand-1.1.0.tgz",

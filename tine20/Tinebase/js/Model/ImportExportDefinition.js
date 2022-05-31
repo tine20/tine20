@@ -18,6 +18,14 @@ Tine.Tinebase.Model.ImportExportDefinitionMixin = {
             const definition = _.find(allDefinitions, {id: id});
             
             return Tine.Tinebase.data.Record.setFromJson(definition, Tine.Tinebase.Model.ImportExportDefinition);
+        },
+
+        getDefaultData: function (defaults) {
+            const dc = Tine.Tinebase.registry.get('defaultImportExportContainer');
+            
+            return _.assign({
+                container_id: dc,
+            }, defaults);
         }
     },
 

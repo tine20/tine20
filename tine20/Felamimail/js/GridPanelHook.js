@@ -201,20 +201,20 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
      * @return {Array}
      */
     getMailAddresses: function(records) {
-        var mailAddresses = [];
+        const mailAddresses = [];
         
         Ext.each(records, function(record) {
             if (this.contactInRelation && record.get('relations')) {
                 Ext.each(record.get('relations'), function(relation) {
                     if (relation.type === this.relationType) {
-                        this.addMailFromAddressBook(mailAddresses, relation.related_record);
+                        this.addRecipientTokenFromContact(mailAddresses, relation.related_record);
                     }
                 }, this);
-            } else if (Ext.isFunction(this.addMailFromRecord)){
+            } else if (Ext.isFunction(this.addMailFromRecord)) {
                 // addMailFromRecord can be defined in config
                 this.addMailFromRecord(mailAddresses, record);
             } else {
-                this.addMailFromAddressBook(mailAddresses, record);
+                this.addRecipientTokenFromContact(mailAddresses, record);
             }
         }, this);
         
@@ -222,7 +222,7 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
             this.mailAddresses = mailAddresses;
         }
         
-        return mailAddresses.unique();
+        return mailAddresses;
     },
     
     /**
@@ -249,6 +249,51 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
                 mailAddresses.push(mailAddress);
         } else {
             var emails = contact.get("emails");
+            if (emails) {
+                Ext.each(emails.split(","), function (mail) {
+                    if (mail.match(emailRegEx)) {
+                        mailAddresses.push(mail);
+                    }
+                });
+            }
+        }
+    },
+    
+    /**
+     * add mail address from addressbook (if available) and add it to mailAddresses array
+     *
+     * @param {Array} mailAddresses
+     * @param {Tine.Addressbook.Model.Contact|Object} contact
+     */
+    addRecipientTokenFromContact: function(mailAddresses, contact) {
+        if (! contact) {
+            return;
+        }
+        if (! Ext.isFunction(contact.beginEdit)) {
+            contact = new Tine.Addressbook.Model.Contact(contact);
+        }
+        
+        // no exact matches are necessary - use the same regex as in \Tinebase_Mail::EMAIL_ADDRESS_CONTAINED_REGEXP
+        // TODO find a good generic place for this const
+        const emailRegEx = /([a-z0-9_\+-\.&]+@[a-z0-9-\.]+\.[a-z]{2,63})/i;
+        
+        if (!contact.get("members")) {
+            const email = contact.getPreferredEmail() ?? null;
+            const emailType = contact.get('email') === email ? 'email' : contact.get('email_home') === email ? 'email_home' : 'email';
+            if (email && email.match(emailRegEx)) {
+                let token = {
+                    'email': email,
+                    'email_type': emailType,
+                    'type': contact.get('type'),
+                    'n_fileas': contact.get('n_fileas'),
+                    'name': contact.get('n_fn'),
+                    'record_id': contact.get('id')
+                };
+                mailAddresses.push(token);
+            }
+        } else {
+            // fixme: we have to remove emails field in the future , how should we get the list member from FE ?
+            const emails = contact.get("emails");
             if (emails) {
                 Ext.each(emails.split(","), function (mail) {
                     if (mail.match(emailRegEx)) {
@@ -290,7 +335,9 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
         }
 
         if (to == 'mass') {
+            to = 'bcc';
             record.set('massMailingFlag', true);
+            record.set('bcc', mailAddresses);
         }
 
         var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
@@ -368,7 +415,7 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
      */
     updateAction: function(action, grants, records) {
         this.mailAddresses = [];
-        action.setDisabled(this.getMailAddresses(records).length == 0);
+        action.setDisabled(this.getMailAddresses(records).length === 0);
 
         if (this.subjectField && records.length > 0) {
             this.subject = records[0].get(this.subjectField);
