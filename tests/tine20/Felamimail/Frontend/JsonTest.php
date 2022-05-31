@@ -962,10 +962,13 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         // create shared account
         $account = $this->_createSharedAccount();
 
-        // send message and move to other INBOX
-        $message = $this->_moveMessageToFolder('INBOX', false, $account);
+        $folders = $this->_json->updateFolderCache($account->getId(), '');
+        $result = $this->_json->addFolder('Info Gemeindebüro', 'INBOX', $account->getId());
+
+        // send message and move to other account folder "Info Gemeindebüro"
+        $message = $this->_moveMessageToFolder('INBOX.Info Gemeindebüro', false, $account);
         $this->_assertMessageNotInFolder('INBOX', $message['subject']);
-        $this->_assertMessageInFolder('INBOX', $message['subject'], $account);
+        $this->_assertMessageInFolder('INBOX.Info Gemeindebüro', $message['subject'], $account);
     }
 
     public function testCopyMessageToAnotherFolder()

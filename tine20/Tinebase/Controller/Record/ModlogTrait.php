@@ -77,7 +77,7 @@ trait Tinebase_Controller_Record_ModlogTrait
                 $cId = $_oldRecord->getContainerId();
             }
             $id = $notNullRecord->getId();
-            $bchub->push($verb, get_class($notNullRecord), $id, $cId);
+            $bchub->pushAfterCommit($verb, get_class($notNullRecord), $id, $cId);
         }
 
         if (! $notNullRecord->has('created_by') || $this->_omitModLog === TRUE) {

@@ -6,7 +6,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 use Zend_RedisProxy as Redis;
@@ -18,6 +18,8 @@ use Zend_RedisProxy as Redis;
  */
 class Tinebase_BroadcastHub
 {
+    use Tinebase_Controller_SingletonTrait;
+
     public function isActive(): bool
     {
         return $this->_isActive;
@@ -33,7 +35,13 @@ class Tinebase_BroadcastHub
         ]));
     }
 
-    use Tinebase_Controller_SingletonTrait;
+    public function pushAfterCommit(string $verb, string $model, string $recordId, ?string $containerId): void
+    {
+        Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(
+            function() use($verb, $model, $recordId, $containerId) {
+                Tinebase_BroadcastHub::getInstance()->push($verb, $model, $recordId, $containerId);
+        });
+    }
 
     protected $_config;
     protected $_isActive;

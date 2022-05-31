@@ -282,10 +282,21 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        parent::_inspectBeforeCreate($_record);
+
+        /** @var Timetracker_Model_Timesheet $_record */
         $this->_checkDeadline($_record);
         $this->_calculateTimes($_record);
     }
-    
+
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        /** @var Timetracker_Model_Timesheet $_createdRecord */
+        parent::_inspectAfterCreate($_createdRecord, $_record);
+
+        $this->_tsChanged($_createdRecord);
+    }
+
     /**
      * inspect update of one record
      * 
@@ -295,8 +306,33 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
+        /** @var Timetracker_Model_Timesheet $_record */
         $this->_checkDeadline($_record);
         $this->_calculateTimes($_record);
+
+    }
+
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+        parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
+
+        /** @var Timetracker_Model_Timesheet $updatedRecord */
+        if ($updatedRecord->duration != $currentRecord->duration ||
+                $updatedRecord->start_date != $currentRecord->start_date ||
+                $updatedRecord->stat_time != $currentRecord->start_time) {
+            $this->_tsChanged($updatedRecord);
+        }
+    }
+
+    protected function _tsChanged(Timetracker_Model_Timesheet $record)
+    {
+        $event = new Tinebase_Event_Record_Update();
+        $event->observable = $record;
+        Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function() use($event) {
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
+        });
     }
 
     /**
