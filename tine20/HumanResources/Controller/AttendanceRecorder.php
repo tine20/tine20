@@ -16,7 +16,7 @@
  * @package     HumanResources
  * @subpackage  Controller
  */
-class HumanResources_Controller_AttendanceRecorder
+class HumanResources_Controller_AttendanceRecorder implements Tinebase_Controller_Interface
 {
     use Tinebase_Controller_SingletonTrait;
 
@@ -144,7 +144,7 @@ class HumanResources_Controller_AttendanceRecorder
             throw new Tinebase_Exception_UnexpectedValue('can\'t clockIn with other status than ' . HumanResources_Model_AttendanceRecord::STATUS_OPEN);
         }
 
-        $this->registerAfterCommitAsyncBLPipeRun();
+        $this->registerAfterCommitBLPipeRun($config->getAccount()->getId());
         $result = $this->getClockInOutResult();
 
         $outOfSequenceClosure = $this->checkOutOfSequence($config);
@@ -317,6 +317,7 @@ class HumanResources_Controller_AttendanceRecorder
 
         $raii->release();
 
+        $result->reloadData();
         return $result;
     }
 
@@ -344,7 +345,7 @@ class HumanResources_Controller_AttendanceRecorder
             return $result;
         }
 
-        $this->registerAfterCommitAsyncBLPipeRun();
+        $this->registerAfterCommitBLPipeRun($config->getAccount()->getId());
 
         $outOfSequenceClosure = $this->checkOutOfSequence($config);
 
@@ -436,6 +437,7 @@ class HumanResources_Controller_AttendanceRecorder
 
         $raii->release();
 
+        $result->reloadData();
         return $result;
     }
 
@@ -458,7 +460,7 @@ class HumanResources_Controller_AttendanceRecorder
                 HumanResources_Model_AttendanceRecord::STATUS_FAULTY);
         }
 
-        $this->registerAfterCommitAsyncBLPipeRun();
+        $this->registerAfterCommitBLPipeRun($config->getAccount()->getId());
         $result = $this->getClockInOutResult();
 
         $outOfSequenceClosure = $this->checkOutOfSequence($config);
@@ -536,6 +538,7 @@ class HumanResources_Controller_AttendanceRecorder
 
         $raii->release();
 
+        $result->reloadData();
         return $result;
     }
 
@@ -553,11 +556,17 @@ class HumanResources_Controller_AttendanceRecorder
         ]);
     }
 
-    protected function registerAfterCommitAsyncBLPipeRun()
+    protected function registerAfterCommitBLPipeRun(string $accountId): void
     {
-        Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function() {
-            Tinebase_ActionQueue::getInstance()->queueAction(HumanResources_Controller_AttendanceRecorder::class .
-                '.runBLPipes');
+        Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function() use($accountId) {
+            $oldContext = $context = (array)HumanResources_Controller_DailyWTReport::getInstance()->getRequestContext();
+            $context['tsSyncron'] = true;
+            HumanResources_Controller_DailyWTReport::getInstance()->setRequestContext($context);
+            try {
+                HumanResources_Controller_AttendanceRecorder::runBLPipes($accountId);
+            } finally {
+                HumanResources_Controller_DailyWTReport::getInstance()->setRequestContext($oldContext);
+            }
         });
     }
 
@@ -625,7 +634,7 @@ class HumanResources_Controller_AttendanceRecorder
         }
     }
 
-    public static function runBLPipes($accountId = null): void
+    public static function runBLPipes(?string $accountId = null): bool
     {
         $deviceCtrl = HumanResources_Controller_AttendanceRecorderDevice::getInstance();
         $recordCtrl = HumanResources_Controller_AttendanceRecord::getInstance();
@@ -671,5 +680,7 @@ class HumanResources_Controller_AttendanceRecorder
 
             $transaction->release();
         }
+
+        return true;
     }
 }

@@ -626,10 +626,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ->setThrowOnFaultyAction(true);
 
         $result = HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn($cfg);
-
-        HumanResources_Controller_AttendanceRecorder::runBLPipes(Tinebase_Core::getUser()->getId());
-        $result->reloadData();
-
         return $result->toArray();
     }
 
@@ -656,10 +652,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ->setThrowOnFaultyAction(true);
 
         $result = HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut($cfg);
-
-        HumanResources_Controller_AttendanceRecorder::runBLPipes(Tinebase_Core::getUser()->getId());
-        $result->reloadData();
-
         return $result->toArray();
     }
 
@@ -686,10 +678,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ->setThrowOnFaultyAction(true);
 
         $result = HumanResources_Controller_AttendanceRecorder::getInstance()->clockPause($cfg);
-
-        HumanResources_Controller_AttendanceRecorder::runBLPipes(Tinebase_Core::getUser()->getId());
-        $result->reloadData();
-
         return $result->toArray();
     }
 
