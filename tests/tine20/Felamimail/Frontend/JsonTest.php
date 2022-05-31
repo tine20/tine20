@@ -2813,4 +2813,15 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
                 $e->getMessage());
         }
     }
+
+    public function testMoveFolder()
+    {
+        $this->_json->addFolder('Info Gemeindebüro', 'INBOX', $this->_account->getId());
+        $this->_createdFolders = ['INBOX.Info Gemeindebüro'];
+        $newGlobalname = $this->_testFolderName . '.Info Gemeindebüro';
+        $result = $this->_json->moveFolder($newGlobalname,
+            'INBOX.Info Gemeindebüro', $this->_account->getId());
+        $this->_createdFolders = [$newGlobalname];
+        self::assertEquals($newGlobalname, $result['globalname']);
+    }
 }
