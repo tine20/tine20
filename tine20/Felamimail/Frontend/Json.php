@@ -69,10 +69,23 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function renameFolder($newName, $oldGlobalName, $accountId)
     {
         $result = Felamimail_Controller_Folder::getInstance()->rename($accountId, $newName, $oldGlobalName);
-        
         return $result->toArray();
     }
-    
+
+    /**
+     * move folder
+     *
+     * @param string $newGlobalName
+     * @param string $oldGlobalName
+     * @param string $accountId
+     * @return array
+     */
+    public function moveFolder(string $newGlobalName, string $oldGlobalName, string $accountId): array
+    {
+        $result = Felamimail_Controller_Folder::getInstance()->rename($accountId, $newGlobalName, $oldGlobalName, false);
+        return $result->toArray();
+    }
+
     /**
      * delete folder
      *
