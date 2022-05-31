@@ -1783,7 +1783,7 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $bchub = Tinebase_BroadcastHub::getInstance();
         if ($bchub->isActive()) {
-            $bchub->push('delete', get_class($record), $record->getId(), $record->has('container_id') ? $record->container_id : null);
+            $bchub->pushAfterCommit('delete', get_class($record), $record->getId(), $record->has('container_id') ? $record->container_id : null);
         }
     }
 
