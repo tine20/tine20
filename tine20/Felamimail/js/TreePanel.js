@@ -336,11 +336,15 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 }
             }, this);
             ftb.supressEvents = false;
-            
+
             // set ftb filters according to tree selection
-            var filter = this.getFilterPlugin().getFilter();
+            const filter = this.getFilterPlugin().getFilter();
+            const grid = this.filterPlugin.getGridPanel();
+            const pathFilterValue =  filter?.value && _.isArray(filter?.value) ? filter.value[0] : null;
+            const isSentFolder = grid.isSendFolderPath(pathFilterValue);
+            
+            ftb.defaultFilter = isSentFolder ? 'to' : 'query';
             ftb.addFilter(new ftb.record(filter));
-        
             ftb.onFiltertrigger();
             
             // finally select the selected node, as filtertrigger clears all selections
@@ -352,7 +356,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         }
         this.saveState();
     },
-
+  
     /**
      * returns a filter plugin to be used in a grid
      * @private
