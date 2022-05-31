@@ -136,7 +136,10 @@ class HumanResources_Controller_AttendanceControllerTests extends HumanResources
         ]));
         $this->assertSame(1, $ts->count());
         $ts = $ts->getFirstRecord();
-        $this->assertSame('Clock in: 17:03:10 Clock pause: 17:03:11 Clock in: 18:03:10 Clock pause: 18:03:10 Clock in: 18:05:10 Clock out: 18:15:10', $ts->description);
+        $t = Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME);
+        $this->assertSame(sprintf($t->_('Clock in: %1$s'), '17:03:10 ') . sprintf($t->_('Clock pause: %1$s'), '17:03:11 ') .
+        sprintf($t->_('Clock in: %1$s'), '18:03:10 ') . sprintf($t->_('Clock pause: %1$s'), '18:03:10 ') .
+        sprintf($t->_('Clock in: %1$s'), '18:05:10 ') . sprintf($t->_('Clock out: %1$s'), '18:15:10'), $ts->description);
         $this->assertSame(45, (int)$ts->duration);
     }
 }
