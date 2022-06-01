@@ -484,12 +484,14 @@
       * ResourceMailsForEditors = Send to Editors and Resource
       * ! ResourceMailsForEditors = Send only to Resource
       *
-      * @param $attender
-      * @param $_notificationLevel
-      * @param $recipients
-      * @param $action
-      * @param $sendLevel
+      * @param Calendar_Model_Attender $attender
+      * @param string $_notificationLevel
+      * @param array $recipients
+      * @param string $action
+      * @param string $sendLevel
       * @return bool
+      *
+      * TODO is return bool needed? we never return false ...
       */
      protected function _handleResourceEditors($attender, $_notificationLevel, &$recipients, &$action, &$sendLevel, $_updates)
      {
@@ -544,6 +546,8 @@
          $recipients = array_merge($recipients,
              Calendar_Controller_Resource::getInstance()->getNotificationRecipients($resource)
          );
+
+         return true;
      }
     
     /**
@@ -557,7 +561,7 @@
      * @param Zend_Locale $locale
      * @param Zend_Translate_Adapter $translate
      * @param string $method
-     * @param Calendar_Model_Attender
+     * @param Calendar_Model_Attender $attender
      * @return string
      * @throws Tinebase_Exception_UnexpectedValue
      */
@@ -733,7 +737,7 @@
      * 
      * @param Calendar_Model_Event $event
      * @param string $method
-     * @param Tinebase_Model_FullAccount $updater
+     * @param Tinebase_Model_FullUser $updater
      * @param Calendar_Model_Attender $attendee
      * @return Sabre\VObject\Component
      */
