@@ -222,11 +222,11 @@ class DFCom_Model_Device extends Tinebase_Record_Abstract
      */
     public function mergeStatusData(DFCom_Model_DeviceRecord $deviceRecord) {
         $deviceData = $deviceRecord->xprops('data');
+        $mc = static::getConfiguration();
 
         foreach(self::$statusFields as $fieldName) {
             if (array_key_exists($fieldName, $deviceData)) {
-                if (Tinebase_ModelConfiguration::TYPE_INTEGER ===
-                        static::$_configurationObject->_fields[$fieldName][Tinebase_ModelConfiguration::TYPE]) {
+                if (Tinebase_ModelConfiguration::TYPE_INTEGER === $mc->_fields[$fieldName][Tinebase_ModelConfiguration::TYPE]) {
                     $this->{$fieldName} = $deviceData[$fieldName] === '' ? null : $deviceData[$fieldName];
                 } else {
                     $this->{$fieldName} = $deviceData[$fieldName];

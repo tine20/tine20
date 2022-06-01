@@ -76,7 +76,7 @@ class DFCom_RecordHandler_TimeAccounting
         $dateTime = new Tinebase_DateTime($this->deviceData['dateTime'], $this->device->timezone);
 
         $this->currentUser = null;
-        $result = false;
+        $result = null;
         try {
             $this->employee = $this->employeeController->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
                 ['condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_OR, 'filters' => [
@@ -122,12 +122,7 @@ class DFCom_RecordHandler_TimeAccounting
                     } elseif (self::FUNCTION_KEY_ABSENCE === $this->deviceData['functionKey']) {
                         HumanResources_Controller_AttendanceRecorder::getInstance()->clockPause($cfg);
                     }
-
-                    if (!in_array(self::class, $this->deviceRecord->xprops(DFCom_Model_DeviceRecord::FLD_PROCESSED))) {
-                        $this->deviceRecord->xprops(DFCom_Model_DeviceRecord::FLD_PROCESSED)[] = self::class;
-                    }
-
-                    //break;
+                    $result = false;
                     // fallthrough to display info
 
                 case self::FUNCTION_KEY_INFO:
@@ -155,7 +150,9 @@ class DFCom_RecordHandler_TimeAccounting
                     if (!in_array(self::class, $this->deviceRecord->xprops(DFCom_Model_DeviceRecord::FLD_PROCESSED))) {
                         $this->deviceRecord->xprops(DFCom_Model_DeviceRecord::FLD_PROCESSED)[] = self::class;
                     }
-                    $result = true;
+                    if (null === $result) {
+                        $result = true;
+                    }
                     break;
 
                 default:
@@ -181,7 +178,7 @@ class DFCom_RecordHandler_TimeAccounting
             }
         }
 
-        return $result;
+        return (bool)$result;
     }
 
     public function createTimesheet($date, $functionKey = self::FUNCTION_KEY_CLOCKIN)
