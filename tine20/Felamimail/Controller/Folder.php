@@ -430,20 +430,27 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     }
     
     /**
-     * rename folder
+     * rename/move folder
      *
      * @param string $_accountId
-     * @param string $_newLocalName
+     * @param string $_newName
      * @param string $_oldGlobalName
+     * @param bool $targetIsLocal
      * @return Felamimail_Model_Folder
      */
-    public function rename($_accountId, $_newLocalName, $_oldGlobalName)
+    public function rename($_accountId, string $_newName, string $_oldGlobalName, bool $targetIsLocal = true): Felamimail_Model_Folder
     {
         $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
         $this->_delimiter = $account->delimiter;
-        
-        $newLocalName = $this->_prepareFolderName($_newLocalName);
-        $newGlobalName = $this->_buildNewGlobalName($newLocalName, $_oldGlobalName);
+
+        if ($targetIsLocal) {
+            $newLocalName = $this->_prepareFolderName($_newName);
+            $newGlobalName = $this->_buildNewGlobalName($newLocalName, $_oldGlobalName);
+        } else {
+            $globalNameParts = explode($this->_delimiter, $_newName);
+            $newLocalName = array_pop($globalNameParts);
+            $newGlobalName = $_newName;
+        }
 
         if ($_oldGlobalName === $newGlobalName) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -495,6 +502,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         $imap = Felamimail_Backend_ImapFactory::factory($_account);
         
         try {
+            /* @var Felamimail_Backend_Imap $imap */
             $imap->renameFolder(Felamimail_Model_Folder::encodeFolderName($_oldGlobalName), Felamimail_Model_Folder::encodeFolderName($_newGlobalName));
         } catch (Zend_Mail_Storage_Exception $zmse) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 

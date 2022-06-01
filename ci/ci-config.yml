@@ -34,7 +34,7 @@ variables:
   PHP_VERSION: "8.0"
 
   # "Codename for build"
-  CODENAME: "Amon"
+  CODENAME: "Pino"
 
   # "Try to reuse source images" 
   REUSE_IMAGES: "true"
