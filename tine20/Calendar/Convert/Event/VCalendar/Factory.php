@@ -42,7 +42,7 @@ class Calendar_Convert_Event_VCalendar_Factory
      *
      * @param   string $_backend
      * @param   string $_version
-     * @return  Tinebase_Convert_Interface
+     * @return  Calendar_Convert_Event_VCalendar_Abstract
      */
     static public function factory($_backend, $_version = null)
     {

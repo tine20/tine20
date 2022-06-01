@@ -484,12 +484,14 @@
       * ResourceMailsForEditors = Send to Editors and Resource
       * ! ResourceMailsForEditors = Send only to Resource
       *
-      * @param $attender
-      * @param $_notificationLevel
-      * @param $recipients
-      * @param $action
-      * @param $sendLevel
+      * @param Calendar_Model_Attender $attender
+      * @param string $_notificationLevel
+      * @param array $recipients
+      * @param string $action
+      * @param string $sendLevel
       * @return bool
+      *
+      * TODO is return bool needed? we never return false ...
       */
      protected function _handleResourceEditors($attender, $_notificationLevel, &$recipients, &$action, &$sendLevel, $_updates)
      {
@@ -544,6 +546,8 @@
          $recipients = array_merge($recipients,
              Calendar_Controller_Resource::getInstance()->getNotificationRecipients($resource)
          );
+
+         return true;
      }
     
     /**
@@ -555,13 +559,21 @@
      * @param array $_updates
      * @param string $timezone
      * @param Zend_Locale $locale
-     * @param Zend_Translate $translate
+     * @param Zend_Translate_Adapter $translate
      * @param string $method
-     * @param Calendar_Model_Attender
+     * @param Calendar_Model_Attender $attender
      * @return string
      * @throws Tinebase_Exception_UnexpectedValue
      */
-    protected function _getSubject($_event, $_notificationLevel, $_action, $_updates, $timezone, $locale, $translate, &$method, Calendar_Model_Attender $attender)
+    protected function _getSubject(Calendar_Model_Event $_event,
+                                   $_notificationLevel,
+                                   $_action,
+                                   $_updates,
+                                   $timezone,
+                                   $locale,
+                                   $translate,
+                                   &$method,
+                                   Calendar_Model_Attender $attender): string
     {
         $startDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtstart, $timezone, $locale);
 
@@ -574,7 +586,8 @@
                 $_action = 'created';
             }
         }
-        
+
+        $messageSubject = '';
         switch ($_action) {
             case 'alarm':
                 $messageSubject = sprintf($translate->_('Alarm for event "%1$s" at %2$s'), $_event->summary, $startDateString);
@@ -655,7 +668,7 @@
                         }
                         
                         // we don't send iMIP parts to organizers with an account cause event is already up to date
-                        if ($_event->organizer && !$_event->resolveOrganizer()->account_id) {
+                        if ($_event->organizer && ($_event->resolveOrganizer() === null || !$_event->resolveOrganizer()->account_id)) {
                             $method = Calendar_Model_iMIP::METHOD_REPLY;
                         }
                         break;
@@ -724,7 +737,7 @@
      * 
      * @param Calendar_Model_Event $event
      * @param string $method
-     * @param Tinebase_Model_FullAccount $updater
+     * @param Tinebase_Model_FullUser $updater
      * @param Calendar_Model_Attender $attendee
      * @return Sabre\VObject\Component
      */
