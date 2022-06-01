@@ -951,8 +951,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         switch ($_type) {
             case Tinebase_Model_Tree_FileObject::TYPE_FOLDER:
                 $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($_statpath);
-                if ($path->getParent()->isToplevelPath()) {
-                    $node = $this->_backend->createAclNode($_statpath);
+                if ($path->isDefaultACLsPath()) {
+                    $node = $this->_backend->createAclNode($_statpath, $path->getDefaultAcls());
                 } else {
                     $node = $this->_backend->mkdir($_statpath);
                 }

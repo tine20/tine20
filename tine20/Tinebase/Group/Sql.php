@@ -71,7 +71,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     protected $_classCache = array (
         'getGroupMemberships' => array()
     );
-    
+
+    protected $_backend;
+
     /**
      * the constructor
      */
@@ -81,6 +83,12 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         
         $this->groupsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . $this->_tableName));
         $this->groupMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
+
+        $this->_backend = new Tinebase_Backend_Sql([
+            Tinebase_Backend_Sql::TABLE_NAME => $this->_tableName,
+            Tinebase_Backend_Sql::MODEL_NAME => Tinebase_Model_Group::class,
+            Tinebase_Backend_Sql::MODLOG_ACTIVE => false,
+        ]);
         
         try {
             // MySQL throws an exception         if the table does not exist
@@ -742,6 +750,11 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         if(count($groups) > 0) {
             $this->deleteGroups($groups);
         }
+    }
+
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = \Tinebase_Controller_Record_Abstract::ACTION_GET)
+    {
+        return $this->_backend->search($_filter, $_pagination, $_onlyIds);
     }
 
     /**

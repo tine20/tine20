@@ -203,8 +203,13 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create directory: ' . $path);
-        
-        Tinebase_FileSystem::getInstance()->mkdir($path);
+
+        $statpath = Tinebase_Model_Tree_Node_Path::createFromStatPath($path);
+        if ($statpath->isDefaultACLsPath()) {
+            Tinebase_FileSystem::getInstance()->createAclNode($path, $statpath->getDefaultAcls());
+        } else {
+            Tinebase_FileSystem::getInstance()->mkdir($path);
+        }
     }
     
     /**

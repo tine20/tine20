@@ -76,6 +76,11 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      * @var string
      */
     protected $_application = 'Tinebase';
+
+    /**
+     * @var ?Tinebase_Record_RecordSet
+     */
+    protected $defaultAcls;
     
     /**
      * list of zend validator
@@ -426,6 +431,76 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         }
         
         return $result;
+    }
+
+    public function isDefaultACLsPath(): bool
+    {
+        if (null !== $this->defaultAcls) {
+            return false !== $this->defaultAcls;
+        }
+
+        $cfg = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_DEFAULT_GRANTS}->toArray();
+
+        foreach ($cfg as $glob => $grants) {
+            list($app, $appendix) = explode('/', $glob, 2);
+            try {
+                $app = Tinebase_Application::getInstance()->getApplicationByName($app);
+                $glob = $app->getId() . '/' . $appendix;
+            } catch (Tinebase_Exception_NotFound $tenf) {}
+
+            if (preg_match('#^/'. str_replace('#', '\\#', $glob) . '$#um', $this->statpath, $globMatches)) {
+
+                foreach ($grants as &$grantData) {
+                    $arrToWalk = null;
+                    if (is_array($grantData['account_id'])) {
+                        $arrToWalk = &$grantData['account_id'];
+                    } elseif (strpos($grantData['account_id'], '$') !== false) {
+                        $arrToWalk = [&$grantData['account_id']];
+                    }
+                    if (null !== $arrToWalk) {
+                        array_walk_recursive($arrToWalk, function(&$val) use($globMatches) {
+                            if (is_string($val) && preg_match_all('/\\$(\d+)/', $val, $m)) {
+                                foreach($m[1] as $digits) {
+                                    $digits = (int)$digits;
+                                    if (isset($globMatches[$digits])) {
+                                        $val = str_replace('$' . $digits, $globMatches[$digits], $val);
+                                    }
+                                }
+                            }
+                        });
+                        unset($arrToWalk);
+                    }
+
+                    if (is_array($grantData['account_id'])) {
+                        switch ($grantData['account_type']) {
+                            case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
+                                $grantData['account_id'] = Tinebase_User::getInstance()->search(
+                                    new Tinebase_Model_FullUserFilter($grantData['account_id']))->getFirstRecord()->getId();
+                                break;
+                            case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
+                                $grantData['account_id'] = Tinebase_Group::getInstance()->search(
+                                    new Tinebase_Model_GroupFilter($grantData['account_id']))->getFirstRecord()->getId();
+                                break;
+                            default:
+                                throw new Tinebase_Exception_NotImplemented('account_type: ' . $grantData['account_type']);
+                        }
+                    }
+                }
+                unset($grantData);
+
+                $this->defaultAcls = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class, $grants);
+
+                return true;
+            }
+        }
+
+        $this->defaultAcls = false;
+        return false;
+    }
+
+    public function getDefaultAcls(): ?Tinebase_Record_RecordSet
+    {
+        return $this->isDefaultACLsPath() ? $this->defaultAcls : null;
     }
 
     /**

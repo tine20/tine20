@@ -513,6 +513,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->assertTrue(isset($createdNode['name']));
         $this->assertEquals($containerName, $createdNode['name']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $createdNode['created_by']['accountId']);
+        $this->assertSame($createdNode['id'], $createdNode['acl_node']);
         
         return $createdNode;
     }
@@ -537,6 +538,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $toBeDeleted = $this->_getUit()->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), false)[0];
         $this->_getUit()->deleteNodes($testPath);
 
+        $this->assertNotSame($node['acl_node'], $node['id']);
         $node['acl_node'] = $node['id'];
         $node = $this->_getUit()->saveNode($node);
         static::assertSame($node['id'], $node['acl_node'], 'acl_node update did not work');
@@ -759,8 +761,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         foreach ($notes as $updateNote) {
             $this->assertTrue(strpos($updateNote->note, ':  revision (0 -> 1) contenttype (application/octet-stream -> text/plain) seq (1 -> 2) size ( -> 8)') !== false ||
                 strpos($updateNote->note, ':  revision (0 -> 1) contenttype (application/octet-stream -> text/plain) seq (1 -> 2) Größe ( -> 8)') !== false ||
-                strpos($updateNote->note, ':  revision (1 -> 2) seq (4 -> 5) size (8 -> ' . $strLen . ')') !== false ||
-                strpos($updateNote->note, ':  revision (1 -> 2) seq (4 -> 5) Größe (8 -> ' . $strLen . ')') !== false,
+                strpos($updateNote->note, ':  revision (1 -> 2) seq (2 -> 3) size (8 -> ' . $strLen . ')') !== false ||
+                strpos($updateNote->note, ':  revision (1 -> 2) seq (2 -> 3) Größe (8 -> ' . $strLen . ')') !== false,
                 $updateNote->note . ' did not match');
         }
     }
