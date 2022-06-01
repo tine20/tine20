@@ -39,6 +39,7 @@ Tine.Felamimail.FolderStore = function(config) {
     
     this.on('load', this.onStoreLoad, this);
     this.on('add', this.onStoreAdd, this);
+    this.on('remove', this.onStoreRemove, this);
     this.on('loadexception', this.onStoreLoadException, this);
 };
 
@@ -177,6 +178,17 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
      */
     onStoreAdd: function(store, records, index) {
         this.computePaths(records, null);
+    },
+
+    /**
+     * add event handler
+     *
+     * @param {Tine.Felamimail.FolderStore} store
+     * @param {Tine.Felamimail.Model.Folder} record
+     * @param {Integer} index
+     */
+    onStoreRemove: function(store, record, index) {
+        this.resetQueryAndRemoveRecords('parent_path', record.get('path'));
     },
 
     /**

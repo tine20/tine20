@@ -2828,5 +2828,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $junkfoldersAfter = $this->_json->searchFolders($filter);
         self::assertGreaterThan($junkfoldersBefore['totalcount'], $junkfoldersAfter['totalcount'],
             'new folder missing from test folder');
+        $testFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account, $this->_testFolderName);
+        self::assertEquals(1, $testFolder->has_children, 'has_children should be 1');
     }
 }

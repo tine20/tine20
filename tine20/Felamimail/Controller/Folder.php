@@ -464,6 +464,9 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         $this->_renameFolderOnIMAP($account, $newGlobalName, $_oldGlobalName);
         $folder = $this->_renameFolderInCache($account, $newGlobalName, $_oldGlobalName, $newLocalName);
         $this->_updateSubfoldersAfterRename($account, $newGlobalName, $_oldGlobalName);
+        if (! $targetIsLocal) {
+            $this->_updateParentsAfterRename($account, $newGlobalName, $_oldGlobalName);
+        }
         
         return $folder;
     }
@@ -566,7 +569,29 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     }
 
     /**
-     * delete all messages in one folder -> be careful, they are completly removed and not moved to trash
+     * update has_children of parents
+     *
+     * @param Felamimail_Model_Account $_account
+     * @param string $_newGlobalName
+     * @param string $_oldGlobalName
+     */
+    protected function _updateParentsAfterRename(Felamimail_Model_Account $_account, $_newGlobalName, $_oldGlobalName)
+    {
+        $parentName = $this->_getParentGlobalname($_newGlobalName);
+        $parentFolder = $this->getByBackendAndGlobalName($_account, $parentName);
+        $parentFolder->has_children = true;
+        $this->update($parentFolder);
+
+        $oldParentName = $this->_getParentGlobalname($_oldGlobalName);
+        if (count($this->getSubfolders($_account, $oldParentName)) === 0 ) {
+            $oldParentFolder = $this->getByBackendAndGlobalName($_account, $oldParentName);
+            $oldParentFolder->has_children = false;
+            $this->update($parentFolder);
+        }
+    }
+
+    /**
+     * delete all messages in one folder -> be careful, they are completely removed and not moved to trash
      * -> delete subfolders if param set
      *
      * @param string $_folderId
