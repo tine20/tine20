@@ -610,15 +610,19 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     * @param Felamimail_Model_Sieve_Vacation $vacation
     * @return string
     */
-    public function getVacationMessage(Felamimail_Model_Sieve_Vacation $vacation)
+    public function getVacationMessage(Felamimail_Model_Sieve_Vacation $vacation): string
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($vacation->toArray(), TRUE));
 
         if (empty($vacation->account_id)) {
             $vacation->account_id = Felamimail_Controller_Account::getInstance()->getSystemAccount();
         }
-        $message = $this->_getMessageFromTemplateFile($vacation->template_id);
-        $message = $this->_doMessageSubstitutions($vacation, $message);
+        if ($vacation->template_id) {
+            $message = $this->_getMessageFromTemplateFile($vacation->template_id);
+            $message = $this->_doMessageSubstitutions($vacation, $message);
+        } else {
+            $message = '';
+        }
         
         return $message;
     }
