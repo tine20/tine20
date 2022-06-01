@@ -62,11 +62,10 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
         'setBySetupModule'      => array('allowEmpty' => true ),
         'default'               => array('allowEmpty' => true ),
 
-        // source of config, as file config's can't be overwritten by db
+        // source of config, as file configs can't be overwritten by db
         'source'                => array(
             Zend_Filter_Input::ALLOW_EMPTY => true,
             array('InArray', array(self::SOURCE_FILE, self::SOURCE_DB, self::SOURCE_DEFAULT))
         ),
     );
-    
 }

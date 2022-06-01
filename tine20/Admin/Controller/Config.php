@@ -235,7 +235,7 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
 
         $this->_inspectRecord($_record, $app);
         $createdRecord = $this->_configBackend->create($_record);
-
+        Tinebase_Config_Abstract::factory($app->name)->clearCache();
         return $this->get($createdRecord->getId());
     }
 
@@ -256,7 +256,7 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
 
         $this->_inspectRecord($_record, $app);
         $this->_configBackend->update($_record);
-
+        Tinebase_Config_Abstract::factory($app->name)->clearCache();
         return $this->get($_record->getId());
     }
 

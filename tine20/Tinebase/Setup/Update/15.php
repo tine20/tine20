@@ -24,6 +24,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE008 = __CLASS__ . '::update008';
     const RELEASE015_UPDATE009 = __CLASS__ . '::update009';
     const RELEASE015_UPDATE010 = __CLASS__ . '::update010';
+    const RELEASE015_UPDATE011 = __CLASS__ . '::update011';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE       => [
@@ -63,6 +64,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE010          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update010',
+            ],
+            self::RELEASE015_UPDATE011          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update011',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -201,5 +206,18 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.10', self::RELEASE015_UPDATE010);
+    }
+
+    public function update011()
+    {
+        if ($this->getTableVersion('config') < 2) {
+            $this->_backend->alterCol('config', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>value</name>
+                    <type>text</type>
+                </field>'));
+            $this->setTableVersion('config', 2);
+        }
+        $this->addApplicationUpdate('Tinebase', '15.11', self::RELEASE015_UPDATE011);
     }
 }

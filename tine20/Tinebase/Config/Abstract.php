@@ -339,7 +339,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
 
             $this->_saveConfig($configRecord);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            // during installation we may not have access to the application yet.. dangerous terrain
+            // during installation, we may not have access to the application yet ... dangerous terrain
         }
 
         $this->_mergedConfigCache[$_name] = $this->_rawToConfig($_value, $_name);
@@ -971,7 +971,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             $target[$key][self::DEFAULT_STR] = $val;
         }
     }
-    
+
     /**
      * Get list of server classes
      *
@@ -981,7 +981,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     {
         return static::$_serverPlugins;
     }
-    
+
     /**
      * check if config system is ready
      * 

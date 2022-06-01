@@ -4,7 +4,7 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -874,6 +874,10 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
 
     protected function createExampleAppRecord()
     {
+        if (!Tinebase_Application::getInstance()->isInstalled('ExampleApplication')) {
+            self::markTestSkipped('Test needs ExampleApplication');
+        }
+
         return ExampleApplication_Controller_ExampleRecord::getInstance()->create(
             new ExampleApplication_Model_ExampleRecord([
                 'name' => Tinebase_Record_Abstract::generateUID(),
@@ -928,7 +932,14 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         $exampleRecord['value'] = json_encode($newExampleRecord->toArray());
 
         $result = $this->_json->saveConfig($exampleRecord);
-        static::assertStringContainsString($newExampleRecord->name, $result['value']);
+        self::assertStringContainsString($newExampleRecord->name, $result['value']);
+
+        // try to save null value
+        $result['value'] = null;
+        $result = $this->_json->saveConfig($result);
+        // it seems that we convert config to string "null" if null
+        self::assertEquals('null', $result['value'], print_r($result, true));
+        self::assertNull(ExampleApplication_Config::getInstance()->get($result['name']));
     }
 
     public function testSearchConfigs()
