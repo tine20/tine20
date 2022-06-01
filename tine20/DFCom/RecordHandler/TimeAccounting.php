@@ -96,34 +96,6 @@ class DFCom_RecordHandler_TimeAccounting
             $this->user = Tinebase_Core::setUser(Tinebase_User::getInstance()->getUserById($this->employee->account_id, Tinebase_Model_FullUser::class));
 
             switch ($this->deviceData['functionKey']) {
-                case self::FUNCTION_KEY_INFO:
-                    $employeeName = $this->user->accountDisplayName;
-                    array_push($assertACLUsageCallbacks, HumanResources_Controller_Contract::getInstance()->assertPublicUsage());
-                    try {
-                        $allRemainingVacationsDays = $this->freeTimeController->getRemainingVacationDays($this->employee);
-                        $remainingVacations = "{$allRemainingVacationsDays} Tage";
-                        
-                        $monthlyWTR = $this->monthlyWTReportController->getByEmployeeMonth($this->employee);
-                        $balanceTS = $monthlyWTR ? 
-                            $monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE} : 0;
-                        $balanceTime = (string)round($balanceTS/3600) .':' .  
-                            str_pad((string) abs($balanceTS/60)%60, 2, "0", STR_PAD_LEFT);
-                        $balance = ($balanceTS >= 0 ? "+{$balanceTime} (haben)" : "{$balanceTime} (soll)");
-                        
-                        $message = "Zeitsaldo: {$balance}\n Resturlaub: {$remainingVacations}";
-                    } catch (Exception $e) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                            __METHOD__ . '::' . __LINE__ . " " . $e->getMessage() . "\n" . $e->getTraceAsString());
-                        $message = "Es liegen keine Informationen vor.";
-                    }
-                    $this->deviceResponse->displayMessage("{$employeeName}\n {$message}");
-                    // lets just do this, hopefully the deviceRecord will not be persisted ... but if it would, we dont want it again, so lets say we processed it
-                    if (!in_array(self::class, $this->deviceRecord->xprops(DFCom_Model_DeviceRecord::FLD_PROCESSED))) {
-                        $this->deviceRecord->xprops(DFCom_Model_DeviceRecord::FLD_PROCESSED)[] = self::class;
-                    }
-                    $result = true;
-                    break;
-
                 case self::FUNCTION_KEY_CLOCKIN:
                 case self::FUNCTION_KEY_CLOCKOUT:
                 case self::FUNCTION_KEY_ABSENCE:
@@ -155,6 +127,35 @@ class DFCom_RecordHandler_TimeAccounting
                         $this->deviceRecord->xprops(DFCom_Model_DeviceRecord::FLD_PROCESSED)[] = self::class;
                     }
 
+                    //break;
+                    // fallthrough to display info
+
+                case self::FUNCTION_KEY_INFO:
+                    $employeeName = $this->user->accountDisplayName;
+                    array_push($assertACLUsageCallbacks, HumanResources_Controller_Contract::getInstance()->assertPublicUsage());
+                    try {
+                        $allRemainingVacationsDays = $this->freeTimeController->getRemainingVacationDays($this->employee);
+                        $remainingVacations = "{$allRemainingVacationsDays} Tage";
+
+                        $monthlyWTR = $this->monthlyWTReportController->getByEmployeeMonth($this->employee);
+                        $balanceTS = $monthlyWTR ?
+                            $monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE} : 0;
+                        $balanceTime = (string)round($balanceTS/3600) .':' .
+                            str_pad((string) abs($balanceTS/60)%60, 2, "0", STR_PAD_LEFT);
+                        $balance = ($balanceTS >= 0 ? "+{$balanceTime} (haben)" : "{$balanceTime} (soll)");
+
+                        $message = "Zeitsaldo: {$balance}\n Resturlaub: {$remainingVacations}";
+                    } catch (Exception $e) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__ . " " . $e->getMessage() . "\n" . $e->getTraceAsString());
+                        $message = "Es liegen keine Informationen vor.";
+                    }
+                    $this->deviceResponse->displayMessage("{$employeeName}\n {$message}");
+                    // lets just do this, hopefully the deviceRecord will not be persisted ... but if it would, we dont want it again, so lets say we processed it
+                    if (!in_array(self::class, $this->deviceRecord->xprops(DFCom_Model_DeviceRecord::FLD_PROCESSED))) {
+                        $this->deviceRecord->xprops(DFCom_Model_DeviceRecord::FLD_PROCESSED)[] = self::class;
+                    }
+                    $result = true;
                     break;
 
                 default:
