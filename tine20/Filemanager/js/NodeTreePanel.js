@@ -147,9 +147,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                 me.expandPath(parentPath, '', function (sucess, parentNode) {
                     const childNode = parentNode.findChild('name', data.name);
                     if (!childNode) {
-                        if (`${me.currentNodePath}/` === data.path.replace(data.name, '')) {
-                            parentNode.appendChild(node || me.loader.createNode({...data}));
-                        }
+                        parentNode.appendChild(node || me.loader.createNode({...data}));
                     } else if (childNode !== node) {
                         // node got duplicated by expand load
                         try {
