@@ -285,12 +285,13 @@ abstract class Felamimail_TestCase extends TestCase
     /**
      * get folder filter
      *
+     * @param string $globalname
      * @return array
      */
-    protected function _getFolderFilter()
+    protected function _getFolderFilter($globalname = ''): array
     {
         return array(array(
-            'field' => 'globalname', 'operator' => 'equals', 'value' => ''
+            'field' => 'globalname', 'operator' => 'equals', 'value' => $globalname
         ));
     }
 

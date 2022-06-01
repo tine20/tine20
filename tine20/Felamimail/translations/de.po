@@ -639,6 +639,15 @@ msgstr "Ordnerliste aktualisieren"
 msgid "Approve Migration"
 msgstr "Migration freigeben"
 
+msgid "Move Folder"
+msgstr "Ordner verschieben"
+
+msgid "Invalid Selection"
+msgstr "Ungültige Auswahl"
+
+msgid "You cannot move the folder to an own sub folder!"
+msgstr "Ordner in eigenen Unterordner verschieben nicht möglich!"
+
 #: js/MessageEditDialog.js:187
 msgid "Send"
 msgstr "Senden"

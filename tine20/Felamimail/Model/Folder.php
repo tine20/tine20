@@ -17,13 +17,14 @@
  * @package     Felamimail
  * @subpackage  Model
  *
- * @property  string  account_id
- * @property  string  localname
- * @property  string  globalname
- * @property  boolean has_children
- * @property  boolean is_selectable
- * @property  boolean supports_condstore
- * @property  integer imap_lastmodseq
+ * @property  string $account_id
+ * @property  string $localname
+ * @property  string $globalname
+ * @property  string $parent
+ * @property  boolean $has_children
+ * @property  boolean $is_selectable
+ * @property  boolean $supports_condstore
+ * @property  integer $imap_lastmodseq
  */
 class Felamimail_Model_Folder extends Tinebase_Record_Abstract
 {

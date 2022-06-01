@@ -495,10 +495,14 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @param {Object} nodeUi
      */
     addStatusboxesToNodeUi: function(nodeUi) {
-        Ext.DomHelper.insertAfter(nodeUi.elNode.lastChild, {tag: 'span', 'class': 'felamimail-node-statusbox', cn:[
-            {'tag': 'img', 'src': Ext.BLANK_IMAGE_URL, 'class': 'felamimail-node-statusbox-progress'},
-            {'tag': 'span', 'class': 'felamimail-node-statusbox-unread'}
-        ]});
+        if (nodeUi?.elNode?.lastChild) {
+            Ext.DomHelper.insertAfter(nodeUi.elNode.lastChild, {
+                tag: 'span', 'class': 'felamimail-node-statusbox', cn: [
+                    {'tag': 'img', 'src': Ext.BLANK_IMAGE_URL, 'class': 'felamimail-node-statusbox-progress'},
+                    {'tag': 'span', 'class': 'felamimail-node-statusbox-unread'}
+                ]
+            });
+        }
     },
     
     /**
@@ -652,6 +656,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         var recordData = Ext.copyTo({}, folderData, Tine.Felamimail.Model.Folder.getFieldNames());
         var newRecord = Tine.Felamimail.folderBackend.recordReader({responseText: Ext.util.JSON.encode(recordData)});
 
+        this.ctxNode.expand();
         this.ctxNode.appendChild(this.loader.createNode(folderData));
         const parentRecord = this.folderStore.getById(this.ctxNode.id);
         if (parentRecord) parentRecord.set('has_children', true);
