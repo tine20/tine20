@@ -75,10 +75,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $this->_relatableModels[]  = 'Sales_Model_Invoice';
             $this->_configuredModels[] = 'InvoicePosition';
             $this->_configuredModels[] = 'Invoice';
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Invoices module disabled');
-            }
+        } else if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Invoices module disabled');
         }
         if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_OFFERS_MODULE)) {
             $this->_relatableModels[]  = 'Sales_Model_Offer';
