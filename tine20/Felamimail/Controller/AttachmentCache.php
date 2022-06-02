@@ -41,6 +41,9 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
 
     public function get($_id, $_containerId = null, $_getRelatedData = true, $_getDeleted = false, $_aclProtect = true)
     {
+        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+        $selectForUpdate = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_backend);
+
         try {
             /** @var Felamimail_Model_AttachmentCache $record */
             $record = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect);
@@ -56,6 +59,10 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
                 __LINE__ . ' creating cache for ' . $_id);
             return $this->create(new Felamimail_Model_AttachmentCache(['id' => $_id]));
+
+        } finally {
+            unset($selectForUpdate);
+            $transaction->release();
         }
     }
 
