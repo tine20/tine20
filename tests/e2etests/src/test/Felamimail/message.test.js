@@ -102,8 +102,8 @@ describe('message', () => {
     test.skip('attachment file in filemanager', async () => {
         await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
         await expect(page).toClick('.x-menu-item-text', {text: 'Dateimanager'});
-        await page.waitForSelector('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von tine ® Admin'});
-        await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von tine ® Admin', clickCount: 2});
+        await page.waitForSelector('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von ' + process.env.TEST_USER});
+        await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von ' + process.env.TEST_USER, clickCount: 2});
         await page.waitForSelector('.x-grid3-cell-inner.x-grid3-col-name', {text: 'attachment.txt'});
     });
 });
