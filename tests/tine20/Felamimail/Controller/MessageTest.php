@@ -901,10 +901,17 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
                 'account_id' => $this->_account->getId(),
                 'subject' => 'test poll mass mailing',
                 'to' => [
-                    Tinebase_Core::getUser()->accountEmailAddress,
+                    [
+                        "email" => Tinebase_Core::getUser()->accountEmailAddress,
+                        "name" => '',
+                        "type" =>  '',
+                        "n_fileas" => '',
+                        "email_type" =>  '',
+                        "record_id" => ''
+                    ],
                     $this->_personas['sclever']->accountEmailAddress
                 ],
-                'body' => '/Calendar/poll/view/' . $event['poll_id']['id'] . '/',
+                'body' => '/Calendar/view/poll/' . $event['poll_id']['id'] . '/',
                 'headers' => ['X-Tine20TestMessage' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822],
                 'massMailingFlag' => true,
             ]);
