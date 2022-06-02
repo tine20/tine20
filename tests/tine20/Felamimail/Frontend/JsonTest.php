@@ -2816,6 +2816,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
     public function testMoveFolder()
     {
+        $filter = $this->_getFolderFilter($this->_testFolderName);
+        $junkfoldersBefore = $this->_json->searchFolders($filter);
         $this->_json->addFolder('Info Gemeindebüro', 'INBOX', $this->_account->getId());
         $this->_createdFolders = ['INBOX.Info Gemeindebüro'];
         $newGlobalname = $this->_testFolderName . '.Info Gemeindebüro';
@@ -2823,5 +2825,10 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             'INBOX.Info Gemeindebüro', $this->_account->getId());
         $this->_createdFolders = [$newGlobalname];
         self::assertEquals($newGlobalname, $result['globalname']);
+        $junkfoldersAfter = $this->_json->searchFolders($filter);
+        self::assertGreaterThan($junkfoldersBefore['totalcount'], $junkfoldersAfter['totalcount'],
+            'new folder missing from test folder');
+        $testFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account, $this->_testFolderName);
+        self::assertEquals(1, $testFolder->has_children, 'has_children should be 1');
     }
 }

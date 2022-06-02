@@ -1054,7 +1054,7 @@ Tine.Felamimail.handleRequestException = function(exception) {
     if (! exception.code && exception.responseText) {
         // we need to decode the exception first
         var response = Ext.util.JSON.decode(exception.responseText);
-        exception = response.data;
+        exception = response.data || response;
     }
 
     Tine.log.warn('Request exception :');

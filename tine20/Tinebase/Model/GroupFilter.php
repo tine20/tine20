@@ -31,6 +31,7 @@ class Tinebase_Model_GroupFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
+        'id'             => array('filter' => Tinebase_Model_Filter_Group::class),
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', 'description'))),
         'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),

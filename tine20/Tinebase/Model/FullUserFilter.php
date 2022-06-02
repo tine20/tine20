@@ -33,7 +33,7 @@ class Tinebase_Model_FullUserFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'id'             => array('filter' => Tinebase_Model_Filter_User::class),
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('login_name', 'full_name'))),
         'login_name'     => array('filter' => 'Tinebase_Model_Filter_Text'),
         'email'          => array('filter' => 'Tinebase_Model_Filter_Text'),

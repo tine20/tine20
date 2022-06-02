@@ -56,12 +56,18 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         parent::__construct($_container, $_useIdAsName);
         
         $this->_path = Tinebase_FileSystem::getInstance()->getPathOfNode($this->_container, /* as string */ true);
-        
+
         // make sure filesystem path exists
+        // no acl check?...
         try {
             Tinebase_FileSystem::getInstance()->stat($this->_path);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_FileSystem::getInstance()->mkdir($this->_path);
+            $statpath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
+            if ($statpath->isDefaultACLsPath()) {
+                Tinebase_FileSystem::getInstance()->createAclNode($this->_path, $statpath->getDefaultAcls());
+            } else {
+                Tinebase_FileSystem::getInstance()->mkdir($this->_path);
+            }
         }
     }
     
@@ -84,8 +90,13 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create directory: ' . $path);
-    
-        Tinebase_FileSystem::getInstance()->mkdir($path);
+
+        $statpath = Tinebase_Model_Tree_Node_Path::createFromStatPath($path);
+        if ($statpath->isDefaultACLsPath()) {
+            Tinebase_FileSystem::getInstance()->createAclNode($path, $statpath->getDefaultAcls());
+        } else {
+            Tinebase_FileSystem::getInstance()->mkdir($path);
+        }
     }
     
     /**

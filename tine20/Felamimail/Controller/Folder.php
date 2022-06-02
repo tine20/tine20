@@ -464,6 +464,9 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         $this->_renameFolderOnIMAP($account, $newGlobalName, $_oldGlobalName);
         $folder = $this->_renameFolderInCache($account, $newGlobalName, $_oldGlobalName, $newLocalName);
         $this->_updateSubfoldersAfterRename($account, $newGlobalName, $_oldGlobalName);
+        if (! $targetIsLocal) {
+            $this->_updateParentsAfterRename($account, $newGlobalName, $_oldGlobalName);
+        }
         
         return $folder;
     }
@@ -474,18 +477,14 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param string $_newLocalName
      * @param string $_oldGlobalName
      * @return string
-     * 
-     * @todo generalize this
      */
     protected function _buildNewGlobalName($_newLocalName, $_oldGlobalName)
     {
-        $globalNameParts = explode($this->_delimiter, $_oldGlobalName);
-        array_pop($globalNameParts);
+        $newGlobalName = $this->_getParentGlobalname($_oldGlobalName);
         if (! empty($_newLocalName)) {
-            array_push($globalNameParts, $_newLocalName);
+            $newGlobalName .= $this->_delimiter . $_newLocalName;
         }
-        $newGlobalName = implode($this->_delimiter, $globalNameParts);
-        
+
         return $newGlobalName;
     }
     
@@ -527,6 +526,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         try {
             $folder = $this->getByBackendAndGlobalName($_account, $_oldGlobalName);
             $folder->globalname = $_newGlobalName;
+            $folder->parent = $this->_getParentGlobalname($_newGlobalName);
             $folder->localname = $_newLocalName;
             $folder = $this->update($folder);
             
@@ -537,7 +537,14 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         return $folder;
     }
-    
+
+    protected function _getParentGlobalname($globalname)
+    {
+        $globalNameParts = explode($this->_delimiter, $globalname);
+        array_pop($globalNameParts);
+        return implode($this->_delimiter, $globalNameParts);
+    }
+
     /**
      * loop subfolders (recursive), replace new localname in globalname path and set new parent name
      * 
@@ -562,7 +569,29 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     }
 
     /**
-     * delete all messages in one folder -> be careful, they are completly removed and not moved to trash
+     * update has_children of parents
+     *
+     * @param Felamimail_Model_Account $_account
+     * @param string $_newGlobalName
+     * @param string $_oldGlobalName
+     */
+    protected function _updateParentsAfterRename(Felamimail_Model_Account $_account, $_newGlobalName, $_oldGlobalName)
+    {
+        $parentName = $this->_getParentGlobalname($_newGlobalName);
+        $parentFolder = $this->getByBackendAndGlobalName($_account, $parentName);
+        $parentFolder->has_children = true;
+        $this->update($parentFolder);
+
+        $oldParentName = $this->_getParentGlobalname($_oldGlobalName);
+        if (count($this->getSubfolders($_account, $oldParentName)) === 0 ) {
+            $oldParentFolder = $this->getByBackendAndGlobalName($_account, $oldParentName);
+            $oldParentFolder->has_children = false;
+            $this->update($parentFolder);
+        }
+    }
+
+    /**
+     * delete all messages in one folder -> be careful, they are completely removed and not moved to trash
      * -> delete subfolders if param set
      *
      * @param string $_folderId

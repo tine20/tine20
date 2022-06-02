@@ -254,6 +254,86 @@ Tine.Felamimail.setTreeContextMenus = function() {
         }
     };
 
+    const moveFolderAction = {
+        text: this.app.i18n._('Move Folder'),
+        iconCls: 'action_move',
+        scope: this,
+        handler: function() {
+            if (this.ctxNode) {
+                this.getSelectionModel().clearSelections();
+                var folder = this.app.getFolderStore().getById(this.ctxNode.id),
+                    account = folder ? this.app.getAccountStore().getById(folder.get('account_id')) :
+                        this.app.getAccountStore().getById(this.ctxNode.id);
+
+                const selectPanel = Tine.Felamimail.FolderSelectPanel.openWindow({
+                    account: account,
+                    // allAccounts: this.allAccounts,
+                    listeners: {
+                        scope: this,
+                        folderselect(newParentNode) {
+                            selectPanel.close();
+                            newParentNode = this.getNodeById(newParentNode.id); // switch context
+                            // const newParentFolder = this.app.getFolderStore().getById(newParentNode.id);
+                            const parentGlobalname = newParentNode.attributes.globalname;
+
+                            if (parentGlobalname.replace(new RegExp(`^${folder.get('globalname').replace('.', '\.')}`), '') !== parentGlobalname) {
+                                return Ext.Msg.alert(this.app.i18n._('Invalid Selection'), this.app.i18n._('You cannot move the folder to an own sub folder!'));
+                            }
+
+                            const newGlobalName = _.compact([parentGlobalname, folder.get('localname')]).join(account.get('delimiter'));
+
+                            this.ctxNode.getUI().addClass("x-tree-node-loading");
+                            newParentNode.getUI().addClass("x-tree-node-loading");
+
+                            Ext.Ajax.request({
+                                params: {
+                                    method: 'Felamimail.moveFolder',
+                                    accountId: account.id,
+                                    oldGlobalName: folder.get('globalname'),
+                                    newGlobalName
+                                },
+                                scope: this,
+                                success: function(result, request) {
+                                    const folderStore = newParentNode.ownerTree.folderStore;
+
+                                    newParentNode.appendChild(newParentNode.ownerTree.loader.createNode(JSON.parse(result.responseText)));
+                                    this.ctxNode.remove();
+                                    // TODO make this work
+                                    // const oldParentNode = this.ctxNode.parentNode;
+                                    // if (!oldParentNode.childNodes.length) {
+                                    //     // remove expand icon of parent
+                                    //     this.ctxNode.parentNode.getUI().removeClass("x-tree-elbow-plus");
+                                    //     this.ctxNode.parentNode.getUI().addClass("x-tree-elbow");
+                                    // }
+                                    folderStore.remove(folderStore.getById(this.ctxNode.id));
+                                    const newRecord = Tine.Felamimail.folderBackend.recordReader({responseText: result.responseText});
+                                    folderStore.getById(newParentNode.id)?.set('has_children', true);
+                                    folderStore.add([newRecord]);
+                                    newParentNode.ownerTree.initNewFolderNode(newRecord);
+
+                                    newParentNode.getUI().removeClass("x-tree-node-loading");
+                                    // TODO make this work
+                                    // if (!newParentNode.getUI().hasClass("x-tree-elbow-minus")) {
+                                    //     newParentNode.getUI().removeClass("x-tree-elbow");
+                                    //     newParentNode.getUI().addClass("x-tree-elbow-minus");
+                                    // }
+                                    newParentNode.expand(() => {
+                                        this.getNodeById(this.ctxNode.id).select();
+                                    });
+                                },
+                                failure: function(exception) {
+                                    this.ctxNode.getUI().removeClass("x-tree-node-loading");
+                                    newParentNode.getUI().removeClass("x-tree-node-loading");
+                                    Tine.Felamimail.folderBackend.handleRequestException(exception);
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        }
+    };
+
     // mutual config options
     const config = {
         nodeName: this.app.i18n.n_('Folder', 'Folders', 1),
@@ -267,7 +347,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
     this.contextMenuSystemFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // user folder ctx menu
-    config.actions = [markFolderSeenAction, addFolderAction, 'rename', 'delete'];
+    config.actions = [markFolderSeenAction, addFolderAction, moveFolderAction, 'rename', 'delete'];
     this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // trash ctx menu

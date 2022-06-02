@@ -177,7 +177,19 @@ abstract class Tinebase_Group_Abstract
      * @return Tinebase_Record_RecordSet
      */
     abstract public function getMultiple($_ids);
-    
+
+    /**
+     * get list of records
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
+     * @param boolean|array|Tinebase_Record_Expander $_getRelations
+     * @param boolean $_onlyIds
+     * @param string $_action for right/acl check
+     * @return Tinebase_Record_RecordSet|array
+     */
+    abstract public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = \Tinebase_Controller_Record_Abstract::ACTION_GET);
+
     /**
      * get list of groups
      *
