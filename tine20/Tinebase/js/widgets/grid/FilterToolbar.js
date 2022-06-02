@@ -638,13 +638,15 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             if (foreignRecordFilter.operatorStore.getCount() > 0) {
                 this.filterModels.push(foreignRecordFilter);
             }
-            
+
+            // TODO: we remove this as the own record filter does not work correctly in most cases - maybe this should
+            //       be refactored or removed completely
             // auto add self id filter
             // add own record filter by default but ignore if set
-            if (this.ownRecordFilter !== false) {
-                this.ownRecordFilterModel = this.createFilterModel({filtertype: 'ownrecord', ownRecordClass: this.recordClass});
-                this.filterModels.push(this.ownRecordFilterModel);
-            }
+            // if (this.ownRecordFilter !== false) {
+            //     this.ownRecordFilterModel = this.createFilterModel({filtertype: 'ownrecord', ownRecordClass: this.recordClass});
+            //     this.filterModels.push(this.ownRecordFilterModel);
+            // }
         }
         
         
