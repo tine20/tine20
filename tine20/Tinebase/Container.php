@@ -1423,7 +1423,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             return false;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' account: ' . $accountId . ' / containerId: ' . $containerId . ' / grant:' . implode('/', (array)$_grant));
         
         $classCacheId = $accountId . $containerId . implode('', (array)$_grant);
