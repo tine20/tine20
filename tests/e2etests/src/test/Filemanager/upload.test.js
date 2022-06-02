@@ -17,7 +17,7 @@ describe('filemanager', () => {
                 console.log('tree also expand');
             }
 
-            await expect(page).toClick('.t-app-filemanager .tine-mainscreen-centerpanel-west-treecards span', {text: 'Persönliche Dateien von tine ® Admin'});
+            await expect(page).toClick('.t-app-filemanager .tine-mainscreen-centerpanel-west-treecards span', {text: 'Persönliche Dateien von ' + process.env.TEST_USER});
             await page.waitForTimeout(2000);
         });
         // gehen ins home verzeichnis
