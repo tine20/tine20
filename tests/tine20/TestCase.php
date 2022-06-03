@@ -338,7 +338,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Trying to delete user: ' . $username);
 
-                Tinebase_User::getInstance()->deleteUser(Tinebase_User::getInstance()->getUserByLoginName($username));
+                Tinebase_User::getInstance()->deleteUser($user = Tinebase_User::getInstance()->getUserByLoginName($username));
+                Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . 'accounts', 'id = "' . $user->getId() . '"');
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Error while deleting user: ' . $e->getMessage());

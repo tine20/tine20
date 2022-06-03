@@ -26,7 +26,11 @@ class Tinebase_Acl_RolesTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
+        $db = Tinebase_Core::getDb();
+        $db->delete(SQL_TABLE_PREFIX . 'accounts', 'is_deleted = 1');
+        $db->delete(SQL_TABLE_PREFIX . 'groups', 'is_deleted = 1');
+
         parent::setUp();
         
         $this->objects['application'] = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
@@ -52,8 +56,12 @@ class Tinebase_Acl_RolesTest extends TestCase
         ));
         
         // add account for group / role member tests
-        $this->_usernamesToDelete[] =$this->objects['user']->accountLoginName;
-        $this->objects['user'] = Tinebase_User::getInstance()->addUser($this->objects['user']);
+        $this->_usernamesToDelete[] = $this->objects['user']->accountLoginName;
+        try {
+            $this->objects['user'] = Tinebase_User::getInstance()->getUserByLoginName('tine20phpunit');
+        } catch (Tinebase_Exception_NotFound $e) {
+            $this->objects['user'] = Tinebase_User::getInstance()->addUser($this->objects['user']);
+        }
         Tinebase_Group::getInstance()->addGroupMember($this->objects['user']->accountPrimaryGroup, $this->objects['user']);
         
         Tinebase_Acl_Roles::getInstance()->resetClassCache();

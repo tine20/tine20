@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  * TODO extend TestCase to use generic cleanup
@@ -54,7 +54,7 @@ class Tinebase_Group_LdapTest extends \PHPUnit\Framework\TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::LDAP) {
             $this->markTestSkipped('LDAP backend not enabled');
         }
@@ -85,6 +85,10 @@ class Tinebase_Group_LdapTest extends \PHPUnit\Framework\TestCase
 
         $this->objects['groups'] = new Tinebase_Record_RecordSet('Tinebase_Model_Group');
         $this->objects['users'] = new Tinebase_Record_RecordSet('Tinebase_Model_FullUser');
+
+        $db = Tinebase_Core::getDb();
+        $db->delete(SQL_TABLE_PREFIX . 'accounts', 'is_deleted = 1');
+        $db->delete(SQL_TABLE_PREFIX . 'groups', 'is_deleted = 1');
 
         try {
             $user = $this->_userLDAP->getUserByLoginName('tine20phpunit');
@@ -120,7 +124,7 @@ class Tinebase_Group_LdapTest extends \PHPUnit\Framework\TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
         if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::LDAP) {
             return;
         }
@@ -131,14 +135,25 @@ class Tinebase_Group_LdapTest extends \PHPUnit\Framework\TestCase
                     $this->_groupLDAP->removeGroupMember($groupId, $user);
                 }
             } catch (Tinebase_Exception_NotFound $tenf) {}
+        }
+
+        $db = Tinebase_Core::getDb();
+        $db->delete(SQL_TABLE_PREFIX . 'accounts', 'is_deleted = 1');
+        $db->delete(SQL_TABLE_PREFIX . 'groups', 'is_deleted = 1');
+
+        if ($this->objects['users']->count() > 0) {
             try {
                 $this->_userLDAP->deleteUsers($this->objects['users']->getArrayOfIds());
             } catch (Tinebase_Exception_NotFound $tenf) {}
+            $db->delete(SQL_TABLE_PREFIX . 'accounts', $db->quoteInto('id in (?)', $this->objects['users']->getArrayOfIds()));
         }
 
         try {
             $this->_groupLDAP->deleteGroups($this->objects['groups']);
-        } catch (Tinebase_Exception_Backend $teb) {
+        } catch (Tinebase_Exception_Backend $teb) {}
+
+        if ($this->objects['groups']->count() > 0) {
+            $db->delete(SQL_TABLE_PREFIX . 'groups', $db->quoteInto('id in (?)', $this->objects['groups']->getArrayOfIds()));
         }
     }
     

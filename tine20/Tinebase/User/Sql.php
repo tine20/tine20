@@ -70,18 +70,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     protected $_db;
 
     /**
-     * hard delete users from db
-     *
-     * @var bool
-     *
-     * NOTE: hard delete is current default as groups and roles don't support soft delete, yet but have fk constraints
-     *  (for example primary user group) that make problems if only users are soft-deleted...
-     *
-     * TODO make it configurable or obsolete (soft-delete should be default or only option)
-     */
-    protected $_hardDeleteUser = true;
-
-    /**
      * sql user plugins
      * 
      * @var array
@@ -273,12 +261,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @param   string  $_property      the key to filter
      * @param   string  $_value         the value to search for
      * @param   string  $_accountClass  type of model to return
-     * 
+     * @param   bool    $_getDeleted
      * @return  Tinebase_Model_User the user object
      */
-    public function getUserByProperty($_property, $_value, $_accountClass = 'Tinebase_Model_User')
+    public function getUserByProperty($_property, $_value, $_accountClass = Tinebase_Model_User::class, bool $_getDeleted = false)
     {
-        $user = $this->getUserByPropertyFromSqlBackend($_property, $_value, $_accountClass);
+        $user = $this->getUserByPropertyFromSqlBackend($_property, $_value, $_accountClass, $_getDeleted);
         
         // append data from plugins
         foreach ($this->_sqlPlugins as $plugin) {
@@ -330,13 +318,13 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @param   string  $_property      the key to filter
      * @param   string  $_value         the value to search for
      * @param   string  $_accountClass  type of model to return
-     * 
+     * @param   bool    $_getDeleted
      * @return  Tinebase_Model_User|Tinebase_Model_FullUser the user object
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_Record_Validation
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function getUserByPropertyFromSqlBackend($_property, $_value, $_accountClass = 'Tinebase_Model_User')
+    public function getUserByPropertyFromSqlBackend($_property, $_value, $_accountClass = Tinebase_Model_User::class, bool $_getDeleted = false)
     {
         if(!(isset($this->rowNameMapping[$_property]) || array_key_exists($_property, $this->rowNameMapping))) {
             throw new Tinebase_Exception_InvalidArgument("invalid property $_property requested");
@@ -351,7 +339,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 break;
         }
         
-        $select = $this->_getUserSelectObject()
+        $select = $this->_getUserSelectObject($_getDeleted)
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier( SQL_TABLE_PREFIX . 'accounts.' . $this->rowNameMapping[$_property]) . ' = ?', $value));
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select);
@@ -407,22 +395,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
     
     /**
-     * get full user by id
-     *
-     * @param   int         $_accountId
-     * @return  Tinebase_Model_FullUser full user
-     */
-    public function getFullUserById($_accountId)
-    {
-        return $this->getUserById($_accountId, 'Tinebase_Model_FullUser');
-    }
-    
-    /**
      * get user select
      *
+     * @param bool $_getDeleted
      * @return Zend_Db_Select
      */
-    protected function _getUserSelectObject()
+    protected function _getUserSelectObject(bool $_getDeleted = false)
     {
         $interval = $this->_dbCommand->getDynamicInterval(
             'SECOND',
@@ -504,7 +482,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 )
             );
 
+        if (!$_getDeleted) {
             $select->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.is_deleted') . ' = 0');
+        }
 
         return $select;
     }
@@ -1256,13 +1236,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
 
         try {
-            if ($this->isHardDeleteEnabled()) {
-                Tinebase_User::getInstance()->fireDeleteUserEvent($user->getId());
-                $this->_hardDelete($user);
-            } else {
-                $this->_softDelete($user);
-                Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_User.fireDeleteUserEvent', $user->getId());
-            }
+            $this->_softDelete($user);
+            Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_User.fireDeleteUserEvent', $user->getId());
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
@@ -1273,34 +1248,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
 
         return $user;
-    }
-
-    protected function _hardDelete($user)
-    {
-        $accountsTable          = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
-        $groupMembersTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
-        $roleMembersTable       = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'role_accounts'));
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Deleting user ' . $user->accountLoginName);
-
-        $where  = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $user->getId()),
-        );
-        $groupMembersTable->delete($where);
-
-        $where  = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('account_id')   . ' = ?', $user->getId()),
-            $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER),
-        );
-        $roleMembersTable->delete($where);
-
-        $where  = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $user->getId()),
-        );
-        $accountsTable->delete($where);
-        $user->seq = $user->seq + 1;
-        $this->_writeModLog(null, $user);
     }
 
     protected function _softDelete($user)
@@ -1369,15 +1316,16 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      *
      * @param  string|array $_id Ids
      * @param  string  $_accountClass  type of model to return
+     * @param  bool     $_getDeleted
      * @return Tinebase_Record_RecordSet of 'Tinebase_Model_User' or 'Tinebase_Model_FullUser'
      */
-    public function getMultiple($_id, $_accountClass = 'Tinebase_Model_User')
+    public function getMultiple($_id, $_accountClass = 'Tinebase_Model_User', bool $_getDeleted = false)
     {
         if (empty($_id)) {
             return new Tinebase_Record_RecordSet($_accountClass);
         }
         
-        $select = $this->_getUserSelectObject()
+        $select = $this->_getUserSelectObject($_getDeleted)
             ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.id') . ' in (?)', (array) $_id);
         
         $stmt = $this->_db->query($select);
@@ -1620,13 +1568,5 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
         list($userPart, /*$domainPart*/) = explode('@', $user->accountEmailAddress);
         $user->accountEmailAddress = $userPart . '@' . $config['primarydomain'];
-    }
-
-    /**
-     * @return bool
-     */
-    public function isHardDeleteEnabled()
-    {
-        return $this->_hardDeleteUser;
     }
 }

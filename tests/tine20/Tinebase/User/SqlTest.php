@@ -302,15 +302,8 @@ class Tinebase_User_SqlTest extends TestCase
         $this->_backend->deleteUser($testUser);
         unset($this->objects['users']['addedUser']);
 
-        if (Tinebase_User::getInstance()->isHardDeleteEnabled()) {
-            $this->expectException('Tinebase_Exception_NotFound');
-        }
-
-        $user = $this->_backend->getUserById($testUser, 'Tinebase_Model_FullUser');
-        if (! Tinebase_User::getInstance()->isHardDeleteEnabled()) {
-            $this->assertTrue((bool)$user->is_deleted);
-            $this->assertSame(Tinebase_Model_User::ACCOUNT_STATUS_DISABLED, $user->accountStatus);
-        }
+        $this->expectException('Tinebase_Exception_NotFound');
+        $this->_backend->getUserById($testUser, 'Tinebase_Model_FullUser');
     }
 
     /**
