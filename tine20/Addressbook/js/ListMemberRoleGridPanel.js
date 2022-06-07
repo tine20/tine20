@@ -28,6 +28,11 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
     record: null,
 
     /**
+     * optional record edit plugin conf for search combo
+     */
+    recordEditPluginConfig: null,
+
+    /**
      * init component
      */
     initComponent: function() {
@@ -64,6 +69,7 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
             recordPrefix: this.recordPrefix,
             userOnly: false,
             blurOnSelect: true,
+            recordEditPluginConfig: this.recordEditPluginConfig,
             listeners: {
                 scope: this,
                 select: this.onAddRecordFromCombo

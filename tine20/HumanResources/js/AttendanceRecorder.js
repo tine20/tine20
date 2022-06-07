@@ -338,7 +338,9 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
         // let result
         try {
             const result = await Tine.HumanResources[fn](Object.assign({ [FLD_DEVICE_ID]: SYSTEM_WORKING_TIME_ID }, options));
-            this.menu.displayPanel.update(`<div class="attendance-clock-msg">${this.app.i18n._('Data saving successful!')}</div>`);
+            // this.menu.displayPanel.update(`<div class="attendance-clock-msg">${this.app.i18n._('Data saving successful!')}</div>`);
+            const message = await Tine.HumanResources.wtInfo();
+            this.menu.displayPanel.update(`<div class="attendance-clock-msg">${ Ext.util.Format.nl2br(message) }</div>`);
             return result;
         } catch (e) {
             this.sounds.failure.play();
