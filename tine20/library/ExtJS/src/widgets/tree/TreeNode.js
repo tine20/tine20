@@ -240,9 +240,8 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
         }
         if(this.childNodes.length < 1){
             this.collapse(false, false);
-        }else{
-            this.ui.updateExpandIcon();
         }
+        this.ui.updateExpandIcon();
         if(!this.firstChild && !this.isHiddenRoot()) {
             this.childrenRendered = false;
         }

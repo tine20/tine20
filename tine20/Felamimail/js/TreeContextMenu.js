@@ -298,13 +298,6 @@ Tine.Felamimail.setTreeContextMenus = function() {
 
                                     newParentNode.appendChild(newParentNode.ownerTree.loader.createNode(JSON.parse(result.responseText)));
                                     this.ctxNode.remove();
-                                    // TODO make this work
-                                    // const oldParentNode = this.ctxNode.parentNode;
-                                    // if (!oldParentNode.childNodes.length) {
-                                    //     // remove expand icon of parent
-                                    //     this.ctxNode.parentNode.getUI().removeClass("x-tree-elbow-plus");
-                                    //     this.ctxNode.parentNode.getUI().addClass("x-tree-elbow");
-                                    // }
                                     folderStore.remove(folderStore.getById(this.ctxNode.id));
                                     const newRecord = Tine.Felamimail.folderBackend.recordReader({responseText: result.responseText});
                                     folderStore.getById(newParentNode.id)?.set('has_children', true);
@@ -312,11 +305,6 @@ Tine.Felamimail.setTreeContextMenus = function() {
                                     newParentNode.ownerTree.initNewFolderNode(newRecord);
 
                                     newParentNode.getUI().removeClass("x-tree-node-loading");
-                                    // TODO make this work
-                                    // if (!newParentNode.getUI().hasClass("x-tree-elbow-minus")) {
-                                    //     newParentNode.getUI().removeClass("x-tree-elbow");
-                                    //     newParentNode.getUI().addClass("x-tree-elbow-minus");
-                                    // }
                                     newParentNode.expand(() => {
                                         this.getNodeById(this.ctxNode.id).select();
                                     });

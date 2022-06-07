@@ -660,10 +660,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         this.ctxNode.appendChild(this.loader.createNode(folderData));
         const parentRecord = this.folderStore.getById(this.ctxNode.id);
         if (parentRecord) parentRecord.set('has_children', true);
-        if (!this.ctxNode.getUI().hasClass("x-tree-elbow-minus")) {
-            this.ctxNode.getUI().removeClass("x-tree-elbow");
-            this.ctxNode.getUI().addClass("x-tree-elbow-minus");
-        }
         this.folderStore.add([newRecord]);
         this.initNewFolderNode(newRecord);
     },
