@@ -57,13 +57,14 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     // initialLoadAfterRender: false,
 
     dataSafeEnabled: false,
+    storeRemoteSort: false,
 
     /**
      * inits this cmp
      * @private
      */
     initComponent: function() {
-        Ext.applyIf(this.defaultSortInfo, {field: 'name', direction: 'DESC'});
+        Ext.applyIf(this.defaultSortInfo, {field: 'name', direction: 'ASC'});
         Ext.applyIf(this.defaultPaging, { start: 0, limit: 500 });
         Ext.applyIf(this.gridConfig, {
             autoExpandColumn: 'name',
@@ -121,7 +122,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (this.hasQuickSearchFilterToolbarPlugin) {
             this.filterToolbar.getQuickFilterPlugin().criteriaIgnores.push({field: 'path'});
         }
-
         
         Tine.Filemanager.NodeGridPanel.superclass.initComponent.call(this);
         this.getStore().on('load', this.onLoad.createDelegate(this));
@@ -199,7 +199,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (!this.rendered) {
             return;
         }
-    
+
         if (record.status === 'failed' || record.status === 'cancelled') {
             this.bufferedLoadGridData({
                 removeStrategy: 'keepBuffered'
@@ -232,7 +232,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             // sort new/edited record
             store.remoteSort = false;
             store.sort(
-                _.get(store, 'sortInfo.field', this.recordClass.getMeta('titleField')),
+                _.get(store, 'sortInfo.field', 'name'),
                 _.get(store, 'sortInfo.direction', 'ASC')
             );
             store.remoteSort = this.storeRemoteSort;
@@ -959,7 +959,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
     },
     
-
     /**
      * upload new files and add to store
      *
