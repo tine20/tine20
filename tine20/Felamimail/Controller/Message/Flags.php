@@ -120,7 +120,9 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
             ]);
         }
         // only get the first 100 messages if we got a filtergroup
-        $pagination = ($_messages instanceof Tinebase_Model_Filter_FilterGroup) ? new Tinebase_Model_Pagination(array('sort' => 'folder_id', 'start' => 0, 'limit' => 100)) : NULL;
+        $pagination = ($_messages instanceof Tinebase_Model_Filter_FilterGroup)
+            ? new Tinebase_Model_Pagination(array('sort' => 'folder_id', 'start' => 0, 'limit' => 100))
+            : NULL;
         $messagesToUpdate = $this->_convertToRecordSet($_messages, TRUE, $pagination);
         
         $lastFolderId       = null;
@@ -128,7 +130,8 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
         $folderCounterById  = array();
         
         while (count($messagesToUpdate) > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Retrieved ' . count($messagesToUpdate) . ' messages from cache.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Retrieved ' . count($messagesToUpdate) . ' messages from cache.');
             
             // update flags on imap server
             foreach ($messagesToUpdate as $message) {
@@ -140,7 +143,8 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
                 
                 // init new folder
                 if ($lastFolderId != $message->folder_id) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Getting new IMAP backend for folder ' . $message->folder_id);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                        __METHOD__ . '::' . __LINE__ . ' Getting new IMAP backend for folder ' . $message->folder_id);
                     $imapBackend              = $this->_getBackendAndSelectFolder($message->folder_id);
                     $lastFolderId             = $message->folder_id;
                     
@@ -179,7 +183,8 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_mode . 'ed flags');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' ' . $_mode . 'ed flags');
         
         $affectedFolders = $this->_updateFolderCounts($folderCounterById);
         return $affectedFolders;

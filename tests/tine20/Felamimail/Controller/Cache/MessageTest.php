@@ -71,9 +71,11 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         // get (or create) test accout
         $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Use account ' . $this->_account->getId() . ' for testing');
         
         // init controller and imap backend
         $this->_controller = Felamimail_Controller_Cache_Message::getInstance();
@@ -89,7 +91,9 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
         Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account->getId());
         
         $this->_folder = $this->_getFolder($this->_testFolderName);
-        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Use folder ' . $this->_folder->getId() . ' for testing');
+
         $this->_emailTestClass = new Felamimail_Controller_MessageTest();
         $this->_emailTestClass->setup();
         

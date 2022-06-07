@@ -421,8 +421,6 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      */
     protected function _removeFromCache(Felamimail_Model_Account $_account, $_parentFolder = NULL, $_imapFolderIds = array())
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '');
-        
         $filterData = array(array('field' => 'account_id',  'operator' => 'equals', 'value' => $_account->getId()));
         if ($_parentFolder !== NULL) {
             $filterData[] = array('field' => 'parent',      'operator' => 'equals', 'value' => $_parentFolder);
