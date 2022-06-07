@@ -221,10 +221,11 @@ class Tinebase_FileSystem_RecordAttachments
      */
     public function addRecordAttachment(Tinebase_Record_Interface $record, $name, $attachment)
     {
-        // only occurs via unittests
         if (!$name && isset($attachment->tempFile) && ! is_resource($attachment->tempFile)) {
             $attachment = Tinebase_TempFile::getInstance()->getTempFile($attachment->tempFile);
-            $name = $attachment->name;
+            if ($attachment) {
+                $name = $attachment->name;
+            }
         }
 
         if ($attachment instanceof Tinebase_Model_Tree_Node && !isset($attachment->tempFile)) {
@@ -239,7 +240,7 @@ class Tinebase_FileSystem_RecordAttachments
                 }
             } else {
                 // this comes from \Calendar_Frontend_CalDAV_PluginManagedAttachments::httpPOSTHandler
-                // it sends an filenode with only hash and name and a bit set
+                // it sends a file node with only hash and name and a bit set
                 if (empty($attachment->hash)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
                             __LINE__ . ' attachment record is missing an id');
