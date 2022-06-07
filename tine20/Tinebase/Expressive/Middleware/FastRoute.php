@@ -48,8 +48,9 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
         $uri = preg_replace('/\/+$/', '', $uri);
 
         // if the tine20 server is located in a subdir, we need to remove the server path from the uri
-        $serverPath = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH);
-        $uri = preg_replace('/^' . preg_quote($serverPath, '/') . '/', '', $uri);
+        if ('/' !== ($serverPath = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH)) && '' !== $serverPath) {
+            $uri = preg_replace('/^' . preg_quote($serverPath, '/') . '/', '/', $uri);
+        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
             . __LINE__ . " FastRoute dispatching:\n" . $request->getMethod() . ' '. $uri . array_reduce(array_keys($request->getHeaders()), function($headers, $name) use ($request)  {
