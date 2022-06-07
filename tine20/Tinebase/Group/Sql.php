@@ -558,8 +558,10 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $_group->visibility = 'hidden';
             $_group->list_id    = null;
         }
-        
+
+        $_group->runConvertToData();
         $data = $_group->toArray();
+        $_group->runConvertToRecord();
         
         unset($data['members']);
         unset($data['container_id']);
@@ -618,6 +620,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $_group->list_id    = null;
         }
 
+        $_group->runConvertToData();
         $data = array(
             'name'          => $_group->name,
             'description'   => $_group->description,
@@ -634,6 +637,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             'deleted_by'            => $_group->deleted_by,
             'seq'                   => $_group->seq,
         );
+        $_group->runConvertToRecord();
         
         if (empty($data['seq'])) {
             unset($data['seq']);
@@ -786,6 +790,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $stmt->closeCursor();
         
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Group', $queryResult, TRUE);
+        $result->runConvertToRecord();
         
         return $result;
     }

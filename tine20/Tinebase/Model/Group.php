@@ -196,12 +196,18 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
         if (isset($this->_properties['xprops'])) {
             $this->_properties['xprops'] = json_decode($this->_properties['xprops'], true);
         }
+        if (isset($this->_properties['deleted_time']) && '1970-01-01 00:00:00' === $this->_properties['deleted_time']) {
+            $this->_properties['deleted_time'] = null;
+        }
     }
 
     public function runConvertToData()
     {
         if (isset($this->_properties['xprops']) && is_array($this->_properties['xprops'])) {
             $this->_properties['xprops'] = json_encode($this->_properties['xprops']);
+        }
+        if (array_key_exists('deleted_time', $this->_properties) && null === $this->_properties['deleted_time']) {
+            $this->_properties['deleted_time'] = '1970-01-01 00:00:00';
         }
     }
 }
