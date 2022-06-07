@@ -146,7 +146,16 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('create');
 
-        $account = $this->_backend->create($_record);
+        try {
+            $account = $this->_backend->create($_record);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (Tinebase_Exception::isDbDuplicate($zdse)) {
+                $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+                throw new Tinebase_Exception_SystemGeneric($translation->_('Email address is already in use'));
+            } else {
+                throw $zdse;
+            }
+        }
         $this->_inspectAfterCreate($account, $_record);
         
         return $account;
