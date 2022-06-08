@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -730,10 +730,17 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $groups[] = $group;
         }
 
+        // group members are still hard deleted, we keep track of memberships in the modlog only
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('group_id') . ' IN (?)', (array) $groupIds);
         $this->groupMembersTable->delete($where);
-        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', (array) $groupIds);
-        $this->groupsTable->delete($where);
+
+        $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?) AND is_deleted = 0', (array) $groupIds);
+        $this->groupsTable->update([
+                'is_deleted' => 1,
+                'deleted_time' => Tinebase_DateTime::now()->toString(),
+                'deleted_by' => Tinebase_Core::getUser()->getId(),
+                'seq' => new Zend_Db_Expr('`seq` + 1'),
+            ], $where);
 
         foreach($groups as $group) {
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($group, 'delete', $group);
@@ -910,6 +917,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $select = $this->_db->select();
         
         $select->from(array($this->_tableName => SQL_TABLE_PREFIX . $this->_tableName), $_cols);
+        if (!$_getDeleted) {
+            $select->where($this->_tableName . '.is_deleted = 0');
+        }
         
         if ($this->_addressBookInstalled === true) {
             $joinCols = ['container_id', 'xprops'];

@@ -128,13 +128,14 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * get account
      *
      * @param   string  $_accountId  account id to get
+     * @param   bool    $_getDeleted
      * @return  Tinebase_Model_FullUser
      */
-    public function get($_userId)
+    public function get($_userId, bool $_getDeleted = false)
     {
         $this->checkRight('VIEW_ACCOUNTS');
         
-        return $this->_userBackend->getUserById($_userId, 'Tinebase_Model_FullUser');
+        return $this->_userBackend->getUserById($_userId, 'Tinebase_Model_FullUser', $_getDeleted);
     }
     
     /**

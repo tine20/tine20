@@ -347,9 +347,7 @@ class Tasks_JsonTest extends TestCase
 
         $organizerArray = $tasks['results'][0]['organizer'];
         $this->assertTrue(is_array($organizerArray), 'organizer not resolved: ' . print_r($tasks['results'][0], TRUE));
-        $expectedDisplayName = Tinebase_User::getInstance()->isHardDeleteEnabled()
-            ? Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName
-            : $organizer->accountDisplayName;
+        $expectedDisplayName = $organizer->accountDisplayName;
         $this->assertEquals($expectedDisplayName, $organizerArray['accountDisplayName']);
 
         // test get single task - organizer is deleted

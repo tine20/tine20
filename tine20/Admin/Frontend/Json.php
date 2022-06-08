@@ -1741,7 +1741,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 foreach ($_records as $record) {
                     if (! empty($record->account_id)) {
                         try {
-                            $record->account_id = Admin_Controller_User::getInstance()->get($record->account_id)->toArray();
+                            $record->account_id = Admin_Controller_User::getInstance()->get($record->account_id, true)->toArray();
                         } catch (Tinebase_Exception_NotFound $e) {
                             $record->account_id = Tinebase_User::getInstance()->getNonExistentUser('Tinebase_Model_FullUser')->toArray();
                         }

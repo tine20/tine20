@@ -47,9 +47,10 @@ interface Tinebase_User_Interface
      * @param   string  $_property
      * @param   string  $_value
      * @param   string  $_accountClass  type of model to return
+     * @param   bool    $_getDeleted
      * @return  Tinebase_Model_User user
      */
-    public function getUserByProperty($_property, $_value, $_accountClass = 'Tinebase_Model_User');
+    public function getUserByProperty($_property, $_value, $_accountClass = Tinebase_Model_User::class, bool $_getDeleted = false);
     
     /**
      * register plugins

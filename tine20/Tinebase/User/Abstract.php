@@ -324,13 +324,14 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     /**
      * get full user by id
      *
-     * @param   int         $_accountId
+     * @param   string         $_accountId
+     * @param   bool           $_getDeleted
      * @return  Tinebase_Model_FullUser full user
      */
-    public function getFullUserById($_accountId)
+    public function getFullUserById($_accountId, bool $_getDeleted = false)
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->getUserById($_accountId, 'Tinebase_Model_FullUser');
+        return $this->getUserById($_accountId, Tinebase_Model_FullUser::class, $_getDeleted);
     }
     
     /**
@@ -595,13 +596,14 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      *
      * @param   string  $_accountId
      * @param   string  $_accountClass  type of model to return
+     * @param   bool    $_getDeleted
      * @return  Tinebase_Model_User|Tinebase_Model_FullUser user
      */
-    public function getUserById($_accountId, $_accountClass = 'Tinebase_Model_User')
+    public function getUserById($_accountId, $_accountClass = Tinebase_Model_User::class, bool $_getDeleted = false)
     {
         $userId = $_accountId instanceof Tinebase_Model_User ? $_accountId->getId() : $_accountId;
 
-        return $this->getUserByProperty('accountId', $userId, $_accountClass);
+        return $this->getUserByProperty('accountId', $userId, $_accountClass, $_getDeleted);
     }
 
     /**
@@ -768,20 +770,14 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     abstract public function deleteUsers(array $_accountIds);
 
     /**
-     * returns true if user backend does hard delete
-     *
-     * @return boolean
-     */
-    abstract public function isHardDeleteEnabled();
-
-    /**
      * Get multiple users
      *
      * @param string|array     $_id Ids
-     * @param string          $_accountClass  type of model to return
+     * @param string          $_accountClass  type of model to
+     * @param bool              $_getDelted
      * @return Tinebase_Record_RecordSet
      */
-    abstract public function getMultiple($_id, $_accountClass = 'Tinebase_Model_User');
+    abstract public function getMultiple($_id, $_accountClass = 'Tinebase_Model_User', bool $_getDelted = false);
 
     /**
      * @return string
@@ -851,7 +847,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     public function fireDeleteUserEvent(string $_userId)
     {
-        $user = $this->getFullUserById($_userId);
+        $user = $this->getFullUserById($_userId, true);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Firing delete user event for: ' . $user->accountLoginName);

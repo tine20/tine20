@@ -244,7 +244,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 $cfg = $resolveFields[$fields[0]];
 
                 if ($cfg[MCC::TYPE] === 'user') {
-                    $foreignRecords = Tinebase_User::getInstance()->getMultiple($foreignIds);
+                    $foreignRecords = Tinebase_User::getInstance()->getMultiple($foreignIds, Tinebase_Model_User::class, true);
                 } else if ($cfg[MCC::TYPE] === 'container') {
                     // TODO: resolve recursive records of records better in controller
                     // TODO: resolve containers
@@ -427,7 +427,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                         switch ($foreignRecordClassName) {
                             case 'Tinebase_Model_User':
                             case 'Tinebase_Model_FullUser':
-                                $record->{$field} = Tinebase_User::getInstance()->getNonExistentUser();
+                                try {
+                                    $record->{$field} = Tinebase_User::getInstance()->getUserById($record->{$field}, Tinebase_Model_User::class, true);
+                                } catch (Tinebase_Exception_NotFound $tenf) {
+                                    $record->{$field} = Tinebase_User::getInstance()->getNonExistentUser();
+                                }
                                 break;
                             default:
                                 // skip
