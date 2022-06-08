@@ -494,11 +494,11 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     /**
      * @param string $id
-     * @param bool $createPreviewInstantly
+     * @param ?bool $createPreviewInstantly
      * @return array
      * @throws Tinebase_Exception_NotFound
      */
-    public function getAttachmentCache(string $id, bool $createPreviewInstantly = true): array
+    public function getAttachmentCache(string $id, ?bool $createPreviewInstantly = null): array
     {
         $old = Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->doSynchronousPreviewCreation($createPreviewInstantly);
         try {
