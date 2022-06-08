@@ -41,17 +41,18 @@ class ExampleApplication_Model_OneToOne extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 1,
+        self::VERSION                   => 2,
         self::APP_NAME                  => ExampleApplication_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::IS_DEPENDENT              => true,
         self::MODLOG_ACTIVE             => true,
+        self::HAS_DELETED_TIME_UNIQUE   => true,
 
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,
             self::UNIQUE_CONSTRAINTS        => [
                 self::FLD_EXAMPLE_RECORD        => [
-                    self::COLUMNS                   => [self::FLD_EXAMPLE_RECORD]
+                    self::COLUMNS                   => [self::FLD_EXAMPLE_RECORD, 'deleted_time']
                 ]
             ]
         ],
@@ -102,7 +103,6 @@ class ExampleApplication_Model_OneToOne extends Tinebase_Record_NewAbstract
                 self::CONFIG                    => [
                     self::APP_NAME                  => ExampleApplication_Config::APP_NAME,
                     self::MODEL_NAME                => ExampleApplication_Model_ExampleRecord::MODEL_NAME_PART,
-                    self::IS_DEPENDENT              => true, // TODO do we need this?
                 ]
             ],
             self::FLD_ADB_RECORD            => [
