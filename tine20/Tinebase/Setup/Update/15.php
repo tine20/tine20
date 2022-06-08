@@ -239,6 +239,15 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
                     <default>false</default>
                     <notnull>true</notnull>
                 </field>'));
+            foreach ($this->getDb()->query('SELECT GROUP_CONCAT(id), count(*) as c FROM ' . SQL_TABLE_PREFIX .
+                    'groups GROUP BY name HAVING c > 1')->fetchAll(Zend_DB::FETCH_NUM) as $row) {
+                $date = new Tinebase_DateTime('1970-01-01 00:00:01');
+                foreach (explode(',', $row[0]) as $num => $id) {
+                    if (0 === $num) continue;
+                    $this->getDb()->update(SQL_TABLE_PREFIX . 'groups', ['deleted_time' => $date->toString()], $this->getDb()->quoteInto('id = ?', $id));
+                    $date->addSecond(1);
+                }
+            }
             $this->getDb()->update(SQL_TABLE_PREFIX . 'groups', ['deleted_time' => '1970-01-01 00:00:00'], 'deleted_time IS NULL');
             $this->_backend->alterCol('groups', new Setup_Backend_Schema_Field_Xml(
                 '<field>
