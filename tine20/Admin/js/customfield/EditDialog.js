@@ -380,12 +380,12 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             hasAccountPrefix: true,
             configColumns: [
                 new Ext.ux.grid.CheckColumn({
-                   header: i18n._('View'),
+                   header: this.app.i18n._('View'),
                     dataIndex: 'readGrant',
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
-                    header: i18n._('Use'),
+                    header: this.app.i18n._('Use'),
                     dataIndex: 'writeGrant',
                     width: 55
                 })
