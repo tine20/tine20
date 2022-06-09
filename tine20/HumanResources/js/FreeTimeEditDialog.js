@@ -367,7 +367,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             Ext.apply({
                 fieldLabel: this.app.i18n._('Type specific status'),
                 keyFieldName: 'freeTimeTypeStatus',
-                name: 'freeTimeTypeStatus'
+                name: 'type_status'
             }, statusPickerDefaults)
         );
     },
