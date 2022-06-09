@@ -4,7 +4,7 @@
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * 
  */
@@ -257,10 +257,8 @@ class Sales_InvoiceTestCase extends TestCase
             foreach($row as $index => $field) {
                 if ($indexes[$index] == 'gender') {
                     if ($field == 'male') {
-                        $isMan = true;
                         $addresses[$i]['salutation'] = 'MR';
                     } else {
-                        $isMan = false;
                         $addresses[$i]['salutation'] = 'MRS';
                     }
                 } else {
@@ -271,21 +269,27 @@ class Sales_InvoiceTestCase extends TestCase
             $i++;
         }
         fclose($fhcsv);
-        
-        $container = Tinebase_Container::getInstance()->addContainer(
-            new Tinebase_Model_Container(
-                array(
-                    'name'           => 'TEST SALES INVOICES',
-                    'type'           => Tinebase_Model_Container::TYPE_SHARED,
-                    'backend'        => 'SQL',
-                    'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-                    'model'          => 'Addressbook_Model_Contact',
-                    'color'          => '#000000'
-                )), NULL, TRUE
-        );
+
+        $containerName = 'TEST SALES INVOICES';
+        $model = Addressbook_Model_Contact::class;
+        $type = Tinebase_Model_Container::TYPE_SHARED;
+        try {
+            $container = Tinebase_Container::getInstance()->getContainerByName($model, $containerName, $type);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $container = Tinebase_Container::getInstance()->addContainer(
+                new Tinebase_Model_Container(
+                    array(
+                        'name' => $containerName,
+                        'type' => $type,
+                        'backend' => 'SQL',
+                        'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+                        'model' => $model,
+                        'color' => '#000000'
+                    )), NULL, TRUE
+            );
+        }
         
         $this->_sharedContractsContainerId = $container->getId();
-        
         
         $this->_contactRecords = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
         
