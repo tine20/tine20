@@ -240,7 +240,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
                     <notnull>true</notnull>
                 </field>'));
             foreach ($this->getDb()->query('SELECT GROUP_CONCAT(id), count(*) as c FROM ' . SQL_TABLE_PREFIX .
-                    'groups GROUP BY name HAVING c > 1')->fetchAll(Zend_DB::FETCH_NUM) as $row) {
+                    'groups GROUP BY name HAVING c > 1')->fetchAll(Zend_Db::FETCH_NUM) as $row) {
                 $date = new Tinebase_DateTime('1970-01-01 00:00:01');
                 foreach (explode(',', $row[0]) as $num => $id) {
                     if (0 === $num) continue;
