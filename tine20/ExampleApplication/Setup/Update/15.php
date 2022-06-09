@@ -39,6 +39,14 @@ class ExampleApplication_Setup_Update_15 extends Setup_Update_Abstract
     public function update001()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
+        
+        $foreignKeys = $this->_backend->getExistingForeignKeys('example_application_record');
+        foreach ($foreignKeys as $foreignKey) {
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+                " Drop index: " . $foreignKey['table_name'] . ' => ' . $foreignKey['constraint_name']);
+            $this->_backend->dropForeignKey($foreignKey['table_name'], $foreignKey['constraint_name']);
+        }
+        
         $db = Tinebase_Core::getDb();
         $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'example_onetoone SET deleted_time = "1970-01-01 00:00:00" WHERE deleted_time IS NULL');
         
