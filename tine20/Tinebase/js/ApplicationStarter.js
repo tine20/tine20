@@ -441,36 +441,9 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                     if (Tine[appName].Model.hasOwnProperty(modelName + 'Mixin') && _.isFunction(_.get(Tine[appName].Model[modelName + 'Mixin'], 'statics', {}).getDefaultData)) {
                         //Do nothing
                     } else {
-                        // if default data is empty, it will be resolved to an array
-                        if (Ext.isArray(modelConfig.defaultData)) {
-                            modelConfig.defaultData = {};
-                        }
-
-                        // overwrite function
+                        // default function
                         Tine[appName].Model[modelName].getDefaultData = function(defaults) {
-                            if (! dd) {
-                                var dd = Ext.decode(Ext.encode(modelConfig.defaultData));
-                            }
-
-                            // find container by selection or use defaultContainer by registry
-                            if (modelConfig.containerProperty) {
-                                if (! dd.hasOwnProperty(modelConfig.containerProperty)) {
-                                    var app = Tine.Tinebase.appMgr.get(appName),
-                                        registry = app.getRegistry(),
-                                        ctp = app.getMainScreen()?.getWestPanel().getContainerTreePanel();
-
-                                    var container = (ctp && Ext.isFunction(ctp.getDefaultContainer) ? ctp.getDefaultContainer() : null)
-                                        || (registry ? registry.get("default" + modelName + "Container") : null);
-
-                                    if (container) {
-                                        dd[modelConfig.containerProperty] = container;
-                                    }
-                                }
-                            }
-
-                            // @TODO: use grants model and set all grants to true for new records
-                            dd['account_grants'] = {'adminGrant': true};
-                            return Object.assign(dd, defaults);
+                            return Tine.Tinebase.data.Record.getDefaultData(Tine[appName].Model[modelName], defaults);
                         };
                     }
                     

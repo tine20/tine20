@@ -483,7 +483,7 @@ Tine.Tinebase.data.Record.generateUID = function(length) {
     return uuid.join('');
 };
 
-Tine.Tinebase.data.Record.getDefaultData = function(recordClass) {
+Tine.Tinebase.data.Record.getDefaultData = function(recordClass, defaults) {
     var modelConfig = recordClass.getModelConfiguration(),
         appName = modelConfig.appName,
         modelName = modelConfig.modelName;
@@ -510,7 +510,10 @@ Tine.Tinebase.data.Record.getDefaultData = function(recordClass) {
             }
         }
     }
-    return dd;
+
+    // @TODO: use grants model and set all grants to true for new records
+    dd['account_grants'] = {'adminGrant': true};
+    return Object.assign(dd, defaults);
 };
 
 Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {

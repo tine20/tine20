@@ -51,15 +51,9 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             return;
         }
 
-        if (! this.record.id) {
-            // @todo: this should be handled by default values
-            this.record.set('account_id', Tine.Tinebase.registry.get('currentAccount'));
-            this.record.set('start_date', new Date());
-        }
-
         Tine.Timetracker.TimesheetEditDialog.superclass.onRecordLoad.call(this);
 
-        // TODO get timeaccount from filter if set
+        // TODO get timeaccount from filter if set - should be done in grid (onCreateNewRecord)
         var timeaccount = this.record.get('timeaccount_id');
         if (timeaccount) {
             this.onTimeaccountUpdate(null, new Tine.Timetracker.Model.Timeaccount(timeaccount));

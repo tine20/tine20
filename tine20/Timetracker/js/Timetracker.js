@@ -6,7 +6,9 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
- 
+
+import './Model/Timesheet';
+
 Ext.ns('Tine.Timetracker');
 
 Tine.widgets.grid.RendererManager.register('Timetracker', 'Timesheet', 'timeaccount_closed', function(row, index, record) {
