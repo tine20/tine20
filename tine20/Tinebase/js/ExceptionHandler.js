@@ -152,7 +152,7 @@ Tine.Tinebase.ExceptionHandler = function() {
         }
 
         // TODO find a generic way for this, some kind of registry for each app to register sensitive information
-        const request = (exception.request && Ext.isString(exception.request)) ? Ext.util.JSON.decode(exception.request) : null;
+        const request = (exception.request && Ext.isString(exception.request)) ? Ext.util.JSON.decode(exception.request) : exception.request;
         if (request && request.method === 'Felamimail.saveMessage') {
             request.params.recordData.body = null;
             exception.request =  Ext.util.JSON.encode(request);
