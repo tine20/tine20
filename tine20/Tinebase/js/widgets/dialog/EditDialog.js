@@ -1023,7 +1023,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         this.fixedFields.eachKey(function(field, value) {
             if (value !== '###CURRENT###') {
-                this.record.set(field, value);
+                this.record.set(field, this.recordClass.getField(field).convert(value));
             }
         }, this);
 

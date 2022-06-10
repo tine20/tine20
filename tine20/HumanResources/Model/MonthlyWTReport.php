@@ -150,7 +150,7 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
                 self::LABEL                         => 'Daily Working Time Reports', // _('Daily Working Time Reports')
                 self::TYPE                          => self::TYPE_RECORDS,
                 self::UI_CONFIG                     => [
-                    self::READ_ONLY                     => true,
+                    'allowDelete'                       => false, // we should have a mc option for models which could not be deleted
                 ],
                 self::VALIDATORS                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::CONFIG                        => [

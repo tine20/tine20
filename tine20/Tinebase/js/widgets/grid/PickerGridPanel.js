@@ -134,6 +134,12 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     allowCreateNew: false,
 
     /**
+     * @cfg {Bool} allowDelete
+     * allow to delete records
+     */
+    allowDelete: true,
+
+    /**
      * config spec for additionalFilters - passed to RecordPicker
      *
      * @type: {object} e.g.
@@ -290,6 +296,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         this.actionRemove = this.deleteAction = new Ext.Action({
             text: String.format(i18n._('Remove {0}'), this.recordName),
+            hidden: !this.allowDelete,
             disabled: true,
             scope: this,
             handler: this.onRemove,
