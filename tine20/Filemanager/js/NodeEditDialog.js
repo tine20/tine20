@@ -268,7 +268,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 ptype: 'ux.itemregistry',
                 key:   'Filemanager-Node-EditDialog-TabPanel'
             }],
-            activeTab: 0,
+            activeTab: this.activeTab ?? 0,
             border: false,
             items: items
         }
@@ -283,6 +283,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  */
 Tine.Filemanager.NodeEditDialog.openWindow = function (config) {
     const id = config.recordId ?? config.record?.id ?? 0;
+    this.activeTab = config?.activeTab ?? 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 570,
