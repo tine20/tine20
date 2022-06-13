@@ -215,5 +215,21 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
             }
         }, this);
         return ret;
+    },
+    
+    expandChildNode: function (parentNode, childNode) {
+        parentNode.expand(1, false, () => {
+            const node = parentNode.findChild('name', childNode.text);
+            if (!node) {
+                parentNode.appendChild(childNode);
+            } else if (node?.text !== childNode?.text) {
+                // node got duplicated by expand load
+                try {
+                    node.cancelExpand();
+                    node.remove(true);
+                } catch (e) {
+                }
+            }
+        });
     }
  });
