@@ -50,7 +50,10 @@ class ExampleApplication_Setup_Update_15 extends Setup_Update_Abstract
         $db = Tinebase_Core::getDb();
         $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'example_onetoone SET deleted_time = "1970-01-01 00:00:00" WHERE deleted_time IS NULL');
         
-        Setup_SchemaTool::updateSchema([ExampleApplication_Model_OneToOne::class]);
+        Setup_SchemaTool::updateSchema([
+            ExampleApplication_Model_ExampleRecord::class,
+            ExampleApplication_Model_OneToOne::class,
+        ]);
         $this->addApplicationUpdate('ExampleApplication', '15.1', self::RELEASE015_UPDATE001);
     }
 }
