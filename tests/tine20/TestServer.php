@@ -5,7 +5,7 @@
  * @package     tests
  * @subpackage  test root
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  * @todo invent common bootstrap for ServerTests and normal Tests to avoid code duplication
@@ -22,6 +22,11 @@ class TestServer
      * @var TestServer
      */
     private static $instance = NULL;
+
+    /**
+     * @var ?Felamimail_Model_Account
+     */
+    protected ?Felamimail_Model_Account $_emailTestAccount = null;
 
     /**
      * the constructor
@@ -297,5 +302,20 @@ class TestServer
             'username' => $username,
             'password' => $password
         );
+    }
+
+    public function getTestEmailAccount(): ?Felamimail_Model_Account
+    {
+        if (!Tinebase_EmailUser::isEmailSystemAccountConfigured()) {
+            return null;
+        }
+        if (! $this->_emailTestAccount) {
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SYSTEM],
+                ['field' => 'user_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()],
+            ]);
+            $this->_emailTestAccount = Felamimail_Controller_Account::getInstance()->search($filter)->getFirstRecord();
+        }
+        return $this->_emailTestAccount;
     }
 }

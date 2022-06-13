@@ -72,8 +72,8 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
      */
     protected function setUp(): void
     {
-        // get (or create) test accout
-        $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
+        // get (or create) test account
+        $this->_account = TestServer::getInstance()->getTestEmailAccount();
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' Use account ' . $this->_account->getId() . ' for testing');
         
