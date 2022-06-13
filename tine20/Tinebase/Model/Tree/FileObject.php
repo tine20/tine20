@@ -11,25 +11,27 @@
 /**
  * class to hold data representing one object which can be inserted into the tree
  * 
- * @property  string            name
- * @property  string            revision
- * @property  array             available_revisions
- * @property  string            description
- * @property  string            contenttype
- * @property  integer           size
- * @property  integer           revision_size
- * @property  string            indexed_hash
- * @property  string            hash
- * @property  string            type
- * @property  integer           preview_count
- * @property  integer           preview_status
- * @property  integer           preview_error_count
- * @property  Tinebase_DateTime lastavscan_time
- * @property  boolean           is_quarantined
+ * @property  string            $name
+ * @property  string            $revision
+ * @property  array             $available_revisions
+ * @property  string            $description
+ * @property  string            $contenttype
+ * @property  integer           $size
+ * @property  integer           $revision_size
+ * @property  string            $indexed_hash
+ * @property  string            $hash
+ * @property  string            $type
+ * @property  integer           $preview_count
+ * @property  integer           $preview_status
+ * @property  integer           $preview_error_count
+ * @property  Tinebase_DateTime $lastavscan_time
+ * @property  boolean           $is_quarantined
  */
 class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
 {
     public const TABLE_NAME = 'tree_fileobjects';
+
+    public const DEFAULT_CONTENT_TYPE = 'application/octet-stream';
 
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -132,7 +134,7 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => 'application/octet-stream'
+                    Zend_Filter_Input::DEFAULT_VALUE => self::DEFAULT_CONTENT_TYPE
                 ],
                 self::INPUT_FILTERS             => [Zend_Filter_StringToLower::class],
             ],
