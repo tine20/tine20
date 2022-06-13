@@ -288,7 +288,9 @@ Ext.extend(Ext.tree.MultiSelectionModel, Ext.util.Observable, {
         var sn = this.selNodes;
         if(sn.length > 0){
             for(var i = 0, len = sn.length; i < len; i++){
-                sn[i].ui.onSelectedChange(false);
+                if(sn[i].ui) {
+                    sn[i].ui.onSelectedChange(false);
+                }
             }
             this.selNodes = [];
             this.selMap = {};
