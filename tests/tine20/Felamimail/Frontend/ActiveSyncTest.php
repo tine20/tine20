@@ -103,7 +103,7 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         if (count($this->_createdFolders) > 0) {
             foreach ($this->_createdFolders as $folderName) {
                 try {
-                    Felamimail_Controller_Folder::getInstance()->delete($this->_getTestUserFelamimailAccount(), $folderName);
+                    Felamimail_Controller_Folder::getInstance()->delete(TestServer::getInstance()->getTestEmailAccount(), $folderName);
                 } catch (Zend_Mail_Storage_Exception $zmse) {
                     // already deleted
                 }
@@ -353,7 +353,7 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
     public function testSendEmail()
     {
         // add account signature
-        $account = $this->_getTestUserFelamimailAccount();
+        $account = TestServer::getInstance()->getTestEmailAccount();
         $account->signatures = new Tinebase_Record_RecordSet(Felamimail_Model_Signature::class, [[
             'signature' => 'my special signature',
             'is_default' => 1,

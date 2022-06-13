@@ -1061,18 +1061,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return NULL|Felamimail_Model_Account
-     */
-    protected function _getTestUserFelamimailAccount()
-    {
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
-           ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SYSTEM],
-           ['field' => 'user_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()],
-        ]);
-        return Felamimail_Controller_Account::getInstance()->search($filter)->getFirstRecord();
-    }
-
-    /**
      * @param array $xpropsToSet
      * @return Addressbook_Model_List
      * @throws Tinebase_Exception_AccessDenied

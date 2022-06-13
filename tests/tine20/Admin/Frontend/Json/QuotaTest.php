@@ -161,7 +161,7 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
     {
         $application = 'Felamimail';
         // save email personal quota
-        $systemaccount = $this->_getTestUserFelamimailAccount();
+        $systemaccount = TestServer::getInstance()->getTestEmailAccount();
 
         // must have data
         $quotaNodeData['name'] = $systemaccount['email'];
