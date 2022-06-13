@@ -374,6 +374,9 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         if ($disposition) {
             header('Content-Disposition: ' . $disposition . '; filename="' . $filename . '"');
         }
+        if (empty($contentType)) {
+            $contentType = Tinebase_Model_Tree_FileObject::DEFAULT_CONTENT_TYPE;
+        }
         header("Content-Type: " . $contentType);
 
         foreach ($additionalHeaders as $key => $val) {
