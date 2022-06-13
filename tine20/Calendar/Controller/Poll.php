@@ -452,7 +452,8 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
         if (!is_array($_message->to) || !isset($_message->to[0])) {
             throw new Tinebase_Exception_UnexpectedValue('bad message, no to[0] set');
         }
-        $emailTo = $_message->to[0];
+        // new recipient structure is array and should always have email field
+        $emailTo = $_message->to[0]['email'] ?? $_message->to[0];
         if (strpos($_message->body, '/Calendar/view/poll/') === false) {
             // nothing to do for us
             return;

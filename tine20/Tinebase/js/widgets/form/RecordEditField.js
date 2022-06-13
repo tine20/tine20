@@ -8,11 +8,17 @@
 
 /*global Ext, Tine*/
 
+import FieldTriggerPlugin from "../../ux/form/FieldTriggerPlugin";
+
 Ext.ns('Tine.Tinebase.widgets.form.RecordEditField');
 
 
 Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
-
+    /**
+     * @cfg {Bool} allowDelete show delete trigger
+     */
+    enableDelete: false,
+    
     itemCls: 'tw-recordEditField',
     triggerClass: 'action_edit',
     editable: false,
@@ -22,6 +28,17 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
 
         this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.appName, this.modelName);
         this.emptyText = i18n._('No record');
+        
+        this.plugins = this.plugins || [];
+        if (this.enableDelete === true) {
+            this.trigger_delete = new FieldTriggerPlugin({
+                triggerClass: 'action_delete',
+                onTriggerClick: () => {
+                    this.clearValue();
+                }
+            });
+            this.plugins.push(this.trigger_delete);
+        }
 
         Tine.Tinebase.widgets.form.RecordEditField.superclass.initComponent.call(this);
     },
@@ -38,13 +55,35 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
         const className = _.get(this.owningRecord, 'data.'+classNameField);
         this.recordClass = className ? Tine.Tinebase.data.RecordMgr.get(className) || this.recordClass : this.recordClass;
     },
+    
     setValue : function(v, owningRecord){
         this.recordData = _.get(v, 'data', v);
         this.assertRecordClass(owningRecord);
-
+    
         let valueRecord = this.recordClass && this.recordData ? Tine.Tinebase.data.Record.setFromJson(this.recordData, this.recordClass) : null;
         Tine.Tinebase.widgets.form.RecordEditField.superclass.setValue.call(this, valueRecord ? valueRecord.getTitle() || '...' : '');
+        
+        if (this.trigger_delete && this.enableDelete === true ) {
+            const visible = !!valueRecord;
+            this.trigger_delete.setVisible(visible);
+        }
     },
+    
+    getValue : function(){
+        return this.recordData;
+    },
+    
+    /**
+     * clear value
+     */
+    clearValue: function () {
+        this.setValue('');
+        
+        if (this.trigger_delete && this.enableDelete === true) {
+            this.trigger_delete.setVisible(false);
+        }
+    },
+
     checkState: function(editDialog, owningRecord) {
         this.assertRecordClass(owningRecord);
     },
@@ -55,39 +94,40 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
             alert('select model');
             return;
         }
+        
         let me = this;
-        let editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass);
+        const editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass);
 
-        if (editDialogClass) {
-            editDialogClass.openWindow({
-                mode: 'local',
-                record: this.recordData,
-                listeners: {
-                    scope: me,
-                    'update': (updatedRecord) => {
-                        let record = !updatedRecord.data ? Tine.Tinebase.data.Record.setFromJson(updatedRecord, me.recordClass) : updatedRecord;
-                        Tine.Tinebase.common.assertComparable(record);
-                        this.setValue(record);
-                    },
-                    'cancel': () => {
-                        if (new Date().getTime() - 1000 < this.blurOnSelectLastRun) return;
-                        _.delay(() => {
-                            this.blurOnSelectLastRun = new Date().getTime();
-                            const focusClass = this.focusClass;
-                            this.focusClass = '';
-                            Ext.form.TriggerField.superclass.onBlur.call(this);
-                            this.focusClass = focusClass;
-                        }, 100);
-                    }
-                }
-            });
+        if (! editDialogClass) {
+            return;
         }
-    },
-    
-    getValue : function(){
-       return this.recordData;
-    },
-
+        
+        editDialogClass.openWindow({
+            mode: 'local',
+            record: this.recordData,
+            listeners: {
+                scope: me,
+                'update': (updatedRecord) => {
+                    let record = !updatedRecord.data ? Tine.Tinebase.data.Record.setFromJson(updatedRecord, me.recordClass) : updatedRecord;
+                    Tine.Tinebase.common.assertComparable(record);
+                    this.setValue(record);
+                },
+                'cancel': () => {
+                    if (new Date().getTime() - 1000 < this.blurOnSelectLastRun) {
+                        return;
+                    }
+                    
+                    _.delay(() => {
+                        this.blurOnSelectLastRun = new Date().getTime();
+                        const focusClass = this.focusClass;
+                        this.focusClass = '';
+                        Ext.form.TriggerField.superclass.onBlur.call(this);
+                        this.focusClass = focusClass;
+                    }, 100);
+                }
+            }
+        });
+    }
 });
 
 Ext.reg('tw-recordEditField', Tine.Tinebase.widgets.form.RecordEditField);

@@ -134,7 +134,7 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                 'nullable' => true,
             ),
             self::FLD_TYPE_STATUS          => array(
-                'label' => 'Status', // _('Status')
+                'label' => 'Type specific status', // _('Type specific status')
                 'type'  => 'keyfield',
                 'name'  => HumanResources_Config::FREE_TIME_TYPE_STATUS,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
@@ -142,7 +142,7 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                 self::DEFAULT_VAL => null,
             ),
             self::FLD_PROCESS_STATUS          => array(
-                'label' => 'Status', // _('Status')
+                'label' => 'Process status', // _('Process status')
                 'type'  => 'keyfield',
                 'name'  => HumanResources_Config::FREE_TIME_PROCESS_STATUS,
                 'validators' => [

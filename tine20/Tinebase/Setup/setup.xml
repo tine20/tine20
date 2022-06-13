@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>15.11</version>
+    <version>15.12</version>
     <minimumRequiredVersion>12.28</minimumRequiredVersion>
     <tables>
         <table>
@@ -123,7 +123,7 @@
 
         <table>
             <name>groups</name>
-            <version>9</version>
+            <version>10</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -186,6 +186,7 @@
                     <name>is_deleted</name>
                     <type>boolean</type>
                     <default>false</default>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>deleted_by</name>
@@ -195,6 +196,8 @@
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
+                    <notnull>true</notnull>
+                    <default>1970-01-01 00:00:00</default>
                 </field>
                 <field>
                     <name>seq</name>

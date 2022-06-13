@@ -25,6 +25,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE009 = __CLASS__ . '::update009';
     const RELEASE015_UPDATE010 = __CLASS__ . '::update010';
     const RELEASE015_UPDATE011 = __CLASS__ . '::update011';
+    const RELEASE015_UPDATE012 = __CLASS__ . '::update012';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE       => [
@@ -68,6 +69,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE011          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update011',
+            ],
+            self::RELEASE015_UPDATE012          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update012',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -219,5 +224,40 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             $this->setTableVersion('config', 2);
         }
         $this->addApplicationUpdate('Tinebase', '15.11', self::RELEASE015_UPDATE011);
+    }
+
+    public function update012()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        if ($this->getTableVersion('groups') < 10) {
+            $this->getDb()->update(SQL_TABLE_PREFIX . 'groups', ['is_deleted' => 0], 'is_deleted IS NULL');
+            $this->_backend->alterCol('groups', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                    <notnull>true</notnull>
+                </field>'));
+            foreach ($this->getDb()->query('SELECT GROUP_CONCAT(id), count(*) as c FROM ' . SQL_TABLE_PREFIX .
+                    'groups GROUP BY name HAVING c > 1')->fetchAll(Zend_Db::FETCH_NUM) as $row) {
+                $date = new Tinebase_DateTime('1970-01-01 00:00:01');
+                foreach (explode(',', $row[0]) as $num => $id) {
+                    if (0 === $num) continue;
+                    $this->getDb()->update(SQL_TABLE_PREFIX . 'groups', ['deleted_time' => $date->toString()], $this->getDb()->quoteInto('id = ?', $id));
+                    $date->addSecond(1);
+                }
+            }
+            $this->getDb()->update(SQL_TABLE_PREFIX . 'groups', ['deleted_time' => '1970-01-01 00:00:00'], 'deleted_time IS NULL');
+            $this->_backend->alterCol('groups', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                    <notnull>true</notnull>
+                    <default>1970-01-01 00:00:00</default>
+                </field>'));
+            $this->setTableVersion('groups', 10);
+        }
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.12', self::RELEASE015_UPDATE012);
     }
 }

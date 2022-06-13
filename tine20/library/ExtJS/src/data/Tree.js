@@ -433,10 +433,6 @@ Ext.extend(Ext.data.Node, Ext.util.Observable, {
 
         // remove it from childNodes collection
         this.childNodes.splice(index, 1);
-        if(!this.childNodes.length) {
-            this.leaf = true;
-            this.attributes.expandable = false;
-        }
 
         // update siblings
         if(node.previousSibling){

@@ -41,8 +41,13 @@ class FieldTriggerPlugin {
 
             // preserve space for triggers
             wrap.addClass('x-form-trigger-plugi-wrap')
-            const paddingRight = Number(String(field.el.getStyle('padding-right')).replace('px', ''))
-            field.el.setStyle({'box-sizing': 'border-box', 'padding-right': paddingRight+17 + 'px'})
+            const paddingRight = Number(String(field.el.getStyle('padding-right')).replace('px', ''));
+            field.el.setStyle({
+                'box-sizing': 'border-box', 
+                'padding-right': paddingRight+17 + 'px', 
+                'width' : '100%', 
+                'height': '18px'
+            });
             field.el.autoBoxAdjust = false;
         }
     }

@@ -405,7 +405,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
 
     async onMenuClick(e) {
         const el = e.getTarget('.tine-recordclass-gridicon');
-        if (el) {
+        if (el && !Ext.fly(el).hasClass('x-item-disabled')) {
             const row = this.menu.timeAccountPickerGrid.view.findRowIndex(el);
             const timeAccount = this.menu.timeAccountPickerGrid.store.getAt(row);
             const timesheet = _.get(timeAccount, `data.xprops.HumanResources_Model_AttendanceRecord.bottom.xprops.metaData.Timetracker_Model_Timesheet`);
@@ -414,7 +414,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
 
             if (String(action).match(/^clock.*/)) {
                 _.defer(() => {
-                    Ext.fly(el).addClass('x-item-disabled')
+                    Ext.fly(el).addClass('x-item-disabled');
                 });
 
                 let result;

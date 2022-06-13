@@ -238,6 +238,7 @@ Tine.widgets.form.FieldManager = function() {
                         // @TODO: denormalizationOf should have an edit plugin
                         if (category === 'editDialog' && fieldDefinition.config.dependentRecords && !fieldDefinition.config.denormalizationOf) {
                             field.xtype = 'tw-recordEditField';
+                            field.enableDelete = true;
                             field.appName = fieldDefinition.config.appName;
                             field.modelName = fieldDefinition.config.modelName;
                             break;

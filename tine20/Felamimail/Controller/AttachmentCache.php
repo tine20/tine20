@@ -100,9 +100,13 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
         }
         rewind($stream);
 
+        if (false === ($name = iconv(mb_detect_encoding($fileName), "UTF-8//IGNORE", $fileName))) {
+            throw new Tinebase_Exception_UnexpectedValue('can not convert filename to utf8 ' . $fileName);
+        }
+
         $_record->attachments = new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class, [
             new Tinebase_Model_Tree_Node([
-                'name' => $fileName,
+                'name' => $name,
                 'tempFile' => true,
                 'stream' => $stream,
             ], true)

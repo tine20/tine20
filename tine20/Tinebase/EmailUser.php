@@ -648,6 +648,10 @@ class Tinebase_EmailUser
 
     public static function removeSieveAdminAccess()
     {
+        if (! Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+            return false;
+        }
+
         $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         if (method_exists($imapEmailBackend, 'removeMasterPassword')) {
             $imapEmailBackend->removeMasterPassword(self::$_masterUser);
