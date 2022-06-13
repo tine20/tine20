@@ -149,9 +149,14 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param boolean $forceOverwrite
      * @return array
      */
-    public function moveNodes($sourceFilenames, $destinationFilenames, $forceOverwrite)
+    public function moveNodes($sourceFilenames, $destinationFilenames, $forceOverwrite): array
     {
-        $nodes = Filemanager_Controller_Node::getInstance()->moveNodes((array)$sourceFilenames, $destinationFilenames, $forceOverwrite);
+        try {
+            $nodes = Filemanager_Controller_Node::getInstance()->moveNodes((array)$sourceFilenames, $destinationFilenames, $forceOverwrite);
+        } catch (Tinebase_Exception_InvalidArgument $teia) {
+            Tinebase_Exception::log($teia);
+            throw new Tinebase_Exception_SystemGeneric('Invalid target(s): ' . print_r($destinationFilenames, true));
+        }
 
         return $this->_multipleRecordsToJson($nodes);
     }
