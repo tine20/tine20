@@ -176,9 +176,10 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
     /**
      * get all entries changed between to dates
      *
-     * @param unknown_type $_field
-     * @param unknown_type $_startTimeStamp
-     * @param unknown_type $_endTimeStamp
+     * @param string $folderId
+     * @param DateTime $_startTimeStamp
+     * @param ?DateTime $_endTimeStamp
+     * @param ?string $filterType
      * @return array
      */
     public function getChangedEntries($folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL, $filterType = NULL)
@@ -209,9 +210,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             ));
         }
         
-        $result = $this->_contentController->search($filter, NULL, false, true, 'sync');
-        
-        return $result;
+        return $this->_contentController->search($filter, NULL, false, true, 'sync');
     }
     
     /**
@@ -235,10 +234,10 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
     }
     
     /**
-     * (non-PHPdoc)
-     * @see ActiveSync_Frontend_Abstract::getFileReference()
+     * @param string $fileReference
+     * @return Syncroton_Model_FileReference
      */
-    public function getFileReference($fileReference)
+    public function getFileReference($fileReference): Syncroton_Model_FileReference
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . " fileReference " . $fileReference);
@@ -252,12 +251,10 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         
         $part = $this->_contentController->getMessagePart($messageId, $partId);
         
-        $syncrotonFileReference = new Syncroton_Model_FileReference(array(
+        return new Syncroton_Model_FileReference(array(
             'contentType' => $part->type,
             'data'        => $part->getDecodedStream()
         ));
-        
-        return $syncrotonFileReference;
     }
     
     /**
@@ -638,11 +635,21 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             $messageBody = stream_get_contents($messageBody->getRawStream());
             
         } else {
-            $messageBody = $this->_contentController->getMessageBody($entry, null, $airSyncBaseType == 2 ? Zend_Mime::TYPE_HTML : Zend_Mime::TYPE_TEXT, NULL, true);
+            $messageBody = $this->_contentController->getMessageBody(
+                $entry,
+                null,
+                $airSyncBaseType == 2 ? Zend_Mime::TYPE_HTML : Zend_Mime::TYPE_TEXT
+            );
         }
         
         if($previewSize !== null) {
-            $preview = substr($this->_contentController->getMessageBody($entry, null, Zend_Mime::TYPE_TEXT, NULL, true), 0, $previewSize);
+            $preview = substr($this->_contentController->getMessageBody(
+                $entry,
+                null,
+                Zend_Mime::TYPE_TEXT),
+                0,
+                $previewSize
+            );
             
             // strip out any non utf-8 characters
             $preview = @iconv('utf-8', 'utf-8//IGNORE', $preview);
@@ -701,7 +708,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
      *
      * @param  string  $_folderId
      * @param  string  $_serverId
-     * @param  array   $_collectionData
+     * @param  mixed   $_collectionData
      */
     public function deleteEntry($_folderId, $_serverId, $_collectionData)
     {
@@ -763,9 +770,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         }
         
         $message->timestamp = $this->_syncTimeStamp;
-        $this->_contentController->update($message);
-        
-        return;
+        return $this->_contentController->update($message);
     }
     
     /**
@@ -777,9 +782,27 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         if (strpos($folder->serverId, $this->_fakePrefix) === 0) {
             return $folder;
         }
-        
+
         $fmailFolder = Felamimail_Controller_Folder::getInstance()->get($folder->serverId);
-        Felamimail_Controller_Folder::getInstance()->rename($fmailFolder->account_id, $folder->displayName, $fmailFolder->globalname);
+        $account = Felamimail_Controller_Account::getInstance()->get($fmailFolder->account_id);
+        $delimiter = $account->delimiter;
+        $parent = $folder->parentId
+            ? Felamimail_Controller_Folder::getInstance()->get($folder->parentId)
+            : null;
+        if ($parent->globalname !== $fmailFolder->parent) {
+            // move folder
+            $target = $parent->globalname . $delimiter . $folder->displayName;
+            $targetIsLocal = false;
+        } else {
+            $target = $folder->displayName;
+            $targetIsLocal = true;
+        }
+        Felamimail_Controller_Folder::getInstance()->rename(
+            $account,
+            $target,
+            $fmailFolder->globalname,
+            $targetIsLocal
+        );
         return $folder;
     }
 
@@ -1070,23 +1093,6 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
     }
     
     /**
-     * get folder identified by $_folderId
-     *
-     * @param string $_folderId
-     * @return string
-     */
-    private function getFolder($_folderId)
-    {
-        $folders = $this->getSupportedFolders();
-        
-        if(!(isset($folders[$_folderId]) || array_key_exists($_folderId, $folders))) {
-            throw new ActiveSync_Exception_FolderNotFound('folder not found. ' . $_folderId);
-        }
-        
-        return $folders[$_folderId];
-    }
-    
-    /**
      * (non-PHPdoc)
      * @see ActiveSync_Frontend_Abstract::_getContentFilter()
      */
@@ -1094,10 +1100,10 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
     {
         $filter = parent::_getContentFilter($_filterType);
         
-        if(in_array($_filterType, $this->_filterArray)) {
+        if (in_array($_filterType, $this->_filterArray)) {
             $today = Tinebase_DateTime::now()->setTime(0,0,0);
                 
-            switch($_filterType) {
+            switch ($_filterType) {
                 case Syncroton_Command_Sync::FILTER_1_DAY_BACK:
                     $received = $today->subDay(1);
                     break;
@@ -1113,10 +1119,16 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
                 case Syncroton_Command_Sync::FILTER_1_MONTH_BACK:
                     $received = $today->subMonth(1);
                     break;
+                default:
+                    $received = $today->subDay(1);
             }
             
             // add period filter
-            $filter->addFilter(new Tinebase_Model_Filter_DateTime('received', 'after', $received->get(Tinebase_Record_Abstract::ISO8601LONG)));
+            $filter->addFilter(new Tinebase_Model_Filter_DateTime(
+                'received',
+                'after',
+                $received->get(Tinebase_Record_Abstract::ISO8601LONG))
+            );
         }
         
         return $filter;

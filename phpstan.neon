@@ -15,13 +15,17 @@ parameters:
       - Zend_View
       - Laminas\Stdlib\ParametersInterface
       # TODO fix in Syncroton phpdoc ...
+      - Syncroton_Model_Email
       - Syncroton_Model_EmailBody
       - Syncroton_Model_Event
       - Syncroton_Model_EventAttendee
       - Syncroton_Model_EventException
       - Syncroton_Model_EventRecurrence
       - Syncroton_Model_IDevice
+      - Syncroton_Model_IFolder
       - Syncroton_Model_MeetingResponse
+      - Syncroton_Model_StoreResponse
+      - Syncroton_Model_StoreRequest
     reportUnmatchedIgnoredErrors: false
     level: 2
     excludePaths:
