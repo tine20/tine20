@@ -764,8 +764,6 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         
         $message->timestamp = $this->_syncTimeStamp;
         $this->_contentController->update($message);
-        
-        return;
     }
     
     /**
@@ -777,9 +775,27 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         if (strpos($folder->serverId, $this->_fakePrefix) === 0) {
             return $folder;
         }
-        
+
         $fmailFolder = Felamimail_Controller_Folder::getInstance()->get($folder->serverId);
-        Felamimail_Controller_Folder::getInstance()->rename($fmailFolder->account_id, $folder->displayName, $fmailFolder->globalname);
+        $account = Felamimail_Controller_Account::getInstance()->get($fmailFolder->account_id);
+        $delimiter = $account->delimiter;
+        $parent = $folder->parentId
+            ? Felamimail_Controller_Folder::getInstance()->get($folder->parentId)
+            : null;
+        if ($parent->globalname !== $fmailFolder->parent) {
+            // move folder
+            $target = $parent->globalname . $delimiter . $folder->displayName;
+            $targetIsLocal = false;
+        } else {
+            $target = $folder->displayName;
+            $targetIsLocal = true;
+        }
+        Felamimail_Controller_Folder::getInstance()->rename(
+            $account,
+            $target,
+            $fmailFolder->globalname,
+            $targetIsLocal
+        );
         return $folder;
     }
 
