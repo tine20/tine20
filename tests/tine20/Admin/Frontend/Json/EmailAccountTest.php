@@ -276,7 +276,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
 
     public function testUpdateSystemAccount()
     {
-        $systemaccount = $this->_getTestUserFelamimailAccount();
+        $systemaccount = TestServer::getInstance()->getTestEmailAccount();
         if (! $systemaccount) {
             self::markTestSkipped('no systemaccount configured');
         }
@@ -807,7 +807,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
     
     public function testResolveAccountEmailUsers()
     {
-        $systemaccount = $this->_getTestUserFelamimailAccount();
+        $systemaccount = TestServer::getInstance()->getTestEmailAccount();
         if (! $systemaccount) {
             self::markTestSkipped('no systemaccount configured');
         }

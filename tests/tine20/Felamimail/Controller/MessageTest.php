@@ -68,7 +68,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
      */
     protected function setUp(): void
     {
-        $this->_account = $this->_getTestUserFelamimailAccount();
+        $this->_account = TestServer::getInstance()->getTestEmailAccount();
         if (! $this->_account || $this->_account->type !== Felamimail_Model_Account::TYPE_SYSTEM) {
             throw new Tinebase_Exception('no valid test account found');
         }

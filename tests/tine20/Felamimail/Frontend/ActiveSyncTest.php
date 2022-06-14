@@ -6,7 +6,7 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  * TODO extend Felamimail_TestCase
@@ -103,8 +103,10 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         if (count($this->_createdFolders) > 0) {
             foreach ($this->_createdFolders as $folderName) {
                 try {
-                    Felamimail_Controller_Folder::getInstance()->delete($this->_getTestUserFelamimailAccount(), $folderName);
+                    Felamimail_Controller_Folder::getInstance()->delete(TestServer::getInstance()->getTestEmailAccount(), $folderName, true);
                 } catch (Zend_Mail_Storage_Exception $zmse) {
+                    // already deleted
+                } catch (Felamimail_Exception_IMAPFolderNotFound $zmse) {
                     // already deleted
                 }
             }
@@ -353,7 +355,7 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
     public function testSendEmail()
     {
         // add account signature
-        $account = $this->_getTestUserFelamimailAccount();
+        $account = TestServer::getInstance()->getTestEmailAccount();
         $account->signatures = new Tinebase_Record_RecordSet(Felamimail_Model_Signature::class, [[
             'signature' => 'my special signature',
             'is_default' => 1,
@@ -980,8 +982,9 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
      * get application activesync controller
      * 
      * @param ActiveSync_Model_Device $_device
+     * @return Felamimail_Frontend_ActiveSync
      */
-    protected function _getController(Syncroton_Model_IDevice $_device)
+    protected function _getController(Syncroton_Model_IDevice $_device): Felamimail_Frontend_ActiveSync
     {
         if ($this->_controller === null) {
             $this->_controller = new $this->_controllerName($_device, new Tinebase_DateTime(null, null, 'de_DE'));
@@ -1113,18 +1116,40 @@ cj48L2Rpdj48L2Rpdj4=&#13;
         self::assertEquals(1, count($message->to), 'message should have 1 recipient: ' . print_r($message->to, true));
     }
 
-    public function testCreateFolder()
+    public function testCreateFolder($name = 'syncroTestFolder')
     {
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
         $inbox = $this->_emailTestClass->getFolder('INBOX');
         $folder = new Syncroton_Model_Folder([
             'parentId' => $inbox->getId(),
-            'displayName' => 'syncroTestFolder',
+            'displayName' => $name,
         ]);
         $this->_createdFolders[] = 'INBOX.' . $folder->displayName;
         $newFolder = $controller->createFolder($folder);
 
         $fmailFolder = Felamimail_Controller_Folder::getInstance()->get($newFolder->serverId);
         self::assertEquals($folder->displayName, $fmailFolder->localname);
+        return $fmailFolder;
+    }
+
+    public function testMoveFolder()
+    {
+        $folder1 = $this->testCreateFolder();
+        $folder2 = $this->testCreateFolder('subfolder');
+
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+        // move folder2 into folder1
+        $folder = new Syncroton_Model_Folder([
+            'parentId' => $folder1->getId(),
+            'serverId' => $folder2->getId(),
+            'displayName' => $folder2->localname,
+        ]);
+        $newGlobalName = 'INBOX.' . $folder1->localname . '.' . $folder2->localname;
+        $this->_createdFolders[] = 'INBOX.' . $folder1->localname;
+        $newFolder = $controller->updateFolder($folder);
+
+        $fmailFolder = Felamimail_Controller_Folder::getInstance()->get($newFolder->serverId);
+        self::assertEquals($folder->displayName, $fmailFolder->localname);
+        self::assertEquals($newGlobalName, $fmailFolder->globalname);
     }
 }
