@@ -20,14 +20,7 @@ Tine.widgets.tags.TagsMassAttachAction = function(config) {
     config.handler = config.handler ? config.handler : this.handleClick.createDelegate(this);
     config.scope = config.scope ? config.scope : this.handleClick.createDelegate(this);
     Ext.apply(this, config);
-    
-    this.store = new Ext.data.SimpleStore({
-        fields: Tine.Tinebase.Model.Tag
-    });
-    
-    this.store.on('add', this.manageOkBtn, this);
-    this.store.on('remove', this.manageOkBtn, this);
-    
+
     Tine.widgets.tags.TagsMassAttachAction.superclass.constructor.call(this, config);
 };
 
@@ -74,14 +67,18 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
     },
     
     manageOkBtn: function() {
-        if (this.win && this.win.okButton) {
-            this.win.okButton.setDisabled(! this.store.getCount());
+        if (this.okButton) {
+            this.okButton.setDisabled(! this.store.getCount());
         }
     },
     
     handleClick: function() {
-        // NOTE: in gridPanels ctxMenu (and so this action) is only created once
-        this.store.removeAll();
+        this.store = new Ext.data.SimpleStore({
+            fields: Tine.Tinebase.Model.Tag
+        });
+
+        this.store.on('add', this.manageOkBtn, this);
+        this.store.on('remove', this.manageOkBtn, this);
         
         this.win = Tine.WindowFactory.getWindow({
             layout: 'fit',
@@ -102,15 +99,14 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
                     scope: this,
                     handler: this.onCancel,
                     iconCls: 'action_cancel'
-                }, {
+                }, this.okButton = new Ext.Button({
                     text: i18n._('Ok'),
-                    ref: '../../../okButton',
                     disabled: this.store ? !this.store.getCount() : true,
                     minWidth: 70,
                     scope: this,
                     handler: this.onOk,
                     iconCls: 'action_saveAndClose'
-                }]
+                })]
             }]
         });
     },
