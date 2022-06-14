@@ -846,32 +846,30 @@ Tine.Tinebase.common = {
     
     /**
      * find contacts by email string
-     * 
+     *
      * return recipients token
      *
-     * @param address
+     * @param addresses
      */
-    findContactsByEmailString: async function (address) {
+    findContactsByEmailString: async function (addresses) {
         const result = [];
         
-        if (!address || address === '') {
+        if (!addresses || addresses === '') {
             return result;
         }
         
-        import(/* webpackChunkName: "Tinebase/js/email-addresses" */ 'email-addresses').then((addrs) => {
-            const parsed = addrs.parseAddressList(address.replace(';', ','));
-        });
-        const matches = address.match(/(?<email>([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+))/g);
-
-        let emails = _.split(address, '>,');
-        let emailArray = _.map(emails, (address) => {
-            const parsed = addressparser.parse(address.replace(/,/g, '\\\\,'));
+        const addressParser = await import(/* webpackChunkName: "Tinebase/js/email-addresses" */ 'email-addresses');
+        addresses = addresses.replaceAll(';', ',');
+        addresses = addresses.replaceAll(/^[^A-Za-z0-9]+|[^A-Za-z0-9>]+$/g, '');
+        const parsedList = addressParser.parseAddressList(addresses);
+        
+        let emailArray = _.map(parsedList, (parsed) => {
             let contact = {
-                'email': parsed && parsed[0]?.address ? parsed[0]?.address : '',
+                'email': parsed.address ?? '',
                 'email_type': '',
                 'type': '',
                 'n_fileas': '',
-                'name': parsed && parsed[0]?.name ? parsed[0]?.name : '',
+                'name': parsed?.name ?? '',
                 'record_id': ''
             };
             
