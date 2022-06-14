@@ -169,6 +169,12 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
             }
 
             foreach ($models as $model) {
+                if (! class_exists($model)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__ . ' Model class not found: ' . $model);
+                    continue;
+                }
+
                 $config = $model::getConfiguration();
                 if ($frontend::exposeApi($config)) {
                     $simpleModelName = Tinebase_Record_Abstract::getSimpleModelName($application, $model);
