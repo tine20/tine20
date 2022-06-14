@@ -286,8 +286,15 @@ class Tinebase_Core
     public static function getDispatchServer(\Laminas\Http\Request $request)
     {
         // Test server conditions from server plugins
-        foreach (self::_getServerPlugins() as $serverPlugin){
-            $server = call_user_func_array(array($serverPlugin,'getServer'), array($request));
+        foreach (self::_getServerPlugins() as $serverPlugin) {
+            if (! class_exists($serverPlugin)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Class not found: '
+                        . $serverPlugin);
+                }
+                continue;
+            }
+            $server = call_user_func_array([$serverPlugin, 'getServer'], [$request]);
             
             if ($server instanceof Tinebase_Server_Interface) {
                 Tinebase_Core::set('serverclassname', get_class($server));
