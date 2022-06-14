@@ -366,13 +366,6 @@ class Tinebase_Server_HttpTests extends TestCase
         return $out;
     }
 
-    public function testExportContactPdf()
-    {
-        $out = $this->_exportInternalContacts('adb_pdf');
-        self::assertStringNotContainsString('Exception', $out);
-        self::assertStringContainsString('%PDF-1.4', $out);
-    }
-
     /**
      * @group ServerTests
      *
