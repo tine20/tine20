@@ -1421,8 +1421,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         let account = this.app.getAccountStore().getById(this.record.get('account_id'));
         let format = this.record.get('content_type');
 
-        let oldSignature = this.getSignature(account, format, _.find(this.signatureCombo.store.data.items, (r) => {return _.get(r, 'data.name') === this.signatureCombo.getValue()}));
-        let newSignature = this.getSignature(account, format, signature);
+        let oldSignature = this.getSignature(account, format, _.find(this.signatureCombo.store.data.items, (r) => {return _.get(r, 'data.name') === this.signatureCombo.getValue()})).substring(4);
+        let newSignature = this.getSignature(account, format, signature).substring(4);
 
         let bodyContent = this.bodyCards.layout.activeItem.getValue();
         bodyContent = oldSignature ?
