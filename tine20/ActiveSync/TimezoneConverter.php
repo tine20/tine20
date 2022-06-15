@@ -599,7 +599,7 @@ class ActiveSync_TimezoneConverter
      * and {@param $_year}.
      * 
      * @param DateTimeZone $_timezone
-     * @param $_year
+     * @param int $_year
      * @return Array
      */
     protected function _getTransitionsForTimezoneAndYear(DateTimeZone $_timezone, $_year)
@@ -617,8 +617,6 @@ class ActiveSync_TimezoneConverter
         }
 
         if ($transitions) {
-            $index = 0;            //we need to access index counter outside of the foreach loop
-            $transition = array(); //we need to access the transition counter outside of the foreach loop
             foreach ($transitions as $index => $transition) {
                 if (strftime('%Y', $transition['ts']) == $_year) {
                     if (isset($transitions[$index + 1]) && strftime('%Y', $transitions[$index]['ts']) == strftime('%Y', $transitions[$index + 1]['ts'])) {
@@ -634,9 +632,8 @@ class ActiveSync_TimezoneConverter
                 }
             }
         } else {
-            // TODO throw an exception?
             $this->_log(__METHOD__, __LINE__, 'Transitions not found for TZ '
-                . print_r($_timezone, true), Tinebase_Log::WARN);
+                . print_r($_timezone, true), Tinebase_Log::NOTICE);
         }
          
         return array($standardTransition, $daylightTransition);
