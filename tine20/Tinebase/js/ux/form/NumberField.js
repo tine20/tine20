@@ -45,7 +45,7 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
     nullable: false,
 
     style: 'text-align: right',
-    
+
     initComponent: function() {
         if (this.useThousandSeparator) {
             this.thousandSeparator = this.thousandSeparator ? this.thousandSeparator : (this.decimalSeparator == '.' ? ',' : '.');
@@ -54,6 +54,10 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
         Ext.ux.form.NumberField.superclass.initComponent.call(this);
         
         this.on('focus', this.selectText, this, {buffer: 10});
+        this.on('keydown', function(cmp,e) {
+            if(e.getKey() === e.ENTER) {
+                this.onBlur();
+            }},this)
     },
 
     selectText: function() {
@@ -79,7 +83,7 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
         if (['', null, undefined].indexOf(v) >= 0 && this.nullable) {
             return this;
         }
-        
+
         var split = String(this.getValue()).split('.');
 
         var tenString = split[0];
