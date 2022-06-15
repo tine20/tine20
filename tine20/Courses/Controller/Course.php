@@ -653,7 +653,34 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
                 'pwdCanChange'  => new Tinebase_DateTime('@1'),
                 'pwdMustChange' => new Tinebase_DateTime('@1')
             ) : array(),
-            'encoding'                      => 'UTF-8'
+            'encoding'                      => 'UTF-8',
+            'afterAccountLoginName'         => function(Tinebase_Model_FullUser $user) {
+                $count = 1;
+                $shortUsername = $user->shortenUsername(2);
+                while ($count < 100) {
+                    try {
+                        Tinebase_User::getInstance()->getUserByLoginName($user->accountLoginName);
+                        $user->accountLoginName = $shortUsername . sprintf('%02d', $count++);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        break;
+                    }
+                }
+                if ($count > 1) {
+                    $user->accountEmailAddress = null;
+                    $user->applyTwigTemplates();
+                }
+
+                $count = 1;
+                $accountFullName = $user->accountFullName;
+                while ($count < 100) {
+                    try {
+                        Tinebase_User::getInstance()->getUserByProperty('accountFullName', $user->accountFullName);
+                        $user->accountFullName = $accountFullName . sprintf('%02d', $count++);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        break;
+                    }
+                }
+            },
         );
     }
     

@@ -71,7 +71,9 @@ Tine.Admin.Groups.Main = {
                             this.gridPanel.getStore().reload();
                         },
                         failure: function (result, request) {
-                            Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occurred while trying to delete the group.'));
+                            const response = Ext.util.JSON.decode(result.responseText);
+                            response.data.request = request.jsonData;
+                            Tine.Tinebase.ExceptionHandler.handleRequestException(response.data);
                         }
                     });
                 }
