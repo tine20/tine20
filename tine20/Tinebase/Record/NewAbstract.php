@@ -1580,8 +1580,11 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
                 $toConvert = $this->_data[$field];
             }
 
-            foreach ($toConvert as $convertField => &$value) {
+            foreach ($toConvert as &$value) {
                 if (! method_exists($value, 'setTimezone')) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' '
+                        . print_r($this->toArray(), true));
                     throw new Tinebase_Exception_Record_Validation($field . ' must have a method setTimezone');
                 }
                 $value->setTimezone($_timezone);
