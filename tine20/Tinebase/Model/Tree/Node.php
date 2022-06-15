@@ -557,10 +557,10 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 
         $invalid = array();
         if (!empty($this->xprops(static::XPROPS_REVISION))) {
-            if (count($this->revisionProps) > 4 || !isset($this->revisionProps[static::XPROPS_REVISION_NODE_ID])
-                    || !isset($this->revisionProps[static::XPROPS_REVISION_MONTH]) ||
-                    !isset($this->revisionProps[static::XPROPS_REVISION_ON]) ||
-                    !isset($this->revisionProps[static::XPROPS_REVISION_NUM])) {
+            if (count($this->revisionProps) > 4 || !array_key_exists(self::XPROPS_REVISION_NODE_ID, $this->revisionProps)
+                    || !array_key_exists(self::XPROPS_REVISION_MONTH, $this->revisionProps) ||
+                    !array_key_exists(self::XPROPS_REVISION_ON, $this->revisionProps) ||
+                    !array_key_exists(self::XPROPS_REVISION_NUM, $this->revisionProps)) {
                 $invalid[] = 'revisionProps';
             }
         }
