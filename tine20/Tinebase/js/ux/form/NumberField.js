@@ -47,6 +47,10 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
         Ext.ux.form.NumberField.superclass.initComponent.call(this);
         
         this.on('focus', this.emptyField, this);
+        this.on('keydown', function(cmp,e) {
+            if(e.getKey() === e.ENTER) {
+                this.onBlur();
+            }},this)
     },
     
     emptyField: function() {
