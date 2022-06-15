@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -268,6 +268,10 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         
         // short username if needed
         $this->accountLoginName = $this->shortenUsername();
+
+        if (isset($options['afterAccountLoginName'])) {
+            $options['afterAccountLoginName']($this);
+        }
         
         // add home dir if empty and prefix is given (append login name)
         if (empty($this->accountHomeDirectory) && ! empty($options['accountHomeDirectoryPrefix'])) {
@@ -462,12 +466,12 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     /**
      * Short username to a configured length
      */
-    public function shortenUsername()
+    public function shortenUsername(int $reserveRight = 0)
     {
         $username = $this->accountLoginName;
         $maxLoginNameLength = Tinebase_Config::getInstance()->get(Tinebase_Config::MAX_USERNAME_LENGTH);
-        if (!empty($maxLoginNameLength) && strlen($username) > $maxLoginNameLength) {
-            $username = substr($username, 0, $maxLoginNameLength);
+        if (!empty($maxLoginNameLength) && strlen($username) > $maxLoginNameLength - $reserveRight) {
+            $username = substr($username, 0, $maxLoginNameLength - $reserveRight);
         }
         
         return $username;

@@ -341,8 +341,6 @@ class Courses_JsonTest extends TestCase
      */
     public function testImportMembersIntoCourse2()
     {
-        $this->markTestSkipped('FIXME 0011950: fix failing test in Courses_JsonTest');
-
         $result = $this->_importHelper(dirname(__FILE__) . '/files/import.txt');
         
         $this->assertEquals(5, count($result['members']), print_r($result, TRUE));
@@ -355,19 +353,23 @@ class Courses_JsonTest extends TestCase
             }
         }
         $this->assertTrue(! empty($lahm));
-        $this->assertEquals('lahmph', $lahm['data']);
+        $this->assertEquals('plahm', $lahm['data']);
         
         // get user and check email
         $maildomain = TestServer::getPrimaryMailDomain();
         $user = Tinebase_User::getInstance()->getFullUserById($lahm['id']);
-        $this->assertEquals('lahmph', $user->accountLoginName);
-        $this->assertEquals('lahmph@' . $maildomain, $user->accountEmailAddress);
+        $this->assertEquals('plahm', $user->accountLoginName);
+        $this->assertEquals('plahm@' . $maildomain, $user->accountEmailAddress);
         $this->assertEquals('//base/school/' . $result['name'] . '/' . $user->accountLoginName, $user->accountHomeDirectory);
         $defaultGroupMembers = Tinebase_Group::getInstance()->getGroupMembers(
-            Tinebase_Group::getInstance()->getDefaultGroup()->getId()
+            Tinebase_Group::getInstance()->getDefaultGroup()->getId(), false
         );
-        $this->assertTrue(in_array($user->getId(), $defaultGroupMembers),
+        $this->assertFalse(in_array($user->getId(), $defaultGroupMembers),
             'user not added to default user group. memberships: ' . print_r($defaultGroupMembers, true));
+
+        $courseGroupMembers = Tinebase_Group::getInstance()->getGroupMembers($result['group_id'], false);
+        $this->assertTrue(in_array($user->getId(), $courseGroupMembers),
+            'user not added to course group. memberships: ' . print_r($courseGroupMembers, true));
     }
     
     /**
@@ -436,6 +438,24 @@ class Courses_JsonTest extends TestCase
         
         $user = Tinebase_User::getInstance()->getFullUserById($userId);
         $this->assertEquals('/bin/false', $user->accountLoginShell);
+    }
+
+    public function testImportMembersIntoCourse6()
+    {
+        $result = $this->_importHelper(dirname(__FILE__) . '/files/duppletten.txt');
+        $this->assertEquals(3, count($result['members']), 'import failed');
+
+        $maler = false;
+        $maler1 = false;
+        foreach ($result['members'] as $result) {
+            if ($result['data'] === 'mhans') {
+                $maler = true;
+            } elseif ($result['data'] === 'mhans01') {
+                $maler1 = true;
+            }
+        }
+
+        $this->assertTrue($maler && $maler1, 'could not find maler and maler01');
     }
     
     /**
@@ -818,7 +838,34 @@ class Courses_JsonTest extends TestCase
                         'homeDrive'   => 'H:',
                         'logonScript' => 'logon.bat',
                         'profilePath' => '\\\\profile\\',
-                    )
+                    ),
+                    'afterAccountLoginName'         => function(Tinebase_Model_FullUser $user) {
+                        $count = 1;
+                        $shortUsername = $user->shortenUsername(2);
+                        while ($count < 100) {
+                            try {
+                                Tinebase_User::getInstance()->getUserByLoginName($user->accountLoginName);
+                                $user->accountLoginName = $shortUsername . sprintf('%02d', $count++);
+                            } catch (Tinebase_Exception_NotFound $tenf) {
+                                break;
+                            }
+                        }
+                        if ($count > 1) {
+                            $user->accountEmailAddress = null;
+                            $user->applyTwigTemplates();
+                        }
+
+                        $count = 1;
+                        $accountFullName = $user->accountFullName;
+                        while ($count < 100) {
+                            try {
+                                Tinebase_User::getInstance()->getUserByProperty('accountFullName', $user->accountFullName);
+                                $user->accountFullName = $accountFullName . sprintf('%02d', $count++);
+                            } catch (Tinebase_Exception_NotFound $tenf) {
+                                break;
+                            }
+                        }
+                    },
                 )
             );
             $tempFilename = TestServer::replaceEmailDomainInFile($_filename);

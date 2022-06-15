@@ -39,7 +39,8 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
         'accountEmailDomain'            => '',
         'samba'                         => '',
         'accountLoginShell'             => '',
-        'userNameSchema'                => 1
+        'userNameSchema'                => 1,
+        'afterAccountLoginName'         => null,
     );
 
     /**
