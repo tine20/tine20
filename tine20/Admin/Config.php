@@ -120,10 +120,10 @@ class Admin_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => false,
         ],
         self::DEFAULT_PASSWORD_MUST_CHANGE => [
-            //_('Default password must changtestSaveQuotaTotalInMBe for new user settings')
-            self::LABEL                 => 'Default password must change for new user settings',
-            //_('Default password must change for new user settings')
-            self::DESCRIPTION           => 'Default password must change for new user settings',
+            //_('Default password must change for new user')
+            self::LABEL                 => 'Default password must change for new user',
+            //_('Default password must change for new user')
+            self::DESCRIPTION           => 'Default password must change for new user',
             self::TYPE                  => self::TYPE_BOOL,
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
@@ -177,6 +177,7 @@ class Admin_Config extends Tinebase_Config_Abstract
                 self::FEATURE_PREVENT_SPECIAL_CHAR_LOGINNAME => false,
                 self::FEATURE_EMAIL_ACCOUNTS => true,
                 self::FEATURE_FORCE_REYPE_PASSWORD => false,
+                self::FEATURE_PREVENT_APPS_DISABLE => false,
             ),
         ),
     );
