@@ -4817,7 +4817,7 @@ input {
 .ext-el-mask-msg div {
     border-color: #a3bad9;
     color: #222;
-    font: 11px tahoma, arial, helvetica, sans-serif
+    font: 11px arial, tahoma, helvetica, sans-serif
 }
 
 .x-item-disabled {
@@ -4855,7 +4855,7 @@ ul.x-tab-strip-top {
 }
 
 .x-tab-strip span.x-tab-strip-text {
-    font: 11px tahoma, arial, helvetica;
+    font: 11px arial, tahoma, helvetica;
     color: #416aa3
 }
 
@@ -4897,7 +4897,7 @@ ul.x-tab-strip-top {
 }
 
 .x-form-field {
-    font: 12px tahoma, arial, helvetica, sans-serif
+    font: 12px arial, tahoma, helvetica, sans-serif
 }
 
 .x-form-select-one, .x-form-text, textarea.x-form-field {
@@ -4960,12 +4960,12 @@ ul.x-tab-strip-top {
 }
 
 .x-form-grow-sizer, .x-form-item {
-    font: 12px tahoma, arial, helvetica, sans-serif
+    font: 12px arial, tahoma, helvetica, sans-serif
 }
 
 .x-form-invalid-msg {
     color: #c0272b;
-    font: 11px tahoma, arial, helvetica, sans-serif
+    font: 11px arial, tahoma, helvetica, sans-serif
 }
 
 .x-form-empty-field {
@@ -4981,7 +4981,7 @@ ul.x-tab-strip-top {
 }
 
 .x-fieldset legend, .x-grid-group-hd div.x-grid-group-title {
-    font: 700 11px tahoma, arial, helvetica, sans-serif;
+    font: 700 11px arial, tahoma, helvetica, sans-serif;
     color: #15428b
 }
 
@@ -5113,7 +5113,7 @@ td.sort-asc, td.sort-desc, td.x-grid3-hd-menu-open, td.x-grid3-hd-over {
 
 .x-grid-empty {
     color: gray;
-    font: 11px tahoma, arial, helvetica, sans-serif
+    font: 11px arial, tahoma, helvetica, sans-serif
 }
 
 .x-grid-with-col-lines .x-grid3-row td.x-grid3-cell {
@@ -5224,16 +5224,16 @@ td.x-date-mp-sep {
 }
 
 .x-tip .x-tip-mc {
-    font: 11px tahoma, arial, helvetica, sans-serif
+    font: 11px arial, tahoma, helvetica, sans-serif
 }
 
 .x-tip .x-tip-header-text {
-    font: 700 11px tahoma, arial, helvetica, sans-serif;
+    font: 700 11px arial, tahoma, helvetica, sans-serif;
     color: #444
 }
 
 .x-tip .x-tip-body {
-    font: 11px tahoma, arial, helvetica, sans-serif;
+    font: 11px arial, tahoma, helvetica, sans-serif;
     color: #444
 }
 
@@ -5278,11 +5278,11 @@ a.x-menu-item {
 .x-combo-list {
     border-color: #98c0f4;
     background-color: #fff;
-    font: 12px tahoma, arial, helvetica, sans-serif
+    font: 12px arial, tahoma, helvetica, sans-serif
 }
 
 .x-combo-list-hd {
-    font: 700 11px tahoma, arial, helvetica, sans-serif;
+    font: 700 11px arial, tahoma, helvetica, sans-serif;
     color: #15428b
 }
 
@@ -5303,7 +5303,7 @@ a.x-menu-item {
 }
 
 .x-combo-list-small {
-    font: 11px tahoma, arial, helvetica, sans-serif
+    font: 11px arial, tahoma, helvetica, sans-serif
 }
 
 .x-panel {
@@ -5335,7 +5335,7 @@ a.x-menu-item {
 }
 
 .x-panel-mc {
-    font: 11px tahoma, arial, helvetica, sans-serif
+    font: 11px arial, tahoma, helvetica, sans-serif
 }
 
 .x-list-header-inner em.sort-asc, .x-list-header-inner em.sort-desc, .x-panel-dd-spacer, .x-window-mc, .x-window-proxy {
@@ -5347,7 +5347,7 @@ a.x-menu-item {
 }
 
 .x-window-mc {
-    font: 11px tahoma, arial, helvetica, sans-serif
+    font: 11px arial, tahoma, helvetica, sans-serif
 }
 
 .x-window-bbar .x-toolbar {
@@ -5433,5 +5433,5 @@ a.x-menu-item {
 }
 
 .x-window-dlg .ext-mb-textarea {
-    font: 12px tahoma, arial, helvetica, sans-serif
+    font: 12px arial, tahoma, helvetica, sans-serif
 }

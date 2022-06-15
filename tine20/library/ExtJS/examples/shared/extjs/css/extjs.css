@@ -427,7 +427,7 @@ a.buynow {
     border:1px solid;
     border-color:#ddd #bbb #bbb #ddd;
     background:#eee;
-    font:bold 11px tahoma, arial, helvetica, sans-serif;
+    font:bold 11px arial, tahoma, helvetica, sans-serif;
     color:#333 !important;
     cursor:pointer;
     margin:0 2px;

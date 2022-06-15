@@ -7,7 +7,7 @@
 .x-combo-list {
     border:2px solid #232732;
     background-color:#555566;
-    font:normal 15px tahoma, arial, helvetica, sans-serif;
+    font:normal 15px arial, tahoma, helvetica, sans-serif;
 }
 
 .x-combo-list-inner {
@@ -15,7 +15,7 @@
 }
 
 .x-combo-list-hd {
-    font:bold 14px tahoma, arial, helvetica, sans-serif;
+    font:bold 14px arial, tahoma, helvetica, sans-serif;
     color:fff;
     background-image: url(../images/default/layout/panel-title-light-bg.gif);
     border-bottom-color:#98c0f4;
@@ -39,5 +39,5 @@
 }
 
 .x-combo-list-small {
-    font:normal 14px tahoma, arial, helvetica, sans-serif;
+    font:normal 14px arial, tahoma, helvetica, sans-serif;
 }

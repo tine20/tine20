@@ -251,7 +251,7 @@ td.x-grid3-hd-over .x-grid3-hd-inner, td.sort-desc .x-grid3-hd-inner, td.sort-as
     background-image:url(../images/access/grid/group-collapse.gif);
     background-position:3px 6px;
     color:#ffd;
-    font:bold 14px tahoma, arial, helvetica, sans-serif;
+    font:bold 14px arial, tahoma, helvetica, sans-serif;
 }
 
 .x-grid-group-collapsed .x-grid-group-hd div.x-grid-group-title {
@@ -272,7 +272,7 @@ td.x-grid3-hd-over .x-grid3-hd-inner, td.sort-desc .x-grid3-hd-inner, td.sort-as
 
 .x-grid-empty {
     color:gray;
-    font:normal 14px tahoma, arial, helvetica, sans-serif;
+    font:normal 14px arial, tahoma, helvetica, sans-serif;
 }
 
 .x-grid-with-col-lines .x-grid3-row td.x-grid3-cell {

@@ -22,7 +22,7 @@ body {
     background-color: #232d38;
     border-color:#556;
     color:#fff;
-    font:normal 14px tahoma, arial, helvetica, sans-serif;
+    font:normal 14px arial, tahoma, helvetica, sans-serif;
 }
 
 .x-mask-loading div {
@@ -108,7 +108,7 @@ ul.x-tab-strip-bottom{
 }
 
 .x-tab-strip span.x-tab-strip-text {
-	font:normal 14px tahoma,arial,helvetica;
+	font:normal 14px arial,tahoma,helvetica;
 	color:#fff;
 }
 
@@ -192,7 +192,7 @@ ul.x-tab-strip-bottom{
     border-color:#99bbe8;
 }
 .x-form-field {
-    font:normal 15px tahoma, arial, helvetica, sans-serif;
+    font:normal 15px arial, tahoma, helvetica, sans-serif;
 }
 
 .x-form-text, textarea.x-form-field{
@@ -310,16 +310,16 @@ ul.x-tab-strip-bottom{
 }
 
 .x-form-grow-sizer {
-	font:normal 15px tahoma, arial, helvetica, sans-serif;
+	font:normal 15px arial, tahoma, helvetica, sans-serif;
 }
 
 .x-form-item {
-    font:normal 15px tahoma, arial, helvetica, sans-serif;
+    font:normal 15px arial, tahoma, helvetica, sans-serif;
 }
 
 .x-form-invalid-msg {
     color:#c0272b;
-    font:normal 14px tahoma, arial, helvetica, sans-serif;
+    font:normal 14px arial, tahoma, helvetica, sans-serif;
     background-image:url(../images/default/shared/warning.gif);
 }
 
@@ -351,7 +351,7 @@ ul.x-tab-strip-bottom{
 }
 
 .x-fieldset legend {
-    font:bold 14px tahoma, arial, helvetica, sans-serif;
+    font:bold 14px arial, tahoma, helvetica, sans-serif;
     color:fff;
 }
 .x-btn {
@@ -883,7 +883,7 @@ td.x-grid3-hd-over .x-grid3-hd-inner, td.sort-desc .x-grid3-hd-inner, td.sort-as
     background-image:url(../images/access/grid/group-collapse.gif);
     background-position:3px 6px;
     color:#ffd;
-    font:bold 14px tahoma, arial, helvetica, sans-serif;
+    font:bold 14px arial, tahoma, helvetica, sans-serif;
 }
 
 .x-grid-group-collapsed .x-grid-group-hd div.x-grid-group-title {
@@ -904,7 +904,7 @@ td.x-grid3-hd-over .x-grid3-hd-inner, td.sort-desc .x-grid3-hd-inner, td.sort-as
 
 .x-grid-empty {
     color:gray;
-    font:normal 14px tahoma, arial, helvetica, sans-serif;
+    font:normal 14px arial, tahoma, helvetica, sans-serif;
 }
 
 .x-grid-with-col-lines .x-grid3-row td.x-grid3-cell {
@@ -1248,19 +1248,19 @@ td.x-date-mp-sep {
 }
 
 .x-tip .x-tip-mc {
-    font: normal 14px tahoma,arial,helvetica,sans-serif;
+    font: normal 14px arial,tahoma,helvetica,sans-serif;
 }
 .x-tip .x-tip-ml {
 	background-color: #fff;
 }
 
 .x-tip .x-tip-header-text {
-    font: bold 14px tahoma,arial,helvetica,sans-serif;
+    font: bold 14px arial,tahoma,helvetica,sans-serif;
     color:#ffd;
 }
 
 .x-tip .x-tip-body {
-    font: normal 14px tahoma,arial,helvetica,sans-serif;
+    font: normal 14px arial,tahoma,helvetica,sans-serif;
     color:#000;
 }
 
@@ -1421,7 +1421,7 @@ a.x-menu-item {
 .x-combo-list {
     border:2px solid #232732;
     background-color:#555566;
-    font:normal 15px tahoma, arial, helvetica, sans-serif;
+    font:normal 15px arial, tahoma, helvetica, sans-serif;
 }
 
 .x-combo-list-inner {
@@ -1429,7 +1429,7 @@ a.x-menu-item {
 }
 
 .x-combo-list-hd {
-    font:bold 14px tahoma, arial, helvetica, sans-serif;
+    font:bold 14px arial, tahoma, helvetica, sans-serif;
     color:fff;
     background-image: url(../images/default/layout/panel-title-light-bg.gif);
     border-bottom-color:#98c0f4;
@@ -1453,7 +1453,7 @@ a.x-menu-item {
 }
 
 .x-combo-list-small {
-    font:normal 14px tahoma, arial, helvetica, sans-serif;
+    font:normal 14px arial, tahoma, helvetica, sans-serif;
 }
 .x-panel {
     border-color: #18181a;
@@ -1511,7 +1511,7 @@ a.x-menu-item {
 }
 
 .x-panel-mc {
-    font: normal 14px tahoma,arial,helvetica,sans-serif;
+    font: normal 14px arial,tahoma,helvetica,sans-serif;
     background-color:#3f4757;
 }
 
@@ -1578,7 +1578,7 @@ a.x-menu-item {
 
 .x-window-mc {
     border-color:#18181a;
-    font: normal 14px tahoma,arial,helvetica,sans-serif;
+    font: normal 14px arial,tahoma,helvetica,sans-serif;
     background-color:#1f2833;
 }
 
@@ -1782,7 +1782,7 @@ body.x-body-masked .x-window-plain .x-window-mc {
 }
 
 .x-window-dlg .ext-mb-textarea {
-    font:normal 15px tahoma,arial,helvetica,sans-serif;
+    font:normal 15px arial,tahoma,helvetica,sans-serif;
 }
 
 .x-window-dlg .x-msg-box-wait {
