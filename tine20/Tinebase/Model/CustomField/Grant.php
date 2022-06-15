@@ -56,7 +56,8 @@ class Tinebase_Model_CustomField_Grant extends Tinebase_Record_Abstract
             array('InArray', array(
                 Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
                 Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP
+                Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE
             )),
         ),
         'account_grant'     => array('allowEmpty' => TRUE),

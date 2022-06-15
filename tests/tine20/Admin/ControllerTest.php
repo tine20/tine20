@@ -40,6 +40,49 @@ class Admin_ControllerTest extends TestCase
         $this->assertEquals('unittest_test', $lookupCf->name);
     }
 
+    public function testCustomFieldAddGrants()
+    {
+        $group = Tinebase_Group::getInstance()->addGroup(new Tinebase_Model_Group(array(
+            'name'          => 'tine20phpunit' . Tinebase_Record_Abstract::generateUID(),
+            'description'   => 'Group from test testAddGroup'
+        )));
+
+        $role = Tinebase_Acl_Roles::getInstance()->createRole(new Tinebase_Model_Role(array(
+            'id'                    => '10',
+            'name'                  => 'phpunitrole',
+            'description'           => 'test role for phpunit',
+        )));
+
+        $this->testCustomFieldCreate();
+        $cfs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication('Addressbook');
+        $result = $cfs->filter('name', 'unittest_test')->getFirstRecord();
+        $result->grants = [
+            [
+                'customfield_id' => $result->getId(),
+                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                'account_id'    => Tinebase_Core::getUser()->getId(),
+                Tinebase_Model_CustomField_Grant::GRANT_READ => true,
+                Tinebase_Model_CustomField_Grant::GRANT_WRITE => true,
+            ],
+            [
+                'customfield_id' => $result->getId(),
+                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                'account_id'    => $group->getId(),
+                Tinebase_Model_CustomField_Grant::GRANT_READ => true,
+                Tinebase_Model_CustomField_Grant::GRANT_WRITE => true,
+            ],
+            [
+                'customfield_id' => $result->getId(),
+                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE,
+                'account_id'    => $role->getId(),
+                Tinebase_Model_CustomField_Grant::GRANT_READ => true,
+                Tinebase_Model_CustomField_Grant::GRANT_WRITE => true,
+            ]
+        ];
+        $updatedCF = Admin_Controller_Customfield::getInstance()->update($result);
+        $this->assertCount(3,$updatedCF->grants, 'missing customField grants');
+    }
+
     /**
      * testCustomFieldUpdate
      */
