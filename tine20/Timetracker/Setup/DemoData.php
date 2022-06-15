@@ -183,11 +183,13 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $this->_contractsMarketing = $contracts->filter('title', '/.Marketing/', TRUE);
         
         $this->_loadCostCentersAndDivisions();
-        
+
         if (Tinebase_Application::getInstance()->isInstalled('HumanResources')) {
             $this->_empController = HumanResources_Controller_Employee::getInstance();
             $filter = new HumanResources_Model_EmployeeFilter(array());
             $this->_employees = $this->_empController->search($filter);
+
+            HumanResources_Controller_DailyWTReport::getInstance()->suspendEvents();
         }
         
         // set start date to start date of june 1st before last year
@@ -198,7 +200,15 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $this->_clearedDate = clone $this->_startDate;
         $this->_clearedDate->addMonth(1)->subDay(2);
     }
-    
+
+    protected function _afterCreate()
+    {
+        parent::_afterCreate();
+        if (Tinebase_Application::getInstance()->isInstalled('HumanResources')) {
+            HumanResources_Controller_DailyWTReport::getInstance()->resumeEvents();
+        }
+    }
+
     /**
      * creates shared tas
      */
