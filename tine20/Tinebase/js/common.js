@@ -988,7 +988,7 @@ Tine.Tinebase.common = {
 var s = '<blockquote class="felamimail-body-blockquote"><div>Hello,</div><div><br></div><div>...</div></blockquote>';
 if (Tine.Tinebase.common.html2text(s) != "\nHello,\n\n...") console.error('ignore empty div: "' + Tine.Tinebase.common.html2text(s) + '"');
 
-var s = '<font face="tahoma, arial, helvetica, sans-serif" style="font-size: 11px; font-family: tahoma, arial, helvetica, sans-serif;"><span style="font-size: 11px;">​<font color="#808080">Dipl.-Phys. Cornelius Weiss</font></span></font><div style="font-size: 11px; font-family: tahoma, arial, helvetica, sans-serif;"><font face="tahoma, arial, helvetica, sans-serif" color="#808080"><span style="font-size: 11px;">Team Leader Software Engineering</span></font></div>';
+var s = '<font face="arial, tahoma, helvetica, sans-serif" style="font-size: 11px; font-family: arial, tahoma, helvetica, sans-serif;"><span style="font-size: 11px;">​<font color="#808080">Dipl.-Phys. Cornelius Weiss</font></span></font><div style="font-size: 11px; font-family: arial, tahoma, helvetica, sans-serif;"><font face="arial, tahoma, helvetica, sans-serif" color="#808080"><span style="font-size: 11px;">Team Leader Software Engineering</span></font></div>';
 if (Tine.Tinebase.common.html2text(s) != "​Dipl.-Phys. Cornelius Weiss\nTeam Leader Software Engineering") console.error('cope with styled div tag: '  + Tine.Tinebase.common.html2text(s));
 
 var s = '<div><div><span><font><br></font></span></div></div>';

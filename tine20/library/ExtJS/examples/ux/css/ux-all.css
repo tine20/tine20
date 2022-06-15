@@ -437,7 +437,7 @@ li.x-menu-list-item div {
     overflow:auto;	
 }
 .ux-mselect-item{
-    font:normal 12px tahoma, arial, helvetica, sans-serif;
+    font:normal 12px arial, tahoma, helvetica, sans-serif;
     padding:2px;
     border:1px solid #fff;
     white-space: nowrap;
