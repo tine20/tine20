@@ -860,7 +860,7 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
     public function testGetAllFolders()
     {
         // create a subfolder of INBOX
-        $emailAccount = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
+        $emailAccount = TestServer::getInstance()->getTestEmailAccount();
         try {
             $subfolder = Felamimail_Controller_Folder::getInstance()->create($emailAccount->getId(), 'sub', 'INBOX');
             $this->_createdFolders[] = $subfolder->globalname;
