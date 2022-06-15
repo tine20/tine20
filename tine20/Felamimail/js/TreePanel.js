@@ -262,7 +262,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             });
             promises.push(promise);
         });
-
+        
         return Promise.all(promises);
     },
     
@@ -464,6 +464,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     onAccountUpdate: function(store, record, action) {
         if (action === Ext.data.Record.EDIT) {
             this.updateAccountStatus(record);
+            this.selectLastSelectedNode();
         }
     },
     
