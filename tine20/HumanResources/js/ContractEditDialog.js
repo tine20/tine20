@@ -285,6 +285,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     ref: '../../../../../../../templateChooser',
                                     columnWidth: 2/3,
                                     name: 'working_time_scheme',
+                                    additionalFilters: [{field: 'type', operator: 'not', value: 'individual'}],
                                     listeners: {
                                         scope:  this,
                                         select: this.onWorkingtimeSchemaSelect.createDelegate(this)

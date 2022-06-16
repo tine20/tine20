@@ -280,17 +280,22 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $wtsController = HumanResources_Controller_WorkingTimeScheme::getInstance();
 
         if (null !== $wtsId) {
-            /** @var HumanResources_Model_WorkingTimeScheme $wts */
-            $wts = $wtsController->get($wtsId);
-            if (!$recordWts instanceof Tinebase_Record_Interface) {
-                $recordWts = $wts;
-            }
-            if ($wts->{HumanResources_Model_WorkingTimeScheme::FLDS_TYPE} ===
+            try {
+                /** @var HumanResources_Model_WorkingTimeScheme $wts */
+                $wts = $wtsController->get($wtsId);
+                if (!$recordWts instanceof Tinebase_Record_Interface) {
+                    $recordWts = $wts;
+                }
+                if ($wts->{HumanResources_Model_WorkingTimeScheme::FLDS_TYPE} ===
                     HumanResources_Model_WorkingTimeScheme::TYPES_SHARED) {
-                $_record->{HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME} = $wtsId;
-                $recordWts = null;
-            } elseif ($wts->{HumanResources_Model_WorkingTimeScheme::FLDS_TYPE} ===
+                    $_record->{HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME} = $wtsId;
+                    $recordWts = null;
+                } elseif ($wts->{HumanResources_Model_WorkingTimeScheme::FLDS_TYPE} ===
                     HumanResources_Model_WorkingTimeScheme::TYPES_TEMPLATE) {
+                    $recordWts->setId(null);
+                }
+            } catch (Tinebase_Exception_NotFound $e) {
+                // new inline defined schema
                 $recordWts->setId(null);
             }
         }
