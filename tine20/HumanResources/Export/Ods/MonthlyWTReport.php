@@ -107,10 +107,10 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
         $context['weekSummary'] = $this->_weekSummary;
         
         $context['scheduledRemainingVacationDays'] = HumanResources_Controller_FreeTime::getInstance()
-            ->getRemainingVacationDays($this->_monthlyWTR->employee_id);
+            ->getRemainingVacationDays($this->_monthlyWTR->employee_id, null, $this->_monthlyWTR->getPeriod()['until']);
 
         $context['actualRemainingVacationDays'] = HumanResources_Controller_FreeTime::getInstance()
-            ->getRemainingVacationDays($this->_monthlyWTR->employee_id, $this->_monthlyWTR->getPeriod()['until']);
+            ->getRemainingVacationDays($this->_monthlyWTR->employee_id, $this->_monthlyWTR->getPeriod()['until'], $this->_monthlyWTR->getPeriod()['until']);
 
         $context['takenVactionsCurrentPeriod'] = HumanResources_Controller_FreeTime::getInstance()
             ->getTakenVacationDays($this->_monthlyWTR->employee_id, $this->_monthlyWTR->getPeriod());
