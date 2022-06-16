@@ -938,7 +938,6 @@ class Courses_JsonTest extends TestCase
                 <headline>1</headline>
                 <use_headline>0</use_headline>
                 <dryrun>0</dryrun>
-                <encoding>MAC-CENTRALEUROPE</encoding>
                 <delimiter>;</delimiter>
                 <mapping>
                     <field>
