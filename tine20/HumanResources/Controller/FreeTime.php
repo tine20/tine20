@@ -57,14 +57,16 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
      * returns remaining vacation days for given employee (mixed accounts)
      * 
      * @param string|HumanResources_Model_Employee $employeeId
-     * @param DateTime $actualUntil | vacation days are computed as taken vacation until this date, null means forever/scheduled
+     * @param DateTime $actualUntil | vacation days are computed as taken vacation until this date, null means forever (all scheduled days count as taken)
+     * @param DateTime $expiryReferenceDate | reference day for vacation_expiary_date evaluation
      * @return int
      */
-    public function getRemainingVacationDays($employeeId, DateTime $actualUntil = null)
+    public function getRemainingVacationDays($employeeId, DateTime $actualUntil = null, DateTime $expiryReferenceDate = null)
     {
         $accountController = HumanResources_Controller_Account::getInstance();
         $currentAccount = $accountController->getByEmployeeYear($employeeId, ($actualUntil ?: Tinebase_DateTime::now())->format('Y'));
         $actualUntil = $actualUntil ?: Tinebase_DateTime::now()->addYear(100);
+        $expiryReferenceDate = $expiryReferenceDate ?: Tinebase_DateTime::now();
         $currentVacations = $accountController->resolveVacation($currentAccount, $actualUntil);
         $remainingPreviousVacationDays = 0;
         $previousAccount = $accountController->getByEmployeeYear($employeeId, $currentAccount->year-1);
@@ -72,7 +74,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         if ($previousAccount) {
             $previousVacations = $accountController->resolveVacation($previousAccount, $actualUntil);
             $remainingPreviousVacationDays = ($previousVacations['vacation_expiary_date']
-                > Tinebase_DateTime::now() ? $previousVacations['actual_remaining_vacation_days'] : 0);
+                > $expiryReferenceDate ? $previousVacations['actual_remaining_vacation_days'] : 0);
         }
         return $currentVacations['actual_remaining_vacation_days'] + $remainingPreviousVacationDays;
     }
