@@ -280,6 +280,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $updatedEvent = $this->_eventController->update($persistentEvent);
         $this->_assertMail('jsmith, pwulf, sclever', NULL);
         $this->_assertMail('jmcblack, rwright', 'update');
+        $this->_assertMail('jmcblack, rwright', $persistentEvent->url, 'body');
 
     }
     
