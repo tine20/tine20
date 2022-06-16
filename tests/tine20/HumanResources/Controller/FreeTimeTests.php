@@ -48,7 +48,7 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
             ])
         );
     }
-    public function testCalculateReportsForEmployeeSickness()
+    public function testGetRemainingVacationDays()
     {
         $this->_getAccount2018();
         $total = HumanResources_Controller_FreeTime::getInstance()->getRemainingVacationDays($this->employee->getId(),
@@ -62,6 +62,15 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
         $remaining = HumanResources_Controller_FreeTime::getInstance()->getRemainingVacationDays($this->employee->getId(),
             new Tinebase_DateTime('2018-08-02 23:59:59'));
         $this->assertEquals($total-2, $remaining);
+
+        HumanResources_Controller_Account::getInstance()->createMissingAccounts(2019);
+        $remaining = HumanResources_Controller_FreeTime::getInstance()->getRemainingVacationDays($this->employee->getId(),
+            new Tinebase_DateTime('2019-08-02 23:59:59'), new Tinebase_DateTime('2019-01-31 23:59:59'));
+        $this->assertEquals($total-2+30, $remaining, 'should be remaining from 2018 + new from 2019');
+
+        $remaining = HumanResources_Controller_FreeTime::getInstance()->getRemainingVacationDays($this->employee->getId(),
+            new Tinebase_DateTime('2019-08-02 23:59:59'), new Tinebase_DateTime('2019-04-01 23:59:59'));
+        $this->assertEquals(30, $remaining, 'should be new from 2019 only. 2018 is expired');
     }
 
     public function testFreeDaysGrantFail()
