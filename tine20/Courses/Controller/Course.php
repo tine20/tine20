@@ -144,7 +144,9 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             $deletedAccounts  = array_diff($currentMembers, (array)$group->members);
 
             // delete members which got removed from course
-            $this->_userController->delete($deletedAccounts);
+            if (!empty($deletedAccounts)) {
+                $this->_userController->delete($deletedAccounts);
+            }
         }
         
         $groupMembers = Tinebase_Group::getInstance()->getGroupMembers($course->group_id);
@@ -455,6 +457,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
      */
     public function delete($_ids)
     {
+        $raii = Tinebase_RAII::getTransactionManagerRAII();
         $courses = $this->getMultiple($_ids);
         
         $groupsToDelete = array();
@@ -464,15 +467,20 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             $groupsToDelete[] = $course->group_id;
             $usersToDelete = array_merge($usersToDelete, $this->_groupController->getGroupMembers($course->group_id));
         }
-        
+
         Courses_Controller::getInstance()->suspendEvents();
-        
-        $this->_userController->delete(array_unique($usersToDelete));
-        $this->_groupController->delete(array_unique($groupsToDelete));
-        
+
+        if (!empty($usersToDelete = array_unique($usersToDelete))) {
+            $this->_userController->delete($usersToDelete);
+        }
+        if (!empty($groupsToDelete = array_unique($groupsToDelete))) {
+            $this->_groupController->delete($groupsToDelete);
+        }
+
         Courses_Controller::getInstance()->resumeEvents();
         
         parent::delete($_ids);
+        $raii->release();
     }
     
     /**
@@ -653,7 +661,6 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
                 'pwdCanChange'  => new Tinebase_DateTime('@1'),
                 'pwdMustChange' => new Tinebase_DateTime('@1')
             ) : array(),
-            'encoding'                      => 'UTF-8',
             'afterAccountLoginName'         => function(Tinebase_Model_FullUser $user) {
                 $count = 1;
                 $shortUsername = $user->shortenUsername(2);
