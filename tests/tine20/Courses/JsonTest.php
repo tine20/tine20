@@ -839,6 +839,7 @@ class Courses_JsonTest extends TestCase
                         'logonScript' => 'logon.bat',
                         'profilePath' => '\\\\profile\\',
                     ),
+                    'encoding' => 'UTF-8',
                     'afterAccountLoginName'         => function(Tinebase_Model_FullUser $user) {
                         $count = 1;
                         $shortUsername = $user->shortenUsername(2);
