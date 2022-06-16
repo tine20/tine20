@@ -718,7 +718,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     return _.isString(addressData)
                 });
                 if (emails.length > 0) {
-                    emails = _.join(emails, '>, ');
+                    emails = _.join(emails, ', ');
                     const resolvedContacts = await Tine.Tinebase.common.findContactsByEmailString(emails);
                     _.each(contacts, (addressData, idx) => {
                         if (_.isString(addressData)) {
