@@ -36,6 +36,8 @@ Tine.Filemanager.RevisionPanel = Ext.extend(Ext.form.FieldSet, {
         this.editDialog.on('load', this.onRecordLoad, this);
         this.editDialog.on('save', this.onSave, this);
 
+        this.editDialog.checkStates = this.editDialog.checkStates.createSequence(this.manageFields, this);
+
         var type = _.get(this.editDialog, 'record.data.type');
         var adminGrant = _.get(this.editDialog, 'record.data.account_grants.adminGrant', false);
 
