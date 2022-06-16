@@ -73,7 +73,7 @@ if ((isset($this->updates['attendee']) || array_key_exists('attendee', $this->up
 <?php endif;?>
 <?php echo $this->translate->_('Event details') ?>:
 <?php
-$orderedFields = array('dtstart', 'dtend', 'summary', 'location', 'description', 'rrule');
+$orderedFields = array('dtstart', 'dtend', 'summary', 'url', 'location', 'description', 'rrule');
 
 foreach($orderedFields as $field) {
     if ($this->event->$field) {
