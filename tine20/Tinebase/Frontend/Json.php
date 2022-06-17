@@ -1573,7 +1573,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     public function getWebAuthnRegisterPublicKeyOptionsForMFA(string $mfaId, ?string $accountId = null)
     {
-        if (null !== $accountId) {
+        if (null !== $accountId && Tinebase_Core::getUser()->accountId !== $accountId) {
             if (!Tinebase_Core::getUser()->hasRight(Tinebase_Config::APP_NAME, Tinebase_Acl_Rights::ADMIN)) {
                 throw new Tinebase_Exception_AccessDenied('user has not right to register webauthn devices for other users');
             }
