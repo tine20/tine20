@@ -296,7 +296,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         this.actionRemove = this.deleteAction = new Ext.Action({
             text: String.format(i18n._('Remove {0}'), this.recordName),
-            hidden: !this.allowDelete,
+            hidden: this.hasOwnProperty('allowDelete') && !this.allowDelete,
             disabled: true,
             scope: this,
             handler: this.onRemove,
