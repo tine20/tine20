@@ -175,6 +175,8 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     calcTax: function() {
         var netPrice   = parseFloat(this.priceNetField.getValue());
         var taxPercent = parseFloat(this.salesTaxField.getValue());
+
+        if (_.isNaN(taxPercent)) return;
         
         var tax        = netPrice * (taxPercent / 100);
         var negative = false;
@@ -203,7 +205,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         var taxPercent =  tax * 100 / netPrice;
         
         this.priceTaxField.setValue(tax);
-        this.salesTaxField.setValue(taxPercent.toFixed(2));
+        this.salesTaxField.setValue(_.isFinite(taxPercent) && this.salesTaxField.getValue() !== null ? taxPercent.toFixed(2) : null);
     },
     
     /**
@@ -217,7 +219,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
 
         var roundedPercent = Math.round(Math.abs(taxPercent) * 100) / 100;
 
-        this.salesTaxField.setValue(roundedPercent);
+        this.salesTaxField.setValue(_.isFinite(roundedPercent) && this.salesTaxField.getValue() !== null ? roundedPercent : null);
     },
     
     /**
@@ -349,6 +351,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             fieldLabel: this.app.i18n._('Sales Tax (percent)'),
             columnWidth: 1/4,
             suffix: ' %',
+            nullable: true,
             listeners: {
                 scope: this,
                 spin: this.onUpdateSalesTax.createDelegate(this),
