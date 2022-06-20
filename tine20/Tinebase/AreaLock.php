@@ -113,13 +113,25 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
         return $status;
     }
 
+    /**
+     * @param string $areaLockName
+     * @return Tinebase_Model_AreaLockState
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
     public function lock(string $areaLockName): Tinebase_Model_AreaLockState
     {
         if (null === ($areaLockCfg = $this->_getConfig()->records->find(Tinebase_Model_AreaLockConfig::FLD_AREA_NAME, $areaLockName))) {
             throw new Tinebase_Exception_NotFound('no area ' . $areaLockName . ' found');
         }
         if ($areaLockCfg->getBackend()->hasValidAuth()) {
-            $areaLockCfg->getBackend()->resetValidAuth();
+            try {
+                $areaLockCfg->getBackend()->resetValidAuth();
+            } catch (Zend_Session_Exception $zse) {
+                throw new Tinebase_Exception_AccessDenied($zse->getMessage());
+            }
         }
 
         return new Tinebase_Model_AreaLockState([
