@@ -99,10 +99,11 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                     // NOTE: need to create record to do conversions (string -> int) here!
                     const product = Tine.Tinebase.data.Record.setFromJson(subproductMapping.product_id, Tine.Sales.Model.Product);
                     subposition.setFromProduct(product.data, lang);
+                    subposition.set('quantity', subproductMapping.quantity);
+                    subposition.computePrice();
                     subposition.set('parent_id', position.id);
                     // NOTE: sorting of subproductmapping sorts inside subpositions only (atm)
                     subposition.set('sorting', position.get('sorting') ? position.get('sorting') + 100 * idx : null);
-                    subposition.set('quantity', subproductMapping.quantity);
                     // @TODO where to store shortcut?
                     // @TODO where to start unfold_type? do we need to remember?
                     if (productData.unfold_type === 'BUNDLE') {
