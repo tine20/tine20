@@ -27,7 +27,7 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
     public function triggerMFA(string $userMfaId): bool
     {
         if (null === ($userCfg = Tinebase_Auth_MFA::getAccountsMFAUserConfig($userMfaId, Tinebase_Core::getUser()))) {
-            throw new Tinebase_Exception('User has no mfa configuration for id ' . $userMfaId);
+            throw new Tinebase_Exception_NotFound('User has no mfa configuration for id ' . $userMfaId);
         }
         return Tinebase_Auth_MFA::getInstance($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
             ->sendOut($userCfg);
