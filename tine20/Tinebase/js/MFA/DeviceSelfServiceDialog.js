@@ -85,6 +85,7 @@ Tine.Tinebase.MFA.DeviceSelfServiceDialog = Ext.extend(Tine.Tinebase.dialog.Dial
                 case 630:
                     return Tine.Tinebase.areaLocks.unlock(exception.data.area, {
                         mfaDevices: exception.data.mfaUserConfigs,
+                        triggerMFAMethod: () => { /* server automatically triggers mfa device */ },
                         USERABORTMethod: () => {
                             this.loadMFADevices();
                         },
