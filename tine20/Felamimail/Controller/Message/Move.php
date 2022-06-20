@@ -114,36 +114,32 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
         
         $_messages->addIndices(array('folder_id'));
         
-        $movedMessages = FALSE;
         foreach (array_unique($_messages->folder_id) as $folderId) {
-            $movedMessages = ($this->_moveMessagesByFolder($_messages,
-                    $folderId,
-                    $_targetFolder,
-                    $keepOriginalMessages,
-                    $checkCopyPreventionConfig
-                ) || $movedMessages);
-        }
-        
-        if (! $movedMessages) {
-            // no messages have been moved -> return empty record set
-            $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
-        } else {
-            if (! $keepOriginalMessages) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Delete messages in local cache');
-                try {
-                    $number = $this->_backend->delete($_messages->getArrayOfIds());
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $number . ' messages from cache');
-                } catch (Zend_Db_Statement_Exception $zdse) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
-                        ' Error deleting cached messages from folder ' . $folderName . ': ' . $zdse);
-                }
-            }
+            $movedMessages = $this->_moveMessagesByFolder($_messages,
+                $folderId,
+                $_targetFolder,
+                $keepOriginalMessages,
+                $checkCopyPreventionConfig
+            );
 
-            $result = $this->_updateCountsAfterMove($_messages);
+            if ($movedMessages && ! $keepOriginalMessages) {
+                if ($_targetFolder === Felamimail_Model_Folder::FOLDER_TRASH) {
+                    $folderId = Felamimail_Controller_Account::getInstance()->getSystemFolder(
+                        $_messages->getFirstRecord()->account_id,
+                        Felamimail_Model_Folder::FOLDER_TRASH
+                    )->getId();
+                } else {
+                    $folderId = $_targetFolder instanceof Felamimail_Model_Folder ? $_targetFolder->getId() : $_targetFolder;
+                }
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Update messages in local cache: move them to target folder');
+                $this->_backend->updateMultiple($_messages->getArrayOfIds(), [
+                    'folder_id' => $folderId
+                ]);
+            }
         }
-        
-        return $result;
+
+        return $this->_updateCountsAfterMove($_messages);
     }
         
     /**
@@ -316,7 +312,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      * @param boolean $keepOriginalMessages
      * @param Felamimail_Backend_ImapProxy $_imap
      * 
-     * @todo perhaps we should check the existance of the messages on the imap instead of catching the exceptions here
+     * @todo perhaps we should check the existence of the messages on the imap instead of catching the exceptions here
      */
     protected function _moveBatchOfMessages($_uids, $_targetFolderName, Felamimail_Backend_ImapProxy $_imap, $keepOriginalMessages)
     {

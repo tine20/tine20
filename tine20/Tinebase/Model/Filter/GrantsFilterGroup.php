@@ -91,7 +91,7 @@ class Tinebase_Model_Filter_GrantsFilterGroup extends Tinebase_Model_Filter_Filt
             $this->_tempBackend = null;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' $select after appending grants sql: ' . $select);
     }
 
