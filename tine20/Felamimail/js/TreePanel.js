@@ -388,7 +388,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     afterRender: function() {
         Tine.Felamimail.TreePanel.superclass.afterRender.call(this);
         this.initToolTips();
-        this.selectLastSelectedNode();
     },
     
     /**
