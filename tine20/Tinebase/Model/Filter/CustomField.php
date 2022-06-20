@@ -351,6 +351,10 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                                         __METHOD__ . '::' . __LINE__ . ' Record not found: ' . $tenf->getMessage());
                                     unset($result['value']['value'][$key]);
+                                } catch (Tinebase_Exception_AccessDenied $tead) {
+                                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                                        __METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
+                                    unset($result['value']['value'][$key]);
                                 }
                             }
                         }
