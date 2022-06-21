@@ -86,11 +86,13 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
 
     /**
      * @param string|HumanResources_Model_Employee $employeeId
-     * @param strig|Date $month default current year
+     * @param string|DateTime $month default current year
      * @return HumanResources_Model_MonthlyWTReport|NULL
      * @throws Tinebase_Exception_InvalidArgument
+     *
+     * maybe @deprecated
      */
-    public function getByEmployeeMonth($employeeId, $month=null)
+    public function getByEmployeeMonth($employeeId, $month = null)
     {
         $employeeId = !($employeeId instanceof HumanResources_Model_Employee) ?: $employeeId->getId();
         $month = $month ?: Tinebase_DateTime::now();
