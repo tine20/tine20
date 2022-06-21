@@ -723,7 +723,7 @@ class Tinebase_Core
      */
     public static function errorHandler($severity, $errstr, $errfile, $errline)
     {
-        if (error_reporting() == 0) {
+        if (error_reporting() == 0 || !(error_reporting() & $severity)) {
             return;
         }
         
