@@ -59,11 +59,11 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
 
     /**
      * @param string|HumanResources_Model_Employee $employeeId
-     * @param strig|Date $year default current year
-     * @return HumanResources_Model_Account|NULL
+     * @param string|DateTime $year default current year
+     * @return HumanResources_Model_Account|null
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function getByEmployeeYear($employeeId, $year=null)
+    public function getByEmployeeYear($employeeId, $year = null)
     {
         $employeeId = $employeeId instanceof HumanResources_Model_Employee ? $employeeId->getId() : $employeeId;
         $year = $year ?: Tinebase_DateTime::now();
