@@ -102,6 +102,8 @@ class MatrixSynapseIntegrator_ControllerTests extends TestCase
 
     public function testCheckCredentialsAuth()
     {
+        $this->_skipIfLDAPBackend();
+
         $mxid = '@' . Tinebase_Core::getUser()->accountLoginName . ':' .
             MatrixSynapseIntegrator_Controller::getInstance()->getMatrixDomain();
         $fh = fopen('php://memory', 'rw');
