@@ -23,7 +23,7 @@ interface Tinebase_Application_Container_Interface
     /**
      * creates the initial folder for new accounts
      *
-     * @param mixed[int|Tinebase_Model_User] $_accountId the account object
+     * @param string|Tinebase_Model_User $_accountId the account object
      * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
      */
     public function createPersonalFolder($_accountId);
