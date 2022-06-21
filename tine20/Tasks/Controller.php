@@ -89,8 +89,8 @@ class Tasks_Controller extends Tinebase_Controller_Event implements Tinebase_App
     /**
      * creates the initial folder for new accounts
      *
-     * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
-     * @return Tinebase_Record_RecordSet                            of subtype Tinebase_Model_Container
+     * @param mixed[int|Tinebase_Model_User] $_accountId the account object
+     * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
      */
     public function createPersonalFolder($_accountId)
     {
@@ -108,9 +108,7 @@ class Tasks_Controller extends Tinebase_Controller_Event implements Tinebase_App
         ));
         
         $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
-        $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
-        
-        return $container;
+        return new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
     }
 
     /**

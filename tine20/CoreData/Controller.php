@@ -67,12 +67,12 @@ class CoreData_Controller extends Tinebase_Controller_Event implements Tinebase_
     /**
      * creates the initial folder for new accounts
      *
-     * @param mixed[int|Tinebase_Model_User] $_account   the account object
+     * @param mixed[int|Tinebase_Model_User] $_accountId   the account object
      * @return Tinebase_Record_RecordSet  of subtype Tinebase_Model_Container
      */
     public function createPersonalFolder($_accountId)
     {
-        // not needed
+        return new Tinebase_Record_RecordSet(Tinebase_Model_Container::class);
     }
 
     /**

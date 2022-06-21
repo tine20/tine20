@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eef7d4fbdc619cd6f38aca286982e9c7",
+    "content-hash": "a757fca2d2a901e9d307fe7017e18846",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2095,12 +2095,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "4ac6b24ad4a011017ebea0fbad6aa5be4457cc9a"
+                "reference": "5b0b423d5db7702012415b9071c41f665e674bf5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/4ac6b24ad4a011017ebea0fbad6aa5be4457cc9a",
-                "reference": "4ac6b24ad4a011017ebea0fbad6aa5be4457cc9a",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/5b0b423d5db7702012415b9071c41f665e674bf5",
+                "reference": "5b0b423d5db7702012415b9071c41f665e674bf5",
                 "shasum": ""
             },
             "require": {
@@ -2125,7 +2125,7 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "time": "2022-03-30T15:32:29+00:00"
+            "time": "2022-05-08T13:27:57+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -8045,6 +8045,7 @@
             ],
             "description": "Provides tools to ease debugging PHP code",
             "homepage": "https://symfony.com",
+            "abandoned": "symfony/error-handler",
             "time": "2021-07-22T07:21:39+00:00"
         },
         {
@@ -11192,28 +11193,6 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
-            "support": {
-                "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.6.3"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/ondrejmirtes",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/phpstan",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/phpstan",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2022-04-28T11:27:53+00:00"
         },
         {
@@ -12321,6 +12300,5 @@
     "platform-overrides": {
         "php": "7.4",
         "ext-filter": "7.4"
-    },
-    "plugin-api-version": "2.1.0"
+    }
 }
