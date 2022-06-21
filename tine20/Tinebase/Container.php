@@ -2227,7 +2227,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      */
     public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $_modification)
     {
-
         switch ($_modification->change_type) {
             case Tinebase_Timemachine_ModificationLog::CREATED:
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
@@ -2241,13 +2240,23 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
             case Tinebase_Timemachine_ModificationLog::UPDATED:
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
-                if (isset($diff->diff['account_grants'])) {
-                    $container = $this->getContainerById($_modification->record_id);
-                    $this->setGrants($container, new Tinebase_Record_RecordSet($container->getGrantClass(), $diff->diff['account_grants']['added']), true, false);
-                } else {
-                    $record = $this->get($_modification->record_id, true);
-                    $record->applyDiff($diff);
-                    $this->update($record, true);
+                try {
+                    if (isset($diff->diff['account_grants'])) {
+                        $container = $this->getContainerById($_modification->record_id);
+                        $this->setGrants($container, new Tinebase_Record_RecordSet(
+                            $container->getGrantClass(),
+                            $diff->diff['account_grants']['added']),
+                            true,
+                            false
+                        );
+                    } else {
+                        $record = $this->get($_modification->record_id, true);
+                        $record->applyDiff($diff);
+                        $this->update($record, true);
+                    }
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
                 }
                 break;
 
@@ -2256,7 +2265,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 break;
 
             default:
-                throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->change_type: ' . $_modification->change_type);
+                throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->change_type: '
+                    . $_modification->change_type);
         }
     }
 
