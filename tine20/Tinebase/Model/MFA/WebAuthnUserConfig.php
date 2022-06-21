@@ -23,6 +23,7 @@ class Tinebase_Model_MFA_WebAuthnUserConfig extends Tinebase_Auth_MFA_AbstractUs
     public const MODEL_NAME_PART = 'MFA_WebAuthnUserConfig';
 
     public const FLD_PUBLIC_KEY_DATA = 'publicKeyData';
+    public const FLD_WEBAUTHN_ID = 'webAuthnId';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -40,22 +41,41 @@ class Tinebase_Model_MFA_WebAuthnUserConfig extends Tinebase_Auth_MFA_AbstractUs
             self::FLD_PUBLIC_KEY_DATA           => [
                 self::TYPE                          => self::TYPE_STRING,
             ],
+            self::FLD_WEBAUTHN_ID               => [
+                self::TYPE                          => self::TYPE_STRING,
+            ],
         ]
     ];
 
     public function updateUserNewRecordCallback(Tinebase_Model_FullUser $newUser, ?Tinebase_Model_FullUser $oldUser, Tinebase_Model_MFA_UserConfig $userCfg)
     {
         if ($this->{self::FLD_PUBLIC_KEY_DATA}) {
-            Tinebase_Auth_Webauthn::webAuthnRegister($this->{self::FLD_PUBLIC_KEY_DATA}, $newUser);
+            if ($this->{self::FLD_WEBAUTHN_ID} && null !== ($webauthnPublicKey = Tinebase_Controller_WebauthnPublicKey::getInstance()
+                    ->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_WebauthnPublicKey::class, [
+                        ['field' => Tinebase_Model_WebauthnPublicKey::FLD_KEY_ID, 'operator' => 'equals', 'value' => $this->{self::FLD_WEBAUTHN_ID}],
+                        ['field' => Tinebase_Model_WebauthnPublicKey::FLD_ACCOUNT_ID, 'operator' => 'equals', 'value' => $newUser->getId()]
+                    ]))->getFirstRecord())) {
+                Tinebase_Controller_WebauthnPublicKey::getInstance()->delete([$webauthnPublicKey->getId()]);
+            }
+            $this->{self::FLD_WEBAUTHN_ID} =
+                Tinebase_Auth_Webauthn::webAuthnRegister($this->{self::FLD_PUBLIC_KEY_DATA}, $newUser);
         }
         $this->{self::FLD_PUBLIC_KEY_DATA} = null;
     }
 
-    /** TODO
-     *
-     *  IMPLEMENT REMOVAL?
-     *
-     */
+    public function updateUserOldRecordCallback(Tinebase_Model_FullUser $newUser, Tinebase_Model_FullUser $oldUser, Tinebase_Model_MFA_UserConfig $userCfg)
+    {
+        if (!$newUser->mfa_configs || !$newUser->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_ID,
+                $userCfg->{Tinebase_Model_MFA_UserConfig::FLD_ID})) {
+            if (null !== ($webauthnPublicKey = Tinebase_Controller_WebauthnPublicKey::getInstance()
+                    ->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_WebauthnPublicKey::class, [
+                        ['field' => Tinebase_Model_WebauthnPublicKey::FLD_KEY_ID, 'operator' => 'equals', 'value' => $this->{self::FLD_WEBAUTHN_ID}],
+                        ['field' => Tinebase_Model_WebauthnPublicKey::FLD_ACCOUNT_ID, 'operator' => 'equals', 'value' => $oldUser->getId()]
+                    ]))->getFirstRecord())) {
+                Tinebase_Controller_WebauthnPublicKey::getInstance()->delete([$webauthnPublicKey->getId()]);
+            }
+        }
+    }
 
     /**
      * holds the configuration object (must be declared in the concrete class)
