@@ -9,6 +9,7 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
+use Base64Url\Base64Url;
 use Webauthn\AuthenticationExtensions\AuthenticationExtension; 
 use Webauthn\AuthenticationExtensions\AuthenticationExtensionsClientInputs;
 
@@ -20,7 +21,7 @@ use Webauthn\AuthenticationExtensions\AuthenticationExtensionsClientInputs;
  */
 final class Tinebase_Auth_Webauthn
 {
-    public static function webAuthnRegister(?string $data = null, ?Tinebase_Model_FullUser $user = null): void
+    public static function webAuthnRegister(?string $data = null, ?Tinebase_Model_FullUser $user = null): string
     {
         /** @var \Psr\Http\Message\ServerRequestInterface $request */
         $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
@@ -31,6 +32,8 @@ final class Tinebase_Auth_Webauthn
         );
 
         (new Tinebase_Auth_WebAuthnPublicKeyCredentialSourceRepository())->saveCredentialSource($credentialSource);
+
+        return Base64Url::encode($credentialSource->getPublicKeyCredentialId());
     }
 
     public static function webAuthnAuthenticate(Tinebase_Model_MFA_WebAuthnConfig $config, ?string $data = null): Tinebase_Model_FullUser
