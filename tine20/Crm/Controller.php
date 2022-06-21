@@ -107,8 +107,8 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Appli
     /**
      * creates the initial folder for new accounts
      *
-     * @param mixed[int|Tinebase_Model_User] $_account   the account object
-     * @return Tinebase_Record_RecordSet                 of subtype Tinebase_Model_Container
+     * @param mixed[int|Tinebase_Model_User] $_accountId the account object
+     * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
      */
     public function createPersonalFolder($_accountId)
     {
@@ -118,8 +118,6 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Appli
             $_accountId
         );
 
-        $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
-
-        return $container;
+        return new Tinebase_Record_RecordSet(Tinebase_Model_Container::class, array($personalContainer));
     }
 }
