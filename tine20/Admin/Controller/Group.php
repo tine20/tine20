@@ -392,7 +392,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
 
                 if (!empty($listIds)) {
                     $listBackend = new Addressbook_Backend_List();
-                    $listBackend->delete($listIds);
+                    $listBackend->softDelete($listIds);
                 }
             }
 
