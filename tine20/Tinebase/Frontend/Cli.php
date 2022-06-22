@@ -651,10 +651,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     if ($result === 0) {
                         $deleteIds[] = $note->getId();
                     } else if ($purge) {
-                        if ($note->note_type_id == 4) {
+                        if ($note->note_type_id === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED) {
                             $deleteIds[] = $note->getId();
                             $purgeCountCreated++;
-                        } else if ($note->note_type_id == 5 && strpos($note->note, '|') === false) {
+                        } else if ($note->note_type_id === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED && strpos($note->note, '|') === false) {
                             $deleteIds[] = $note->getId();
                             $purgeCountEmptyUpdate++;
                         }

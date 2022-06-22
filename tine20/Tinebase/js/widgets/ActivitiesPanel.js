@@ -81,8 +81,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'note_type_id', header: this.translation.gettext('Type'), dataIndex: 'note_type_id', width: 15, 
-                renderer: Tine.widgets.activities.getTypeIcon },
+            { resizable: true, id: 'note_type_id', header: this.translation.gettext('Type'), dataIndex: 'note_type_id', width: 25, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tinebase', 'noteType')},
             { resizable: true, id: 'note', header: this.translation.gettext('Note'), dataIndex: 'note', renderer: this.noteRenderer.createDelegate(this)},
             { resizable: true, id: 'created_by', header: this.translation.gettext('Created By'), dataIndex: 'created_by', width: 70},
             { resizable: true, id: 'creation_time', header: this.translation.gettext('Timestamp'), dataIndex: 'creation_time', width: 50, 
@@ -269,14 +268,24 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             filterModels: [
                 {label: i18n._('Quick Search'), field: 'query',         operators: ['contains']},
                 //{label: this.translation._('Time'), field: 'creation_time', operators: ['contains']}
-                {label: this.translation.gettext('Time'), field: 'creation_time', valueType: 'date', pastOnly: true}
+                {label: this.translation.gettext('Time'), field: 'creation_time', valueType: 'date', pastOnly: true},
                 // user search is note working yet -> see NoteFilter.php
                 //{label: this.translation._('User'), field: 'created_by', defaultOperator: 'contains'},
                 // type search isn't implemented yet
-                //{label: this.translation._('Type'), field: 'note_type_id', defaultOperator: 'contains'}
+                {
+                    label: this.translation._('Type'),
+                    field: 'note_type_id',
+                    filtertype: 'tine.widget.keyfield.filter',
+                    app: 'Tinebase',
+                    keyfieldName: 'noteType',
+                    defaultOperator: 'notin'
+                }
             ],
             defaultFilter: 'query',
-            filters: []
+            filters: [
+                {field: 'query',        operator: 'contains',   value: ''},
+                {field: 'note_type_id', operator: 'notin',      value: ['avscan']}
+            ],
         });
         
         filterToolbar.on('change', function () {
@@ -324,54 +333,3 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
 Ext.reg('tineactivitiestabpanel', Tine.widgets.activities.ActivitiesTabPanel);
 
 /************************* helper *********************************/
-
-/**
- * get note / activities types store
- * if available, load data from initial data
- *
- * @return Ext.data.JsonStore with activities types
- *
- * @todo translate type names / descriptions
- */
-Tine.widgets.activities.getTypesStore = function () {
-    var store = Ext.StoreMgr.get('noteTypesStore');
-    if (!store) {
-        store = new Ext.data.JsonStore({
-            fields: Tine.Tinebase.Model.NoteType,
-            baseParams: {
-                method: 'Tinebase.getNoteTypes'
-            },
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'id',
-            remoteSort: false
-        });
-        /*if (Tine.Tinebase.registry.get('NoteTypes')) {
-            store.loadData(Tine.Tinebase.registry.get('NoteTypes'));
-        } else*/
-        if (Tine.Tinebase.registry.get('NoteTypes')) {
-            store.loadData(Tine.Tinebase.registry.get('NoteTypes'));
-        }
-        Ext.StoreMgr.add('noteTypesStore', store);
-    }
-
-    return store;
-};
-
-/**
- * get type icon
- *
- * @param   id of the note type record
- * @returns img tag with icon source
- *
- * @todo use icon_class here
- */
-Tine.widgets.activities.getTypeIcon = function (id) {
-    var typesStore = Tine.widgets.activities.getTypesStore();
-    var typeRecord = typesStore.getById(id);
-    if (typeRecord) {
-        return '<img src="' + typeRecord.data.icon + '" ext:qtip="' + Tine.Tinebase.common.doubleEncode(typeRecord.data.description) + '" style="height:16px;width:16px" />';
-    } else {
-        return '';
-    }
-};

@@ -58,30 +58,6 @@ class Tinebase_NotesTest extends TestCase
     }
     
     /**
-     * try to add a note type
-     *
-     * @return Tinebase_Model_NoteType
-     */
-    public function testAddNoteType()
-    {
-        $noteType = new Tinebase_Model_NoteType(array(
-            'name'          => 'phpunit note type',
-            'icon'          => '/images/oxygen/16x16/actions/document-properties.png',
-            'is_user_type'  => TRUE
-        ));
-        
-        $this->_instance->addNoteType($noteType);
-        
-        // read back created note type
-        $testNoteType = $this->_instance->getNoteTypeByName($noteType->name);
-                
-        $this->assertEquals('phpunit note type', $noteType->name);
-        $this->assertEquals(1, $testNoteType->is_user_type, 'user type not set');
-        
-        return $testNoteType;
-    }
-    
-    /**
      * try to add a note
      * 
      * @return Tinebase_Model_Note
@@ -89,7 +65,7 @@ class Tinebase_NotesTest extends TestCase
     public function testAddNote()
     {
         $note = new Tinebase_Model_Note(array(
-            'note_type_id'      => $this->testAddNoteType()->getId(),
+            'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
             'note'              => 'phpunit test note',
             'record_model'      => $this->_objects['record']['model'],
             'record_backend'    => $this->_objects['record']['backend'],
@@ -216,36 +192,6 @@ class Tinebase_NotesTest extends TestCase
     }
     
     /**
-     * try to delete a note type
-     *
-     */
-    public function testDeleteNoteType()
-    {
-        $noteType = $this->testAddNoteType();
-        
-        $noteTypesPre = $this->_instance->getNoteTypes();
-        
-        $this->_instance->deleteNoteType($noteType->getId());
-        
-        $noteTypesPost = $this->_instance->getNoteTypes();
-        
-        $this->assertLessThan(count($noteTypesPre), count($noteTypesPost));
-    }
-    
-    /**
-     * test get note types ids only
-     */
-    public function testGetNotesTypeOnlyIds()
-    {
-        $noteType = $this->testAddNoteType();
-        
-        $noteTypesIds = $this->_instance->getNoteTypes(false, true);
-        
-        $this->assertTrue(is_array($noteTypesIds));
-        $this->assertTrue(is_string($noteTypesIds[0]));
-    }
-    
-    /**
      * try to get notes of multiple records (adding 'changed' note first)
      * 
      * @return void
@@ -262,7 +208,7 @@ class Tinebase_NotesTest extends TestCase
         foreach ($contacts as $contact) {
             $this->_instance->addNote(new Tinebase_Model_Note(array(
                 'note'          => 'very important note!',
-                'note_type_id'  => Tinebase_Notes::getInstance()->getNoteTypes()->getFirstRecord()->getId(),
+                'note_type_id'  => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
                 'record_id'     => $contact->getId(),
                 'record_model'  => 'Addressbook_Model_Contact',
             )));

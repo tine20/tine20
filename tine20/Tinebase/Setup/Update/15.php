@@ -26,6 +26,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE010 = __CLASS__ . '::update010';
     const RELEASE015_UPDATE011 = __CLASS__ . '::update011';
     const RELEASE015_UPDATE012 = __CLASS__ . '::update012';
+    const RELEASE015_UPDATE013 = __CLASS__ . '::update013';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE       => [
@@ -73,6 +74,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE012          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update012',
+            ],
+            self::RELEASE015_UPDATE013          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update013',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -259,5 +264,22 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             $this->setTableVersion('groups', 10);
         }
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.12', self::RELEASE015_UPDATE012);
+    }
+
+    public function update013()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $this->_backend->dropForeignKey('notes', 'notes::note_type_id--note_types::id');
+        $this->_backend->dropTable('note_types');
+
+        $db = Tinebase_Core::getDb();
+        $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'notes SET note_type_id = "' . Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE . '" WHERE note_type_id = "1"');
+        $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'notes SET note_type_id = "' . Tinebase_Model_Note::SYSTEM_NOTE_NAME_TELEPHONE . '" WHERE note_type_id = "2"');
+        $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'notes SET note_type_id = "' . Tinebase_Model_Note::SYSTEM_NOTE_NAME_EMAIL . '" WHERE note_type_id = "3"');
+        $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'notes SET note_type_id = "' . Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED . '" WHERE note_type_id = "4"');
+        $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'notes SET note_type_id = "' . Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED . '" WHERE note_type_id = "5"');
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.13', self::RELEASE015_UPDATE013);
     }
 }

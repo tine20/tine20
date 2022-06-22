@@ -206,7 +206,7 @@ class Crm_AbstractTest extends TestCase
             array('type'  => 'PRODUCT', 'related_id' => $product->getId(), 'remark' => array('price' => $price, 'quantity' => 3)),
         ];
         $note = array(
-            'note_type_id'      => 1,
+            'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
             'note'              => 'phpunit test note',
         );
         $leadData['notes'] = array($note);

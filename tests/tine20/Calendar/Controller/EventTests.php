@@ -2337,7 +2337,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event1 = $this->_getEvent(true);
         $event1->summary = 'event 1';
         $event1->notes = [new Tinebase_Model_Note([
-            'note_type_id'      => 1,
+            'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
             'note'              => 'phpunit test note',
         ])];
         $event1->relations = [[
@@ -2381,7 +2381,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $updateEvent = clone $createdEvent;
         $notes = $updateEvent->notes->toArray();
         $notes[] = [
-            'note_type_id'      => 1,
+            'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
             'note'              => 'phpunit test note 2',
         ];
         $updateEvent->notes = $notes;

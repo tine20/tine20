@@ -25,7 +25,28 @@
 class Tinebase_Model_Note extends Tinebase_Record_Abstract
 {
     /**
-     * system note type: changed
+     * system note type: note
+     *
+     * @staticvar string
+     */
+    const SYSTEM_NOTE_NAME_NOTE = 'note';
+    
+    /**
+     * system note type: telephone
+     *
+     * @staticvar string
+     */
+    const SYSTEM_NOTE_NAME_TELEPHONE = 'telephone';
+    
+    /**
+     * system note type: email
+     *
+     * @staticvar string
+     */
+    const SYSTEM_NOTE_NAME_EMAIL = 'email';
+    
+    /**
+     * system note type: created
      * 
      * @staticvar string
      */
@@ -37,6 +58,13 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
      * @staticvar string
      */
     const SYSTEM_NOTE_NAME_CHANGED = 'changed';
+
+    /**
+     * system note type: avscan
+     *
+     * @staticvar string
+     */
+    const SYSTEM_NOTE_AVSCAN = 'avscan';
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -88,10 +116,12 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
 
         'fields'            => [
             'note_type_id'                  => [
+                'type'    => self::TYPE_KEY_FIELD,
+                'name'    => Tinebase_Config::NOTE_TYPE,
                 'validators'                    => [
                     'presence' => 'required',
                     Zend_Filter_Input::ALLOW_EMPTY => false
-                ],
+                ]
             ],
             'note'                          => [
                 'type'                          => 'string',
