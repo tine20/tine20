@@ -303,6 +303,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         if ($this->_currentProcessor->hasConfig('groupFooter')) {
             $this->_currentProcessor->append($this->_currentProcessor->getConfig('groupFooter'));
         }
+
+        $this->renderProcessorsTwigTemplate();
     }
 
     protected function _startRow()
