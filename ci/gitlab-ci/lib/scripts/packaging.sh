@@ -75,7 +75,7 @@ packaging_push_package_to_github() {
     release=$2
 
     cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/
-    asset_name="$(date '+%Y.%m.%d')-$(git rev-parse --short HEAD)-nightly"
+    asset_name="tine-$(date '+%Y.%m.%d')-$(git rev-parse --short HEAD)-nightly"
 
     release_json=$(github_create_release "$GITHUB_RELEASE_REPO_OWNER" "$GITHUB_RELEASE_REPO" "$version" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN")
     if [ "$?" != "0" ]; then
