@@ -265,6 +265,36 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     }
 
     /**
+     * @throws Tinebase_Exception_NotFound
+     * @throws \Sabre\DAV\Exception\NotFound
+     */
+    public function testGetNodeForPath_webdav_filemanager_with_pin_protection_shared()
+    {
+        $nodeFsRootPath = '/webdav/Filemanager';
+        // try to get folder /shared , should always sync and ignore grants setting
+        $children = $this->_getNewWebDAVTreeNode($nodeFsRootPath)->getChildren();
+        static::assertCount(2, $children, 'child root nodes should always be sync');
+
+        // try to get folder /shared/dir1
+        // check grants in \Tinebase_WebDav_Collection_AbstractContainerTree::_getSharedDirectories
+        $nodeSharedRootPath = $nodeFsRootPath . '/'. 'shared';
+        $nodeSharedRoot = $this->_getNewWebDAVTreeNode($nodeSharedRootPath);
+        $nodeSharedRoot->createDirectory('dir1');
+        $treeNodeSharedRootPath = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Filemanager', Tinebase_FileSystem::FOLDER_TYPE_SHARED);
+        $treeNodeSharedRoot = Tinebase_FileSystem::getInstance()->stat($treeNodeSharedRootPath);
+        $treeNodeDir1 = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($treeNodeSharedRoot)->getFirstRecord();
+        $this->_testPinProtectionHelper($treeNodeDir1, $nodeSharedRootPath);
+
+        // try to get folder /shared/dir1/dir2
+        // check grants in \Tinebase_Frontend_WebDAV_Directory::getChildren
+        $nodeDir1 = current($nodeSharedRoot->getChildren());
+        $nodeDir1->createDirectory('dir2');
+        $nodeDir1Path = $nodeSharedRootPath . '/' . $nodeDir1->getName();
+        $treeNodeDir2 = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($treeNodeDir1)->getFirstRecord();
+        $this->_testPinProtectionHelper($treeNodeDir2, $nodeDir1Path);
+    }
+    
+    /**
      * node should only be sync when user has both READ_GRANT and SYNC_GRANT
      * 
      * @throws Tinebase_Exception_NotFound
@@ -354,6 +384,56 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
                 $folder->grants->removeRecord($grant);
             }
         }
+    }
+    
+    public function _testPinProtectionHelper($folder, $nodePath)
+    {
+        // should detect delete
+        if (! $folder) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                __METHOD__ . '::' . __LINE__ . ' FIXME: Folder not set, skipping grant checks');
+            return;
+        }
+
+        Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($folder);
+        if (! $folder->grants instanceof Tinebase_Record_RecordSet) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                __METHOD__ . '::' . __LINE__ . ' FIXME: Folder has no grants, skipping grant checks: '
+                . print_r($folder->toArray(), true));
+            return;
+        }
+
+        $testSyncUser = $this->_personas['sclever'];
+
+        // set default grant for test sync user first
+        $folder->grants->addRecord(new Tinebase_Model_Grants([
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id' => $testSyncUser->getId(),
+            Tinebase_Model_Grants::GRANT_ADMIN => true
+        ]));
+        Tinebase_FileSystem::getInstance()->setGrantsForNode($folder, $folder->grants);
+
+        // change current user to test the sync ability
+        Tinebase_Core::setUser($testSyncUser);
+        
+        // set to pin protection
+        $folder['pin_protected_node'] = $folder['id'];
+        $folder = Filemanager_Controller_Node::getInstance()->update($folder);
+        
+        $children = $this->_getNewWebDAVTreeNode($nodePath)->getChildren();
+        static::assertCount(0, $children, 'children node should not be sync');
+        
+        // reset current user and folder grants for operating nodes
+        Tinebase_Core::setUser($this->_originalTestUser);
+
+        foreach ( $folder->grants as $grant) {
+            if ($grant->account_id === $testSyncUser->getId()) {
+                $folder->grants->removeRecord($grant);
+            }
+        }
+
+        $folder['pin_protected_node'] = null;
+        Filemanager_Controller_Node::getInstance()->update($folder);
     }
 
     public function testGetNodeForPath_webdav_filemanagerWithOtherUsersLoginName()
