@@ -865,6 +865,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILTER_SYNC_TOKEN_CLEANUP_MAX_FILTER = 'cleanUpMaxFilter';
     const FILTER_SYNC_TOKEN_CLEANUP_MAX_AGE = 'cleanUpMaxAge';
 
+    const NOTE_TYPE = 'noteType';
+
     /**
      * Grad der Verstädterung (CummunityIdentificationNumber)
      * 
@@ -879,6 +881,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const MUNICIPALITYKEY_DUP_FIELDS = 'municipalityKeyDupFields';
     
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -3115,7 +3118,33 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'contents'              => 'array',
             'clientRegistryInclude' => TRUE,
             'default'               => array('arsCombined'),
-        )
+        ),
+        self::NOTE_TYPE => [
+            self::LABEL                 => 'Note Type', //_('Note Type')
+            self::DESCRIPTION           => 'Available Note types for modlog history', //_('Available Note types for modlog history')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::OPTIONS               => [
+                'recordModel'               => Tinebase_Model_NoteType::class,
+            ],
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE, 'value' => 'Note', 'is_user_type' => 1, 
+                        'icon' => 'images/icon-set/icon_note.svg', 'icon_class' => 'notes_noteIcon', 'system' => true], // _('Note')
+                    ['id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_TELEPHONE, 'value' => 'Telephone', 'is_user_type' => 1,
+                        'icon' => 'images/icon-set/icon_phone.svg', 'icon_class' => 'notes_telephoneIcon', 'system' => true], // _('Telephone')
+                    ['id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_EMAIL, 'value' => 'E-Mail', 'is_user_type' => 1,
+                        'icon' => 'images/icon-set/icon_email.svg', 'icon_class' => 'notes_emailIcon', 'system' => true], // _('E-Mail')
+                    ['id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, 'value' => 'Created', 'is_user_type' => 0,
+                        'icon' => 'images/icon-set/icon_star_out.svg', 'icon_class' => 'notes_createdIcon', 'system' => true], // _('Created')
+                    ['id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, 'value' => 'Changed', 'is_user_type' => 0,
+                        'icon' => 'images/icon-set/icon_file.svg', 'icon_class' => 'notes_changedIcon', 'system' => true], // _('Changed')
+                    ['id' => Tinebase_Model_Note::SYSTEM_NOTE_AVSCAN, 'value' => 'Avscan', 'is_user_type' => 0,
+                        'icon' => 'images/icon-set/icon_virus.svg', 'icon_class' => 'notes_avscanIcon', 'system' => true], // _('Avscan')
+                ],
+                self::DEFAULT_STR           => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+            ],
+        ],
     );
 
     /**

@@ -78,7 +78,7 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
      * @cfg {Number} minLayerWidth The minimum width of the dropdown layer in pixels (defaults to <tt>70</tt>, will
      * be ignored if <tt>{@link #layerWidth}</tt> has a higher value)
      */
-    minLayerWidth : 70,
+    minLayerWidth : 172,
     /**
      * @cfg {Number} layerWidth The width (used as a parameter to {@link Ext.Element#setWidth}) of the dropdown
      * layer (defaults to the width of the ComboBox field).  See also <tt>{@link #minLayerWidth}</tt>

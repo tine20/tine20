@@ -111,7 +111,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         $note = new Tinebase_Model_Note(array(
             'note'         => 'very important note!',
-            'note_type_id' => Tinebase_Notes::getInstance()->getNoteTypes()->getFirstRecord()->getId(),
+            'note_type_id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
         ));
         $eventData['notes'] = array($note->toArray());
         $eventData['etag'] = Tinebase_Record_Abstract::generateUID();

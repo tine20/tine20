@@ -734,6 +734,7 @@ class Setup_Controller
         $oldModLog = $roleController->modlogActive(false);
         Tinebase_Model_User::forceSuperUser();
 
+        $useNotes = $roleController->useNotes(false);
         try {
             Tinebase_Model_Role::setIsReplicable(false);
 
@@ -774,8 +775,9 @@ class Setup_Controller
                 'id' => $_user->getId()
             ), [$superUserRole->getId()]);
         } finally {
-            Tinebase_Model_Role::setIsReplicable(true);
+            Tinebase_Model_Role::setIsReplicable();
             $roleController->modlogActive($oldModLog);
+            $roleController->useNotes($useNotes);
         }
     }
 

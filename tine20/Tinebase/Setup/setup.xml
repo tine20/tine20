@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>15.12</version>
+    <version>15.13</version>
     <minimumRequiredVersion>12.28</minimumRequiredVersion>
     <tables>
         <table>
@@ -2148,55 +2148,6 @@
             </declaration>
         </table>
         <table>
-            <name>note_types</name>
-            <version>3</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>name</name>
-                    <type>text</type>
-                    <length>64</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>description</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <default>NULL</default>
-                </field>
-                <field>
-                    <name>icon</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>icon_class</name>
-                    <type>text</type>
-                    <length>128</length>
-                    <default>NULL</default>
-                </field>
-                <field>
-                    <name>is_user_type</name>
-                    <type>boolean</type>
-                    <notnull>true</notnull>
-                    <default>true</default>
-                </field>
-                <index>
-                    <name>id</name>
-                    <primary>true</primary>
-                    <field>
-                        <name>id</name>
-                    </field>
-                </index>
-            </declaration>
-        </table>
-        <table>
             <name>notes</name>
             <version>3</version>
             <declaration>
@@ -2298,18 +2249,6 @@
                     <field>
                         <name>record_backend</name>
                     </field>
-                </index>
-                <index>
-                    <name>notes::note_type_id--note_types::id</name>
-                    <field>
-                        <name>note_type_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>note_types</table>
-                        <field>id</field>
-                        <!-- add onupdate/ondelete? -->
-                    </reference>
                 </index>
             </declaration>
         </table>
@@ -3398,162 +3337,4 @@
             </declaration>
         </table>
     </tables>
-
-    <defaultRecords>
-        <record>
-            <table>
-                <name>note_types</name>
-            </table>
-            <field>
-                <name>id</name>
-                <value>1</value>
-            </field>
-            <field>
-                <name>name</name>
-                <value>note</value>
-                <!-- gettext('note') -->
-            </field>
-            <field>
-                <name>description</name>
-                <value>default note type</value>
-                <!-- gettext('default note type') -->
-            </field>
-            <field>
-                <name>icon</name>
-                <value>images/icon-set/icon_note.svg</value>
-            </field>
-            <field>
-                <name>icon_class</name>
-                <value>notes_noteIcon</value>
-            </field>
-            <field>
-                <name>is_user_type</name>
-                <value>1</value>
-            </field>
-        </record>
-        <record>
-            <table>
-                <name>note_types</name>
-            </table>
-            <field>
-                <name>id</name>
-                <value>2</value>
-            </field>
-            <field>
-                <name>name</name>
-                <value>telephone</value>
-                <!-- gettext('telephone') -->
-            </field>
-            <field>
-                <name>description</name>
-                <value>telephone call</value>
-                <!-- gettext('telephone call') -->
-            </field>
-            <field>
-                <name>icon</name>
-                <value>images/icon-set/icon_phone.svg</value>
-            </field>
-            <field>
-                <name>icon_class</name>
-                <value>notes_telephoneIcon</value>
-            </field>
-            <field>
-                <name>is_user_type</name>
-                <value>1</value>
-            </field>
-        </record>
-        <record>
-            <table>
-                <name>note_types</name>
-            </table>
-            <field>
-                <name>id</name>
-                <value>3</value>
-            </field>
-            <field>
-                <name>name</name>
-                <value>email</value>
-                <!-- gettext('email') -->
-            </field>
-            <field>
-                <name>description</name>
-                <value>email contact</value>
-                <!-- gettext('email contact') -->
-            </field>
-            <field>
-                <name>icon</name>
-                <value>images/icon-set/icon_email.svg</value>
-            </field>
-            <field>
-                <name>icon_class</name>
-                <value>notes_emailIcon</value>
-            </field>
-            <field>
-                <name>is_user_type</name>
-                <value>1</value>
-            </field>
-        </record>
-        <record>
-            <table>
-                <name>note_types</name>
-            </table>
-            <field>
-                <name>id</name>
-                <value>4</value>
-            </field>
-            <field>
-                <name>name</name>
-                <value>created</value>
-                <!-- gettext('created') -->
-            </field>
-            <field>
-                <name>description</name>
-                <value>record created</value>
-                <!-- gettext('record created') -->
-            </field>
-            <field>
-                <name>icon</name>
-                <value>images/icon-set/icon_star_out.svg</value>
-            </field>
-            <field>
-                <name>icon_class</name>
-                <value>notes_createdIcon</value>
-            </field>
-            <field>
-                <name>is_user_type</name>
-                <value>0</value>
-            </field>
-        </record>
-        <record>
-            <table>
-                <name>note_types</name>
-            </table>
-            <field>
-                <name>id</name>
-                <value>5</value>
-            </field>
-            <field>
-                <name>name</name>
-                <value>changed</value>
-                <!-- gettext('changed') -->
-            </field>
-            <field>
-                <name>description</name>
-                <value>record changed</value>
-                <!-- gettext('record changed') -->
-            </field>
-            <field>
-                <name>icon</name>
-                <value>images/icon-set/icon_file.svg</value>
-            </field>
-            <field>
-                <name>icon_class</name>
-                <value>notes_changedIcon</value>
-            </field>
-            <field>
-                <name>is_user_type</name>
-                <value>0</value>
-            </field>
-        </record>
-    </defaultRecords>
 </application>

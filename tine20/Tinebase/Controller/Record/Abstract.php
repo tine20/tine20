@@ -3600,10 +3600,9 @@ HumanResources_CliTests.testSetContractsEndDate */
         );
 
         // TODO add link to node attachment (like attachment icon in grid)
-
-        $noteType = Tinebase_Notes::getInstance()->getNoteTypeByName('email');
+        
         $note = new Tinebase_Model_Note([
-            'note_type_id'      => (string) $noteType->getId(),
+            'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_EMAIL,
             'note'              => mb_substr($noteText, 0, Tinebase_Notes::MAX_NOTE_LENGTH),
             'record_model'      => $this->_modelName,
             'record_backend'    => ucfirst(strtolower('sql')),

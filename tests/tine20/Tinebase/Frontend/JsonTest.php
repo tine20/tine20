@@ -49,7 +49,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         ));
 
         $this->_objects['note'] = new Tinebase_Model_Note(array(
-            'note_type_id'      => 1,
+            'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
             'note'              => 'phpunit test note',
             'record_model'      => $this->_objects['record']['model'],
             'record_backend'    => $this->_objects['record']['backend'],
@@ -362,15 +362,6 @@ class Tinebase_Frontend_JsonTest extends TestCase
         // restore old settings
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $oldPreference);
         Tinebase_Core::getPreference()->{Tinebase_Preference::TIMEZONE} = $oldPreference;
-    }
-    
-    /**
-     * get notes types
-     */
-    public function testGetNotesTypes()
-    {
-        $noteTypes = $this->_instance->getNoteTypes();
-        $this->assertTrue($noteTypes['totalcount'] >= 5);
     }
 
     /**

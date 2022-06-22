@@ -226,20 +226,6 @@ Tine.Tinebase.Model.Note = Ext.data.Record.create([
 ]);
 
 /**
- * Model of a note type
- * 
- * @constructor {Ext.data.Record}
- */
-Tine.Tinebase.Model.NoteType = Ext.data.Record.create([
-    {name: 'id'             },
-    {name: 'name'           },
-    {name: 'icon'           },
-    {name: 'icon_class'     },
-    {name: 'description'    },
-    {name: 'is_user_type'   }
-]);
-
-/**
  * Model of a customfield definition
  */
 Tine.Tinebase.Model.Customfield = Ext.data.Record.create([

@@ -105,13 +105,13 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 id: 'note_type_id',
                 header: i18n._('Type'),
                 dataIndex: 'note_type_id',
-                renderer: Tine.widgets.activities.getTypeIcon,
-                width: 30
+                width: 50,
+                renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tinebase', 'noteType')
             },
             {
                 id: 'note',
                 dataIndex: 'note',
-                width: 500,
+                width: 450,
                 header: i18n._('Note'),
                 sortable: true,
                 renderer: this.renderMultipleLines
@@ -314,10 +314,6 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
      * @param event
      */
     addNote: function (button, event) {
-        var typesStore = Tine.widgets.activities.getTypesStore();
-        var data = [];
-
-
         // if is edit
         var selectedRecord = this.getSelectionModel().getSelected();
         if (selectedRecord && button.iconCls == 'action_edit') {
@@ -325,35 +321,6 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             var note = selectedRecord.get('note');
             var recordId = selectedRecord.id;
         }
-
-        typesStore.each(function (record) {
-            if (record.data.is_user_type == 1) {
-                data.push({'type_id': record.data.id,'name': record.data.name});
-            }
-        }, this);
-
-        this.filteredTypeStore =  new Ext.data.JsonStore({
-            fields: [
-                'type_id',
-                'name'
-            ],
-            data: data,
-            idIndex: 0
-        });
-
-        this.typeComboBox = new Ext.form.ComboBox({
-            store: this.filteredTypeStore,
-            valueField: 'type_id',
-            mode: 'local',
-            displayField: 'name',
-            fieldLabel: i18n._('Type'),
-            forceSelection: true,
-            allowBlank: false,
-            editable: false,
-            anchor: '100% 100%'
-        });
-
-        this.typeComboBox.setValue(typeId || 1);
 
         this.onClose = function () {
             this.window.close();
@@ -365,8 +332,10 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
 
         this.onOk = function () {
             if (this.formPanel.getForm().findField('notification').validate()) {
-                var text = this.formPanel.getForm().findField('notification').getValue();
-                this.onNoteAdd(text, this.typeComboBox.getValue(), recordId);
+                const text = this.formPanel.getForm().findField('notification').getValue();
+                const noteType = this.formPanel.getForm().findField('noteType').getValue();
+    
+                this.onNoteAdd(text, noteType, recordId);
                 this.onClose();
             }
         };
@@ -401,8 +370,15 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             frame: true,
             buttons: buttons,
             items: [
-                this.typeComboBox,
                 {
+                    fieldLabel: i18n._('Type'),
+                    name: 'noteType',
+                    anchor: '100% 100%',
+                    xtype: 'widget-keyfieldcombo',
+                    app:   'Tinebase',
+                    keyFieldName: 'noteType',
+                    allowBlank: false
+                }, {
                     xtype: 'textarea',
                     name: 'notification',
                     fieldLabel: i18n._('Enter new note:'),
