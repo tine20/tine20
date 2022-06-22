@@ -259,7 +259,7 @@
       
           git fetch origin "$previous_tag"
       
-          if ! git log "$tag...$previous_tag"; then
+          if ! git log "$tag...$previous_tag" 1> /dev/null; then
               git fetch origin --unshallow --quiet
           fi
       
@@ -282,7 +282,7 @@
               -T "$path_to_asset" \
               -H "accept: application/vnd.github.v3+json" \
               -H "content-type: $(file -b --mime-type $path_to_asset)" \
-              "$upload_url?name=$name.tar.gz"
+              "$upload_url?name=$name.tar.bz2"
       }
       
       github_get_latest_release_tag_name() {
@@ -434,7 +434,7 @@
           release=$2
       
           cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/
-          asset_name="$(date '+%Y.%m.%d')-$(git rev-parse --short HEAD)-nightly"
+          asset_name="tine-$(date '+%Y.%m.%d')-$(git rev-parse --short HEAD)-nightly"
       
           release_json=$(github_create_release "$GITHUB_RELEASE_REPO_OWNER" "$GITHUB_RELEASE_REPO" "$version" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN")
           if [ "$?" != "0" ]; then
