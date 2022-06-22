@@ -131,7 +131,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
 
         $recordId = $_record->getId();
 
-        if ($recordId && isset($this->_idMap[$recordId]) && isset($this->_listOfRecords[$this->_idMap[$recordId]])) {
+        if (($recordId  || 0 === $recordId || '0' === $recordId) && isset($this->_idMap[$recordId]) && isset($this->_listOfRecords[$this->_idMap[$recordId]])) {
             return $this->_idMap[$recordId];
         }
 
@@ -140,7 +140,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         $index = key($this->_listOfRecords);
         
         // maintain indices
-        if ($recordId) {
+        if ($recordId || 0 === $recordId || '0' === $recordId) {
             $this->_idMap[$recordId] = $index;
         } else {
             $this->_idLess[] = $index;
@@ -816,7 +816,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * sorts this recordset
      *
-     * @param string $_field
+     * @param string|Closure $_field
      * @param string $_direction
      * @param string $_sortFunction
      * @param int $_flags sort flags for asort/arsort
@@ -824,6 +824,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function sort($_field, $_direction = 'ASC', $_sortFunction = 'asort', $_flags = SORT_REGULAR)
     {
+        $offsetToSortFieldMap = null;
         if (! is_string($_field) && is_callable($_field)) {
             $_sortFunction = 'function';
         } else {

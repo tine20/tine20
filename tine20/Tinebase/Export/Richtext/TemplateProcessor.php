@@ -750,7 +750,7 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
      *
      * @return string
      */
-    protected function fixBrokenTwigMacros($documentPart)
+    public function fixBrokenTwigMacros($documentPart)
     {
         $fixedDocumentPart = preg_replace_callback(
             '|\{[^}{%]*\{[^}]*\}[^}]*\}|U',
