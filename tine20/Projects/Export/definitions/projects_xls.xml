@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Projects_Model_Project</model>
+    <name>projects_xls</name>
+    <!-- _('Excel all data') -->
+    <label>Excel all data</label>
+    <type>export</type>
+    <plugin>Projects_Export_Xls</plugin>
+    <icon_class>tinebase-action-export-xls</icon_class>
+    <favorite>true</favorite>
+    <order>600</order>
+    <scope>multi</scope>
+</config>
