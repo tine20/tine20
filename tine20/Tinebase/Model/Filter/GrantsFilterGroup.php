@@ -38,6 +38,8 @@ class Tinebase_Model_Filter_GrantsFilterGroup extends Tinebase_Model_Filter_Filt
         Tinebase_Model_Grants::GRANT_READ
     ];
 
+    protected $_tempBackend = null;
+
     /**
      * sets the grants this filter needs to assure
      *
@@ -80,10 +82,35 @@ class Tinebase_Model_Filter_GrantsFilterGroup extends Tinebase_Model_Filter_Filt
             /* on     */ "{$db->quoteIdentifier($this->_joinedTableAlias . '.record_id')} = {$db->quoteIdentifier($backend->getTableName() . '.' . $this->_aclIdColumn)}",
             /* select */ array()
         );
+
+        $this->_tempBackend = $backend;
+        try {
+            Tinebase_Container::addGrantsSql($select, $user, $this->_requiredGrants, $this->_joinedTableAlias, false,
+                [$this, 'addGrantsSqlCallback']);
+        } finally {
+            $this->_tempBackend = null;
+        }
         
-        Tinebase_Container::addGrantsSql($select, $user, $this->_requiredGrants, $this->_joinedTableAlias);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' $select after appending grants sql: ' . $select);
+    }
+
+    /**
+     * appends container_acl sql
+     *
+     * @param  Zend_Db_Select    $_select
+     * @param  integer           $iteration
+     * @return string table identifier to work on
+     */
+    public function addGrantsSqlCallback($_select, $iteration)
+    {
+        $db = $_select->getAdapter();
+        $tblAlias = $this->_aclTableName . $iteration;
+        $_select->joinLeft(array(
+            /* table  */ $tblAlias => SQL_TABLE_PREFIX . $this->_aclTableName),
+            /* on     */ $db->quoteIdentifier($tblAlias . '.record_id') . ' = ' . $db->quoteIdentifier($this->_tempBackend->getTableName() . '.' . $this->_aclIdColumn),
+            array()
+        );
+        return $tblAlias;
     }
 }

@@ -94,12 +94,17 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
     public function setName($name) 
     {
         self::checkForbiddenFile($name);
-        
-        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_EDIT)) {
+
+        list($dirname,) = Sabre\DAV\URLUtil::splitPath($this->_path);
+
+        $parentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname);
+        if ($parentPath->isToplevelPath() && Tinebase_FileSystem::FOLDER_TYPE_SHARED === $parentPath->containerType) {
+            if (!Tinebase_Core::getUser()->hasGrant($this->_node, Tinebase_Model_Grants::GRANT_ADMIN)) {
+                throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
+            }
+        } elseif (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_EDIT)) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
         }
-        
-        list($dirname, $basename) = Sabre\DAV\URLUtil::splitPath($this->_path);
 
         if (!($result = Tinebase_FileSystem::getInstance()->rename($this->_path, $dirname . '/' . $name))) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
@@ -110,7 +115,13 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
 
     public function rename(string $newPath)
     {
-        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_DELETE)) {
+        list($dirname,) = Sabre\DAV\URLUtil::splitPath($this->_path);
+        $parentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname);
+        if ($parentPath->isToplevelPath() && Tinebase_FileSystem::FOLDER_TYPE_SHARED === $parentPath->containerType) {
+            if (!Tinebase_Core::getUser()->hasGrant($this->_node, Tinebase_Model_Grants::GRANT_DELETE)) {
+                throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
+            }
+        } elseif (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_DELETE)) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to move file: ' . $this->_path);
         }
 
@@ -139,27 +150,12 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
     /**
      * return container for given path
      * 
-     * @return Tinebase_Model_Container
+     * @return Tinebase_Model_Tree_Node
      */
     protected function _getContainer()
     {
-        if ($this->_container == null) {
-            $pathParts = explode('/', substr($this->_path, 1), 7);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' name: ' . print_r($pathParts, true));
-            
-
-            if ($this->_node instanceof Tinebase_Model_Tree_Node) {
-                $this->_container = Tinebase_FileSystem::getInstance()->get($this->_node->parent_id);
-            } else if ($this->_node instanceof Tinebase_Model_Container) {
-                if ($pathParts[2] == Tinebase_Model_Container::TYPE_SHARED) {
-                    $containerId = $pathParts[3];
-                } else {
-                    $containerId = $pathParts[4];
-                }
-                $this->_container = Tinebase_Container::getInstance()->get($containerId);
-            }
+        if (null === $this->_container) {
+            $this->_container = Tinebase_FileSystem::getInstance()->get($this->_node->parent_id);
         }
         
         return $this->_container;
@@ -246,6 +242,23 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
                     }
+                    break;
+                case '{DAV:}quota-available-bytes':
+                    $quotaData = Tinebase_FileSystem::getInstance()->getEffectiveAndLocalQuota($this->_node);
+                    // 200 GB limit in case no quota provided
+                    $response[$prop] = $quotaData['localQuota'] === null ? 200 * 1024 * 1024 * 1024 :
+                        $quotaData['localFree'];
+
+                    break;
+
+                case '{DAV:}quota-used-bytes':
+                    if (Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}
+                        ->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
+                        $size = $this->_node->size;
+                    } else {
+                        $size = $this->_node->revision_size;
+                    }
+                    $response[$prop] = $size;
                     break;
             }
         }
