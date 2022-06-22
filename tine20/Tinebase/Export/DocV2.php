@@ -58,6 +58,23 @@ class Tinebase_Export_DocV2 extends Tinebase_Export_Doc
         });
     }
 
+    protected function renderProcessorsTwigTemplate()
+    {
+        $twigName = uniqid();
+        $this->_twig->addLoader(new Tinebase_Twig_CallBackLoader($twigName, $this->_getLastModifiedTimeStamp(),
+            function() {
+                return $this->_currentProcessor->fixBrokenTwigMacros($this->_currentProcessor->getMainPart());
+            }));
+
+        $xml = str_replace(["\n", "\r", '\'', Tinebase_Export_Richtext_TemplateProcessor::NEW_LINE_PLACEHOLDER],
+            ['</w:t><w:br/><w:t>', '', '&apos;', '</w:t><w:br/><w:t>'],
+            $this->_twig->load($twigName)->render($this->_getTwigContext([
+                'records' => $this->_currentIterationRecords,
+                'record'  => null,
+            ])));
+        $this->_currentProcessor->setMainPart($xml);
+    }
+
     /**
      * @param Tinebase_Record_Interface $_record
      */
