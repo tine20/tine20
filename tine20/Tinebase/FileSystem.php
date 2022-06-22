@@ -2545,6 +2545,8 @@ class Tinebase_FileSystem implements
             }
 
             $this->_getTreeNodeBackend()->updated($newNode, $currentNodeObject);
+            // force mtime update on parents
+            $this->_checkQuotaAndRegisterRefLog($newNode, 0, 0);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
