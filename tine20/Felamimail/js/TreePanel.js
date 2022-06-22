@@ -249,7 +249,11 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     setExpandedPaths: async function(state) {
         let promises = [];
-
+        
+        if (! state?.paths) {
+            return;
+        }
+        
         _.each(state.paths, (path) => {
             const promise = new Promise((resolve, reject) => {
                 this.expandPath(path, null, function (success, oLastNode) {
@@ -395,7 +399,11 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * - expand the recorded expanded node from db
      */
     selectLastSelectedNode: async function () {
-        let state = Ext.state.Manager.get(this.stateId);
+        if (!this.root.rendered) {
+            return;
+        }
+        
+        const state = Ext.state.Manager.get(this.stateId);
         this.applyingState = true;
 
         this.expandPortalColumn();
