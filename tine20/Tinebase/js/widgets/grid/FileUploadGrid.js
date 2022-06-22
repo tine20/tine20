@@ -452,7 +452,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
         return {
             text: String.format(i18n._('Add {0}'), me.i18nFileString),
-            iconCls: 'action_add',
+            iconCls: 'action_attach',
             scope: me,
             plugins: [{
                 ptype: 'ux.browseplugin',

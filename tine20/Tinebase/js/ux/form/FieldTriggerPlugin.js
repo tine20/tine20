@@ -40,15 +40,16 @@ class FieldTriggerPlugin {
             this.#trigger.addClassOnClick('x-form-trigger-click');
 
             // preserve space for triggers
-            wrap.addClass('x-form-trigger-plugi-wrap')
+            wrap.addClass('x-form-trigger-plugin-wrap')
             const paddingRight = Number(String(field.el.getStyle('padding-right')).replace('px', ''));
             field.el.setStyle({
-                'box-sizing': 'border-box', 
-                'padding-right': paddingRight+17 + 'px', 
-                'width' : '100%', 
+                'box-sizing': 'border-box',
+                'padding-right': paddingRight+17 + 'px',
+                'width' : '100%',
                 'height': '18px'
             });
             field.el.autoBoxAdjust = false;
+            field.onResize(wrap.getWidth(), wrap.getHeight());
         }
     }
 
