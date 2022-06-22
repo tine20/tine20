@@ -64,11 +64,6 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
      */
     public function appendFilterSql($select, $backend)
     {
-        if ($this->_ignoreAcl) {
-            //??? yes or no? its a change in a refactor... but still I think its right to return here
-            return;
-        }
-
         parent::appendFilterSql($select, $backend);
 
         if (! $this->_ignorePinProtection
