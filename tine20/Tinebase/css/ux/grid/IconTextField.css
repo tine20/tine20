@@ -1,8 +1,12 @@
 .x-ux-form-icontextfield-labelicon {
     width: 16px;
     height: 16px;
-    position: relative;
-    top: 3px;
-    margin-right: 3px;
-    margin-top: -3px;  
+    position: absolute;
+    left: 2px;
+    top: -1px;
+}
+
+.x-ux-form-icontextfield-spacer {
+    width: 18px;
+    float: left;
 }

@@ -26,7 +26,7 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
     initComponent : function(){
         Ext.ux.form.ClearableComboBox.superclass.initComponent.call(this);
         this.triggerConfig = {
-            tag: 'span', cls: 'x-form-twin-triggers', style: 'padding-right:2px',  // padding needed to prevent IE from clipping 2nd trigger button
+            tag: 'span', cls: 'x-form-twin-triggers',
             cn: [
                 {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger x-form-clear-trigger"},
                 {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger " + this.triggerClass}
@@ -45,11 +45,11 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
         ts.each(function (t, all, index) {
             t.hide = function () {
                 this.dom.style.display = 'none';
-                triggerField.el?.setWidth(triggerField.wrap.getWidth() - 21);
+                triggerField.el?.setWidth(triggerField.wrap.getWidth() - 17);
             };
             t.show = function () {
                 this.dom.style.display = '';
-                triggerField.el.setWidth(triggerField.wrap.getWidth() - 38);
+                triggerField.el.setWidth(triggerField.wrap.getWidth() - 34);
             };
             var triggerIndex = 'Trigger' + (index + 1);
 
