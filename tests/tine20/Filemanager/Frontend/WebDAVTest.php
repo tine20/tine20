@@ -415,13 +415,14 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
 
         // change current user to test the sync ability
         Tinebase_Core::setUser($testSyncUser);
-        
+        $originalChildren = $this->_getNewWebDAVTreeNode($nodePath)->getChildren();
+
         // set to pin protection
         $folder['pin_protected_node'] = $folder['id'];
         $folder = Filemanager_Controller_Node::getInstance()->update($folder);
         
         $children = $this->_getNewWebDAVTreeNode($nodePath)->getChildren();
-        static::assertCount(0, $children, 'children node should not be sync');
+        static::assertCount(count($originalChildren) - 1 , $children, 'children node should not be sync');
         
         // reset current user and folder grants for operating nodes
         Tinebase_Core::setUser($this->_originalTestUser);
