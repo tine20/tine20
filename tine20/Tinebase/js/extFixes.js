@@ -910,7 +910,9 @@ Ext.override(Ext.form.CheckboxGroup, {
 
 Ext.layout.VBoxLayout.prototype.onLayout = Ext.layout.VBoxLayout.prototype.onLayout.createSequence(function() {
     if (! this.vboxfix) {
+        const container = this.container;
         this.container.on('resize', function (c) {
+            if (this.container !== container) return; // layout change
             var w = c.getWidth();
             c.items.each(function (i) {
                 i.setWidth(w);
