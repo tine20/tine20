@@ -1639,10 +1639,11 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             }
             $this->_setNextNumber($_record);
         }
-        
-        if (! $_record->is_auto) {
-            return;
-        }
+
+        // 2022-06-23 - cweiss - why to do this for is_auto only? see #203517
+//        if (! $_record->is_auto) {
+//            return;
+//        }
         
         if ($_oldRecord->cleared == 'CLEARED') {
             $diff = $_record->diff($_oldRecord);
