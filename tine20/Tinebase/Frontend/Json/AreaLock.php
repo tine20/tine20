@@ -168,6 +168,25 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
             throw new Tinebase_Exception_AccessDenied('mfa is not self serviceable');
         }
 
+        if ($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS} !== Tinebase_Model_MFA_WebAuthnUserConfig::class) {
+            $this->_testSelfServiceMFA($userCfg, $mfaId, $MFAPassword, $mfa);
+        }
+
+        // no exception? persist the mfa user config
+        $user = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
+        if (!$user->mfa_configs) {
+            $user->mfa_configs = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
+        }
+        $user->mfa_configs->removeById($userCfg->getId());
+        $user->mfa_configs->addRecord($userCfg);
+        Tinebase_User::getInstance()->updateUser($user);
+
+        return true;
+    }
+
+    protected function _testSelfServiceMFA(Tinebase_Model_MFA_UserConfig $userCfg, string $mfaId, ?string $MFAPassword, Tinebase_Auth_MFA $mfa): void
+    {
+
         // we need to test the unsaved mfa user config here, so we clone it and the user
         // then we get it ready, that's a bit tedious sadly
         $testUserCfg = clone $userCfg;
@@ -210,16 +229,5 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
             // clean up, eventually we created something persistent
             $testUserCfg->updateUserOldRecordCallback(Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId()), $user);
         }
-
-        // no exception? persist the mfa user config
-        $user = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
-        if (!$user->mfa_configs) {
-            $user->mfa_configs = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
-        }
-        $user->mfa_configs->removeById($userCfg->getId());
-        $user->mfa_configs->addRecord($userCfg);
-        Tinebase_User::getInstance()->updateUser($user);
-
-        return true;
     }
 }

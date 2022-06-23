@@ -230,6 +230,12 @@ Ext.layout.ContainerLayout = Ext.extend(Object, {
                 ct.on(ct.resizeEvent, this.onResize, this);
             }
         }
+        if (! ct) {
+            var target = this.container.getLayoutTarget();
+            if(!(this.hasLayout || Ext.isEmpty(this.targetCls))){
+                target.removeClass(this.targetCls);
+            }
+        }
         this.container = ct;
     },
 

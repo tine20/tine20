@@ -261,7 +261,7 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
 
         $updateEvent = $persistentEvent;
         $updateEvent['notes'] = [[
-            'note_type_id'      => 1,
+            'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
             'note'              => 'phpunit test note',
         ]];
         $updateEvent['relations'] = [[
@@ -302,7 +302,7 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         static::assertEquals(1, count($changedAlternative['alarms']));
 
         $changedAlternative['notes'][] = [
-            'note_type_id'      => 1,
+            'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
             'note'              => 'phpunit test note 2',
         ];
         $changedAlternative['relations'][] = [

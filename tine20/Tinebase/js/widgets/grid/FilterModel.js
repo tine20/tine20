@@ -152,7 +152,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 case 'percentage':
                 case 'combo':
                 case 'time':
-                case 'country':
                     this.defaultOperator = 'equals';
                     break;
                 case 'string':
@@ -180,7 +179,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 case 'user':
                 case 'number':
                 case 'money':
-                case 'country':
                 default:
                     break;
             }
@@ -533,10 +531,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                     comboConfig.valueField = this.valueField;
                 }
                 value = new Ext.form.ComboBox(comboConfig);
-                break;
-            case 'country':
-                value = new Tine.widgets.CountryCombo(Ext.apply(commonOptions, {
-                }));
                 break;
             case 'number':
                 if (filter.specialType == 'percent') {

@@ -301,7 +301,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         // set description to contract title if empty
         var descriptionField = this.getForm().findField('description');
-        if (descriptionField.getValue() == '') {
+        if (!descriptionField.getValue()) {
             descriptionField.setValue(record.get('title'));
         }
 
@@ -655,11 +655,13 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 }), {
                                     xtype: 'datefield',
                                     name: 'start_date',
+                                    allowBlank: false,
                                     fieldLabel: this.app.i18n._('Interval Begins'),
                                     columnWidth: 1/3
                                 }, {
                                     xtype: 'datefield',
                                     name: 'end_date',
+                                    allowBlank: false,
                                     fieldLabel: this.app.i18n._('Interval Ends'),
                                     columnWidth: 1/3
                                 }

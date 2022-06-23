@@ -30,11 +30,6 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     protected $_notesTable;
     
     /**
-     * @var Tinebase_Db_Table
-     */
-    protected $_noteTypesTable;
-    
-    /**
      * default record backend
      */
     const DEFAULT_RECORD_BACKEND = 'Sql';
@@ -92,11 +87,6 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         
         $this->_notesTable = new Tinebase_Db_Table(array(
             'name' => SQL_TABLE_PREFIX . 'notes',
-            'primary' => 'id'
-        ));
-        
-        $this->_noteTypesTable = new Tinebase_Db_Table(array(
-            'name' => SQL_TABLE_PREFIX . 'note_types',
             'primary' => 'id'
         ));
     }
@@ -356,8 +346,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                         $noteArray = (!is_array($noteData)) ? array('note' => $noteData) : $noteData;
                         if (!isset($noteArray['note_type_id'])) {
                             // get default note type
-                            $defaultNote = $this->getNoteTypeByName('note');
-                            $noteArray['note_type_id'] = $defaultNote->getId();
+                            $noteArray['note_type_id'] = Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE;
                         }
                         try {
                             $note = new Tinebase_Model_Note($noteArray);
@@ -431,16 +420,17 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * add new system note
      *
      * @param Tinebase_Record_Interface|string $_record
-     * @param string|Tinebase_Mode_User $_userId
+     * @param string|Tinebase_Model_User $_userId
      * @param string $_type (created|changed)
      * @param Tinebase_Record_RecordSet|string $_mods (Tinebase_Model_ModificationLog)
-     * @param string $_backend   backend of record
+     * @param string $_backend backend of record
      * @return Tinebase_Model_Note|boolean
-     * 
-     * @todo get field translations from application?
+     *
+     * @throws Tinebase_Exception_NotFound
      * @todo attach modlog record (id) to note instead of saving an ugly string
+     * @todo get field translations from application?
      */
-    public function addSystemNote($_record, $_userId = NULL, $_type = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_mods = NULL, $_backend = 'Sql', $_modelName = NULL)
+    public function addSystemNote($_record, $_userId = NULL, string $_type = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_mods = NULL, $_backend = 'Sql', $_modelName = NULL)
     {
         if ((empty($_mods) || $_mods instanceof Tinebase_Record_RecordSet && count($_mods) === 0)
             && $_type === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED
@@ -478,10 +468,9 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             .' Adding "' . $_type . '" system note note to record (id ' . $id . ')');
-
-        $noteType = $this->getNoteTypeByName($_type);
+        
         $note = new Tinebase_Model_Note(array(
-            'note_type_id'      => $noteType->getId(),
+            'note_type_id'      => $_type,
             'note'              => mb_substr($noteText, 0, self::MAX_NOTE_LENGTH),
             'record_model'      => $modelName,
             'record_backend'    => ucfirst(strtolower($_backend)),
@@ -696,7 +685,12 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     protected function _getNotesFilter($_id, $_model, $_backend, $_onlyNonSystemNotes = TRUE)
     {
         $backend = ucfirst(strtolower($_backend));
+        $noteTypes = Tinebase_Config::getInstance()->get(Tinebase_Config::NOTE_TYPE)->records;
         
+        if ($_onlyNonSystemNotes) {
+            $noteTypes = $noteTypes->filter('is_user_type', 1);
+        }
+
         $filter = new Tinebase_Model_NoteFilter(array(
             array(
                 'field' => 'record_model',
@@ -716,7 +710,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             array(
                 'field' => 'note_type_id',
                 'operator' => 'in',
-                'value' => $this->getNoteTypes($_onlyNonSystemNotes, true)
+                'value' => $noteTypes->getId()
             )
         ));
         
@@ -724,95 +718,6 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     }
     
     /************************** note types *******************/
-    
-    /**
-     * get all note types
-     *
-     * @param boolean|optional $onlyNonSystemNotes
-     * @return Tinebase_Record_RecordSet of Tinebase_Model_NoteType
-     */
-    public function getNoteTypes($onlyNonSystemNotes = false, $onlyIds = false)
-    {
-        $select = $this->_db->select()
-            ->from(array('note_types' => SQL_TABLE_PREFIX . 'note_types'), ($onlyIds ? 'id' : '*'));
-        
-        if ($onlyNonSystemNotes) {
-            $select->where($this->_db->quoteIdentifier('is_user_type') . ' = 1');
-        }
-        
-        $stmt = $this->_db->query($select);
-        
-        if ($onlyIds) {
-            $types = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
-        } else {
-            $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-            
-            $types = new Tinebase_Record_RecordSet('Tinebase_Model_NoteType', $rows, true);
-        }
-        
-        return $types;
-    }
-
-    /**
-     * get note type by name
-     *
-     * @param string $_name
-     * @return Tinebase_Model_NoteType
-     * @throws  Tinebase_Exception_NotFound
-     */
-    public function getNoteTypeByName($_name)
-    {
-        $row = $this->_noteTypesTable->fetchRow($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_name));
-        
-        if (!$row) {
-            throw new Tinebase_Exception_NotFound('Note type not found.');
-        }
-        
-        return new Tinebase_Model_NoteType($row->toArray());
-    }
-    
-    /**
-     * add new note type
-     *
-     * @param Tinebase_Model_NoteType $_noteType
-     */
-    public function addNoteType(Tinebase_Model_NoteType $_noteType)
-    {
-        if (!$_noteType->getId()) {
-            $id = $_noteType->generateUID();
-            $_noteType->setId($id);
-        }
-        
-        $data = $_noteType->toArray();
-
-        $this->_noteTypesTable->insert($data);
-    }
-
-    /**
-     * update note type
-     *
-     * @param Tinebase_Model_NoteType $_noteType
-     */
-    public function updateNoteType(Tinebase_Model_NoteType $_noteType)
-    {
-        $data = $_noteType->toArray();
-
-        $where  = array(
-            $this->_noteTypesTable->getAdapter()->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_noteType->getId()),
-        );
-        
-        $this->_noteTypesTable->update($data, $where);
-    }
-    
-    /**
-     * delete note type
-     *
-     * @param integer $_noteTypeId
-     */
-    public function deleteNoteType($_noteTypeId)
-    {
-        $this->_noteTypesTable->delete($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_noteTypeId));
-    }
 
     /**
      * Search for records matching given filter

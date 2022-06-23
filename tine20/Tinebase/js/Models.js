@@ -31,7 +31,23 @@ Tine.Tinebase.Model.modlogFields = [
 Tine.Tinebase.Model.genericFields = Tine.Tinebase.Model.modlogFields.concat([
     { name: 'container_id', header: 'Container',                                       omitDuplicateResolving: false}
 ]);
-    
+
+/**
+ * Model of a country
+ */
+Tine.Tinebase.Model.Country = Tine.Tinebase.data.Record.create([
+    { name: 'shortName' },
+    { name: 'translatedName' }
+], {
+    appName: 'Tinebase',
+    modelName: 'Country',
+    idProperty: 'shortName',
+    titleProperty: 'translatedName',
+    // ngettext('Country', 'Countries', n); gettext('Country');
+    recordName: 'Country',
+    recordsName: 'Countries'
+});
+
 /**
  * Model of a language
  */
@@ -223,20 +239,6 @@ Tine.Tinebase.Model.Note = Ext.data.Record.create([
     {name: 'note'           },
     {name: 'creation_time', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     {name: 'created_by'     }
-]);
-
-/**
- * Model of a note type
- * 
- * @constructor {Ext.data.Record}
- */
-Tine.Tinebase.Model.NoteType = Ext.data.Record.create([
-    {name: 'id'             },
-    {name: 'name'           },
-    {name: 'icon'           },
-    {name: 'icon_class'     },
-    {name: 'description'    },
-    {name: 'is_user_type'   }
 ]);
 
 /**

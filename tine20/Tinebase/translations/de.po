@@ -5227,3 +5227,19 @@ msgstr "Alle Kostenträger Datensätze"
 msgid "plz"
 msgstr "PLZ"
 
+msgid "Country"
+msgid_plural "Countries"
+msgstr[0] "Land"
+msgstr[1] "Länder"
+
+msgid "Telephone"
+msgstr "Telefon"
+
+msgid "Created"
+msgstr "Erstellt"
+
+msgid "Changed"
+msgstr "Geändert"
+
+msgid "Avscan"
+msgstr "Avscan"

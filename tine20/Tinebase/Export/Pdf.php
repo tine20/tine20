@@ -477,8 +477,6 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         
         if (!empty($_notes)) {
             
-            $noteTypes = Tinebase_Notes::getInstance()->getNoteTypes();
-
             $record[] = array(
                 'label' => $translate->_('Activities'),
                 'type'  => 'separator',
@@ -486,10 +484,9 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             
             foreach ($_notes as $note) {
                 if ($note instanceOf Tinebase_Model_Note) {
+                    $noteType = Tinebase_Config::getInstance()->get(Tinebase_Config::NOTE_TYPE)->records->getById($note->note_type_id);
                     $noteArray = $note->toArray();
                     $noteText = (strlen($note->note) > 100) ? substr($note->note, 0, 99) . '...' : $note->note;
-                    $noteType = $noteTypes[$noteTypes->getIndexById($note->note_type_id)];
-    
                     $time = Tinebase_Translation::dateToStringInTzAndLocaleFormat($note->creation_time);
                       
                     $createdBy = '(' . $noteArray['created_by'] . ')';

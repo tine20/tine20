@@ -279,6 +279,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     ]
                 ],
             ],
+            'adr_one_countryname' => [
+                'filter'            => Tinebase_Model_Filter_Country::class,
+            ],
+            'adr_two_countryname' => [
+                'filter'            => Tinebase_Model_Filter_Country::class,
+            ],
         ],
 
         self::FIELDS        => [

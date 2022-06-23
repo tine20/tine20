@@ -755,7 +755,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $notes = Tinebase_Notes::getInstance()->getNotesOfRecord(Tinebase_Model_Tree_Node::class, $result[0]['id'],
             'Sql', false);
         $this->assertEquals(3, $notes->count());
-        $this->assertEquals(2, ($notes = $notes->filter('note_type_id', 5))->count());
+        $this->assertEquals(2, ($notes = $notes->filter('note_type_id', Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED))->count());
 
         /** @var Tinebase_Model_Note $updateNote */
         foreach ($notes as $updateNote) {

@@ -135,7 +135,7 @@ class Addressbook_ControllerTest extends TestCase
         ));
                 
         $this->objects['note'] = new Tinebase_Model_Note(array(
-            'note_type_id'      => 1,
+            'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
             'note'              => 'phpunit test note',    
         ));
     }
@@ -481,7 +481,7 @@ class Addressbook_ControllerTest extends TestCase
 (
     [0] => Array
         (
-            [note_type_id] => 1
+            [note_type_id] => note
             [note] => phpunit test note
             [record_backend] => Sql
             [id] => 
@@ -680,7 +680,7 @@ class Addressbook_ControllerTest extends TestCase
         $updateContact->setId($createdContact->getId());
         $notes = $createdContact->notes->toArray();
         $notes[] = array(
-            'note_type_id'      => 1,
+            'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
             'note'              => 'phpunit test note 2',
         );
         $updateContact->notes = $notes;

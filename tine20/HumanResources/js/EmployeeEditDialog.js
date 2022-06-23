@@ -97,9 +97,12 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         Tine.HumanResources.EmployeeEditDialog.superclass.onAfterRecordLoad.call(this);
         const recordGrants = _.get(this.record, this.recordClass.getMeta('grantsPath'));
         this.showPrivateInformation = ['readEmployeeDataGrant', 'readOwnDataGrant'].some((requiredGrant) => { return recordGrants[requiredGrant] });
-        ['contractGridPanel', 'costCenterGridPanel', 'attachmentsPanel', 'notesGridPanel', 'activitiesTabPanel'].forEach((cmp) => {
+        ['contractGridPanel', 'costCenterGridPanel', 'attachmentsPanel', 'notesGridPanel', 'relationsPanel', 'activitiesTabPanel'].forEach((cmp) => {
             if (this[cmp]?.setDisabled) {
                 this[cmp].setDisabled(!this.showPrivateInformation);
+                if (Ext.isFunction(this[cmp].setReadOnly)) {
+                    this[cmp].setReadOnly(!this.showPrivateInformation);
+                }
             }
         })
 

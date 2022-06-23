@@ -885,6 +885,14 @@ class Tinebase_FileSystemTest extends TestCase
         static::assertFalse(!$node->lastavscan_time, 'expect lastavscan_time to be set');
         static::assertGreaterThanOrEqual($now->toString(), $node->lastavscan_time);
         static::assertTrue(!$node->is_quarantined, 'expect is_quarantined to be false');
+
+        $filter = new Tinebase_Model_NoteFilter(array(array(
+            'field' => 'note_type_id',
+            'operator' => 'equals',
+            'value' => Tinebase_Model_Note::SYSTEM_NOTE_AVSCAN
+        )));
+        $notes = Tinebase_Notes::getInstance()->searchNotes($filter, new Tinebase_Model_Pagination());
+        $this->assertCount(1, $notes);
     }
 
     public function testAVModeUnittestFound()

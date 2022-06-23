@@ -522,21 +522,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * get note types
-     *
-     */
-    public function getNoteTypes()
-    {
-        $noteTypes = Tinebase_Notes::getInstance()->getNoteTypes();
-        $noteTypes->translate();
-        
-        return array(
-            'results'       => $noteTypes->toArray(),
-            'totalcount'    => count($noteTypes)
-        );
-    }
-    
-    /**
      * deletes tags identified by an array of identifiers
      *
      * @param  array $ids
@@ -923,7 +908,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'userContact' => $userContactArray,
             'jsonKey' => Tinebase_Core::get('jsonKey'),
             'userApplications' => $user->getApplications()->toArray(),
-            'NoteTypes' => $this->getNoteTypes(),
             'manageImapEmailUser' => Tinebase_EmailUser::manages(Tinebase_Config::IMAP),
             'manageSmtpEmailUser' => $manageSmtpEmailUser,
             'mustchangepw' => $user->mustChangePassword(),

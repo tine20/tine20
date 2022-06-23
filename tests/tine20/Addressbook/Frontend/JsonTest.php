@@ -385,7 +385,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
     protected function _getContactData($_orgName = NULL)
     {
         $note = array(
-            'note_type_id' => 1,
+            'note_type_id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
             'note' => 'phpunit test note',
         );
 
@@ -396,6 +396,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
             'container_id' => $this->container->id,
             'notes' => array($note),
             'tel_cell_private' => '+49TELCELLPRIVATE',
+            'adr_one_countryname' => 'GB',
         );
     }
 
@@ -610,8 +611,14 @@ class Addressbook_Frontend_JsonTest extends TestCase
             'sort' => array('note_type_id', 'creation_time')
         ));
         $this->assertEquals($_changedNoteNumber, $history['totalcount'], print_r($history, TRUE));
-        $changedNote = preg_replace('/\s*GDPR_DataProvenance \([^)]+\)/', '',
-            $history['results'][$_changedNoteNumber - 1]);
+        foreach ($history['results'] as $note) {
+            if ($note['note_type_id'] === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED) {
+                $changedNote = preg_replace('/\s*GDPR_DataProvenance \([^)]+\)/', '', $note);
+            }
+        }
+        
+        $this->assertNotNull($changedNote);
+        
         foreach ((array)$_expectedText as $text) {
             $this->assertStringContainsString($text, $changedNote['note'], print_r($changedNote, TRUE));
         }
@@ -2559,6 +2566,27 @@ Steuernummer 33/111/32212";
         $result = $this->_uit->searchContacts($filter, array());
 
         $this->assertEquals(1, $result['totalcount']);
+    }
+
+    public function testSearchContactByCountryFilter()
+    {
+        $this->_addContact();
+
+        $filter = array(
+            array('field' => 'adr_one_countryname', 'operator' => 'in', 'value' => ['GB'])
+        );
+
+        $result = $this->_uit->searchContacts($filter, array());
+
+        $this->assertGreaterThanOrEqual(1, $result['totalcount']);
+        $countryFilter = $result['filter'][0];
+        $this->assertTrue(is_array(['value']), print_r($countryFilter, true));
+        $this->assertTrue(is_array($countryFilter['value'][0]), 'value item should be an array: '
+            . print_r($countryFilter, true));
+        $this->assertTrue(array_key_exists('shortName', $countryFilter['value'][0]), 'value should have shortName index: '
+            . print_r($countryFilter, true));
+        $this->assertEquals('GB', $countryFilter['value'][0]['shortName'],
+            print_r($countryFilter, true));
     }
 
     /**
