@@ -1397,6 +1397,10 @@ msgstr "E-Mail Kontingent Benachrichtigungen"
 msgid "email soft quota notification"
 msgstr "E-Mail Fließ-Kontingent Benachrichtigungen"
 
+#: FileSystem.php:4271
+msgid "email "
+msgstr "E-Mail"
+
 #: FileSystem.php:4333
 msgid "filemanager quota notification"
 msgstr "Dateimanager Kontingent Benachrichtigungen"
@@ -1421,10 +1425,6 @@ msgstr "default note type"
 msgid "telephone"
 msgstr "Telefon"
 
-#: Setup/setup.xml:3656
-msgid "Telephone"
-msgstr "Telefon"
-
 #: Setup/setup.xml:3661
 msgid "telephone call"
 msgstr "Telefonanruf"
@@ -1441,9 +1441,6 @@ msgstr "E-Mail Kontakt"
 msgid "created"
 msgstr "erstellt"
 
-msgid "Created"
-msgstr "Erstellt"
-
 #: Setup/setup.xml:3723
 msgid "record created"
 msgstr "Eintrag erstellt"
@@ -1451,9 +1448,6 @@ msgstr "Eintrag erstellt"
 #: Setup/setup.xml:3749
 msgid "changed"
 msgstr "geändert"
-
-msgid "Changed"
-msgstr "Geändert"
 
 #: Setup/setup.xml:3754
 msgid "record changed"
@@ -5233,6 +5227,19 @@ msgstr "Alle Kostenträger Datensätze"
 msgid "plz"
 msgstr "PLZ"
 
+msgid "Country"
+msgid_plural "Countries"
+msgstr[0] "Land"
+msgstr[1] "Länder"
+
+msgid "Telephone"
+msgstr "Telefon"
+
+msgid "Created"
+msgstr "Erstellt"
+
+msgid "Changed"
+msgstr "Geändert"
+
 msgid "Avscan"
 msgstr "Avscan"
-

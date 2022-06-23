@@ -40,14 +40,14 @@ Tine.widgets.CountryCombo = Ext.extend(Ext.form.ComboBox, {
      */
     getCountryStore: function(){
         var store = Ext.StoreMgr.get('Countries');
-        if(!store) {
+        if (!store) {
             store = new Ext.data.JsonStore({
                 baseParams: {
-                    method:'Tinebase.getCountryList'
+                    method: 'Tinebase.getCountryList'
                 },
                 root: 'results',
                 id: 'shortName',
-                fields: ['shortName', 'translatedName'],
+                fields: Tine.Tinebase.Model.Country,
                 remoteSort: false,
                 sortInfo: {
                     field: 'translatedName',

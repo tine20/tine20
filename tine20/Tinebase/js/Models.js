@@ -31,7 +31,23 @@ Tine.Tinebase.Model.modlogFields = [
 Tine.Tinebase.Model.genericFields = Tine.Tinebase.Model.modlogFields.concat([
     { name: 'container_id', header: 'Container',                                       omitDuplicateResolving: false}
 ]);
-    
+
+/**
+ * Model of a country
+ */
+Tine.Tinebase.Model.Country = Tine.Tinebase.data.Record.create([
+    { name: 'shortName' },
+    { name: 'translatedName' }
+], {
+    appName: 'Tinebase',
+    modelName: 'Country',
+    idProperty: 'shortName',
+    titleProperty: 'translatedName',
+    // ngettext('Country', 'Countries', n); gettext('Country');
+    recordName: 'Country',
+    recordsName: 'Countries'
+});
+
 /**
  * Model of a language
  */

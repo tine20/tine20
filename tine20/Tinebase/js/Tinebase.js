@@ -32,6 +32,7 @@ require('./MunicipalityKey/editDialog');
 
 require('./Model/ImportExportDefinition');
 
+require('./widgets/CountryFilter');
 
 // UI style >= 2019
 require('node-waves');
