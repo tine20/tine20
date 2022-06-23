@@ -466,6 +466,9 @@ items: [
     // private
     setLayout : function(layout){
         if(this.layout && this.layout != layout){
+            this.items.each((c) => {
+                this.layout.onRemove(c);
+            })
             this.layout.setContainer(null);
         }
         this.initItems();

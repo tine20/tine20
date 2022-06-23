@@ -92,6 +92,13 @@ Ext.layout.BoxLayout = Ext.extend(Ext.layout.ContainerLayout, {
         Ext.layout.BoxLayout.superclass.renderAll.call(this, ct, this.innerCt);
     },
 
+    setContainer: function(ct) {
+        if (! ct) {
+            // layout change
+            this.innerCt.remove();
+        }
+        Ext.layout.BoxLayout.superclass.setContainer.call(this, ct);
+    },
     onLayout : function(ct, target){
         this.renderAll(ct, target);
     },
