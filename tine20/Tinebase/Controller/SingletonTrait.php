@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -16,7 +16,8 @@
  * private static $_instance;
  * public static getInstance();
  * public static destroyInstance();
- * private function __construct();
+ * protected function __construct();
+ * protected function __clone();
  *
  * @package     Tinebase
  * @subpackage  Controller

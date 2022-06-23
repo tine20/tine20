@@ -26,6 +26,7 @@ class Admin_AllTests
     {
         $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Admin All Tests');
         $suite->addTestSuite(Admin_ControllerTest::class);
+        $suite->addTestSuite(Admin_Controller_SchedulerTaskTest::class);
         $suite->addTestSuite(Admin_Controller_UserTest::class);
         $suite->addTestSuite(Admin_CliTest::class);
         $suite->addTestSuite(Admin_Acl_RightsTest::class);

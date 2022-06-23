@@ -293,6 +293,8 @@ class Tinebase_ApplicationTest extends TestCase
                 Admin_Model_OVpnApi_AuthConfig::class,
                 Admin_Model_OVpnApiAccount::class,
                 Admin_Model_OVpnApiRealm::class,
+                Admin_Model_SchedulerTask::class,
+                Admin_Model_SchedulerTask_Import::class,
             ),
             'Calendar' => array(
                 Calendar_Model_AttendeeRole::class,

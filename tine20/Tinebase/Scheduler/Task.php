@@ -74,6 +74,9 @@ class Tinebase_Scheduler_Task
      */
     protected $_callables = null;
 
+    protected $_config = null;
+    protected $_config_class = null;
+
     /**
      * Tinebase_Scheduler_Task constructor.
      * @param array $options
@@ -98,6 +101,8 @@ class Tinebase_Scheduler_Task
         $this->_cron = $options['cron'];
         $this->_cronObject = Cron\CronExpression::factory($this->_cron);
         $this->_callables = $options['callables'];
+        $this->_config = isset($options['config']) ? $options['config'] : null;
+        $this->_config_class = isset($options['config_class']) ? $options['config_class'] : null;
     }
 
     public function toArray()
@@ -105,6 +110,8 @@ class Tinebase_Scheduler_Task
         return [
             'cron'              => $this->_cron,
             'callables'         => $this->_callables,
+            'config'            => $this->_config,
+            'config_class'      => $this->_config_class,
         ];
     }
 

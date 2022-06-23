@@ -1655,6 +1655,8 @@ class Setup_Controller
             }
 
             Tinebase_Application::getInstance()->omitModLog(true);
+            Tinebase_Scheduler::getInstance()->modlogActive(false);
+            Tinebase_Scheduler::getInstance()->useNotes(false);
         } else {
             $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
             if ($setupUser && ! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
