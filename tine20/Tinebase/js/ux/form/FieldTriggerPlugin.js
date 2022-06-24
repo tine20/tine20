@@ -46,7 +46,7 @@ class FieldTriggerPlugin {
                 'box-sizing': 'border-box',
                 'padding-right': paddingRight+17 + 'px',
                 'width' : '100%',
-                'height': '18px'
+                'height': field.getHeight() + 'px'
             });
             field.el.autoBoxAdjust = false;
             field.onResize(wrap.getWidth(), wrap.getHeight());
