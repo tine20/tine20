@@ -398,7 +398,7 @@ class Courses_JsonTest extends TestCase
 
         $result = $this->_importHelper(dirname(__FILE__) . '/files/testklasse.csv',
             $this->_getCourseImportDefinition2(), TRUE);
-        $this->assertEquals(8, count($result['members']), 'import failed');
+        $this->assertEquals(8, count($result['members']), 'import failed: ' . print_r($result['members'], true));
         $found = FALSE;
         foreach($result['members'] as $member) {
             if ($member['name'] === 'Frantasia, Anastasia' && $member['data'] === 'afrantasia') {
