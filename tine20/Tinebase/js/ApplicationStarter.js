@@ -396,11 +396,16 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                     
                     // create model
                     if (! Tine[appName].Model.hasOwnProperty(modelName)) {
-                        Tine[appName].Model[modelName] = Tine.Tinebase.data.Record.create(Tine[appName].Model[modelArrayName], 
-                            Ext.copyTo({modelConfiguration: modelConfig}, modelConfig,
-                               'idProperty,defaultFilter,appName,modelName,recordName,recordsName,titleProperty,' +
-                                'containerProperty,containerName,containersName,group,copyOmitFields,copyNoAppendTitle')
-                        );
+                        const recordConfig = Ext.copyTo({modelConfiguration: modelConfig}, modelConfig,
+                            'idProperty,defaultFilter,appName,modelName,recordName,recordsName,titleProperty,' +
+                            'containerProperty,containerName,containersName,group,copyOmitFields,copyNoAppendTitle');
+
+                        const beforeCreate = _.get(Tine, `${appName}.Model.${modelName}Mixin.mixinConfig.before.create`);
+                        if (_.isFunction(beforeCreate)) {
+                            beforeCreate(Tine[appName].Model[modelArrayName], recordConfig);
+                        }
+
+                        Tine[appName].Model[modelName] = Tine.Tinebase.data.Record.create(Tine[appName].Model[modelArrayName], recordConfig);
 
                         // called from legacy code - but all filters should come from registy (see below)
                         Tine[appName].Model[modelName].getFilterModel = function() { return [];};
@@ -409,6 +414,10 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                         if (Tine[appName].Model.hasOwnProperty(modelName + 'Mixin')) {
                             Ext.override(Tine[appName].Model[modelName], Tine[appName].Model[modelName + 'Mixin']);
                             Ext.apply(Tine[appName].Model[modelName], _.get(Tine[appName].Model[modelName + 'Mixin'], 'statics', {}));
+                            const afterCreate = _.get(Tine, `${appName}.Model.${modelName}Mixin.mixinConfig.after.create`);
+                            if (_.isFunction(afterCreate)) {
+                                afterCreate(Tine[appName].Model[modelArrayName], recordConfig);
+                            }
                         }
                     }
 
