@@ -182,6 +182,7 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
     subjectFn: null,
     bodyFn: null,
     massMailingFlagFn: null,
+    records: [],
 
     /**
      * get addressbook contact grid panel
@@ -195,157 +196,140 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
     },
     
     /**
-     * return mail addresses of given contacts 
-     * 
-     * @param {Array} contacts
-     * @return {Array}
+     * return mail addresses of given contacts
+     *
+     * @param records
      */
-    getMailAddresses: function(records) {
+    getMailAddresses: async function(records = []) {
         const mailAddresses = [];
+        const promises = [];
         
-        Ext.each(records, function(record) {
+        _.each(records, (record) => {
             if (this.contactInRelation && record.get('relations')) {
                 Ext.each(record.get('relations'), function(relation) {
                     if (relation.type === this.relationType) {
-                        this.addRecipientTokenFromContact(mailAddresses, relation.related_record);
+                        promises.push(this.addRecipientTokenFromContacts(mailAddresses, [relation.related_record]));
                     }
                 }, this);
             } else if (Ext.isFunction(this.addMailFromRecord)) {
                 // addMailFromRecord can be defined in config
-                this.addMailFromRecord(mailAddresses, record);
+                promises.push(this.addMailFromRecord(mailAddresses, record));
             } else {
-                this.addRecipientTokenFromContact(mailAddresses, record);
+                promises.push(this.addRecipientTokenFromContacts(mailAddresses, [record]));
             }
         }, this);
         
-        if (mailAddresses.length > 0) {
-            this.mailAddresses = mailAddresses;
-        }
-        
-        return mailAddresses;
-    },
-    
-    /**
-     * add mail address from addressbook (if available) and add it to mailAddresses array
-     * 
-     * @param {Array} mailAddresses
-     * @param {Tine.Addressbook.Model.Contact|Object} contact
-     */
-    addMailFromAddressBook: function(mailAddresses, contact) {
-        if (! contact) {
-            return;
-        }
-        if (! Ext.isFunction(contact.beginEdit)) {
-            contact = new Tine.Addressbook.Model.Contact(contact);
-        }
-
-        // no exact matches are necessary - use the same regex as in \Tinebase_Mail::EMAIL_ADDRESS_CONTAINED_REGEXP
-        // TODO find a good generic place for this const
-        const emailRegEx = /([a-z0-9_\+-\.&]+@[a-z0-9-\.]+\.[a-z]{2,63})/i;
-        
-        if (!contact.get("members")) {
-            var mailAddress = (contact.getPreferredEmail()) ? Tine.Felamimail.getEmailStringFromContact(contact) : null;
-            if (mailAddress && mailAddress.match(emailRegEx))
-                mailAddresses.push(mailAddress);
-        } else {
-            var emails = contact.get("emails");
-            if (emails) {
-                Ext.each(emails.split(","), function (mail) {
-                    if (mail.match(emailRegEx)) {
-                        mailAddresses.push(mail);
-                    }
-                });
+        await Promise.allSettled(promises).then(() => {
+            if (mailAddresses.length > 0) {
+                this.mailAddresses = mailAddresses;
             }
-        }
+        })
+        
+        return this.mailAddresses;
     },
     
     /**
      * add mail address from addressbook (if available) and add it to mailAddresses array
      *
      * @param {Array} mailAddresses
-     * @param {Tine.Addressbook.Model.Contact|Object} contact
+     * @param contacts
      */
-    addRecipientTokenFromContact: function(mailAddresses, contact) {
-        if (! contact) {
-            return;
-        }
-        if (! Ext.isFunction(contact.beginEdit)) {
-            contact = new Tine.Addressbook.Model.Contact(contact);
-        }
-        
-        // no exact matches are necessary - use the same regex as in \Tinebase_Mail::EMAIL_ADDRESS_CONTAINED_REGEXP
-        // TODO find a good generic place for this const
-        const emailRegEx = /([a-z0-9_\+-\.&]+@[a-z0-9-\.]+\.[a-z]{2,63})/i;
-        
-        if (!contact.get("members")) {
-            const email = contact.getPreferredEmail() ?? null;
-            const emailType = contact.get('email') === email ? 'email' : contact.get('email_home') === email ? 'email_home' : 'email';
-            if (email && email.match(emailRegEx)) {
-                let token = {
-                    'email': email,
-                    'email_type': emailType,
-                    'type': contact.get('type'),
-                    'n_fileas': contact.get('n_fileas'),
-                    'name': contact.get('n_fn'),
-                    'record_id': contact.get('id')
-                };
-                mailAddresses.push(token);
+    addRecipientTokenFromContacts: function (mailAddresses, contacts) {
+        return new Promise(async (resolve, reject) => {
+            if (!contacts || contacts.length === 0) {
+                resolve();
             }
-        } else {
-            // fixme: we have to remove emails field in the future , how should we get the list member from FE ?
-            const emails = contact.get("emails");
-            if (emails) {
-                Ext.each(emails.split(","), function (mail) {
-                    if (mail.match(emailRegEx)) {
-                        mailAddresses.push(mail);
+    
+            // no exact matches are necessary - use the same regex as in \Tinebase_Mail::EMAIL_ADDRESS_CONTAINED_REGEXP
+            const emailRegEx = /([a-z0-9_\+-\.&]+@[a-z0-9-\.]+\.[a-z]{2,63})/i;
+    
+            await _.reduce(contacts, async (prev, contact) => {
+                return prev.then(async () => {
+                    contact = Ext.isFunction(contact.beginEdit) ? contact : new Tine.Addressbook.Model.Contact(contact);
+                    const memberIds = contact.get("members");
+    
+                    if (memberIds && memberIds.length > 0) {
+                        let {results: memberContacts} = await Tine.Addressbook.searchContacts([{
+                            field: 'id', operator: 'in', value: _.compact(_.uniq(memberIds))
+                        }]);
+        
+                        await this.addRecipientTokenFromContacts(mailAddresses, memberContacts);
+                    } else {
+                        const email = typeof contact.getPreferredEmail == 'function' ? contact.getPreferredEmail() : null;
+                        const emailType = contact.get('email') === email ? 'email' : contact.get('email_home') === email ? 'email_home' : 'email';
+        
+                        if (email && email.match(emailRegEx)) {
+                            const existEmail = _.find(mailAddresses, {email: email});
+                            if (!existEmail) {
+                                let token = {
+                                    'email': email,
+                                    'email_type': emailType,
+                                    'type': contact.get('type'),
+                                    'n_fileas': contact.get('n_fileas'),
+                                    'name': contact.get('n_fn'),
+                                    'record_id': contact.get('id')
+                                };
+                                mailAddresses.push(token);
+                            }
+                        }
                     }
-                });
-            }
-        }
+                })
+            }, Promise.resolve());
+    
+            resolve();
+        });
     },
     
     /**
      * compose an email to selected contacts
-     * 
-     * @param {Button} btn 
+     *
+     * @param {Button} btn
+     * @param to
      */
-    onComposeEmail: function(btn,to) {
-        if (this.getGridPanel().grid) {
-            var sm = this.getGridPanel().grid.getSelectionModel(),
-                mailAddresses = sm.isFilterSelect
-                    ? null
-                    : this.getMailAddresses(this.getGridPanel().grid.getSelectionModel().getSelections());
-        } else {
-            var sm = null,
-                mailAddresses = this.mailAddresses;
-        }
-
-        var record = new Tine.Felamimail.Model.Message({
-            subject: (this.subject) ? this.subject : '',
-            body: this.body,
-            massMailingFlag: this.massMailingFlag
-        }, 0);
-
-        if (to == "CC") {
-            record.set('cc', mailAddresses);
-        } else if (to == "BCC") {
-            record.set('bcc', mailAddresses);
-        } else {
-            record.set('to', mailAddresses);
-        }
-
-        if (to == 'mass') {
-            to = 'bcc';
-            record.set('massMailingFlag', true);
-            record.set('bcc', mailAddresses);
-        }
-
+    onComposeEmail: async function (btn, to) {
+        const sm = this.getGridPanel().grid ? this.getGridPanel().grid.getSelectionModel() : null;
+        const records = (sm && sm.isFilterSelect) ? sm.getSelections(): this.records;
+        
         var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
+            contentPanelConstructorInterceptor: async (config) => {
+                const waitingText = this.app.i18n._('Loading Recipients...');
+                const mask = await config.setWaitText(waitingText);
+                const mailAddresses = await this.getMailAddresses(records);
+                
+                const record = new Tine.Felamimail.Model.Message({
+                    subject: (this.subject) ? this.subject : '',
+                    body: this.body,
+                    massMailingFlag: this.massMailingFlag
+                }, 0);
+    
+                switch (to) {
+                    case "TO":
+                        record.set('to', mailAddresses);
+                        break;
+                    case "CC":
+                        record.set('cc', mailAddresses);
+                        break;
+                    case "BCC":
+                        record.set('bcc', mailAddresses);
+                        break;
+                    case "mass":
+                        to = 'bcc';
+                        record.set('massMailingFlag', true);
+                        record.set('bcc', mailAddresses);
+                        break;
+                }
+                config.record = record;
+                config.listeners = {
+                    single: true,
+                    load: function() {
+                        mask.hide();
+                    }
+                };
+            },
             selectionFilter: sm && sm.isFilterSelect ? Ext.encode({
                 to: to,
                 filter: sm.getSelectionFilter()
             }) : null,
-            record: record
         });
     },
 
@@ -415,8 +399,34 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
      */
     updateAction: function(action, grants, records) {
         this.mailAddresses = [];
-        action.setDisabled(this.getMailAddresses(records).length === 0);
+        this.records = records.length ? records :   
+            action.initialConfig?.selections?.length ? action.initialConfig.selections : [];
+    
+        if (action.text ===  this.app.i18n._('Compose email') && this.records.length > 0){
+            let hasEmailAddress = false;
+            _.each(this.records, (record) => {
+                if ((typeof record.getPreferredEmail == 'function' && record.getPreferredEmail() !== '') ||
+                    (record.get('members') && record.get('members').length > 0) ||
+                    (record.get('attendee') && record.get('attendee').length > 0)
+                ){
+                    hasEmailAddress = true;
+                }
+            })
+            this.composeMailAction.setDisabled(!hasEmailAddress);
+        }
 
+        if (!action.text && action.initialConfig?.selectionModel) {
+            const isComposeItem = _.find(['To', 'CC', 'BCC', 'Mass Mailing'], (name) => {
+                return action.initialConfig.text === this.app.i18n._(name);
+            });
+    
+            if (isComposeItem) {
+                const isFilterSelect = action.initialConfig.selectionModel.isFilterSelect;
+                action.setDisabled(isFilterSelect ? action.initialConfig.text !== this.app.i18n._('Mass Mailing') : false);
+            }
+        }
+
+        
         if (this.subjectField && records.length > 0) {
             this.subject = records[0].get(this.subjectField);
         } else if (Ext.isFunction(this.subjectFn)) {
