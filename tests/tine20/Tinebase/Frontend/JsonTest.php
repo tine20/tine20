@@ -643,7 +643,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         self::assertTrue(is_bool($changepwValue), 'changepw should be (bool) false: ' . var_export($changepwValue, TRUE));
         
         $userApps = $registryData['Tinebase']['userApplications'];
-        self::assertEquals('Admin', $userApps[0]['name'], 'first app should be Admin: ' . print_r($userApps, TRUE));
+        self::assertEquals('Tinebase', $userApps[0]['name'], 'first app should be Tinebase: ' . print_r($userApps, TRUE));
         
         $locale = Tinebase_Core::getLocale();
         $symbols = Zend_Locale::getTranslationList('symbols', $locale);

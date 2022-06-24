@@ -37,12 +37,28 @@ Tine.Filemanager.Model.NodeMixin = {
         return [Tine.Tinebase.common.getUrl().replace(/\/$/, ''), '#',
             Tine.Tinebase.appMgr.get('Filemanager').getRoute(this.get('path'), this.get('type'))].join('/');
     },
-    
+
+    mixinConfig: {
+        before: {
+            create(o, meta) {
+                // NOTE: custom fields of Tree_Nodes are inherited but mc can't show it
+                const parentConfig = Tine.Tinebase.Model.Tree_Node.getModelConfiguration();
+                _.difference(parentConfig.fieldKeys, meta.modelConfiguration.fieldKeys).forEach((fieldName) => {
+                    const idx = parentConfig.fieldKeys.indexOf(fieldName);
+                    meta.modelConfiguration.fieldKeys.splice(idx, 0, fieldName);
+                    o.splice(idx, 0, {... Tine.Tinebase.Model.Tree_Node.getField(fieldName)});
+                    meta.modelConfiguration.fields[fieldName] = {... parentConfig.fields[fieldName]};
+                })
+                // @TODO: filtermodel?
+            }
+        }
+    },
+
     statics: {
         type(path) {
             path = String(path);
             const basename = path.split('/').pop(); // do not use basename() here -> recursion!
-            return path.lastIndexOf('/') === --path.length || basename.lastIndexOf('.') < Math.max(1, basename.length - 5) ? 'folder' : 'file';
+            return path.lastIndexOf('/') === path.length-1 || basename.lastIndexOf('.') < Math.max(1, basename.length - 5) ? 'folder' : 'file';
         },
         
         dirname(path) {
@@ -77,7 +93,7 @@ Tine.Filemanager.Model.NodeMixin = {
         sanitize(path) {
             path = String(path);
             const self = Tine.Filemanager.Model.Node;
-            let isFolder = path.lastIndexOf('/') === --path.length;
+            let isFolder = path.lastIndexOf('/') === path.length -1;
             path = _.compact(path.split('/')).join('/');
             return '/' + path + (isFolder || self.type(path) === 'folder' ? '/' : '');
         },
