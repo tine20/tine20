@@ -306,12 +306,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     contextMenu: null,
 
     /**
-     * @property lastStoreTransactionId 
-     * @type String
-     */
-    lastStoreTransactionId: null,
-
-    /**
      * @property editBuffer  - array of ids of records edited since last explicit refresh
      * @type Array of ids
      */
@@ -1316,9 +1310,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * called before store queries for data
      */
     onStoreBeforeload: function(store, options) {
-        // define a transaction
-        this.lastStoreTransactionId = options.transactionId = Ext.id();
-
         options.params = options.params || {};
         // always start with an empty filter set!
         // this is important for paging and sort header!
@@ -1426,12 +1417,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Ext.data.Store} store
      */
     onStoreBeforeLoadRecords: function(o, options, success, store) {
-
-        if (this.lastStoreTransactionId && options.transactionId && this.lastStoreTransactionId !== options.transactionId) {
-            Tine.log.debug('onStoreBeforeLoadRecords - cancelling old transaction request.');
-            return false;
-        }
-
         // save selection -> will be applied onLoad
         if (options.preserveSelection) {
             options.preserveSelection = this.grid.getSelectionModel().getSelections();

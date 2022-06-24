@@ -359,17 +359,6 @@ Ext.override(Ext.Button, {
     },
 });
 
-/**
- * add beforeloadrecords event
- */
-Ext.data.Store.prototype.loadRecords = Ext.data.Store.prototype.loadRecords.createInterceptor(function(o, options, success) {
-    var pass = this.fireEvent('beforeloadrecords', o, options, success, this);
-    if (pass === false) {
-        // fire load event so loading indicator stops
-        this.fireEvent('load', this, this.data.items, options);
-        return false;
-    }
-});
 
 /**
  * state encoding converts null to empty object
