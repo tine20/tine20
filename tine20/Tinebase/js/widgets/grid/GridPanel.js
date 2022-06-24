@@ -53,6 +53,16 @@ Tine.widgets.grid.GridPanel = function(config) {
         this.stateId = this.stateId + '-Touch';
     }
 
+    this.plugins = this.plugins || [];
+
+    if (this.recordClass) {
+        this.plugins.push({
+            ptype: 'ux.itemregistry',
+            key: `${this.recordClass.prototype.appName}-${this.recordClass.prototype.modelName}-GridPanel`
+        });
+        Ext.ux.pluginRegistry.addRegisteredPlugins(this,`${this.recordClass.prototype.appName}-${this.recordClass.prototype.modelName}-GridPanel`);
+    }
+
     Tine.widgets.grid.GridPanel.superclass.constructor.call(this);
 };
 
