@@ -116,7 +116,12 @@ Ext.apply(Tine.Calendar.ColorManager.prototype, {
         var color = this.getStrategy().getColor(event, attendeeRecord);
 
         color = String(color).replace('#', '');
-        if (! color.match(/[0-9a-fA-F]{6}/)) {
+        return this.getSchema(color);
+
+    },
+
+    getSchema(color) {
+        if (! String(color).match(/[0-9a-fA-F]{6}/)) {
             return this.gray;
         }
 
@@ -208,6 +213,19 @@ Tine.Calendar.ColorManager.compare = function(color1, color2, abs) {
     
     return abs ? (Math.abs(diff[0]) + Math.abs(diff[1]) + Math.abs(diff[2])) : diff;
 };
+
+Tine.Calendar.ColorManager.stringToColour = function(str) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    var colour = '#';
+    for (var i = 0; i < 3; i++) {
+        var value = (hash >> (i * 8)) & 0xFF;
+        colour += ('00' + value.toString(16)).substr(-2);
+    }
+    return colour;
+}
 
 Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
     scale: 'medium',

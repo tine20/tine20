@@ -162,11 +162,30 @@ const urlRenderer = function (url) {
 
 Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'url', Tine.Addressbook.urlRenderer, 'displayPanel');
 
+const avatarRenderer = function(n_short, metadata, record) {
+    const fullName = record ? record.get('n_fileas') : n_short;
+    let shortName = record ? record.get('n_short') : n_short;
+    if (! shortName && record) {
+        let names = _.compact([record.get('n_family'), record.get('n_middle'), record.get('n_given')]);
+        if (!names.length && fullName) {
+            names = fullName.split(' ');
+        }
+        if (names.length > 1) {
+            shortName = _.map(names, (n) => { return n.substring(0, 1).toUpperCase() }).join('');
+        } else {
+            shortName = String(names[0]).substring(0, 2);
+        }
+    }
+
+    const colorSchema = Tine.Calendar.colorMgr.getSchema(record && record.get('color') ? record.get('color') : Tine.Calendar.ColorManager.stringToColour(shortName).substring(1,6));
+    return shortName ? `<span class="adb-avatar-wrap" ext:qtip="${fullName}" style="background-color: ${colorSchema.color}; color: ${colorSchema.text}">${shortName}</span>` : '';
+}
 export {
     mailAddressRenderer,
     countryRenderer,
     addressRenderer,
     imageRenderer,
     preferredAddressRender,
-    urlRenderer
+    urlRenderer,
+    avatarRenderer
 }
