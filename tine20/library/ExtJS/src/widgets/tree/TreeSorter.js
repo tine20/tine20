@@ -54,12 +54,14 @@ Ext.tree.TreeSorter = function(tree, config){
     tree.on("insert", this.updateSort, this);
     tree.on("textchange", this.updateSortParent, this);
 
-    var dsc = this.dir && this.dir.toLowerCase() == "desc";
-    var p = this.property || "text";
-    var sortType = this.sortType;
-    var fs = this.folderSort;
-    var cs = this.caseSensitive === true;
-    var leafAttr = this.leafAttr || 'leaf';
+    const dsc = this.dir && this.dir.toLowerCase() === "desc";
+    const p = this.property || "text";
+    const sortType = this.sortType;
+    const fs = this.folderSort;
+    const cs = this.caseSensitive === true;
+    const leafAttr = this.leafAttr || 'leaf';
+    const priorityList = this.priorityList || [];
+    const priorityProperty = this.priorityProperty;
 
     this.sortFn = function(n1, n2){
         if(fs){
@@ -70,14 +72,29 @@ Ext.tree.TreeSorter = function(tree, config){
                 return -1;
             }
         }
-        var v1 = sortType ? sortType(n1) : (cs ? n1.attributes[p] : n1.attributes[p].toUpperCase());
-        var v2 = sortType ? sortType(n2) : (cs ? n2.attributes[p] : n2.attributes[p].toUpperCase());
-        if(v1 < v2){
-            return dsc ? +1 : -1;
-        }else if(v1 > v2){
-            return dsc ? -1 : +1;
-        }else{
-            return 0;
+        
+        const node1Priority = priorityProperty ? priorityList.includes(n1.attributes[priorityProperty]) : false;
+        const node2Priority = priorityProperty ? priorityList.includes(n2.attributes[priorityProperty]) : false;
+
+        if(node1Priority && !node2Priority){
+            return -1;
+        }
+        if(!node1Priority && node2Priority){
+            return +1;
+        }
+        if (node1Priority && node2Priority) {
+            return priorityList.indexOf(n1.attributes[priorityProperty]) > priorityList.indexOf(n2.attributes[priorityProperty]) ? +1 : -1;
+        } else {
+            const v1 = sortType ? sortType(n1) : (cs ? n1.attributes[p] : n1.attributes[p].toUpperCase());
+            const v2 = sortType ? sortType(n2) : (cs ? n2.attributes[p] : n2.attributes[p].toUpperCase());
+
+            if(v1 < v2){
+                return dsc ? +1 : -1;
+            }else if(v1 > v2){
+                return dsc ? -1 : +1;
+            }else{
+                return 0;
+            }
         }
     };
 };

@@ -238,6 +238,16 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         }
 
         Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
+    
+        this.treeSorter = new Ext.tree.TreeSorter(this, {
+            folderSort: true,
+            dir: "asc",
+            doSort : function(node){
+                if(node.ownerTree.getRootNode() !== node) {
+                    node.sort(this.sortFn);
+                }
+            },
+        });
     },
 
     /**
@@ -588,11 +598,13 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         if (appendedNode.leaf && this.hasGrant(appendedNode, this.requiredGrants)) {
             if (this.useContainerColor) {
                 appendedNode.ui.render = appendedNode.ui.render.createSequence(function () {
-                    this.colorNode = Ext.DomHelper.insertAfter(this.iconNode, {
-                        tag: 'span',
-                        html: '&nbsp;&#9673;&nbsp',
-                        style: {color: appendedNode.attributes.container.color || '#808080'}
-                    }, true);
+                    if (!this.colorNode) {
+                        this.colorNode = Ext.DomHelper.insertAfter(this.iconNode, {
+                            tag: 'span',
+                            html: '&nbsp;&#9673;&nbsp',
+                            style: {color: appendedNode.attributes.container.color || '#808080'}
+                        }, true);
+                    }
                 }, appendedNode.ui);
             }
         }
@@ -779,8 +791,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         // var selections = this.getSelectionModel().getSelectedNodes();
 
         this.getSelectionModel().suspendEvents();
-        node.removeAll();
         node.loaded = false;
+        node.removeAll();
 
         this.getSelectionModel().resumeEvents();
     },
