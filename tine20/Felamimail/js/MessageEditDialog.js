@@ -862,8 +862,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this['AddressLoadMask'] = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Loading Mail Addresses')});
             this['AddressLoadMask'].show();
 
-            Tine.Addressbook.searchContacts(filter, null, function (response) {
-                const mailAddresses = Tine.Felamimail.GridPanelHook.prototype.getMailAddresses(response.results);
+            Tine.Addressbook.searchContacts(filter, null, async function (response) {
+                const mailAddresses = await Tine.Felamimail.GridPanelHook.prototype.getMailAddresses(response.results);
                 this.record.set(field, mailAddresses);
                 this.recipientGrid.syncRecipientsToStore([field], this.record, true, false);
                 this['AddressLoadMask'].hide();

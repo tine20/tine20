@@ -2058,3 +2058,6 @@ msgstr "Sieve-Skript anzeigen"
 
 msgid "Resolve to single contact"
 msgstr "In Einzelkontakte umwandeln"
+
+msgid "Loading Recipients..."
+msgstr "Empfänger laden..."

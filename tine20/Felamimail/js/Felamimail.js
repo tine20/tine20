@@ -253,15 +253,17 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             massMailingFlagFn: function(record) {
                 return record && record.hasPoll();
             },
-            addMailFromRecord: function(mailAddresses, record) {
-                Ext.each(record.get('attendee'), function(attender) {
+            addMailFromRecord: async function (mailAddresses, record) {
+                const recipients = [];
+                Ext.each(record.get('attendee'), function (attender) {
                     Tine.log.debug('Tine.Felamimail.Application::initGridPanelHooks/addMailFromRecord() - Calendar attender:');
                     Tine.log.debug(attender);
                     if (attender.user_type === 'user' || attender.user_type === 'groupmember') {
                         attender.user_id.type = 'user';
-                        this.addRecipientTokenFromContact(mailAddresses, attender.user_id);
+                        recipients.push(attender.user_id);
                     }
                 }, this);
+                await this.addRecipientTokenFromContacts(mailAddresses, recipients);
             }
         });
     },
