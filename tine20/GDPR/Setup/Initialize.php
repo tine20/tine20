@@ -42,8 +42,10 @@ class GDPR_Setup_Initialize extends Setup_Initialize
                         TMCC::MODEL_NAME        => GDPR_Model_DataIntendedPurposeRecord::MODEL_NAME_PART,
                         TMCC::REF_ID_FIELD      => 'record',
                         TMCC::DEPENDENT_RECORDS => true,
-                        TMCC::FILTER_OPTIONS    =>
-                            [GDPR_Model_DataIntendedPurposeRecordFilter::OPTIONS_SHOW_WITHDRAWN => true],
+                        TMCC::FILTER_OPTIONS    => [
+                            GDPR_Model_DataIntendedPurposeRecordFilter::OPTIONS_SHOW_WITHDRAWN => true,
+                            'doJoin'                => true,
+                        ],
                     ],
                 ],
             ]
