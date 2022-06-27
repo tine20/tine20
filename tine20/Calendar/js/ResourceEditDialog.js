@@ -126,7 +126,7 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }
                         }, {
                             xtype: 'tinerelationpickercombo',
-                            fieldLabel: this.app.i18n._('Location'),
+                            fieldLabel: this.app.i18n._('Resource Location'),
                             editDialog: this,
                             allowBlank: true,
                             app: 'Addressbook',
