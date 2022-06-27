@@ -116,6 +116,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'adr_lon'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'adr_lat'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'location'             => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
+        'location_record'      => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         'organizer'            => array(Zend_Filter_Input::ALLOW_EMPTY => false,        ),
         'priority'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Int'   ),
         'status'            => array(
@@ -704,6 +705,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
 
         if (empty($_data['adr_lat'])) {
             $_data['adr_lat'] = NULL;
+        }
+
+        if (isset($_data['location_record']) && is_array($_data['location_record'])) {
+            $_data['location_record'] = $_data['location_record']['id'];
         }
         
         if (empty($_data['class'])) {

@@ -9,7 +9,7 @@
         <!-- events -->
         <table>
             <name>cal_events</name>
-            <version>18</version>
+            <version>19</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -110,7 +110,13 @@
                     <type>text</type>
                     <length>1024</length>
                 </field>
-                    <field>
+                <field>
+                    <name>location_record</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
                     <name>organizer</name>
                     <type>text</type>
                     <length>40</length>
@@ -237,6 +243,12 @@
                     <name>organizer</name>
                     <field>
                         <name>organizer</name>
+                    </field>
+                </index>
+                <index>
+                    <name>location_record</name>
+                    <field>
+                        <name>location_record</name>
                     </field>
                 </index>
                 <index>

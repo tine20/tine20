@@ -135,11 +135,35 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     columnWidth: .7
                                 },
                                 items: [[{
-                                    columnWidth: 1,
-                                    fieldLabel: this.app.i18n._('Event Location'),
-                                    name: 'location',
-                                    requiredGrant: 'editGrant',
-                                    maxLength: 255
+                                        xtype:'label',
+                                        width: 105,
+                                        text: this.app.i18n._('Event Location'),
+                                    }, {
+                                        columnWidth: 1/3,
+                                        hideLabel: true,
+                                        name: 'location_record',
+                                        requiredGrant: 'editGrant',
+                                        allowBlank: true,
+                                        xtype: 'addressbookcontactpicker',
+                                        userOnly: false,
+                                        useAccountRecord: false,
+                                        blurOnSelect: true,
+                                        selectOnFocus: true,
+                                        readOnly: false,
+                                        maxLength: 40,
+                                        recordEditPluginConfig: {allowCreateNew: false,},
+                                        listeners: {
+                                            scope: this,
+                                            'select': function (combo, rec) {
+                                                this.form.findField('location').setValue(rec.get('n_fn'));
+                                            }
+                                        }
+                                    }, {
+                                        columnWidth: 2/3,
+                                        hideLabel: true,
+                                        name: 'location',
+                                        requiredGrant: 'editGrant',
+                                        maxLength: 255
                                 }], [{
                                     xtype: 'datetimefield',
                                     fieldLabel: this.app.i18n._('Start Time'),
@@ -426,26 +450,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     type = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'resourceTypes').getById(typeId);
 
                 if (type?.get('is_location')) {
-                    const locationField = this.getForm().findField('location');
-                    if (! locationField.getValue()) {
-                        locationField.setValue(
-                            this.attendeeGridPanel.renderAttenderResourceName(o.record.get('user_id'), {noIcon: true})
-                        );
-                    }
-
-                    var relations = _.get(o.record, 'data.user_id.relations'),
-                        locationId = relations ? _.findIndex(relations, function(k) { return k.type == 'LOCATION'; }) : -1,
-                        locationContact = locationId >= 0 ? relations[locationId].related_record : null;
-                    
-                    if (locationContact) {
-                        if (locationContact.preferred_address == 0) {
-                            this.record.set('adr_lon', locationContact.adr_one_lon);
-                            this.record.set('adr_lat', locationContact.adr_one_lat);
-                        } else {
-                            this.record.set('adr_lon', locationContact.adr_two_lon);
-                            this.record.set('adr_lat', locationContact.adr_two_lat);
-                        }
-                    }
+                    this.setLocationRecord(o.record);
                 }
             }
 
@@ -487,6 +492,34 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
         this.addAttendee();
+    },
+
+    setLocationRecord: function(resource, overwrite = false) {
+        const locationField = this.getForm().findField('location');
+        const locationRecordField = this.getForm().findField('location_record');
+
+        if (! locationField.getValue() || overwrite) {
+            locationField.setValue(
+                this.attendeeGridPanel.renderAttenderResourceName(resource.get('user_id'), {noIcon: true})
+            );
+        }
+
+        var relations = _.get(resource, 'data.user_id.relations'),
+            locationId = relations ? _.findIndex(relations, function(k) { return k.type == 'LOCATION'; }) : -1,
+            locationContact = locationId >= 0 ? relations[locationId].related_record : null;
+
+        if (locationContact && (!locationRecordField.getValue() || overwrite)) {
+            locationRecordField.setValue(locationContact);
+        } else {
+            var siteId = relations ? _.findIndex(relations, function (k) {
+                    return k.type == 'SITE';
+                }) : -1,
+                siteContact = siteId >= 0 ? relations[siteId].related_record : null;
+
+            if (siteContact && (!locationRecordField.getValue() || overwrite)) {
+                locationRecordField.setValue(siteContact);
+            }
+        }
     },
 
     /**
