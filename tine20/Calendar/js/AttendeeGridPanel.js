@@ -343,17 +343,27 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     // set status authkey for contacts and recources so user can edit status directly
                     // NOTE: we can't compute if the user has editgrant to the displaycontainer of an account here!
                     //       WELL we could add the info to search attendee somehow
-                    if (   (o.record.get('user_type') == 'user' && ! o.value.account_id )
-                        || (o.record.get('user_type') == 'resource' && o.record.get('user_id') && o.record.get('user_id').container_id && o.record.get('user_id').container_id.account_grants && o.record.get('user_id').container_id.account_grants.editGrant)) {
+                    if (   (o.record.get('user_type') == 'user' && ! o.value.account_id && !o.record.get('status_authkey'))) {
                         o.record.set('status_authkey', Tine.Tinebase.data.Record.generateUID());
+                    } else if (o.record.get('user_type') == 'resource') {
+                        const grants = lodash.get(o.record, 'data.user_id.container_id.account_grants', {});
+                        if (grants.resourceStatusGrant && !o.record.get('status_authkey')) {
+                            o.record.set('status_authkey', Tine.Tinebase.data.Record.generateUID());
+                        }
                     }
                     
                     o.record.explicitlyAdded = true;
                     o.record.set('checked', true);
+
                     
                     // Set status if the resource has a specific default status
                     if (o.record.get('user_type') == 'resource' && o.record.get('user_id') && o.record.get('user_id').status) {
-                        o.record.set('status', o.record.get('user_id').status);
+                        const grants = lodash.get(o.record, 'data.user_id.container_id.account_grants', {});
+                        if (grants.resourceStatusGrant && o.record.get('user_id').status_with_grant) {
+                            o.record.set('status', o.record.get('user_id').status_with_grant);
+                        } else {
+                            o.record.set('status', o.record.get('user_id').status);
+                        }
                     }
 
                     // resolve groupmembers

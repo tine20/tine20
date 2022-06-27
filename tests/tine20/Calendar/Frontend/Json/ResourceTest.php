@@ -4,7 +4,7 @@
  *
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 20018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -150,6 +150,14 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
                 $expectedGrants = [
                     Calendar_Model_ResourceGrants::EVENTS_SYNC,
                     Calendar_Model_ResourceGrants::GRANT_SYNC,
+                ];
+                break;
+            case Calendar_Model_ResourceGrants::RESOURCE_STATUS:
+                $expectedGrants = [
+                    Calendar_Model_ResourceGrants::RESOURCE_INVITE,
+                    Calendar_Model_ResourceGrants::RESOURCE_STATUS,
+                    Calendar_Model_ResourceGrants::EVENTS_FREEBUSY,
+                    Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY,
                 ];
                 break;
         }
@@ -395,6 +403,16 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
         }
     }
 
+    protected function _preGrantACL($resource, $user, $grants)
+    {
+        $oldGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_testCalendar, true);
+        $oldGrants->addRecord(new Calendar_Model_EventPersonalGrants(array_merge([
+            'account_id'      => $this->_personas[$user]->getId(),
+            'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
+        ], $grants), true));
+        Tinebase_Container::getInstance()->setGrants($this->_testCalendar, $oldGrants, true, false);
+    }
+
     protected function _preRemoveManageResourcesAndFlush()
     {
         // remove manage_resource right
@@ -404,13 +422,23 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
         Tinebase_Container::getInstance()->resetClassCache();
     }
 
-    protected function _preSetTestUserEtc()
+    protected function _preSetTestUser($resource = null, $user = null)
     {
         $this->selfReset['_testUserContact'] = $this->_testUserContact;
         $this->selfReset['_originalTestUser'] = $this->_originalTestUser;
         $this->selfReset['_testCalendar'] = $this->_testCalendar;
-        $this->_originalTestUser = $this->_getPersona('pwulf');
+        $this->_originalTestUser = $this->_getPersona($user ?: 'pwulf');
         Tinebase_Core::setUser($this->_originalTestUser);
+        $this->_testUserContact = null;
+    }
+
+    protected function _preSetTestUserEtc($resource = null, $user = null)
+    {
+        $this->selfReset['_testUserContact'] = $this->_testUserContact;
+        $this->selfReset['_originalTestUser'] = $this->_originalTestUser;
+        $this->selfReset['_testCalendar'] = $this->_testCalendar;
+        $this->_originalTestUser = $this->_getPersona($user ?: 'pwulf');
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
         $this->_testCalendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container([
             'name'           => 'PHPUnit shared Calender container',
             'type'           => Tinebase_Model_Container::TYPE_SHARED,
@@ -493,6 +521,21 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
         }
     }
 
+    protected function _runPrePostFunctions($test, $resource, $preOrPost = 'pre')
+    {
+        if (isset($test[$preOrPost])) {
+            foreach ($test[$preOrPost] as $function) {
+                if (is_array($function)) {
+                    $func = array_shift($function);
+                    array_unshift($function, $resource);
+                    call_user_func_array([$this, $func], $function);
+                } else {
+                    $this->{$function}($resource);
+                }
+            }
+        }
+    }
+
     protected function _runGrantsTests($data)
     {
         foreach ($data as $grant => $tests) {
@@ -503,19 +546,9 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
                 $this->_checkResourceGrants($resource['container_id']['id'], $grant);
 
                 try {
-                    if (isset($test['pre'])) {
-                        foreach ($test['pre'] as $pre) {
-                            $this->{$pre}($resource);
-                        }
-                    }
-
+                    $this->_runPrePostFunctions($test, $resource);
                     $result = $this->_runGrantsTest($test['name'], $test['result'], $resource);
-
-                    if (isset($test['post'])) {
-                        foreach ($test['post'] as $pre) {
-                            $this->{$pre}($resource);
-                        }
-                    }
+                    $this->_runPrePostFunctions($test, $resource, 'post');
 
                     if (isset($test['followUps'])) {
                         foreach ($test['followUps'] as $followUp) {
@@ -523,10 +556,10 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
                         }
                     }
                 } catch (Tinebase_Exception $te) {
-                    static::fail(print_r($test, true) . ' failed with exception ' . get_class($te) . ' '
+                    self::fail(print_r($test, true) . ' failed with exception ' . get_class($te) . ' '
                         . $te->getMessage() . PHP_EOL . $te->getTraceAsString());
                 } catch (PHPUnit_Framework_AssertionFailedError $e) {
-                    static::fail(print_r($test, true) . ' failed with message ' . $e->getMessage());
+                    self::fail(print_r($test, true) . ' failed with message ' . $e->getMessage());
                 }
             }
         }
@@ -742,6 +775,21 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
                 'post' => ['_preRemoveACLsFromTestContainer', '_preResetTestUser'],
                 'followUps' => [['name' => '_getLocalEvent', 'result' => true]]
             ],
+        ]]);
+    }
+
+    public function testResourceStatusGrant()
+    {
+        $this->_runGrantsTests([Calendar_Model_ResourceGrants::RESOURCE_STATUS => [
+            // grant freebusy to jmcblack on test container
+            // invite resource attender should succeed with resource_invite grant, authkey returned
+            // resource status update should be possible
+            ['pre' => [['_preGrantACL', 'jmcblack', [Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY]]],
+                'name' => '_createEventWithResourceAttendee', 'result' => ['succeed' => true, 'authKey' => true],
+                'post' => [['_preSetTestUser', 'jmcblack']],
+                'followUps' => [
+                    ['name' => '_changeResourceAttendeeStatus', 'result' => true]
+                ]],
         ]]);
     }
 

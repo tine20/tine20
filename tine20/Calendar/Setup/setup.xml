@@ -2,7 +2,7 @@
 <application>
     <name>Calendar</name>
     <!-- gettext('Calendar') -->
-    <version>15.0</version>
+    <version>15.1</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
@@ -511,7 +511,7 @@
         <!-- resources -->
         <table>
             <name>cal_resources</name>
-            <version>8</version>
+            <version>9</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -599,6 +599,13 @@
                 </field>
                 <field>
                     <name>status</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <default>NEEDS-ACTION</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>status_with_grant</name>
                     <type>text</type>
                     <length>32</length>
                     <default>NEEDS-ACTION</default>

@@ -95,6 +95,12 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             value: 'NEEDS-ACTION'
                     }), new Tine.Tinebase.widgets.keyfield.ComboBox({
                             app: 'Calendar',
+                            keyFieldName: 'attendeeStatus',
+                            fieldLabel: this.app.i18n._('Default attendee status with status grant'),
+                            name: 'status_with_grant',
+                            value: 'NEEDS-ACTION'
+                    }), new Tine.Tinebase.widgets.keyfield.ComboBox({
+                            app: 'Calendar',
                             keyFieldName: 'freebusyTypes',
                             fieldLabel: this.app.i18n._('Busy Type'),
                             name: 'busy_type'
