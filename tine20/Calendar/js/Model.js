@@ -255,7 +255,9 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
     if (makeEventsPrivate == 1) {
         eventClass =  'PRIVATE';
     }
-
+    
+    var defaultAttendee = Tine.Calendar.Model.Event.getDefaultAttendee(organizer, container),
+        defaultLocationResource = Tine.Calendar.Model.Event.getDefaultLocation(defaultAttendee);
     var data = {
         id: 'new-' + Ext.id(),
         summary: '',
@@ -269,7 +271,9 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         // needed for action updater / save and close in edit dialog
         readGrant: true,
         organizer: organizer,
-        attendee: Tine.Calendar.Model.Event.getDefaultAttendee(organizer, container),
+        attendee: defaultAttendee,
+        location: defaultLocationResource ? defaultLocationResource.name : null,
+        location_record: defaultLocationResource ? Tine.Calendar.Model.Event.getDefaultLocationRecord(defaultLocationResource) : null,
         mute: false
     };
     
@@ -395,6 +399,44 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer, container) {
     }
     
     return defaultAttendee;
+};
+
+Tine.Calendar.Model.Event.getDefaultLocation = function(defaultAttendee) {
+    var location = null;
+    if (defaultAttendee) {
+        _.forEach(defaultAttendee, function(attendee) {
+            if (attendee.user_type == 'resource') {
+                var type = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'resourceTypes').getById(lodash.get(attendee, 'user_id.type', {}))
+                if (type?.get('is_location')) {
+                    location =  attendee.user_id;
+                }
+            }
+        });
+    }
+
+    return location;
+};
+
+Tine.Calendar.Model.Event.getDefaultLocationRecord = function(resource) {
+    var relations = resource.relations,
+        locationId = relations ? _.findIndex(relations, function(k) { return k.type == 'LOCATION'; }) : -1,
+        locationContact = locationId >= 0 ? relations[locationId].related_record : null;
+
+    if (locationContact) {
+        return locationContact;
+    } else {
+        var siteId = relations ? _.findIndex(relations, function (k) {
+                return k.type == 'SITE';
+            }) : -1,
+            siteContact = siteId >= 0 ? relations[siteId].related_record : null;
+
+        if (siteContact) {
+            return siteContact;
+        }
+    }
+    
+
+    return null;
 };
 
 Tine.Calendar.Model.Event.getFilterModel = function() {
