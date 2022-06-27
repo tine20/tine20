@@ -103,6 +103,11 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     const DEFAULT_CALENDAR_STRATEGY = 'defaultCalendarStrategy';
 
     /**
+     * remove all filters on change selection
+     */
+    const REMOVE_ALL_FILTERS = 'removeAllFilters';
+
+    /**
      * fixedCalendars
      */
     const FIXED_CALENDARS = 'fixedCalendars';
@@ -142,6 +147,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULT_EVENTS_RRIVATE,
             self::FIRSTDAYOFWEEK,
             self::DEFAULT_CALENDAR_STRATEGY,
+            self::REMOVE_ALL_FILTERS,
             self::FIXED_CALENDARS,
         );
         
@@ -233,6 +239,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULT_CALENDAR_STRATEGY => array(
                 'label'         => $translate->_('Default calendar strategy'),
                 'description'   => $translate->_('The calendar for new events if no container is selected'),
+            ),
+            self::REMOVE_ALL_FILTERS => array(
+                'label'         => $translate->_('Remove all filters on change selection'),
+                'description'   => $translate->_('On Calendar Change will remove all filters')
             ),
             self::FIXED_CALENDARS => array(
                 'label'         => $translate->_('Fixed Calendars'),
@@ -499,6 +509,13 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                             <label>' . $translate->_('None') . '</label>
                             <value>none</value>
                         </option>
+                    </options>';
+                break;
+            case self::REMOVE_ALL_FILTERS:
+                $preference->value      = 0;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
                     </options>';
                 break;
             case self::FIXED_CALENDARS:

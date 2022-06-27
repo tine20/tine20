@@ -561,8 +561,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 disabled: ! this.record.get('editGrant'),
                 handler: function() {
                     const locationField = this.editDialog.getForm().findField('location');
+                    const locationRecordField = this.editDialog.getForm().findField('location_record');
                     const attendeeName = this.renderAttenderName(attender?.data?.user_id,{noIcon: true}, attender);
                     locationField.setValue(attendeeName);
+                    locationRecordField.setValue(attender?.data?.user_id);
                 }
             }, '-'];
 
@@ -594,6 +596,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 Tine.log.debug('Adding resource hook for attender');
                 var resourceId = attender.get('user_id').id,
                     resource = new Tine.Calendar.Model.Resource(attender.get('user_id'), resourceId),
+                    type = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'resourceTypes').getById(lodash.get(resource, 'data.type', {})),
                     grants = lodash.get(resource, 'data.container_id.account_grants', {});
 
                 items = items.concat(new Ext.Action({
@@ -606,6 +609,17 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         Tine.Calendar.ResourceEditDialog.openWindow({record: resource});
                     }
                 }));
+
+                if (type?.get('is_location')) {
+                    items = items.concat(new Ext.Action({
+                        text: this.app.i18n._('use as location'),
+                        iconCls: 'cal-resource',
+                        scope: this,
+                        handler: function () {
+                            this.editDialog.setLocationRecord(attender, true);
+                        }
+                    }));
+                }
 
                 var exportAction = Tine.widgets.exportAction.getExportButton(
                     Tine.Calendar.Model.Resource, {

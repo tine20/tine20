@@ -60,6 +60,7 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'poll_id'               => array('filter' => 'Tinebase_Model_Filter_Id'),
         'summary'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'location'              => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'location_record'       => array('filter' => 'Addressbook_Model_ContactIdFilter', 'options' => array('modelName' => 'Addressbook_Model_Contact')),
         'description'           => array('filter' => 'Tinebase_Model_Filter_FullText'),
         'is_deleted'            => array('filter' => 'Tinebase_Model_Filter_Bool'),
         'deleted_by'            => array('filter' => 'Tinebase_Model_Filter_User'),

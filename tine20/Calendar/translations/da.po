@@ -220,7 +220,9 @@ msgid "Name for poll"
 msgstr ""
 
 #: js/PollPanel.js:118
-msgid "Create scheduling suggestions and pick the best alternative based on user feedback."
+msgid ""
+"Create scheduling suggestions and pick the best alternative based on user "
+"feedback."
 msgstr ""
 
 #: js/PollPanel.js:119
@@ -280,7 +282,8 @@ msgid "Event not found"
 msgstr ""
 
 #: js/Application.js:165
-msgid "The Event was deleted in the meantime or you don't have access rights to it."
+msgid ""
+"The Event was deleted in the meantime or you don't have access rights to it."
 msgstr ""
 
 #: js/pollClient/src/App.vue:14 tempExtract/vueStrings.js:14
@@ -517,7 +520,9 @@ msgid "Please Change Selection"
 msgstr ""
 
 #: js/MainScreenCenterPanel.js:1170
-msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
+msgid ""
+"Your selection contains recurring events. Recuring events must be deleted "
+"seperatly!"
 msgstr ""
 
 #: js/MainScreenCenterPanel.js:1183
@@ -580,7 +585,9 @@ msgid "Update Status for all Attendee?"
 msgstr ""
 
 #: js/MainScreenCenterPanel.js:1762 js/EventEditDialog.js:213
-msgid "You are about to change the status of the event itself and not just your own status. Do you really want to change the event status for all attendee?"
+msgid ""
+"You are about to change the status of the event itself and not just your own "
+"status. Do you really want to change the event status for all attendee?"
 msgstr ""
 
 #: js/AdminPanel.js:46
@@ -623,7 +630,9 @@ msgid "Import Definition Success!"
 msgstr ""
 
 #: js/ImportDialog.js:113
-msgid "The Ical Import definition has been created successfully! Please wait some minutes to get the events synced by the cronjob."
+msgid ""
+"The Ical Import definition has been created successfully! Please wait some "
+"minutes to get the events synced by the cronjob."
 msgstr ""
 
 #: js/ImportDialog.js:139
@@ -631,7 +640,8 @@ msgid "Choose Import File"
 msgstr ""
 
 #: js/ImportDialog.js:143
-msgid "Please choose the file that contains the records you want to add to Tine 2.0"
+msgid ""
+"Please choose the file that contains the records you want to add to Tine 2.0"
 msgstr ""
 
 #: js/ImportDialog.js:147
@@ -684,11 +694,15 @@ msgid "What should the file you upload look like?"
 msgstr ""
 
 #: js/ImportDialog.js:317
-msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
+msgid ""
+"Tine 2.0 does not understand all kind of files you might want to upload. You "
+"will have to manually adjust your file so Tine 2.0 can handle it."
 msgstr ""
 
 #: js/ImportDialog.js:320
-msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
+msgid ""
+"Following you find a list of all supported import formats and a sample file, "
+"how Tine 2.0 expects your file to look like."
 msgstr ""
 
 #: js/ImportDialog.js:323
@@ -899,7 +913,9 @@ msgid "Sync Events"
 msgstr ""
 
 #: js/Model/ResourceGrants.js:103
-msgid "The grant to synchronise events from this resource calendar. Need Read Events Grant"
+msgid ""
+"The grant to synchronise events from this resource calendar. Need Read "
+"Events Grant"
 msgstr ""
 
 #: js/Model/ResourceGrants.js:104
@@ -907,7 +923,8 @@ msgid "Events Free Busy"
 msgstr ""
 
 #: js/Model/ResourceGrants.js:105
-msgid "The grant to get free/busy information of events from this resource calendar"
+msgid ""
+"The grant to get free/busy information of events from this resource calendar"
 msgstr ""
 
 #: js/Model/ResourceGrants.js:106
@@ -915,7 +932,9 @@ msgid "Edit Events"
 msgstr ""
 
 #: js/Model/ResourceGrants.js:107
-msgid "The grant to respond to event invitations of this resource and to edit events directly saved in this resource calendar"
+msgid ""
+"The grant to respond to event invitations of this resource and to edit "
+"events directly saved in this resource calendar"
 msgstr ""
 
 #: js/Model/ResourceGrants.js:108
@@ -1201,7 +1220,9 @@ msgid "Whole Group or each Member of Group"
 msgstr ""
 
 #: js/AttendeeGridPanel.js:291
-msgid "Choose \"Group\" to filter for the whole group itself. Choose \"Member of Group\" to filter for each member of the group"
+msgid ""
+"Choose \"Group\" to filter for the whole group itself. Choose \"Member of "
+"Group\" to filter for each member of the group"
 msgstr ""
 
 #: js/AttendeeGridPanel.js:296
@@ -1425,7 +1446,9 @@ msgid "Send Notification?"
 msgstr ""
 
 #: js/EventEditDialog.js:665
-msgid "Changes to this event might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
+msgid ""
+"Changes to this event might send notifications. Press the button "
+"\"Notifcation are enabled\" to switch to \"Notification are disabled\""
 msgstr ""
 
 #: js/EventEditDialog.js:705
@@ -1509,7 +1532,8 @@ msgid "Default Start Time"
 msgstr ""
 
 #: Preference.php:172
-msgid "Scroll position on the left time axis, day and week view should start with"
+msgid ""
+"Scroll position on the left time axis, day and week view should start with"
 msgstr ""
 
 #: Preference.php:175
@@ -1541,7 +1565,10 @@ msgid "Get Notification Emails"
 msgstr ""
 
 #: Preference.php:188
-msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
+msgid ""
+"The level of actions you want to be notified about. Please note that "
+"organizers will get notifications for all updates including attendee answers "
+"unless this preference is set to \"Never\""
 msgstr ""
 
 #: Preference.php:191
@@ -1653,7 +1680,9 @@ msgid "On attendee responses too"
 msgstr ""
 
 #: Config.php:273
-msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
+msgid ""
+"Calendars always selected regardless of all filter parameters. A valid use "
+"case might be to force the display of an certain holiday calendar."
 msgstr ""
 
 #: Config.php:280
@@ -1685,7 +1714,9 @@ msgid "Event Status Available"
 msgstr ""
 
 #: Config.php:335
-msgid "Possible event status. Please note that additional event status might impact other calendar systems on export or synchronisation."
+msgid ""
+"Possible event status. Please note that additional event status might impact "
+"other calendar systems on export or synchronisation."
 msgstr ""
 
 #: Config.php:342
@@ -1701,7 +1732,9 @@ msgid "Event Classes Available"
 msgstr ""
 
 #: Config.php:352
-msgid "Possible event classes. Please note that additional event classes might impact other calendar systems on export or synchronisation."
+msgid ""
+"Possible event classes. Please note that additional event classes might "
+"impact other calendar systems on export or synchronisation."
 msgstr ""
 
 #: Config.php:359
@@ -1717,7 +1750,10 @@ msgid "Event Transparencies Available"
 msgstr ""
 
 #: Config.php:369
-msgid "Possible event transparencies. Please note that additional event transparencies might impact other calendar systems on export or synchronisation."
+msgid ""
+"Possible event transparencies. Please note that additional event "
+"transparencies might impact other calendar systems on export or "
+"synchronisation."
 msgstr ""
 
 #: Config.php:376
@@ -1733,7 +1769,9 @@ msgid "Attendee Status Available"
 msgstr ""
 
 #: Config.php:385
-msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or synchronisation."
+msgid ""
+"Possible event attendee status. Please note that additional attendee status "
+"might impact other calendar systems on export or synchronisation."
 msgstr ""
 
 #: Config.php:393
@@ -1753,7 +1791,9 @@ msgid "Attendee Roles Available"
 msgstr ""
 
 #: Config.php:404
-msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or synchronisation."
+msgid ""
+"Possible event attendee roles. Please note that additional attendee roles "
+"might impact other calendar systems on export or synchronisation."
 msgstr ""
 
 #: Config.php:412
@@ -1773,7 +1813,9 @@ msgid "Resource Types Available"
 msgstr ""
 
 #: Config.php:431
-msgid "Possible resource types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation."
+msgid ""
+"Possible resource types. Please note that additional free/busy types might "
+"impact other calendar systems on export or synchronisation."
 msgstr ""
 
 #: Config.php:440
@@ -1825,7 +1867,9 @@ msgid "Free/Busy Types Available"
 msgstr ""
 
 #: Config.php:458
-msgid "Possible free/busy types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation."
+msgid ""
+"Possible free/busy types. Please note that additional free/busy types might "
+"impact other calendar systems on export or synchronisation."
 msgstr ""
 
 #: Config.php:465
@@ -1885,11 +1929,15 @@ msgid "(CalDAV) Skip double events from personal or shared calendar"
 msgstr ""
 
 #: Config.php:553
-msgid "(CalDAV) Skip double events from personal or shared calendar (\"personal\" > Skip events from personal calendar or \"shared\" > Skip events from shared calendar)"
+msgid ""
+"(CalDAV) Skip double events from personal or shared calendar (\"personal\" > "
+"Skip events from personal calendar or \"shared\" > Skip events from shared "
+"calendar)"
 msgstr ""
 
 #: Config.php:562
-msgid "Send notifications to every user with edit permissions of the added resources"
+msgid ""
+"Send notifications to every user with edit permissions of the added resources"
 msgstr ""
 
 #: Config.php:572
@@ -1945,7 +1993,9 @@ msgid "Activate Poll for Events"
 msgstr ""
 
 #: Config.php:626
-msgid "Create alternative Events and let users as well as externals vote for the best option."
+msgid ""
+"Create alternative Events and let users as well as externals vote for the "
+"best option."
 msgstr ""
 
 #: Config.php:631
@@ -1957,7 +2007,9 @@ msgid "Send Tentative Notifications"
 msgstr ""
 
 #: Config.php:641
-msgid "Send notifications to event organiziers of events that are tentative certain days before event is due"
+msgid ""
+"Send notifications to event organiziers of events that are tentative certain "
+"days before event is due"
 msgstr ""
 
 #: Config.php:649 Config.php:650
@@ -1985,7 +2037,9 @@ msgid "Mute Event Notifications for Polls"
 msgstr ""
 
 #: Config.php:672
-msgid "Do not send invitations notifications for alternative events in an active poll."
+msgid ""
+"Do not send invitations notifications for alternative events in an active "
+"poll."
 msgstr ""
 
 #: Config.php:681 Config.php:683
@@ -2143,7 +2197,8 @@ msgid "unknown"
 msgstr ""
 
 #: Model/Attender.php:666
-msgid "This contact has been automatically added by the system as an event attender"
+msgid ""
+"This contact has been automatically added by the system as an event attender"
 msgstr ""
 
 #: Model/Attender.php:669
@@ -2309,7 +2364,9 @@ msgid "Resource Management"
 msgstr ""
 
 #: Controller/Event.php:2265
-msgid "The new recurrence rule is unpredictable. Please choose a valid recurrence rule"
+msgid ""
+"The new recurrence rule is unpredictable. Please choose a valid recurrence "
+"rule"
 msgstr ""
 
 #: Controller/Poll.php:249
@@ -2317,7 +2374,8 @@ msgid "Polls for recurring events are not supported"
 msgstr ""
 
 #: Controller/Poll.php:725
-msgid "This contact has been automatically added by the system as a poll attendee"
+msgid ""
+"This contact has been automatically added by the system as a poll attendee"
 msgstr ""
 
 #: Controller/Poll.php:913
@@ -2498,3 +2556,9 @@ msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] ""
 msgstr[1] ""
+
+msgid "Remove all filters on change selection"
+msgstr "Entferne alle Filter bei Kalenderselektion"
+
+msgid "On Calendar Change will remove all filters"
+msgstr "Beim Wechsel des Kalenders werden alle weiteren Filter entfernt"

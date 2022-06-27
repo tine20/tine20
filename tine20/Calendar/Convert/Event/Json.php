@@ -44,6 +44,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         self::resolveRrule($_record);
         self::resolvePoll($_record);
         self::resolveOrganizer($_record);
+        self::resolveLocationRecord($_record);
         self::resolveGrantsOfExternalOrganizers($_record);
     }
     
@@ -114,6 +115,24 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
             )
         ));
     }
+
+    /**
+     * resolves organizer of given event
+     *
+     * @param Tinebase_Record_RecordSet|Calendar_Model_Event $_events
+     */
+    static public function resolveLocationRecord($_events)
+    {
+        $events = $_events instanceof Tinebase_Record_RecordSet
+            ? $_events : new Tinebase_Record_RecordSet('Calendar_Model_Event', array($_events));
+
+        self::resolveMultipleIdFields($events, array(
+            'Addressbook_Model_Contact' => array(
+                'options' => array('ignoreAcl' => TRUE),
+                'fields'  => array('location_record'),
+            )
+        ));
+    }
     
     /**
      * resolves grants of external organizers events
@@ -170,6 +189,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         Calendar_Model_Attender::resolveAttendee($_records->attendee, TRUE, $_records);
         Calendar_Convert_Event_Json::resolveRrule($_records);
         Calendar_Convert_Event_Json::resolvePoll($_records);
+        Calendar_Convert_Event_Json::resolveLocationRecord($_records);
         Calendar_Controller_Event::getInstance()->getAlarms($_records);
         
         Calendar_Convert_Event_Json::resolveGrantsOfExternalOrganizers($_records);
