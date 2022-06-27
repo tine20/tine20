@@ -76,12 +76,6 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     sortDir: 'ASC',
 
     /**
-     * @type string
-     * @property lastStoreTransactionId
-     */
-    lastStoreTransactionId: null,
-
-    /**
      * if set to false, it is not possible to add the same record handled in this.editDialog
      * this.editDialog must also be set
      *
@@ -172,7 +166,6 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         });
 
         this.on('beforequery', this.onBeforeQuery, this);
-        this.store.on('beforeloadrecords', this.onStoreBeforeLoadRecords, this);
         this.initTemplate();
 
         this.additionalFilters = expandFilter(this.additionalFilterSpec, this.additionalFilters);
@@ -258,27 +251,10 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     onBeforeLoad: function (store, options) {
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.onBeforeLoad.call(this, store, options);
 
-        this.lastStoreTransactionId = options.transactionId = Ext.id();
-
         Ext.apply(options.params, {
             sort: (this.sortBy) ? this.sortBy : this.displayField,
             dir: this.sortDir
         });
-    },
-
-    /**
-     * onStoreBeforeLoadRecords
-     *
-     * @param {Object} o
-     * @param {Object} options
-     * @param {Boolean} success
-     * @param {Ext.data.Store} store
-     */
-    onStoreBeforeLoadRecords: function(o, options, success, store) {
-        if (! this.lastStoreTransactionId || options.transactionId && this.lastStoreTransactionId !== options.transactionId) {
-            Tine.log.debug('Tine.Tinebase.widgets.form.RecordPickerComboBox::onStoreBeforeLoadRecords cancelling old transaction request.');
-            return false;
-        }
     },
 
     /**

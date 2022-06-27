@@ -391,6 +391,8 @@ sortInfo: {
         }
         this.modified = [];
 
+        this.lastTransactionId = 0;
+
         this.addEvents(
             /**
              * @event datachanged
@@ -981,6 +983,7 @@ sortInfo: {
             }
         }
         if (doRequest !== false) {
+            this.lastTransactionId = options.transactionId = ++this.lastTransactionId;
             // Send request to proxy.
             if (this.writer && this.proxy.url && !this.proxy.restful && !Ext.data.Api.hasUniqueUrl(this.proxy, action)) {
                 options.params.xaction = action;    // <-- really old, probaby unecessary.
@@ -1246,6 +1249,11 @@ myStore.reload(lastOptions);
     // Called as a callback by the Reader during a load operation.
     loadRecords : function(o, options, success){
         if (this.isDestroyed === true) {
+            return;
+        }
+        if ((options.transactionId && this.lastTransactionId !== options.transactionId) || this.fireEvent('beforeloadrecords', o, options, success, this) === false) {
+            // fire load event so loading indicator stops
+            this.fireEvent('load', this, this.data.items, options);
             return;
         }
         if(!o || success === false){
