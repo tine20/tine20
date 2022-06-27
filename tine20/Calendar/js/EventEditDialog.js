@@ -30,7 +30,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordClass: Tine.Calendar.Model.Event,
     showContainerSelector: false,
     displayNotes: true,
-    requiredSaveGrant: 'readGrant',
+    requiredSaveGrant: '',
 
     mode: 'local',
 
@@ -136,7 +136,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 },
                                 items: [[{
                                     columnWidth: 1,
-                                    fieldLabel: this.app.i18n._('Location'),
+                                    fieldLabel: this.app.i18n._('Event Location'),
                                     name: 'location',
                                     requiredGrant: 'editGrant',
                                     maxLength: 255
@@ -622,6 +622,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
 
         this.omitCopyTitle = this.record.hasPoll();
+        this.getForm().findField('summary').allowBlank = !this.record.get('editGrant');
         Tine.Calendar.EventEditDialog.superclass.onRecordLoad.call(this);
     },
 

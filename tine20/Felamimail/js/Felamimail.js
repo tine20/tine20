@@ -314,6 +314,9 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         
         Tine.log.info('checking mails' + (folder ? ' for folder ' + folder.get('localname') : '') + ' now: ' + new Date());
         
+        if (!this.getMainScreen()) {
+            return;
+        }
         // if no folder is given, see if there is a folder to check in the folderstore
         if (! folder) {
             folder = this.getNextFolderToUpdate();

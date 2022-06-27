@@ -66,7 +66,7 @@ const init = async () => {
 
     socket.onopen = async (e) => {
         running = true;
-        socket.send({ token: auth.auth_token, jsonApiUrl: Tine.Tinebase.common.getUrl() });
+        socket.send(JSON.stringify({ token: auth.auth_token, jsonApiUrl: Tine.Tinebase.common.getUrl() }));
     };
 
     socket.onmessage = async (event) => {

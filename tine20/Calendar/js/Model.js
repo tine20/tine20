@@ -1025,6 +1025,7 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     {name: 'max_number_of_people', type: 'int'},
     {name: 'type', type: 'keyField', keyFieldConfigName: 'resourceTypes'},
     {name: 'status', type: 'keyField', keyFieldConfigName: 'attendeeStatus'},
+    {name: 'status_with_grant', type: 'keyField', keyFieldConfigName: 'attendeeStatus'},
     {name: 'busy_type', type: 'keyField', keyFieldConfigName: 'freebusyTypes'},
     {name: 'suppress_notification', type: 'bool'},
     {name: 'tags'},

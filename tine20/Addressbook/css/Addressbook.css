@@ -67,3 +67,8 @@
     background-image:url(../../images/icon-set/icon_address_structure.svg) !important;
     background-repeat: no-repeat;
 }
+
+.adb-avatar-wrap {
+    padding: 1px 2px;
+    border-radius: 3px;
+}

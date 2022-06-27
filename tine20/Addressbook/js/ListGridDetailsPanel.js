@@ -85,7 +85,7 @@ Tine.Addressbook.ListGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPane
                         '<span class="preview-panel-bold">',
                             this.il8n._('List') + '<br/>',
                         '</span>',
-                        '<div style="word-wrap:break-word;">{[values.emails]}</div>',
+                        '<div style="word-wrap:break-word;">{}</div>',
                     '</div>',
                 '</div>',
             '</div>'

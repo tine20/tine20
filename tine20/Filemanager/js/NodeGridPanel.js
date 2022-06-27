@@ -127,6 +127,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.getStore().on('load', this.onLoad.createDelegate(this));
         this.getGrid().on('beforeedit', this.onBeforeEdit, this);
 
+        this.postalSubscriptions.push(postal.subscribe({
+            channel: "recordchange",
+            topic: 'Tinebase.Tree_Node.*',
+            callback: this.onRecordChanges.createDelegate(this)
+        }));
+
+
         // // cope with empty selections - dosn't work. It's confusing if e.g. the delte btn is enabled with no selections
         // this.selectionModel.on('selectionchange', function(sm) {
         //     if (sm.getSelections().length) {
@@ -179,7 +186,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         } else if (existingRecord && e.topic.match(/\.delete/)) {
             this.store.remove(existingRecord);
         } else {
-            if (this.isInCurrentGrid(_.get(data, 'path'))) {
+            const path = _.get(data, 'path');
+            if (!path || this.isInCurrentGrid(path)) {
                 this.bufferedLoadGridData({
                     removeStrategy: 'keepBuffered'
                 });

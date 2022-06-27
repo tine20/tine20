@@ -118,6 +118,10 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
                 if ($grant->{Calendar_Model_ResourceGrants::RESOURCE_EDIT}) {
                     $grant->{Calendar_Model_ResourceGrants::RESOURCE_READ}      = true;
                 }
+                if ($grant->{Calendar_Model_ResourceGrants::RESOURCE_STATUS}) {
+                    $grant->{Calendar_Model_ResourceGrants::RESOURCE_INVITE}    = true;
+                    $grant->{Calendar_Model_ResourceGrants::EVENTS_FREEBUSY}    = true;
+                }
             }
 
 

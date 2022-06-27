@@ -111,12 +111,17 @@ const preferredAddressRender = function (v, metadata, record) {
     let preferredAddress = !!+_.get(record.data, 'preferred_address') || !!+_.get(record, 'preferred_address'),
         adr_street = preferredAddress ? 'adr_two_street' : 'adr_one_street',
         adr_postalcode = preferredAddress ? 'adr_two_postalcode' : 'adr_one_postalcode',
-        adr_locality = preferredAddress ? 'adr_two_locality' : 'adr_one_locality'
+        adr_locality = preferredAddress ? 'adr_two_locality' : 'adr_one_locality',
+        contact = record.data ? record.data : record,
+        result = ''
 
-    return Ext.util.Format.htmlEncode(_.get(record.data, adr_street) ? _.get(record.data, adr_street)  : _.get(record, adr_street, ' ')) + ' ' +
-        Ext.util.Format.htmlEncode(_.get(record.data, adr_postalcode) ? _.get(record.data, adr_postalcode)  : _.get(record, adr_postalcode, ' ')) +
-        ' ' + Ext.util.Format.htmlEncode(_.get(record.data, adr_locality) ? _.get(record.data, adr_locality)  : _.get(record, adr_locality, ' '));
+    _.each([adr_street, adr_postalcode, adr_locality], function(value) {
+        if (contact[value] !== null) {
+            result += Ext.util.Format.htmlEncode(_.get(contact, value, ' ')) + ' ';
+        }
+    });
 
+    return result;
 }
 
 Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'addressblock', addressRenderer, 'displayPanel');
@@ -162,11 +167,30 @@ const urlRenderer = function (url) {
 
 Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'url', Tine.Addressbook.urlRenderer, 'displayPanel');
 
+const avatarRenderer = function(n_short, metadata, record) {
+    const fullName = record ? record.get('n_fileas') : n_short;
+    let shortName = record ? record.get('n_short') : n_short;
+    if (! shortName && record) {
+        let names = _.compact([record.get('n_family'), record.get('n_middle'), record.get('n_given')]);
+        if (!names.length && fullName) {
+            names = fullName.split(' ');
+        }
+        if (names.length > 1) {
+            shortName = _.map(names, (n) => { return n.substring(0, 1).toUpperCase() }).join('');
+        } else {
+            shortName = String(names[0]).substring(0, 2);
+        }
+    }
+
+    const colorSchema = Tine.Calendar.colorMgr.getSchema(record && record.get('color') ? record.get('color') : Tine.Calendar.ColorManager.stringToColour(shortName).substring(1,6));
+    return shortName ? `<span class="adb-avatar-wrap" ext:qtip="${fullName}" style="background-color: ${colorSchema.color}; color: ${colorSchema.text}">${shortName}</span>` : '';
+}
 export {
     mailAddressRenderer,
     countryRenderer,
     addressRenderer,
     imageRenderer,
     preferredAddressRender,
-    urlRenderer
+    urlRenderer,
+    avatarRenderer
 }

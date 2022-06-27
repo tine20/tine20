@@ -82,22 +82,6 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
     public function __construct($_dbAdapter = NULL, $_options = array())
     {
         parent::__construct($_dbAdapter, $_options);
-
-        /**
-         * TODO move this code somewhere and make it optionally. Maybe even make it a new controller / frontend action and request the data async
-         */
-        if (Tinebase_Application::getInstance()->isInstalled('Addressbook')
-            && Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_LIST_VIEW))
-        {
-            $this->_additionalColumns['emails'] = new Zend_Db_Expr('(' .
-                $this->_db->select()
-                    ->from($this->_tablePrefix . 'addressbook', array(new Zend_Db_Expr('GROUP_CONCAT(DISTINCT IF(LENGTH(email)>0, email, email_home))')))
-                    ->where($this->_db->quoteIdentifier('id') . ' IN ?', $this->_db->select()
-                        ->from(array('addressbook_list_members' => $this->_tablePrefix . 'addressbook_list_members'), array('contact_id'))
-                        ->where($this->_db->quoteIdentifier('addressbook_list_members.list_id') . ' = ' . $this->_db->quoteIdentifier('addressbook_lists.id'))
-                    ) .
-                ')');
-        }
     }
 
     /**
