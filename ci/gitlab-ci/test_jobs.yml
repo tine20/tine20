@@ -76,7 +76,7 @@ phpstan-analysis:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHPSTAN_ANALYSES_SCHEDULE != "false"
     - if: $CI_COMMIT_TAG && $PHPSTAN_ANALYSES_STRICT == "true"
       allow_failure: false
-  timeout: 30m
+  timeout: 40m
   interruptible: true
 
 parallel-lint-analysis:
