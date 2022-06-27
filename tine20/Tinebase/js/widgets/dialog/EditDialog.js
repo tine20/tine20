@@ -1184,7 +1184,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         var me = this;
         return new Promise(function (fulfill, reject) {
             if (me.getForm().isValid()) {
-                fulfill(true);
+                if ( me?.attachmentsPanel?.isUploading()) {
+                    reject(i18n._('Files are still uploading.'));
+                } else {
+                    fulfill(true);
+                }
             } else {
                 reject(me.getValidationErrorMessage())
             }
