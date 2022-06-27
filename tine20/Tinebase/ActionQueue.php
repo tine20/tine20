@@ -220,7 +220,11 @@
       */
     public function executeAction($message)
     {
-        if (! is_array($message) || ! (isset($message['action']) || array_key_exists('action', $message)) || strpos($message['action'], '.') === FALSE) {
+        if (
+            ! is_array($message)
+            || ! isset($message['action'])
+            || strpos($message['action'], '.') === FALSE
+        ) {
             throw new Tinebase_Exception_NotFound('Could not execute action, invalid message/action param');
         }
 
@@ -231,7 +235,8 @@
         $controller = Tinebase_Core::getApplicationInstance($appName, '', true);
     
         if (! method_exists($controller, $actionName)) {
-            throw new Tinebase_Exception_NotFound('Could not execute action, requested action does not exist');
+            throw new Tinebase_Exception_NotFound('Could not execute action, requested action does not exist: '
+                . $message['action']);
         }
         
         return call_user_func_array(array($controller, $actionName), $message['params']);
