@@ -111,12 +111,17 @@ const preferredAddressRender = function (v, metadata, record) {
     let preferredAddress = !!+_.get(record.data, 'preferred_address') || !!+_.get(record, 'preferred_address'),
         adr_street = preferredAddress ? 'adr_two_street' : 'adr_one_street',
         adr_postalcode = preferredAddress ? 'adr_two_postalcode' : 'adr_one_postalcode',
-        adr_locality = preferredAddress ? 'adr_two_locality' : 'adr_one_locality'
+        adr_locality = preferredAddress ? 'adr_two_locality' : 'adr_one_locality',
+        contact = record.data ? record.data : record,
+        result = ''
 
-    return Ext.util.Format.htmlEncode(_.get(record.data, adr_street) ? _.get(record.data, adr_street)  : _.get(record, adr_street, ' ')) + ' ' +
-        Ext.util.Format.htmlEncode(_.get(record.data, adr_postalcode) ? _.get(record.data, adr_postalcode)  : _.get(record, adr_postalcode, ' ')) +
-        ' ' + Ext.util.Format.htmlEncode(_.get(record.data, adr_locality) ? _.get(record.data, adr_locality)  : _.get(record, adr_locality, ' '));
+    _.each([adr_street, adr_postalcode, adr_locality], function(value) {
+        if (contact[value] !== null) {
+            result += Ext.util.Format.htmlEncode(_.get(contact, value, ' ')) + ' ';
+        }
+    });
 
+    return result;
 }
 
 Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'addressblock', addressRenderer, 'displayPanel');
