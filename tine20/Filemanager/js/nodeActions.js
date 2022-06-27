@@ -167,16 +167,18 @@ Tine.Filemanager.nodeActions.CreateFolder = {
         const grid = _.get(this, 'initialConfig.selectionModel.grid');
         if (grid) {
             const gridWdgt = grid.ownerCt.ownerCt;
+            const defaultFolderName = app.i18n._('New Folder');
             const newRecord = new Tine.Filemanager.Model.Node(Tine.Filemanager.Model.Node.getDefaultData({
-                name: app.i18n._('New Folder'),
+                name: defaultFolderName,
                 type: 'folder',
+                path: `${currentPath}${defaultFolderName}/`,
                 account_grants: {
                     addGrant: true,
                     editGrant: true,
                     deleteGrant: true
                 }
             }));
-            
+
             gridWdgt.newInlineRecord(newRecord, 'name', async (localRecord) => {
                 let text = localRecord.get('name');
                 let forbidden = /[\/\\\:*?"<>|]/;
@@ -186,6 +188,14 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                 }
 
                 return await Tine.Filemanager.nodeBackend.createFolder(`${currentPath}${localRecord.get('name')}/`)
+                    .then((result) => {
+                        if (result.data.path === `/shared/${text}/`) {
+                            Tine.Filemanager.NodeEditDialog.openWindow({
+                                record: result,
+                                activeTab: 3
+                            });
+                        }
+                    })
                     .catch((e) => {
                         window.postal.publish({
                             channel: "recordchange",
@@ -214,6 +224,14 @@ Tine.Filemanager.nodeActions.CreateFolder = {
 
                     const filename = `${currentPath}${text}/`;
                     await Tine.Filemanager.nodeBackend.createFolder(filename)
+                        .then((result) => {
+                            if (result.data.path === `/shared/${text}/`) {
+                                Tine.Filemanager.NodeEditDialog.openWindow({
+                                    record: result,
+                                    activeTab: 3
+                                });
+                            }
+                        })
                         .catch((e) => {
                             if (e.message === "file exists") {
                                 Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), app.i18n._('Folder with this name already exists!'));

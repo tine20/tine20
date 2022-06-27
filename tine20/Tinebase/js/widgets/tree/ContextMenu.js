@@ -194,7 +194,7 @@ Tine.widgets.tree.ContextMenu = {
      */
     addNode: function() {
         Ext.MessageBox.prompt(String.format(i18n._('New {0}'), this.nodeName), String.format(i18n._('Please enter the name of the new {0}:'), this.nodeName), function(_btn, _text) {
-            if( this.scope.ctxNode && _btn == 'ok') {
+            if( this.scope.ctxNode && _btn === 'ok') {
                 if (! _text) {
                     Ext.Msg.alert(String.format(i18n._('No {0} added'), this.nodeName), String.format(i18n._('You have to supply a {0} name!'), this.nodeName));
                     return;
@@ -208,43 +208,33 @@ Tine.widgets.tree.ContextMenu = {
                 };
                 
                 // TODO try to generalize this and move app specific stuff to app
-                
-                if (this.backendModel == 'Node') {
-                    params.application = this.scope.app.appName || this.scope.appName;
-                    var filename = parentNode.attributes.nodeRecord.data.path + '/' + _text;
-                    params.filename = filename;
-                    params.type = 'folder';
-                    params.method = this.backend + ".createNode";
-                }
-                else if (this.backendModel == 'Container') {
+                if (this.backendModel === 'Container') {
                     params.application = this.scope.app.appName || this.scope.appName;
                     params.containerType = Tine.Tinebase.container.path2type(parentNode.attributes.path);
                     params.modelName = this.scope.app.getMainScreen().getActiveContentType();
-                    if(params.modelName == '') params.modelName = this.scope.contextModel;
+                    if(params.modelName === '') params.modelName = this.scope.contextModel;
                 }
                 Ext.Ajax.request({
                     params: params,
                     scope: this,
                     success: function(result, request){
-                        var nodeData = Ext.util.JSON.decode(result.responseText);
+                        const nodeData = Ext.util.JSON.decode(result.responseText);
 
-                        if (nodeData.length == 0) {
+                        if (nodeData.length === 0) {
                             Tine.log.err('Server returned empty node data!');
                             Ext.MessageBox.hide();
                             return;
                         }
 
-                        var newNode = this.scope.loader.createNode(nodeData);
-                        parentNode.expand();
-                        parentNode.appendChild(newNode);
+                        const newNode = this.scope.loader.createNode(nodeData);
+                        this.scope.loader.expandChildNode(parentNode, newNode);
                         this.scope.fireEvent('containeradd', nodeData);
                                               
                         Ext.MessageBox.hide();
                     },
                     failure: function(result, request) {
-                        var nodeData = Ext.util.JSON.decode(result.responseText);
-                        
-                        var appContext = Tine[this.scope.app.appName];
+                        const nodeData = Ext.util.JSON.decode(result.responseText);
+                        const appContext = Tine[this.scope.app.appName];
                         if(appContext && appContext.handleRequestException) {
                             appContext.handleRequestException(nodeData.data);
                         }
@@ -268,7 +258,7 @@ Tine.widgets.tree.ContextMenu = {
                 buttons: Ext.MessageBox.OKCANCEL,
                 value: Ext.util.Format.htmlDecode(node.attributes.longName || node.text),
                 fn: function(_btn, _text){
-                    if (_btn == 'ok') {
+                    if (_btn === 'ok') {
                         if (! _text) {
                             Ext.Msg.alert(String.format(i18n._('Not renamed {0}'), this.nodeName), String.format(i18n._('You have to supply a {0} name!'), this.nodeName));
                             return;

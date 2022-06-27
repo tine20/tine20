@@ -129,10 +129,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     initComponent: function() {
-       
         this.initStore();
-        
-
         this.initColumnModel();
         this.initActions();
         this.sm = new Ext.grid.RowSelectionModel();
@@ -697,7 +694,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.record.set('to', Tine.Tinebase.common.assertComparable([]));
         this.record.set('cc', Tine.Tinebase.common.assertComparable([]));
         this.record.set('bcc', Tine.Tinebase.common.assertComparable([]));
-    
+        
         // update record recipient fields
         this.store.each(function(record, index){
             const addressData = record.get('address') ?? '';
@@ -720,7 +717,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 let emails = _.filter(contacts, (addressData) => {
                     return _.isString(addressData)
                 });
-            
                 if (emails.length > 0) {
                     emails = _.join(emails, '>, ');
                     const resolvedContacts = await Tine.Tinebase.common.findContactsByEmailString(emails);

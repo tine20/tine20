@@ -176,13 +176,13 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
                         cls: 'ux-pp-mode ux-pp-mode-' + this.mode
                     },*/ {
                         tag: 'div',
-                        cls: 'ux-pp-prev'
+                        cls: 'x-mask-trigger ux-pp-prev'
                     }, {
                         tag: 'div',
                         cls: 'ux-pp-period'
                     }, {
                         tag: 'div',
-                        cls: 'ux-pp-next'
+                        cls: 'x-mask-trigger ux-pp-next'
                     }]
                 }]
         };

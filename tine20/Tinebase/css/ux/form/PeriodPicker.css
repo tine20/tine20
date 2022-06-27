@@ -26,22 +26,16 @@
 }
 
 .ux-pp-prev {
-    background-image: url(../../../../library/ExtJS/resources/images/default/grid/page-prev-disabled.gif);
     left: 0px;
-}
-
-.ux-pp-prev:hover {
-    background-image: url(../../../../library/ExtJS/resources/images/default/grid/page-prev.gif);
+    mask-image: url(../../../../images/icon-set/icon_arrow_left.svg);
+    -webkit-mask-image: url(../../../../images/icon-set/icon_arrow_left.svg);
 }
 
 .ux-pp-next {
-    background-image: url(../../../../library/ExtJS/resources/images/default/grid/page-next-disabled.gif);
     right: 0px;
     top: 0px;
-}
-
-.ux-pp-next:hover {
-    background-image: url(../../../../library/ExtJS/resources/images/default/grid/page-next.gif);
+    mask-image: url(../../../../images/icon-set/icon_arrow_right.svg);
+    -webkit-mask-image: url(../../../../images/icon-set/icon_arrow_right.svg);
 }
 
 .ux-pp-prev, .ux-pp-next, .ux-pp-mode {
@@ -51,7 +45,6 @@
     cursor: pointer;
     position: absolute;
     margin: 2px;
-    opacity: 0.6;
 }
 
 .ux-pp-mode {

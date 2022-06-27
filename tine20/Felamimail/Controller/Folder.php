@@ -699,7 +699,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     {
         $sortedFolders = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
         
-        $_folders->sort('localname', 'ASC', 'natcasesort');
+        $_folders->sort('localname', 'ASC', 'asort', SORT_STRING);
         $_folders->addIndices(array('globalname'));
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__

@@ -663,11 +663,29 @@ span.x-tab-strip-text.tine-favicon {
     background-size: 15px 15px !important;
     background-position: 1px 1px !important;
   }
+  &:active {
+    background-position: 1px 2px !important;
+  }
 }
 
 .x-trigger-wrap-focus .x-form-trigger {
   border-bottom: 1px solid @focusColor !important;
   box-sizing: border-box;
+}
+
+// trigger image via mask instead of background-image
+.x-mask-trigger {
+  background-color: black;
+  mask-size: cover;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: cover;
+  -webkit-mask-repeat: no-repeat;
+  &:hover {
+    transform: scale(1.2);
+  }
+  &:active {
+    transform: translateY(1px);
+  }
 }
 
 .x-form-field-wrap .x-form-trigger, // twin triggers e.g. preferences admin dlg

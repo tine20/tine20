@@ -102,12 +102,9 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     
     onRecordChanges: function(data, e) {
         if (data.type === 'folder') {
-            var _ = window.lodash,
-                me = this,
-                path = data.path,
-                parentPath = Tine.Filemanager.Model.Node.dirname(path),
-                node = this.getNodeById(data.id) ?? this.getNodeByPath(path),
-                pathChange = node && node.attributes && node.attributes.nodeRecord.get('path') != path;
+            const path = data.path;
+            const node = this.getNodeById(data.id) ?? this.getNodeByPath(path);
+            const pathChange = node && node.attributes && node.attributes.nodeRecord.get('path') !== path;
 
             if (node && e.topic.match(/\.delete/)) {
                 try {
@@ -141,26 +138,19 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                     node.bufferedReload();
                 }
             }
-            
-            // add / remount node
-            try {
-                me.expandPath(parentPath, '', function (sucess, parentNode) {
-                    const childNode = parentNode.findChild('name', data.name);
-                    if (!childNode) {
-                        parentNode.appendChild(node || me.loader.createNode({...data}));
-                    } else if (childNode !== node) {
-                        // node got duplicated by expand load
-                        try {
-                            node.cancelExpand();
-                            node.remove(true);
-                        } catch (e) {
-                        }
-                    }
-                });
-            } catch (e) {}
         }
     },
-
+    
+    appendTreeNode: function (parentPath, node) {
+        // add / remount node
+        const newNode = this.loader.createNode({...node.data});
+        try {
+            this.expandPath(parentPath, '', (success, parentNode) => {
+                this.loader.expandChildNode(parentNode, newNode);
+            });
+        } catch (e) {}
+    },
+    
     applyDataSafeState: function() {
         const wasLocked = this.dataSafeIsLocked;
         this.dataSafeIsLocked = !! Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName, true).length;
@@ -180,23 +170,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             // }
         }
     },
-
-    /**
-     * autosort new nodes
-     *
-     * @param tree
-     * @param parent
-     * @param appendedNode
-     * @param idx
-     */
-    onAppendNode: function(tree, parent, appendedNode, idx) {
-        if (parent.getDepth() > 0) {
-            parent.sort(function (n1, n2) {
-                return n1.text.localeCompare(n2.text);
-            });
-        }
-    },
-
+    
     /**
      * An empty function by default, but provided so that you can perform a custom action before the initial
      * drag event begins and optionally cancel it.
@@ -363,10 +337,42 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @private
      */
     initContextMenu: function() {
+        const createFolder = {... Tine.Filemanager.nodeActions.CreateFolder};
+        createFolder.handler = () => {
+            const currentPath = _.get(this.ctxNode, 'attributes.nodeRecord.data.path');
+            const nodeName = Tine.Filemanager.Model.Node.getContainerName();
+    
+            if (! currentPath) return;
+            Ext.MessageBox.prompt(this.app.i18n._('New Folder'), this.app.i18n._('Please enter the name of the new folder:'), async function (btn, text) {
+                if (currentPath && btn === 'ok') {
+                    if (!text) {
+                        Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), String.format(this.app.i18n._('You have to supply a {0} name!'), nodeName));
+                        return;
+                    }
+            
+                    let forbidden = /[\/\\\:*?"<>|]/;
+                    if (forbidden.test(text)) {
+                        Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('Illegal characters: ') + forbidden);
+                        return;
+                    }
+            
+                    const filename = `${currentPath}${text}/`;
+                    await Tine.Filemanager.nodeBackend.createFolder(filename)
+                        .then((result) => {
+                            this.appendTreeNode(currentPath, result);
+                        })
+                        .catch((e) => {
+                            if (e.message === "file exists") {
+                                Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('Folder with this name already exists!'));
+                            }
+                        });
+                }
+            }, this);
+        };
         this.ctxMenu = Tine.Filemanager.nodeContextMenu.getMenu({
             actionMgr: Tine.Filemanager.nodeActionsMgr,
             nodeName: this.recordClass.getContainerName(),
-            actions: ['reload', 'createFolder', 'delete', 'rename', 'move', 'edit', 'publish', 'systemLink'],
+            actions: ['reload', createFolder, 'delete', 'rename', 'move', 'edit', 'publish', 'systemLink'],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
@@ -505,7 +511,6 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         this.expandPath(path, attr, function(bSuccess, oLastNode){
             if (oLastNode) {
                 oLastNode.select();
-                this.currentNodePath = oLastNode?.attributes?.nodeRecord?.data?.path;
                 if (Ext.isFunction(callback)) {
                     callback.call(true, oLastNode);
                 }
