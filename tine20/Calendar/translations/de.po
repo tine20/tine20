@@ -1100,6 +1100,9 @@ msgstr "Keine Angabe"
 msgid "Event Location"
 msgstr "Termin Ort"
 
+msgid "Resource Location"
+msgstr "Ressourcen Ort"
+
 #: js/PagingToolbar.js:678
 msgid "From"
 msgstr "Von"

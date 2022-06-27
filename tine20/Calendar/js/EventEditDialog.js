@@ -136,7 +136,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 },
                                 items: [[{
                                     columnWidth: 1,
-                                    fieldLabel: this.app.i18n._('Location'),
+                                    fieldLabel: this.app.i18n._('Event Location'),
                                     name: 'location',
                                     requiredGrant: 'editGrant',
                                     maxLength: 255
