@@ -52,7 +52,7 @@ class Setup_Backend_Factory
         }
         
         if (!class_exists($className)) {
-            throw new Tinebase_Exception_InvalidArgument('Invalid database backend type defined.');
+            throw new Tinebase_Exception_InvalidArgument('Invalid database backend type defined: ' . $className);
         }
         
         $instance = new $className();
