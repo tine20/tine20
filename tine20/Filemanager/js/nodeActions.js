@@ -192,7 +192,7 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                         if (result.data.path === `/shared/${text}/`) {
                             Tine.Filemanager.NodeEditDialog.openWindow({
                                 record: result,
-                                activeTab: 3
+                                activeTabName: 'Grants'
                             });
                         }
                     })
@@ -208,37 +208,6 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                         }
                     });
             });
-        } else {
-            Ext.MessageBox.prompt(app.i18n._('New Folder'), app.i18n._('Please enter the name of the new folder:'), async function (btn, text) {
-                if (currentFolderNode && btn === 'ok') {
-                    if (!text) {
-                        Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), String.format(app.i18n._('You have to supply a {0} name!'), nodeName));
-                        return;
-                    }
-
-                    let forbidden = /[\/\\\:*?"<>|]/;
-                    if (forbidden.test(text)) {
-                        Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), app.i18n._('Illegal characters: ') + forbidden);
-                        return;
-                    }
-
-                    const filename = `${currentPath}${text}/`;
-                    await Tine.Filemanager.nodeBackend.createFolder(filename)
-                        .then((result) => {
-                            if (result.data.path === `/shared/${text}/`) {
-                                Tine.Filemanager.NodeEditDialog.openWindow({
-                                    record: result,
-                                    activeTab: 3
-                                });
-                            }
-                        })
-                        .catch((e) => {
-                            if (e.message === "file exists") {
-                                Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), app.i18n._('Folder with this name already exists!'));
-                            }
-                        });
-                }
-            }, this);
         }
     },
     actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
