@@ -457,13 +457,13 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             }
 
             $cmd = ($structDump !== false ? '{ ' : '')
-                . 'mysqldump --defaults-extra-file=$mycnf'
+                . 'mysqldump --defaults-extra-file=' . $mycnf
                 . ' ' . $ignoreTables
                 . ' --single-transaction --max_allowed_packet=512M'
                 . ' --opt --no-tablespaces --default-character-set=utf8mb4'
                 . ' ' . escapeshellarg($dbName)
                 . ($structDump !== false ? '; ' . $structDump . '; }' : '')
-                . ' | bzip2 > $backupDir/tine20_mysql.sql.bz2';
+                . ' | bzip2 > ' . $backupDir . '/tine20_mysql.sql.bz2';
 
             exec($cmd);
         } finally {

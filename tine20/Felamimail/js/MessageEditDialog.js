@@ -808,18 +808,15 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     initReplyRecipients: async function () {
         // should resolve recipients here , save data
-        var replyTo = this.replyTo.get('headers')['reply-to'];
-    
+        const replyTo = this.replyTo.get('headers')['reply-to'];
+
         if (replyTo) {
             this.to = replyTo;
         } else {
-            var toemail = '<' + this.replyTo.get('from_email') + '>';
-            if (this.replyTo.get('from_name') && this.replyTo.get('from_name') != this.replyTo.get('from_email')) {
-                this.to = this.replyTo.get('from_name') + ' ' + toemail;
-            } else {
-                this.to = toemail;
-            }
-        
+            const toEmail = this.replyTo.get('from_email');
+            const toName = this.replyTo.get('from_name');
+            this.to = (toName && toName !== toEmail) ? `${toName} <${toEmail}>` : toEmail;
+            // we might get the recipient token from server
             if (this.replyTo.get('from')) {
                 this.to = this.replyTo.get('from');
             }

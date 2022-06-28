@@ -1511,19 +1511,23 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         const operator = _.get(pathFilter, 'operator', '');
         const value = operator.match(/equals|in/) ? _.get(pathFilter, 'value', null) : null;
         const pathFilterValue =  value && _.isArray(value) ? value[0] : value;
-
+        
+        return this.isSendFolderPath(pathFilterValue);
+    },
+    
+    isSendFolderPath: function (pathFilterValue) {
         const pathParts = _.isString(pathFilterValue) ? pathFilterValue.split('/') : null;
         if (! pathParts || pathParts.length < 3) {
             return false;
         }
         const composerAccount = this.app.getAccountStore().getById(pathParts[1]);
-
+        
         const sendFolderIds = composerAccount ? [
             composerAccount.getSendFolderId(),
             composerAccount.getSpecialFolderId('templates_folder'),
             composerAccount.getSpecialFolderId('drafts_folder')
         ]: null;
-
+        
         return (-1 !== sendFolderIds.indexOf(pathParts[2]));
     },
 

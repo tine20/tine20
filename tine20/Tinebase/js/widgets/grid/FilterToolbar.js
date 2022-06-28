@@ -994,7 +994,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         // add a default query filter if missing
         if (this.filterStore.find('field', 'query') < 0) {
-            this.addFilter(new this.record({field: 'query'}));
+            const defaultFilter = this.defaultFilter ?? 'query';
+            this.addFilter(new this.record({field: defaultFilter}));
         }
         
         this.supressEvents = false;
