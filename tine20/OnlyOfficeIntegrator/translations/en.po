@@ -1,0 +1,160 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - OnlyOfficeIntegrator\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Frontend/Json.php:42
+msgid "New Document"
+msgstr "New Document"
+
+#: Frontend/Json.php:43
+msgid "New Spreadsheet"
+msgstr "New Spreadsheet"
+
+#: Frontend/Json.php:44
+msgid "New Presentation"
+msgstr "New Presentation"
+
+#: Frontend/Json.php:48
+msgid "New Document (%1$d)"
+msgstr "New Document (%1$d)"
+
+#: Frontend/Json.php:49
+msgid "New Spreadsheet (%1$d)"
+msgstr "New Spreadsheet (%1$d)"
+
+#: Frontend/Json.php:50
+msgid "New Presentation (%1$d)"
+msgstr "New Presentation (%1$d)"
+
+#: Setup/Initialize.php:42
+msgid "Editing"
+msgstr "Editing"
+
+#: Setup/Initialize.php:59
+msgid "Current Editors"
+msgstr "Current Editors"
+
+#: Config.php:47
+msgid "Public OnlyOffice document server url"
+msgstr "Public OnlyOffice document server url"
+
+#: Config.php:49
+msgid "OnlyOffice document server url accessible by the users browser"
+msgstr "OnlyOffice document server url accessible by the users browser"
+
+#: Config.php:57
+msgid "Internal/Server OnlyOffice document server url"
+msgstr "Internal/Server OnlyOffice document server url"
+
+#: Config.php:59
+msgid "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
+msgstr "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
+
+#: Config.php:67
+msgid "Server url of this installation"
+msgstr "Server url of this installation"
+
+#: Config.php:69
+msgid "Server url of this installation accessible by the OnlyOffice document server"
+msgstr "Server url of this installation accessible by the OnlyOffice document server"
+
+#: Config.php:77
+msgid "Enable oo jwt tokens"
+msgstr "Enable oo jwt tokens"
+
+#: Config.php:79
+msgid "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
+msgstr "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
+
+#: Config.php:88
+msgid "OnlyOffice jwt secret string"
+msgstr "OnlyOffice jwt secret string"
+
+#: Config.php:90
+msgid "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
+msgstr "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
+
+#: Config.php:98 Config.php:100
+msgid "Live time of token subscriptions"
+msgstr "Live time of token subscriptions"
+
+#: js/editDocumentAction.js:23
+msgid "Open Document"
+msgstr "Open Document"
+
+#: js/OnlyOfficeEditDialog.js:132
+msgid "Select Image"
+msgstr "Select Image"
+
+#: js/OnlyOfficeEditDialog.js:174
+msgid "Save Copy As"
+msgstr "Save Copy As"
+
+#: js/OnlyOfficeEditDialog.js:181
+msgid "Exporting Document ..."
+msgstr "Exporting Document ..."
+
+#: js/OnlyOfficeEditDialog.js:260
+msgid "Overwrite Existing File?"
+msgstr "Overwrite Existing File?"
+
+#: js/OnlyOfficeEditDialog.js:261
+#, python-brace-format
+msgid "You are about to replace \"{filename}\" by the old version {version}. All newer changes will be lost. Do you want to continue?"
+msgstr "You are about to replace \"{filename}\" by the old version {version}. All newer changes will be lost. Do you want to continue?"
+
+#: js/OnlyOfficeEditDialog.js:274
+msgid "Restoring ..."
+msgstr "Restoring ..."
+
+#: js/OnlyOfficeEditDialog.js:307
+msgid "No Document Specified"
+msgstr "No Document Specified"
+
+#: js/OnlyOfficeEditDialog.js:308
+msgid "Something went wrong, please try again later."
+msgstr "Something went wrong, please try again later."
+
+#: js/OnlyOfficeEditDialog.js:329
+msgid "Outdated Revision"
+msgstr "Outdated Revision"
+
+#: js/OnlyOfficeEditDialog.js:330
+msgid "This revision of the document is outdated, please open the latest revision"
+msgstr "This revision of the document is outdated, please open the latest revision"
+
+#: js/OnlyOfficeEditDialog.js:382
+msgid "Saving Document ..."
+msgstr "Saving Document ..."
+
+#: js/Application.js:21
+msgid "Only Office Integrator"
+msgstr "Only Office Integrator"
+
+#: js/createDocumentAction.js:40
+msgid "Add Document"
+msgstr "Add Document"
+
+#: js/createDocumentAction.js:42
+msgid "Add Text"
+msgstr "Add Text"
+
+#: js/createDocumentAction.js:46
+msgid "Add Spreadsheet"
+msgstr "Add Spreadsheet"
+
+#: js/createDocumentAction.js:50
+msgid "Add Presentation"
+msgstr "Add Presentation"
