@@ -100,7 +100,6 @@ class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      */
     public function getAllApplicationRights()
     {
-        
         $allRights = parent::getAllApplicationRights();
         
         $addRights = array(
