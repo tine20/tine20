@@ -723,11 +723,18 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 ),
             ));
 
-            if (false === ($result = $iterator->iterate())) {
-                $result = array(
+            try {
+                $result = $iterator->iterate();
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
+                $result = false;
+            }
+            if (false === $result) {
+                $result = [
                     'totalcount' => 0,
                     'results'    => [],
-                );
+                ];
             }
         } else {
             $totalCount = 0;
