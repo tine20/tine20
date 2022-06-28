@@ -1,0 +1,16 @@
+{
+  "name": "EFile",
+  "version": "0.0.1",
+  "description": "Tine 2.0 EFile extensions",
+  "main": "eFile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "electroic",
+    "file",
+    "extension"
+  ],
+  "author": "Cornelius Weiß",
+  "license": "AGPL-3.0"
+}

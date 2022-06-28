@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application>
+    <name>Bookmarks</name>
+    <!-- gettext('Bookmarks') -->
+    <version>15.0</version>
+    <status>enabled</status>
+</application>

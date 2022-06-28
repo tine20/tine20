@@ -1,0 +1,14 @@
+{
+  "name": "bookmarks",
+  "version": "0.0.1",
+  "description": "Tine 2.0 Bookmarks",
+  "main": "Bookmarks.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bookmarks"
+  ],
+  "author": "Stefanie Stamer",
+  "license": "AGPL-3.0"
+}

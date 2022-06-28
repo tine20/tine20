@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>bookmarks_import_html</name>
+    <model>Bookmarks_Model_Bookmark</model>
+    <plugin>Bookmarks_Import_Html</plugin>
+    <type>import</type>
+    <dryrun>0</dryrun>
+    <description>Import html formated bookmarks</description>
+    <!-- _("Import html formated bookmarks") -->
+    <example>Bookmarks/Import/examples/bookmarks.html</example>
+    <extension>html</extension>
+    <label>Bookmarks HTML import</label>
+    <!-- _("Bookmarks HTML import") -->
+</config>

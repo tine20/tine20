@@ -1,0 +1,212 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - EFile\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: js/nodeFileMetadataPanel.js:19
+msgid "Jump to File"
+msgstr "Zur Akte springen"
+
+#: js/nodeEFileHookPanel.js:25 Setup/setup.xml:4
+msgid "eFile"
+msgstr "eAkte"
+
+#: js/nodeEFileHookPanel.js:45
+msgid "Enter contents"
+msgstr "Inhalt hinzufügen"
+
+#: js/nodeEFileHookPanel.js:46
+msgid "Contents"
+msgstr "Inhalt"
+
+#: js/createEFileAction.js:21
+#, python-brace-format
+msgid "Create new {0} Folder"
+msgstr "Neuen {0} Ordner anlegen"
+
+#: js/createEFileAction.js:39
+#, python-brace-format
+msgid "Name of the new {0} folder:"
+msgstr "Name des neuen {0} Ordners"
+
+#: js/createEFileAction.js:43
+msgid "Name"
+msgstr "Name"
+
+#: js/createEFileAction.js:51
+msgid "Note: A number prefix will be automatically assigned when creating this folder."
+msgstr "Hinweis: Beim Anlegen des Ordners wird wird automatisch eine Ebenen-Nummer vorangestellt."
+
+#: js/createEFileAction.js:73 js/Application.js:21
+msgid "Electronic File"
+msgstr "eAkte"
+
+#: js/tierTypes.js:7 Config.php:135
+msgid "Master Plan"
+msgstr "Rahmenaktenplan"
+
+#: js/tierTypes.js:11 Config.php:134
+msgid "File Group"
+msgstr "Aktengruppe"
+
+#: js/tierTypes.js:15 Config.php:133
+msgid "File"
+msgstr "Akte"
+
+#: js/tierTypes.js:19 Config.php:136
+msgid "Sub File"
+msgstr "Teilakte"
+
+#: js/tierTypes.js:23 Config.php:130
+msgid "Case"
+msgstr "Vorgang"
+
+#: js/tierTypes.js:27 Config.php:132
+msgid "Document Directory"
+msgstr "Dokumentenordner"
+
+#: js/tierTypes.js:31 Config.php:131
+msgid "Document"
+msgstr "Dokument"
+
+#: Setup/Initialize.php:54 Config.php:123 Config.php:124
+msgid "eFile Tier Type"
+msgstr "eAkten Ebenen-Typ"
+
+#: Setup/Initialize.php:83
+msgid "eFile File Metadata"
+msgstr "eAkten Metadaten"
+
+#: Setup/Initialize.php:115
+msgid "eFile Tier Token"
+msgstr "eAkten Ebenen-Nummer"
+
+#: Setup/Initialize.php:138
+msgid "eFile Tier Reference Number"
+msgstr "Aktenzeichen"
+
+#: Setup/Initialize.php:161
+msgid "eFile Tier Counter"
+msgstr "eAkten Ebenen-Zähler"
+
+#: Config.php:53 Config.php:54
+msgid "Base path"
+msgstr "Basis Ordner"
+
+#: Config.php:68
+msgid "Retention Periods"
+msgstr "Aufbewahrungsfristen"
+
+#: Config.php:69
+msgid "Available retention periods"
+msgstr "Verfügbare Aufbewahrungsfristen"
+
+#: Config.php:74
+msgid "6 Years"
+msgstr "6 Jahre"
+
+#: Config.php:75
+msgid "10 Years"
+msgstr "10 Jahre"
+
+#: Config.php:76
+msgid "Eternally"
+msgstr "Ewig"
+
+#: Config.php:82 Model/FileMetadata.php:222
+msgid "Disposal Type"
+msgstr "Aussonderungsart"
+
+#: Config.php:83
+msgid "Available disposal types"
+msgstr "Verfügbare Aussonderungs-Arten"
+
+#: Config.php:88
+msgid "Quashed"
+msgstr "Kassiert (Vernichtet)"
+
+#: Config.php:89
+msgid "Archived"
+msgstr "Archiviert"
+
+#: Config.php:95 Config.php:96
+msgid "eFile Tier Reference Number Prefix"
+msgstr "eAkten Ebenen-Nummer Präfix"
+
+#: Config.php:110 Config.php:111
+msgid "eFile Token Template"
+msgstr "eAkten Ebenen-Nummer Vorlage"
+
+#: Model/FileMetadata.php:119
+msgid "Duration Start"
+msgstr "Laufzeit von"
+
+#: Model/FileMetadata.php:125
+msgid "Duration End"
+msgstr "Laufzeit bis"
+
+#: Model/FileMetadata.php:134
+msgid "Commissioned Office"
+msgstr "Aktenführende Stelle"
+
+#: Model/FileMetadata.php:140
+msgid "File is Hybrid (a corresponding paper file exists)"
+msgstr "Hybridakte (Es gibt eine korrespondierende Papierakte)"
+
+#: Model/FileMetadata.php:147
+msgid "Location of Paper File"
+msgstr "Standort der Papierakte"
+
+#: Model/FileMetadata.php:154
+msgid "File is Closed"
+msgstr "Die Akte ist geschlossen"
+
+#: Model/FileMetadata.php:156 Model/FileMetadata.php:165
+#: Model/FileMetadata.php:180 Model/FileMetadata.php:192
+#: Model/FileMetadata.php:201
+msgid "Final Decree"
+msgstr "Schlussverfügung"
+
+#: Model/FileMetadata.php:163
+msgid "Final Decree Date"
+msgstr "Datum Schlussverfügung"
+
+#: Model/FileMetadata.php:178
+msgid "Final Decree by"
+msgstr "Schlussverfügung durch"
+
+#: Model/FileMetadata.php:190
+msgid "Retention Period"
+msgstr "Aufbewahrungsfrist"
+
+#: Model/FileMetadata.php:199
+msgid "Retention Period End Date"
+msgstr "Ende der Aufbewahrungsfrist"
+
+#: Model/FileMetadata.php:210
+msgid "File is Disposed"
+msgstr "Die Akte ist ausgesondert"
+
+#: Model/FileMetadata.php:212 Model/FileMetadata.php:224
+#: Model/FileMetadata.php:233 Model/FileMetadata.php:243
+msgid "Disposal"
+msgstr "Aussonderung"
+
+#: Model/FileMetadata.php:231
+msgid "Disposal Date"
+msgstr "Aussonderungsdatum"
+
+#: Model/FileMetadata.php:241
+msgid "Archive Name"
+msgstr "Archivname"

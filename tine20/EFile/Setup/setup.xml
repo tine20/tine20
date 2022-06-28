@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application>
+    <name>EFile</name>
+    <!-- gettext('eFile') -->
+    <version>15.0</version>
+    <order>90</order>
+    <status>enabled</status>
+    <depends>
+        <application>Filemanager</application>
+    </depends>
+    <tables/>
+</application>

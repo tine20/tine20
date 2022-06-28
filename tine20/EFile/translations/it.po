@@ -1,0 +1,212 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - EFile\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Italian\n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: js/nodeFileMetadataPanel.js:19
+msgid "Jump to File"
+msgstr ""
+
+#: js/nodeEFileHookPanel.js:25 Setup/setup.xml:4
+msgid "eFile"
+msgstr ""
+
+#: js/nodeEFileHookPanel.js:45
+msgid "Enter contents"
+msgstr ""
+
+#: js/nodeEFileHookPanel.js:46
+msgid "Contents"
+msgstr ""
+
+#: js/createEFileAction.js:21
+#, python-brace-format
+msgid "Create new {0} Folder"
+msgstr ""
+
+#: js/createEFileAction.js:39
+#, python-brace-format
+msgid "Name of the new {0} folder:"
+msgstr ""
+
+#: js/createEFileAction.js:43
+msgid "Name"
+msgstr ""
+
+#: js/createEFileAction.js:51
+msgid "Note: A number prefix will be automatically assigned when creating this folder."
+msgstr ""
+
+#: js/createEFileAction.js:73 js/Application.js:21
+msgid "Electronic File"
+msgstr ""
+
+#: js/tierTypes.js:7 Config.php:135
+msgid "Master Plan"
+msgstr ""
+
+#: js/tierTypes.js:11 Config.php:134
+msgid "File Group"
+msgstr ""
+
+#: js/tierTypes.js:15 Config.php:133
+msgid "File"
+msgstr ""
+
+#: js/tierTypes.js:19 Config.php:136
+msgid "Sub File"
+msgstr ""
+
+#: js/tierTypes.js:23 Config.php:130
+msgid "Case"
+msgstr ""
+
+#: js/tierTypes.js:27 Config.php:132
+msgid "Document Directory"
+msgstr ""
+
+#: js/tierTypes.js:31 Config.php:131
+msgid "Document"
+msgstr ""
+
+#: Setup/Initialize.php:54 Config.php:123 Config.php:124
+msgid "eFile Tier Type"
+msgstr ""
+
+#: Setup/Initialize.php:83
+msgid "eFile File Metadata"
+msgstr ""
+
+#: Setup/Initialize.php:115
+msgid "eFile Tier Token"
+msgstr ""
+
+#: Setup/Initialize.php:138
+msgid "eFile Tier Reference Number"
+msgstr ""
+
+#: Setup/Initialize.php:161
+msgid "eFile Tier Counter"
+msgstr ""
+
+#: Config.php:53 Config.php:54
+msgid "Base path"
+msgstr ""
+
+#: Config.php:68
+msgid "Retention Periods"
+msgstr ""
+
+#: Config.php:69
+msgid "Available retention periods"
+msgstr ""
+
+#: Config.php:74
+msgid "6 Years"
+msgstr ""
+
+#: Config.php:75
+msgid "10 Years"
+msgstr ""
+
+#: Config.php:76
+msgid "Eternally"
+msgstr ""
+
+#: Config.php:82 Model/FileMetadata.php:222
+msgid "Disposal Type"
+msgstr ""
+
+#: Config.php:83
+msgid "Available disposal types"
+msgstr ""
+
+#: Config.php:88
+msgid "Quashed"
+msgstr ""
+
+#: Config.php:89
+msgid "Archived"
+msgstr ""
+
+#: Config.php:95 Config.php:96
+msgid "eFile Tier Reference Number Prefix"
+msgstr ""
+
+#: Config.php:110 Config.php:111
+msgid "eFile Token Template"
+msgstr ""
+
+#: Model/FileMetadata.php:119
+msgid "Duration Start"
+msgstr ""
+
+#: Model/FileMetadata.php:125
+msgid "Duration End"
+msgstr ""
+
+#: Model/FileMetadata.php:134
+msgid "Commissioned Office"
+msgstr ""
+
+#: Model/FileMetadata.php:140
+msgid "File is Hybrid (a corresponding paper file exists)"
+msgstr ""
+
+#: Model/FileMetadata.php:147
+msgid "Location of Paper File"
+msgstr ""
+
+#: Model/FileMetadata.php:154
+msgid "File is Closed"
+msgstr ""
+
+#: Model/FileMetadata.php:156 Model/FileMetadata.php:165
+#: Model/FileMetadata.php:180 Model/FileMetadata.php:192
+#: Model/FileMetadata.php:201
+msgid "Final Decree"
+msgstr ""
+
+#: Model/FileMetadata.php:163
+msgid "Final Decree Date"
+msgstr ""
+
+#: Model/FileMetadata.php:178
+msgid "Final Decree by"
+msgstr ""
+
+#: Model/FileMetadata.php:190
+msgid "Retention Period"
+msgstr ""
+
+#: Model/FileMetadata.php:199
+msgid "Retention Period End Date"
+msgstr ""
+
+#: Model/FileMetadata.php:210
+msgid "File is Disposed"
+msgstr ""
+
+#: Model/FileMetadata.php:212 Model/FileMetadata.php:224
+#: Model/FileMetadata.php:233 Model/FileMetadata.php:243
+msgid "Disposal"
+msgstr ""
+
+#: Model/FileMetadata.php:231
+msgid "Disposal Date"
+msgstr ""
+
+#: Model/FileMetadata.php:241
+msgid "Archive Name"
+msgstr ""
