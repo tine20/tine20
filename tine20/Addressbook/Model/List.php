@@ -161,6 +161,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                 'type'              => 'FOO',
                 'default'           => array(),
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                self::SHY           => true
             ),
             'email'             => array(
                 'label'             => 'E-Mail', //_('E-Mail')
