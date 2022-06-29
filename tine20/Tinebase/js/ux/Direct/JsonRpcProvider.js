@@ -55,17 +55,22 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
             const method = `${c}.${m.name}`;
             _.each(_.map(m.parameters, 'name'), (paramName, i) => {
                 paramArray[paramName] = args[i];
-            })
-            
-            var cb = args[m.len];
-            
-            if (! Ext.isFunction(cb)) {
+            });
+
+            let cb;
+            if (Ext.isFunction(args[args.length-1])) {
+                // no scope, last arg is cb
+                cb = args[args.length-1];
+                args.push(window);
+            } else if (Ext.isFunction(args[args.length-2])) {
+                cb = args[args.length-2];
+            } else {
                 cb = Ext.emptyFn;
                 args.push(cb);
                 args.push(window);
             }
 
-            args[m.len] = cb.createSequence(function(result, e) {
+            args[args.length-2] = cb.createSequence(function(result, e) {
                 if (e.status === 'failure') {
                     reject(e);
                 } else if (e.type === 'exception') {

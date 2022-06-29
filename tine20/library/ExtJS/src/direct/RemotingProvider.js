@@ -268,10 +268,10 @@ TestAction.multiply(
     },
 
     doCall : function(c, m, args){
-        var data = null, hs = args[m.len], scope = args[m.len+1];
+        var data = null, hs = args[args.length-2], scope = args[args.length-1];
 
-        if(m.len !== 0){
-            data = args.slice(0, m.len);
+        if(args.length-2 > 0){
+            data = args.slice(0, args.length-2);
         }
 
         var t = new Ext.Direct.Transaction({
