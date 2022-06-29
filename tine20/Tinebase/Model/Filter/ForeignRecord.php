@@ -64,6 +64,8 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
 
     protected $_orgOperator = '';
 
+    protected $_doJoin = false;
+
     /**
      * sets operator
      *
@@ -184,6 +186,10 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         if (isset($options['tablename'])) {
             unset($options['tablename']);
         }
+        if (isset($options['subTablename'])) {
+            $options['tablename'] = $options['subTablename'];
+            unset($options['subTablename']);
+        }
         if (isset($options['field'])) {
             unset($options['field']);
         }
@@ -242,6 +248,11 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
     {
         if (! (isset($_options['isGeneric']) || array_key_exists('isGeneric', $_options))) {
             $_options['isGeneric'] = FALSE;
+        }
+        if (isset($_options['filterOptions']['doJoin']) && $_options['filterOptions']['doJoin']) {
+            $this->_doJoin = true;
+        } else {
+            $this->_doJoin = false;
         }
         
         $this->_options = $_options;

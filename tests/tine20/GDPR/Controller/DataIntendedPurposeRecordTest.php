@@ -73,6 +73,57 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
         return $updatedContact;
     }
 
+    public function testSearch()
+    {
+        $createdContact = $this->testCreateByAdbContact();
+        $c2 = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'n_given' => 'unittest'.uniqid(),
+            'email' => Tinebase_Record_Abstract::generateUID() . '@unittest.de',
+            GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME => [
+                new GDPR_Model_DataIntendedPurposeRecord([
+                    'intendedPurpose' => $this->_dataIntendedPurpose1->getId(),
+                    'agreeDate' => Tinebase_DateTime::now(),
+                    'agreeComment' => 'well, I talked the contact into it',
+                ], true),
+            ]
+        ], true));
+
+        $result = Addressbook_Controller_Contact::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+                ['field' => GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME, 'operator' => 'definedBy', 'value' => [
+                    ['field' => 'intendedPurpose', 'operator' => 'equals', 'value' => $this->_dataIntendedPurpose2->getId()],
+                ]],
+            ]
+        ));
+
+        $this->assertSame(1, $result->count());
+        $this->assertSame($createdContact->getId(), $result->getFirstRecord()->getId());
+
+        $result = Addressbook_Controller_Contact::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+                ['field' => GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME, 'operator' => 'definedBy', 'value' => [
+                    ['field' => 'intendedPurpose', 'operator' => 'not', 'value' => $this->_dataIntendedPurpose1->getId()],
+                ]],
+            ]
+        ));
+
+        $this->assertSame(1, $result->count());
+        $this->assertSame($createdContact->getId(), $result->getFirstRecord()->getId());
+
+        $result = Addressbook_Controller_Contact::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+                ['field' => GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME, 'operator' => 'notDefinedBy', 'value' => [
+                    ['field' => 'intendedPurpose', 'operator' => 'equals', 'value' => $this->_dataIntendedPurpose2->getId()],
+                ]],
+            ]
+        ));
+
+        $this->assertGreaterThan(1, $result->count());
+        $ids = $result->getArrayOfIds();
+        $this->assertNotContains($createdContact->getId(), $ids);
+        $this->assertContains($c2->getId(), $ids);
+    }
+
     public function testUpdate()
     {
         $createdContact = $this->testCreateByAdbContact();
