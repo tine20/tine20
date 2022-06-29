@@ -1150,10 +1150,18 @@ EOS
         $this->assertTrue(fread($node->get(), 10000) == file_get_contents($updateFile), 'content not updated');
     }
 
+    public function testCreateFile()
+    {
+        $parent = $this->testgetNodeForPath_webdav_filemanager_shared_unittestdirectory();
+        $rc = fopen('php://temp', 'r');
+        $etag = $parent->createFile('AR-0394xa5 => GS-00sb064', $rc);
+        fclose($rc);
+        self::assertRegExp('/"[a-z0-9]+"/', $etag);
+    }
+
     public function testUpdateFileWithOCMTime()
     {
         $node = $this->testgetNodeForPath_webdav_filemanager_shared_unittestdirectory_file();
-        $filename = dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png';
         $updateFile = dirname(__FILE__) . '/../../Tinebase/files/tine_logo_setup.png';
 
         $mtime = Tinebase_DateTime::now()->subDay(1);
