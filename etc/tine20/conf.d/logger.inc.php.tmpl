@@ -1,18 +1,19 @@
 <?php
 return [
-    'logger' => array (
+    'logger' => [
         'active' => true,
         'filename' => '{{getv "/logger/filename" "php://stdout"}}',
         'priority' => {{getv "/logger/priority" "5"}},
         'logruntime' => true,
         'logdifftime' => true,
         'traceQueryOrigins' => true,
+        'colorize' => {{ getv "/logger/colorize" "false" }},
         {{if exists "/logger/additionalwriters/filename"}}
-        'additionalWriters' => array(array(
+        'additionalWriters' => [[
             'active' => true,
             'filename' => '{{getv "/logger/additionalwriters/filename"}}',
             'priority' => {{getv "/logger/additionalwriters/priority" "5"}},
-        )),
+        ]],
         {{end}}
-    ),
+    ],
 ];
