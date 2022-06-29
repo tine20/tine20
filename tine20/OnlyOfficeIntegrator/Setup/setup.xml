@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application>
+    <name>OnlyOfficeIntegrator</name>
+    <version>15.1</version>
+    <order>200</order>
+    <depends>
+        <application>Filemanager</application>
+    </depends>
+</application>
