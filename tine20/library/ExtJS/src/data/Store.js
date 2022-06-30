@@ -1251,7 +1251,7 @@ myStore.reload(lastOptions);
         if (this.isDestroyed === true) {
             return;
         }
-        if ((options.transactionId && this.lastTransactionId !== options.transactionId) || this.fireEvent('beforeloadrecords', o, options, success, this) === false) {
+        if (options && options.add !== true && ((options.transactionId && this.lastTransactionId !== options.transactionId) || this.fireEvent('beforeloadrecords', o, options, success, this) === false)) {
             // fire load event so loading indicator stops
             this.fireEvent('load', this, this.data.items, options);
             return;
