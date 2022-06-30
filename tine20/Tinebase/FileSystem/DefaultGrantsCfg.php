@@ -13,14 +13,14 @@ class Tinebase_FileSystem_DefaultGrantsCfg
                         ['field' => 'id', 'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT],
                     ],
                     'account_type' => 'user',
-                ], array_fill_keys(Tinebase_Model_Grants::getAllGrants(), true)), [
+                ], array_fill_keys(Tinebase_Model_Grants::getAllGrants(), true))/*, [
                     'account_id' => [
                         ['field' => 'id', 'operator' => 'equals', 'value' => Tinebase_Group::DEFAULT_USER_GROUP],
                     ],
                     'account_type' => 'group',
                     Tinebase_Model_Grants::GRANT_READ   => true,
                     Tinebase_Model_Grants::GRANT_SYNC   => true,
-                ], array_merge([
+                ]*/, array_merge([
                     'account_id' => [
                         ['field' => 'id', 'operator' => 'equals', 'value' => Tinebase_Group::DEFAULT_ADMIN_GROUP],
                     ],

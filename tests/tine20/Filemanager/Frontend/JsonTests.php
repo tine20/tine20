@@ -2274,7 +2274,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $child['acl_node'] = '';
         $childWithoutPersonalGrants = $this->_getUit()->saveNode($child);
 
-        self::assertEquals(3, count($childWithoutPersonalGrants['grants']), 'node should have parent grants again - '
+        self::assertEquals(2, count($childWithoutPersonalGrants['grants']), 'node should have parent grants again - '
             . print_r($childWithoutPersonalGrants['grants'], true));
     }
 

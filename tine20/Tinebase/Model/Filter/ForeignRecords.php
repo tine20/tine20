@@ -52,6 +52,45 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
      */
     public function appendFilterSql($_select, $_backend)
     {
+        if ($this->_doJoin && $this->_filterGroup) {
+            $groupSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
+            $joinBackend = $this->_getController()->getBackend();
+            Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($groupSelect, $this->_filterGroup, $joinBackend);
+
+            $db = $_backend->getAdapter();
+            $orgField = $this->_field;
+            $this->_field = 'id';
+            $not = false;
+            if (strpos($this->_operator, 'not') === 0) {
+                $not = true;
+            }
+            try {
+                if (!$not) {
+                    $_select->join(
+                        [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
+                        $this->_getQuotedFieldName($_backend) . ' = ' .
+                        $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField']),
+                        []
+                    );
+                    $groupSelect->appendWhere();
+                } else {
+                    $_select->joinLeft(
+                        [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
+                        $this->_getQuotedFieldName($_backend) . ' = ' .
+                        $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField'])
+                        . ' AND (' . $groupSelect->getSQL() . ')',
+                        []
+                    );
+
+                    $_select->where($this->_options['subTablename'] . '.id IS NULL');
+                }
+            } finally {
+                $this->_field = $orgField;
+            }
+
+            return;
+        }
+
         if (! is_array($this->_foreignIds) && null !== $this->_filterGroup) {
             $this->_foreignIds = array_keys($this->_getController()
                 ->search($this->_filterGroup, null, false, $this->_options['refIdField']));

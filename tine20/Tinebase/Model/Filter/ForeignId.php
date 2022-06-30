@@ -51,7 +51,22 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
         if (! isset($_options['controller']) || ! isset($_options['filtergroup'])) {
             throw new Tinebase_Exception_InvalidArgument('a controller and a filtergroup must be specified in the options');
         }
+
         parent::_setOptions($_options);
+    }
+
+    /**
+     * get foreign filter group
+     *
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    protected function _setFilterGroup()
+    {
+        if ($this->_doJoin) {
+            $this->_options['subTablename'] = uniqid();
+        }
+
+        return parent::_setFilterGroup();
     }
     
     /**
@@ -62,6 +77,24 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
      */
     public function appendFilterSql($_select, $_backend)
     {
+        /*if ($this->_doJoin && $this->_filterGroup) {
+        // this also needs to implement NOT logic
+            $groupSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
+            $joinBackend = $this->_getController()->getBackend();
+            /** @var Tinebase_ModelConfiguration $mc *
+            $mc = $this->_getController()->getModel()::getConfiguration();
+            $db = $_backend->getAdapter();
+            $_select->join(
+                [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
+                $this->_getQuotedFieldName($_backend) . ' = ' .
+                    $db->quoteIdentifier($this->_options['subTablename'] . '.' . ($mc ? $mc->getIdProperty() : 'id')),
+                []
+            );
+            Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($groupSelect, $this->_filterGroup, $joinBackend);
+            $groupSelect->appendWhere();
+            return;
+        }*/
+
         if (! is_array($this->_foreignIds) && null !== $this->_filterGroup) {
             $this->_foreignIds = $this->_getController()->search($this->_filterGroup, null, false, true);
         }
