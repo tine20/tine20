@@ -62,17 +62,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * wait for changes
-     * 
-     * @todo do we still need this?
+     * ping
+     *
+     * NOTE: auth & outdated client gets checked in server
      */
     public function ping()
     {
-        Tinebase_Session::writeClose(true);
-        sleep(10);
-        return array('changes' => 'contacts');
+        return 'ack';
     }
-    
+
     /**
      * get list of translated country names
      * 
