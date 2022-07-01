@@ -91,8 +91,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 xtype: 'tw-uidtriggerfield',
                                 fieldLabel: this.app.i18n._('ID'),
                                 name: 'inventory_id',
-                                maxLength: 100,
-                                allowBlank: false
+                                maxLength: 100
                             }],
                             [{
                                 columnWidth: 1,

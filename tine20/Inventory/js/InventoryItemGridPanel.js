@@ -30,5 +30,9 @@ Ext.ns('Tine.Inventory');
  */
 Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     multipleEdit: true,
-    copyEditAction: true
+    copyEditAction: true,
+    gridConfig: {
+        enableDragDrop: true,
+        ddGroup: 'containerDDGroup'
+    }
 });
