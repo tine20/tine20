@@ -1610,7 +1610,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
                 $record = $_controller->get($_modification->record_id, NULL, true, true);
                 $record->applyDiff($diff);
-                $_controller->update($record);
+                $_controller->update($record, true, true);
                 break;
 
             case Tinebase_Timemachine_ModificationLog::DELETED:
