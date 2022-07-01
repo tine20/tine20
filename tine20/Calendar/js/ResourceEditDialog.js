@@ -9,6 +9,7 @@
  */
  
 Ext.ns('Tine.Calendar');
+import FieldInfoPlugin from "ux/form/FieldInfoPlugin";
 
 /**
  * @namespace Tine.Calendar
@@ -74,7 +75,8 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n._('Email'),
                         allowBlank: false,
                         name: 'email',
-                        vtype: 'email'
+                        vtype: 'email',
+                        plugins: [new FieldInfoPlugin({qtip: this.app.i18n._('The email address of the resource. It is needed to identify the resource on external calendar applications and synchronised devices. Therefore the email Address needs to be unique. It does not have to be an actual existing Address though.')})]
                     },  new Tine.Tinebase.widgets.keyfield.ComboBox({
                         app: 'Calendar',
                         keyFieldName: 'resourceTypes',
