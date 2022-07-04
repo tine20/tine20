@@ -481,6 +481,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     /**
      * delete email account contact
      *
+     * @param array $ids array of account ids
      * @return void
      * @throws Tinebase_Exception
      * @throws Tinebase_Exception_AccessDenied
@@ -503,9 +504,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                     if (!empty($emailAccount->contact_id)) {
                         try {
                             $contact = Addressbook_Controller_Contact::getInstance()->get($emailAccount->contact_id);
-                            // hard delete contact in admin module
-                            $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-                            $contactsBackend->delete($contact->getId());
+                            if ($contact->type !== Addressbook_Model_Contact::CONTACTTYPE_USER) {
+                                // hard delete contact in admin module
+                                $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+                                $contactsBackend->delete($contact->getId());
+                            }
                         } catch (Exception $e) {
                             continue;
                         }
@@ -1244,7 +1247,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             ) {
                 Felamimail_Controller_Sieve::getInstance()->updateAutoMoveNotificationScript($updatedRecord);
             }
-            
+
             // update sieve script too
             if (is_array($record->sieve_vacation) && is_array($record->sieve_rules)) {
                 $sieveRecord = new Felamimail_Model_Sieve_Vacation($record->sieve_vacation, TRUE);
@@ -1723,10 +1726,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             // skip all special update handling
             $account = $this->_backend->update($account);
         }
-        
+
         return $account;
     }
-    
+
     /**
      * @param Tinebase_Model_User|string|null $_accountId
      * @return Felamimail_Model_Account|null

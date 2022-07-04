@@ -242,18 +242,9 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
     {
         $this->_testNeedsTransaction();
         
-        $credentials = TestServer::getInstance()->getTestCredentials();
-        $accountData = [
-            'email' =>  Tinebase_Record_Abstract::generateUID() . '@' . TestServer::getPrimaryMailDomain(),
-            'type' => Felamimail_Model_Account::TYPE_USER,
-            'password' => $credentials['password'],
-            'user_id' => $this->_personas['sclever']->toArray(),
-            'visibility' => Felamimail_Model_Account::VISIBILITY_DISPLAYED
-        ];
+        $account = $this->_createExternalAccount(Felamimail_Model_Account::VISIBILITY_DISPLAYED);
 
-        $account = null;
         try {
-            $account = $this->_json->saveEmailAccount($accountData);
             
             $contact = Addressbook_Controller_Contact::getInstance()->get($account['contact_id']);
 
@@ -264,9 +255,6 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
             $account['visibility'] = Felamimail_Model_Account::VISIBILITY_HIDDEN;
             $account = $this->_json->saveEmailAccount($account);
             self::assertNull($account['contact_id']);
-
-            $this->expectException('Tinebase_Exception_NotFound');
-            $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
         } finally {
             if ($account) {
                 $this->_json->deleteEmailAccounts([$account['id']]);
@@ -335,16 +323,17 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
      *
      * @return array
      */
-    protected function _createExternalAccount()
+    protected function _createExternalAccount($visibility=Felamimail_Model_Account::VISIBILITY_HIDDEN)
     {
         $this->_uit = $this->_json;
         $credentials = TestServer::getInstance()->getTestCredentials();
         $accountdata = [
-            'email' => $this->_personas['sclever']->accountEmailAddress,
+            'email' => Tinebase_Core::getUser()->accountEmailAddress,
             'type' => Felamimail_Model_Account::TYPE_USER,
-            'user' => $this->_personas['sclever']->accountEmailAddress,
+            'user' => Tinebase_Core::getUser()->accountEmailAddress,
             'password' => $credentials['password'],
             'user_id' => Tinebase_Core::getUser()->getId(),
+            'visibility' => $visibility
         ];
         return $this->_json->saveEmailAccount($accountdata);
     }
@@ -366,6 +355,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
             return ($account['id'] === $movedaccount['id']);
         });
         self::assertEquals(1, count($scleverExtraAccounts), 'sclever account is missing');
+        @todo fix me to add external accounts
         */
     }
 
