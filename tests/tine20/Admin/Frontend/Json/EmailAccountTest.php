@@ -304,7 +304,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
             'type' => Felamimail_Model_Account::TYPE_USER,
             'user' => $this->_personas['sclever']->accountEmailAddress,
             'password' => $credentials['password'],
-            'user_id' => $this->_personas['sclever']->toArray(),
+            'user_id' => Tinebase_Core::getUser()->getId(),
         ];
         return $this->_json->saveEmailAccount($accountdata);
     }
@@ -312,15 +312,21 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
     public function testMoveExternalAccountToAnotherUser()
     {
         $account = $this->_createExternalAccount();
-        $account['user_id'] = Tinebase_Core::getUser()->toArray();
-        $movedaccount = $this->_json->saveEmailAccount($account);
-
-        $json = new Felamimail_Frontend_Json();
+        $account['user_id'] = $this->_personas['sclever']['accountId'];
+        try {
+            $movedaccount = $this->_json->saveEmailAccount($account);
+            self::fail('it should not be possible to change external accounts to another user');
+        } catch (Tinebase_Exception_SystemGeneric $ted) {
+            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            self::assertEquals($translate->_('Can´t add additional personal external account for another user account.'), $ted->getMessage());
+        }
+        /*$json = new Felamimail_Frontend_Json();
         $result = $json->searchAccounts([]);
         $scleverExtraAccounts = array_filter($result['results'], function($account) use ($movedaccount) {
             return ($account['id'] === $movedaccount['id']);
         });
         self::assertEquals(1, count($scleverExtraAccounts), 'sclever account is missing');
+        */
     }
 
     public function testUpdateSystemAccountWithDuplicateEmailAddress()
