@@ -271,6 +271,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 $this->_createUserInternalEmailUser($_record);
                 // we dont need a credential cache here neither
                 return;
+            case Felamimail_Model_Account::TYPE_USER:
+                if ($_record->user_id !== Tinebase_Core::getUser()->getId()) {
+                    $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__
+                        . '::' . __LINE__ . ' Can´t add additional personal external account for another user account.');
+                    throw new Tinebase_Exception_SystemGeneric($translation->_('Can´t add additional personal external account for another user account.'));
+                }
             default:
                 if (! $_record->user || ! $_record->password) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__
@@ -720,6 +727,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             case Felamimail_Model_Account::TYPE_USER_INTERNAL:
                 $this->_beforeUpdateUserInternalAccount($_record, $_oldRecord);
                 break;
+            case Felamimail_Model_Account::TYPE_USER:
+                if ($_record->user_id !== Tinebase_Core::getUser()->getId()) {
+                    $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__
+                        . '::' . __LINE__ . ' Can´t add additional personal external account for another user account.');
+                    throw new Tinebase_Exception_SystemGeneric($translation->_('Can´t add additional personal external account for another user account.'));
+                }
             default:
                 $this->_beforeUpdateStandardAccount($_record, $_oldRecord);
         }
