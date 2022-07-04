@@ -2856,3 +2856,9 @@ msgstr "Thema ⏎ Organisator ⏎ Lokalität"
 
 msgid "The email address of the resource. It is needed to identify the resource on external calendar applications and synchronised devices. Therefore the email Address needs to be unique. It does not have to be an actual existing Address though."
 msgstr "E-Mail Adresse der Ressource. Diese wird benötigt um die Ressource auf externen Kalendern und Sync-Devices zu identifizieren. Die E-Mail Adresse muss daher eindeutig sein. Es ist nicht notwendig, dass die Adresse tatsächlich existiert."
+
+msgid "Remove all filters on change selection"
+msgstr "Entferne alle Filter bei Kalenderselektion"
+
+msgid "On Calendar Change will remove all filters"
+msgstr "Beim Wechsel des Kalenders werden alle weiteren Filter entfernt"

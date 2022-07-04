@@ -2661,3 +2661,9 @@ msgstr "Default attendee status with status grant"
 
 msgid "Default Status with status grant"
 msgstr "Default Status with status grant"
+
+msgid "Remove all filters on change selection"
+msgstr "Remove all filters on change selection"
+
+msgid "On Calendar Change will remove all filters"
+msgstr "On Calendar Change will remove all filters"
