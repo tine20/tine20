@@ -88,7 +88,7 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         //@TODO improve detection or pipe as config
         this.isMainScreenFilterTree = this.hasContextMenu;
 
-        this.removeAllFilters = this.app.getRegistry().get('preferences').get('removeAllFilters');
+        this.removeFiltersOnSelectContainer = this.app ? this.app.getRegistry().get('preferences').get('removeFiltersOnSelectContainer') : false;
 
         // only apply filter plugin when used as mainscreen leftpanel
         if (this.isMainScreenFilterTree) {

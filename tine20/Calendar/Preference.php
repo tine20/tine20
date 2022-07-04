@@ -105,7 +105,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     /**
      * remove all filters on change selection
      */
-    const REMOVE_ALL_FILTERS = 'removeAllFilters';
+    const REMOVE_FILTERS_ON_SELECT_CONTAINER = 'removeFiltersOnSelectContainer';
 
     /**
      * fixedCalendars
@@ -147,7 +147,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULT_EVENTS_RRIVATE,
             self::FIRSTDAYOFWEEK,
             self::DEFAULT_CALENDAR_STRATEGY,
-            self::REMOVE_ALL_FILTERS,
+            self::REMOVE_FILTERS_ON_SELECT_CONTAINER,
             self::FIXED_CALENDARS,
         );
         
@@ -240,7 +240,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 'label'         => $translate->_('Default calendar strategy'),
                 'description'   => $translate->_('The calendar for new events if no container is selected'),
             ),
-            self::REMOVE_ALL_FILTERS => array(
+            self::REMOVE_FILTERS_ON_SELECT_CONTAINER => array(
                 'label'         => $translate->_('Remove all filters on change selection'),
                 'description'   => $translate->_('On Calendar Change will remove all filters')
             ),
@@ -511,7 +511,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                         </option>
                     </options>';
                 break;
-            case self::REMOVE_ALL_FILTERS:
+            case self::REMOVE_FILTERS_ON_SELECT_CONTAINER:
                 $preference->value      = 0;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>

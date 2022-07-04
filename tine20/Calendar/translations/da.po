@@ -2556,9 +2556,3 @@ msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] ""
 msgstr[1] ""
-
-msgid "Remove all filters on change selection"
-msgstr "Entferne alle Filter bei Kalenderselektion"
-
-msgid "On Calendar Change will remove all filters"
-msgstr "Beim Wechsel des Kalenders werden alle weiteren Filter entfernt"
