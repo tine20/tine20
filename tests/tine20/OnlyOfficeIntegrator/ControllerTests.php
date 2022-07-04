@@ -855,6 +855,26 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
         $this->_uit->updateStatus($token);
     }
 
+    public function testCallConversionService()
+    {
+        $this->markTestSkipped('use this test to debug the conversion service locally');
+        
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $editorCfg = $this->_jsonTest->testGetEditorConfigForTempFile(false);
+
+        $result = OnlyOfficeIntegrator_Controller::getInstance()->callConversionService([
+            'async' => false,
+            'filetype' => 'txt',
+            'outputtype' => 'pdf',
+            'title' => 'Example Document Title',
+            'url' => $editorCfg['document']['url'],
+            'key' => $editorCfg['document']['key'],
+        ]);
+
+        print_r($result);
+    }
+
     public function testCallCmdServiceDropFailure1()
     {
         Tinebase_FileSystem::getInstance()->createAclNode('/Filemanager/folders/shared/ootest');
