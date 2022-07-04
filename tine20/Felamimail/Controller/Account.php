@@ -467,8 +467,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     }
 
     /**
-     * remove one groupmember from the group
+     * remove contact of mail account
      *
+     * @param array $ids array of account ids
      * @return void
      * @throws Tinebase_Exception
      * @throws Tinebase_Exception_AccessDenied
@@ -491,9 +492,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                     if (!empty($emailAccount->contact_id)) {
                         try {
                             $contact = Addressbook_Controller_Contact::getInstance()->get($emailAccount->contact_id);
-                            // hard delete contact in admin module
-                            $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-                            $contactsBackend->delete($contact->getId());
+                            if ($contact->type !== Addressbook_Model_Contact::CONTACTTYPE_USER) {
+                                // hard delete contact in admin module
+                                $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+                                $contactsBackend->delete($contact->getId());
+                            }
                         } catch (Exception $e) {
                             continue;
                         }
