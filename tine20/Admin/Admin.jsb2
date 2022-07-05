@@ -126,6 +126,10 @@
         {
           "text": "QuotaManagement.js",
           "path": "js/"
+        },
+        {
+          "text": "OVpnApiConfig.js",
+          "path": "js/"
         }
       ]
     },

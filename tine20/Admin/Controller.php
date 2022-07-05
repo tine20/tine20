@@ -75,4 +75,88 @@ class Admin_Controller extends Tinebase_Controller_Abstract
         
         return $_settings;
     }
+
+    public static function addFastRoutes(\FastRoute\RouteCollector $r)
+    {
+        $r->addGroup('/admin', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->post('/ovpnapi/{apikey}/validate/check', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicPostOVpnApi', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+        });
+    }
+
+    public function publicPostOVpnApi(string $apikey): \Psr\Http\Message\ResponseInterface
+    {
+        if (!($key = Admin_Config::getInstance()->{Admin_Config::OVPN_API}->{Admin_Config::OVPN_API_KEY}) ||
+                $apikey !== $key) {
+            return $this->_publicPostOVpnApiReturnError('bad request, api key wrong');
+        }
+        /** @var \Psr\Http\Message\ServerRequestInterface $request */
+        $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+
+        if (!($body = json_decode($request->getBody()->getContents(), true)) || !isset($body['user']) ||
+                !isset($body['pass']) || !isset($body['realm'])) {
+            return $this->_publicPostOVpnApiReturnError('bad request, json body needs to have user, pass and realm');
+        }
+
+        /** @var Admin_Model_OVpnApiAccount $account */
+        $account = Admin_Controller_OVpnApiAccount::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Admin_Model_OVpnApiAccount::class, [
+                ['field' => Admin_Model_OVpnApiAccount::FLD_NAME, 'operator' => 'equals', 'value' => $body['user']],
+                ['field' => Admin_Model_OVpnApiAccount::FLD_REALM, 'operator' => 'definedBy', 'value' => [
+                    ['field' => Admin_Model_OVpnApiRealm::FLD_KEY, 'operator' => 'equals', 'value' => $body['realm']],
+                ]],
+            ]))->getFirstRecord();
+
+        if (null === $account) {
+            return $this->_publicPostOVpnApiReturnStatus(0);
+        }
+        if ($account->{Admin_Model_OVpnApiAccount::FLD_PIN}) {
+            if (strpos($body['pass'], $account->{Admin_Model_OVpnApiAccount::FLD_PIN}) !== 0) {
+                return $this->_publicPostOVpnApiReturnStatus(0);
+            }
+            $body['pass'] = substr($body['pass'], strlen($account->{Admin_Model_OVpnApiAccount::FLD_PIN}));
+        }
+
+        foreach ($account->{Admin_Model_OVpnApiAccount::FLD_AUTH_CONFIGS} as $authConfig) {
+            $mfa = Tinebase_Auth_MFA::getInstance($authConfig->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID});
+            $mfa->setPersistUserConfigDelegator(function(Closure $cb) use($account) {
+                if (!$cb(new Tinebase_Model_FullUser([
+                            'mfa_configs' => $account->{Admin_Model_OVpnApiAccount::FLD_AUTH_CONFIGS}
+                        ], true))) {
+                    return false;
+                }
+                Admin_Controller_OVpnApiAccount::getInstance()->update($account);
+                return true;
+            });
+            if ($mfa->validate($body['pass'], $authConfig)) {
+                return $this->_publicPostOVpnApiReturnStatus(1);
+            }
+        }
+
+        return $this->_publicPostOVpnApiReturnStatus(0);
+    }
+
+    protected function _publicPostOVpnApiReturnStatus($value): \Laminas\Diactoros\Response
+    {
+        return (new \Laminas\Diactoros\Response('php://memory', 200))
+            ->withAddedHeader('Content-Type', 'application/json')
+            ->withBody(
+                (new \Laminas\Diactoros\StreamFactory())->createStream(
+                    json_encode(['result' => ['status' => ['value' => $value]]])
+                )
+            );
+    }
+
+    protected function _publicPostOVpnApiReturnError($msg): \Laminas\Diactoros\Response
+    {
+        return (new \Laminas\Diactoros\Response('php://memory', 200))
+            ->withAddedHeader('Content-Type', 'application/json')
+            ->withBody(
+                (new \Laminas\Diactoros\StreamFactory())->createStream(
+                    json_encode(['result' => ['error' => ['message' => $msg]]])
+                )
+            );
+    }
 }

@@ -2836,7 +2836,8 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _createDependentRecord(Tinebase_Record_Interface $_createdRecord, Tinebase_Record_Interface $_record, $_property, $_fieldConfig)
     {
-        if (! isset($_fieldConfig[TMCC::DEPENDENT_RECORDS]) || ! $_fieldConfig[TMCC::DEPENDENT_RECORDS]) {
+        // records stored e.g. in JSON are also 'dependend' / 'owned'
+        if (! isset($_fieldConfig[TMCC::DEPENDENT_RECORDS]) || ! $_fieldConfig[TMCC::DEPENDENT_RECORDS] || isset($_fieldConfig[TMCC::STORAGE])) {
             return;
         }
 
@@ -2906,7 +2907,8 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _updateDependentRecord(Tinebase_Record_Interface $_record, /** @noinspection PhpUnusedParameterInspection */
                                                Tinebase_Record_Interface $_oldRecord, $_property, $_fieldConfig)
     {
-        if (! isset($_fieldConfig[TMCC::DEPENDENT_RECORDS])|| ! $_fieldConfig[TMCC::DEPENDENT_RECORDS]) {
+        // records stored e.g. in JSON are also 'dependend' / 'owned'
+        if (! isset($_fieldConfig[TMCC::DEPENDENT_RECORDS]) || ! $_fieldConfig[TMCC::DEPENDENT_RECORDS] || isset($_fieldConfig[TMCC::STORAGE])) {
             return;
         }
 
@@ -2992,7 +2994,8 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _createDependentRecords(Tinebase_Record_Interface $_createdRecord, Tinebase_Record_Interface $_record, $_property, $_fieldConfig)
     {
-        if (! (isset($_fieldConfig['dependentRecords']) || array_key_exists('dependentRecords', $_fieldConfig)) || ! $_fieldConfig['dependentRecords']) {
+        if (! (isset($_fieldConfig['dependentRecords']) || array_key_exists('dependentRecords', $_fieldConfig)) || ! $_fieldConfig['dependentRecords'] ||
+                (isset($_fieldConfig[TMCC::STORAGE]) && $_fieldConfig[TMCC::STORAGE] === TMCC::TYPE_JSON)) {
             return;
         }
         
@@ -3075,7 +3078,9 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _updateDependentRecords(Tinebase_Record_Interface $_record, /** @noinspection PhpUnusedParameterInspection */
                                                Tinebase_Record_Interface $_oldRecord, $_property, $_fieldConfig)
     {
-        if (! (isset($_fieldConfig['dependentRecords']) || array_key_exists('dependentRecords', $_fieldConfig)) || ! $_fieldConfig['dependentRecords']) {
+        // records stored e.g. in JSON are also 'dependend' / 'owned'
+        if (! (isset($_fieldConfig['dependentRecords']) || array_key_exists('dependentRecords', $_fieldConfig)) || ! $_fieldConfig['dependentRecords'] ||
+                (isset($_fieldConfig[TMCC::STORAGE]) && $_fieldConfig[TMCC::STORAGE] === TMCC::TYPE_JSON)) {
             return;
         }
         
@@ -3206,7 +3211,8 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _deleteDependentRecords($_record, $_property, $_fieldConfig)
     {
-        if (! isset($_fieldConfig['dependentRecords']) || ! $_fieldConfig['dependentRecords']) {
+        if (! isset($_fieldConfig['dependentRecords']) || ! $_fieldConfig['dependentRecords'] ||
+                (isset($_fieldConfig[TMCC::STORAGE]) && $_fieldConfig[TMCC::STORAGE] === TMCC::TYPE_JSON)) {
             return;
         }
 

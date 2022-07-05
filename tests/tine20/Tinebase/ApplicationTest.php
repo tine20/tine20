@@ -290,6 +290,9 @@ class Tinebase_ApplicationTest extends TestCase
                 Admin_Model_Config::class,
                 Admin_Model_JWTAccessRoutes::class,
                 Admin_Model_SambaMachine::class,
+                Admin_Model_OVpnApi_AuthConfig::class,
+                Admin_Model_OVpnApiAccount::class,
+                Admin_Model_OVpnApiRealm::class,
             ),
             'Calendar' => array(
                 Calendar_Model_AttendeeRole::class,

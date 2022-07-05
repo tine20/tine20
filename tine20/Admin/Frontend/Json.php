@@ -33,6 +33,16 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_hasMasterSieveAccess;
 
     /**
+     * the models handled by this frontend
+     * @var array
+     */
+    protected $_configuredModels = [
+        Admin_Model_OVpnApiRealm::MODEL_NAME_PART,
+        Admin_Model_OVpnApi_AuthConfig::MODEL_NAME_PART,
+        Admin_Model_OVpnApiAccount::MODEL_NAME_PART
+    ];
+
+    /**
      * constructs Admin_Frontend_Json
      */
     public function __construct()

@@ -958,7 +958,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
     }
 
-    protected function treatMFA(Tinebase_Model_FullUser $_user, Tinebase_Model_FullUser $oldUser = null)
+    public function treatMFA(Tinebase_Model_FullUser $_user, Tinebase_Model_FullUser $oldUser = null)
     {
         if ($_user->mfa_configs) {
             if (!$_user->mfa_configs->isValid()) {

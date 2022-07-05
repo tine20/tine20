@@ -75,17 +75,19 @@ class Tinebase_Auth_MFA_YubicoOTPAdapter implements Tinebase_Auth_MFA_AdapterInt
         if ($counter > intval($yubicoOTPCfg->{Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_COUNTER}) || (
                 $counter === intval($yubicoOTPCfg->{Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_COUNTER}) &&
                 $session > intval($yubicoOTPCfg->{Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_SESSIONC}))) {
-            $user = Tinebase_User::getInstance()->getUserById(
-                $yubicoOTPCfg->{Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_ACCOUNT_ID}, Tinebase_Model_FullUser::class);
-            if (!($cfg = $user->mfa_configs->getById($_userCfg->getId()))) {
-                return false;
-            }
-            $cfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->{Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_COUNTER} =
-                $counter;
-            $cfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->{Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_SESSIONC} =
-                $session;
-            Tinebase_User::getInstance()->updateUserInSqlBackend($user);
-            return true;
+
+            return Tinebase_Auth_MFA::getInstance($_userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
+                ->persistUserConfig($yubicoOTPCfg->{Tinebase_Model_MFA_HOTPUserConfig::FLD_ACCOUNT_ID},
+                    function(Tinebase_Model_FullUser $user) use($counter, $session, $_userCfg) {
+                        if (!($cfg = $user->mfa_configs->getById($_userCfg->getId()))) {
+                            return false;
+                        }
+                        $cfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}
+                            ->{Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_COUNTER} = $counter;
+                        $cfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}
+                            ->{Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_SESSIONC} = $session;
+                        return true;
+                    });
         }
 
         return false;

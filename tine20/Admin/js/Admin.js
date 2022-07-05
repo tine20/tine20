@@ -231,11 +231,10 @@ Tine.Admin.init = function () {
                 hidden: !Tine.Admin.showModule('importexportdefinitions')
             });
         }
-        
         _.each(tree, function(item, idx) {
             item.pos = item.pos || (100 + 100 * idx);
         });
-            _.each(registeredItems, function(item) {
+        _.each(registeredItems, function(item) {
             // NOTE: too early for appMgr :-(
             var app = item.appName ? Tine.Tinebase.appMgr.get(item.appName) : null,
                 i18n = app ? app.i18n : translation;
@@ -416,7 +415,9 @@ Tine.Admin.init = function () {
 
             default:
                 if (! panels[dataPanelType]) {
-                    panels[dataPanelType] = new item.panel();
+                    item.panel = !item.panel && String(item.dataPanelType).indexOf('.') ? item.dataPanelType : item.panel;
+                    item.panel = _.isString(item.panel) ? _.get(window, item.panel) : item.panel;
+                    panels[dataPanelType] = new (item.panel || Ext.Panel)();
                 }
 
                 var contentPanel = panels[dataPanelType],
