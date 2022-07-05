@@ -1160,8 +1160,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             listeners: {
                 scope: this,
                 'update': function (record) {
-                    var messageWithRecipients = Ext.isString(record) ? new this.recordClass(Ext.decode(record)) : record;
-                    debugger
+                    const messageWithRecipients = Ext.isString(record) ? new this.recordClass(Ext.decode(record)) : record;
                     this.recipientGrid.syncRecipientsToStore(['to', 'cc', 'bcc'], messageWithRecipients, true, true);
                 }
             }

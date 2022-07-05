@@ -239,10 +239,7 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
             if (!contacts || contacts.length === 0) {
                 resolve();
             }
-    
-            // no exact matches are necessary - use the same regex as in \Tinebase_Mail::EMAIL_ADDRESS_CONTAINED_REGEXP
-            const emailRegEx = /([a-z0-9_\+-\.&]+@[a-z0-9-\.]+\.[a-z]{2,63})/i;
-    
+            
             await _.reduce(contacts, async (prev, contact) => {
                 return prev.then(async () => {
                     contact = Ext.isFunction(contact.beginEdit) ? contact : new Tine.Addressbook.Model.Contact(contact);
@@ -255,22 +252,10 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
         
                         await this.addRecipientTokenFromContacts(mailAddresses, memberContacts);
                     } else {
-                        const email = typeof contact.getPreferredEmail == 'function' ? contact.getPreferredEmail() : null;
-                        const emailType = contact.get('email') === email ? 'email' : contact.get('email_home') === email ? 'email_home' : 'email';
-        
-                        if (email && email.match(emailRegEx)) {
-                            const existEmail = _.find(mailAddresses, {email: email});
-                            if (!existEmail) {
-                                let token = {
-                                    'email': email,
-                                    'email_type': emailType,
-                                    'type': contact.get('type'),
-                                    'n_fileas': contact.get('n_fileas'),
-                                    'name': contact.get('n_fn'),
-                                    'record_id': contact.get('id')
-                                };
-                                mailAddresses.push(token);
-                            }
+                        const token = this.getRecipientTokenFromContact(contact);
+                        const existToken = _.find(mailAddresses, {email: token.email});
+                        if (!existToken) {
+                            mailAddresses.push(token);
                         }
                     }
                 })
@@ -278,6 +263,27 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
     
             resolve();
         });
+    },
+    
+    getRecipientTokenFromContact: function (contact) {
+        // no exact matches are necessary - use the same regex as in \Tinebase_Mail::EMAIL_ADDRESS_CONTAINED_REGEXP
+        const emailRegEx = /([a-z0-9_\+-\.&]+@[a-z0-9-\.]+\.[a-z]{2,63})/i;
+        const email = typeof contact.getPreferredEmail == 'function' ? contact.getPreferredEmail() : null;
+        const emailType = contact.get('email') === email ? 'email' : contact.get('email_home') === email ? 'email_home' : 'email';
+        let token = null;
+        
+        if (email && email.match(emailRegEx)) {
+            token = {
+                'email': email,
+                'email_type': emailType,
+                'type': contact.get('type'),
+                'n_fileas': contact.get('n_fileas'),
+                'name': contact.get('n_fn'),
+                'record_id': contact.get('id')
+            };
+        }
+        
+        return token;
     },
     
     /**
