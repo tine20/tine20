@@ -182,8 +182,8 @@ msgid "Factor"
 msgstr "Faktor"
 
 #: js/TimeaccountEditDialog.js:113
-msgid "Budget"
-msgstr "Budget"
+msgid "Budget in hours"
+msgstr "Budget in Stunden"
 
 #: js/TimeaccountEditDialog.js:118 Model/Timeaccount.php:189
 msgid "Status"
