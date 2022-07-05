@@ -76,7 +76,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             value: 0
         }, {
             xtype: 'numberfield',
-            fieldLabel: this.app.i18n._('Budget'),
+            fieldLabel: this.app.i18n._('Budget in hours'),
             name: 'budget',
             allowNegative: false,
             decimalSeparator: ',',

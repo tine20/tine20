@@ -134,7 +134,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     /**
      * remove all filter on filterPanel
      */
-    removeAllFilters: false,
+    removeFiltersOnSelectContainer: false,
 
     useArrows: true,
     border: false,
@@ -805,7 +805,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     onFilterChange: function() {
         // get filterToolbar
         var ftb = this.filterPlugin.getGridPanel().filterToolbar,
-            removeFilter = Ext.EventObject.altKey ? !this.removeAllFilters : this.removeAllFilters;
+            removeFilter = Ext.EventObject.altKey ? !this.removeFiltersOnSelectContainer : this.removeFiltersOnSelectContainer;
 
         // in case of filterPanel
         ftb = ftb.activeFilterPanel ? ftb.activeFilterPanel : ftb;
