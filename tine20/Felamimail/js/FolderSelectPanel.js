@@ -127,7 +127,7 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
                     cls: 'felamimail-node-account',
                     delimiter: record.get('delimiter'),
                     ns_personal: record.get('ns_personal'),
-                    account_id: record.data.id
+                    account_id: record.data.id,
                 });
             
                 this.root.appendChild(node);
@@ -142,7 +142,7 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
                 leaf: false,
                 cls: 'felamimail-node-account',
                 id: this.account.id,
-                path: '/' + this.account.id
+                path: '/' + this.account.id,
             });
         }
         
@@ -161,6 +161,7 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
         });
         this.folderTree.on('dblclick', this.onTreeNodeDblClick, this);
         this.folderTree.on('click', this.onTreeNodeClick, this);
+        this.folderTree.on('beforeclick', this.onTreeNodeBeforeClick, this);
         
         this.items = [this.folderTree];
     },
@@ -186,7 +187,10 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
      */
     onTreeNodeDblClick: function(node) {
         this.selectedNode = node;
-        this.onOk();
+        
+        if (this.selectedNode.attributes?.folderNode) {
+            this.onOk();
+        }
         return false;
     },
     
@@ -195,7 +199,16 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
      */
     onTreeNodeClick: function(node) {
         this.selectedNode = node;
-        this.action_ok.setDisabled(false);
+        const isFolderNode = this.selectedNode.attributes?.folderNode;
+        this.action_ok.setDisabled(!isFolderNode);
+    },
+    
+    /**
+     * @private
+     */
+    onTreeNodeBeforeClick: function(node) {
+        this.selectedNode = node;
+        this.selectedNode.attributes.singleClickExpand = true;
     },
     
     /**
