@@ -482,7 +482,11 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     {
         $newGlobalName = $this->_getParentGlobalname($_oldGlobalName);
         if (! empty($_newLocalName)) {
-            $newGlobalName .= $this->_delimiter . $_newLocalName;
+            if ($newGlobalName === '') {
+                $newGlobalName = $_newLocalName;
+            } else {
+                $newGlobalName .= $this->_delimiter . $_newLocalName;
+            }
         }
 
         return $newGlobalName;
