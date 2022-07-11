@@ -62,6 +62,7 @@ Ext.tree.TreeSorter = function(tree, config){
     const leafAttr = this.leafAttr || 'leaf';
     const priorityList = this.priorityList || [];
     const priorityProperty = this.priorityProperty;
+    const locale = Tine.Tinebase.registry.get('locale').locale || 'en';
 
     this.sortFn = function(n1, n2){
         if(fs){
@@ -87,6 +88,10 @@ Ext.tree.TreeSorter = function(tree, config){
         } else {
             const v1 = sortType ? sortType(n1) : (cs ? n1.attributes[p] : n1.attributes[p].toUpperCase());
             const v2 = sortType ? sortType(n2) : (cs ? n2.attributes[p] : n2.attributes[p].toUpperCase());
+            
+            if (Ext.isString(v1) && Ext.isString(v2)) {
+                return v1.localeCompare(v2, locale);
+            }
 
             if(v1 < v2){
                 return dsc ? +1 : -1;
