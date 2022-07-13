@@ -50,7 +50,7 @@ class Addressbook_Convert_List_Json extends Tinebase_Convert_Json
                 if (!isset($allVisibleMemberIds[$member['id']])) {
                     $member = [
                         'id'    => $member['id'],
-                        'email' => $member->getPreferredEmailAddress(),
+                        'email' => $member['email'] ?? $member['email_home'],
                         'n_fn'  => $member['n_fn'],
                     ];
                 }
