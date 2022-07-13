@@ -539,7 +539,13 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @param {Ext.tree.AsyncTreeNode} node
      */
     onBeforeClick: function(node) {
-        if (this.accountStore.getById(node.id) || ! this.app.getFolderStore().getById(node.id).get('is_selectable')) {
+        const account = this.accountStore.getById(node.id);
+
+        if (account || ! this.app.getFolderStore().getById(node.id).get('is_selectable')) {
+            // account node should not trigger click event but still need to be expanded
+            if (account && node.isExpandable()) {
+                node.toggle();
+            }
             return false;
         }
     },
@@ -555,12 +561,12 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @private
      */
     onClick: function(node) {
-        if (node.expandable) {
+        if (node.isExpandable() && !node.expanded) {
             node.expand();
         }
         
-        if (node.id && node.id != '/' && node.attributes.globalname != '') {
-            var folder = this.app.getFolderStore().getById(node.id);
+        if (node.id && node.id !== '/' && node.attributes.globalname !== '') {
+            const folder = this.app.getFolderStore().getById(node.id);
             if (folder) {
                 if (folder.get('cache_status') === 'pending') {
                     this.app.checkMails(folder, Ext.emptyFn);
