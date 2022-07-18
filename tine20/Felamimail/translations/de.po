@@ -401,6 +401,9 @@ msgstr "E-Mail"
 msgid "From"
 msgstr "Von"
 
+msgid "from"
+msgstr "aus"
+
 #: Model/Account.php:328 js/AccountEditDialog.js:321
 msgid "Organization"
 msgstr "Firma"
