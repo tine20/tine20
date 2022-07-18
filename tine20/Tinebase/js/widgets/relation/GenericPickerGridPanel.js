@@ -881,7 +881,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 related_model: rc.getPhpClassName(),
                 type: type,
                 related_degree: 'sibling'
-            }, relconf)), Ext.id());
+            }, relconf)), Tine.Tinebase.data.Record.generateUID());
             
             let mySideValid = true;
             if (this.constraintsConfig[f]) {
