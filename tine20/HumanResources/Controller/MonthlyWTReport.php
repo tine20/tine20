@@ -126,7 +126,7 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
      */
     public function getNextMonthlyWTR(HumanResources_Model_MonthlyWTReport $_monthlyWTR)
     {
-        $date = new Tinebase_DateTime($_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_MONTH}, '-01 00:00:00');
+        $date = new Tinebase_DateTime($_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_MONTH}, 'UTC');
         $date->addMonth(1);
 
         return $this->search(
@@ -144,7 +144,7 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
      */
     public function getPreviousMonthlyWTR(HumanResources_Model_MonthlyWTReport $_monthlyWTR)
     {
-        $date = new Tinebase_DateTime($_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_MONTH}, '-01 00:00:00');
+        $date = new Tinebase_DateTime($_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_MONTH}, 'UTC');
         $date->subMonth(1);
 
         return $this->search(
