@@ -82,6 +82,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      */
     protected $_appPrefsCache = array();
 
+    protected $_ignoreAcl = false;
+
     /**************************** public abstract functions *********************************/
 
     /**
@@ -91,6 +93,19 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @return  array   all application prefs
      */
     abstract public function getAllApplicationPreferences();
+
+    /**
+     * set/get checking ACL rights
+     *
+     * @param  boolean $setTo
+     * @return boolean
+     */
+    public function setIgnoreAcl($setTo = true)
+    {
+        $oldValue = $this->_ignoreAcl;
+        $this->_ignoreAcl = $setTo;
+        return $oldValue;
+    }
 
     /**
      * get translated right descriptions
@@ -151,24 +166,34 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         }
         
         // make sure account is set in filter
-        $userId = Tinebase_Core::getUser()->getId();
-        if (! $_filter->isFilterSet('account')) {
-            $accountFilter = $_filter->createFilter('account', 'equals', array(
-                'accountId'   => (string) $userId, 
-                'accountType' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
-            ));
-            $_filter->addFilter($accountFilter);
-        } else {
-            // only admins can search for other users prefs
-            $accountFilter = $_filter->getAccountFilter();
-            if (($accountFilterValue = $accountFilter->getValue()) && $accountFilterValue['accountId'] != $userId && $accountFilterValue['accountType'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
-                if (!Tinebase_Acl_Roles::getInstance()->hasRight($this->_application, Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights_Abstract::ADMIN)) {
-                    return new Tinebase_Record_RecordSet('Tinebase_Model_Preference');
+        if ($this->_ignoreAcl === false) {
+            $userId = Tinebase_Core::getUser()->getId();
+            if (!$_filter->isFilterSet('account')) {
+                $accountFilter = $_filter->createFilter('account', 'equals', array(
+                    'accountId' => (string)$userId,
+                    'accountType' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
+                ));
+                $_filter->addFilter($accountFilter);
+            } else {
+                // only admins can search for other users prefs
+                $accountFilter = $_filter->getAccountFilter();
+                if (($accountFilterValue = $accountFilter->getValue())
+                    && $accountFilterValue['accountId'] != $userId
+                    && $accountFilterValue['accountType'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
+                ) {
+                    if (!Tinebase_Acl_Roles::getInstance()->hasRight(
+                        $this->_application,
+                        Tinebase_Core::getUser()->getId(),
+                        Tinebase_Acl_Rights_Abstract::ADMIN)
+                    ) {
+                        return new Tinebase_Record_RecordSet('Tinebase_Model_Preference');
+                    }
                 }
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), TRUE));
         
         $paging = new Tinebase_Model_Pagination(array(
             'dir'       => 'ASC',
@@ -177,7 +202,9 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         
         $allPrefs = parent::search($_filter, $_pagination, $_onlyIds);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r((is_array($allPrefs)) ? $allPrefs : $allPrefs->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r((is_array($allPrefs))
+                ? $allPrefs : $allPrefs->toArray(), TRUE));
         
         if (! $_onlyIds) {
             $this->_addDefaultAndRemoveUndefinedPrefs($allPrefs, $_filter);
