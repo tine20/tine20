@@ -161,7 +161,8 @@
     },
     "sort-packages": true,
     "allow-plugins": {
-      "tine20/composerapploader": true
+      "tine20/composerapploader": true,
+      "simplesamlphp/composer-module-installer": true
     }
   },
   "scripts": {
