@@ -558,7 +558,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     resolveGroupContact: async function (contact) {
         let recipients = [];
-        
+        const app = Tine.Tinebase.appMgr.get('Felamimail');
+
         if (contact === '') {
             return recipients;
         }
@@ -571,7 +572,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
                 _.each(contactMembers, (contact) => {
                     contact.type = group.type + 'Member';
-                    contact.note = i18n._('from') + ' ' + group.name;
+                    contact.note = app.i18n._('from') + ' ' + group.name;
                 })
 
                 recipients = contactMembers;
