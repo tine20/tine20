@@ -54,7 +54,7 @@ Tine.Sales.AddressGridPanel = Ext.extend(Tine.widgets.grid.BbarGridPanel, {
             }]
         });
         
-        this.plugins = Ext.isArray(this.plugins) ? this.plugins.push(this.clipboardAction) : [this.clipboardAction];
+        Ext.isArray(this.plugins) ? this.plugins.push(this.clipboardAction) : this.plugins = [this.clipboardAction];
         
         Tine.Sales.AddressGridPanel.superclass.initComponent.call(this);
     },
