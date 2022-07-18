@@ -993,6 +993,28 @@ Tine.Tinebase.tineInit = {
                 }
             });
         } else {
+
+            if (window.isMainWindow) {
+                await new Promise((resolve) => {
+                    Ext.Ajax.request({
+                        timeout: 120000, // 2 minutes
+                        params: {
+                            method: 'Tinebase.ping'
+                        },
+                        callback: (request, success, response) => {
+                            try {
+                                if (success && JSON.parse(response.responseText) === 'ack') return resolve();
+                            } catch (e) {
+                            }
+                            Tine.Tinebase.common.reload({
+                                keepRegistry: false,
+                                clearCache: true
+                            });
+                        }
+                    });
+                });
+            }
+
             for (var app,i=0;i<userApplications.length;i++) {
                 app = userApplications[i].name;
                 Ext.ns('Tine.' + app);
@@ -1389,10 +1411,4 @@ Ext.onReady(async function () {
         Tine.Tinebase.tineInit.initWindowMgr();
         Tine.Tinebase.tineInit.renderWindow();
     });
-
-    // TODO use await
-    // await Tine.Tinebase.tineInit.initRegistry(false);
-    // Tine.Tinebase.tineInit.checkClientVersion();
-    // Tine.Tinebase.tineInit.initWindowMgr();
-    // Tine.Tinebase.tineInit.renderWindow();
 });
