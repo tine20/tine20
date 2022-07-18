@@ -1,10 +1,10 @@
 <?php
 return array(
     'actionqueue' => array(
-        'active' => true,
+        'active' => {{ getv "/actionqueue/active" "true" }},
         'backend' => 'Redis',
-        'host' => '{{getv "/actionqueue/host" ""}}',
-        'port' => {{getv "/actionqueue/port" "6379"}},
+        'host' => '{{ getv "/actionqueue/host" "" }}',
+        'port' => {{ getv "/actionqueue/port" "6379" }},
         'queueName' => 'actionqueue'
     ),
 );
