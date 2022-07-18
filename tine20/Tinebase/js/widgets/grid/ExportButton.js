@@ -69,6 +69,8 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
      * @cfg {Boolean} showExportDialog
      */
     showExportDialog: false,
+    
+    cm: null,
 
     /**
      * add sub menu with attached/related templates
@@ -137,6 +139,19 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
             filter = this.sm.getSelectionFilter();
             count = this.sm.getCount();
             options.sortInfo = this.gridPanel.getStore().sortInfo;
+
+            if (!this.cm) {
+                this.cm = this.gridPanel.grid.getColumnModel();
+            }
+            
+            const visibleColumns = [];
+            _.each(this.cm.columns, function(column){ 
+                if(column.hidden == false) {
+                    visibleColumns.push({'identifier': column.dataIndex, 'header': column.header})
+                }
+            });
+            
+            options.cm = {'column': visibleColumns};
         }
 
         if (_.isFunction(this.getExportOptions)) {

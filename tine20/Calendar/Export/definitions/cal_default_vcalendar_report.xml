@@ -9,5 +9,8 @@
     <label>VCalendar Report</label>
     <!-- _('Export multiple calendars to ics files') -->
     <description>Export multiple calendars to ics files</description>
-    <plugin_options_definition>true</plugin_options_definition>
+    <plugin_options_definition>
+        <sources></sources>
+        <target></target>
+    </plugin_options_definition>
 </config>

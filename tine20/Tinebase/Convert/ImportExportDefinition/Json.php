@@ -62,7 +62,16 @@ class Tinebase_Convert_ImportExportDefinition_Json extends Tinebase_Convert_Json
 
         if (isset($options['plugin_options_definition']) && $options['plugin_options_definition']) {
             if (method_exists($_definition->plugin, 'getPluginOptionsDefinition')) {
-                $_definition->plugin_options_definition = call_user_func($_definition->plugin . '::getPluginOptionsDefinition');
+                $validPluginOptions = [];
+                foreach (call_user_func($_definition->plugin . '::getPluginOptionsDefinition') as $name => $pluginOptionsDefinition) {
+                    if ((isset($pluginOptionsDefinition['definitionPluginOptionDefinitionRequired']) && !$pluginOptionsDefinition['definitionPluginOptionDefinitionRequired']) ||
+                        (is_array($options['plugin_options_definition']) && array_key_exists($name, $options['plugin_options_definition']) && is_array($options['plugin_options_definition'][$name]))) {
+                        $validPluginOptions[$name] = array_replace_recursive($pluginOptionsDefinition, $options['plugin_options_definition'][$name]);
+                    } else {
+                        $validPluginOptions[$name] = $pluginOptionsDefinition;
+                    }
+                }
+                $_definition->plugin_options_definition = $validPluginOptions;
             }
         }
     }
