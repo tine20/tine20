@@ -28,6 +28,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE012 = __CLASS__ . '::update012';
     const RELEASE015_UPDATE013 = __CLASS__ . '::update013';
     const RELEASE015_UPDATE014 = __CLASS__ . '::update014';
+    const RELEASE015_UPDATE015 = __CLASS__ . '::update015';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE       => [
@@ -93,6 +94,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE007          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update007',
+            ],
+            self::RELEASE015_UPDATE015          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update015',
             ],
         ],
     ];
@@ -287,11 +292,56 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.13', self::RELEASE015_UPDATE013);
     }
+
     public function update014()
     {
         $app = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
         $app->order = 0;
-        $app = Tinebase_Application::getInstance()->updateApplication($app);
+        Tinebase_Application::getInstance()->updateApplication($app);
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.14', self::RELEASE015_UPDATE014);
+    }
+
+    public function update015()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $db = Tinebase_Core::getDb();
+
+        $rows = $db->query('SELECT * FROM ' . SQL_TABLE_PREFIX .
+            'relations WHERE rel_id like "ext-gen%" and is_deleted=0')->fetchAll();
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Fixing broken relations: ' . count($rows));
+        $rowsbyRelId = [];
+        foreach ($rows as $row) {
+            $rowsbyRelId[$row['rel_id']][] = $row;
+        }
+
+        foreach ($rowsbyRelId as $relId => $relations) {
+//            echo '---------------------------------------' . "\n";
+//            echo 'rel_id: ' . $relId . "\n";
+//            echo 'number of relations: ' . count($relations). "\n";
+            if (count($relations) === 2) {
+                // just replace rel_ids with new UUID
+                $query = 'UPDATE ' . SQL_TABLE_PREFIX . 'relations SET rel_id = "'
+                    . Tinebase_Record_Abstract::generateUID() . '",last_modified_time=NOW() WHERE rel_id = "' . $relId . '";';
+                // echo "$query \n";
+                $db->query($query);
+            } else {
+                $updatedIds = [];
+                foreach ($relations as $relation) {
+                    if (! in_array($relation['related_id'], $updatedIds) && ! in_array($relation['own_id'], $updatedIds)) {
+                        $query = 'UPDATE ' . SQL_TABLE_PREFIX . 'relations SET rel_id = "'
+                            . Tinebase_Record_Abstract::generateUID() . '",last_modified_time=NOW() WHERE rel_id = "'
+                            . $relId . '" AND (related_id = "' . $relation['related_id']. '" OR related_id = "' . $relation['own_id']. '");';
+                        // echo "$query \n";
+                        $db->query($query);
+                        $updatedIds[] = $relation['own_id'];
+                        $updatedIds[] = $relation['related_id'];
+                    }
+                }
+            }
+        }
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.15', self::RELEASE015_UPDATE015);
     }
 }
