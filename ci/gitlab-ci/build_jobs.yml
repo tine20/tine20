@@ -61,6 +61,19 @@ docker_build_source:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_NOGITLABCI_TESTS_BUILT_SCHEDULE != "false"
       variables:
         REUSE_IMAGES: "false"
+    # from php-unit-tinebase-tests-built:
+    - if: $PHP_UNIT_TINEBASE_TESTS_BUILT == "true"
+      variables:
+          REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_TINEBASE_TESTS_BUILT_MERGE_REQUEST == "true"
+      variables:
+          REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-tinebase-tests-built/
+      variables:
+          REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_TINEBASE_TESTS_BUILT_SCHEDULE != "false"
+      variables:
+          REUSE_IMAGES: "false"
     # from php-unit-all-tests-ldap-built:
     - if: $PHP_UNIT_ALL_TESTS_LDAP_BUILD == "true"
       variables:
@@ -136,6 +149,11 @@ docker_build_built:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_BUILT_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-built/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_BUILT_SCHEDULE != "false"
+    # from php-unit-tinebase-tests-built:
+    - if: $PHP_UNIT_TINEBASE_TESTS_BUILT == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_TINEBASE_TESTS_BUILT_MERGE_REQUEST == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-tinebase-tests-built/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_TINEBASE_TESTS_BUILT_SCHEDULE != "false"
     # from php-unit-nogitlabci-tests-built:
     - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_NOGITLABCI_TESTS_BUILT_MERGE_REQUEST == "true"
