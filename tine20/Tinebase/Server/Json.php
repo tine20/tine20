@@ -160,17 +160,23 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
 
         $response = array();
         foreach ($requests as $requestOptions) {
-            if ($requestOptions !== NULL) {
-                $jsonRequest = new Zend_Json_Server_Request();
-                $jsonRequest->setOptions($requestOptions);
-                
-                $response[] = $exception ?
-                   $this->_handleException($jsonRequest, $exception) :
-                   $this->_handle($jsonRequest);
+            if ($requestOptions !== null) {
+                if (isset($requestOptions['id']) && ! is_scalar($requestOptions['id'])) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                        . ' Request ID needs to be a scalar, got: ' . print_r($requestOptions['id'], true));
+                    $response[] = null;
+                } else {
+                    $jsonRequest = new Zend_Json_Server_Request();
+                    $jsonRequest->setOptions($requestOptions);
+
+                    $response[] = $exception ?
+                        $this->_handleException($jsonRequest, $exception) :
+                        $this->_handle($jsonRequest);
+                }
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ' Got empty request options: skip request.');
-                $response[] = NULL;
+                $response[] = null;
             }
         }
 
