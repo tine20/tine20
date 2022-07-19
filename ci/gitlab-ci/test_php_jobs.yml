@@ -163,6 +163,57 @@ php-unit-servertests-source:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_SERVERTESTS_SOURCE_SCHEDULE != "false"
 
 
+.php-unit-all-tests-ldap-source:
+  extends: .abstract_jobs.php_unit_ldap
+  variables:
+    ARG_IMAGE: test-source
+    ARG_COPY_SOURCE: "true"
+  needs:
+    - docker_build_source
+  timeout: 2h
+  interruptible: true
+  rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_LDAP_SOURCE == "false"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_LDAP_SOURCE== "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_LDAP_SOURCE_MERGE_REQUEST == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-ldap-source/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_LDAP_SOURCE_SCHEDULE != "false"
+phpunit-all-tests-ldap-source-sequential:
+  extends: .php-unit-all-tests-ldap-source
+  variables:
+    NODE_TOTAL: 1
+    NODE_INDEX: 1
+  rules:
+    - if: $PHP_UNIT_ALL_TESTS_LDAP_SOURCE_TYPE != "sequential"
+      when: never
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_LDAP_SOURCE == "false"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_LDAP_SOURCE== "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_LDAP_SOURCE_MERGE_REQUEST == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-ldap-source/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_LDAP_SOURCE_SCHEDULE != "false"
+php-unit-all-tests-ldap-source-parallel:
+  extends: .php-unit-all-tests-ldap-source
+  timeout: 45m
+  parallel: 5
+  rules:
+    - if: $PHP_UNIT_ALL_TESTS_LDAP_SOURCE_TYPE != "parallel"
+      when: never
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_LDAP_SOURCE == "false"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_LDAP_SOURCE== "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_LDAP_SOURCE_MERGE_REQUEST == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-ldap-source/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_LDAP_SOURCE_SCHEDULE != "false"
+
+
 .php-unit-all-tests-built:
   extends: .php-unit-all-tests-source
   variables:
@@ -177,7 +228,7 @@ php-unit-servertests-source:
     - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_BUILT_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-built/
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_BUILT_SCHEDULE != "false"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_BUILT_SCHEDULE == "true"
 php-unit-all-tests-built-sequential:
   extends: .php-unit-all-tests-built
   variables:
@@ -193,7 +244,7 @@ php-unit-all-tests-built-sequential:
     - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_BUILT_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-built/
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_BUILT_SCHEDULE != "false"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_BUILT_SCHEDULE == "true"
     - when: never
 php-unit-all-tests-built-parallel:
   extends: .php-unit-all-tests-built
@@ -209,7 +260,29 @@ php-unit-all-tests-built-parallel:
     - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_BUILT_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-built/
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_BUILT_SCHEDULE != "false"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_BUILT_SCHEDULE == "true"
+
+
+php-unit-tinebase-tests-built:
+  extends: .php-unit-all-tests-source
+  variables:
+    ARG_IMAGE: test-built
+    ARG_TEST: Tinebase/AllTests
+  needs:
+    - docker_build_built
+  variables:
+    NODE_TOTAL: 1
+    NODE_INDEX: 1
+  rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_TINEBASE_TESTS_BUILT == "false"
+      when: never
+    - if: $PHP_UNIT_TINEBASE_TESTS_BUILT == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_TINEBASE_TESTS_BUILT_MERGE_REQUEST == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-tinebase-tests-built/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_TINEBASE_TESTS_BUILT_SCHEDULE != "false"
+
 
 .php-unit-nogitlabci-tests-built:
   extends: .php-unit-all-tests-built
@@ -258,56 +331,6 @@ php-unit-nogitlabci-tests-built-parallel:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-nogitlabci-tests-built/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_NOGITLABCI_TESTS_BUILT_SCHEDULE != "false"
 
-
-.php-unit-all-tests-ldap-built:
-  extends: .abstract_jobs.php_unit_ldap
-  variables:
-    ARG_IMAGE: test-built
-  stage: test
-  needs:
-    - docker_build_built
-  timeout: 2h
-  interruptible: true
-  rules:
-    - if: $RUN_NO_TESTS == "true"
-      when: never
-    - if: $PHP_UNIT_ALL_TESTS_LDAP_BUILD == "false"
-      when: never
-    - if: $PHP_UNIT_ALL_TESTS_LDAP_BUILD == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_MERGE_REQUEST == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-ldap-built/
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_SCHEDULE != "false"
-phpunit-all-tests-built-ldap-sequential:
-  extends: .php-unit-all-tests-ldap-built
-  variables:
-    NODE_TOTAL: 1
-    NODE_INDEX: 1
-  rules:
-    - if: $PHP_UNIT_ALL_TESTS_LDAP_BUILD_TYPE != "sequential"
-      when: never
-    - if: $RUN_NO_TESTS == "true"
-      when: never
-    - if: $PHP_UNIT_ALL_TESTS_LDAP_BUILD == "false"
-      when: never
-    - if: $PHP_UNIT_ALL_TESTS_LDAP_BUILD == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_MERGE_REQUEST == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-ldap-built/
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_SCHEDULE != "false"
-php-unit-all-tests-built-ĺdap-parallel:
-  extends: .php-unit-all-tests-ldap-built
-  timeout: 45m
-  parallel: 5
-  rules:
-    - if: $PHP_UNIT_ALL_TESTS_LDAP_BUILD_TYPE != "parallel"
-      when: never
-    - if: $RUN_NO_TESTS == "true"
-      when: never
-    - if: $PHP_UNIT_ALL_TESTS_LDAP_BUILD == "false"
-      when: never
-    - if: $PHP_UNIT_ALL_TESTS_LDAP_BUILD == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_MERGE_REQUEST == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-ldap-built/
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_SCHEDULE != "false"
 
 php-unit-update-tests:
   extends: .abstract_jobs.php_unit
