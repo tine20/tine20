@@ -142,7 +142,6 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         $path = $this->_path . '/' . $name;
 
         try {
-
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
                 Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $path);
             }
@@ -163,6 +162,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
                 throw new Sabre\DAV\Exception('Tinebase_FileSystem::fclose failed for path ' . $path);
             }
 
+            $etag = Tinebase_FileSystem::getInstance()->getETag($path);
 
         } catch (Exception $e) {
             Tinebase_FileSystem::getInstance()->unlink($path);
@@ -176,7 +176,8 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             }
         }
 
-        return '"' . Tinebase_FileSystem::getInstance()->getETag($path) . '"';
+
+        return '"' . $etag . '"';
     }
 
     /**
