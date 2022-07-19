@@ -257,7 +257,7 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
         let mergeStrategies = [
             ['keep', i18n._('Keep both records')]
         ];
-        if (!_.get(this,'store.clientRecord.id')) {
+        if (!(_.get(this, 'ref') === '../../gridPanel') || !_.get(this,'store.clientRecord.id')) {
             // only allow all strategies for new (client) records
             mergeStrategies = [
                 ['mergeTheirs', i18n._('Merge, keeping existing details')],
