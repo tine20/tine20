@@ -129,6 +129,10 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                 self::QUERY_FILTER => true,
                 self::LABEL => 'Number', // _('Number')
                 self::LENGTH => 64,
+                self::NULLABLE => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ]
             ],
             self::FLD_GTIN => [
                 self::TYPE => self::TYPE_STRING,
