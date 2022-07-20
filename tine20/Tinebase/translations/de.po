@@ -5243,3 +5243,6 @@ msgstr "Geändert"
 
 msgid "Avscan"
 msgstr "Avscan"
+
+msgid "Files are still uploading."
+msgstr "Es werden gerade Dateien hochgeladen."
