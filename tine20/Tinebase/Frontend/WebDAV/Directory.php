@@ -209,7 +209,13 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         if ($statpath->isDefaultACLsPath()) {
             Tinebase_FileSystem::getInstance()->createAclNode($path, $statpath->getDefaultAcls());
         } else {
-            Tinebase_FileSystem::getInstance()->mkdir($path);
+            try {
+                Tinebase_FileSystem::getInstance()->mkdir($path);
+            } catch (Tinebase_Exception_Record_Validation $terv) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $terv->getMessage());
+                throw new Sabre\DAV\Exception\Forbidden('Forbidden to create directory: ' . $path);
+            }
         }
     }
     
