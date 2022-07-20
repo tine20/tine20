@@ -266,13 +266,12 @@ php-unit-all-tests-built-parallel:
 php-unit-tinebase-tests-built:
   extends: .php-unit-all-tests-source
   variables:
+    NODE_TOTAL: 1
+    NODE_INDEX: 1
     ARG_IMAGE: test-built
     ARG_TEST: Tinebase/AllTests
   needs:
     - docker_build_built
-  variables:
-    NODE_TOTAL: 1
-    NODE_INDEX: 1
   rules:
     - if: $RUN_NO_TESTS == "true"
       when: never
