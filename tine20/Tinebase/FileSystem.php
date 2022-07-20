@@ -4593,7 +4593,11 @@ class Tinebase_FileSystem implements
         return $this->_getTreeNodeBackend()->has($_ids, $_getDeleted);
     }
 
-    public function repairTreeIsDeletedState()
+    /**
+     * @return bool
+     * @throws Zend_Db_Statement_Exception
+     */
+    public function repairTreeIsDeletedState(): bool
     {
         $fileobjectsTableName = SQL_TABLE_PREFIX . 'tree_fileobjects';
         $nodesTableName = SQL_TABLE_PREFIX . 'tree_nodes';
@@ -4602,8 +4606,8 @@ class Tinebase_FileSystem implements
             ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
 
         if (count($ids)) {
-            Tinebase_Exception::log(new Exception('found ' . count($ids) . ' treenodes with broken deltime: ' .
-                print_r($ids, true)));
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                . __LINE__ . ' found ' . count($ids) . ' treenodes with broken deltime: ' . print_r($ids, true));
 
             $db->query('update ' . $nodesTableName . ' set deleted_time = "1970-01-01 00:00:00" where is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"');
         }
@@ -4612,8 +4616,8 @@ class Tinebase_FileSystem implements
             ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
 
         if (count($ids)) {
-            Tinebase_Exception::log(new Exception('found ' . count($ids) . ' fileobjects with broken deltime: ' .
-                print_r($ids, true)));
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                . __LINE__ . ' found ' . count($ids) . ' fileobjects with broken deltime: ' . print_r($ids, true));
 
             $db->query('update ' . $fileobjectsTableName . ' set deleted_time = "1970-01-01 00:00:00" where is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"');
         }
@@ -4623,8 +4627,8 @@ class Tinebase_FileSystem implements
             ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
 
         if (count($ids)) {
-            Tinebase_Exception::log(new Exception('found ' . count($ids) .
-                ' fileobjects is_deleted differ from treenodes: ' . print_r($ids, true)));
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                . __LINE__ . ' found ' . count($ids) . ' fileobjects is_deleted differ from treenodes: ' . print_r($ids, true));
 
             $db->query('update ' . $fileobjectsTableName . ' as F join ' . $nodesTableName
                 . ' as N ON F.id = N.object_id AND F.is_deleted != N.is_deleted set F.deleted_time = N.deleted_time, F.is_deleted = N.is_deleted');
@@ -4635,8 +4639,8 @@ class Tinebase_FileSystem implements
             ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
 
         if (count($ids)) {
-            Tinebase_Exception::log(new Exception('found ' . count($ids) .
-                ' treenodes are not deleted but parent is: ' . print_r($ids, true)));
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                . __LINE__ . ' found ' . count($ids) . ' treenodes are not deleted but parent is: ' . print_r($ids, true));
 
             $db->query('update ' . $fileobjectsTableName . ' as F join ' . $nodesTableName
                 . ' as N ON F.id = N.object_id set F.deleted_time = NOW(), N.deleted_time = NOW(), F.is_deleted = 1, N.is_deleted = 1 WHERE '
