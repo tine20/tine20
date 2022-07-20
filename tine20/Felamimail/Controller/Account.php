@@ -197,6 +197,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     protected function _updateDefaultAccountPreference($_accounts)
     {
         $pref = Tinebase_Core::getPreference($this->_applicationName);
+        $oldIgnoreAcl = $pref->setIgnoreAcl(true);
         foreach ($_accounts as $account) {
             $usersWithPref = $pref->getUsersWithPref(Felamimail_Preference::DEFAULTACCOUNT, $account->getId());
             foreach ($usersWithPref as $userId) {
@@ -213,6 +214,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 $pref->setValueForUser(Felamimail_Preference::DEFAULTACCOUNT, $defaultAccountId, $userId);
             }
         }
+        $pref->setIgnoreAcl($oldIgnoreAcl);
     }
 
     /**
