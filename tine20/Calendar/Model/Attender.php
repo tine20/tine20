@@ -10,14 +10,14 @@
  * Model of an attendee
  *
  * @package Calendar
- * @property Tinebase_DateTime alarm_ack_time
- * @property Tinebase_DateTime alarm_snooze_time
- * @property string transp
- * @property string user_id
- * @property string status
- * @property string status_authkey
- * @property string user_type
- * @property string displaycontainer_id
+ * @property Tinebase_DateTime $alarm_ack_time
+ * @property Tinebase_DateTime $alarm_snooze_time
+ * @property string $transp
+ * @property string $user_id
+ * @property string $status
+ * @property string $status_authkey
+ * @property string $user_type
+ * @property string $displaycontainer_id
  */
 class Calendar_Model_Attender extends Tinebase_Record_Abstract
 {
@@ -1074,7 +1074,14 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         // build type map 
         foreach ($eventAttendee as $attendee) {
+            /** @var Calendar_Model_Attender $attender */
             foreach ($attendee as $attender) {
+                if (empty($attender->user_id)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' user_id missing from attender: ' . print_r($attender->toArray(), true));
+                    continue;
+                }
                 $allAttendee->addRecord($attender);
                 
                 if ($attender->user_id instanceof Tinebase_Record_Interface) {
@@ -1082,7 +1089,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     continue;
                 } elseif (isset(self::$_resolvedAttendeesCache[$attender->user_type])
                     && isset(self::$_resolvedAttendeesCache[$attender->user_type][$attender->user_id])
-                ){
+                ) {
                     // already in cache
                     $attender->user_id = self::$_resolvedAttendeesCache[$attender->user_type][$attender->user_id];
                 } else {
