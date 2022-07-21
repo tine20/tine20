@@ -1061,7 +1061,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         if (empty($eventAttendees)) {
             return;
         }
-        
+
         $eventAttendee = $eventAttendees instanceof Tinebase_Record_RecordSet ? array($eventAttendees) : $eventAttendees;
 
         $events = !$_events ? array() : $_events;
@@ -1169,9 +1169,16 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
 
         foreach ($eventAttendee as $attendee) {
+            /** @var Calendar_Model_Attender $attender */
             foreach ($attendee as $attender) {
                 if ($attender->user_id instanceof Tinebase_Record_Interface) {
                     // already resolved from cache
+                    continue;
+                }
+                if (empty($attender->user_id)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' user_id missing from attender: ' . print_r($attender->toArray(), true));
                     continue;
                 }
 
