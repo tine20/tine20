@@ -554,6 +554,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 $syncedUser = self::_syncDataAndUpdateUser($user, $options);
 
             } catch (Tinebase_Exception_NotFound $ten) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' ' . $ten->getMessage());
                 try {
                     $invalidUser = $userBackend->getUserByPropertyFromSqlBackend('accountLoginName', $username, 'Tinebase_Model_FullUser');
                     if (isset($options['deleteUsers']) && $options['deleteUsers']) {
@@ -582,11 +584,17 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 $syncedUser = $userBackend->addUserInSqlBackend($user);
 
                 // fire event to make sure all user data is created in the apps
-                // TODO convert to Tinebase event?
-                $event = new Admin_Event_AddAccount(array(
-                    'account' => $syncedUser
-                ));
-                Tinebase_Event::fireEvent($event);
+                try {
+                    // TODO convert to Tinebase event?
+                    $event = new Admin_Event_AddAccount(array(
+                        'account' => $syncedUser
+                    ));
+                    Tinebase_Event::fireEvent($event);
+                } catch (Exception $e) {
+                    // we continue with user creation - even if the event failed
+                    // otherwise we would get lots of duplicate contacts in the addressbook
+                    Tinebase_Exception::log($e);
+                }
 
                 // the addressbook is registered as a plugin and will take care of the create
                 // see \Addressbook_Controller_Contact::inspectUpdateUser

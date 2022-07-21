@@ -303,7 +303,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         } catch (Zend_Db_Statement_Exception $zdse) {
             if (Tinebase_Exception::isDbDuplicate($zdse)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' ' . $zdse);
+                    __METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
                 $translation = Tinebase_Translation::getTranslation();
                 throw new Tinebase_Exception_SystemGeneric($translation->_('The container already exists'));
             } else {
@@ -624,9 +624,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             throw new Tinebase_Exception_Duplicate("Container $containerName name duplicate.");
         }
 
-        $container = new Tinebase_Model_Container($containersData[0]);
-        
-        return $container;
+        return new Tinebase_Model_Container($containersData[0]);
     }
     
     /**

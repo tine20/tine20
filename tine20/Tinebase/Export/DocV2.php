@@ -60,6 +60,8 @@ class Tinebase_Export_DocV2 extends Tinebase_Export_Doc
 
     protected function renderProcessorsTwigTemplate()
     {
+        parent::renderProcessorsTwigTemplate();
+        
         $twigName = uniqid();
         $this->_twig->addLoader(new Tinebase_Twig_CallBackLoader($twigName, $this->_getLastModifiedTimeStamp(),
             function() {
