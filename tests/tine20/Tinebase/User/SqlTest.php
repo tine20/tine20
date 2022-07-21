@@ -339,7 +339,6 @@ class Tinebase_User_SqlTest extends TestCase
         $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
             'n_given' => 'testcontact'
         )));
-
         $this->_setUser($this->_originalTestUser);
 
         $this->_backend->deleteUser($testUser);
@@ -358,6 +357,14 @@ class Tinebase_User_SqlTest extends TestCase
             $this->fail('Event should be deleted: ' . print_r($event->toArray(), true));
         } catch (Exception $e) {
             $this->assertTrue($e instanceof Tinebase_Exception_NotFound, $e);
+        }
+
+        // check if container was removed, too
+        try {
+            $container = Tinebase_Container::getInstance()->getContainerById($contact->container_id);
+            self::fail('personal container should be deleted: ' . print_r($container->toArray(), true));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            self::assertStringContainsString('Tinebase_Model_Container record with id', $tenf->getMessage());
         }
     }
 
