@@ -300,6 +300,13 @@ class Admin_Controller_UserTest extends TestCase
             'smtp user id still set: ' . print_r($updatedUser->toArray(), true));
         self::assertEmpty($updatedUser->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP],
             'imap user id still set ' . print_r($updatedUser->toArray(), true));
+        $oldUser = Tinebase_Core::getUser();
+        Tinebase_Core::setUser($user);
+        $config = Tinebase_Core::getPreference('Felamimail')->getValue(Felamimail_Preference::DEFAULTACCOUNT);
+        self::assertEmpty($config);
+        Tinebase_Core::setUser($oldUser);
+        $config = Tinebase_Core::getPreference('Felamimail')->getValueForUser(Felamimail_Preference::DEFAULTACCOUNT,$user->getId());
+        self::assertEmpty($config);
     }
 
     public function testCustomEventHookUserAdd()
