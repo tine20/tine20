@@ -100,8 +100,11 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
         }
         rewind($stream);
 
-        if (false === ($name = iconv(mb_detect_encoding($fileName), "UTF-8//IGNORE", $fileName))) {
-            throw new Tinebase_Exception_UnexpectedValue('can not convert filename to utf8 ' . $fileName);
+        if (!$fileName || false === ($name = iconv(mb_detect_encoding($fileName), "UTF-8//IGNORE", $fileName))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                __LINE__ . ' no usable filename available');
+
+            $name = 'unknown file name ' . uniqid();
         }
 
         $_record->attachments = new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class, [
