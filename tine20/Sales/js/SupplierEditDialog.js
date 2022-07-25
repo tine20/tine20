@@ -168,6 +168,7 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 minValue: 1,
                                 maxValue: 4294967296,
                                 xtype: 'uxspinner',
+                                useThousandSeparator : false,
                                 strategy: new Ext.ux.form.Spinner.NumberStrategy({
                                     incrementValue : 1,
                                     alternateIncrementValue: 1,

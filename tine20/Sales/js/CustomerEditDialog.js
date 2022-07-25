@@ -227,6 +227,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     maxValue: 4294967296,
                                 }),
                                 allowDecimals : false,
+                                useThousandSeparator : false,
                             }, {
                                 columnWidth: .750,
                                 allowBlank: false,
