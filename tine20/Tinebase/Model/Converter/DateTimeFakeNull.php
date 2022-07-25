@@ -26,7 +26,7 @@ class Tinebase_Model_Converter_DateTimeFakeNull implements Tinebase_Model_Conver
      */
     public function convertToRecord($record, $key, $blob)
     {
-        return (string)$blob === '1970-01-01 00:00:00' ? null : $blob;
+        return (string)$blob === '1970-01-01 00:00:00' || !$blob ? null : new Tinebase_DateTime($blob);
     }
 
     /**
