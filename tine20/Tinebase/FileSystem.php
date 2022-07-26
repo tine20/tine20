@@ -3082,16 +3082,20 @@ class Tinebase_FileSystem implements
      * @param Tinebase_Model_Tree_Node_Path $_path
      * @param string $_action get|add|delete|update
      * @param boolean $_topLevelAllowed
+     * @param boolean $_throw
+     * @param Tinebase_Model_Tree_Node_Path $_nodePath
      * @throws Tinebase_Exception_AccessDenied
      * @return boolean
      */
-    public function checkPathACL(Tinebase_Model_Tree_Node_Path $_path, $_action = 'get', $_topLevelAllowed = true, $_throw = true)
+    public function checkPathACL(Tinebase_Model_Tree_Node_Path $_path, $_action = 'get', $_topLevelAllowed = true, $_throw = true, $_nodePath = null)
     {
         switch ($_path->containerType) {
             case Tinebase_FileSystem::FOLDER_TYPE_PERSONAL:
                 if ($_path->containerOwner && ($_topLevelAllowed || ! $_path->isToplevelPath())) {
                     if ($_path->isToplevelPath()) {
-                        $hasPermission = ($_path->containerOwner === Tinebase_Core::getUser()->accountLoginName || $_action === 'get');
+                        if (!($hasPermission = ($_path->containerOwner === Tinebase_Core::getUser()->accountLoginName || $_action === 'get')) && $_nodePath) {
+                            $hasPermission = $this->_checkACLNode($_nodePath->getNode(), 'admin');
+                        }
                     } else {
                         $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
                     }
@@ -3107,35 +3111,27 @@ class Tinebase_FileSystem implements
                     $hasPermission = false;
                     break;
                 }
+                if (true === ($hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
+                        $_path->application->name,
+                        Tinebase_Core::getUser()->getId(),
+                        Tinebase_Acl_Rights::ADMIN
+                    ))) {
+                    // admin, go ahead
+                    break;
+                }
                 if ($_path->isToplevelPath()) {
-                    if ('add' === $_action || 'delete' === $_action) {
-                        if (true === ($hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
-                                $_path->application->name,
-                                Tinebase_Core::getUser()->getId(),
-                                Tinebase_Acl_Rights::ADMIN
-                            ))) {
-                            // admin, go ahead
-                            break;
-                        }
-                        if ('add' === $_action) {
-                            $hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
-                                $_path->application->name,
-                                Tinebase_Core::getUser()->getId(),
-                                Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
-                            );
-                        }
-                    } else {
-                        $hasPermission = 'get' === $_action;
-                    }
-                } else {
-                    if (true === ($hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
+                    if ('add' === $_action) {
+                        $hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
                             $_path->application->name,
                             Tinebase_Core::getUser()->getId(),
-                            Tinebase_Acl_Rights::ADMIN
-                        ))) {
-                        // admin, go ahead
+                            Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
+                        );
                         break;
                     }
+                    if (!($hasPermission = 'get' === $_action) && $_nodePath) {
+                        $hasPermission = $this->_checkACLNode($_nodePath->getNode(), 'admin');
+                    }
+                } else {
                     $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
                 }
                 break;

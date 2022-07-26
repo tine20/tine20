@@ -1434,7 +1434,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     protected function _moveFolderNode($source, $destination, $_forceOverwrite = FALSE)
     {
-        $this->_backend->checkPathACL($source->getParent(), 'delete');
+        $this->_backend->checkPathACL($source->getParent(), 'delete', true, true, $source);
         
         $destinationParentPathRecord = $destination->getParent();
         
@@ -1507,7 +1507,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         list($parentPathRecord, $nodeName) = Tinebase_Model_Tree_Node_Path::getParentAndChild($flatpathWithBasepath);
         $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($flatpathWithBasepath);
         
-        $this->_backend->checkPathACL($parentPathRecord, 'delete');
+        $this->_backend->checkPathACL($parentPathRecord, 'delete', true, true, $pathRecord);
         $success = $this->_deleteNodeInBackend($pathRecord, $_flatpath);
 
         return $success;
