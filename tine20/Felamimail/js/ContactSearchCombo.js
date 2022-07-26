@@ -125,6 +125,9 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
      */
     onSelect: function(record, index) {
         this.selectedRecord = record;
+        if (this.selectedRecord) {
+            this.setRawValue('');
+        }
         this.value = this.getValue();
         this.collapse();
         this.fireEvent('select', this, record, index);
