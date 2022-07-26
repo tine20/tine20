@@ -97,12 +97,8 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
 
         list($dirname,) = Sabre\DAV\URLUtil::splitPath($this->_path);
 
-        $parentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname);
-        if ($parentPath->isToplevelPath() && Tinebase_FileSystem::FOLDER_TYPE_SHARED === $parentPath->containerType) {
-            if (!Tinebase_Core::getUser()->hasGrant($this->_node, Tinebase_Model_Grants::GRANT_ADMIN)) {
-                throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
-            }
-        } elseif (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_EDIT)) {
+        if (!Tinebase_FileSystem::getInstance()->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname)
+                , 'update', true, false, Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path))) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
         }
 
@@ -116,23 +112,21 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
     public function rename(string $newPath)
     {
         list($dirname,) = Sabre\DAV\URLUtil::splitPath($this->_path);
-        $parentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname);
-        if ($parentPath->isToplevelPath() && Tinebase_FileSystem::FOLDER_TYPE_SHARED === $parentPath->containerType) {
-            if (!Tinebase_Core::getUser()->hasGrant($this->_node, Tinebase_Model_Grants::GRANT_DELETE)) {
-                throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
-            }
-        } elseif (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_DELETE)) {
+
+        if (!Tinebase_FileSystem::getInstance()->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname)
+                , 'delete', true, false, Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path))) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to move file: ' . $this->_path);
         }
 
-        if (!Tinebase_Core::getUser()->hasGrant(Tinebase_FileSystem::getInstance()->stat(dirname($newPath)),
-                Tinebase_Model_Grants::GRANT_ADD)) {
-            $destinationParentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath(dirname($newPath));
-            if (Tinebase_FileSystem::FOLDER_TYPE_SHARED !== $destinationParentPath->containerType ||
-                    !$destinationParentPath->isToplevelPath() ||
-                    !Tinebase_Core::getUser()->hasRight(Filemanager_Config::APP_NAME, Filemanager_Acl_Rights::MANAGE_SHARED_FOLDERS)) {
-                throw new Sabre\DAV\Exception\Forbidden('Forbidden to create file: ' . $newPath);
-            }
+        if (!Tinebase_FileSystem::getInstance()->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname)
+                , 'update', true, false, Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path))) {
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
+        }
+
+
+        if (!Tinebase_FileSystem::getInstance()->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath(dirname($newPath))
+                , 'update', true, false, Tinebase_Model_Tree_Node_Path::createFromStatPath($newPath))) {
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to create file: ' . $newPath);
         }
 
         try {
