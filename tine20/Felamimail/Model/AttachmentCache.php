@@ -111,10 +111,7 @@ class Felamimail_Model_AttachmentCache extends Tinebase_Record_NewAbstract
 
     protected function fillFromId(string $id)
     {
-        if (substr_count($id, ':') !== 2) {
-            throw new Tinebase_Exception_UnexpectedValue('id does not contain exactly 2 ":": ' . $id);
-        }
-        [$model, $recordId, $partId] = explode(':', $id);
+        [$model, $recordId, $partId] = explode(':', $id, 3);
         $this->{self::FLD_SOURCE_MODEL} = $model;
         $this->{self::FLD_SOURCE_ID} = $recordId;
         $this->{self::FLD_PART_ID} = $partId;
