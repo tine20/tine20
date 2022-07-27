@@ -82,7 +82,7 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
                         []
                     );
 
-                    $_select->where($this->_options['subTablename'] . '.id IS NULL');
+                    $_select->where($db->quoteIdentifier($this->_options['subTablename']) . '.id IS NULL');
                 }
             } finally {
                 $this->_field = $orgField;
