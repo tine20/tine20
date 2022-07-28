@@ -472,7 +472,6 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_Grants::class,
                 Tinebase_Model_Group::class,
                 Tinebase_Model_Image::class,
-                Tinebase_Model_Import::class,
                 Tinebase_Model_ImportException::class,
                 Tinebase_Model_ImportExportDefinition::class,
                 Tinebase_Model_LogEntry::class,

@@ -178,7 +178,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         Tinebase_Scheduler_Task::addDeletedFileCleanupTask($scheduler);
         Tinebase_Scheduler_Task::addSessionsCleanupTask($scheduler);
         Tinebase_Scheduler_Task::addAccessLogCleanupTask($scheduler);
-        Tinebase_Scheduler_Task::addImportTask($scheduler);
+        //Tinebase_Scheduler_Task::addImportTask($scheduler);
         Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);
         Tinebase_Scheduler_Task::addReplicationTask($scheduler);
         Tinebase_Scheduler_Task::addFileRevisionCleanupTask($scheduler);

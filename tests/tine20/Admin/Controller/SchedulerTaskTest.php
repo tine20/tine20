@@ -11,7 +11,6 @@
  */
 class Admin_Controller_SchedulerTaskTest extends TestCase
 {
-
     public function testCreateSchedulerTask()
     {
         $task = new Admin_Model_SchedulerTask([
