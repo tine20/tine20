@@ -63,16 +63,14 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
                 xtype: (def.value_search == 1) ? 'customfieldsearchcombo' : uiConfig.xtype,
                 customfieldId: cfConfig.id,
                 readOnly: cfConfig.get('account_grants').indexOf('writeGrant') < 0,
-                requiredGrant: 'editGrant'
+                requiredGrant: 'editGrant',
             };
 
         if (def.length) {
             fieldDef.maxLength = def.length;
         }
 
-        if (def.required) {
-            fieldDef.allowBlank = false;
-        }
+        fieldDef.allowBlank = !+def.required;
 
         // custom code overrides
         var overwritesKey = cfConfig.get('model').replace(/_/g, '.') + '.' + cfConfig.get('name');
