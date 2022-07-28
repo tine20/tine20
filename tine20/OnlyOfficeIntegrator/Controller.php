@@ -757,11 +757,12 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         }
 
         $url = rtrim($url, '/') . '/coauthoring/CommandService.ashx';
-        $response = $this->_getCmdServiceHttpClient($url)->setRawData($body = json_encode([
-            'c'         => 'forcesave',
-            'key'       => $token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY},
-            'userdata'  => Tinebase_Record_Abstract::generateUID(),
-        ]))->setHeaders('Authorization', 'Bearer ' . JWT::encode(['payload' => $body],
+        $response = $this->_getCmdServiceHttpClient($url)
+            ->setHeaders('Authorization', 'Bearer ' . JWT::encode(['payload' => [
+                    'c'         => 'forcesave',
+                    'key'       => $token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY},
+                    'userdata'  => Tinebase_Record_Abstract::generateUID(),
+                ]],
                 OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256'))
             ->request(Zend_Http_Client::POST);
 
@@ -802,11 +803,12 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         }
 
         $url = rtrim($url, '/') . '/coauthoring/CommandService.ashx';
-        $response = $this->_getCmdServiceHttpClient($url)->setRawData($body = json_encode([
-            'c'     => 'drop',
-            'key'   => $documentKey,
-            'users' => $documentUsers,
-        ]))->setHeaders('Authorization', 'Bearer ' . JWT::encode(['payload' => $body],
+        $response = $this->_getCmdServiceHttpClient($url)
+            ->setHeaders('Authorization', 'Bearer ' . JWT::encode(['payload' => [
+                    'c'     => 'drop',
+                    'key'   => $documentKey,
+                    'users' => $documentUsers,
+                ]],
                 OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256'))
             ->request(Zend_Http_Client::POST);
 
@@ -851,8 +853,8 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 
         $url = rtrim($url, '/') . '/ConvertService.ashx';
 
-        $response = $this->_getCmdServiceHttpClient($url)->setRawData($body = json_encode($requestData))
-            ->setHeaders('Authorization', 'Bearer ' . JWT::encode(['payload' => $body],
+        $response = $this->_getCmdServiceHttpClient($url)
+            ->setHeaders('Authorization', 'Bearer ' . JWT::encode(['payload' => $requestData],
                 OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256'))
             ->setHeaders('Accept', 'application/json')
             ->request(Zend_Http_Client::POST);
@@ -884,10 +886,11 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         }
 
         $url = rtrim($url, '/') . '/coauthoring/CommandService.ashx';
-        $response = $this->_getCmdServiceHttpClient($url)->setRawData($body = json_encode([
-            'c'     => 'info',
-            'key'   => $token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY},
-        ]))->setHeaders('Authorization', 'Bearer ' . JWT::encode(['payload' => $body],
+        $response = $this->_getCmdServiceHttpClient($url)
+            ->setHeaders('Authorization', 'Bearer ' . JWT::encode(['payload' => [
+                    'c'     => 'info',
+                    'key'   => $token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY},
+                ]],
                 OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256'))
             ->request(Zend_Http_Client::POST);
 
