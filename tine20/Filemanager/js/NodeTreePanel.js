@@ -338,6 +338,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      */
     initContextMenu: function() {
         const createFolder = {... Tine.Filemanager.nodeActions.CreateFolder};
+        createFolder.text = this.app.i18n._(createFolder.text);
         createFolder.handler = () => {
             const currentPath = _.get(this.ctxNode, 'attributes.nodeRecord.data.path');
             const nodeName = Tine.Filemanager.Model.Node.getContainerName();
@@ -360,6 +361,12 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                     await Tine.Filemanager.nodeBackend.createFolder(filename)
                         .then((result) => {
                             this.appendTreeNode(currentPath, result);
+                            if (result.data.path === `/shared/${text}/`) {
+                                Tine.Filemanager.NodeEditDialog.openWindow({
+                                    record: result,
+                                    activeTabName: 'Grants'
+                                });
+                            }
                         })
                         .catch((e) => {
                             if (e.message === "file exists") {

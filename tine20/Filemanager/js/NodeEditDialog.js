@@ -71,6 +71,19 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.window.setTitle(this.getFittingTypeTranslation(true));
     },
+    
+    afterRender: function () {
+        Tine.Filemanager.NodeEditDialog.superclass.afterRender.apply(this, arguments);
+    
+        if (this.activeTabName) {
+            const activeTab = _.find(this.tabPanelItems, (item) => {
+                return item?.title === i18n._(this.activeTabName);
+            });
+            if (activeTab?.id) {
+                this.grantsPanel.ownerCt.setActiveTab(activeTab.id);
+            }
+        }
+    },
 
     /**
      * returns dialog
@@ -99,13 +112,13 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         // require('./GrantsPanel');
         
-        var grantsPanel = new Tine.Filemanager.GrantsPanel({
+        this.grantsPanel = new Tine.Filemanager.GrantsPanel({
             app: this.app,
             editDialog: this
         });
 
         if (this.record.data.type !== 'folder') {
-            grantsPanel.setDisabled(true);
+            this.grantsPanel.setDisabled(true);
         }
 
         var revisionPanel = {};
@@ -116,7 +129,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             });
         }
 
-        var items = [{
+        this.tabPanelItems = [{
             title: this.getFittingTypeTranslation(false),
             autoScroll: true,
             border: false,
@@ -248,7 +261,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }),
             this.downloadLinkGrid,
             {xtype: 'Tine.Filemanager.UsagePanel', app: this.app, editDialog: this},
-            grantsPanel
+            this.grantsPanel
         ];
 
         if (_.get(fsConfig, 'enableNotifications', false) && this.record.data.type === 'folder') {
@@ -256,10 +269,10 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 app: this.app,
                 editDialog: this
             });
-            items.push(notificationPanel)
+            this.tabPanelItems.push(notificationPanel)
         }
-
-        return {
+        
+        this.tabPanel = {
             xtype: 'tabpanel',
             plain:true,
             plugins: [{
@@ -270,8 +283,10 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }],
             activeTab: this.activeTab ?? 0,
             border: false,
-            items: items
-        }
+            items: this.tabPanelItems
+        };
+        
+        return this.tabPanel;
     }
 });
 
@@ -283,7 +298,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  */
 Tine.Filemanager.NodeEditDialog.openWindow = function (config) {
     const id = config.recordId ?? config.record?.id ?? 0;
-    this.activeTab = config?.activeTab ?? 0;
+    this.activeTabName = config.activeTabName ?? null;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 570,

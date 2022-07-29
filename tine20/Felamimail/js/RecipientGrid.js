@@ -170,32 +170,26 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         // we dont know the type by default
         const {results: contacts} = await Tine.Addressbook.searchContactsByRecipientsToken([updatedContact]);
         
-        this.store.each(function (item) {
-            const addressData = item.get('address');
-            _.each(contacts, async (contact, idx) => {
-                if (latestEditContact.record_id) {
+        if (!latestEditContact.record_id) {
+            await this.updateRecipientsToken(this.lastEditedRecord, contacts);
+        } else {
+            this.store.each(function (item) {
+                const addressData = item.get('address');
+                _.each(contacts, async (contact, idx) => {
                     if (addressData.record_id !== contact.record_id
                         || addressData.email_type !== contact.email_type) {
                         return;
                     }
-
+            
                     const isEmailChanged = addressData.email !== contact.email;
                     const isNameChanged = addressData.name !== contact.name;
-
+            
                     if (isEmailChanged || isNameChanged) {
                         await this.updateRecipientsToken(item, [contact], item.get('type'));
                     }
-                } else {
-                    if (idx > 0) {
-                        return;
-                    }
-                    
-                    if (addressData.email === latestEditContact.email) {
-                        await this.updateRecipientsToken(item, [contact], item.get('type'));
-                    }
-                }
-            })
-        }, this);
+                })
+            }, this);
+        }
     },
     
     /**
@@ -274,15 +268,15 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 },
                 blur: async (combo) => {
                     const value = combo.getRawValue();
+
                     Tine.log.debug('Tine.Felamimail.MessageEditDialog::onSearchComboBlur() -> current value: ' + value);
+    
                     if (value !== '') {
-                        const latestAddressData = this.lastEditedRecord ? this.lastEditedRecord.get('address') : '';
-                        if (latestAddressData === '') {
-                            const recipients = await Tine.Tinebase.common.findContactsByEmailString(value);
-                            await this.updateRecipientsToken(null, recipients, null, true);
-                        } else {
-                            this.addEmptyRowAndDoLayout();
-                        }
+                        const sm = this.getSelectionModel();
+                        const records = sm.getSelections();
+                        const oldRecord = this.lastEditedRecord ?? records[0];
+                        const recipients = await Tine.Tinebase.common.findContactsByEmailString(value);
+                        await this.updateRecipientsToken(oldRecord, recipients, null, true);
                     }
                 }
             }
@@ -305,6 +299,9 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             listeners: {
                 focus: function(combo) {
                     combo.onTriggerClick();
+                },
+                select: function(combo, record) {
+                    this.fireEvent('blur', this);
                 }
             }
         });
@@ -368,22 +365,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     onSearchComboSpecialkey: async function (combo, e) {
         const value = combo.getRawValue();
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::onSearchComboSpecialkey() -> current value: ' + value);
-    
-        if (e.getKey() === e.ENTER) {
-            Tine.log.debug('Tine.Felamimail.MessageEditDialog::onSearchComboSpecialkey() -> ENTER');
-            
-            if (combo?.selectedRecord) { 
-                return false; 
-            }
-            
-            if (value !== '') {
-                const sm = this.getSelectionModel();
-                const records = sm.getSelections();
-                const oldRecord = records[0] ?? null;
-                const recipients = await Tine.Tinebase.common.findContactsByEmailString(value);
-                await this.updateRecipientsToken(oldRecord, recipients, null, true);
-            }
-        } else if (this.activeEditor && e.getKey() === e.BACKSPACE) {
+        
+        if (this.activeEditor && e.getKey() === e.BACKSPACE) {
             Tine.log.debug('Tine.Felamimail.MessageEditDialog::onSearchComboSpecialkey() -> BACKSPACE');
             // remove row on backspace if we have more than 1 rows in grid
             if (value === '' && this.store.getCount() > 1 && this.activeEditor.row > 0) {
@@ -436,7 +419,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             recipients = await this.resolveGroupContact(contact);
         }
         
-        await this.updateRecipientsToken(null, recipients, null, true);
+        await this.updateRecipientsToken(this.lastEditedRecord, recipients, null , true);
         combo.selectedRecord = null;
     },
     
@@ -447,6 +430,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} col
      */
     startEditing: function(row, col) {
+        this.lastEditedRecord = this.store.getAt(row);
+        
         if (!this.allowTypeSelect && col === 0) { 
             return;
         }
@@ -461,7 +446,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         if (value?.email) {
             return this.autoEncode && Ext.isString(value.email) ? Ext.util.Format.htmlDecode(value.email) : value.email;
         } else {
-            Tine.Felamimail.RecipientGrid.superclass.preEditValue.apply(this, arguments);
+            return Tine.Felamimail.RecipientGrid.superclass.preEditValue.apply(this, arguments);
         }
     },
     
@@ -486,6 +471,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         position[1] = position[1] + Ext.fly(target).getHeight();
         const targetInput = e.getTarget('input[type=text]', 1, true);
         const contact = record.get('address');
+        this.lastEditedRecord = record;
         
         if (targetInput || ! record || record.get('address') === '' || col !== 1 || row === false || ! contact?.email) {
             return;
@@ -589,7 +575,12 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     
     // private
     onCellClick: async function onCellClick(g, row, col, e) {
-        await this.onContactClick(e);
+        if (col === 0) {
+            this.startEditing(row, col);
+        } 
+        if (col === 1) {
+            await this.onContactClick(e);
+        }
     },
     
     // private
@@ -598,10 +589,9 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         if (row === false) {
             return;
         }
-        
-        const col = this.getView().findCellIndex(target);
-        this.lastEditedRecord = this.store.getAt(row);
     
+        const col = this.getView().findCellIndex(target);
+        const record = this.store.getAt(row);
         const activeRow = (row === null) ? ((this.activeEditor) ? this.activeEditor.row : 0) : row;
         const selModel = this.getSelectionModel();
     
@@ -609,7 +599,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             selModel.selectRow(activeRow);
         }
     
-        if (col === 1 && this.lastEditedRecord.get('address') === '') {
+        if (col === 1 && record.get('address') === '') {
             this.startEditing.defer(50, this, [row, col]);
         }
     },
@@ -774,7 +764,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         const rowRecord = this.store.getAt(row);
         let contact = rowRecord?.data?.address ?? '';
         rowRecord.selectedRecord = contact ?? null;
-    
+        
         if (col === 1) {
             if (contact !== '' && startValue === contact.email) {
                 return;
@@ -802,9 +792,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.store.remove(o.record);
                 this.setFixedHeight(true);
             }
-        
-            this.lastEditedRecord = o.record;
-        
+
             if (o.originalValue !== '') {
                 this.addEmptyRowAndDoLayout(true);
             }

@@ -17,7 +17,7 @@ class Tinebase_WebDav_Principal extends \Sabre\DAVACL\Principal implements \Sabr
      */
     public function createFile($name, $data = null) 
     {
-        throw new \Sabre\DAV\Exception\Forbidden('Permission denied to create file (filename ' . $name . ')');
+        throw new \Sabre\DAV\Exception\Forbidden('Permission denied to create file (filename ' . $this->getPrincipalUrl() . '/' . $name . ')');
     }
 
     /**

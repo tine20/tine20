@@ -1676,6 +1676,30 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->expectException('Tinebase_Exception_NotFound');
         $node = $this->_fsController->stat(Filemanager_Controller_Node::getInstance()->addBasePath($dirpaths[0]));
     }
+
+    /**
+     * testDeleteDirectoryNodes
+     */
+    public function testDeleteDirectoryNodeInSharedWithPersonalAdminAcl()
+    {
+        $node = $this->testCreateContainerNodeInSharedFolder();
+        $grants = Tinebase_Model_Grants::getPersonalGrants($this->_personas['sclever'])->toArray();
+
+        // give sclever the admin grants to delete node
+        $node['grants'][] = $grants[0];
+        $result = $this->_getUit()->saveNode($node);
+
+        // switch to sclever
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        
+        // delete subfolder
+        $result = $this->_getUit()->deleteNodes($node['path']);
+        self::assertEquals($result['status'], 'success');
+
+        // check if node is deleted
+        $this->expectException('Tinebase_Exception_NotFound');
+        $node = $this->_fsController->stat(Filemanager_Controller_Node::getInstance()->addBasePath($node['path']));
+    }
     
     /**
      * testGetUpdate

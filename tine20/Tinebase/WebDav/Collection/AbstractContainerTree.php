@@ -1131,4 +1131,9 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
     {
         $this->_instanceCache = [];
     }
+
+    public function createFile($name, $data = null)
+    {
+        throw new \Sabre\DAV\Exception\Forbidden('Permission denied to create file (filename ' . $this->_path . '/' . $name . ')');
+    }
 }

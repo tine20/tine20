@@ -232,7 +232,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         if (! Tinebase_FileSystem::getInstance()->checkPathACL(
             $pathRecord->getParent(),
             'delete',
-            true, false
+            true, false, $pathRecord
         )) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to delete directory: ' . $this->_path);
         }
