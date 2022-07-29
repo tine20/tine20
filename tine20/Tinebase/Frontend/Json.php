@@ -644,11 +644,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
 
         if (!headers_sent()) {
+            $cookieOptions = Tinebase_Helper::getDefaultCookieSettings();
             if (Tinebase_Config::getInstance()->get(Tinebase_Config::REUSEUSERNAME_SAVEUSERNAME, 0)) {
                 // save in cookie (expires in 2 weeks)
-                setcookie('TINE20LASTUSERID', $username, time() + 60 * 60 * 24 * 14);
+                $cookieOptions['expires'] = time() + 60 * 60 * 24 * 14;
+                setcookie('TINE20LASTUSERID', $username, $cookieOptions);
             } else {
-                setcookie('TINE20LASTUSERID', '', 0);
+                setcookie('TINE20LASTUSERID', '', $cookieOptions);
             }
 
             $this->_setCredentialCacheCookie();
