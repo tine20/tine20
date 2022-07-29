@@ -34,7 +34,7 @@ ARG ALPINE_PHP_PACKAGE=php7
 COPY --from=cache-invalidator /cachehash /usr/local/lib/container/
 RUN apk add --no-cache nodejs npm git
 
-RUN if [ ${ALPINE_PHP_PACKAGE} == php8 ]; then \
+RUN if [ ${ALPINE_PHP_PACKAGE} == "php8" ]; then \
         EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"; \
         php -r "copy('https://getcomposer.org/installer', '/composer-setup.php');"; \
         ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', '/composer-setup.php');")"; \
