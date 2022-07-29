@@ -5,7 +5,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -602,5 +602,20 @@ class Tinebase_Helper
             && strlen($string) === 40
             && preg_match('/^[a-f0-9]+$/', $string)
         );
+    }
+
+    public static function getDefaultCookieSettings(string $prefix = ''): array
+    {
+        $settings = [
+            $prefix . 'httponly' => true,
+            $prefix . 'path' => '/',
+        ];
+
+        if (Tinebase_Core::isHttpsRequest()) {
+            $settings[$prefix . 'secure'] = true;
+            $settings[$prefix . 'samesite'] = 'none';
+        }
+
+        return $settings;
     }
 }

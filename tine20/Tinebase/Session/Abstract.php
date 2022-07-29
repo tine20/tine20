@@ -6,7 +6,7 @@
  * @subpackage  Session
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Guilherme Striquer Bisotto <guilherme.bisotto@serpro.gov.br>
- * @copyright   Copyright (c) 2014-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -351,18 +351,11 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
     {
         $options = array_merge(
             $options,
-             array (
-                'cookie_httponly' => true,
-                'hash_function'   => 1
-             )
+            [
+                'hash_function'   => 1,
+            ],
+            Tinebase_Helper::getDefaultCookieSettings('cookie_')
         );
-
-        $baseUri = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH);
-        $options['cookie_path'] = $baseUri;
-        
-        if (!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') {
-            $options['cookie_secure'] = true;
-        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' Session options: ' . print_r($options, true));
