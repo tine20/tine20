@@ -31,12 +31,15 @@ class Admin_Model_SchedulerTask_Import extends Admin_Model_SchedulerTask_Abstrac
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::FIELDS][self::FLD_IMPORT_NAME] = [
             self::TYPE          => self::TYPE_STRING,
-        ];
-        $_definition[self::FIELDS][self::FLD_OPTIONS] = [
-            self::TYPE          => self::TYPE_JSON,
+            self::LABEL         => 'Name', // _('Name')
         ];
         $_definition[self::FIELDS][self::FLD_PLUGIN_CLASS] = [
             self::TYPE          => self::TYPE_STRING,
+            self::LABEL         => 'Plugin', // _('Plugin')
+        ];
+        $_definition[self::FIELDS][self::FLD_OPTIONS] = [
+            self::TYPE          => self::TYPE_JSON,
+            self::LABEL         => 'Options', // _('Options')
         ];
     }
 

@@ -28,6 +28,8 @@
 
 class Admin_Model_SchedulerTask extends Tinebase_Model_SchedulerTask
 {
+    public const MODEL_NAME_PART = 'SchedulerTask';
+
     public const FLD_CONFIG_CLASS = 'config_class';
     public const FLD_CRON = 'cron';
 
@@ -39,16 +41,36 @@ class Admin_Model_SchedulerTask extends Tinebase_Model_SchedulerTask
         $_definition[self::EXPOSE_JSON_API] = true;
         $_definition[self::CREATE_MODULE] = true;
 
-        $_definition[self::FIELDS][self::FLD_CRON] = [
-            self::TYPE          => self::TYPE_STRING,
-            self::VALIDATORS    => [
-                Zend_Filter_Input::ALLOW_EMPTY => false,
-                Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
-            ],
-        ];
+        Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self:: FLD_NAME, [
+            self::FLD_CRON => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LABEL         => 'Period', // _('Period')
+                self::VALIDATORS    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
+            ]
+        ]);
+
+        Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_CRON, [
+            self::FLD_CONFIG_CLASS => [
+                self::TYPE      => self::TYPE_MODEL,
+                self::LABEL     => 'Task type', // _('Task type')
+                self::CONFIG    => [
+                    self::AVAILABLE_MODELS => [
+                        Admin_Model_SchedulerTask_Import::class,
+                    ],
+                ],
+                self::VALIDATORS    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
+            ]
+        ]);
 
         $_definition[self::FIELDS][self::FLD_CONFIG] = [
             self::TYPE      => self::TYPE_DYNAMIC_RECORD,
+            self::LABEL     => 'Task config', // _('Task config')
             self::CONFIG    => [
                 self::REF_MODEL_FIELD       => self::FLD_CONFIG_CLASS,
                 self::PERSISTENT            => true,
@@ -58,18 +80,7 @@ class Admin_Model_SchedulerTask extends Tinebase_Model_SchedulerTask
                 Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
             ],
         ];
-        $_definition[self::FIELDS][self::FLD_CONFIG_CLASS] = [
-            self::TYPE      => self::TYPE_MODEL,
-            self::CONFIG    => [
-                self::AVAILABLE_MODELS => [
-                    Admin_Model_SchedulerTask_Import::class,
-                ],
-            ],
-            self::VALIDATORS    => [
-                Zend_Filter_Input::ALLOW_EMPTY => false,
-                Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
-            ],
-        ];
+
         $_definition[self::FIELDS][self::FLD_NEXT_RUN][self::VALIDATORS][Zend_Filter_Input::ALLOW_EMPTY] = true;
         $_definition[self::FIELDS][self::FLD_NEXT_RUN][self::VALIDATORS][Zend_Filter_Input::DEFAULT_VALUE] = '1970-01-01 00:00:00';
         $_definition[self::FIELDS][self::FLD_NEXT_RUN][self::INPUT_FILTERS] = [

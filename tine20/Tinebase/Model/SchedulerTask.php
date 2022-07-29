@@ -96,6 +96,9 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'default'       => null,
                 'type'          => 'datetime',
                 'nullable'      => true,
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
             ],
             'last_duration' => [
                 'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -103,6 +106,9 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'default'       => null,
                 'type'          => 'integer',
                 'nullable'      => true,
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
             ],
             'lock_id' => [
                 'type'          => 'string',
@@ -111,6 +117,9 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'label'         => 'Lock id', // _('Lock id')
                 'default'       => null,
                 'nullable'      => true,
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
             ],
             self::FLD_NEXT_RUN => [
                 'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
@@ -123,21 +132,33 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'default'       => null,
                 'type'          => 'datetime',
                 'nullable'      => true,
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
             ],
             'failure_count' => [
                 'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'label'         => 'Failure count', // _('Failure count')
                 'default'       => 0,
                 'type'          => 'integer',
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
             ],
             'server_time' => [
                 'type'          => 'virtual',
                 'config'        => ['type' => 'datetime'],
                 self::CONVERTERS=> [Tinebase_Model_Converter_DateTime::class],
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
             ],
             self::FLD_IS_SYSTEM => [
                 self::TYPE          => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL   => true,
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
             ],
             self::FLD_ACCOUNT_ID => [
                 self::TYPE          => self::TYPE_USER,

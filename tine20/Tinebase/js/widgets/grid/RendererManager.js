@@ -241,7 +241,7 @@ Tine.widgets.grid.RendererManager = function() {
                     const classNameField = fieldDefinition.config.refModelField;
                     renderer = (configRecord, metaData, record) => {
                         const configRcordClass = Tine.Tinebase.data.RecordMgr.get(record.get(classNameField));
-                        return Tine.Tinebase.data.Record.setFromJson(configRecord, configRcordClass).getTitle();
+                        return configRcordClass ? Tine.Tinebase.data.Record.setFromJson(configRecord, configRcordClass).getTitle() : '';
                     };
                     break;
                 case 'localizedString':

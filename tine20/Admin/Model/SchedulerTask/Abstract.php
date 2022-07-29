@@ -27,10 +27,13 @@ abstract class Admin_Model_SchedulerTask_Abstract extends Tinebase_Record_NewAbs
      */
     protected static $_modelConfiguration = [
         self::APP_NAME          => Admin_Config::APP_NAME,
+        self::RECORD_NAME       => 'Task config', // gettext('GENDER_Task config')
+        self::RECORDS_NAME      => 'Task configs', // ngettext('Task config', 'Task configs', n)
 
         self::FIELDS => [
             self::FLD_PARENT_ID => [
                 self::TYPE          => self::TYPE_STRING,
+                self::DISABLED      => true,
             ],
         ],
     ];
