@@ -195,35 +195,79 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @param string $remoteUrl
      * @param string $interval
-     * @param string $importOptions
+     * @param array $importOptions
      * @return array
      */
     public function importRemoteEvents($remoteUrl, $interval, $importOptions)
     {
+        switch ($interval) {
+            case 'hourly':
+                $interval = Tinebase_Scheduler_Task::TASK_TYPE_HOURLY;
+                break;
+            case 'daily':
+                $interval = Tinebase_Scheduler_Task::TASK_TYPE_DAILY;
+                break;
+            case 'weekly':
+                $interval = Tinebase_Scheduler_Task::TASK_TYPE_WEEKLY;
+                break;
+            case 'once':
+                $interval = null;
+                break;
+            default:
+                throw new Tinebase_Exception_UnexpectedValue('interval "' . $interval . '" unknown');
+        }
+
         // Determine which plugin should be used to import
         switch ($importOptions['sourceType']) {
             case 'remote_caldav':
-                $plugin = 'Calendar_Import_CalDAV';
+                $plugin = Calendar_Import_CalDAV::class;
                 break;
             default:
-                $plugin = 'Calendar_Import_Ical';
+                $plugin = Calendar_Import_Ical::class;
         }
 
-        $record = Tinebase_Controller_ScheduledImport::getInstance()->create( new Tinebase_Model_Import(array(
-            'source'            => $remoteUrl,
-            'sourcetype'        => Tinebase_Model_Import::SOURCETYPE_REMOTE,
-            'interval'          => $interval,
-            'options'           => array_replace($importOptions, array(
-                'plugin' => $plugin,
-                'importFileByScheduler' => $importOptions['sourceType'] != 'remote_caldav',
-            )),
-            'model'             => 'Calendar_Model_Event',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-        ), true));
+        unset($importOptions['cc_id']);
+        if (null !== $interval) {
+            if (isset($importOptions['username']) && isset($importOptions['password'])) {
+                $cc = Tinebase_Auth_CredentialCache::getInstance();
+                $adapter = explode('_', get_class($cc->getCacheAdapter()));
+                $adapter = end($adapter);
+                try {
+                    $cc->setCacheAdapter('Shared');
+                    $sharedCredentials = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials(
+                        $importOptions['username'], $importOptions['password'], null, true /* save in DB */,
+                        Tinebase_DateTime::now()->addYear(100));
 
-        $result = $this->_recordToJson($record);
+                    $importOptions['cc_id'] = $sharedCredentials->getId();
+                } finally {
+                    $cc->setCacheAdapter($adapter);
+                }
 
-        return $result;
+                Tinebase_Auth_CredentialCache::getInstance();
+            }
+            unset($importOptions['username']);
+            unset($importOptions['password']);
+
+
+            return $this->_recordToJson(Admin_Controller_SchedulerTask::getInstance()->create(new Admin_Model_SchedulerTask([
+                Admin_Model_SchedulerTask::FLD_ACCOUNT_ID => Tinebase_Core::getUser()->getId(),
+                Admin_Model_SchedulerTask::FLD_NAME => mb_substr('import remote events for ' . Tinebase_Core::getUser()->accountDisplayName . ' from ' . $remoteUrl, 0, 255),
+                Admin_Model_SchedulerTask::FLD_CONFIG_CLASS => Admin_Model_SchedulerTask_Import::class,
+                Admin_Model_SchedulerTask::FLD_CONFIG => [
+                    Admin_Model_SchedulerTask_Import::FLD_PLUGIN_CLASS => $plugin,
+                    Admin_Model_SchedulerTask_Import::FLD_OPTIONS => array_merge($importOptions, [
+                        'url' => $remoteUrl,
+                    ]),
+                ],
+                Admin_Model_SchedulerTask::FLD_CRON => $interval,
+            ])));
+        } else {
+            $plugin = new $plugin(array_merge($importOptions, [
+                'url' => $remoteUrl,
+            ]));
+            $plugin->import();
+            return [];
+        }
     }
 
     /**

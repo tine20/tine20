@@ -255,28 +255,6 @@ class Tinebase_Scheduler_Task
     }
     
     /**
-     * add scheduled import task
-     * 
-     * @param Tinebase_Scheduler $_scheduler
-     */
-    public static function addImportTask(Tinebase_Scheduler $_scheduler)
-    {
-        if ($_scheduler->hasTask('Tinebase_Controller_ScheduledImport')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_Controller_ScheduledImport', self::TASK_TYPE_MINUTELY, [[
-            self::CONTROLLER    => 'Tinebase_Controller_ScheduledImport',
-            self::METHOD_NAME   => 'runNextScheduledImport',
-        ]]);
-        
-        $_scheduler->create($task);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' Saved task Tinebase_Controller_ScheduledImport::runNextScheduledImport in scheduler.');
-    }
-    
-    /**
      * add cache cleanup task to scheduler
      * 
      * @param Tinebase_Scheduler $_scheduler

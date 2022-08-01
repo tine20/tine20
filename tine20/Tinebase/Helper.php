@@ -444,9 +444,10 @@ class Tinebase_Helper
      * fetches contents from file or uri
      *
      * @param string $filenameOrUrl
+     * @param array $options
      * @return string|null
      */
-    public static function getFileOrUriContents($filenameOrUrl)
+    public static function getFileOrUriContents($filenameOrUrl, array $options = [])
     {
         if (strpos($filenameOrUrl, 'http') === 0) {
             try {
@@ -454,6 +455,9 @@ class Tinebase_Helper
                 // 0011054: Problems with ScheduledImport of external ics calendars
                 // google shows a lot of trouble with gzip in Zend_Http_Response, so let's deny it
                 $client->setHeaders('Accept-encoding', 'identity');
+                if (isset($options['auth']['username']) && isset($options['auth']['password'])) {
+                    $client->setAuth($options['auth']['username'], $options['auth']['password']);
+                }
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Fetching content from ' . $filenameOrUrl);

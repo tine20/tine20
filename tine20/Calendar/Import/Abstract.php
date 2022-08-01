@@ -92,6 +92,10 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
          * the model
          */
         'model'                 => 'Calendar_Model_Event',
+        /**
+         * credential cache id
+         */
+        'cc_id'                 => null,
     );
 
     protected function _getCalendarController()
