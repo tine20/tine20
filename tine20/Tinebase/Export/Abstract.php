@@ -322,7 +322,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $this->_exportTimeStamp = Tinebase_DateTime::now();
 
         if (isset($this->_config->target)) {
-            $this->_fileLocation = new Tinebase_Model_Tree_FileLocation($this->_config->target->toArray());
+            if (is_string($this->_config->target)) {
+                $this->_config->target = json_decode( $this->_config->target, true);
+            }
+            $this->_fileLocation = new Tinebase_Model_Tree_FileLocation(is_array($this->_config->target) ? $this->_config->target : $this->_config->target->toArray());
         }
 
         if (!empty($this->_config->group)) {

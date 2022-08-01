@@ -180,48 +180,111 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * apply changes handler
      */
-    onApplyChanges: function(closeWindow) {
+    onApplyChanges: async function(closeWindow) {
         var form = this.getForm();
         if (form.isValid()) {
             this.onRecordUpdate();
 
-            const exportMask = new Ext.LoadMask(this.getEl(), {msg: i18n._('Exporting...')});
-            exportMask.show();
-
-            Tine.widgets.exportAction.downloadExport(this.record).then((raw) => {
-                const response = JSON.parse(raw.responseText);
-
-                if (_.get(response, 'file_location.type') === 'download') {
-                    new Ext.ux.file.Download({
-                        params: {
-                            method: 'Tinebase.downloadTempfile',
-                            requestType: 'HTTP',
-                            tmpfileId: _.get(response, 'file_location.tempfile_id')
-                        }
-                    }).start();
-                }
-                
-                Ext.Msg.show({
-                    title: i18n._('Success'),
-                    msg: i18n._('Export created successfully.') + 
-                        (_.get(response, 'file_location.type') === 'download' ? ('<br /><b>' + i18n._('Please check your computers downloads folder!') + '</b>')  : ''),
-                    icon: Ext.MessageBox.INFO,
-                    buttons: Ext.Msg.OK,
-                    scope: this.window,
-                    fn: this.window.close
-                });
-                
-            }).catch((error) => {
-                Ext.Msg.show({
-                    title: i18n._('Failure'),
-                    msg: i18n._('Export could not be created. Please try again later'),
-                    icon: Ext.MessageBox.ERROR,
-                    buttons: Ext.Msg.OK,
-                    scope: this.window,
-                    fn: this.window.close
-                });
-            });
+            const definition = this.definitionsStore.getById(this.definitionId);
+            const options =  _.get(definition, 'data.plugin_options_json', {});
+            const locationOptions = [
+                {text: i18n._('Download'), name: 'download'},
+                {text: i18n._('Filemanager'), name: 'filesystem'}
+            ];
             
+            let location = 'download';
+
+            if (Tine.OnlyOfficeIntegrator) {
+                locationOptions.push({text: i18n._('Open'), name: 'open'});
+            }
+            
+            if (options && !options.target) {
+                location = await Tine.widgets.dialog.MultiOptionsDialog.getOption({
+                    title: window.i18n._('Choose Export Location'),
+                    questionText: window.i18n._('How would you like to save your export?'),
+                    height: 200,
+                    allowCancel: false,
+                    options: locationOptions
+                })
+            }
+
+            switch (location) {
+                case 'download':
+                    const exportMask = new Ext.LoadMask(this.getEl(), {msg: i18n._('Exporting...')});
+                    exportMask.show();
+
+                    Tine.widgets.exportAction.downloadExport(this.record).then((raw) => {
+                        const response = JSON.parse(raw.responseText);
+
+                        if (_.get(response, 'file_location.type') === 'download') {
+                            new Ext.ux.file.Download({
+                                params: {
+                                    method: 'Tinebase.downloadTempfile',
+                                    requestType: 'HTTP',
+                                    tmpfileId: _.get(response, 'file_location.tempfile_id')
+                                }
+                            }).start();
+                        }
+
+                        Ext.Msg.show({
+                            title: i18n._('Success'),
+                            msg: i18n._('Export created successfully.') +
+                                (_.get(response, 'file_location.type') === 'download' ? ('<br /><b>' + i18n._('Please check your computers downloads folder!') + '</b>')  : ''),
+                            icon: Ext.MessageBox.INFO,
+                            buttons: Ext.Msg.OK,
+                            scope: this.window,
+                            fn: this.window.close
+                        });
+
+                    }).catch((error) => {
+                        Ext.Msg.show({
+                            title: i18n._('Failure'),
+                            msg: i18n._('Export could not be created. Please try again later'),
+                            icon: Ext.MessageBox.ERROR,
+                            buttons: Ext.Msg.OK,
+                            scope: this.window,
+                            fn: this.window.close
+                        });
+                    });
+                    break;
+                case 'open':
+                    Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({
+                        contentPanelConstructorInterceptor: async (config) => {
+                            const waitingText = i18n._('Exporting...');
+                            const mask = await config.setWaitText(waitingText);
+
+                            try {
+                                const result = await Tine.widgets.exportAction.downloadExport(this.record);
+                                const response = JSON.parse(result.responseText);
+                                
+                                config.recordData =  _.get(response, 'file');
+                                mask.hide();
+                            } catch (error) {
+                                Ext.ux.MessageBox.msg(i18n._('Failure'), i18n._('Export could not be created. Please try again later'));
+                            }
+                        }            
+                    });
+                    break;
+                case 'filesystem':
+                    const filePickerDialog = new Tine.Filemanager.FilePickerDialog({
+                        constraint: 'folder',
+                        mode: 'target',
+                        singleSelect: true,
+                        requiredGrants: ['addGrant']
+                    });
+
+                    filePickerDialog.on('selected',  (nodes) => {
+                        _.set(this.record, 'data.options.' +'target', {'type': 'fm_node', 'fm_path': nodes[0].path });
+
+                        Tine.widgets.exportAction.downloadExport(this.record).then((raw) => {
+                            Ext.ux.MessageBox.msg(i18n._('Success'), i18n._('Export created successfully.'));
+                        }).catch((error) => {
+                            Ext.ux.MessageBox.msg(i18n._('Failure'), i18n._('Export could not be created. Please try again later'));
+                        });
+                    });
+                    filePickerDialog.openWindow();
+                    break;
+            }
         } else {
             Ext.Msg.show({
                 title: i18n._('Errors'),
