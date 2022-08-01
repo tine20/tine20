@@ -33,6 +33,12 @@ class Calendar_Import_Ical extends Calendar_Import_Abstract
      */
     protected function _getImportEvents($_resource, $container)
     {
+        if (!$_resource && isset($this->_options['url'])) {
+            $_resource = Tinebase_Helper::getFileOrUriContents($this->_options['url']);
+            if (!$_resource) {
+                throw new Tinebase_Exception_NotFound('url not found or timeout');
+            }
+        }
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         if (isset($this->_options['onlyBasicData'])) {
             $converter->setOptions(array('onlyBasicData' => $this->_options['onlyBasicData']));

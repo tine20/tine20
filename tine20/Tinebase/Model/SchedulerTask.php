@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Scheduler
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -26,14 +26,13 @@
  * @property Tinebase_DateTime          server_time
  */
 
-class Tinebase_Model_SchedulerTask extends Tinebase_Record_Abstract
+class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
 {
-    /**
-     * holds the configuration object (must be declared in the concrete class)
-     *
-     * @var Tinebase_ModelConfiguration
-     */
-    protected static $_configurationObject = NULL;
+    public const FLD_ACCOUNT_ID = 'account_id';
+    public const FLD_CONFIG = 'config';
+    public const FLD_IS_SYSTEM = 'is_system';
+    public const FLD_NAME = 'name';
+    public const FLD_NEXT_RUN = 'next_run';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -41,7 +40,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        'version'           => 1,
+        'version'           => 2,
         'recordName'        => 'Scheduler task',
         'recordsName'       => 'Scheduler tasks', // ngettext('Scheduler task', 'Scheduler tasks', n)
         //'containerProperty' => 'container_id',
@@ -52,7 +51,8 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_Abstract
         'hasCustomFields'   => false,
         'hasNotes'          => false,
         'hasTags'           => false,
-        'modlogActive'      => false,
+        'modlogActive'      => true,
+        self::HAS_DELETED_TIME_UNIQUE => true,
         'hasAttachments'    => false,
         'exposeJsonApi'     => false,
 
@@ -70,20 +70,20 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_Abstract
             ],
             'uniqueConstraints' => [
                 'name' => [
-                    'columns' => ['name']
+                    'columns' => ['name', self::FLD_DELETED_TIME]
                 ]
             ]
         ],
 
         'fields'            => [
-            'name' => [
+            self::FLD_NAME => [
                 'type'          => 'string',
                 'length'        => 255,
                 'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 'label'         => 'Name', // _('Name')
                 'queryFilter'   => true
             ],
-            'config' => [
+            self::FLD_CONFIG => [
                 'type'          => 'text',
                 'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 'label'         => 'Configuration', // _('Configuration')
@@ -96,6 +96,9 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_Abstract
                 'default'       => null,
                 'type'          => 'datetime',
                 'nullable'      => true,
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
             ],
             'last_duration' => [
                 'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -103,6 +106,9 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_Abstract
                 'default'       => null,
                 'type'          => 'integer',
                 'nullable'      => true,
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
             ],
             'lock_id' => [
                 'type'          => 'string',
@@ -111,8 +117,11 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_Abstract
                 'label'         => 'Lock id', // _('Lock id')
                 'default'       => null,
                 'nullable'      => true,
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
             ],
-            'next_run' => [
+            self::FLD_NEXT_RUN => [
                 'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 'label'         => 'Next run', // _('Next run')
                 'type'          => 'datetime',
@@ -123,19 +132,47 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_Abstract
                 'default'       => null,
                 'type'          => 'datetime',
                 'nullable'      => true,
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
             ],
             'failure_count' => [
                 'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'label'         => 'Failure count', // _('Failure count')
                 'default'       => 0,
                 'type'          => 'integer',
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
             ],
             'server_time' => [
                 'type'          => 'virtual',
-                'config'        => ['type' => 'datetime']
-            ]
+                'config'        => ['type' => 'datetime'],
+                self::CONVERTERS=> [Tinebase_Model_Converter_DateTime::class],
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
+            ],
+            self::FLD_IS_SYSTEM => [
+                self::TYPE          => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL   => true,
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
+            ],
+            self::FLD_ACCOUNT_ID => [
+                self::TYPE          => self::TYPE_USER,
+                self::NULLABLE      => true,
+            ],
         ]
     ];
+
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
 
     /**
      * @return bool

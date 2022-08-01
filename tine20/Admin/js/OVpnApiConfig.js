@@ -29,20 +29,20 @@ Tine.widgets.form.FieldManager.register('Admin', 'OVpnApiAccount', 'auth_configs
 
 Tine.Admin.registerItem({
     text: 'OVPN API Config', // _('OVPN API Config')
-    iconCls: 'admin-node-quota-usage', // TODO icon?
     pos: 2000,
     dataPanelType: "ovpnapiconfig",
     hidden: ! (Tine.Admin.showModule('ovpnaccounts') || Tine.Admin.showModule('ovpnrealms')),
     leaf: false,
+    expanded: false,
     children: [{
         text: 'Realms', // _('Realms')
-        iconCls: 'admin-node-customfields', // TODO icon?
+        iconCls: 'admin-node',
         leaf: true,
         dataPanelType: "Tine.Admin.OVpnApiRealmGridPanel",
         hidden: !Tine.Admin.showModule('ovpnrealms')
     }, {
         text: 'Accounts', // _('Accounts')
-        iconCls: 'admin-node-customfields', // TODO icon?
+        iconCls: 'admin-node',
         leaf: true,
         dataPanelType: "Tine.Admin.OVpnApiAccountGridPanel",
         hidden: !Tine.Admin.showModule('ovpnaccounts')

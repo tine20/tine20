@@ -294,7 +294,8 @@ Tine.Admin.init = function () {
             loader: treeLoader,
             rootVisible: false,
             border: false,
-            autoScroll: true
+            autoScroll: true,
+            autoHeight: true
         });
         
         // set the root node
