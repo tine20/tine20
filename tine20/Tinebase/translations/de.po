@@ -5246,3 +5246,15 @@ msgstr "Avscan"
 
 msgid "Files are still uploading."
 msgstr "Es werden gerade Dateien hochgeladen."
+
+msgid "Open"
+msgstr "Öffnen"
+
+msgid "Filemanager"
+msgstr "Dateimanager"
+
+msgid "Choose Export Location"
+msgstr "Bitte wählen Sie das Export Ziel"
+
+msgid "How would you like to save your export?"
+msgstr "Wie möchten Sie Ihren Export speichern?"

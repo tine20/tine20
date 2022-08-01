@@ -47,7 +47,9 @@ class Tinebase_Server_HttpTests extends TestCase
         $this->assertStringNotContainsString('Not Authorised', $out);
         $this->assertStringNotContainsString('Method not found', $out);
         $this->assertStringNotContainsString('No Application Controller found', $out);
-        $this->assertStringNotContainsString('"error"', $out);
+        if (!$returnFileLocation) {
+            $this->assertStringNotContainsString('"error"', $out);
+        }
         $this->assertStringNotContainsString('PHP Fatal error', $out);
 
         if ($returnFileLocation) {
@@ -267,7 +269,7 @@ class Tinebase_Server_HttpTests extends TestCase
             ['maxfilesize' => 1] // split after each event!
         );
         $this->assertTrue(!empty($out), 'request should not be empty');
-        $this->assertStringContainsString('{"success":true,"file_location":{"type":"fm_node","fm_path":"\/shared\/unittestexport"}}', $out);
+        $this->assertStringContainsString('{"success":true,"file_location":{"type":"fm_node","fm_path":"\/shared\/unittestexport"}', $out);
     }
 
     public function testExportEventsDownloadReturnFileLocation()
@@ -283,7 +285,7 @@ class Tinebase_Server_HttpTests extends TestCase
         $out = $this->testExportEvents(false, true);
 
         $this->assertTrue(!empty($out), 'request should not be empty');
-        $this->assertStringContainsString('{"success":true,"file_location":{"type":"fm_node","fm_path":"\/shared\/unittestexport"}}', $out);
+        $this->assertStringContainsString('{"success":true,"file_location":{"type":"fm_node","fm_path":"\/shared\/unittestexport"}', $out);
     }
 
     public function testExportEventsToFilemanagerPersonalReturnFileLocation()
@@ -293,7 +295,7 @@ class Tinebase_Server_HttpTests extends TestCase
 
         $this->assertTrue(!empty($out), 'request should not be empty');
         $this->assertStringContainsString('{"success":true,"file_location":{"type":"fm_node","fm_path":"'
-            . str_replace('/', '\/', $path) . '"}}', $out);
+            . str_replace('/', '\/', $path) . '"}', $out);
     }
 
     public function testExportEventsDownloadReturnFileLocationVCalendar()

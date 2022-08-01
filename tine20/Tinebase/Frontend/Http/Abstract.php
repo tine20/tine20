@@ -207,6 +207,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _outputFileLocationJson($export, $filename)
     {
+        $tmpFile = [];
         if (! method_exists($export, 'getTargetFileLocation')) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                 . ' export does not support file location');
@@ -217,11 +218,15 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 $export->writeToFileLocation();
             }
             $fileLocation = $export->getTargetFileLocation($filename);
+            if ($fileLocation && $fileLocation->tempfile_id) {
+                $tmpFile = Tinebase_TempFile::getInstance()->getTempFile($fileLocation->tempfile_id);
+            }
         }
 
         echo json_encode([
             'success' => ($fileLocation !== null),
             'file_location' => $fileLocation ? $fileLocation->toArray() : [],
+            'file' => $tmpFile ? $tmpFile->toArray() : []
         ]);
     }
 
