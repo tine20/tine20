@@ -25,7 +25,7 @@ class Tinebase_Backend_Scheduler extends Tinebase_Backend_Sql
         parent::__construct([
             'modelName'     => Tinebase_Model_SchedulerTask::class,
             'tableName'     => self::TABLE_NAME,
-            'modlogActive'  => false
+            'modlogActive'  => true,
         ]);
         $this->_additionalColumns = ['server_time' => new Zend_Db_Expr('NOW()')];
     }

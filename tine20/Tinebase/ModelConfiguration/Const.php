@@ -57,6 +57,9 @@ class Tinebase_ModelConfiguration_Const {
     const DELEGATED_ACL_FIELD = 'delegateAclField';
     const DENORMALIZATION_CONFIG = 'denormalizationConfig';
     const DENORMALIZATION_OF = 'denormalizationOf';
+    /**
+     * valid vor type 'records' - means records are governed (not independent)
+     */
     const DEPENDENT_RECORDS = 'dependentRecords';
     const DESCRIPTION = 'description'; // e.g. Tinebase_Model_Grants
     /**

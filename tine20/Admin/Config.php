@@ -79,6 +79,9 @@ class Admin_Config extends Tinebase_Config_Abstract
      */
     const MODULES_TO_SHOW = 'modulesToShow';
 
+    const OVPN_API = 'ovpnApi';
+    const OVPN_API_KEY = 'apiKey';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -141,6 +144,18 @@ class Admin_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => FALSE,
         ),
+        self::OVPN_API => [
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::CONTENT               => [
+                self::OVPN_API_KEY          => [
+                    self::TYPE                  => self::TYPE_STRING,
+                    self::DEFAULT_STR           => '',
+                ],
+            ],
+            self::DEFAULT_STR           => [],
+        ],
         self::ENABLED_FEATURES => array(
             //_('Enabled Features')
             'label' => 'Enabled Features',

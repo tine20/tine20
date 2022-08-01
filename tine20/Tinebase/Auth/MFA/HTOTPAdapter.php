@@ -60,15 +60,17 @@ class Tinebase_Auth_MFA_HTOTPAdapter implements Tinebase_Auth_MFA_AdapterInterfa
                 }
                 if ($result) {
                     ++$i;
-                    $user = Tinebase_User::getInstance()->getUserById(
-                        $htOTPCfg->{Tinebase_Model_MFA_HOTPUserConfig::FLD_ACCOUNT_ID}, Tinebase_Model_FullUser::class);
-                    if (!($cfg = $user->mfa_configs->getById($_userCfg->getId()))) {
-                        return false;
-                    }
-                    $cfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->{Tinebase_Model_MFA_HOTPUserConfig::FLD_COUNTER} =
-                        $htOTPCfg->{Tinebase_Model_MFA_HOTPUserConfig::FLD_COUNTER} + $i;
-                    Tinebase_User::getInstance()->updateUserInSqlBackend($user);
-                    return true;
+                    return Tinebase_Auth_MFA::getInstance($_userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
+                        ->persistUserConfig($htOTPCfg->{Tinebase_Model_MFA_HOTPUserConfig::FLD_ACCOUNT_ID},
+                            function(Tinebase_Model_FullUser $user) use($i, $_userCfg, $htOTPCfg) {
+                                if (!($cfg = $user->mfa_configs->getById($_userCfg->getId()))) {
+                                    return false;
+                                }
+                                $cfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}
+                                    ->{Tinebase_Model_MFA_HOTPUserConfig::FLD_COUNTER} =
+                                        $htOTPCfg->{Tinebase_Model_MFA_HOTPUserConfig::FLD_COUNTER} + $i;
+                                return true;
+                            });
                 }
             }
             return false;

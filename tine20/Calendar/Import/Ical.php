@@ -6,7 +6,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        use more functionality of Tinebase_Import_Abstract (import() and other fns)
  */
@@ -33,6 +33,24 @@ class Calendar_Import_Ical extends Calendar_Import_Abstract
      */
     protected function _getImportEvents($_resource, $container)
     {
+        if (!$_resource && isset($this->_options['url'])) {
+
+            $cc = null;
+            if (isset($this->_options['cc_id'])) {
+                /** @var Tinebase_Model_CredentialCache $cc */
+                $cc = Tinebase_Auth_CredentialCache::getInstance()->get($this->_options['cc_id']);
+                $cc->key = Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY};
+                Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($cc);
+            }
+
+            $_resource = Tinebase_Helper::getFileOrUriContents($this->_options['url'], $cc ? ['auth' => [
+                    'username' => $cc->username,
+                    'password' => $cc->password,
+                ]] : []);
+            if (!$_resource) {
+                throw new Tinebase_Exception_NotFound('url not found or timeout');
+            }
+        }
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         if (isset($this->_options['onlyBasicData'])) {
             $converter->setOptions(array('onlyBasicData' => $this->_options['onlyBasicData']));

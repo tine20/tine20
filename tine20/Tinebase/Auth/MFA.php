@@ -66,6 +66,26 @@ final class Tinebase_Auth_MFA
         return $_account->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_ID, $_userMfaId);
     }
 
+    public function persistUserConfig(?string $_accountId, Closure $cb): bool
+    {
+        if ($this->_persistUserConfigDelegator) {
+            return ($this->_persistUserConfigDelegator)($cb);
+        } else {
+            $user = Tinebase_User::getInstance()->getUserById($_accountId, Tinebase_Model_FullUser::class);
+            if (!$cb($user)) {
+                return false;
+            }
+            Tinebase_User::getInstance()->updateUserInSqlBackend($user);
+        }
+
+        return true;
+    }
+
+    public function setPersistUserConfigDelegator(?Closure $fun)
+    {
+        $this->_persistUserConfigDelegator = $fun;
+    }
+
     /**
      * the constructor
      *
@@ -95,4 +115,6 @@ final class Tinebase_Auth_MFA
      * @var array<self>
      */
     private static $_instances = [];
+
+    protected $_persistUserConfigDelegator = null;
 }

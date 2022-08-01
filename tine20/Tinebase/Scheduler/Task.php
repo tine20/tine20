@@ -74,6 +74,9 @@ class Tinebase_Scheduler_Task
      */
     protected $_callables = null;
 
+    protected $_config = null;
+    protected $_config_class = null;
+
     /**
      * Tinebase_Scheduler_Task constructor.
      * @param array $options
@@ -98,6 +101,8 @@ class Tinebase_Scheduler_Task
         $this->_cron = $options['cron'];
         $this->_cronObject = Cron\CronExpression::factory($this->_cron);
         $this->_callables = $options['callables'];
+        $this->_config = isset($options['config']) ? $options['config'] : null;
+        $this->_config_class = isset($options['config_class']) ? $options['config_class'] : null;
     }
 
     public function toArray()
@@ -105,6 +110,8 @@ class Tinebase_Scheduler_Task
         return [
             'cron'              => $this->_cron,
             'callables'         => $this->_callables,
+            'config'            => $this->_config,
+            'config_class'      => $this->_config_class,
         ];
     }
 
@@ -245,28 +252,6 @@ class Tinebase_Scheduler_Task
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task Tinebase_Alarm::sendPendingAlarms in scheduler.');
-    }
-    
-    /**
-     * add scheduled import task
-     * 
-     * @param Tinebase_Scheduler $_scheduler
-     */
-    public static function addImportTask(Tinebase_Scheduler $_scheduler)
-    {
-        if ($_scheduler->hasTask('Tinebase_Controller_ScheduledImport')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_Controller_ScheduledImport', self::TASK_TYPE_MINUTELY, [[
-            self::CONTROLLER    => 'Tinebase_Controller_ScheduledImport',
-            self::METHOD_NAME   => 'runNextScheduledImport',
-        ]]);
-        
-        $_scheduler->create($task);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' Saved task Tinebase_Controller_ScheduledImport::runNextScheduledImport in scheduler.');
     }
     
     /**

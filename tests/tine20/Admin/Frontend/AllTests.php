@@ -26,6 +26,7 @@ class Admin_Frontend_AllTests
         $suite->addTestSuite(Admin_Frontend_JsonTest::class);
         $suite->addTestSuite(Admin_Frontend_Json_EmailAccountTest::class);
         $suite->addTestSuite(Admin_Frontend_Json_UserTest::class);
+        $suite->addTestSuite(Admin_Frontend_Json_OVpnApiTest::class);
         $suite->addTestSuite(Admin_Frontend_Json_QuotaTest::class);
         return $suite;
     }

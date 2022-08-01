@@ -22,6 +22,9 @@
     background-image:url(../../images/icon-set/icon_settings.svg) !important;
 }
 
+.admin-node {
+    background-image:url(../../images/icon-set/icon_calendar_list.svg) !important;
+}
 .admin-node-accesslog {
     background-image:url(../../images/icon-set/icon_log_file.svg) !important;
 }
@@ -60,6 +63,10 @@
 
 .admin-node-quota-usage {
     background-image:url(../../images/icon-set/icon_quota.svg) !important;
+}
+
+.admin-node-scheduler {
+    background-image:url(../../images/icon-set/icon_time.svg) !important;
 }
 
 .x-tree-node-collapsed .x-tree-node-icon.x-tree-node-leaf-checkbox, 

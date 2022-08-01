@@ -128,7 +128,7 @@ Ext.ComponentMgr = function(){
          * @return {Ext.Component} The newly instantiated Component.
          */
         create : function(config, defaultType){
-            return config.render ? config : new types[config.xtype || defaultType](config);
+            return config.render ? config : new (_.isFunction(config.xtype) ? config.xtype : (types[config.xtype || defaultType]))(config);
         },
 
         /**

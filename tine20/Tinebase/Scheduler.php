@@ -28,8 +28,8 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
         $this->_applicationName = 'Tinebase';
         $this->_backend = new Tinebase_Backend_Scheduler();
         $this->_modelName = 'Tinebase_Model_SchedulerTask';
-        $this->_purgeRecords = true;
-        $this->_omitModLog = true;
+        $this->_purgeRecords = false;
+        $this->_omitModLog = false;
         $this->_doContainerACLChecks = false;
     }
 
@@ -156,7 +156,16 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                         . ' run task ' . $task->name);
                 }
+                $userRaii = null;
                 try {
+                    if ($task->{Tinebase_Model_SchedulerTask::FLD_ACCOUNT_ID}) {
+                        $oldUser = Tinebase_Core::getUser();
+                        $userRaii = new Tinebase_RAII(function() use($oldUser) {
+                            Tinebase_Core::setUser($oldUser);
+                        });
+                        Tinebase_Core::setUser(Tinebase_User::getInstance()
+                            ->getFullUserById($task->{Tinebase_Model_SchedulerTask::FLD_ACCOUNT_ID}));
+                    }
                     if (true === $task->config->run()) {
                         $task->config->markSuccess($task);
                         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
@@ -178,6 +187,7 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
                 }
 
                 // clean up again
+                unset($userRaii);
                 $task->lock_id = null;
                 $this->_backend->update($task);
             } finally {
