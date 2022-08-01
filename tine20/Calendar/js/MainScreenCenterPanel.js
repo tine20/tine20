@@ -1030,7 +1030,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 
             // if
             options.push({text: this.app.i18n._('Update this and all future events'), name: (event.isRecurBase() && ! event.get('rrule').newrule) ? 'series' : 'future'});
-            options.push({text: this.app.i18n._('Update whole series'), name: 'series'});
             // endif
 
             options.push({text: this.app.i18n._('Update nothing'), name: 'cancel'});
