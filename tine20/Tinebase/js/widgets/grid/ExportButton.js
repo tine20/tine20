@@ -171,7 +171,71 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
                 record: exportJob
             });
         } else {
-            Tine.widgets.exportAction.downloadExport(exportJob);
+            if (this.definition.plugin_options_json && !this.definition.plugin_options_json.target) {
+                const locationOptions = [
+                    {text: i18n._('Download'), name: 'download'},
+                    {text: i18n._('Filemanager'), name: 'filesystem'}
+                ];
+
+                if (Tine.OnlyOfficeIntegrator) {
+                    locationOptions.push({text: i18n._('Open'), name: 'open'});
+                }
+                
+                const location = await Tine.widgets.dialog.MultiOptionsDialog.getOption({
+                    title: window.i18n._('Choose Export Location'),
+                    questionText: window.i18n._('How would you like to save your export?'),
+                    height: 200,
+                    allowCancel: false,
+                    options: locationOptions
+                })
+                switch (location) {
+                    case 'download':
+                        Tine.widgets.exportAction.downloadExport(exportJob);
+                        break;
+                    case 'open':
+                        exportJob.set('returnFileLocation', true);
+                        Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({
+                            contentPanelConstructorInterceptor: async (config) => {
+                                const waitingText = i18n._('Exporting...');
+                                const mask = await config.setWaitText(waitingText);
+
+                                try {
+                                    const result = await Tine.widgets.exportAction.downloadExport(exportJob);
+                                    const response = JSON.parse(result.responseText);
+
+                                    config.recordData =  _.get(response, 'file');
+                                    mask.hide();
+                                } catch (error) {
+                                    Ext.ux.MessageBox.msg(i18n._('Failure'), i18n._('Export could not be created. Please try again later'));
+                                }
+                            }
+                        });
+                        break;
+                    case 'filesystem':
+                        const filePickerDialog = new Tine.Filemanager.FilePickerDialog({
+                            constraint: 'folder',
+                            mode: 'target',
+                            singleSelect: true,
+                            requiredGrants: ['addGrant']
+                        });
+
+                        filePickerDialog.on('selected',  (nodes) => {
+                            exportJob.set('returnFileLocation', true);
+                            _.set(exportJob, 'data.options.' +'target', {'type': 'fm_node', 'fm_path': nodes[0].path });
+
+                            Tine.widgets.exportAction.downloadExport(exportJob).then((raw) => {
+                                Ext.ux.MessageBox.msg(i18n._('Success'), i18n._('Export created successfully.'));
+                            }).catch((error) => {
+                                Ext.ux.MessageBox.msg(i18n._('Failure'), i18n._('Export could not be created. Please try again later'));
+                            });
+                        });
+                        filePickerDialog.openWindow();
+                        break;
+                };
+                
+            } else {
+                Tine.widgets.exportAction.downloadExport(exportJob);
+            }
         }
     }
 });

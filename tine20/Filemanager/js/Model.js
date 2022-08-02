@@ -197,9 +197,6 @@ Tine.Filemanager.nodeBackendMixin = {
                         response.records.push(new this.recordClass(nodeData));
                     }
                 })
-                const sort = options?.params?.sort ?? 'name';
-                const dir = paging.dir?.toLowerCase() ?? 'asc';
-                response.records = _.orderBy(response.records, [`data.${sort}`], [dir]);
             }
     
             cb.apply(cb.scope, arguments);
