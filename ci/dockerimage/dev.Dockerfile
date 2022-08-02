@@ -45,7 +45,7 @@ RUN if [ ${ALPINE_PHP_PACKAGE} == "php8" ]; then \
             rm /composer-setup.php; \
             exit 1; \
         fi; \
-        php /composer-setup.php; \
+        php /composer-setup.php --install-dir=/usr/bin --filename=composer; \
         RESULT=$?; \
         rm /composer-setup.php; \
         exit $RESULT; \
