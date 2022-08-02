@@ -40,10 +40,10 @@ RUN if [ ${ALPINE_PHP_PACKAGE} == "php8" ]; then \
         ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', '/composer-setup.php');")"; \
         if [ "$EXPECTED_CHECKSUM" != "$ACTUAL_CHECKSUM" ]; then \
             >&2 echo 'ERROR: Invalid installer checksum'; \
-            rm composer-setup.php; \
+            rm /composer-setup.php; \
             exit 1; \
         fi; \
-        php composer-setup.php; \
+        php /composer-setup.php; \
         RESULT=$?; \
         rm /composer-setup.php; \
         exit $RESULT; \
