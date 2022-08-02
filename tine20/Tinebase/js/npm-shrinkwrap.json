@@ -14369,39 +14369,39 @@
     },
     "postal.federation": {
       "version": "github:tine20/postal.federation#21f3d0b2b3755b48a999655c6312fcd5801367e0",
-      "from": "github:tine20/postal.federation",
+      "from": "github:tine20/postal.federation#21f3d0b2b3755b48a999655c6312fcd5801367e0",
       "requires": {
         "lodash": "^4.12.0"
       }
     },
     "postal.request-response": {
       "version": "github:tine20/postal.request-response#a5b6a1b4842b0a20f54a8266f255005f3a70a8a8",
-      "from": "github:tine20/postal.request-response",
+      "from": "github:tine20/postal.request-response#a5b6a1b4842b0a20f54a8266f255005f3a70a8a8",
       "requires": {
         "lodash": "^4.12.0"
       }
     },
     "postal.xwindow": {
       "version": "github:tine20/postal.xwindow#20f915298e7a177949255938cbf5ebecb70fbf7d",
-      "from": "github:tine20/postal.xwindow",
+      "from": "github:tine20/postal.xwindow#20f915298e7a177949255938cbf5ebecb70fbf7d",
       "requires": {
         "lodash": "^4.12.0",
         "postal": "^2.0.5",
-        "postal.federation": "github:tine20/postal.federation#21f3d0b2b3755b48a999655c6312fcd5801367e0",
-        "postal.request-response": "github:tine20/postal.request-response#a5b6a1b4842b0a20f54a8266f255005f3a70a8a8",
+        "postal.federation": "github:tine20/postal.federation",
+        "postal.request-response": "github:tine20/postal.request-response",
         "store2": "^2.5.9"
       },
       "dependencies": {
         "postal.federation": {
           "version": "github:tine20/postal.federation#21f3d0b2b3755b48a999655c6312fcd5801367e0",
-          "from": "github:tine20/postal.federation#21f3d0b2b3755b48a999655c6312fcd5801367e0",
+          "from": "github:tine20/postal.federation",
           "requires": {
             "lodash": "^4.12.0"
           }
         },
         "postal.request-response": {
           "version": "github:tine20/postal.request-response#a5b6a1b4842b0a20f54a8266f255005f3a70a8a8",
-          "from": "github:tine20/postal.request-response#a5b6a1b4842b0a20f54a8266f255005f3a70a8a8",
+          "from": "github:tine20/postal.request-response",
           "requires": {
             "lodash": "^4.12.0"
           }
