@@ -1477,6 +1477,22 @@
         "regenerator-runtime": "^0.13.4"
       }
     },
+    "@babel/runtime-corejs2": {
+      "version": "7.18.9",
+      "resolved": "https://registry.npmjs.org/@babel/runtime-corejs2/-/runtime-corejs2-7.18.9.tgz",
+      "integrity": "sha512-l057ZarpDX2QnXM89ViR2BgRFgTy2l5UFGDt0SbInhim1N/ljBgPeTJV0kRG1/Bo7CkHfYfrNNwTeQ2CPph9xQ==",
+      "requires": {
+        "core-js": "^2.6.12",
+        "regenerator-runtime": "^0.13.4"
+      },
+      "dependencies": {
+        "core-js": {
+          "version": "2.6.12",
+          "resolved": "https://registry.npmjs.org/core-js/-/core-js-2.6.12.tgz",
+          "integrity": "sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ=="
+        }
+      }
+    },
     "@babel/template": {
       "version": "7.10.4",
       "resolved": "https://registry.npmjs.org/@babel/template/-/template-7.10.4.tgz",
@@ -4087,6 +4103,11 @@
       "integrity": "sha1-ZF/ErfWLcrZJ1crmUTVhnbJv8UM=",
       "dev": true
     },
+    "component-props": {
+      "version": "1.1.1",
+      "resolved": "https://registry.npmjs.org/component-props/-/component-props-1.1.1.tgz",
+      "integrity": "sha512-69pIRJs9fCCHRqCz3390YF2LV1Lu6iEMZ5zuVqqUn+G20V9BNXlMs0cWawWeW9g4Ynmg29JmkG6R7/lUJoGd1Q=="
+    },
     "compressible": {
       "version": "2.0.18",
       "resolved": "https://registry.npmjs.org/compressible/-/compressible-2.0.18.tgz",
@@ -6362,6 +6383,11 @@
       "integrity": "sha1-2uRqnXj74lKSJYzB54CkHZXAN4I=",
       "dev": true
     },
+    "flow": {
+      "version": "0.2.3",
+      "resolved": "https://registry.npmjs.org/flow/-/flow-0.2.3.tgz",
+      "integrity": "sha512-CFNnRuX6nsOmEjGvE5RP0zwGoebdU9k+IJJy97HHkc0Xdlyh5EFAmdOznTKhEQkWKWXTJp63bW0TWQZ+sywWRw=="
+    },
     "flush-write-stream": {
       "version": "1.1.1",
       "resolved": "https://registry.npmjs.org/flush-write-stream/-/flush-write-stream-1.1.1.tgz",
@@ -6813,6 +6839,14 @@
       "integrity": "sha512-jcLLfkpoVGmH7/InMC/1hIvOPSUh38oJtGhvrOFGzioE1DZ+0YW16RgmOJhHiuWTvGiJQ9Z1Ik43JvkRPRvE+A==",
       "requires": {
         "lodash": "^4.17.15"
+      }
+    },
+    "group-by": {
+      "version": "0.0.1",
+      "resolved": "https://registry.npmjs.org/group-by/-/group-by-0.0.1.tgz",
+      "integrity": "sha512-qHyGGbMxDq0vkOvSmHdGHtF8dSah48xQ0aw3T8QYgr6Mcsrh6Ib/JKqfCuPkrsZCdL0fJyteqQa5TJWv6kpqDA==",
+      "requires": {
+        "to-function": "*"
       }
     },
     "growl": {
@@ -14369,8 +14403,7 @@
     "regenerator-runtime": {
       "version": "0.13.5",
       "resolved": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.13.5.tgz",
-      "integrity": "sha512-ZS5w8CpKFinUzOwW3c83oPeVXoNsrLsaCoLtJvAClH135j/R77RuymhiSErhm2lKcwSCIpmvIWSbDkIfAqKQlA==",
-      "dev": true
+      "integrity": "sha512-ZS5w8CpKFinUzOwW3c83oPeVXoNsrLsaCoLtJvAClH135j/R77RuymhiSErhm2lKcwSCIpmvIWSbDkIfAqKQlA=="
     },
     "regenerator-transform": {
       "version": "0.14.5",
@@ -15744,7 +15777,10 @@
       "version": "github:tine20/storage-based-queue#215c4b2de3780d3a7b05aeacbf281544823be8a7",
       "from": "github:tine20/storage-based-queue#215c4b2de3780d3a7b05aeacbf281544823be8a7",
       "requires": {
+        "@babel/runtime-corejs2": "^7.0.0",
         "braces": "^3.0.2",
+        "flow": "^0.2.3",
+        "group-by": "0.0.1",
         "localforage": "^1.10.0",
         "object-path": "^0.11.5",
         "pseudo-worker": "^1.3.0",
@@ -16336,6 +16372,14 @@
       "resolved": "https://registry.npmjs.org/to-fast-properties/-/to-fast-properties-2.0.0.tgz",
       "integrity": "sha1-3F5pjL0HkmW8c+A3doGk5Og/YW4=",
       "dev": true
+    },
+    "to-function": {
+      "version": "2.0.6",
+      "resolved": "https://registry.npmjs.org/to-function/-/to-function-2.0.6.tgz",
+      "integrity": "sha512-LWfUmW851x5T8+78Nl82CA2j6w0trhoFj4rpS6pFUMgfUMUySDAKPgTvQkUqlWuH3Lihlk5sPyDHSVwmKDSc5Q==",
+      "requires": {
+        "component-props": "*"
+      }
     },
     "to-object-path": {
       "version": "0.3.0",
