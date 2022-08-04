@@ -5,18 +5,17 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
 /**
- * validates if a value is a json string
- * arrays (converted json strings to php arrays), empty strings and null are accepted too
+ * SubValidate Record(Set)
  *
  * @package     Tinebase
  * @subpackage  Record
  */
-class Tinebase_Record_Validator_Json implements Zend_Validate_Interface
+class Tinebase_Record_Validator_SubValidate implements Zend_Validate_Interface
 {
     protected $_messages = [];
 
@@ -33,17 +32,19 @@ class Tinebase_Record_Validator_Json implements Zend_Validate_Interface
      */
     public function isValid($value)
     {
-        $this->_messages = [];
-        if (null === $value || '' === $value || is_array($value)) {
-            return true;
-        }
-        if (!is_string($value)) {
-            $this->_messages[] = 'value needs to be a string';
+        if ($value instanceof Tinebase_Record_Interface) {
+            $value = [$value];
+        } elseif (!$value instanceof Tinebase_Record_RecordSet) {
+            $this->_messages[] = 'value not a record(set)';
             return false;
         }
-        if (null === json_decode($value, true)) {
-            $this->_messages[] = 'value is not a valid json string';
-            return false;
+
+        /** @var Tinebase_Record_Interface $val */
+        foreach ($value as $val) {
+            if (!$val->isValid()) {
+                $this->_messages[] = 'subvalidation failed';
+                return false;
+            }
         }
 
         return true;

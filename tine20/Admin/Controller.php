@@ -107,6 +107,7 @@ class Admin_Controller extends Tinebase_Controller_Abstract
                 ['field' => Admin_Model_OVpnApiAccount::FLD_REALM, 'operator' => 'definedBy', 'value' => [
                     ['field' => Admin_Model_OVpnApiRealm::FLD_KEY, 'operator' => 'equals', 'value' => $body['realm']],
                 ]],
+                ['field' => Admin_Model_OVpnApiAccount::FLD_IS_ACTIVE, 'operator' => 'equals', 'value' => true],
             ]))->getFirstRecord();
 
         if (null === $account) {
@@ -119,7 +120,8 @@ class Admin_Controller extends Tinebase_Controller_Abstract
             $body['pass'] = substr($body['pass'], strlen($account->{Admin_Model_OVpnApiAccount::FLD_PIN}));
         }
 
-        foreach ($account->{Admin_Model_OVpnApiAccount::FLD_AUTH_CONFIGS} as $authConfig) {
+        foreach ($account->{Admin_Model_OVpnApiAccount::FLD_AUTH_CONFIGS}
+                     ->filter(Admin_Model_OVpnApi_AuthConfig::FLD_IS_ACTIVE, true) as $authConfig) {
             $mfa = Tinebase_Auth_MFA::getInstance($authConfig->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID});
             $mfa->setPersistUserConfigDelegator(function(Closure $cb) use($account) {
                 if (!$cb(new Tinebase_Model_FullUser([
