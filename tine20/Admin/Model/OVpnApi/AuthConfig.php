@@ -47,7 +47,8 @@ class Admin_Model_OVpnApi_AuthConfig extends Tinebase_Model_MFA_UserConfig
                 Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
                 Zend_Validate_InArray::class => [true, false]
             ],
-            self::LABEL => 'is active', // _('is active')
+            self::DEFAULT_VAL => true, // otherwise new AuthConfigs are created inactive
+            self::LABEL => 'Is active', // _('Is active')
         ];
     }
 
