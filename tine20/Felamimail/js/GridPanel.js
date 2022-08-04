@@ -152,7 +152,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.app.getFolderStore().on('update', this.onUpdateFolderStore, this);
         this.contextMenu.on('beforeshow', this.onDisplaySpamActions, this);
         this.initPagingToolbar();
-
+        
         this.sendFolderGridStateId = this.gridConfig.stateId + '-SendFolder';
     },
     
@@ -1489,19 +1489,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     onStoreBeforeLoadFolderChange: function (store, options) {
-
         const isSendFolderPath = this.isSendFolderPathInFilterParams(options.params);
+        const stateId = isSendFolderPath ? this.sendFolderGridStateId : this.gridConfig.stateId;
 
         if (isSendFolderPath && ! this.sentFolderSelected) {
-            this.changeFilterInParams(options.params, 'query', 'to');
-            this.changeGridState(this.sendFolderGridStateId);
             this.sentFolderSelected = true;
-
         } else if (! isSendFolderPath && this.sentFolderSelected) {
-            this.changeFilterInParams(options.params, 'to', 'query');
-            this.changeGridState(this.gridConfig.stateId);
             this.sentFolderSelected = false;
         }
+        
+        this.resolveFilterInParams(options.params, this.sentFolderSelected);
+        this.changeGridState(stateId);
     },
 
     isSendFolderPathInFilterParams: function (params) {
@@ -1532,25 +1530,32 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     /**
+     * add custom filter before or after store load
+     * 
      * @param params
-     * @param from
-     * @param to
+     * @param sentFolderSelected
      *
-     * TODO just change the field??
      */
-    changeFilterInParams: function (params, from, to) {
-        const queryFilter = params.filter[0] && params.filter[0].filters
-            ? _.remove(params.filter[0].filters[0].filters, {
-                field: from
-            })
-            : [];
-        if (queryFilter.length > 0) {
-            params.filter[0].filters[0].filters =
-                params.filter[0].filters[0].filters.concat({
-                    field: to,
-                    operator: 'contains',
-                    value: queryFilter[0].value
-                });
+    resolveFilterInParams: function (params, sentFolderSelected) {
+        const from = sentFolderSelected ? 'query' : 'to';
+        const to = sentFolderSelected ? 'to' : 'query';
+        const searchField = sentFolderSelected ? 'to' : 'query';
+        const searchFilter =  _.find(params.filter[0].filters[0].filters, {field: searchField});
+        // remove exist from filter 
+        const oldFilter = params.filter[0] && params.filter[0].filters[0].filters
+            ? _.remove(params.filter[0].filters[0].filters, {field: from}) : [];
+        const toFilter = {
+            field: to,
+            operator: 'contains',
+            value: oldFilter[0]?.value ?? ''
+        };
+        // concat or add target filter if not exist
+        if (!searchFilter) {
+            if (oldFilter.length > 0) {
+                params.filter[0].filters[0].filters = params.filter[0].filters[0].filters.concat(toFilter);
+            } else {
+                params.filter[0].filters[0].filters.push(toFilter);
+            }
         }
     },
 
@@ -1564,41 +1569,43 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * // if switched from send, draft, template to "normal" folder
      * // - switch to default state
      *
-     * TODO make it work with current state / set/apply from existing state
      *
      * @param stateId
      */
     changeGridState: function (stateId) {
-
-        this.stateId = stateId;
-
-        // if (! Ext.state.Manager.get(stateId)) {
-
-        const cm = this.grid.getColumnModel();
-        const from_email_index = cm.getIndexById('from_email');
-        const from_name_index = cm.getIndexById('from_name');
-        const to_index = cm.getIndexById('to');
-
+        this.grid.stateId = stateId;
+        const refState = Ext.state.Manager.get(stateId);
+        
         if (stateId === this.sendFolderGridStateId) {
+            const defaultState = Ext.state.Manager.get(this.gridConfig.stateId) ?? this.grid.getState();
+            let cloneRefState = JSON.parse(JSON.stringify(defaultState));
             // - hide from email + name columns from grid
             // - show to column in grid
-
-            cm.setHidden(from_email_index, true);
-            cm.setHidden(from_name_index, true);
-            cm.setHidden(to_index, false);
+            const customHideCols = {
+                'from_email' : true,
+                'from_name' : true,
+                'to' : false,
+            }
+            //overwrite custom states
+            _.each(customHideCols, (isHidden, colId) => {
+                const idx = _.findIndex(cloneRefState.columns, {id: colId});
+                isHidden = !refState ? isHidden : _.get(_.find(refState.columns, {id: colId}), 'hidden', false);
+                
+                if (idx > -1 && isHidden !== _.get(cloneRefState.columns[idx], 'hidden', false)) {
+                    if (isHidden) {
+                        cloneRefState.columns[idx].hidden = true;
+                    } else {
+                        delete cloneRefState.columns[idx].hidden;
+                    }
+                }
+            })
+            // apply state and update grid column ui
+            this.grid.applyState(cloneRefState);
+            // save state
+            this.grid.saveState();
         } else {
-            cm.setHidden(from_email_index, false);
-            cm.setHidden(from_name_index, false);
-            cm.setHidden(to_index, true);
+            this.grid.applyState(refState ?? this.grid.getState());
         }
-
-        // this.saveState();
-
-        // } else {
-        //     // TODO make this work
-        //     const state = this.getState();
-        //     this.applyState(state);
-        // }
     },
 
     /**
@@ -1622,7 +1629,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             folder.commit();
             this.app.checkMailsDelayedTask.delay(1000);
         }
-        
+        this.resolveFilterInParams(options.params, this.sentFolderSelected);
         this.updateQuotaBar();
     },
     

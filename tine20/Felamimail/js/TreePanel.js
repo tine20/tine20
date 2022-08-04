@@ -332,34 +332,41 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @param {} node
      */
     onSelectionChange: function(sm, nodes) {
-        if (this.filterMode == 'gridFilter' && this.filterPlugin) {
+        if (this.filterMode === 'gridFilter' && this.filterPlugin) {
             this.filterPlugin.onFilterChange();
         }
-        if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
+        if (this.filterMode === 'filterToolbar' && this.filterPlugin) {
             
             // get filterToolbar
-            var ftb = this.filterPlugin.getGridPanel().filterToolbar;
+            let ftb = this.filterPlugin.getGridPanel().filterToolbar;
             // in case of filterPanel
             ftb = ftb.activeFilterPanel ? ftb.activeFilterPanel : ftb;
-
-            // remove path filter
-            ftb.supressEvents = true;
-            ftb.filterStore.each(function(filter) {
-                var field = filter.get('field');
-                if (field === 'path') {
-                    ftb.deleteFilter(filter);
-                }
-            }, this);
-            ftb.supressEvents = false;
-
+            
             // set ftb filters according to tree selection
-            const filter = this.getFilterPlugin().getFilter();
+            const oldPathFilters = ftb.filterStore.query('field', 'path');
+            const newPathFilter = this.getFilterPlugin().getFilter();
             const grid = this.filterPlugin.getGridPanel();
-            const pathFilterValue =  filter?.value && _.isArray(filter?.value) ? filter.value[0] : null;
+            const pathFilterValue =  newPathFilter?.value && _.isArray(newPathFilter?.value) ? newPathFilter.value[0] : null;
             const isSentFolder = grid.isSendFolderPath(pathFilterValue);
             
             ftb.defaultFilter = isSentFolder ? 'to' : 'query';
-            ftb.addFilter(new ftb.record(filter));
+
+            if (oldPathFilters.length > 0) {
+                // update path filter
+                ftb.supressEvents = true;
+                _.each(oldPathFilters.items, (oldPathFilter, idx) => {
+                    if ((idx + 1) === oldPathFilters.length) {
+                        ftb.setFilterData(oldPathFilter, newPathFilter);
+                    } else {
+                        ftb.deleteFilter(oldPathFilter);
+                    }
+                })
+
+                ftb.supressEvents = false;
+            } else {
+                ftb.addFilter(new ftb.record(newPathFilter));
+            }
+
             ftb.onFiltertrigger();
             
             // finally select the selected node, as filtertrigger clears all selections
