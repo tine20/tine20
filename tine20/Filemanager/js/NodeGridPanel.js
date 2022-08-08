@@ -57,7 +57,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     // initialLoadAfterRender: false,
 
     dataSafeEnabled: false,
-    storeRemoteSort: false,
 
     /**
      * inits this cmp
@@ -236,19 +235,24 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             } else {
                 return;
             }
-
-            // sort new/edited record
-            store.remoteSort = false;
-            store.sort(
-                _.get(store, 'sortInfo.field', 'name'),
-                _.get(store, 'sortInfo.direction', 'ASC')
-            );
-            store.remoteSort = this.storeRemoteSort;
+            
+            this.localSort();
 
             if (isSelected) {
                 this.getGrid().getSelectionModel().selectRow(store.indexOfId(record.id), true);
             }
         }
+    },
+    
+    localSort: function() {
+        // sort new/edited record
+        const store = this.getStore();
+        store.remoteSort = false;
+        store.sort(
+            _.get(store, 'sortInfo.field', this.defaultSortInfo.field),
+            _.get(store, 'sortInfo.direction', this.defaultSortInfo.direction)
+        );
+        store.remoteSort = this.storeRemoteSort;
     },
    
     /**
@@ -1032,7 +1036,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         const filterData = _.get(store, 'reader.jsonData.filter', {});
         const pathFilter = _.get(_.find(filterData, {field: 'path'}), 'value');
         this.latestFilter = _.isArray(pathFilter) ? pathFilter[0] : pathFilter;
-        
+        this.localSort();
+
         const quota = _.get(store, 'reader.jsonData.quota', false);
             
         if (quota) {
