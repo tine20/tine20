@@ -134,7 +134,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DAYSVIEW_TIME_VISIBLE,
             self::DEFAULTCALENDAR,
             self::DEFAULTPERSISTENTFILTER,
-            self:: WEB_EVENT_TITLE_TEMPLATE,
+            self::WEB_EVENT_TITLE_TEMPLATE,
             self::NOTIFICATION_LEVEL,
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS,
             self::SEND_NOTIFICATION_FOR_TENTATIVE,
@@ -192,9 +192,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 'label'         => $translate->_('Default Favorite'),
                 'description'   => $translate->_('The default favorite which is loaded on calendar startup'),
             ),
-            self:: WEB_EVENT_TITLE_TEMPLATE => [
+            self::WEB_EVENT_TITLE_TEMPLATE => [
                 'label'         => $translate->_('Web Event Title Template'),
                 'description'   => $translate->_('How to build event titles in web ui.'),
+                self::CLIENT_NEEDS_RELOAD => true,
             ],
             self::NOTIFICATION_LEVEL => array(
                 'label'         => $translate->_('Get Notification Emails'),
@@ -326,7 +327,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             case self::DEFAULTPERSISTENTFILTER:
                 $preference->value          = Tinebase_PersistentFilter::getPreferenceValues('Calendar', $_accountId, "All my events");
                 break;
-            case self:: WEB_EVENT_TITLE_TEMPLATE:
+            case self::WEB_EVENT_TITLE_TEMPLATE:
                 $translate = Tinebase_Translation::getTranslation($this->_application);
                 $preference->value      = '{{ summary }}';
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>

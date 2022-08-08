@@ -113,6 +113,7 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
                 break;
             case self::DEFAULTTASKLIST:
                 $this->_getDefaultContainerPreferenceDefaults($preference, $_accountId);
+                $preference->uiconfig = [self::CLIENT_NEEDS_RELOAD => true];
                 break;
             case self::DEFAULTALARM_ENABLED:
                 $preference->value      = 0;
