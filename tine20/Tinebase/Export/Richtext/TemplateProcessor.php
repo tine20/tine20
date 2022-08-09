@@ -180,6 +180,10 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
                 },
             ],*/
         ];
+
+        $this->forEachDocument(function(&$xml) {
+            $xml = str_replace(["\n", "\r"], '', $xml);
+        });
     }
 
     public function replaceTwigTemplate()
