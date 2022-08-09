@@ -85,7 +85,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         }
         const isNewRecord = !this.record.get('creation_time');
         const grants = _.get(employee, 'data.division_id.account_grants', {});
-        const isOwn = Tine.Tinebase.registry.get('currentAccount').accountId === _.get(employee, 'data.account_id.accountId');
+        const isOwn = Tine.Tinebase.registry.get('currentAccount').accountId === _.get(employee, 'data.account_id.accountId', _.get(employee, 'data.account_id'));
         const processStatus = this.processStatusPicker.getValue();
         const allowUpdate = grants.adminGrant || grants.updateChangeRequestGrant ||
             (processStatus === 'REQUESTED' && (isNewRecord || (isOwn && grants.createOwnChangeRequestGrant) || grants.createChangeRequestGrant));
