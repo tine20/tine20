@@ -1,0 +1,290 @@
+Return-Path: <name@example.com>
+Delivered-To: info@domain.de
+Received: from host.home.example.net ([unix socket])
+    by host.home.example.net (Cyrus v2.2.13-Debian-2.2.13-13ubuntu3) with LMTPA;
+    Fri, 16 Mar 2012 17:31:20 +0100
+Received: from mx (unknown [33.22.11.2])
+   by host.home.example.net (Postfix) with ESMTP id 193CD10131
+   for <name@example.net>; Fri, 16 Mar 2012 17:31:20 +0100 (CET)
+Received: from <unknown> (<unknown> []) by bc2403e93584 with HTTP id
+ 62eae0f784254b29a398d8e2; Wed, 03 Aug 2022 20:56:23 GMT
+Sender: <name@example.com>
+Date: Wed, 03 Aug 2022 20:56:23 +0000
+Mime-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary=9e678a26ed110b0b3adf8f52d531e591c25f1765b2c835ac13d2a5736100
+X-Tine20TestMessage: subscription_notification.eml
+Subject: [Link11 Status status] Confirm your subscription
+From: noreply@example.com
+To: name@example.com
+Message-Id: <e3894b75-8821-46b4-97d4-daa97becd925@statuspage.io>
+X-Rspamd-Queue-Id: 1E5DF1F647
+X-Spam-Status: No, score=2.31
+X-Spamd-Bar: ++
+X-Rspamd-Server: vmail-smtp01
+
+--9e678a26ed110b0b3adf8f52d531e591c25f1765b2c835ac13d2a5736100
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=ascii
+
+Link11 Status - Notification Subscription Confirmation
+
+Thanks for subscribing to Link11 Status status updates. You're almost done - we just need to confirm your subscription.
+
+In order to activate your subscription, please go to the following URL:
+
+https://link11.statuspage.io/subscriptions/confirm/ooaCpodSniBI0T4i
+
+
+--
+Link11 Status Status: https://link11.statuspage.io
+To unsubscribe: https://link11.statuspage.io/?unsubscribe=3ftwjktkgwn6
+
+You received this email because you are subscribed to Link11 Status's service status notifications.
+--9e678a26ed110b0b3adf8f52d531e591c25f1765b2c835ac13d2a5736100
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset=ascii
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head><title></title><!--[if !mso]><!-- --><meta http-equiv=3D"X-UA-Com=
+patible" content=3D"IE=3Dedge"><!--<![endif]--><meta http-equiv=3D"Content-=
+Type" content=3D"text/html; charset=3DUTF-8"><meta name=3D"viewport" conten=
+t=3D"width=3Ddevice-width,initial-scale=3D1"><style type=3D"text/css">#outl=
+ook a { padding:0; }
+          .ReadMsgBody { width:100%; }
+          .ExternalClass { width:100%; }
+          .ExternalClass * { line-height:100%; }
+          body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-=
+size-adjust:100%; }
+          table, td { border-collapse:collapse;mso-table-lspace:0pt;mso-tab=
+le-rspace:0pt; }
+          img { border:0;height:auto;line-height:100%; outline:none;text-de=
+coration:none;-ms-interpolation-mode:bicubic; }
+          p { display:block;margin:13px 0; }</style><!--[if !mso]><!--><sty=
+le type=3D"text/css">@media only screen and (max-width:480px) {
+            @-ms-viewport { width:320px; }
+            @viewport { width:320px; }
+          }</style><!--<![endif]--><!--[if mso]>
+        <xml>
+        <o:OfficeDocumentSettings>
+          <o:AllowPNG/>
+          <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+        </xml>
+        <![endif]--><!--[if lte mso 11]>
+        <style type=3D"text/css">
+          .outlook-group-fix { width:100% !important; }
+        </style>
+        <![endif]--><!--[if !mso]><!--><link href=3D"https://fonts.googleap=
+is.com/css?family=3DDroid+Sans:300,400,500,700" rel=3D"stylesheet" type=3D"=
+text/css"><link href=3D"https://fonts.googleapis.com/css?family=3DRoboto:30=
+0,400,500,700" rel=3D"stylesheet" type=3D"text/css"><link href=3D"https://f=
+onts.googleapis.com/css?family=3DUbuntu:300,400,500,700" rel=3D"stylesheet"=
+ type=3D"text/css"><style type=3D"text/css">@import url(https://fonts.googl=
+eapis.com/css?family=3DDroid+Sans:300,400,500,700);
+@import url(https://fonts.googleapis.com/css?family=3DRoboto:300,400,500,70=
+0);
+@import url(https://fonts.googleapis.com/css?family=3DUbuntu:300,400,500,70=
+0);</style><!--<![endif]--><style type=3D"text/css">@media only screen and =
+(min-width:480px) {
+        .mj-column-per-100 { width:100% !important; max-width: 100%; }
+=2Emj-column-per-85 { width:85% !important; max-width: 85%; }
+      }</style><style type=3D"text/css"></style><style type=3D"text/css">.e=
+mail-logo-image {
+  max-width: 320px;
+  max-height: 100px;
+  width: auto !important;
+  height: auto !important;
+}
+
+@media only screen and (max-width:450px) {
+  .email-logo-image {
+    max-width: 250px;
+  }
+
+  .content-section > table > tbody > tr > td {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .incident-link > table > tbody > tr > td {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .header-spacing > table > tbody > tr > td {
+    padding-top: 45px !important;
+    padding-bottom: 30px !important;
+  }
+}
+
+/* border-radius, border, and border-collapse: collapse do not combine well=
+=2E */
+/* when we do have embedded (discrete) css, override this to put the border=
+ on the outside div, not on the table cell. */
+div.content-outer > table,
+div.content-outer > table > tbody > tr > td {
+  border: none !important;
+}
+
+div.content-outer {
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+  border: 1px solid #E0E0E0;
+}
+
+=2Eemail-body a, .email-body a:hover, .email-body a:visited {
+  color: #3498db !important;
+}
+
+      a[x-apple-data-detectors=3Dtrue] {
+       color: inherit !important;
+       text-decoration: inherit !important;
+      }</style></head><body style=3D"font-size: 16px; line-height: 24px; fo=
+nt-weight: normal; font-style: normal; background-color: #fcfcfc;"><div sty=
+le=3D"background-color:#fcfcfc;"><!--[if mso | IE]><table align=3D"center" =
+border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"header-spacing-ou=
+tlook" style=3D"width:600px;" width=3D"600" ><tr><td style=3D"line-height:0=
+px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div class=3D"h=
+eader-spacing" style=3D"Margin:0px auto;max-width:600px;"><table align=3D"c=
+enter" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentatio=
+n" style=3D"width:100%;"><tbody><tr><td style=3D"direction:ltr;font-size:0p=
+x;padding:20px 0;padding-bottom:30px;padding-left:0px;padding-right:0px;pad=
+ding-top:30px;text-align:center;vertical-align:top;"><!--[if mso | IE]><tab=
+le role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><=
+tr><td class=3D"" style=3D"vertical-align:top;width:600px;" ><![endif]--><d=
+iv class=3D"mj-column-per-100 outlook-group-fix" style=3D"font-size:13px;te=
+xt-align:left;direction:ltr;display:inline-block;vertical-align:top;width:1=
+00%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"prese=
+ntation" width=3D"100%"><tbody><tr><td style=3D"vertical-align:top;padding-=
+top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;"><table bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D=
+"100%"><tr><td align=3D"center" style=3D"font-size:0px;padding:10px 25px;pa=
+dding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;word-br=
+eak:break-word;"><div style=3D"font-family:-apple-system, BlinkMacSystemFon=
+t, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Fira Sans', 'Droid Sans', 'He=
+lvetica Neue', sans-serif;font-size:13px;line-height:1;text-align:center;co=
+lor:#000000;">  <h1 class=3D"text_logo" style=3D"margin: 0; font-weight: no=
+rmal; padding-left: 20px; padding-right: 20px; font-size: 40px; color: #333=
+333;">Link11 Status</h1>  </div></td></tr></table></td></tr></tbody></table=
+></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></=
+table></div><!--[if mso | IE]></td></tr></table><table align=3D"center" bor=
+der=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"content-outer-outloo=
+k" style=3D"width:600px;" width=3D"600" ><tr><td style=3D"line-height:0px;f=
+ont-size:0px;mso-line-height-rule:exactly;"><![endif]--><div class=3D"conte=
+nt-outer" style=3D"background:#ffffff;background-color:#ffffff;Margin:0px a=
+uto;max-width:600px;"><table align=3D"center" border=3D"0" cellpadding=3D"0=
+" cellspacing=3D"0" role=3D"presentation" style=3D"background:#ffffff;backg=
+round-color:#ffffff;width:100%;"><tbody><tr><td style=3D"border:solid 1px #=
+E0E0E0;direction:ltr;font-size:0px;padding:0px;padding-bottom:0px;padding-l=
+eft:0px;padding-right:0px;padding-top:0px;text-align:center;vertical-align:=
+top;"><!--[if mso | IE]><table role=3D"presentation" border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0"><tr><td class=3D"content-section-outlook" width=
+=3D"600px" ><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" class=3D"content-section-outlook" style=3D"width:600px;" width=3D=
+"600" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-height-rule:=
+exactly;"><![endif]--><div class=3D"content-section" style=3D"Margin:0px au=
+to;max-width:600px;"><table align=3D"center" border=3D"0" cellpadding=3D"0"=
+ cellspacing=3D"0" role=3D"presentation" style=3D"width:100%;"><tbody><tr><=
+td style=3D"direction:ltr;font-size:0px;padding:20px 0;padding-bottom:40px;=
+padding-left:40px;padding-right:40px;padding-top:40px;text-align:center;ver=
+tical-align:top;"><!--[if mso | IE]><table role=3D"presentation" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical=
+-align:top;width:520px;" ><![endif]--><div class=3D"mj-column-per-100 outlo=
+ok-group-fix" style=3D"font-size:13px;text-align:left;direction:ltr;display=
+:inline-block;vertical-align:top;width:100%;"><table border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr>=
+<td style=3D"vertical-align:top;padding:0px;padding-top:0px;padding-right:0=
+px;padding-bottom:0px;padding-left:0px;"><table border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tr><td align=3D=
+"center" style=3D"font-size:0px;padding:10px 25px;padding-top:0px;padding-r=
+ight:0px;padding-bottom:0px;padding-left:0px;word-break:break-word;"><div s=
+tyle=3D"font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto'=
+, 'Oxygen', 'Ubuntu', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-ser=
+if;font-size:13px;line-height:1;text-align:center;color:#000000;"><h2 style=
+=3D"margin: 0; font-weight: normal; font-size: 26px; margin-bottom: 30px; c=
+olor: #333333;">Confirm your subscription</h2></div></td></tr><tr><td align=
+=3D"center" class=3D"text" style=3D"line-height: 24px; font-weight: normal;=
+ font-style: normal; font-size: 0px; padding: 10px 25px; padding-top: 0px; =
+padding-right: 0px; padding-bottom: 0px; padding-left: 0px; word-break: bre=
+ak-word;"><div style=3D"font-family:-apple-system, BlinkMacSystemFont, 'Seg=
+oe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Fira Sans', 'Droid Sans', 'Helvetica=
+ Neue', sans-serif;font-size:13px;line-height:1;text-align:center;color:#33=
+3333;"><p style=3D"font-size: 16px; line-height: 24px; font-weight: normal;=
+ font-style: normal; margin: 0 0 35px 0; color: inherit;">Thanks for subscr=
+ibing to <b>Link11 Status</b>&nbsp;status updates. You're almost done - we =
+just need to confirm your subscription.</p><p style=3D"font-size: 16px; lin=
+e-height: 24px; font-weight: normal; font-style: normal; margin: 0 0 35px 0=
+; color: inherit;">In order to activate your subscription, please click the=
+ following link:</p></div></td></tr> <!--[if mso | IE]> <tr><td align=3D"ce=
+nter" vertical-align=3D"middle" style=3D"font-size:0px;padding:10px 25px;pa=
+dding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;word-br=
+eak:break-word;"><table align=3D"center" border=3D"0" cellpadding=3D"0" cel=
+lspacing=3D"0" role=3D"presentation" style=3D"border-collapse:separate;line=
+-height:100%;"><tr><td align=3D"center" bgcolor=3D"#2fcc66" role=3D"present=
+ation" style=3D"border:none;border-radius:3px;cursor:auto;padding:10px 25px=
+;" valign=3D"middle"><a href=3D"https://link11.statuspage.io/subscriptions/=
+confirm/ooaCpodSniBI0T4i" style=3D"background:#2fcc66;color:#FFFFFE;font-fa=
+mily:-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ub=
+untu', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;font-size:13=
+px;font-weight:normal;line-height:120%;Margin:0;text-decoration:none;text-t=
+ransform:none;" target=3D"_blank">Confirm subscription</a></td></tr></table=
+></td></tr> <![endif]--> <tr><td align=3D"center" style=3D"font-size:0px;pa=
+dding:10px 25px;padding-top:0px;padding-right:0px;padding-bottom:0px;paddin=
+g-left:0px;word-break:break-word;"><div style=3D"font-family:-apple-system,=
+ BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Fira Sans',=
+ 'Droid Sans', 'Helvetica Neue', sans-serif;font-size:13px;line-height:1;te=
+xt-align:center;color:#000000;"> <!--[if !mso]><!--><a role=3D"button" styl=
+e=3D"display: inline-block; padding: 12px 35px; background-color: #2fcc66; =
+color: #fffffe; text-decoration: none; font-size: 14px; font-weight: bold; =
+border-radius: 3px;" href=3D"https://link11.statuspage.io/subscriptions/con=
+firm/ooaCpodSniBI0T4i">Confirm subscription</a><![endif]--><!--> </div></td=
+></tr><tr><td style=3D"font-size:0px;word-break:break-word;"><!--[if mso | =
+IE]><table role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0"><tr><td height=3D"20" style=3D"vertical-align:top;height:20px;"><![e=
+ndif]--><div style=3D"height:20px;">&nbsp;</div><!--[if mso | IE]></td></tr=
+></table><![endif]--></td></tr></table></td></tr></tbody></table></div><!--=
+[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div=
+><!--[if mso | IE]></td></tr></table></td></tr></table><![endif]--></td></t=
+r></tbody></table></div><!--[if mso | IE]></td></tr></table><table align=3D=
+"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" style=
+=3D"width:600px;" width=3D"600" ><tr><td style=3D"line-height:0px;font-size=
+:0px;mso-line-height-rule:exactly;"><![endif]--><div style=3D"Margin:0px au=
+to;max-width:600px;"><table align=3D"center" border=3D"0" cellpadding=3D"0"=
+ cellspacing=3D"0" role=3D"presentation" style=3D"width:100%;"><tbody><tr><=
+td style=3D"direction:ltr;font-size:0px;padding:20px 0;padding-bottom:0px;p=
+adding-left:0px;padding-right:0px;padding-top:0px;text-align:center;vertica=
+l-align:top;"><!--[if mso | IE]><table role=3D"presentation" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-ali=
+gn:top;width:510px;" ><![endif]--><div class=3D"mj-column-per-85 outlook-gr=
+oup-fix" style=3D"font-size:13px;text-align:left;direction:ltr;display:inli=
+ne-block;vertical-align:top;width:100%;"><table border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr><td s=
+tyle=3D"vertical-align:top;padding-top:0px;padding-right:0px;padding-bottom=
+:0px;padding-left:0px;"><table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"100%"><tr><td align=3D"center" style=
+=3D"font-size:0px;padding:10px 25px;padding-top:0px;padding-right:20px;padd=
+ing-bottom:0px;padding-left:20px;word-break:break-word;"><div style=3D"font=
+-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', =
+'Ubuntu', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;font-size=
+:13px;line-height:1;text-align:center;color:#000000;"> <table role=3D"prese=
+ntation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td height=3D=
+"25" style=3D"height:25px;"></td></tr></table>
+  <a style=3D"font-size: 12px; color: #AAAAAA" href=3D"https://link11.statu=
+spage.io/?unsubscribe=3D3ftwjktkgwn6">Unsubscribe</a> <table role=3D"presen=
+tation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td height=3D"=
+25" style=3D"height:25px;"></td></tr></table>
+  <span class=3D"footer_powered_by" style=3D"color: #AAAAAA;font-size: 12px=
+;"><a style=3D"color: #AAAAAA;font-size: 12px;" href=3D"https://www.atlassi=
+an.com/software/statuspage?utm_source=3Demail&utm_medium=3Dpowered-by&utm_c=
+ampaign=3Dlink11.statuspage.io&utm_content=3DSP-notifications">Powered by A=
+tlassian Statuspage</a> </span> <table role=3D"presentation" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0"><tr><td height=3D"60" style=3D"height:60=
+px;"></td></tr></table>
+ </div></td></tr></table></td></tr></tbody></table></div><!--[if mso | IE]>=
+</td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso |=
+ IE]></td></tr></table><![endif]--></div></body></html>
+
+--9e678a26ed110b0b3adf8f52d531e591c25f1765b2c835ac13d2a5736100--
