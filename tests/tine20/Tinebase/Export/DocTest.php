@@ -181,8 +181,7 @@ class Tinebase_Export_DocTest extends TestCase
         $export->save($tmpFile);
 
         try {
-            static::assertEquals(filesize(dirname(__DIR__) . '/files/export/twigFunctions_result2.docx'),
-                filesize($tmpFile));
+            static::assertEquals(9483, filesize($tmpFile));
         } finally {
             unlink($tmpFile);
         }
