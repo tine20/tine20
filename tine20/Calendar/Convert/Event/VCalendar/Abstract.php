@@ -168,7 +168,6 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         $this->_convertCalendarModelEvent($vcalendar, $event);
 
         if ($event->exdate instanceof Tinebase_Record_RecordSet) {
-            $event->exdate->addIndices(array('is_deleted'));
             $eventExceptions = $event->exdate->filter('is_deleted', false);
 
             foreach ($eventExceptions as $eventException) {
@@ -328,7 +327,6 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             }
             
             if ($event->exdate instanceof Tinebase_Record_RecordSet) {
-                $event->exdate->addIndices(array('is_deleted'));
                 $deletedEvents = $event->exdate->filter('is_deleted', true);
                 
                 foreach ($deletedEvents as $deletedEvent) {

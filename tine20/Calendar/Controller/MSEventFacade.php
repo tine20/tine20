@@ -185,7 +185,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
-        $events = $this->_getEvents($_filter, $_action);
+        $events = $this->getExdateResolvedEvents($_filter, $_action);
 
         if ($_pagination instanceof Tinebase_Model_Pagination && ($_pagination->start || $_pagination->limit) ) {
             $eventIds = $events->id;
@@ -226,7 +226,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get') 
     {
-        $eventIds = $this->_getEvents($_filter, $_action);
+        $eventIds = $this->getExdateResolvedEvents($_filter, $_action);
         
         return count ($eventIds);
     }
@@ -237,7 +237,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string                            $action
      */
-    protected function _getEvents($_filter, $_action)
+    public function getExdateResolvedEvents($_filter, $_action)
     {
         if (! $_filter instanceof Calendar_Model_EventFilter) {
             $_filter = new Calendar_Model_EventFilter();
@@ -1216,5 +1216,50 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     public function getModel()
     {
         return Calendar_Model_Event::class;
+    }
+
+    public function getEventController(): Calendar_Controller_Event
+    {
+        return $this->_eventController;
+    }
+
+    public function prepareAttendeesView(Calendar_Model_Event &$event, Calendar_Model_Attender $attendee): void
+    {
+        if ($event->isRecurException() || $event->rrule) {
+            $oldAclCheck = $this->getEventController()->doContainerACLChecks(false);
+            try {
+                $baseEvent = $this->getExdateResolvedEvents(new Calendar_Model_EventFilter([
+                    ['field' => 'id', 'operator' => 'equals', 'value' => $event->isRecurException() ? $event->base_event_id : $event->getId()],
+                ]), 'get')->getFirstRecord();
+                if (Calendar_Model_Attender::getAttendee($baseEvent->attendee, $attendee)) {
+                    $eventLength = $baseEvent->dtstart->diff($baseEvent->dtend);
+                    $remove = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
+                    $add = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
+
+                    /** @var Calendar_Model_Event $exdate */
+                    foreach ($baseEvent->exdate as $exdate) {
+                        if (!Calendar_Model_Attender::getAttendee($exdate->attendee, $attendee)) {
+                            $remove->addRecord($exdate);
+
+                            $fakeEvent = new Calendar_Model_Event([
+                                'uid' => $exdate->uid,
+                                'dtstart' => $exdate->getOriginalDtStart(),
+                                'dtend' => $exdate->getOriginalDtStart()->add($eventLength),
+                                'is_deleted' => true,
+                            ], true);
+                            $fakeEvent->setRecurId($baseEvent->getId());
+                            $add->addRecord($fakeEvent);
+                        }
+                    }
+                    $baseEvent->exdate->removeRecords($remove);
+                    $baseEvent->exdate->merge($add);
+                    $event = $baseEvent;
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+            } finally {
+                $this->getEventController()->doContainerACLChecks($oldAclCheck);
+            }
+        }
     }
 }
