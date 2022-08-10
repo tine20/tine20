@@ -58,6 +58,7 @@ class Admin_Model_OVpnApiAccount extends Tinebase_Record_NewAbstract
             self::FLD_NAME => [
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 255,
+                self::QUERY_FILTER => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
@@ -91,6 +92,9 @@ class Admin_Model_OVpnApiAccount extends Tinebase_Record_NewAbstract
             self::FLD_AUTH_CONFIGS => [
                 self::TYPE      => self::TYPE_RECORDS,
                 self::LABEL     => 'Authentication Configuration', // _('Authentication Configuration')
+                self::VALIDATORS => [
+                    Tinebase_Record_Validator_SubValidate::class,
+                ],
                 self::CONFIG => [
                     self::DEPENDENT_RECORDS         => true,
                     self::STORAGE                   => self::TYPE_JSON,

@@ -1478,12 +1478,19 @@
       }
     },
     "@babel/runtime-corejs2": {
-      "version": "7.17.9",
-      "resolved": "https://registry.npmjs.org/@babel/runtime-corejs2/-/runtime-corejs2-7.17.9.tgz",
-      "integrity": "sha512-+QThIsnjVY12uURTvmnW33risFZ7ulq6OWw0VJL08UwiYiWVp9PM63s+W1L2ppajYyKAYKb7afcGYSHzA0k04Q==",
+      "version": "7.18.9",
+      "resolved": "https://registry.npmjs.org/@babel/runtime-corejs2/-/runtime-corejs2-7.18.9.tgz",
+      "integrity": "sha512-l057ZarpDX2QnXM89ViR2BgRFgTy2l5UFGDt0SbInhim1N/ljBgPeTJV0kRG1/Bo7CkHfYfrNNwTeQ2CPph9xQ==",
       "requires": {
-        "core-js": "^2.6.5",
+        "core-js": "^2.6.12",
         "regenerator-runtime": "^0.13.4"
+      },
+      "dependencies": {
+        "core-js": {
+          "version": "2.6.12",
+          "resolved": "https://registry.npmjs.org/core-js/-/core-js-2.6.12.tgz",
+          "integrity": "sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ=="
+        }
       }
     },
     "@babel/template": {
@@ -4099,7 +4106,7 @@
     "component-props": {
       "version": "1.1.1",
       "resolved": "https://registry.npmjs.org/component-props/-/component-props-1.1.1.tgz",
-      "integrity": "sha1-+bffm5kntubZfJvScqqGdnDzSUQ="
+      "integrity": "sha512-69pIRJs9fCCHRqCz3390YF2LV1Lu6iEMZ5zuVqqUn+G20V9BNXlMs0cWawWeW9g4Ynmg29JmkG6R7/lUJoGd1Q=="
     },
     "compressible": {
       "version": "2.0.18",
@@ -4332,7 +4339,8 @@
     "core-js": {
       "version": "2.6.5",
       "resolved": "https://registry.npmjs.org/core-js/-/core-js-2.6.5.tgz",
-      "integrity": "sha1-RLyNJJ5/sv9dAOA0Gn/7lPv2eJU="
+      "integrity": "sha1-RLyNJJ5/sv9dAOA0Gn/7lPv2eJU=",
+      "dev": true
     },
     "core-js-compat": {
       "version": "3.6.5",
@@ -6378,7 +6386,7 @@
     "flow": {
       "version": "0.2.3",
       "resolved": "https://registry.npmjs.org/flow/-/flow-0.2.3.tgz",
-      "integrity": "sha1-+Npl76JJEn7Jk3aiiJZXKpeV0a8="
+      "integrity": "sha512-CFNnRuX6nsOmEjGvE5RP0zwGoebdU9k+IJJy97HHkc0Xdlyh5EFAmdOznTKhEQkWKWXTJp63bW0TWQZ+sywWRw=="
     },
     "flush-write-stream": {
       "version": "1.1.1",
@@ -6836,7 +6844,7 @@
     "group-by": {
       "version": "0.0.1",
       "resolved": "https://registry.npmjs.org/group-by/-/group-by-0.0.1.tgz",
-      "integrity": "sha1-hXYgV19nFHhvjYa7Gf0T4YjdaKQ=",
+      "integrity": "sha512-qHyGGbMxDq0vkOvSmHdGHtF8dSah48xQ0aw3T8QYgr6Mcsrh6Ib/JKqfCuPkrsZCdL0fJyteqQa5TJWv6kpqDA==",
       "requires": {
         "to-function": "*"
       }
@@ -7156,8 +7164,8 @@
       }
     },
     "html5-file-selector": {
-      "version": "git+https://github.com/tine20/html5-file-selector.git#1625c2102e49f8f997e16108f6f0d5b6bfd6b2d8",
-      "from": "git+https://github.com/tine20/html5-file-selector.git"
+      "version": "github:tine20/html5-file-selector.git#1625c2102e49f8f997e16108f6f0d5b6bfd6b2d8",
+      "from": "github:tine20/html5-file-selector.git#1625c2102e49f8f997e16108f6f0d5b6bfd6b2d8"
     },
     "htmlparser2": {
       "version": "3.10.1",
@@ -7349,6 +7357,11 @@
       "integrity": "sha1-Cd/Uq50g4p6xw+gLiZA3jfnjy5w=",
       "dev": true,
       "optional": true
+    },
+    "immediate": {
+      "version": "3.0.6",
+      "resolved": "https://registry.npmjs.org/immediate/-/immediate-3.0.6.tgz",
+      "integrity": "sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ=="
     },
     "import-fresh": {
       "version": "3.0.0",
@@ -8470,6 +8483,14 @@
         "type-check": "~0.3.2"
       }
     },
+    "lie": {
+      "version": "3.1.1",
+      "resolved": "https://registry.npmjs.org/lie/-/lie-3.1.1.tgz",
+      "integrity": "sha512-RiNhHysUjhrDQntfYSfY4MU24coXXdEOgw9WGcKHNeEwffDYbF//u87M1EWaMGzuFoSbqW0C9C6lEEhDOAswfw==",
+      "requires": {
+        "immediate": "~3.0.5"
+      }
+    },
     "linkifyjs": {
       "version": "2.1.9",
       "resolved": "https://registry.npmjs.org/linkifyjs/-/linkifyjs-2.1.9.tgz",
@@ -8571,6 +8592,14 @@
         "big.js": "^3.1.3",
         "emojis-list": "^2.0.0",
         "json5": "^0.5.0"
+      }
+    },
+    "localforage": {
+      "version": "1.10.0",
+      "resolved": "https://registry.npmjs.org/localforage/-/localforage-1.10.0.tgz",
+      "integrity": "sha512-14/H1aX7hzBBmmh7sGPd+AOMkkIrHM3Z1PAyGgZigA1H1p5O5ANnMyWzvpAETtG68/dC4pC0ncy3+PPGzXZHPg==",
+      "requires": {
+        "lie": "3.1.1"
       }
     },
     "locate-path": {
@@ -15745,13 +15774,14 @@
       "dev": true
     },
     "storage-based-queue": {
-      "version": "git+https://github.com/tine20/storage-based-queue.git#e3f4b2c109f3744438a06a3275843ac0f133acdf",
-      "from": "git+https://github.com/tine20/storage-based-queue.git",
+      "version": "github:tine20/storage-based-queue#215c4b2de3780d3a7b05aeacbf281544823be8a7",
+      "from": "github:tine20/storage-based-queue#215c4b2de3780d3a7b05aeacbf281544823be8a7",
       "requires": {
         "@babel/runtime-corejs2": "^7.0.0",
         "braces": "^3.0.2",
         "flow": "^0.2.3",
         "group-by": "0.0.1",
+        "localforage": "^1.10.0",
         "object-path": "^0.11.5",
         "pseudo-worker": "^1.3.0",
         "tunnel-agent": "^0.6.0"
@@ -16346,7 +16376,7 @@
     "to-function": {
       "version": "2.0.6",
       "resolved": "https://registry.npmjs.org/to-function/-/to-function-2.0.6.tgz",
-      "integrity": "sha1-fVbNnDuS+o29eyLoPVGSTedA68U=",
+      "integrity": "sha512-LWfUmW851x5T8+78Nl82CA2j6w0trhoFj4rpS6pFUMgfUMUySDAKPgTvQkUqlWuH3Lihlk5sPyDHSVwmKDSc5Q==",
       "requires": {
         "component-props": "*"
       }

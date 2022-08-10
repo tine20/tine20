@@ -4,7 +4,8 @@ class AuthConfig extends MFAPanel {
     initComponent() {
         this.dataPath = 'data.auth_configs';
         // NOTE: this is wrong but we don't have a real account so let's work in the context of the current user (admin)
-        this.account = new Tine.Tinebase.Model.User({}, Tine.Tinebase.registry.get('currentAccount').accountId),
+        this.account = new Tine.Tinebase.Model.User({}, Tine.Tinebase.registry.get('currentAccount').accountId);
+        this.recordClass = Tine.Admin.Model.OVpnApi_AuthConfig;
         super.initComponent();
     }
     onRender() {
@@ -24,7 +25,7 @@ class AuthConfig extends MFAPanel {
 
 Tine.widgets.form.FieldManager.register('Admin', 'OVpnApiAccount', 'auth_configs', {
     xtype: AuthConfig,
-    height: 120,
+    height: 300,
 }, Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
 
 Tine.Admin.registerItem({

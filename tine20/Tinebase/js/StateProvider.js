@@ -49,12 +49,13 @@ Ext.extend(Tine.Tinebase.StateProvider, Ext.state.Provider, {
         }
         
         const encodedValue = this.encodeValue(value);
-        await Tine.Tinebase.loadState().then(async (stateInfo) => {
-            if (stateInfo[name] !== encodedValue) {
-                // persistent save
-                await Tine.Tinebase.setState(name, encodedValue);
-            }
-        }).catch((e) => {});
+        const currentStateEncodedValue = this.encodeValue(this.state[name]);
+
+        if (!this.state[name] || (currentStateEncodedValue !== encodedValue)) {
+            // persistent save
+            await Tine.Tinebase.setState(name, encodedValue);
+        }
+
         Tine.Tinebase.StateProvider.superclass.set.call(this, name, value);
     }
 });

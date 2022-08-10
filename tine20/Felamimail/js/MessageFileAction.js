@@ -484,26 +484,24 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
 });
 
 Tine.Felamimail.MessageFileAction.getFileLocationText = function(locations, glue='') {
-    const _ = window.lodash,
-        formatMessage = Tine.Tinebase.appMgr.get('Felamimail').formatMessage;
-
     return _.reduce(locations, function(text, location) {
-        const model = _.isString(location.model) ? Tine.Tinebase.data.RecordMgr.get(location.model) : location.model,
-            iconCls = model ? model.getIconCls() : '',
-            icon = iconCls ? '<span class="felamimail-location-icon ' + iconCls +'"></span>' : '',
-            span = model ? '<span class="felamimail-location" ' +
-                'onclick="Tine.Felamimail.MessageFileAction.locationClickHandler(\'' + model.getPhpClassName() +
-                "','" + location.record_id + '\')">' + icon + '<span class="felamimail-location-text">'
-                + Ext.util.Format.htmlEncode(location.record_title) + '</span></span>' : '';
-
+        const model = _.isString(location.model) ? Tine.Tinebase.data.RecordMgr.get(location.model) : location.model;
+        const recordId = location?.record_id?.id ?? location.record_id;
+        const iconCls = model ? model.getIconCls() : '';
+        const icon = iconCls ? '<span class="felamimail-location-icon ' + iconCls +'"></span>' : '';
+        const span = model ? '<span class="felamimail-location" ' +
+            'onclick="Tine.Felamimail.MessageFileAction.locationClickHandler(\'' + model.getPhpClassName() +
+            "','" + recordId + '\')">' + icon + '<span class="felamimail-location-text">'
+            + Ext.util.Format.htmlEncode(location.record_title) + '</span></span>' : '';
+        
         return text.concat(span);
     }, []).join(glue);
 };
 
 Tine.Felamimail.MessageFileAction.locationClickHandler = function (recordClassName, recordId) {
-    let recordClass = Tine.Tinebase.data.RecordMgr.get(recordClassName);
-    let recordData = {};
-    let editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(recordClass);
+    const recordClass = Tine.Tinebase.data.RecordMgr.get(recordClassName);
+    const recordData = {};
+    const editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(recordClass);
     recordData[recordClass.getMeta('idProperty')] = recordId;
 
     editDialogClass.openWindow({

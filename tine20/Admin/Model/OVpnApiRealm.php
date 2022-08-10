@@ -59,6 +59,7 @@ class Admin_Model_OVpnApiRealm extends Tinebase_Record_NewAbstract
             self::FLD_NAME => [
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 255,
+                self::QUERY_FILTER => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED

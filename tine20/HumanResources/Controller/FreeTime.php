@@ -78,6 +78,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
                 break;
             case self::ACTION_CREATE:
             case self::ACTION_UPDATE:
+            case self::ACTION_DELETE:
                 if (HumanResources_Config::FREE_TIME_PROCESS_STATUS_REQUESTED === $_record->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS} &&
                         (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::CREATE_CHANGE_REQUEST, false) ||
                             (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::CREATE_OWN_CHANGE_REQUEST, false) &&

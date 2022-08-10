@@ -56,9 +56,13 @@ class Addressbook_Export_DocTest extends TestCase
         $tempfile = tempnam(Tinebase_Core::getTempDir(), $_config['filename']) . '.docx';
         $doc->save($tempfile);
 
-        $expectedFile = dirname($_config['template']) . '/results/' . basename($_config['template']);
         $contentHashIs = hash_file('md5', 'zip://' . $tempfile . '#word/document.xml');
-        $contentHashToBe = hash_file('md5', 'zip' . substr($expectedFile, strpos($expectedFile, ':')) . '#word/document.xml');
+        if (isset($_config['contentHash'])) {
+            $contentHashToBe = $_config['contentHash'];
+        } else {
+            $expectedFile = dirname($_config['template']) . '/results/' . basename($_config['template']);
+            $contentHashToBe = hash_file('md5', 'zip' . substr($expectedFile, strpos($expectedFile, ':')) . '#word/document.xml');
+        }
         static::assertEquals($contentHashToBe, $contentHashIs, 'generated document does not match expectation');
     }
 
@@ -139,7 +143,8 @@ class Addressbook_Export_DocTest extends TestCase
         $this->_genericExportTest(array(
             'definition' => __DIR__ . '/definitions/adb_doc_tableWithPOSTPmarkers.xml',
             'template' => 'file://' . __DIR__ . '/templates/tableWithPOSTPmarkers.docx',
-            'filename' => __METHOD__ . '_'
+            'filename' => __METHOD__ . '_',
+            'contentHash' => 'b66595427a413cdf85ffa97397aaed79',
         ));
     }
 
@@ -148,7 +153,8 @@ class Addressbook_Export_DocTest extends TestCase
         $this->_genericExportTest(array(
             'definition' => __DIR__ . '/definitions/adb_doc_record_block.xml',
             'template' => 'file://' . __DIR__ . '/templates/record_block.docx',
-            'filename' => __METHOD__ . '_'
+            'filename' => __METHOD__ . '_',
+            'contentHash' => '14d7477ff2172066e0c3f867b688b8bd',
         ));
     }
 
@@ -157,7 +163,8 @@ class Addressbook_Export_DocTest extends TestCase
         $this->_genericExportTest(array(
             'definition' => __DIR__ . '/definitions/adb_doc_simple_table.xml',
             'template' => 'file://' . __DIR__ . '/templates/simple_table.docx',
-            'filename' => __METHOD__ . '_'
+            'filename' => __METHOD__ . '_',
+            'contentHash' => '33abc20b39cf0f87ea3e139003375d9a',
         ));
     }
 
@@ -166,7 +173,8 @@ class Addressbook_Export_DocTest extends TestCase
         $this->_genericExportTest(array(
             'definition' => __DIR__ . '/definitions/adb_doc_group_blocks.xml',
             'template' => 'file://' . __DIR__ . '/templates/group_blocks.docx',
-            'filename' => __METHOD__ . '_'
+            'filename' => __METHOD__ . '_',
+            'contentHash' => 'c1254b706d8e0ddfad9e19c2aa608cd1',
         ));
     }
 
@@ -175,7 +183,8 @@ class Addressbook_Export_DocTest extends TestCase
         $this->_genericExportTest(array(
             'definition' => __DIR__ . '/definitions/adb_doc_group_blocks_table.xml',
             'template' => 'file://' . __DIR__ . '/templates/group_blocks_with_table.docx',
-            'filename' => __METHOD__ . '_'
+            'filename' => __METHOD__ . '_',
+            'contentHash' => '398a4db83f722084af8f03c23833395e',
         ));
     }
 
@@ -184,7 +193,8 @@ class Addressbook_Export_DocTest extends TestCase
         $this->_genericExportTest(array(
             'definition' => __DIR__ . '/definitions/adb_doc_grouped_table.xml',
             'template' => 'file://' . __DIR__ . '/templates/grouped_table.docx',
-            'filename' => __METHOD__ . '_'
+            'filename' => __METHOD__ . '_',
+            'contentHash' => '2940f70ba9547fb2b9db733e68b96aa7',
         ));
     }
 
@@ -194,7 +204,8 @@ class Addressbook_Export_DocTest extends TestCase
             'definition' => __DIR__ . '/definitions/adb_doc_datasources.xml',
             'template' => 'file://' . __DIR__ . '/templates/datasources.docx',
             'filename' => __METHOD__ . '_',
-            'exportClass' => 'Addressbook_Export_TestDocDataSource'
+            'exportClass' => 'Addressbook_Export_TestDocDataSource',
+            'contentHash' => '7966e0df245f0737fce965de8c93e23d',
         ));
     }
 
