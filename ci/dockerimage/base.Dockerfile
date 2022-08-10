@@ -15,7 +15,9 @@ ARG ALPINE_PHP_REPOSITORY_BRANCH=v3.12
 ARG ALPINE_PHP_REPOSITORY_REPOSITORY=main
 ARG ALPINE_PHP_PACKAGE=php7
 ARG CACHE_BUST=0
-RUN apk add --no-cache --simulate supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd | sha256sum >> /cachehash
+RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/main \
+                                  --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community \
+                                  supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd | sha256sum >> /cachehash
 RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/main \
                                   --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community \
                                   ${ALPINE_PHP_PACKAGE} \
@@ -79,7 +81,9 @@ RUN wget -O /usr/local/bin/tika.jar http://packages.tine20.org/tika/tika-app-1.1
 RUN mkdir /usr/local/lib/container
 
 COPY --from=cache-invalidator /cachehash /usr/local/lib/container/
-RUN apk add --no-cache supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd
+RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/main \
+                                  --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community \
+                                  supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd
 RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/main \
                                   --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community \
                                   ${ALPINE_PHP_PACKAGE} \
