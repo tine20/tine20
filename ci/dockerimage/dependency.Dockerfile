@@ -2,42 +2,16 @@ ARG BASE_IMAGE=base
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM ${BASE_IMAGE} as cache-invalidator
-ARG ALPINE_PHP_REPOSITORY_BRANCH=v3.12
 ARG CACHE_BUST=0
-RUN apk add --no-cache --simulate git npm | sha256sum >> /cachehash
-RUN if [ ${ALPINE_PHP_PACKAGE} != "php8" ]; then \
-        apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community \
-        composer | sha256sum >> /cachehash; \
-    fi
+RUN apk add --no-cache --simulate git npm composer build-base | sha256sum >> /cachehash
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM ${BASE_IMAGE} as dependency
-ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ARG NPM_INSTALL_COMMAND="npm --no-optional install"
-ARG NODE_TLS_REJECT_UNAUTHORIZED=1
 ARG TINE20ROOT=/usr/share
-ARG ALPINE_PHP_REPOSITORY_BRANCH=v3.12
-ARG ALPINE_PHP_PACKAGE=php7
 
 COPY --from=cache-invalidator /cachehash /usr/local/lib/container/
-RUN apk add --no-cache git npm
-
-RUN if [ ${ALPINE_PHP_PACKAGE} == "php8" ]; then \
-        EXPECTED_CHECKSUM="$(curl https://composer.github.io/installer.sig)"; \
-        curl https://getcomposer.org/installer -o /composer-setup.php; \
-        ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', '/composer-setup.php');")"; \
-        if [ "$EXPECTED_CHECKSUM" != "$ACTUAL_CHECKSUM" ]; then \
-            >&2 echo 'ERROR: Invalid installer checksum'; \
-            rm /composer-setup.php; \
-            exit 1; \
-        fi; \
-        php /composer-setup.php --install-dir=/usr/bin --filename=composer --disable-tls; \
-        RESULT=$?; \
-        rm /composer-setup.php; \
-        exit $RESULT; \
-    else \
-        apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community composer; \
-    fi
+RUN apk add --no-cache git npm composer build-base
 
 # used to inject http auth credentials for git repos
 COPY ci/dockerimage/utility/.gitconfig /root/.gitconfig

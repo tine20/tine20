@@ -7,13 +7,11 @@
 # ARGS:
 #   SOURCE_IMAGE=source
 #   TINE20ROOT=/usr/share
-#   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true - is this still needed here?
 
 ARG SOURCE_IMAGE=source
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM ${SOURCE_IMAGE} as test-source
-ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ARG TINE20ROOT=/usr/share
 
 RUN apk add mysql-client jq rsync coreutils
