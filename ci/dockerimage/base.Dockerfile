@@ -6,64 +6,58 @@
 #
 # ARGS:
 #   TINE20ROOT=/usr/share
-#   ALPINE_PHP_REPOSITORY_BRANCH=v3.12 from which alpine versions repository php should be installed
 #   ALPINE_PHP_PACKAGE=php7 php package prefix
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
-FROM alpine:3.12 as cache-invalidator
-ARG ALPINE_PHP_REPOSITORY_BRANCH=v3.12
-ARG ALPINE_PHP_REPOSITORY_REPOSITORY=main
+ARG ALPINE_BRANCH=3.14
+
+FROM alpine:${ALPINE_BRANCH} as cache-invalidator
 ARG ALPINE_PHP_PACKAGE=php7
 ARG CACHE_BUST=0
-RUN apk add --no-cache --simulate supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd | sha256sum >> /cachehash
-RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/${ALPINE_PHP_REPOSITORY_REPOSITORY} \
+
+RUN apk add --update --no-cache --simulate supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd | sha256sum >> /cachehash
+RUN apk add --no-cache --simulate \
                                   ${ALPINE_PHP_PACKAGE} \
-                                  ${ALPINE_PHP_PACKAGE}-fpm \
                                   ${ALPINE_PHP_PACKAGE}-bcmath \
+                                  ${ALPINE_PHP_PACKAGE}-ctype \
+                                  ${ALPINE_PHP_PACKAGE}-curl \
                                   ${ALPINE_PHP_PACKAGE}-exif \
-                                  ${ALPINE_PHP_PACKAGE}-mysqli \
-                                  ${ALPINE_PHP_PACKAGE}-pcntl \
-                                  ${ALPINE_PHP_PACKAGE}-pdo_mysql \
-                                  ${ALPINE_PHP_PACKAGE}-soap \
-                                  ${ALPINE_PHP_PACKAGE}-sockets \
-                                  ${ALPINE_PHP_PACKAGE}-zip \
-                                  ${ALPINE_PHP_PACKAGE}-xsl \
-                                  ${ALPINE_PHP_PACKAGE}-intl \
+                                  ${ALPINE_PHP_PACKAGE}-fileinfo \
+                                  ${ALPINE_PHP_PACKAGE}-fpm \
                                   ${ALPINE_PHP_PACKAGE}-gd \
-                                  ${ALPINE_PHP_PACKAGE}-opcache \
                                   ${ALPINE_PHP_PACKAGE}-gettext \
                                   ${ALPINE_PHP_PACKAGE}-iconv \
+                                  ${ALPINE_PHP_PACKAGE}-intl \
+                                  ${ALPINE_PHP_PACKAGE}-json \
                                   ${ALPINE_PHP_PACKAGE}-ldap \
+                                  ${ALPINE_PHP_PACKAGE}-mysqli \
+                                  ${ALPINE_PHP_PACKAGE}-opcache \
+                                  ${ALPINE_PHP_PACKAGE}-pcntl \
+                                  ${ALPINE_PHP_PACKAGE}-pdo_mysql \
                                   ${ALPINE_PHP_PACKAGE}-pecl-igbinary \
+                                  ${ALPINE_PHP_PACKAGE}-pecl-redis \
                                   ${ALPINE_PHP_PACKAGE}-pecl-yaml \
+                                  ${ALPINE_PHP_PACKAGE}-phar \
+                                  ${ALPINE_PHP_PACKAGE}-posix \
                                   ${ALPINE_PHP_PACKAGE}-simplexml \
-                                  ${ALPINE_PHP_PACKAGE}-ctype \
+                                  ${ALPINE_PHP_PACKAGE}-soap \
+                                  ${ALPINE_PHP_PACKAGE}-sockets \
+                                  ${ALPINE_PHP_PACKAGE}-sodium \
+                                  ${ALPINE_PHP_PACKAGE}-tokenizer \
                                   ${ALPINE_PHP_PACKAGE}-xml \
                                   ${ALPINE_PHP_PACKAGE}-xmlreader \
-                                  ${ALPINE_PHP_PACKAGE}-curl \
-                                  ${ALPINE_PHP_PACKAGE}-tokenizer \
                                   ${ALPINE_PHP_PACKAGE}-xmlwriter \
-                                  ${ALPINE_PHP_PACKAGE}-fileinfo \
-                                  ${ALPINE_PHP_PACKAGE}-posix \
-                                  ${ALPINE_PHP_PACKAGE}-json \
-                                  ${ALPINE_PHP_PACKAGE}-phar \
+                                  ${ALPINE_PHP_PACKAGE}-xsl \
+                                  ${ALPINE_PHP_PACKAGE}-zip \
                                   | sha256sum >> /cachehash
-RUN if [ ${ALPINE_PHP_PACKAGE} == php7 ] && [ ${ALPINE_PHP_REPOSITORY_BRANCH} == v3.12 ]; then \
-        apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/v3.10/community \
-                                  php7-pecl-redis=4.3.0-r2 | sha256sum >> /cachehash; \
-    else \
-        apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/${ALPINE_PHP_REPOSITORY_REPOSITORY} \
-                                  ${ALPINE_PHP_PACKAGE}-pecl-redis | sha256sum >> /cachehash; \
-    fi
+
 RUN apk add --no-cache --simulate --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv \
                                   | sha256sum >> /cachehash
 RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/edge/main nginx nginx-mod-http-brotli \
                                   | sha256sum >> /cachehash
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
-FROM alpine:3.12 as base
-ARG ALPINE_PHP_REPOSITORY_BRANCH=v3.12
-ARG ALPINE_PHP_REPOSITORY_REPOSITORY=main
+FROM alpine:${ALPINE_BRANCH} as base
 ARG ALPINE_PHP_PACKAGE=php7
 ARG TINE20ROOT=/usr/share
 
@@ -76,47 +70,45 @@ RUN wget -O /usr/local/bin/tika.jar http://packages.tine20.org/tika/tika-app-1.1
 RUN mkdir /usr/local/lib/container
 
 COPY --from=cache-invalidator /cachehash /usr/local/lib/container/
-RUN apk add --no-cache supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd
-RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/${ALPINE_PHP_REPOSITORY_REPOSITORY} \
+
+RUN apk add --update --no-cache supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd
+RUN apk add --no-cache \
                                   ${ALPINE_PHP_PACKAGE} \
-                                  ${ALPINE_PHP_PACKAGE}-fpm \
                                   ${ALPINE_PHP_PACKAGE}-bcmath \
+                                  ${ALPINE_PHP_PACKAGE}-ctype \
+                                  ${ALPINE_PHP_PACKAGE}-curl \
                                   ${ALPINE_PHP_PACKAGE}-exif \
-                                  ${ALPINE_PHP_PACKAGE}-mysqli \
-                                  ${ALPINE_PHP_PACKAGE}-pcntl \
-                                  ${ALPINE_PHP_PACKAGE}-pdo_mysql \
-                                  ${ALPINE_PHP_PACKAGE}-soap \
-                                  ${ALPINE_PHP_PACKAGE}-sockets \
-                                  ${ALPINE_PHP_PACKAGE}-zip \
-                                  ${ALPINE_PHP_PACKAGE}-xsl \
-                                  ${ALPINE_PHP_PACKAGE}-intl \
+                                  ${ALPINE_PHP_PACKAGE}-fileinfo \
+                                  ${ALPINE_PHP_PACKAGE}-fpm \
                                   ${ALPINE_PHP_PACKAGE}-gd \
-                                  ${ALPINE_PHP_PACKAGE}-opcache \
                                   ${ALPINE_PHP_PACKAGE}-gettext \
                                   ${ALPINE_PHP_PACKAGE}-iconv \
+                                  ${ALPINE_PHP_PACKAGE}-intl \
+                                  ${ALPINE_PHP_PACKAGE}-json \
                                   ${ALPINE_PHP_PACKAGE}-ldap \
+                                  ${ALPINE_PHP_PACKAGE}-mysqli \
+                                  ${ALPINE_PHP_PACKAGE}-opcache \
+                                  ${ALPINE_PHP_PACKAGE}-pcntl \
+                                  ${ALPINE_PHP_PACKAGE}-pdo_mysql \
                                   ${ALPINE_PHP_PACKAGE}-pecl-igbinary \
+                                  ${ALPINE_PHP_PACKAGE}-pecl-redis \
                                   ${ALPINE_PHP_PACKAGE}-pecl-yaml \
+                                  ${ALPINE_PHP_PACKAGE}-phar \
+                                  ${ALPINE_PHP_PACKAGE}-posix \
                                   ${ALPINE_PHP_PACKAGE}-simplexml \
-                                  ${ALPINE_PHP_PACKAGE}-ctype \
+                                  ${ALPINE_PHP_PACKAGE}-soap \
+                                  ${ALPINE_PHP_PACKAGE}-sockets \
+                                  ${ALPINE_PHP_PACKAGE}-sodium \
+                                  ${ALPINE_PHP_PACKAGE}-tokenizer \
                                   ${ALPINE_PHP_PACKAGE}-xml \
                                   ${ALPINE_PHP_PACKAGE}-xmlreader \
-                                  ${ALPINE_PHP_PACKAGE}-curl \
-                                  ${ALPINE_PHP_PACKAGE}-tokenizer \
                                   ${ALPINE_PHP_PACKAGE}-xmlwriter \
-                                  ${ALPINE_PHP_PACKAGE}-fileinfo \
-                                  ${ALPINE_PHP_PACKAGE}-posix \
-                                  ${ALPINE_PHP_PACKAGE}-json \
-                                  ${ALPINE_PHP_PACKAGE}-phar
-RUN if [ ${ALPINE_PHP_PACKAGE} == php7 ] && [ ${ALPINE_PHP_REPOSITORY_BRANCH} == v3.12 ]; then \
-        apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.10/community php7-pecl-redis=4.3.0-r2; \
-    else \
-        apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/${ALPINE_PHP_REPOSITORY_REPOSITORY} \
-                                  ${ALPINE_PHP_PACKAGE}-pecl-redis; \
-    fi
+                                  ${ALPINE_PHP_PACKAGE}-xsl \
+                                  ${ALPINE_PHP_PACKAGE}-zip
+
 RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/main nginx nginx-mod-http-brotli
 # fix alpine iconv problem e.g. could not locate filter
-RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv
+RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/testing gnu-libiconv
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
 RUN if [ ! -f /usr/bin/php ] && [ -f /usr/bin/php8 ]; then ln -s /usr/bin/php8 /usr/bin/php; echo "php symlink created"; fi

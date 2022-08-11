@@ -7,13 +7,11 @@
 # ARGS:
 #   SOURCE_IMAGE=source
 #   TINE20ROOT=/usr/share
-#   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true - is this still needed here?
 
 ARG DEPENDENCY_IMAGE=dependency
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM ${DEPENDENCY_IMAGE} as test-dependency
-ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ARG TINE20ROOT=/usr/share
 
 RUN apk add mysql-client jq rsync
