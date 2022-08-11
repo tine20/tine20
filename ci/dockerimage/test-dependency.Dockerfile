@@ -8,10 +8,10 @@
 #   SOURCE_IMAGE=source
 #   TINE20ROOT=/usr/share
 
-ARG SOURCE_IMAGE=source
+ARG DEPENDENCY_IMAGE=dependency
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
-FROM ${SOURCE_IMAGE} as test-source
+FROM ${DEPENDENCY_IMAGE} as test-dependency
 ARG TINE20ROOT=/usr/share
 
 RUN apk add mysql-client jq rsync
