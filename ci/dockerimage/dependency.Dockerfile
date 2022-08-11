@@ -4,7 +4,7 @@ ARG BASE_IMAGE=base
 FROM ${BASE_IMAGE} as cache-invalidator
 ARG CACHE_BUST=0
 RUN apk add --update --no-cache --simulate git composer build-base | sha256sum >> /cachehash
-RUN apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/v3.14/main/ npm=7.17.0-r0 | sha256sum >> /cachehash
+RUN apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/main/ npm=12.22.12-r0 | sha256sum >> /cachehash
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM ${BASE_IMAGE} as dependency
@@ -13,7 +13,7 @@ ARG TINE20ROOT=/usr/share
 
 COPY --from=cache-invalidator /cachehash /usr/local/lib/container/
 RUN apk add --update --no-cache git composer build-base
-RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.14/main/ npm=7.17.0-r0
+RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/main/ npm=12.22.12-r0
 
 # used to inject http auth credentials for git repos
 COPY ci/dockerimage/utility/.gitconfig /root/.gitconfig
