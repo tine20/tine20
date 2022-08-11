@@ -22,7 +22,8 @@ FROM ${BUILT_IMAGE} as test-built
 ARG NPM_INSTALL_COMMAND="npm --no-optional install"
 ARG TINE20ROOT=/usr/share
 
-RUN apk add --no-cache git npm mysql-client jq rsync composer build-base
+RUN apk add --update --no-cache git mysql-client jq rsync composer build-base
+RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.14/main/ npm=7.17.0-r0
 
 COPY etc /config
 
