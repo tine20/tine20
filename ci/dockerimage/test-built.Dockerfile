@@ -23,7 +23,7 @@ ARG NPM_INSTALL_COMMAND="npm --no-optional install"
 ARG TINE20ROOT=/usr/share
 
 RUN apk add --update --no-cache git mysql-client jq rsync composer build-base
-RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/main/ npm=12.22.12-r0
+RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/main/ npm=12.22.12-r0 nodejs=12.22.12-r0
 
 COPY etc /config
 
