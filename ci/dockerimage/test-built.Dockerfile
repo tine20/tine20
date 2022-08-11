@@ -22,7 +22,7 @@ FROM ${BUILT_IMAGE} as test-built
 ARG NPM_INSTALL_COMMAND="npm --no-optional install"
 ARG TINE20ROOT=/usr/share
 
-RUN apk add --no-cache git npm mysql-client jq rsync composer
+RUN apk add --no-cache git npm mysql-client jq rsync composer build-base
 
 COPY etc /config
 
