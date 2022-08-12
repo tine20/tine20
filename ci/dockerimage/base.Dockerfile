@@ -51,9 +51,9 @@ RUN apk add --no-cache --simulate \
                                   ${ALPINE_PHP_PACKAGE}-zip \
                                   | sha256sum >> /cachehash
 
-RUN apk add --no-cache --simulate --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv \
+RUN apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/v3.13/community/ gnu-libiconv=1.15-r3 \
                                   | sha256sum >> /cachehash
-RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/edge/main nginx nginx-mod-http-brotli \
+RUN apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/edge/main nginx nginx-mod-http-brotli \
                                   | sha256sum >> /cachehash
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
@@ -106,7 +106,7 @@ RUN apk add --no-cache \
                                   ${ALPINE_PHP_PACKAGE}-xsl \
                                   ${ALPINE_PHP_PACKAGE}-zip
 
-RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/main nginx nginx-mod-http-brotli
+RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/main nginx nginx-mod-http-brotli
 # fix alpine iconv problem e.g. could not locate filter
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.13/community/ gnu-libiconv=1.15-r3
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
