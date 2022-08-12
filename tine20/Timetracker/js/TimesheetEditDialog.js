@@ -377,7 +377,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         },
                         items: [[
                             fieldManager('timeaccount_id', {
-                                disabled: this.record.get('workingtime_is_cleared') ? true : false,
+                                disabled: !!this.record.get('workingtime_is_cleared'),
                                 columnWidth: 0.75,
                                 listeners: {
                                     scope: this,
@@ -390,7 +390,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             })
                         ], [
                             fieldManager('duration', {
-                                disabled: this.record.get('workingtime_is_cleared') ? true : false,
+                                disabled: !!this.record.get('workingtime_is_cleared'),
                                 selectOnFocus: true,
                                 allowBlank: false,
                                 allowNegative: false,
@@ -401,9 +401,9 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     spin: this.onDurationChange,
                                 }
                             }),
-                            fieldManager('start_date', {disabled: this.record.get('workingtime_is_cleared') ? true : false}), 
+                            fieldManager('start_date', {disabled: !!this.record.get('workingtime_is_cleared')}), 
                             fieldManager('start_time', {
-                                disabled: this.record.get('workingtime_is_cleared') ? true : false,
+                                disabled: !!this.record.get('workingtime_is_cleared'),
                                 listeners: {
                                     scope: this,
                                     blur: this.onStartTimeChange,
@@ -411,7 +411,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                 }
                             }),
                             fieldManager('end_time', {
-                                disabled: this.record.get('workingtime_is_cleared') ? true : false,
+                                disabled: !!this.record.get('workingtime_is_cleared'),
                                 listeners: {
                                     scope: this,
                                     blur: this.onEndTimeChange,
@@ -420,7 +420,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             }),
                         ], [
                             fieldManager('description', {
-                                disabled: this.record.get('workingtime_is_cleared') ? true : false,
+                                disabled: !!this.record.get('workingtime_is_cleared'),
                                 columnWidth: 1,
                                 allowBlank: false,
                                 height: 150}),

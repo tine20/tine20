@@ -199,22 +199,6 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'shy'                   => true,
                 'copyOmit'              => true,
             ),
-            // ts + ta fields combined
-            'is_cleared_combined'   => array(
-                'type'                  => 'virtual',
-                'config'                => [
-                    'label'                 => 'Projecttime cleared (combined)', // _('Projecttime cleared (combined)')
-                    'tooltip'               => 'Projecttime cleared (combined)',
-                    'type'                  => 'boolean',
-                ], 
-                'filterDefinition'      => array(
-                    'filter'                => 'Tinebase_Model_Filter_Bool',
-                    'options'               => array(
-                        'leftOperand'           => "( (CASE WHEN timetracker_timesheet.is_cleared = '1' THEN 1 ELSE 0 END) | (CASE WHEN timetracker_timeaccount.status = 'billed' THEN 1 ELSE 0 END) )",
-                        'requiredCols'          => array('is_cleared_combined'),
-                    ),
-                ),
-            ),
             // TODO combine those three fields like this?
             // TODO create individual fields in MC and Doctrine Mapper? how to handle filter/validators/labels/...?
 //            'start'            => array(
