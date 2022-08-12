@@ -63,13 +63,14 @@ class Tasks_Controller extends Tinebase_Controller_Event implements Tinebase_App
         }
         return self::$_instance;
     }
-    
+
     /**
      * temporary function to get a default container]
-     * 
+     *
      * @param string $_referingApplication
      * @return Tinebase_Model_Container container
-     * 
+     *
+     * @throws Tinebase_Exception_NotFound
      * @todo replace this by Tinebase_Container::getDefaultContainer
      */
     public function getDefaultContainer($_referingApplication = 'tasks')
@@ -80,7 +81,8 @@ class Tasks_Controller extends Tinebase_Controller_Event implements Tinebase_App
         if (isset($taskConfig->$configString)) {
             $defaultContainer = Tinebase_Container::getInstance()->getContainerById((int)$taskConfig->$configString);
         } else {
-            $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer(Tasks_Model_Task::class);
+            $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer(Tasks_Model_Task::class,
+                null, Tasks_Preference::DEFAULTTASKLIST);
         }
         
         return $defaultContainer;
