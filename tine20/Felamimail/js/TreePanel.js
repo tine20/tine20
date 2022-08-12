@@ -468,7 +468,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
 
         this.expandPath('/root/' + accountId + '/', null, function(success, parentNode) {
             Ext.each(parentNode.childNodes, function(node) {
-                if (Ext.util.Format.lowercase(node.attributes.localname) == 'inbox') {
+                if (Ext.util.Format.lowercase(node.attributes.localname) === 'inbox') {
                     node.select();
                     return false;
                 }

@@ -844,3 +844,6 @@ msgstr "Dateiinhalt"
 
 msgid "Copy Public Link"
 msgstr "Öffentlichen Link kopieren"
+
+msgid "Do you want to restart the failed uploads?"
+msgstr "Möchten Sie die nicht erfolgreich Datei(en) erneut hochladen?"

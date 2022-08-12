@@ -145,7 +145,15 @@ Tine.Filemanager.DuplicateFileUploadDialog = Ext.extend(Ext.FormPanel, {
     },
     
     handleApplyAll: async function (button) {
+        this.handler.call(this.scope, button);
+        this.window.close();
+        
         if (this.applyToAll || button === 'stop') {
+            _.each(Tine.Filemanager.DuplicateFileUploadDialog.openWindow.stack, (window) => {
+                window.handler.call(window.scope, button);
+            });
+            Tine.Filemanager.DuplicateFileUploadDialog.openWindow.stack = [];
+            
             if (button === 'skip' || button === 'stop') {
                 await Tine.Tinebase.uploadManager.stopBatchUploads(this.batchID);
             }
@@ -153,16 +161,7 @@ Tine.Filemanager.DuplicateFileUploadDialog = Ext.extend(Ext.FormPanel, {
             if (button === 'replace') {
                 await Tine.Tinebase.uploadManager.overwriteBatchUploads(this.batchID);
             }
-
-            _.each(Tine.Filemanager.DuplicateFileUploadDialog.openWindow.stack, (window) => {
-                window.handler.call(window.scope, button);
-            });
-
-            Tine.Filemanager.DuplicateFileUploadDialog.openWindow.stack = [];
         }
-        
-        this.handler.call(this.scope, button);
-        this.window.close();
     }
 });
 

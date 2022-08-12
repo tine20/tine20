@@ -50,6 +50,9 @@ module.exports = {
          */
         splitChunks: false
     },
+    externals: {
+        fs: "fs",
+    },
     output: {
         path: baseDir + '/',
         // avoid public path, see #13430.
