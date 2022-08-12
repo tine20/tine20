@@ -107,12 +107,14 @@ RUN apk add --no-cache \
 
 RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/main nginx nginx-mod-http-brotli
 # fix alpine iconv problem e.g. could not locate filter
-RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/testing gnu-libiconv
+RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.13/community/ gnu-libiconv=1.15-r3
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
-RUN if [ ! -f /usr/bin/php ] && [ -f /usr/bin/php8 ]; then ln -s /usr/bin/php8 /usr/bin/php; echo "php symlink created"; fi
-RUN if [ ${ALPINE_PHP_PACKAGE} == "php8" ]; then ln -s /usr/sbin/php-fpm8 /usr/sbin/php-fpm; else ln -s /usr/sbin/php-fpm7 /usr/sbin/php-fpm; fi
-RUN if [ ${ALPINE_PHP_PACKAGE} == "php8" ]; then ln -s /etc/php8 /etc/php; else ln -s /etc/php7 /etc/php; fi
+RUN if [ ! -f /usr/bin/php ] && [ -f /usr/bin/php8 ]; then ln -s /usr/bin/php8 /usr/bin/php; echo "php8 symlink created"; fi
+RUN if [ ! -f /usr/sbin/php-fpm ] && [ -f /usr/sbin/php-fpm8 ]; then ln -s /usr/sbin/php-fpm8 /usr/sbin/php-fpm; echo "php-fpm8 symlink created"; fi
+RUN if [ ! -f /usr/sbin/php-fpm ] && [ -f /usr/sbin/php-fpm7 ]; then ln -s /usr/sbin/php-fpm7 /usr/sbin/php-fpm; echo "php-fpm7 symlink created"; fi
+RUN if [ ! -d /etc/php ] && [ -d /etc/php8 ]; then ln -s /etc/php8 /etc/php; echo "etc php8 symlink created"; fi
+RUN if [ ! -d /etc/php ] && [ -d /etc/php7 ]; then ln -s /etc/php7 /etc/php; echo "etc php7 symlink created"; fi
 
 RUN addgroup -S -g 150 tine20 && \
     adduser -S -H -D -s /bin/ash -g "tine20 user" -G tine20 -u 150 tine20 && \
