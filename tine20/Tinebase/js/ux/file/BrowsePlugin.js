@@ -204,7 +204,8 @@ Ext.ux.file.BrowsePlugin.prototype = {
     onInputFileChange: async function (e) {
         // easy cope with directories
         const fs = await require('html5-file-selector/src');
-        const files = await fs.getDroppedOrSelectedFiles(e.browserEvent || e);
+        const supportFileHandle = Tine.Tinebase.uploadManager.supportFileHandle;
+        const files = await fs.getDroppedOrSelectedFiles(e.browserEvent || e, supportFileHandle);
         
         if (files) {
             this.files = files;

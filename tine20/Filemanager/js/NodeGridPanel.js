@@ -224,14 +224,16 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (record && Ext.isFunction(record.copy)) {
             const store = this.getStore();
             let isSelected = false;
-
-            if (existingRecord) {
-                const idx = store.indexOf(existingRecord);
-                isSelected = this.getGrid().getSelectionModel().isSelected(idx);
-                store.removeAt(idx);
-                store.insert(idx, [record]);
-            } else if (this.isInCurrentGrid(record.get('path'))) {
-                store.add([record]);
+            
+            if (this.isInCurrentGrid(record.get('path'))) {
+                if (existingRecord) {
+                    const idx = store.indexOf(existingRecord);
+                    isSelected = this.getGrid().getSelectionModel().isSelected(idx);
+                    store.removeAt(idx);
+                    store.insert(idx, [record]);
+                } else {
+                    store.add([record]);
+                }
             } else {
                 return;
             }
@@ -291,6 +293,44 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 return record;
             }
         });
+        
+        this.monitorUploadTasks();
+    },
+    
+    /**
+     * monitor upload tasks
+     * 
+     * - cross window : if yes , duplicated window should not proceed upload at all
+     */
+    monitorUploadTasks: async function () {
+        const failedUploads = await Tine.Tinebase.uploadManager.getFailedUploadTasks();
+        const fileHandleUploadTasks = _.filter(failedUploads, (task)=> {
+            const fileHandle = task.args.fileObject;
+            return typeof fileHandle.getFile === 'function' && task.handler === 'FilemanagerUploadFileTask';
+        });
+
+        if (fileHandleUploadTasks.length > 0) {
+            const failedUploadPaths = _.join(_.map(fileHandleUploadTasks, (task) => {
+                return task.label + " <br />";
+            }), '');
+            
+            this.conflictConfirmWin = Tine.widgets.dialog.FileListDialog.openWindow({
+                modal: true,
+                allowCancel: false,
+                height: 180,
+                width: 500,
+                title: this.app.i18n._('Do you want to restart the failed uploads?'),
+                text: failedUploadPaths,
+                scope: this,
+                handler: async function (button) {
+                    if (button === 'yes') {
+                        await Tine.Tinebase.uploadManager.restartFailedUploads(fileHandleUploadTasks);
+                    } else {
+                        await Tine.Tinebase.uploadManager.resetUploadChannels();
+                    }
+                }
+            });
+        }
     },
 
     /**
@@ -769,7 +809,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getViewRowClass: function(record, index, rowParams, store) {
         let className = Tine.Filemanager.NodeGridPanel.superclass.getViewRowClass.apply(this, arguments);
-
+        
         if (this.dataSafeEnabled && !!record.get('pin_protected_node')) {
             className += ' x-type-data-safe'
         }
@@ -1007,6 +1047,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
 
         let files = fileSelector.getFileList();
+
         const folderList = _.uniq(_.map(files, (fo) => {
             return fo.fullPath.replace(/\/[^/]*$/, '');
         }));

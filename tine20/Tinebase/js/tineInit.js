@@ -1355,12 +1355,8 @@ Tine.Tinebase.tineInit = {
      * initialise upload manager
      */
     initUploadMgr: function () {
-        if (! window.isMainWindow) {
-            Tine.Tinebase.uploadManager = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.uploadManager;
-        } else {
-            Tine.Tinebase.uploadManager = new Ext.ux.file.UploadManager();
-            Tine.Tinebase.uploadManager.InitChannels();
-        }
+        Tine.Tinebase.uploadManager = window.isMainWindow ? new Ext.ux.file.UploadManager()
+            : Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.uploadManager;
     },
 
     /**
