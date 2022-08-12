@@ -623,8 +623,13 @@ class Tinebase_Core
      *
      * @throws Exception
      */
-    public static function startCoreSession()
+    public static function startCoreSession($refresh=false)
     {
+        if ($refresh === true) {
+            $_SESSION = [];
+            Tinebase_Session::regenerateId();
+        }
+
         if (! Tinebase_Session::isStarted()) {
             Tinebase_Session::setSessionBackend();
             Zend_Session::start();
