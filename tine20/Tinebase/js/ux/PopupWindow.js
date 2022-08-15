@@ -177,8 +177,17 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
                 e.returnValue = '';
             }
         }, this));
-        
+
         this.popup.addEventListener('resize', _.debounce(_.bind(this.saveState, this), 150));
+
+        // NOTE: 'beforeunload' in Chrome does not help
+        this.popup.setInterval(() => {
+            if (this.popup.screenX !== this.screenX || this.popup.screenY !== this.screenY) {
+                this.screenX = this.popup.screenX;
+                this.screenY = this.popup.screenY;
+                this.saveState();
+            }
+        }, 1000)
     },
 
     /**
@@ -203,10 +212,11 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         const h = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
 
         // Determine correct left and top values including dual screen setup
-        const left = ((w / 2) - (width / 2)) + dualScreenLeft;
-        const top = ((h / 2) - (height / 2)) + dualScreenTop;
+        this.screenX = _.isNumber(this.screenX) ? this.screenX : ((w / 2) - (width / 2)) + dualScreenLeft;
+        this.screenY = _.isNumber(this.screenY) ? this.screenY : ((h / 2) - (height / 2)) + dualScreenTop;
 
-        return popup = window.open(url, windowName, 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left +
+        return popup = window.open(url, windowName,
+            'width=' + width + ',height=' + height + ',screenY=' + this.screenY + ',screenX=' + this.screenX +
             ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
     },
     
@@ -215,7 +225,9 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         // NOTE: FF does auto scaling!
         const state = {
             width: this.popup.innerWidth,
-            height: this.popup.innerHeight
+            height: this.popup.innerHeight,
+            screenX: this.popup.screenX,
+            screenY: this.popup.screenY
         };
         return state;
     },
@@ -307,7 +319,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
      */
     destroy: function() {
         Ext.ux.PopupWindow.superclass.destroy.call(this);
-        
+
         this.purgeListeners();
         this.windowManager.unregister(this);
 
