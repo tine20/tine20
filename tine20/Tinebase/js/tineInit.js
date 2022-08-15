@@ -106,11 +106,6 @@ Tine.Tinebase.tineInit = {
     stateful: true,
 
     /**
-     * @cfg {String} jsonKeyCookieId
-     */
-    jsonKeyCookieId: 'TINE20JSONKEY',
-
-    /**
      * @cfg {String} requestUrl
      */
     requestUrl: 'index.php',
@@ -487,7 +482,7 @@ Tine.Tinebase.tineInit = {
                 Tine.Tinebase.tineInit.initRegistry(true, function() {
                     if (Ext.isWebApp) {
                         Tine.Tinebase.registry.set('sessionId', response.responseData.sessionId);
-                        Tine.Tinebase.registry.set('usercredentialcache', Tine.Tinebase.tineInit.jsonKeyCookieProvider.get('usercredentialcache'));
+                        Tine.Tinebase.registry.set('usercredentialcache', Tine.Tinebase.tineInit.cookieProvider.get('usercredentialcache'));
                     }
                     Tine.log.info('tineInit::renderWindow - registry fetched, render main window');
                     Ext.MessageBox.hide();
@@ -557,7 +552,7 @@ Tine.Tinebase.tineInit = {
 
         Ext.Ajax.transactions = {};
 
-        Tine.Tinebase.tineInit.jsonKeyCookieProvider = new Ext.ux.util.Cookie({
+        Tine.Tinebase.tineInit.cookieProvider = new Ext.ux.util.Cookie({
             path: String(Tine.Tinebase.common.getUrl('path')).replace(/\/$/, '')
         });
 
@@ -573,18 +568,7 @@ Tine.Tinebase.tineInit = {
          */
         Ext.Ajax.on('beforerequest', function (connection, options) {
 
-            var jsonKey = Tine.Tinebase.registry && Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('jsonKey') : '',
-                jsonKeyCookieId = Tine.Tinebase.tineInit.jsonKeyCookieId,
-                cookieJsonKey = Tine.Tinebase.tineInit.jsonKeyCookieProvider.get(jsonKeyCookieId);
-
-            if (cookieJsonKey) {
-                Tine.Tinebase.tineInit.jsonKeyCookieProvider.clear(jsonKeyCookieId);
-                // NOTE cookie reset is not always working in IE, so we need to check jsonKey again
-                if (cookieJsonKey && cookieJsonKey != "null") {
-                    jsonKey = cookieJsonKey;
-                    Tine.Tinebase.registry.set('jsonKey', jsonKey);
-                }
-            }
+            const jsonKey = Tine.Tinebase.registry && Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('jsonKey') : '';
 
             options.headers = options.headers || {};
             options.headers['X-Tine20-JsonKey'] = jsonKey;
@@ -874,6 +858,28 @@ Tine.Tinebase.tineInit = {
                 }
             });
         } else {
+
+            if (window.isMainWindow) {
+                await new Promise((resolve) => {
+                    Ext.Ajax.request({
+                        timeout: 120000, // 2 minutes
+                        params: {
+                            method: 'Tinebase.ping'
+                        },
+                        callback: (request, success, response) => {
+                            try {
+                                if (success && JSON.parse(response.responseText) === 'ack') return resolve();
+                            } catch (e) {
+                            }
+                            Tine.Tinebase.common.reload({
+                                keepRegistry: false,
+                                clearCache: true
+                            });
+                        }
+                    });
+                });
+            }
+
             for (var app,i=0;i<userApplications.length;i++) {
                 app = userApplications[i].name;
                 Ext.ns('Tine.' + app);
@@ -927,8 +933,8 @@ Tine.Tinebase.tineInit = {
 
         if (Ext.isWebApp && Tine.Tinebase.registry.get('sessionId')) {
             // restore session cookie
-            Tine.Tinebase.tineInit.jsonKeyCookieProvider.set('TINE20SESSID', Tine.Tinebase.registry.get('sessionId'));
-            Tine.Tinebase.tineInit.jsonKeyCookieProvider.set('usercredentialcache', Tine.Tinebase.registry.get('usercredentialcache'));
+            Tine.Tinebase.tineInit.cookieProvider.set('TINE20SESSID', Tine.Tinebase.registry.get('sessionId'));
+            Tine.Tinebase.tineInit.cookieProvider.set('usercredentialcache', Tine.Tinebase.registry.get('usercredentialcache'));
         }
 
         Ext.override(Ext.ux.file.Upload, {
@@ -1047,6 +1053,15 @@ Tine.Tinebase.tineInit = {
 
     /**
      * executed when a value in Tinebase registry/preferences changed
+     *
+     * NOTE: this also happens when registry gets cleared e.g. through a logout in another tab
+     * @TODO we might face a race condition / loop here:
+     *  -> other tab reloads registry
+     *  -> this tab reloads and clears cache
+     *  -> while this tab reloads the registry is empty
+     *  -> if the other tab does a request in the meantime it lacks of registry (and json-key)
+     *  -> other tab gets unauth exception and reloads (with clear registry again)
+     *  -> ...
      *
      * @param {string} key
      * @param {value} oldValue
@@ -1265,10 +1280,4 @@ Ext.onReady(async function () {
         Tine.Tinebase.tineInit.initWindowMgr();
         Tine.Tinebase.tineInit.renderWindow();
     });
-
-    // TODO use await
-    // await Tine.Tinebase.tineInit.initRegistry(false);
-    // Tine.Tinebase.tineInit.checkClientVersion();
-    // Tine.Tinebase.tineInit.initWindowMgr();
-    // Tine.Tinebase.tineInit.renderWindow();
 });

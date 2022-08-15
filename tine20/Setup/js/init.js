@@ -36,7 +36,6 @@ Tine.Tinebase.tineInit.initAjax = Tine.Tinebase.tineInit.initAjax.createIntercep
     Tine.Tinebase.tineInit.initRegistry = async (forceReload, cb, scope) => {
         await Tine.Tinebase.tineInit.clearRegistry();
         Tine.Tinebase.tineInit.getAllRegistryDataMethod = 'Setup.getAllRegistryData';
-        Tine.Tinebase.tineInit.jsonKeyCookieId = 'TINE20SETUPJSONKEY';
         Tine.Tinebase.tineInit.stateful = false;
         return await orig.call(Tine.Tinebase.tineInit, forceReload, cb, scope);
     }
