@@ -131,6 +131,21 @@ class GDPR_Setup_Initialize extends Setup_Initialize
                 ],*/
             ]
         ], true));
+
+        Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
+            'name' => GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_EXPIRY_CUSTOM_FIELD_NAME,
+            'application_id' => $appId,
+            'model' => Addressbook_Model_Contact::class,
+            'is_system' => true,
+            'definition' => [
+                Tinebase_Model_CustomField_Config::DEF_FIELD => [
+                    TMCC::LABEL             => 'GDPR Data Expiry Date',
+                    TMCC::TYPE              => TMCC::TYPE_DATE,
+                    TMCC::NULLABLE          => true,
+                    TMCC::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                ],
+            ]
+        ], true));
     }
 
     protected function _initializeDefaultDataProvenance()
@@ -144,5 +159,14 @@ class GDPR_Setup_Initialize extends Setup_Initialize
         ]));
 
         GDPR_Config::getInstance()->set(GDPR_Config::DEFAULT_ADB_CONTACT_DATA_PROVENANCE, $dP->getId());
+    }
+
+    /**
+     * init scheduler tasks
+     */
+    protected function _initializeSchedulerTasks()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        GDPR_Scheduler_Task::addDeleteExpiredDataTask($scheduler);
     }
 }
