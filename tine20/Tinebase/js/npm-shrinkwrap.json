@@ -7164,8 +7164,8 @@
       }
     },
     "html5-file-selector": {
-      "version": "github:tine20/html5-file-selector.git#1625c2102e49f8f997e16108f6f0d5b6bfd6b2d8",
-      "from": "github:tine20/html5-file-selector.git#1625c2102e49f8f997e16108f6f0d5b6bfd6b2d8"
+      "version": "github:tine20/html5-file-selector.git#5658e0e3b358441a4bfce5b77567172efcd07eb0",
+      "from": "github:tine20/html5-file-selector.git#5658e0e3b358441a4bfce5b77567172efcd07eb0"
     },
     "htmlparser2": {
       "version": "3.10.1",

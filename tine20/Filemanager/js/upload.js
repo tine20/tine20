@@ -19,7 +19,6 @@
  * - folders have transitional state only (not yet created, just in uploadManager)
  */
 async function upload(targetFolderPath, files) {
-    // TODO: in the future we might have yes too all button , it marks the batchID with forceToWrite flag
     const batchID = Ext.id();
     files.forEach((file) => {file.batchID = batchID});
     await createTasks(targetFolderPath, files);
@@ -36,9 +35,8 @@ async function upload(targetFolderPath, files) {
  */
 async function createTasks(targetFolderPath, files) {
     // try to generate the id here which is used for grid update
-    const taskIDs = [];
-    let fileTasks = [];
-    
+    let tasks = [];
+
     try {
         files = resolvePaths(targetFolderPath, files);
         const folders = getSortedFolders(files);
@@ -46,100 +44,98 @@ async function createTasks(targetFolderPath, files) {
             {field: 'path', operator: 'equals', value: targetFolderPath}
         ]);
         
-        const existFileList = response.results;
-        
-        await _.reduce(folders, (prev, folder) =>  {
-            return prev.then(async (result) => {
-                const pathArray = _.compact(folder.split('/'));
-                
-                if (pathArray.length > 0) {
-                    const task = await createFolderTask(targetFolderPath, folder, taskIDs, existFileList);
-                    taskIDs.push(task);
-                }
+        const existNodeList = response.results;
+        tasks = _.concat(tasks, createFolderTasks(targetFolderPath, folders, existNodeList));
+    
+        _.each(folders, (folder) => {
+            const filesToUpload = getFilesToUpload(files, folder);
+            tasks = _.concat(tasks, createUploadFileTasks(targetFolderPath, filesToUpload, existNodeList));
+        });
 
-                const filesUpload = getFilesToUpload(files, folder);
-                const tasks = await createUploadFileTasks(filesUpload, taskIDs, existFileList);
-                fileTasks = _.concat(fileTasks, tasks);
-                
-                return Promise.resolve();
-            })
-        }, Promise.resolve());
-        
-        await Tine.Tinebase.uploadManager.queueUploads(fileTasks);
-        
-        return taskIDs;
+        await Tine.Tinebase.uploadManager.queueUploads(tasks);
     } catch (e) {
-        console.err(e.message);
+        const app = Tine.Tinebase.appMgr.get('Filemanager');
+        Ext.MessageBox.alert(
+            i18n._('Upload Failed'),
+            app.i18n._(e.message)
+        ).setIcon(Ext.MessageBox.ERROR);
     }
 }
 
 /**
  * creat folder task
- * 
+ *
  * - create node in NodeGridPanel
  * @param targetFolderPath
- * @param folder
- * @param taskIDs
- * @param existFileList
+ * @param folders
+ * @param existNodeList
  * @returns {Promise<{path, taskId: *}>}
  */
-async function createFolderTask(targetFolderPath, folder, taskIDs, existFileList) {
-    folder = _.startsWith(folder, '/') ? folder.slice(1) : folder;
-    const uploadId = `${targetFolderPath}${folder}/`;
-    const folderName = _.last(_.compact(_.split(folder, '/')));
-    const [existNode] = _.filter(existFileList, {path: `${uploadId}`});
-    const nodeData = Tine.Filemanager.Model.Node.getDefaultData({
-        name: folderName,
-        type: 'folder',
-        status: 'pending',
-        path: `${uploadId}`,
-        id: Tine.Tinebase.data.Record.generateUID()
+function createFolderTasks(targetFolderPath, folders, existNodeList) {
+    const folderTasks = [];
+    
+    _.each(folders, (folder)=> {
+        const pathArray = _.compact(folder.split('/'));
+    
+        if (pathArray.length === 0) {
+            return;
+        }
+        
+        folder = _.startsWith(folder, '/') ? folder.slice(1) : folder;
+        const uploadId = `${targetFolderPath}${folder}/`;
+        const folderName = _.last(_.compact(_.split(folder, '/')));
+        const [existNode] = _.filter(existNodeList, {path: `${uploadId}`});
+        const nodeData = Tine.Filemanager.Model.Node.getDefaultData({
+            name: folderName,
+            type: 'folder',
+            status: 'pending',
+            path: `${uploadId}`,
+            id: Tine.Tinebase.data.Record.generateUID()
+        });
+        
+        if (!existNode) {
+            window.postal.publish({
+                channel: "recordchange",
+                topic: 'Filemanager.Node.create',
+                data: nodeData
+            });
+        }
+        
+        const task = {
+            handler: "FilemanagerCreateFolderTask",
+            tag: 'queue',
+            label: uploadId,
+            folderDependencies: getFolderDependencyPaths(targetFolderPath, folder),
+            status: nodeData.status,
+            args: _.assign({
+                uploadId,
+                nodeData,
+                targetFolderPath,
+            })
+        };
+        folderTasks.push(task);
     });
     
-    if (!existNode) {
-        window.postal.publish({
-            channel: "recordchange",
-            topic: 'Filemanager.Node.create',
-            data: nodeData
-        });
-    }
-    
-    const task = {
-        handler: "FilemanagerCreateFolderTask",
-        tag: 'folder',
-        label: uploadId,
-        dependencies: getTaskDependencies(taskIDs, folder),
-        status: nodeData.status,
-        args: _.assign({
-            uploadId,
-            nodeData,
-            existNode: existNode,
-            targetFolderPath
-        })
-    };
-
-    const taskId = await Tine.Tinebase.uploadManager.queueUploads([task]);
-    return {path: folder, taskId: taskId};
+    return folderTasks;
 }
 
 /**
  * create upload file tasks
- * 
+ *
  * - create node in NodeGridPanel
+ * @param targetFolderPath
  * @param filesToUpload
- * @param taskIDs
- * @param existFileList
+ * @param existNodeList
  * @returns {Promise<void>}
  */
-async function createUploadFileTasks(filesToUpload, taskIDs, existFileList) {
-    const tasks = [];
+function createUploadFileTasks(targetFolderPath, filesToUpload, existNodeList) {
+    const fileTasks = [];
     
-    await _.reduce(filesToUpload, async (prev, file) => {
+    _.each(filesToUpload, (file)=> {
         const fileObject = file.fileObject;
         const uploadId = file.uploadId;
-        const folder = file.fullPath.replace(file.name, '');
-        const [existNode] = _.filter(existFileList, {path: uploadId});
-        const targetFolderPath = uploadId.replace(file.name, '');
+        const [existNode] = _.filter(existNodeList, {path: uploadId});
+        const parentFolderPath = uploadId.replace(file.name, '');
 
         const nodeData = existNode ?? Tine.Filemanager.Model.Node.getDefaultData({
             name: _.get(file, 'name'),
@@ -161,12 +157,11 @@ async function createUploadFileTasks(filesToUpload, taskIDs, existFileList) {
             data: nodeData
         });
         
-
         const task = {
             handler: "FilemanagerUploadFileTask",
-            tag: 'file',
+            tag: 'queue',
             label: uploadId,
-            dependencies: getTaskDependencies(taskIDs, folder),
+            folderDependencies: getFolderDependencyPaths(targetFolderPath, file.fullPath),
             status: nodeData.status,
             args: _.assign({
                 batchID: file.batchID,
@@ -174,17 +169,16 @@ async function createUploadFileTasks(filesToUpload, taskIDs, existFileList) {
                 uploadId, 
                 fileObject,
                 nodeData,
-                fileSize: fileObject.size,
+                fileSize: file.size,
                 existNode: existNode ? existNode : null,
-                targetFolderPath
+                targetFolderPath: parentFolderPath
             })
         };
-        
-        tasks.push(task);
-        return Promise.resolve();
-    }, Promise.resolve());
     
-    return tasks;
+        fileTasks.push(task);
+    });
+    
+    return fileTasks;
 }
 
 /**
@@ -232,24 +226,36 @@ function getSortedFolders(files) {
  * @param folder
  */
 function getFilesToUpload(files, folder) {
+    let parentPathArray = _.compact(folder.split('/'));
     return _.filter(files, (file) => {
-        return _.get(file, 'fullPath').replace(_.get(file, 'name'), '') === `${folder}/`;
+        const filePathArray = _.compact(file.fullPath.split('/'));
+        if (filePathArray.length - parentPathArray.length === 1) {
+            return file.fullPath.includes(`${folder}/`);
+        }
     });
 }
 
 /**
- * get task dependencies based on folder path
- * 
- * @param taskIds
- * @param folder
+ * get folder dependency paths
+ *
  * @returns {*}
+ * @param targetFolderPath
+ * @param path
  */
-function getTaskDependencies(taskIds, folder) {
-    let deps = _.filter(taskIds, (task) => {
-        if (task) return folder.includes(`${task.path}/`)
-    })
+function getFolderDependencyPaths(targetFolderPath, path) {
+    let pathArray = _.compact(path.split('/'));
+    const depPaths = [];
     
-    return _.map(deps, 'taskId').flat();
+    if (pathArray.length > 1) {
+        pathArray.pop();
+        let depBasePath = targetFolderPath;
+        _.each(pathArray, (subFolder) => {
+            depBasePath = `${depBasePath}${subFolder}/`;
+            depPaths.push(depBasePath);
+        });
+    }
+
+    return depPaths;
 }
 
 export default upload

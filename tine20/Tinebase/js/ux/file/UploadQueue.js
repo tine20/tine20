@@ -1,7 +1,13 @@
 import Queue from 'storage-based-queue';
 import UploadChannel from "./UploadChannel";
+import FilemanagerCreateFolderTask from 'Filemanager/js/CreateFolderTask';
+import FilemanagerUploadFileTask from 'Filemanager/js/UploadFileTask';
 
 class UploadQueue extends Queue {
+    constructor(config) {
+        super(config);
+        this.initWorkers();
+    }
 
     /**
      * Create a new channel
@@ -17,6 +23,23 @@ class UploadQueue extends Queue {
         }
         return this.container.get(channel);
     };
+    
+    /**
+     * Get channel instance by channel name
+     *
+     * @param  {String} name
+     * @return {Queue}
+     *
+     * @api public
+     */
+    channel(name) {
+        return this.container.has(name) ? this.container.get(name) : null;
+    }
+    
+    initWorkers() {
+        UploadQueue.workers({FilemanagerCreateFolderTask});
+        UploadQueue.workers({FilemanagerUploadFileTask});
+    }
 
 }
 
