@@ -992,12 +992,8 @@ msgid "Edit Events"
 msgstr "Termine bearbeiten"
 
 #: js/Model/ResourceGrants.js:103
-msgid ""
-"The grant to respond to event invitations of this resource and to edit "
-"events directly saved in this resource calendar"
-msgstr ""
-"Das Recht auf Termin-Einladungen dieser Ressource zu antworten und Termine "
-"aus dem Ressourcen-Kalender zu bearbeiten"
+msgid "The grant to edit events directly saved in this resource calendar"
+msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu bearbeiten"
 
 #: js/Model/ResourceGrants.js:104
 msgid "Delete Events"

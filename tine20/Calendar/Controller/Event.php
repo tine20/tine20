@@ -2947,8 +2947,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($attender->displaycontainer_id && !$this->_keepAttenderStatus) {
             // check if user is allowed to set status
             if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
-                if (! $preserveStatus && !Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id,
-                            Calendar_Model_ResourceGrants::EVENTS_EDIT) && !Tinebase_Core::getUser()->hasGrant(
+                if (! $preserveStatus && !Tinebase_Core::getUser()->hasGrant(
                                 $attender->displaycontainer_id, Calendar_Model_ResourceGrants::RESOURCE_STATUS)) {
                     //If resource has an default status use this
                     $attender->status = isset($resource->status) ? $resource->status : Calendar_Model_Attender::STATUS_NEEDSACTION;
@@ -3056,9 +3055,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($attender->displaycontainer_id && $attender->status_authkey !== $currentAttender->status_authkey &&
                 !$this->_keepAttenderStatus) {
             if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
-                if (!Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id,
-                        Calendar_Model_ResourceGrants::EVENTS_EDIT) && !Tinebase_Core::getUser()->hasGrant(
-                            $attender->displaycontainer_id, Calendar_Model_ResourceGrants::RESOURCE_STATUS)) {
+                if (!Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id, Calendar_Model_ResourceGrants::RESOURCE_STATUS)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                         Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                             . ' Wrong authkey, resetting status (' . $attender->status . ' -> ' . $currentAttender->status . ')');

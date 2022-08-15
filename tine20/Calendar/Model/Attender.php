@@ -1227,10 +1227,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 // keep authkey if attender is a resource and user has manage_resources
                 if ($attender->user_type === self::USERTYPE_RESOURCE &&
                         isset($attender['displaycontainer_id']) && !is_scalar($attender['displaycontainer_id'])
-                        && ((isset($attender['displaycontainer_id']['account_grants'][Calendar_Model_ResourceGrants::EVENTS_EDIT])
-                        && $attender['displaycontainer_id']['account_grants'][Calendar_Model_ResourceGrants::EVENTS_EDIT]) || (
-                            isset($attender['displaycontainer_id']['account_grants'][Calendar_Model_ResourceGrants::RESOURCE_STATUS])
-                            && $attender['displaycontainer_id']['account_grants'][Calendar_Model_ResourceGrants::RESOURCE_STATUS]))) {
+                        && (isset($attender['displaycontainer_id']['account_grants'][Calendar_Model_ResourceGrants::RESOURCE_STATUS])
+                            && $attender['displaycontainer_id']['account_grants'][Calendar_Model_ResourceGrants::RESOURCE_STATUS])) {
                     continue;
                 }
                 
