@@ -16,6 +16,7 @@ Tine.Calendar.Model.ResourceGrants = Tine.Tinebase.data.Record.create([
     {name: 'account_name'},
     {name: 'resourceInviteGrant',    type: 'boolean'},
     {name: 'resourceStatusGrant',    type: 'boolean'},
+    {name: 'resourceNotificationGrant',    type: 'boolean'},
     {name: 'resourceReadGrant',      type: 'boolean'},
     {name: 'resourceEditGrant',      type: 'boolean'},
     {name: 'resourceExportGrant',    type: 'boolean'},
@@ -49,6 +50,7 @@ Tine.widgets.container.GrantsManager.register('Calendar_Model_Event', function(c
         return [
             'resourceInvite',
             'resourceStatus',
+            'resourceNotification',
             'resourceRead',
             'resourceEdit',
             // 'resourceExport', // should be resource-admin?
@@ -83,6 +85,8 @@ Ext.override(Tine.widgets.container.GrantsGrid, {
     resourceInviteGrantDescription: 'The grant to invite the resource to an event', // i18n._('The grant to invite the resource to an event')
     resourceStatusGrantTitle: 'Resource status', // i18n._('Resource status')
     resourceStatusGrantDescription: 'The grant to set the resource attendee status', // i18n._('The grant to set the resource attendee status')
+    resourceNotificationGrantTitle: 'Resource notification', // i18n._('Resource notification')
+    resourceNotificationGrantDescription: 'The grant to receive notifications for this resource', // i18n._('The grant to receive notifications for this resource')
     resourceReadGrantTitle: 'Read Resource', // i18n._('Read Resource')
     resourceReadGrantDescription: 'The grant to read the resource itself', // i18n._('The grant to read the resource itself')
     resourceEditGrantTitle: 'Edit Resource', // i18n._('Edit Resource')

@@ -20,6 +20,7 @@ class Calendar_Model_ResourceGrants extends Tinebase_Model_Grants
 {
     const RESOURCE_INVITE   = 'resourceInviteGrant';
     const RESOURCE_STATUS   = 'resourceStatusGrant';
+    const RESOURCE_NOTIFICATION    = 'resourceNotificationGrant';
     const RESOURCE_READ     = 'resourceReadGrant';
     const RESOURCE_EDIT     = 'resourceEditGrant';
     const RESOURCE_EXPORT   = 'resourceExportGrant';
@@ -50,6 +51,7 @@ class Calendar_Model_ResourceGrants extends Tinebase_Model_Grants
         return array_merge(parent::getAllGrants(), [
             self::RESOURCE_INVITE,
             self::RESOURCE_STATUS,
+            self::RESOURCE_NOTIFICATION,
             self::RESOURCE_READ,
             self::RESOURCE_EDIT,
             self::RESOURCE_EXPORT,
