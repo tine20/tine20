@@ -108,7 +108,7 @@ Ext.override(Tine.widgets.container.GrantsGrid, {
     eventsFreebusyGrantTitle: 'Events Free Busy', // i18n._('Events Free Busy')
     eventsFreebusyGrantDescription: 'The grant to get free/busy information of events from this resource calendar', // i18n._('The grant to get free/busy information of events from this resource calendar')
     eventsEditGrantTitle: 'Edit Events', // i18n._('Edit Events')
-    eventsEditGrantDescription: 'The grant to respond to event invitations of this resource and to edit events directly saved in this resource calendar', // i18n._('The grant to respond to event invitations of this resource and to edit events directly saved in this resource calendar')
+    eventsEditGrantDescription: 'The grant to edit events directly saved in this resource calendar', // i18n._('The grant to of this resource and to edit events directly saved in this resource calendar')
     eventsDeleteGrantTitle: 'Delete Events', // i18n._('Delete Events')
     eventsDeleteGrantDescription: 'The grant to delete events directly stored in this resource calendar', // i18n._('The grant to delete events directly stored in this resource calendar')
 

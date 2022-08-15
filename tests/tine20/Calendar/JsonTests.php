@@ -1578,7 +1578,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testSaveResource($grants = [Calendar_Model_ResourceGrants::RESOURCE_READ => true,
          Calendar_Model_ResourceGrants::EVENTS_EDIT => true, Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
-        Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true])
+        Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true, Calendar_Model_ResourceGrants::RESOURCE_STATUS => true])
     {
         $resoureData = array(
             'name'  => Tinebase_Record_Abstract::generateUID(),
