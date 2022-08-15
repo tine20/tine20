@@ -628,7 +628,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                     'container_id' => $_record['contact_id']['container_id'] ?? Admin_Controller_User::getInstance()->getDefaultInternalAddressbook(),
                     'type' => Addressbook_Model_Contact::CONTACTTYPE_EMAIL_ACCOUNT,
                     'email' => $_record['email'],
-                    'n_given' => $name,
+                    'n_fileas' => $name,
                 ], true);
 
                 try {
@@ -638,7 +638,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                         $contact = Addressbook_Controller_Contact::getInstance()->get($existContact['id']);
                         $contact['email'] = $_record['email'];
                         $contact['container_id'] = $_record['contact_id']['container_id'] ?? $contact['container_id'];
-                        $contact['n_given'] = $name;
+                        $contact['n_fileas'] = $name;
 
                         $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
                     }
