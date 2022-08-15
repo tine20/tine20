@@ -21,12 +21,17 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
         this.title = this.app.i18n._('GDPR');
 
         this.blacklistContactCheckbox = new Ext.form.Checkbox({
+            hideLabel: true,
             disabled: true,
             boxLabel: this.app.i18n._('Must not be contacted'),
             listeners: {scope: this, check: this.onBlacklistContactCheck}
         });
         this.blacklistContactDescription = new Ext.form.Label({
             text: this.app.i18n._("This Contact withdrawed usage of his data for any purpose.")
+        });
+
+        this.expiryDatePicker = new Ext.ux.form.ClearableDateField({
+            fieldLabel: this.app.i18n._('Expiry Date'),
         });
 
         this.dataIntendedPurposesGrid = new Tine.widgets.grid.QuickaddGridPanel({
@@ -53,11 +58,11 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
             items: [{
                 layout: 'form',
                 frame: true,
-                hideLabels: true,
                 width: '100%',
                 items: [
                     this.blacklistContactCheckbox,
                     this.blacklistContactDescription,
+                    this.expiryDatePicker,
                 ]},
                 this.dataIntendedPurposesGrid
             ]
@@ -108,9 +113,13 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
         var _ = window.lodash,
             evalGrants = editDialog.evalGrants,
             hasRequiredGrant = !evalGrants || _.get(record, 'json.container_id.account_grants' + '.' + this.requiredGrant),
-            blacklistContact = !!+record.get('GDPR_Blacklist');
-
+            blacklistContact = !!+record.get('GDPR_Blacklist'),
+            expiryDate = record.get('GDPR_DataExpiryDate');
+        
         this.blacklistContactCheckbox.setValue(blacklistContact);
+        if (expiryDate) {
+            this.expiryDatePicker.setValue(expiryDate);
+        }
         this.dataIntendedPurposesGrid.setStoreFromArray(record.get('GDPR_DataIntendedPurposeRecord') || []);
 
         this.setReadOnly(!hasRequiredGrant);
@@ -129,6 +138,7 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
     onRecordUpdate: function(editDialog, record) {
         record.set('GDPR_DataIntendedPurposeRecord', this.dataIntendedPurposesGrid.getFromStoreAsArray());
         record.set('GDPR_Blacklist', this.blacklistContactCheckbox.getValue());
+        record.set('GDPR_DataExpiryDate', this.expiryDatePicker.getValue());
     },
 
     getCanonicalPathSegment: function () {

@@ -25,6 +25,10 @@ Tine.Addressbook.Model.Contact.prototype.fields.add(new Ext.data.Field(
     {name: 'GDPR_DataEditingReason', label: 'GDPR Data Editing Reason', group: 'GDPR' }, // i18n._('GDPR Data Editing Reason')
 ));
 
+Tine.Addressbook.Model.Contact.prototype.fields.add(new Ext.data.Field(
+    {name: 'GDPR_DataExpiryDate', label: 'GDPR Data Expiry Date', group: 'GDPR' }, // i18n._('GDPR Data Expiry Date')
+));
+
 // Tine.Addressbook.contactBackend is created on code include time
 delete Tine.Addressbook.contactBackend.getReader().ef;
 Tine.Addressbook.contactBackend.getReader().buildExtractors();
