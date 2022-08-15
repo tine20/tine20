@@ -129,7 +129,10 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
 
     afterRender: function () {
         Tine.Tinebase.widgets.dialog.PasswordDialog.superclass.afterRender.call(this);
-        this.buttonApply.setDisabled(!this.allowEmptyPassword);
+        const policyConfig = this.policyConfig || Tine.Tinebase.configManager.get('downloadPwPolicy');
+        const passwordIsMandatoryByPolicy =  policyConfig ? policyConfig.pwIsMandatory : false;
+
+        this.buttonApply.setDisabled(!this.allowEmptyPassword || passwordIsMandatoryByPolicy);
 
         this.passwordField.focus(true, 500);
     },
