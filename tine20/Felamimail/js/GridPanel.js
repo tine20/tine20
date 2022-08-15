@@ -1574,11 +1574,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     changeGridState: function (stateId) {
         this.grid.stateId = stateId;
-        const refState = Ext.state.Manager.get(stateId);
+        
+        if (!Ext.state.Manager.get(this.gridConfig.stateId)) {
+            this.grid.saveState();
+        }
+        const defaultState = Ext.state.Manager.get(this.gridConfig.stateId) ?? this.grid.getState();
+        defaultState.sort = this.store.getSortState();
         
         if (stateId === this.sendFolderGridStateId) {
-            const defaultState = Ext.state.Manager.get(this.gridConfig.stateId) ?? this.grid.getState();
-            let cloneRefState = JSON.parse(JSON.stringify(defaultState));
+            const refState = Ext.state.Manager.get(stateId);
+            let cloneDefaultState = JSON.parse(JSON.stringify(defaultState));
             // - hide from email + name columns from grid
             // - show to column in grid
             const customHideCols = {
@@ -1588,23 +1593,24 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
             //overwrite custom states
             _.each(customHideCols, (isHidden, colId) => {
-                const idx = _.findIndex(cloneRefState.columns, {id: colId});
+                const idx = _.findIndex(cloneDefaultState.columns, {id: colId});
                 isHidden = !refState ? isHidden : _.get(_.find(refState.columns, {id: colId}), 'hidden', false);
                 
-                if (idx > -1 && isHidden !== _.get(cloneRefState.columns[idx], 'hidden', false)) {
+                if (idx > -1 && isHidden !== _.get(cloneDefaultState.columns[idx], 'hidden', false)) {
                     if (isHidden) {
-                        cloneRefState.columns[idx].hidden = true;
+                        cloneDefaultState.columns[idx].hidden = true;
                     } else {
-                        delete cloneRefState.columns[idx].hidden;
+                        delete cloneDefaultState.columns[idx].hidden;
                     }
                 }
             })
+            
             // apply state and update grid column ui
-            this.grid.applyState(cloneRefState);
+            this.grid.applyState(cloneDefaultState);
             // save state
             this.grid.saveState();
         } else {
-            this.grid.applyState(refState ?? this.grid.getState());
+            this.grid.applyState(defaultState);
         }
     },
 
