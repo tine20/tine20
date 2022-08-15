@@ -960,12 +960,21 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         }
 
         // try to guess name from n_fileas
-        // TODO: n_fn
-        if (empty($_data['org_name']) && empty($_data['n_family'])) {
-            if (! empty($_data['n_fileas'])) {
-                $names = preg_split('/\s*,\s*/', $_data['n_fileas']);
-                if (empty($_data['n_given'])&& isset($names[1])) {
+        if (empty($_data['org_name']) && empty($_data['n_family']) && empty($_data['n_given'])) {
+            if (! empty($_data['n_fn'])) {
+                $names = preg_split('/\s* \s*/', $_data['n_fn'],2);
+                if (isset($names[0])) {
+                    $_data['n_given'] = $names[0];
+                }
+                if (isset($names[1])) {
+                    $_data['n_family'] = $names[1];
+                }
+            } elseif (! empty($_data['n_fileas'])) {
+                $names = preg_split('/\s*,\s*/', $_data['n_fileas'],2);
+                if (isset($names[0])) {
                     $_data['n_family'] = $names[0];
+                }
+                if (isset($names[1])) {
                     $_data['n_given'] = $names[1];
                 }
             }
