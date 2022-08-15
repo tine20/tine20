@@ -533,4 +533,25 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
         Tinebase_Model_Application $_application, $_accountId, $_grant)
     {
     }
+
+    /**
+     * @return array
+     */
+    public static function resolveGrantAccounts($grants)
+    {
+        $accounts = [];
+        switch ($grants['account_type']) {
+            case 'user': 
+                $accounts[] = $grants['account_id'];
+                break;
+            case 'group':
+                $accounts = Tinebase_Group::getInstance()->getGroupMembers($grants['account_id']);
+                break;
+            case 'role':
+                $accounts = Tinebase_Role::getInstance()->getRoleMembers($grants['account_id']);
+                break;
+        }
+       
+        return $accounts;
+    }
 }

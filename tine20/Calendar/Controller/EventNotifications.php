@@ -364,7 +364,7 @@
 
             $recipients = array($attendee);
 
-            $this->_handleResourceEditors($_attender, $_notificationLevel, $recipients, $_action, $sendLevel, $_updates);
+            $this->_handleResourceNotifications($_attender, $recipients, $_action, $sendLevel, $_updates);
 
             // check if user wants this notification NOTE: organizer gets mails unless she set notificationlevel to NONE
             // NOTE prefUser is organizer for external notifications
@@ -479,21 +479,16 @@
     }
 
      /**
-      * Not a resource? = Don't do anything
-      * Suppress Notifications = Don't send anything. Neither to Users or Resource
-      * ResourceMailsForEditors = Send to Editors and Resource
-      * ! ResourceMailsForEditors = Send only to Resource
-      *
-      * @param Calendar_Model_Attender $attender
-      * @param string $_notificationLevel
-      * @param array $recipients
-      * @param string $action
-      * @param string $sendLevel
+      * @param $attender
+      * @param $recipients
+      * @param $action
+      * @param $sendLevel
+      * @param $_updates
       * @return bool
-      *
-      * TODO is return bool needed? we never return false ...
+      * @throws Tinebase_Exception_AccessDenied
+      * @throws Tinebase_Exception_NotFound
       */
-     protected function _handleResourceEditors($attender, $_notificationLevel, &$recipients, &$action, &$sendLevel, $_updates)
+     protected function _handleResourceNotifications($attender, &$recipients, &$action, &$sendLevel, $_updates)
      {
          // Add additional recipients for resources
          if ($attender->user_type !== Calendar_Model_Attender::USERTYPE_RESOURCE) {
@@ -501,18 +496,12 @@
          }
 
          $resource = Calendar_Controller_Resource::getInstance()->get($attender->user_id);
-         // Suppress all notifications?
+         
+         //Do not send any Notifications if suppress Notifications is turned on
          if ($resource->suppress_notification) {
              if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                  . " Do not send Notifications for this resource: ". $resource->name);
-             // $recipients will still contain the resource itself
-             // Edit 13.12.2016 Remove resource as well and supress ALL notifications
              $recipients = array();
-             return true;
-         }
-
-         // Send Mails to Editors?
-         if (! Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS)) {
              return true;
          }
 
@@ -531,24 +520,14 @@
                  }
              }
          }
-         
-         /*
-         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                 . " Attender: ". $attender);
-         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                 . " Action: ". $action);
-         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                 . " Notification Level: ". $_notificationLevel);
-         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                 . " Send Level: ". $sendLevel);
-         */
-         
+
          $recipients = array_merge($recipients,
              Calendar_Controller_Resource::getInstance()->getNotificationRecipients($resource)
          );
 
          return true;
      }
+     
     
     /**
      * get notification subject and method
@@ -747,13 +726,7 @@
         $converter->setMethod($method);
         $converter->setCalendarUser($attendee);
 
-        if ($event->isRecurException()) {
-            try {
-                $event = Calendar_Controller_Event::getInstance()->get($event->base_event_id);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-            } catch (Tinebase_Exception_AccessDenied $tead) {
-            }
-        }
+        Calendar_Controller_MSEventFacade::getInstance()->prepareAttendeesView($event, $attendee);
         $vcalendar = $converter->fromTine20Model($event);
         
         foreach ($vcalendar->children() as $component) {

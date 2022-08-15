@@ -126,7 +126,7 @@ describe('filterBar', () => {
         try {
             await expect(page).toClick('.t-app-felamimail button', {text: 'Details verbergen'});
         } catch (e) {
-
+            console.log('details also not activate')
         }
         await page.screenshot({
             path: 'screenshots/StandardBedienhinweise/8_standardbedienhinweise_suchfilter.png'
@@ -144,9 +144,10 @@ describe('filterBar', () => {
         try {
             await expect(page).toClick('.t-app-felamimail button', {text: 'Details anzeigen'});
         } catch (e) {
-
+            console.log('details also activate')
         }
-        let arrowtrigger = await page.$$('.t-app-felamimail .x-form-arrow-trigger');
+        await expect(page).toMatchElement('button', {text: 'Suche starten', visible: true})
+        let arrowtrigger = await page.$$('.t-app-felamimail .tw-filtertoolbar .x-form-arrow-trigger');
         await arrowtrigger[0].click();
         await page.screenshot({path: 'screenshots/StandardBedienhinweise/7_standardbedienhinweise_email_suchoptionen.png'});
         await page.keyboard.press('Escape');

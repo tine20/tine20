@@ -18,6 +18,7 @@ class GDPR_Setup_Update_15 extends Setup_Update_Abstract
 {
     const RELEASE015_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE015_UPDATE001 = __CLASS__ . '::update001';
+    const RELEASE015_UPDATE002 = __CLASS__ . '::update002';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -30,6 +31,10 @@ class GDPR_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],
+            self::RELEASE015_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
             ],
         ],
     ];
@@ -67,5 +72,32 @@ class GDPR_Setup_Update_15 extends Setup_Update_Abstract
         Tinebase_CustomField::getInstance()->updateCustomField($cfCfg);
 
         $this->addApplicationUpdate(GDPR_Config::APPNAME, '15.1', self::RELEASE015_UPDATE001);
+    }
+
+    public function update002()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $appId = Tinebase_Application::getInstance()->getApplicationByName(Addressbook_Config::APP_NAME)->getId();
+
+        Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
+            'name' => GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_EXPIRY_CUSTOM_FIELD_NAME,
+            'application_id' => $appId,
+            'model' => Addressbook_Model_Contact::class,
+            'is_system' => true,
+            'definition' => [
+                Tinebase_Model_CustomField_Config::DEF_FIELD => [
+                    TMCC::LABEL             => 'GDPR Data Expiry Date',
+                    TMCC::TYPE              => TMCC::TYPE_DATE,
+                    TMCC::NULLABLE          => true,
+                    TMCC::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                ],
+            ]
+        ], true));
+
+        $scheduler = Tinebase_Core::getScheduler();
+        GDPR_Scheduler_Task::addDeleteExpiredDataTask($scheduler);
+
+        $this->addApplicationUpdate(GDPR_Config::APPNAME, '15.2', self::RELEASE015_UPDATE001);
     }
 }

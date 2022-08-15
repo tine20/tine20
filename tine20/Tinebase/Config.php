@@ -514,6 +514,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const DOWNLOAD_PASSWORD_POLICY= 'downloadPwPolicy';
 
     /**
+     * PASSWORD_MANDATORY
+     *
+     * @var string
+     */
+    const PASSWORD_MANDATORY = 'pwIsMandatory';
+    
+    /**
      * PASSWORD_POLICY_ACTIVE
      *
      * @var string
@@ -2059,6 +2066,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => true,
             // TODO move to class constant when we no longer need to support php 5.5
             'content'               => [
+                self::PASSWORD_MANDATORY => array(
+                    //_('A password must be set')
+                    'label'                 => 'A password must be set',
+                    //_('A password must be set')
+                    'description'           => 'A password must be set',
+                    'type'                  => 'bool',
+                    'clientRegistryInclude' => TRUE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => TRUE,
+                ),
                 self::PASSWORD_POLICY_ACTIVE => array(
                     //_('Enable password policy')
                     'label'                 => 'Enable password policy',
@@ -2172,6 +2189,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => true,
             // TODO move to class constant when we no longer need to support php 5.5
             'content'               => [
+                self::PASSWORD_MANDATORY => array(
+                    //_('A password must be set')
+                    'label'                 => 'A password must be set',
+                    //_('A password must be set')
+                    'description'           => 'A password must be set',
+                    'type'                  => 'bool',
+                    'clientRegistryInclude' => TRUE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => TRUE,
+                ),
                 self::PASSWORD_POLICY_ACTIVE => array(
                     //_('Enable password policy')
                     'label'                 => 'Enable password policy',

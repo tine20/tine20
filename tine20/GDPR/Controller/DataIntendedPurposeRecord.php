@@ -22,6 +22,8 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
 
     const ADB_CONTACT_CUSTOM_FIELD_NAME = 'GDPR_DataIntendedPurposeRecord';
     const ADB_CONTACT_BLACKLIST_CUSTOM_FIELD_NAME = 'GDPR_Blacklist';
+    const ADB_CONTACT_EXPIRY_CUSTOM_FIELD_NAME = 'GDPR_DataExpiryDate';
+
 
     /**
      * the constructor
@@ -128,5 +130,34 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
                 $selfInstance->update($toUpdate);
             }
         }
+    }
+
+    /**
+     * Delete All Contacts with an Expiry Date before now
+     * 
+     * @return bool
+     */
+    public function deleteExpiredData()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' delete expired Contact data...');
+
+        $now = Tinebase_DateTime::now();
+        $contactController = Addressbook_Controller_Contact::getInstance();
+        $oldACL = $contactController->doContainerACLChecks(false);
+
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, array(array(
+            'field'    => GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_EXPIRY_CUSTOM_FIELD_NAME,
+            'operator' => 'before',
+            'value'    => $now
+        )));
+
+        $contactsToDelete =  $contactController->search($filter, null,false, true);
+        $contactController->delete($contactsToDelete);
+
+        $contactController->doContainerACLChecks($oldACL);
+
+        return true;
     }
 }
