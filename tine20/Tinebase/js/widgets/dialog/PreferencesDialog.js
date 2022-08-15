@@ -247,7 +247,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         this.loadMask.show();
         
         // get values from card panels
-        var data = this.getValuesFromPanels();
+        const [data,clientneedsreload] = this.getValuesFromPanels();
         
         // save preference data
         Ext.Ajax.request({
@@ -268,8 +268,9 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                     this.window.close();
                 }
 
-                // reload mainWindow
-                Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.common.reload();
+                if(clientneedsreload) {
+                    Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.common.reload();
+                }
             },
             failure: function (response) {
                 Ext.MessageBox.alert(i18n._('Errors'), i18n._('Saving of preferences failed.'));
@@ -302,7 +303,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * @return {Object} with form data
      */
     getValuesFromPanels: function() {
-        var panel, data = {};
+        var panel, data = {}, clientneedsreload = false;
         var panelsToSave = (this.adminMode) ? this.adminPrefPanels : this.prefPanels;
 
         for (panelName in panelsToSave) {
@@ -321,6 +322,9 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                                 }
                             } else {
                                 data[panel.appName][item.name] = {value: item.getValue()};
+                                if(!clientneedsreload && (item.startValue !== item.getValue()) && item.startValue && item.clientneedsreload) {
+                                    clientneedsreload = true;
+                                }
                             }
                         }
                     }
@@ -328,7 +332,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             }
         }
         
-        return data;
+        return [data, clientneedsreload];
     },
     
     /**
