@@ -1438,6 +1438,7 @@ class Setup_Controller
     {
         $configs = array(
             Tinebase_Config::PASSWORD_CHANGE                     => 1,
+            Tinebase_Config::PASSWORD_MANDATORY                  => 0,
             Tinebase_Config::PASSWORD_POLICY_ACTIVE              => 0,
             Tinebase_Config::PASSWORD_POLICY_ONLYASCII           => 0,
             Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH          => 0,
