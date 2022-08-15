@@ -96,6 +96,77 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
         // remove instance to prevent acl pollution
         Admin_Controller_EmailAccount::destroyInstance();
+        Calendar_Controller_Event::unsetInstance();
+    }
+
+    public function testExternalIMIPViews()
+    {
+        $externalContact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'email' => 'external@domain.tld',
+        ]));
+        $externalContact1 = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'email' => 'external1@domain.tld',
+        ]));
+        $sharedContainer = $this->_getTestContainer('Calendar', Calendar_Model_Event::class, true);
+        $event = $this->_getEvent();
+        $event->dtstart = Tinebase_DateTime::now()->setTime(10, 0);
+        $event->dtend = $event->dtstart->getClone()->setTime(11, 0);
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=' . $event->dtend->getClone()->addDay(5)->toString();
+        $event->container_id = $sharedContainer;
+        $event->attendee->addRecord(new Calendar_Model_Attender([
+            'user_id'        => $externalContact1->getId(),
+            'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
+            'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
+        ]));
+
+        $calCtrl = Calendar_Controller_Event::getInstance();
+        $calCtrl->sendNotifications(false);
+        $createdEvent = $calCtrl->create($event);
+        $attendee = $createdEvent->attendee->find('user_id', $externalContact1->getId());
+
+        $exceptions = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($createdEvent, $exceptions, $event->dtend->getClone());
+        $nextOccurance->attendee->addRecord(new Calendar_Model_Attender([
+            'user_id'        => $externalContact->getId(),
+            'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
+            'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
+        ]));
+        $exception1 = $calCtrl->createRecurException($nextOccurance);
+        $exceptions->addRecord($exception1);
+
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($calCtrl->get($createdEvent->getId()), $exceptions, $nextOccurance->dtend->getClone());
+        $nextOccurance->attendee->addRecord(new Calendar_Model_Attender([
+            'user_id'        => $externalContact->getId(),
+            'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
+            'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
+        ]));
+        $exception2 = $calCtrl->createRecurException($nextOccurance);
+
+        $refMeth = new ReflectionMethod(Calendar_Controller_EventNotifications::class, '_createVCalendar');
+        $refMeth->setAccessible(true);
+        $vcalendar = $refMeth->invoke(Calendar_Controller_EventNotifications::getInstance(), $calCtrl->get($createdEvent->getId()), Calendar_Model_iMIP::METHOD_REQUEST, Tinebase_Core::getUser(), $attendee)->serialize();
+
+        $converter = new Calendar_Convert_Event_VCalendar_Abstract();
+        $imipEvent = $converter->toTine20Model($vcalendar);
+        $this->assertSame($createdEvent->uid, $imipEvent->uid);
+        $this->assertSame($createdEvent->dtstart->toString(), $imipEvent->dtstart->toString());
+        $this->assertSame(2, $imipEvent->exdate->count());
+
+        $exception1Attendee = $exception1->attendee->find('user_id', $externalContact->getId());
+        $vcalendarEx1 = $refMeth->invoke(Calendar_Controller_EventNotifications::getInstance(),$exception1, Calendar_Model_iMIP::METHOD_REQUEST, Tinebase_Core::getUser(), $exception1Attendee)->serialize();
+
+        $imipEvent = $converter->toTine20Model($vcalendarEx1);
+        $this->assertSame($exception1->getId(), $imipEvent->uid);
+        $this->assertSame($exception1->dtstart->toString(), $imipEvent->dtstart->toString());
+        $this->assertEmpty($imipEvent->exdate);
+
+        $exception2Attendee = $exception2->attendee->find('user_id', $externalContact->getId());
+        $vcalendarEx2 = $refMeth->invoke(Calendar_Controller_EventNotifications::getInstance(),$exception2, Calendar_Model_iMIP::METHOD_REQUEST, Tinebase_Core::getUser(), $exception2Attendee)->serialize();
+
+        $imipEvent = $converter->toTine20Model($vcalendarEx2);
+        $this->assertSame($exception2->getId(), $imipEvent->uid);
+        $this->assertSame($exception2->dtstart->toString(), $imipEvent->dtstart->toString());
+        $this->assertEmpty($imipEvent->exdate);
     }
 
     public function testExternalInvitationToOneOfARecurSeries()
