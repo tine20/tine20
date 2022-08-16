@@ -829,7 +829,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} o
      */
     onBeforeEdit: function(o) {
-        if (this.record.get('massMailingFlag')) {
+        if (this.record.get('massMailingFlag') && o.column === 0) {
             o.cancel = true;
             return;
         }
