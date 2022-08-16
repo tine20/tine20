@@ -1622,8 +1622,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.log.debug('Tine.Felamimail.GridPanel::onStoreLoad(): store loaded new records.');
 
         let folder = this.getCurrentFolderFromTree();
-        if (folder && records.length < folder.get('cache_totalcount')) {
-            Tine.log.debug('Tine.Felamimail.GridPanel::onStoreLoad() - Count mismatch: got ' + records.length + ' records for folder ' + folder.get('globalname'));
+        if (folder && folder.get('imap_totalcount') !== folder.get('cache_totalcount')) {
+            Tine.log.debug('Tine.Felamimail.GridPanel::onStoreLoad() - Count mismatch: got ' + folder.get('imap_totalcount') + ' records for folder ' + folder.get('globalname'));
             Tine.log.debug(folder);
             folder.set('cache_status', 'pending');
             folder.commit();
