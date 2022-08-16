@@ -1929,7 +1929,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     public function autoCreateMoveNotifications(Felamimail_Model_Account $_account)
     {
         $translate = Tinebase_Translation::getTranslation($this->_applicationName);
-        $_account->sieve_notification_move = true;
+        $_account->sieve_notification_move = Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_AUTO;
         $_account->sieve_notification_move_folder = $translate->_('Notifications');
 
         try {
