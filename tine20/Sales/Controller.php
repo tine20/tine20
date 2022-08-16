@@ -197,9 +197,11 @@ class Sales_Controller extends Tinebase_Controller_Event
         $billingAddress = $contactRelations->filter('type', 'CONTACTADDRESS');
 
         if (count($billingAddress) >= 1) {
-            //This contact already has billing address relations
+            // This contact already has billing address relations
             foreach ($billingAddress as $address) {
-                Sales_Controller_Address::getInstance()->contactToCustomerAddress($address->related_record, $contact);
+                if ($address->related_record) {
+                    Sales_Controller_Address::getInstance()->contactToCustomerAddress($address->related_record, $contact);
+                }
             }
         }
     }

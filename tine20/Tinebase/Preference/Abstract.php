@@ -46,6 +46,11 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @staticvar string
      */
     const DEFAULTCONTAINER_OPTIONS = 'defaulcontaineropt';
+
+    /**
+     * changing preference needs client reload
+     */
+    const CLIENT_NEEDS_RELOAD = 'clientneedsreload';
     
     /**************************** backend settings *********************************/
 
