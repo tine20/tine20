@@ -789,14 +789,15 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         $parent = $folder->parentId
             ? Felamimail_Controller_Folder::getInstance()->get($folder->parentId)
             : null;
-        if ($parent->globalname !== $fmailFolder->parent) {
-            // move folder
+
+        if ($parent && $parent->globalname !== $fmailFolder->parent) {
             $target = $parent->globalname . $delimiter . $folder->displayName;
             $targetIsLocal = false;
         } else {
             $target = $folder->displayName;
-            $targetIsLocal = true;
+            $targetIsLocal = ($parent !== null);
         }
+
         Felamimail_Controller_Folder::getInstance()->rename(
             $account,
             $target,

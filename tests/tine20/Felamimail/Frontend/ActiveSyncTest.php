@@ -1152,4 +1152,24 @@ cj48L2Rpdj48L2Rpdj4=&#13;
         self::assertEquals($folder->displayName, $fmailFolder->localname);
         self::assertEquals($newGlobalName, $fmailFolder->globalname);
     }
+
+    public function testMoveFolderToRoot()
+    {
+        $folder1 = $this->testCreateFolder();
+
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+        // move folder1 to root
+        $folder = new Syncroton_Model_Folder([
+            'parentId' => '',
+            'serverId' => $folder1->getId(),
+            'displayName' => $folder1->localname,
+        ]);
+        $newGlobalName = $folder1->localname;
+        $this->_createdFolders[] = $folder1->localname;
+        $newFolder = $controller->updateFolder($folder);
+
+        $fmailFolder = Felamimail_Controller_Folder::getInstance()->get($newFolder->serverId);
+        self::assertEquals($folder->displayName, $fmailFolder->localname);
+        self::assertEquals($newGlobalName, $fmailFolder->globalname);
+    }
 }
