@@ -11,4 +11,7 @@
     <favorite>true</favorite>
     <order>600</order>
     <scope>multi</scope>
+    <plugin_options_definition>
+        <use_current_columns></use_current_columns>
+    </plugin_options_definition>
 </config>
