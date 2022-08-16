@@ -59,40 +59,41 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update002()
     {
-        $accounts = Felamimail_Controller_Account::getInstance()->getAll();
+        if ($this->getTableVersion('felamimail_account') < 28) {
+            $accounts = Felamimail_Controller_Account::getInstance()->getBackend()->getAll();
 
-        foreach ($accounts as $account) {
-            if (! isset($account['sieve_notification_move'])) {
-               continue;
-            }
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>sieve_notification_move</name>
+                    <length>255</length>
+                    <type>text</type>
+                    <default>AUTO</default>
+                </field>
+            ');
+            $this->_backend->alterCol('felamimail_account', $declaration);
+            $this->setTableVersion('felamimail_account', 28);
 
-            if ($account->sieve_notification_move == '1') {
-                $account->sieve_notification_move = Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_ACTIVE;
-            }
+            foreach ($accounts as $account) {
+                if (!isset($account['sieve_notification_move'])) {
+                    continue;
+                }
 
-            if ($account->sieve_notification_move == '0') {
-                $account->sieve_notification_move = Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_INACTIVE;
-            }
+                if ($account->sieve_notification_move == '1') {
+                    $account->sieve_notification_move = Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_ACTIVE;
+                }
 
-            if (empty($account->sieve_notification_move)) {
-                $account->sieve_notification_move = Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_AUTO;
+                if ($account->sieve_notification_move == '0') {
+                    $account->sieve_notification_move = Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_INACTIVE;
+                }
+
+                if (empty($account->sieve_notification_move)) {
+                    $account->sieve_notification_move = Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_AUTO;
+                }
+
+                Felamimail_Controller_Account::getInstance()->getBackend()->update($account);
             }
-            
-            Felamimail_Controller_Account::getInstance()->update($account);
         }
 
-        $declaration = new Setup_Backend_Schema_Field_Xml('
-            <field>
-                <name>sieve_notification_move</name>
-                <length>255</length>
-                <type>text</type>
-                <default>AUTO</default>
-            </field>
-        ');
-
-        $this->_backend->alterCol('felamimail_account', $declaration);
-        
-        $this->setTableVersion('felamimail_account', 28);
         $this->addApplicationUpdate('Felamimail', '15.2',self::RELEASE015_UPDATE002);
     }
 }
