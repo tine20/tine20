@@ -1289,7 +1289,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
         foreach ($hooks as $hook) {
             if (is_callable($hook)) {
-                call_user_func_array($hook, [&$this->_fields]);
+                call_user_func_array($hook, [/*well well legacy... :-/*/&$this->_fields, $this]);
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__
                     . '::' . __LINE__ . ' Configured hook is not callable: ' . print_r($hook, true));
@@ -2140,6 +2140,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     public function getConverters()
     {
         return $this->_converters;
+    }
+
+    public function setJsonExpander(?array $expander)
+    { // used by crewscheduling gdpr should be refaactored to use it too
+        $this->_jsonExpander = $expander;
     }
 
     /**
