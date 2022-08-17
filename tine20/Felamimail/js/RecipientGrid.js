@@ -364,44 +364,56 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     onSearchComboSpecialkey: async function (combo, e) {
         const value = combo.getRawValue();
-        Tine.log.debug('Tine.Felamimail.MessageEditDialog::onSearchComboSpecialkey() -> current value: ' + value);
+        const key = e.getKey();
         
-        if (this.activeEditor && e.getKey() === e.BACKSPACE) {
-            Tine.log.debug('Tine.Felamimail.MessageEditDialog::onSearchComboSpecialkey() -> BACKSPACE');
-            // remove row on backspace if we have more than 1 rows in grid
-            if (value === '' && this.store.getCount() > 1 && this.activeEditor.row > 0) {
-                this.store.remove(this.activeEditor.record);
-                this.activeEditor.row -= 1;
-                const record = this.store.getAt(this.activeEditor.row);
-                this.activeEditor.record.set('address', record.data.address);
-                const selModel = this.getSelectionModel();
-                if (! selModel.isSelected(this.activeEditor.row)) {
-                    selModel.selectRow(this.activeEditor.row);
+        Tine.log.debug(`Tine.Felamimail.MessageEditDialog::onSearchComboSpecialkey() -> key : ${key}, current value: ${value}`);
+        
+        if (!this.activeEditor) {
+            return;
+        }
+
+        switch (key) {
+            case e.BACKSPACE:
+                if (value === '' && this.store.getCount() > 1 && this.activeEditor.row > 0) {
+                    this.store.remove(this.activeEditor.record);
+                    this.activeEditor.row -= 1;
+                    const record = this.store.getAt(this.activeEditor.row);
+                    this.activeEditor.record.set('address', record.data.address);
+                    const selModel = this.getSelectionModel();
+                    if (! selModel.isSelected(this.activeEditor.row)) {
+                        selModel.selectRow(this.activeEditor.row);
+                    }
+                    this.setFixedHeight(false);
+                    this.ownerCt.doLayout();
+                    this.startEditing.defer(100, this, [this.activeEditor.row, this.activeEditor.col]);
                 }
-                this.setFixedHeight(false);
-                this.ownerCt.doLayout();
-                this.startEditing.defer(100, this, [this.activeEditor.row, this.activeEditor.col]);
-            }
-        } else if (this.activeEditor && e.getKey() === e.ESC) {
-            // TODO should ESC close the compose window if search combo is already empty?
+                break;
+            case e.ESC:
+                // TODO should ESC close the compose window if search combo is already empty?
 //            if (value == '') {
 //                this.fireEvent('specialkey', this, e);
 //            }
-            if (this.activeEditor.startValue === '') {
-                this.startEditing.defer(100, this, [this.activeEditor.row, this.activeEditor.col]);
-            }
-            return true;
+                if (this.activeEditor.startValue === '') {
+                    this.startEditing.defer(100, this, [this.activeEditor.row, this.activeEditor.col]);
+                }
+                break;
+            case e.TAB:
+            case e.ENTER:
+                // jump to subject if we are in the last row, and it is empty OR TAB was pressed
+                if (combo?.selectedRecord) {
+                    await this.onSearchComboSelect(combo, combo.selectedRecord);
+                }
+                if (this.store.getCount() === this.activeEditor?.row + 1) {
+                    Tine.log.debug(`Tine.Felamimail.MessageEditDialog::onSearchComboSpecialkey() -> last row`);
+        
+                    if (value === '') {
+                        this.fireEvent('specialkey', combo, e);
+                    }
+                }
+                break;
         }
     
-        // jump to subject if we are in the last row, and it is empty OR TAB was pressed
-        if (this.activeEditor && e.getKey() === e.TAB || (e.getKey() === e.ENTER && this.store.getCount() === this.activeEditor?.row + 1)) {
-            Tine.log.debug(`Tine.Felamimail.MessageEditDialog::onSearchComboSpecialkey() -> last row`);
-            
-            if (value === '') {
-                this.fireEvent('specialkey', combo, e);
-                return false;
-            }
-        }
+        return true;
     },
     
     onSearchComboSelect: async function (combo, value , startValue) {
