@@ -235,5 +235,18 @@ class GDPR_Frontend_JsonTest extends TestCase
             $ids[$r['id']] = true;
         }
         static::assertFalse(isset($ids[$createdContact['id']]));
+
+
+
+        $filter = json_decode('[{"condition":"AND","filters":
+        [{"field": "GDPR_DataIntendedPurposeRecord","operator": "definedBy?condition=and&setOperator=oneOf",
+        "value": [{"field": ":intendedPurpose","operator": "in",
+                "value": [
+                    {"id": "' . $this->_dataIntendedPurpose1->getId() . '", "name": "foo"},
+                    {"id": "' . $this->_dataIntendedPurpose2->getId() . '", "name": "bar"}
+                ]
+        }]}]}]', true);
+        $result = $adbJsonFE->searchContacts($filter, []);
+        static::assertCount(1, $result['results']);
     }
 }
