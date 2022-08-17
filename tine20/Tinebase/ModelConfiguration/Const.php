@@ -107,6 +107,7 @@ class Tinebase_ModelConfiguration_Const {
     const FUNCTION = 'function';
 
     const GRANTS_MODEL = 'grantsModel';
+    const GROUP = 'group';
 
     const HAS_ATTACHMENTS = 'hasAttachments';
     const HAS_CUSTOM_FIELDS = 'hasCustomFields';
@@ -154,6 +155,7 @@ class Tinebase_ModelConfiguration_Const {
     const ON_DELETE = 'onDelete';
     const ON_UPDATE = 'onUpdate';
     const OPTIONS = 'options';
+    const ORDER = 'order';
     // used for example by system customfields. Tells the receiving model, that this property originates from a different app
     // relevant for translation, keyfields, etc.
     const OWNING_APP = 'owningApp';
@@ -196,6 +198,7 @@ class Tinebase_ModelConfiguration_Const {
     const SUPPORTED_FORMATS = 'supportedFormats';
     const SYSTEM = 'system';
 
+    const TAB = 'tab';
     const TABLE = 'table';
     const TARGET_ENTITY = 'targetEntity';
     const TITLE_PROPERTY = 'titleProperty';
