@@ -94,8 +94,9 @@ Ext.ux.display.DisplayTextArea = Ext.extend(Ext.Container, {
 
         var v = this.renderer(value, {}, record);
 
+        
         if(this.htmlEncode){
-            v = Ext.util.Format.htmlEncode(v);
+            v = this.linkify ? Ext.util.Format.linkSaveHtmlEncodeStepOne(v) : Ext.util.Format.htmlEncode(v);
         }
 
         if (this.nl2br) {
@@ -105,7 +106,9 @@ Ext.ux.display.DisplayTextArea = Ext.extend(Ext.Container, {
         this.getEl().update(v);
 
         if (this.linkify) {
-            Tine.Tinebase.common.linkifyText(v, this.getEl());
+            Tine.Tinebase.common.linkifyText(v, (l)=>{
+                this.getEl().update(this.htmlEncode ? Ext.util.Format.linkSaveHtmlEncodeStepTwo(l) : l);
+            });
         }
 
     }
