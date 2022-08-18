@@ -247,7 +247,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         this.loadMask.show();
         
         // get values from card panels
-        const [data,clientneedsreload] = this.getValuesFromPanels();
+        const [data, clientneedsreload] = this.getValuesFromPanels();
         
         // save preference data
         Ext.Ajax.request({
@@ -322,7 +322,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                                 }
                             } else {
                                 data[panel.appName][item.name] = {value: item.getValue()};
-                                if(!clientneedsreload && (item.startValue !== item.getValue()) && item.startValue && item.clientneedsreload) {
+                                if(!clientneedsreload && (item.startValue !== item.getValue()) && item.startValue && _.get(item, 'pref.data.uiconfig.clientneedsreload')) {
                                     clientneedsreload = true;
                                 }
                             }
