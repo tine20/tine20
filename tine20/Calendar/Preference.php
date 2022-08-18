@@ -195,7 +195,6 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::WEB_EVENT_TITLE_TEMPLATE => [
                 'label'         => $translate->_('Web Event Title Template'),
                 'description'   => $translate->_('How to build event titles in web ui.'),
-                self::CLIENT_NEEDS_RELOAD => true,
             ],
             self::NOTIFICATION_LEVEL => array(
                 'label'         => $translate->_('Get Notification Emails'),
@@ -329,6 +328,9 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 break;
             case self::WEB_EVENT_TITLE_TEMPLATE:
                 $translate = Tinebase_Translation::getTranslation($this->_application);
+                $preference->uiconfig = [
+                    self::CLIENT_NEEDS_RELOAD => true
+                ];
                 $preference->value      = '{{ summary }}';
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>

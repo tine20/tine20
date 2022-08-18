@@ -107,8 +107,7 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                     },
                     prefId: pref.id,
                     description: pref.get('description'),
-                    clientneedsreload: pref.get('uiconfig').clientneedsreload
-
+                    pref
                 };
                 
                 var options = pref.get('options');
