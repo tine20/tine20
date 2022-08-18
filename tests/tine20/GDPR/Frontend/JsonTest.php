@@ -237,7 +237,6 @@ class GDPR_Frontend_JsonTest extends TestCase
         static::assertFalse(isset($ids[$createdContact['id']]));
 
 
-
         $filter = json_decode('[{"condition":"AND","filters":
         [{"field": "GDPR_DataIntendedPurposeRecord","operator": "definedBy?condition=and&setOperator=oneOf",
         "value": [{"field": ":intendedPurpose","operator": "in",
@@ -248,5 +247,16 @@ class GDPR_Frontend_JsonTest extends TestCase
         }]}]}]', true);
         $result = $adbJsonFE->searchContacts($filter, []);
         static::assertCount(1, $result['results']);
+
+
+        $filter = json_decode('[{"condition":"AND","filters":
+        [{"field": "GDPR_DataIntendedPurposeRecord","operator": "definedBy?condition=and&setOperator=oneOf",
+        "value": [
+            {"field": "intendedPurpose","operator": "definedBy?condition=and&setOperator=oneOf",
+                "value": [{"field": ":id","operator": "equals","value": "' . $this->_dataIntendedPurpose1->getId() . '"}]},
+            {"field": "withdrawDate","operator": "equals","value": "2022-08-17 00:00:00"}
+            ]}]}]', true);
+        $result = $adbJsonFE->searchContacts($filter, []);
+        static::assertCount(0, $result['results']);
     }
 }
