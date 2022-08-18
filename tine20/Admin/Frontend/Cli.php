@@ -537,9 +537,9 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $enabled = 0;
         foreach ($systemAccounts as $account) {
             /* @var Felamimail_Model_Account $account */
-            if (! $account->sieve_notification_move) {
+            if ($account->sieve_notification_move !== Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_ACTIVE) {
                 if (! $opts->d) {
-                    $account->sieve_notification_move = true;
+                    $account->sieve_notification_move = Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_ACTIVE;
                     $account->sieve_notification_move_folder = $folderName;
                     try {
                         $accountsController->update($account);

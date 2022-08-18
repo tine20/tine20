@@ -680,7 +680,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }], [{
                     fieldLabel: this.app.i18n._('Auto-move notifications'),
                     name: 'sieve_notification_move',
-                    xtype: 'checkbox',
+                    xtype: 'widget-keyfieldcombo',
+                    keyFieldName: 'sieveNotificationMoveStatus',
+                    app:   'Felamimail',
                     hidden: ! Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('accountMoveNotifications'),
                     checkState: function() {
                         this.setDisabled(! me.isSystemAccount());

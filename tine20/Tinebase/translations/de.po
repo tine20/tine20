@@ -5258,3 +5258,6 @@ msgstr "Bitte wählen Sie das Export Ziel"
 
 msgid "How would you like to save your export?"
 msgstr "Wie möchten Sie Ihren Export speichern?"
+
+msgid "Export only currently shown columns"
+msgstr "Nur die angezeigten Spalten exportieren"

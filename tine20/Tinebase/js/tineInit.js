@@ -147,10 +147,9 @@ Tine.Tinebase.tineInit = {
             }  else if (window.isMainWindow) {
                 // select first row of current grid panel if available
                 var app = Tine.Tinebase.MainScreen ? Tine.Tinebase.MainScreen.getActiveApp() : null,
-                    centerPanel = app && _.get(app, 'getMainScreen.getCenterPanel') ? app.getMainScreen().getCenterPanel() : null,
+                    centerPanel = app?.getMainScreen?.().getCenterPanel?.() ?? null,
                     grid = centerPanel && Ext.isFunction(centerPanel.getGrid) ? centerPanel.getGrid() : null,
                     sm = grid ? grid.getSelectionModel() : null;
-
                 if (grid) {
                     if (e.getKey() === e.ESC && sm) {
                         sm.selectFirstRow();

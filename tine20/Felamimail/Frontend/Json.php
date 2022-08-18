@@ -549,10 +549,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 if ($account->type === Felamimail_Model_Account::TYPE_SYSTEM &&
                     Felamimail_Config::getInstance()->featureEnabled(
                         Felamimail_Config::FEATURE_ACCOUNT_MOVE_NOTIFICATIONS) &&
-                    ! $account->sieve_notification_move
+                    $account->sieve_notification_move === Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_AUTO
                 ) {
-                    // TODO add new status for sieve_notification_move: "never" (+ "auto" if feature is active, but not already set, and "active")
-                    // Felamimail_Controller_Account::getInstance()->autoCreateMoveNotifications($account);
+                     Felamimail_Controller_Account::getInstance()->autoCreateMoveNotifications($account);
                 }
                 $accounts['results'][$idx] = $this->_recordToJson($account);
             } else {

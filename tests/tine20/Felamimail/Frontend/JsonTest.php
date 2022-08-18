@@ -1983,16 +1983,25 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
         $script = new Felamimail_Sieve_Backend_Sql($this->_account->getId());
         $scriptParts = $script->getScriptParts();
-        static::assertEquals(1, $scriptParts->count(), '1 script part expected. script: '
+        
+        static::assertGreaterThan(0, $scriptParts->count(), 'at least 1 script part expected. script: '
             . $script->getSieve() . ' parts: '
             . print_r($scriptParts->toArray(), true)
         );
-        /** @var Felamimail_Model_Sieve_ScriptPart $scriptPart */
-        $scriptPart = $scriptParts->getFirstRecord();
-        static::assertTrue(count(array_intersect(array('"enotify"', '"variables"', '"copy"', '"body"'),
-                $scriptPart->xprops(Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES))) === 4,
-            print_r($scriptPart->xprops(Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES), true));
-        static::assertStringContainsString('test@test.de', $script->getSieve());
+        
+        foreach ($scriptParts as $scriptPart) {
+            if ($scriptPart['type'] === Felamimail_Model_Sieve_ScriptPart::TYPE_NOTIFICATION) {
+                $requires = ['"enotify"', '"variables"', '"copy"', '"body"'];
+            }
+            
+            if ($scriptPart['type'] === Felamimail_Model_Sieve_ScriptPart::TYPE_AUTO_MOVE_NOTIFICATION) {
+                $requires = ['"fileinto"', '"mailbox"'];
+                static::assertStringContainsString('test@test.de', $script->getSieve());
+            }
+
+            static::assertTrue(count(array_intersect($requires, $scriptPart->xprops(Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES))) === sizeof($requires),
+                print_r($scriptPart->xprops(Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES), true));
+        }
     }
 
     /**

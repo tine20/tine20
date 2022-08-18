@@ -300,6 +300,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if ($this->_config->template) {
             $this->_templateFileName = $this->_parseTemplatePath($this->_config->template);
         }
+        if ($this->_config->use_current_columns && $this->_config->cm) {
+            $this->_config->columns = $this->_config->cm;
+        }
+        
         if ($this->_config->templateFileId) {
             try {
                 $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(Tinebase_FileSystem::getInstance()->getPathOfNode($this->_config->templateFileId,
@@ -1487,18 +1491,25 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             __METHOD__ . '::' . __LINE__ . ' processing a export record...');
 
         if (true === $this->_dumpRecords) {
-            // TODO we should support "writing" whole records here and not only single fields - see \Calendar_Export_VCalendar
-            foreach (empty($this->_fields) ? $_record->getFields() : $this->_fields as $field) {
-                if ($this->_rawData === false) {
-                    if ($this->_modelConfig && isset($this->_modelConfig->getFields()[$field])
-                        && isset($this->_modelConfig->getFields()[$field]['system'])
-                        && $this->_modelConfig->getFields()[$field]['system'] === true
-                    ) {
-                        continue;
-                    } 
+            if ($this->_config->columns) {
+                foreach (Tinebase_Helper_ZendConfig::getChildrenConfigs($this->_config->columns, 'column') as $column) {
+                    $this->_writeValue($this->_convertToString($_record->{$column->identifier}));
                 }
                 
-                $this->_writeValue($this->_convertToString($_record->{$field}));
+            } else {
+                // TODO we should support "writing" whole records here and not only single fields - see \Calendar_Export_VCalendar
+                foreach (empty($this->_fields) ? $_record->getFields() : $this->_fields as $field) {
+                    if ($this->_rawData === false) {
+                        if ($this->_modelConfig && isset($this->_modelConfig->getFields()[$field])
+                            && isset($this->_modelConfig->getFields()[$field]['system'])
+                            && $this->_modelConfig->getFields()[$field]['system'] === true
+                        ) {
+                            continue;
+                        }
+                    }
+
+                    $this->_writeValue($this->_convertToString($_record->{$field}));
+                }
             }
         } elseif (true !== $this->_hasTemplate) {
             $twigResult = array();
@@ -1853,5 +1864,23 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         ]);
 
         return $response;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getPluginOptionsDefinition()
+    {
+        $translation = Tinebase_Translation::getTranslation('Tinebase');
+
+        return [
+            'use_current_columns' => [
+                'definitionPluginOptionDefinitionRequired' => true,
+                'label' => $translation->_('Export only currently shown columns'), // _('Export only currently shown columns')
+                'type' => 'boolean',
+                'default' => false,
+                'allowEmpty' => true,
+            ],
+        ];
     }
 }

@@ -190,6 +190,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
      */
     const MAIL_ACCOUNT_TYPE = 'mailAccountType';
 
+    const SIEVE_NOTIFICATION_MOVE_STATUS = 'sieveNotificationMoveStatus';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -499,6 +501,20 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => false,
         ),
+        self::SIEVE_NOTIFICATION_MOVE_STATUS => [
+            self::LABEL                 => 'Auto-move sieve notifications status',
+            self::DESCRIPTION           => 'Available auto-move sieve notifications status',
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_ACTIVE, 'value' => 'Active', 'system' => true], // _('Active')
+                    ['id' => Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_AUTO, 'value' => 'Auto', 'system' => true], // _('Auto')
+                    ['id' => Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_INACTIVE, 'value' => 'Inactive', 'system' => true], // _('Inactive')
+                ],
+                self::DEFAULT_STR => Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_AUTO,
+            ],
+        ],
     );
 
     /**

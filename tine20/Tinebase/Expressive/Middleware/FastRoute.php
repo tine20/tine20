@@ -52,6 +52,9 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
             $uri = preg_replace('/^' . preg_quote($serverPath, '/') . '/', '/', $uri);
         }
 
+        // remove multiple slashes as well - FastRoute is not handling uris with them correctly it seems
+        $uri = preg_replace('/\/+/', '/', $uri);
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
             . __LINE__ . " FastRoute dispatching:\n" . $request->getMethod() . ' '. $uri . array_reduce(array_keys($request->getHeaders()), function($headers, $name) use ($request)  {
                 return $headers .= PHP_EOL . $name . ': ' . ('authorization' === strtolower($name) ? '*****' : $request->getHeaderLine($name));

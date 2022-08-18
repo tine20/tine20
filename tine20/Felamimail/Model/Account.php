@@ -27,7 +27,7 @@
  * @property  string $email
  * @property  string $user_id
  * @property  string $sieve_notification_email
- * @property  boolean $sieve_notification_move
+ * @property  string $sieve_notification_move
  * @property  string $sieve_notification_move_folder
  * @property  string $sieve_hostname
  * @property  string $migration_approved
@@ -67,6 +67,27 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
      * @var string
      */
     const VISIBILITY_DISPLAYED = 'displayed';
+
+    /**
+     * sieve notification move status active
+     *
+     * @var string
+     */
+    const SIEVE_NOTIFICATION_MOVE_ACTIVE = 'ACTIVE';
+
+    /**
+     * sieve notification move status auto
+     *
+     * @var string
+     */
+    const SIEVE_NOTIFICATION_MOVE_AUTO = 'AUTO';
+
+    /**
+     * sieve notification move status inactive
+     *
+     * @var string
+     */
+    const SIEVE_NOTIFICATION_MOVE_INACTIVE = 'INACTIVE';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -534,13 +555,10 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::NULLABLE                  => true,
             ],
             'sieve_notification_move' => [
-                self::TYPE => self::TYPE_BOOLEAN,
+                self::TYPE => self::TYPE_KEY_FIELD,
                 self::LABEL => 'Auto-move notifications', // _('Auto-move notifications')
-                self::SHY => true,
-                self::VALIDATORS => [
-                    Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => false,
-                ],
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::NAME => Felamimail_Config::SIEVE_NOTIFICATION_MOVE_STATUS,
             ],
             'sieve_vacation' => [
                 self::TYPE => self::TYPE_VIRTUAL,
@@ -569,7 +587,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
-                self::NULLABLE                  => true,
+                self::NULLABLE                  => true
             ],
             'all_folders_fetched' => [
                 self::TYPE => self::TYPE_BOOLEAN,
