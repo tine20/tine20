@@ -50,12 +50,11 @@ Tine.widgets.customfields.Renderer = function(){
                 } else if (['record'].indexOf(Ext.util.Format.lowercase(cfDefinition.type)) > -1 &&
                     _.get(window, cfDefinition.recordConfig.value.records)) {
                     renderers[key] = function(customfields) {
-                        var recordClass = eval(cfDefinition.recordConfig.value.records);
-                        customfields = customfields || {}
+                        var recordClass = eval(cfDefinition.recordConfig.value.records),
+                            cfData = _.get(customfields, cfName, customfields),
+                            record = Tine.Tinebase.data.Record.setFromJson(cfData, recordClass);
 
-                        return Ext.isObject(customfields[cfName]) && customfields[cfName].hasOwnProperty(recordClass.getMeta('titleProperty'))
-                            ? customfields[cfName][recordClass.getMeta('titleProperty')]
-                            : customfields[cfName];
+                        return record.getTitle();
                     };
                 } else {
                     renderers[key] = function(customfields) {

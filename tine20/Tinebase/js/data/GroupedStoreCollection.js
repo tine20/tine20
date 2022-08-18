@@ -50,7 +50,7 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
 
     /**
      * @cfg {Array} fixedGroups
-     * if present, these is the fixed set of groups
+     * if present, this is the fixed set of groups
      */
     fixedGroups: null,
 
@@ -119,6 +119,8 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
     },
 
     setFixedGroups: function(groupNames) {
+        groupNames = this.sanitizeGroupNames(groupNames);
+
         this.fixedGroups = groupNames;
         if (groupNames.length) {
             this.setGroups(groupNames);
@@ -157,11 +159,31 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
             groupNames = [groupNames];
         }
 
+        groupNames = this.sanitizeGroupNames(groupNames);
+
         if (this.fixedGroups.length) {
             groupNames = _.intersection(groupNames, this.fixedGroups);
         }
 
         return groupNames;
+    },
+
+    sanitizeGroupNames: function(groupNames) {
+        groupNames = groupNames.map((groupName) => {
+            if (! _.isObject(groupName)) return groupName;
+            if (_.isFunction(groupName.getTitle)) return groupName.getTitle();
+            if (_.isString(this.group) && this.store.recordClass) return Tine.widgets.grid.RendererManager.get(
+                this.store.recordClass.getMeta('appName'),
+                this.store.recordClass.getMeta('modelName'),
+                this.group
+            )(groupName);
+        });
+
+        if (_.remove(groupNames, (v) => {return [null, undefined, false, Infinity, NaN].indexOf(v) >= 0}).length) {
+            groupNames.push('');
+        }
+
+        return groupNames
     },
 
     onStoreBeforeLoad: function(store, options) {

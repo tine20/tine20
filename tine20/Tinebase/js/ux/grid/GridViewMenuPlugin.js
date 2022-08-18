@@ -92,6 +92,9 @@ Ext.ux.grid.GridViewMenuPlugin = Ext.extend(Object, {
             listeners: {
                 scope: this,
                 beforeshow: this._beforeColMenuShow,
+                beforehide: function(colMenu) {
+                    colMenu._lastShowTime = new Date().getTime();
+                },
                 itemclick: this._handleHdMenuClick
             }
         });
@@ -154,7 +157,10 @@ Ext.ux.grid.GridViewMenuPlugin = Ext.extend(Object, {
     _beforeColMenuShow : function(menu)
     {
         this._view.beforeColMenuShow.call(this, menu);
-        
+        this._addMenuTitle();
+    },
+
+    _addMenuTitle: function() {
         // menu title tweak
         this.colMenu.insert(0, new Ext.menu.Separator());
         this.colMenu.insert(0, new Ext.menu.TextItem({
@@ -180,7 +186,11 @@ Ext.ux.grid.GridViewMenuPlugin = Ext.extend(Object, {
     {
         if(Ext.fly(t).hasClass('x-grid3-hd-btn')){
             e.stopEvent();
-            this.colMenu.show(t, "tr-br?");
+            if ((new Date().getTime() - (this.colMenu._lastShowTime||0)) > 500) {
+                this.colMenu.show(t, "tr-br?");
+            } else {
+                this.colMenu.hide();
+            }
         }
     },
 
