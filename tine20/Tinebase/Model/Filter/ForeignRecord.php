@@ -135,8 +135,18 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         // id(s) is/are to be provided directly as value
         if ($this->_operator === 'equals' || $this->_operator === 'in' || $this->_operator === 'not' ||
                 $this->_operator === 'notin') {
-            if (is_array($_value) && isset($_value['id'])) {
-                $_value = [$_value['id']];
+            if (is_array($_value)) {
+                if (isset($_value['id'])) {
+                    $_value = [$_value['id']];
+                } elseif (isset($_value[0]) && is_array($_value[0]) && isset($_value[0]['id'])) {
+                    $vals = [];
+                    array_walk($_value, function($val) use (&$vals) {
+                        if (isset($val['id'])) {
+                            $vals[] = $val['id'];
+                        }
+                    });
+                    $_value = $vals;
+                }
             }
             $this->_foreignIds = (array) $_value;
             $this->_value = null;
@@ -182,19 +192,16 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
      */
     protected function _setFilterGroup()
     {
-        $options = $this->_options;
-        if (isset($options['tablename'])) {
-            unset($options['tablename']);
+        if (isset($this->_options['timezone'])) {
+            $options = ['timezone' => $this->_options['timezone']];
+        } else {
+            $options = [];
         }
-        if (isset($options['subTablename'])) {
-            $options['tablename'] = $options['subTablename'];
-            unset($options['subTablename']);
+        if (isset($this->_options['subTablename'])) {
+            $options['tablename'] = $this->_options['subTablename'];
         }
-        if (isset($options['field'])) {
-            unset($options['field']);
-        }
-        while (isset($options[Tinebase_Record_Abstract::SPECIAL_TYPE]) &&
-                Tinebase_Record_Abstract::TYPE_LOCALIZED_STRING === $options[Tinebase_Record_Abstract::SPECIAL_TYPE] &&
+        while (isset($this->_options[Tinebase_Record_Abstract::SPECIAL_TYPE]) &&
+                Tinebase_Record_Abstract::TYPE_LOCALIZED_STRING === $this->_options[Tinebase_Record_Abstract::SPECIAL_TYPE] &&
                 isset($this->_clientOptions['language'])) {
             foreach ($this->_value as $val) {
                 if (Tinebase_Record_PropertyLocalization::FLD_LANGUAGE === $val['field']) {
@@ -206,8 +213,8 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
                 'operator' => 'equals',
                 'value' => $this->_clientOptions['language']
             ];
-            $modelName = $options[Tinebase_Record_Abstract::APP_NAME] . '_Model_' .
-                $options[Tinebase_Record_Abstract::MODEL_NAME];
+            $modelName = $this->_options[Tinebase_Record_Abstract::APP_NAME] . '_Model_' .
+                $this->_options[Tinebase_Record_Abstract::MODEL_NAME];
             $context = Tinebase_Model_Pagination::getContext();
             if (isset($context[Tinebase_Record_Abstract::TYPE_LOCALIZED_STRING][$modelName]['language'])) {
                 $context[Tinebase_Record_Abstract::TYPE_LOCALIZED_STRING][$modelName]['language'] =

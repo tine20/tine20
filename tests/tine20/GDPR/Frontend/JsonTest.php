@@ -237,16 +237,48 @@ class GDPR_Frontend_JsonTest extends TestCase
         static::assertFalse(isset($ids[$createdContact['id']]));
 
 
-
         $filter = json_decode('[{"condition":"AND","filters":
         [{"field": "GDPR_DataIntendedPurposeRecord","operator": "definedBy?condition=and&setOperator=oneOf",
         "value": [{"field": ":intendedPurpose","operator": "in",
                 "value": [
-                    {"id": "' . $this->_dataIntendedPurpose1->getId() . '", "name": "foo"},
+                    {"id": "' . $this->_dataIntendedPurpose1->getId() . '", "name": "foo", "notes": "", "created_by": {
+                        "accountId": "9a070b1f4a5ee1f1c2efb26f1f2c13ed07302ee3",
+                        "accountLoginName": "tine20admin",
+                        "accountDisplayName": "Admin, tine ®",
+                        "accountFullName": "tine ® Admin",
+                        "accountFirstName": "tine ®",
+                        "accountLastName": "Admin",
+                        "accountEmailAddress": "tine20admin@mail.test",
+                        "contact_id": "e927142bc5497f53bb612e87d49b967e84b4828d",
+                        "created_by": "65ecd668dadbb6ca5150c627dcda2021f52c4e33",
+                        "creation_time": "2022-07-20 11:12:12",
+                        "last_modified_by": "65ecd668dadbb6ca5150c627dcda2021f52c4e33",
+                        "last_modified_time": "2022-07-20 11:12:12",
+                        "is_deleted": "0",
+                        "deleted_time": null,
+                        "deleted_by": null,
+                        "seq": "4",
+                        "xprops": {
+                          "emailUserIdImap": "ea4a06f1e5b1ef756670ade0187fa406d3907d86",
+                          "emailUserIdSmtp": "ea4a06f1e5b1ef756670ade0187fa406d3907d86"
+                        },
+                        "notes": []
+                      }, "deleted_by": null},
                     {"id": "' . $this->_dataIntendedPurpose2->getId() . '", "name": "bar"}
                 ]
         }]}]}]', true);
         $result = $adbJsonFE->searchContacts($filter, []);
         static::assertCount(1, $result['results']);
+
+
+        $filter = json_decode('[{"condition":"AND","filters":
+        [{"field": "GDPR_DataIntendedPurposeRecord","operator": "definedBy?condition=and&setOperator=oneOf",
+        "value": [
+            {"field": "intendedPurpose","operator": "definedBy?condition=and&setOperator=oneOf",
+                "value": [{"field": ":id","operator": "equals","value": "' . $this->_dataIntendedPurpose1->getId() . '"}]},
+            {"field": "withdrawDate","operator": "equals","value": "2022-08-17 00:00:00"}
+            ]}]}]', true);
+        $result = $adbJsonFE->searchContacts($filter, []);
+        static::assertCount(0, $result['results']);
     }
 }
