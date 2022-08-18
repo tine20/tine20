@@ -1383,8 +1383,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $nodeId
      * @return Felamimail_Model_Message
      * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_SystemGeneric
      */
-    public function getMessageFromNode($nodeId)
+    public function getMessageFromNode($nodeId): Felamimail_Model_Message
     {
         // @todo simplify this / create Tinebase_Model_Tree_Node_Path::createFromNode()?
 
@@ -1402,7 +1403,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $hashFile = Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash);
             $ole = $documentFactory->createFromFile($hashFile);
             $parsedMessage = $messageFactory->parseMessage($ole);
-            $content = $parsedMessage->toMimeString();
+            try {
+                $content = $parsedMessage->toMimeString();
+            } catch (Exception $e) {
+                $message = 'Could not parse message: ' . $e->getMessage();
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $message);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                throw new Tinebase_Exception_SystemGeneric($message);
+            }
 
             // write it to cache
             $cacheId = sha1(self::class . $node['name']);
