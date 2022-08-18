@@ -52,7 +52,7 @@
       else
         export TEST_URL=http://tine:80;
       fi
-    - while ! wget $TEST_URL; do echo; done
+    - while ! wget $TEST_URL; do sleep 1; done
     - echo TEST_URL=${TEST_URL}
     - export TEST_ENVIROMENT=""
     - echo "%%%% tests ..." >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
