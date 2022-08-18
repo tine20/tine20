@@ -372,7 +372,7 @@ var columns = grid.getColumnModel().getColumnsBy(function(c){
      * @return {Number}
      */
     getColumnWidth : function(col){
-        return this.config[col].width;
+        return this.config[col]?.width;
     },
 
     /**
@@ -539,7 +539,7 @@ var grid = new Ext.grid.GridPanel({
      * @return {Boolean}
      */
     isHidden : function(colIndex){
-        return !!this.config[colIndex].hidden; // ensure returns boolean
+        return !!this.config[colIndex]?.hidden; // ensure returns boolean
     },
 
     /**
