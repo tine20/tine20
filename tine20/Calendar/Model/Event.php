@@ -51,6 +51,9 @@
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
 {
+    const MODEL_PART_NAME      = 'Event';
+    const TABLE_NAME           = 'cal_events';
+
     const TRANSP_TRANSP        = 'TRANSPARENT';
     const TRANSP_OPAQUE        = 'OPAQUE';
     
@@ -67,38 +70,342 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     const RANGE_THISANDFUTURE = 'THISANDFUTURE';
     const XPROPS_IMIP_PROPERTIES = 'imipProperties';
     const XPROPS_REPLICATABLE = 'calendarReplicatable';
+
     /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */
-    protected $_identifier = 'id';
-    
-    /**
-     * application the record belongs to
+     * holds the configuration object (must be declared in the concrete class)
      *
-     * @var string
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_application = 'Calendar';
+    protected static $_configurationObject = NULL;
+
+    /**
+     * Holds the model configuration (must be assigned in the concrete class)
+     *
+     * @var array
+     */
+    protected static $_modelConfiguration = [
+        self::VERSION       => 19,
+        'containerName'     => 'Calendar',
+        'containersName'    => 'Calendars', // ngettext('Calendar', 'Calendars', n)
+        'recordName'        => self::MODEL_PART_NAME,
+        'recordsName'       => 'Events', // ngettext('Event', 'Events', n)
+        'hasRelations'      => true,
+        'copyRelations'     => false,
+        'hasCustomFields'   => true,
+        'hasSystemCustomFields' => true,
+        'hasNotes'          => true,
+        'hasTags'           => true,
+        'modlogActive'      => true,
+        'hasAttachments'    => true,
+        self::HAS_XPROPS    => true,
+
+        'containerProperty' => 'container_id',
+
+        'appName'           => 'Calendar',
+        'modelName'         => self::MODEL_PART_NAME,
+        self::TABLE         => [
+            self::NAME          => self::TABLE_NAME,
+            self::INDEXES       => [
+                'description'               => [
+                    self::COLUMNS               => ['description'],
+                    self::FLAGS                 => ['fulltext'],
+                ],
+                'dtstart'                   => [
+                    self::COLUMNS               => ['dtstart'],
+                ],
+                'dtend'                     => [
+                    self::COLUMNS               => ['dtend'],
+                ],
+                'organizer'                 => [
+                    self::COLUMNS               => ['organizer'],
+                ],
+                'location_record'           => [
+                    self::COLUMNS               => ['location_record'],
+                ],
+                'uid'                       => [
+                    self::COLUMNS               => ['uid'],
+                ],
+                'base_event_id'             => [
+                    self::COLUMNS               => ['base_event_id'],
+                ],
+                'etag'                      => [
+                    self::COLUMNS               => ['etag'],
+                ],
+                'rrule_until'               => [
+                    self::COLUMNS               => ['rrule_until'],
+                ],
+                'rrule'                     => [
+                    self::COLUMNS               => ['rrule'],
+                ],
+                'class'                     => [
+                    self::COLUMNS               => ['class'],
+                ],
+                'poll_id'                   => [
+                    self::COLUMNS               => ['poll_id'],
+                ],
+                'mute'                      => [ // index auf boolean... macht nicht viel sinn, das muß weg!
+                    self::COLUMNS               => ['mute'],
+                ],
+            ],
+        ],
+
+        'associations' => [
+            \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
+                'cal_events::container_id--container::id' => [
+                    'targetEntity' => Tinebase_Model_Container::class,
+                    'fieldName' => 'container_id',
+                    'joinColumns' => [[
+                        'name' => 'container_id',
+                        'referencedColumnName'  => 'id'
+                    ]],
+                ],
+            ],
+        ],
+
+        self::FIELDS        => [
+            'external_seq'      => [
+                self::TYPE          => self::TYPE_INTEGER,
+                self::UNSIGNED      => true,
+                self::DEFAULT_VAL   => 0,
+                self::INPUT_FILTERS => [
+                    Zend_Filter_Int::class,
+                ],
+                self::OMIT_MOD_LOG  => true,
+            ],
+            'dtend'      => [
+                self::TYPE          => self::TYPE_DATETIME,
+            ],
+            'transp'      => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 40,
+                self::DEFAULT_VAL   => 'OPAQUE',
+                self::NULLABLE      => true,
+                self::VALIDATORS    => [
+                    [Zend_Validate_InArray::class, [self::TRANSP_OPAQUE, self::TRANSP_TRANSP]],
+                ],
+            ],
+            'class'      => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 40,
+                self::DEFAULT_VAL   => 'PUBLIC',
+                self::VALIDATORS    => [
+                    [Zend_Validate_InArray::class, [self::CLASS_PUBLIC, self::CLASS_PRIVATE, /*self::CLASS_CONFIDENTIAL,*/]],
+                ],
+            ],
+            'description'      => [
+                self::TYPE          => self::TYPE_TEXT,
+                self::INPUT_FILTERS => [], // we need this to overwrite default text filter!
+                self::NULLABLE      => true,
+            ],
+            'geo'      => [
+                self::TYPE          => self::TYPE_FLOAT,
+                self::UNSIGNED      => true,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
+            ],
+            'adr_lon'      => [
+                self::TYPE          => self::TYPE_FLOAT,
+                self::UNSIGNED      => true,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
+            ],
+            'adr_lat'      => [
+                self::TYPE          => self::TYPE_FLOAT,
+                self::UNSIGNED      => true,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
+            ],
+            'location'      => [
+                self::TYPE          => self::TYPE_TEXT,
+                self::INPUT_FILTERS => [], // we need this to overwrite default text filter!
+                self::LENGTH        => 1024,
+                self::NULLABLE      => true,
+            ],
+            'location_record'      => [
+                self::TYPE          => self::TYPE_STRING, // type record?
+                self::LENGTH        => 40,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
+            ],
+            'organizer'      => [
+                self::TYPE          => self::TYPE_STRING, // type record?
+                self::LENGTH        => 40,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
+                self::VALIDATORS    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                ],
+            ],
+            'priority'      => [
+                self::TYPE          => self::TYPE_INTEGER,
+                self::UNSIGNED      => true,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
+            ],
+            'status'      => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 255,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
+                self::VALIDATORS    => [
+                    [Zend_Validate_InArray::class, [self::STATUS_CONFIRMED, self::STATUS_TENTATIVE, self::STATUS_CANCELED,]],
+                ]
+            ],
+            'summary'      => [
+                self::TYPE          => self::TYPE_TEXT,
+                self::INPUT_FILTERS => [], // we need this to overwrite default text filter!
+                self::LENGTH        => 1024,
+                self::NULLABLE      => true,
+            ],
+            'url'      => [
+                self::TYPE          => self::TYPE_TEXT,
+                self::INPUT_FILTERS => [], // we need this to overwrite default text filter!
+                self::LENGTH        => 65535,
+                self::NULLABLE      => true,
+            ],
+            'uid'      => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 255,
+            ],
+            'etag'      => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 60,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
+            ],
+            'attendee'   => [
+                self::TYPE          => self::TYPE_VIRTUAL, // RecordSet of Calendar_Model_Attender
+                self::OMIT_MOD_LOG  => false,
+            ],
+            'alarms'   => [
+                self::TYPE          => self::TYPE_VIRTUAL, // RecordSet of Tinebase_Model_Alarm
+                self::OMIT_MOD_LOG  => false,
+            ],
+            'dtstart'      => [
+                self::TYPE          => self::TYPE_DATETIME,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
+            ],
+            'recurid'      => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 255,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
+            ],
+            'members'   => [
+                self::TYPE          => self::TYPE_VIRTUAL,
+                self::OMIT_MOD_LOG  => false,
+            ],
+            'resources'   => [
+                self::TYPE          => self::TYPE_VIRTUAL,
+                self::OMIT_MOD_LOG  => false,
+            ],
+            'date'   => [
+                self::TYPE          => self::TYPE_VIRTUAL,
+                self::OMIT_MOD_LOG  => false,
+            ],
+            'duration'   => [
+                self::TYPE          => self::TYPE_VIRTUAL,
+                self::OMIT_MOD_LOG  => false,
+            ],
+            'time'   => [
+                self::TYPE          => self::TYPE_VIRTUAL,
+                self::OMIT_MOD_LOG  => false,
+            ],
+            'groups'   => [
+                self::TYPE          => self::TYPE_VIRTUAL,
+                self::OMIT_MOD_LOG  => false,
+            ],
+            'base_event_id'      => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 40,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
+            ],
+            'exdate'   => [
+                self::TYPE          => self::TYPE_DATETIME, // legacy! needed :-/
+                self::DOCTRINE_IGNORE => true, //  legacy! needed :-/
+            ],
+            'rrule'      => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 255,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
+            ],
+            'is_all_day_event'      => [
+                self::TYPE          => self::TYPE_BOOLEAN,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => 0,
+            ],
+            'rrule_until'      => [
+                self::TYPE          => self::TYPE_DATETIME,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
+            ],
+            'rrule_constraints'      => [
+                self::TYPE          => self::TYPE_TEXT,
+                self::INPUT_FILTERS => [], // we need this to overwrite default text filter!
+                self::NULLABLE      => true,
+            ],
+            'originator_tz'      => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 255,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
+            ],
+            'poll_id'      => [
+                self::TYPE          => self::TYPE_STRING, // record?
+                self::LENGTH        => 40,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
+            ],
+            'mute'      => [
+                self::TYPE          => self::TYPE_BOOLEAN,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
+                self::VALIDATORS    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => false,
+                ],
+            ],
+            Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => [
+                self::TYPE          => self::TYPE_VIRTUAL,
+                self::OMIT_MOD_LOG  => true,
+            ],
+            Tinebase_Model_Grants::GRANT_READ => [
+                self::TYPE          => self::TYPE_VIRTUAL,
+                self::OMIT_MOD_LOG  => true,
+            ],
+            Tinebase_Model_Grants::GRANT_SYNC => [
+                self::TYPE          => self::TYPE_VIRTUAL,
+                self::OMIT_MOD_LOG  => true,
+            ],
+            Tinebase_Model_Grants::GRANT_EXPORT => [
+                self::TYPE          => self::TYPE_VIRTUAL,
+                self::OMIT_MOD_LOG  => true,
+            ],
+            Tinebase_Model_Grants::GRANT_EDIT => [
+                self::TYPE          => self::TYPE_VIRTUAL,
+                self::OMIT_MOD_LOG  => true,
+            ],
+            Tinebase_Model_Grants::GRANT_DELETE => [
+                self::TYPE          => self::TYPE_VIRTUAL,
+                self::OMIT_MOD_LOG  => true,
+            ],
+            Calendar_Model_EventPersonalGrants::GRANT_PRIVATE => [
+                self::TYPE          => self::TYPE_VIRTUAL,
+                self::OMIT_MOD_LOG  => true,
+            ],
+        ],
+    ];
     
     /**
      * validators
      *
      * @var array
-     */
+     *
     protected $_validators = array(
-        // tine record fields
-        'id'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true,  /*'Alnum'*/),
-        'container_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true,         ),
-        'created_by'           => array(Zend_Filter_Input::ALLOW_EMPTY => true,         ),
-        'creation_time'        => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
-        'last_modified_by'     => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
-        'last_modified_time'   => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
-        'is_deleted'           => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
-        'deleted_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
-        'deleted_by'           => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
-        'seq'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true,  'Int'  ),
+
         // calendar only fields
         'external_seq'         => array(Zend_Filter_Input::ALLOW_EMPTY => true,  'Int'  ), // external seq for caldav / imip update handling
         'dtend'                => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
@@ -109,7 +416,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         // ical common fields
         'class'                => array(
             Zend_Filter_Input::ALLOW_EMPTY => true,
-            array('InArray', array(self::CLASS_PUBLIC, self::CLASS_PRIVATE, /*self::CLASS_CONFIDENTIAL*/))
+            array('InArray', array(self::CLASS_PUBLIC, self::CLASS_PRIVATE, /*self::CLASS_CONFIDENTIAL*))
         ),
         'description'          => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         'geo'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
@@ -179,49 +486,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
 
         'xprops'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
-    
-    /**
-     * datetime fields
-     *
-     * @var array
      */
-    protected $_datetimeFields = array(
-        'creation_time', 
-        'last_modified_time', 
-        'deleted_time', 
-        'completed', 
-        'dtstart', 
-        'dtend', 
-        'exdate',
-        //'rdate',
-        'rrule_until',
-    );
-    
-    /**
-     * name of fields that should be omitted from modlog
-     *
-     * @var array list of modlog omit fields
-     */
-    protected $_modlogOmitFields = array(
-        Tinebase_Model_Grants::GRANT_READ,
-        Tinebase_Model_Grants::GRANT_SYNC,
-        Tinebase_Model_Grants::GRANT_EXPORT,
-        Tinebase_Model_Grants::GRANT_EDIT,
-        Tinebase_Model_Grants::GRANT_DELETE,
-        Calendar_Model_EventPersonalGrants::GRANT_PRIVATE,
-        'external_seq'
-    );
 
-    /**
-     * list of zend inputfilter
-     *
-     * this filter get used when validating user generated content with Zend_Input_Filter
-     *
-     * @var array
-     */
-    protected $_filters = [
-        'organizer'     => array(array('Empty', null)),
-    ];
     protected static $_freebusyCleanUpKeys = null;
     protected static $_freebusyCleanUpVisibilty = null;
     /**
