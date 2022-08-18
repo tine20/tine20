@@ -135,8 +135,18 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         // id(s) is/are to be provided directly as value
         if ($this->_operator === 'equals' || $this->_operator === 'in' || $this->_operator === 'not' ||
                 $this->_operator === 'notin') {
-            if (is_array($_value) && isset($_value['id'])) {
-                $_value = [$_value['id']];
+            if (is_array($_value)) {
+                if (isset($_value['id'])) {
+                    $_value = [$_value['id']];
+                } elseif (isset($_value[0]) && is_array($_value[0]) && isset($_value[0]['id'])) {
+                    $vals = [];
+                    array_walk($_value, function($val) use (&$vals) {
+                        if (isset($val['id'])) {
+                            $vals[] = $val['id'];
+                        }
+                    });
+                    $_value = $vals;
+                }
             }
             $this->_foreignIds = (array) $_value;
             $this->_value = null;
