@@ -253,7 +253,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initActions: function() {
-        
+        // init felamimail specific actions
         this.action_spam = new Ext.Action({
             requiredGrant: 'editGrant',
             actionType: 'edit',
@@ -262,7 +262,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             iconCls: 'felamimail-action-spam',
             allowMultiple: true,
             hidden: !this.app.featureEnabled('featureSpamSuspicionStrategy')
-
         });
 
         this.action_ham = new Ext.Action({
@@ -331,16 +330,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             allowMultiple: true,
             disabled: true
         });
-        
-        this.action_deleteRecord = new Ext.Action({
-            requiredGrant: 'deleteGrant',
-            allowMultiple: true,
-            text: this.app.i18n._('Delete'),
-            handler: this.onDeleteRecords,
-            disabled: true,
-            iconCls: 'action_delete',
-            scope: this
-        });
 
         this.action_moveRecord = new Ext.Action({
             requiredGrant: 'editGrant',
@@ -392,6 +381,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             scope: this,
             disabled: ! Tine.Tinebase.common.hasRight('add_accounts', 'Felamimail')
         });
+        
         this.action_printPreview = new Ext.Action({
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Print Preview'),
@@ -401,6 +391,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             iconCls:'action_printPreview',
             scope:this
         });
+
         this.action_print = new Ext.Action({
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Print Message'),
@@ -414,7 +405,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 ]
             }
         });
-        
+
         this.action_addTask = new Ext.Action({
             requiredGrant: 'readGrant',
             text: Tine.Tinebase.appMgr.isEnabled('Tasks') ? Tine.Tinebase.appMgr.get('Tasks').i18n._('Create New Task') : '',
@@ -425,7 +416,26 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             allowMultiple: false,
             hidden: !Tine.Tinebase.appMgr.isEnabled('Tasks')
         });
+    
+        // initial tagging actions from parent
+        Tine.Felamimail.GridPanel.superclass.initActions.call(this);
         
+        // overwrite parent action
+        this.action_deleteRecord = new Ext.Action({
+            requiredGrant: 'deleteGrant',
+            allowMultiple: true,
+            text: this.app.i18n._('Delete'),
+            handler: this.onDeleteRecords,
+            disabled: true,
+            iconCls: 'action_delete',
+            scope: this
+        });
+
+        this.actionUpdater = new Tine.widgets.ActionUpdater({
+            recordClass: this.recordClass,
+            evalGrants: this.evalGrants
+        });
+
         this.actionUpdater.addActions([
             this.action_deleteRecord,
             this.action_reply,
@@ -442,7 +452,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_moveRecord,
             this.action_addTask,
             this.action_spam,
-            this.action_ham
+            this.action_ham,
+            this.action_tagsMassAttach,
+            this.action_tagsMassDetach,
         ]);
         
         this.contextMenu = new Ext.menu.Menu({
@@ -462,7 +474,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 this.action_fileRecord,
                 this.action_addTask,
                 this.action_spam,
-                this.action_ham
+                this.action_ham,
+                this.action_tagsMassAttach,
+                this.action_tagsMassDetach,
             ],
         });
     },
@@ -639,6 +653,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             dataIndex: 'flags',
             align: 'center',
             renderer: this.flagRenderer
+        }, {
+            id: 'tags',
+            header: this.app.i18n._("Tags"),
+            width: 24,
+            sortable: true,
+            dataIndex: 'tags',
+            align: 'center',
+            renderer: Tine.Tinebase.common.tagsRenderer
         },{
             id: 'subject',
             header: this.app.i18n._("Subject"),

@@ -22,6 +22,7 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
      * @var array
      */
     protected static $_allowedFlags = array(
+        'Passed'   => Zend_Mail_Storage::FLAG_PASSED,      // _("Passed")
         '\Answered' => Zend_Mail_Storage::FLAG_ANSWERED,    // _("Answered")
         '\Seen'     => Zend_Mail_Storage::FLAG_SEEN,        // _("Seen")
         '\Deleted'  => Zend_Mail_Storage::FLAG_DELETED,     // _("Deleted")
@@ -200,7 +201,10 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
      */
     protected function _updateFlagsOnImap($_imapMessageUids, $_flags, $_imapBackend, $_mode)
     {
-        $flagsToChange = array_intersect($_flags, array_keys(self::$_allowedFlags));
+        $flagsToChange = array_filter($_flags, function($val, $key) {
+            return in_array($val, array_keys(self::$_allowedFlags)) || strlen($val) === 40;
+        }, ARRAY_FILTER_USE_BOTH); 
+        
         if (empty($flagsToChange)) {
             return;
         }

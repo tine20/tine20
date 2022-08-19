@@ -1621,4 +1621,26 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             '${1} ' . mb_encode_mimeheader($newValue) . "\n",
             $mailAsString);
     }
+
+    /**
+     * attach tags hook
+     * 
+     */
+    public function attachTagsHook($recordIds, $tagId)
+    {
+        foreach ($recordIds as $messageId) {
+            Felamimail_Controller_Message_Flags::getInstance()->addFlags($messageId, [$tagId]);
+        }
+    }
+
+    /**
+     * detach tags hook
+     *
+     */
+    public function detachTagsHook($recordIds, $tagId)
+    {
+        foreach ($recordIds as $messageId) {
+            Felamimail_Controller_Message_Flags::getInstance()->clearFlags($messageId, [$tagId]);
+        }
+    }
 }

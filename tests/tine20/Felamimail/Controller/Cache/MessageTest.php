@@ -355,8 +355,8 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
         $cachedMessage = Felamimail_Controller_Message::getInstance()->get($message->getId());
         $this->assertTrue(! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags),  'SEEN flag found: ' . print_r($cachedMessage->flags, TRUE));
         
-        $expectedFlags = array(Zend_Mail_Storage::FLAG_FLAGGED, Zend_Mail_Storage::FLAG_DRAFT, Zend_Mail_Storage::FLAG_ANSWERED);
-        $this->assertEquals(3, count($cachedMessage->flags), 'found too many flags: ' . print_r($cachedMessage->flags, TRUE));
+        $expectedFlags = array(Zend_Mail_Storage::FLAG_FLAGGED, Zend_Mail_Storage::FLAG_DRAFT, Zend_Mail_Storage::FLAG_ANSWERED, Zend_Mail_Storage::FLAG_PASSED);
+        $this->assertEquals(4, count($cachedMessage->flags), 'found too many flags: ' . print_r($cachedMessage->flags, TRUE));
         foreach ($expectedFlags as $expectedFlag) {
             $this->assertTrue(in_array($expectedFlag, $cachedMessage->flags), $expectedFlag . ' flag not found: ' . print_r($cachedMessage->flags, TRUE));
         }

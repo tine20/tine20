@@ -727,24 +727,33 @@ class Tinebase_Tags
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             
+            if (method_exists($controller, 'attachTagsHook')) {
+                call_user_func_array([$controller, 'attachTagsHook'],[$recordIds, $tagId]);
+            } 
+            
             foreach ($toAttachIds as $recordId) {
                 $this->_db->insert(SQL_TABLE_PREFIX . 'tagging', array(
-                    'tag_id'         => $tagId,
-                    'application_id' => $appId,
-                    'record_id'      => $recordId,
-                // backend property not supported by record yet
-                    'record_backend_id' => ''
+                        'tag_id'         => $tagId,
+                        'application_id' => $appId,
+                        'record_id'      => $recordId,
+                        // backend property not supported by record yet
+                        'record_backend_id' => ''
                     )
                 );
             }
             
-            $controller->concurrencyManagementAndModlogMultiple(
-                $toAttachIds, 
-                array('tags' => array()), 
-                array('tags' => array($tag->toArray()))
-            );
+            // skip concurrency check if record has no seq property
+            $record = $controller->getMultiple($toAttachIds)->getFirstRecord();
             
-            $this->_addOccurrence($tagId, count($toAttachIds));
+            if ($record && $record->has('seq')) {
+                $controller->concurrencyManagementAndModlogMultiple(
+                    $toAttachIds,
+                    array('tags' => array()),
+                    array('tags' => array($tag->toArray()))
+                );
+
+                $this->_addOccurrence($tagId, count($toAttachIds));
+            }
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
@@ -779,7 +788,13 @@ class Tinebase_Tags
         foreach ((array) $_tag as $dirtyTagId) {
             try {
                 $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+
+                if (method_exists($controller, 'detachTagsHook')) {
+                    call_user_func_array([$controller, 'detachTagsHook'],[$recordIds, $dirtyTagId]);
+                }
+
                 $this->_detachSingleTag($recordIds, $dirtyTagId, $appId, $controller);
+                
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             } catch (Exception $e) {
                 Tinebase_TransactionManager::getInstance()->rollBack();
@@ -834,13 +849,18 @@ class Tinebase_Tags
             ));
         }
         
-        $controller->concurrencyManagementAndModlogMultiple(
-            $attachedIds,
-            array('tags' => array($tag->toArray())),
-            array('tags' => array())
-        );
-        
-        $this->_deleteOccurrence($tagId, count($attachedIds));
+        // skip concurrency check if record has no seq property
+        $record = $controller->getMultiple($recordIds)->getFirstRecord();
+
+        if ($record && $record->has('seq')) {
+            $controller->concurrencyManagementAndModlogMultiple(
+                $attachedIds,
+                array('tags' => array($tag->toArray())),
+                array('tags' => array())
+            );
+
+            $this->_deleteOccurrence($tagId, count($attachedIds));
+        }
     }
     
     /**

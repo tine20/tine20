@@ -55,7 +55,11 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         'cc'            => array('custom' => true, 'requiredCols' => array('cc' => 'felamimail_cache_message_cc.*')),
         'bcc'           => array('custom' => true, 'requiredCols' => array('bcc' => 'felamimail_cache_message_bcc.*')),
         'flags'         => array('custom' => true, 'requiredCols' => array('flags' => 'felamimail_cache_msg_flag.flag')),
-        'account_id'    => array('custom' => true)
+        'account_id'    => array('custom' => true),
+        'tag'           => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
+            'idProperty' => 'felamimail_cache_message.id',
+            'applicationName' => 'Felamimail',
+        )),
     );
 
     /**

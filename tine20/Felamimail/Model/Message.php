@@ -176,6 +176,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
         ),
         'fileLocations'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'is_spam_suspicions'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true), // originally categories handled by Tinebase_Tags
     );
     
     /**
