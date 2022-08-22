@@ -1311,4 +1311,20 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
         return $fh;
     }
+
+    protected function _getRecordHistory($id, $model)
+    {
+        $tinebaseJson = new Tinebase_Frontend_Json();
+        return $tinebaseJson->searchNotes(array(array(
+            'field' => 'record_id',
+            'operator' => 'equals',
+            'value' => $id
+        ), array(
+            'field' => "record_model",
+            'operator' => "equals",
+            'value' => $model
+        )), array(
+            'sort' => array('note_type_id', 'creation_time')
+        ));
+    }
 }

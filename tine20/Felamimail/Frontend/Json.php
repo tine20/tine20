@@ -697,7 +697,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function saveRules($accountId, $rulesData)
     {
         $records = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_Rule', $rulesData);
-        $records = Felamimail_Controller_Sieve::getInstance()->setSieveScript($accountId, null, $records);
+        Felamimail_Controller_Sieve::getInstance()->setSieveScript($accountId, null, $records);
         $rules = Felamimail_Controller_Sieve::getInstance()->getRules($accountId);
         
         return $this->_multipleRecordsToJson($rules);
