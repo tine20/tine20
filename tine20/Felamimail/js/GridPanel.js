@@ -1766,12 +1766,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         const popupWindow = Tine.Tasks.TaskEditDialog.openWindow({
             contentPanelConstructorInterceptor: async (config) => {
-                const waitingText = Tine.Tinebase.appMgr.isEnabled('Tasks') ? Tine.Tinebase.appMgr.get('Tasks').i18n._('Creating new Task...') : 'Creating new Task...';
+                const isTaskEnabled = Tine.Tinebase.appMgr.isEnabled('Tasks');
+                const waitingText = isTaskEnabled ? Tine.Tinebase.appMgr.get('Tasks').i18n._('Creating new Task...') : 'Creating new Task...';
                 const mask = await config.setWaitText(waitingText);
                 
                 const messageData = msg.data;
                 const body = Tine.Tinebase.common.html2text(messageData?.body || '');
-                const subject = messageData?.subject ?? '';
+                const subject = messageData?.subject ? messageData.subject : isTaskEnabled ? Tine.Tinebase.appMgr.get('Tasks').i18n._('New Task') : 'New Task';
                 config.record = Tine.Tinebase.data.Record.setFromJson(await Tine.Tasks.saveTask(Ext.apply(Tine.Tasks.Model.Task.getDefaultData(), {
                     summary: subject,
                     description: body
