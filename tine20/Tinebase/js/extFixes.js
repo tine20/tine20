@@ -225,7 +225,7 @@ Ext.form.TimeField.prototype.getValue = function(){
  */
 Ext.grid.GridPanel.prototype.applyState  = Ext.grid.GridPanel.prototype.applyState.createInterceptor(function(state){
     var cm = this.colModel,
-        s = state.sort;
+        s = state?.sort;
     
     if (s && cm.getIndexById(s.field) < 0) {
         delete state.sort;

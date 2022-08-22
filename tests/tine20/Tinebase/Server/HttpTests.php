@@ -195,7 +195,7 @@ class Tinebase_Server_HttpTests extends TestCase
 
         if (preg_match('/"tempfile_id":"([a-z0-9]+)"/', $out, $matches)) {
             $tempfile = Tinebase_TempFile::getInstance()->getTempFile($matches[1]);
-            self::assertEquals('export_calendar_vcalendar_report.zip', $tempfile->name);
+            self::assertEquals('export_calendar_event_vcalendar_report.zip', $tempfile->name);
         } else {
             self::fail('could not extract tempfile_id');
         }
@@ -220,7 +220,7 @@ class Tinebase_Server_HttpTests extends TestCase
 
         if (preg_match('/"tempfile_id":"([a-z0-9]+)"/', $out, $matches)) {
             $tempfile = Tinebase_TempFile::getInstance()->getTempFile($matches[1]);
-            self::assertEquals('export_calendar_vcalendar_report.zip', $tempfile->name);
+            self::assertEquals('export_calendar_event_vcalendar_report.zip', $tempfile->name);
         } else {
             self::fail('could not extract tempfile_id');
         }
@@ -307,7 +307,7 @@ class Tinebase_Server_HttpTests extends TestCase
         // check download filename in Tempfile
         if (preg_match('/"tempfile_id":"([a-z0-9]+)"/', $out, $matches)) {
             $tempfile = Tinebase_TempFile::getInstance()->getTempFile($matches[1]);
-            self::assertEquals('export_calendar_vcalendar_ics.ics', $tempfile->name);
+            self::assertEquals('export_calendar_event_vcalendar_ics.ics', $tempfile->name);
         } else {
             self::fail('could not extract tempfile_id');
         }

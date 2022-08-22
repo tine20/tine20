@@ -2833,7 +2833,7 @@ msgid "Attendee status if the user has the status grant"
 msgstr "Teilnehmer Status, wenn der Benutzer über das Status Recht verfügt"
 
 msgid "Web Event Title Template"
-msgstr "Termin Titel Template"
+msgstr "Termin Titel Schablone"
 
 msgid "How to build event titles in web ui."
 msgstr "Wie der Titel in der Web-Anwendung gebildet wird."
