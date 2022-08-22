@@ -4,7 +4,7 @@
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -30,7 +30,6 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         foreach ($this->_pathsToDelete as $path) {
             try {
                 $webdavRoot = new DAV\ObjectTree(new Tinebase_WebDav_Root());
-                //echo "delete $path";
                 $webdavRoot->delete($path);
             } catch (Exception $e) {
             }
@@ -1685,10 +1684,16 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
         // check by sending mail
         $messageData = $this->_getMessageData('', 'viagra');
-        $returned = $this->_json->saveMessage($messageData);
+        $this->_json->saveMessage($messageData);
         $this->_foldersToClear = array('INBOX', $this->_testFolderName);
         // check if message is in test folder
-        $message = $this->_searchForMessageBySubject($messageData['subject'], $this->_testFolderName);
+        $this->_searchForMessageBySubject($messageData['subject'], $this->_testFolderName);
+
+        $history = $this->_getRecordHistory($this->_account['id'], Felamimail_Model_Account::class);
+        self::assertGreaterThan(1, $history['totalcount'], 'no update note created');
+        $translation = Tinebase_Translation::getTranslation('Felamimail');
+        self::assertEquals($translation->_('Sieve rules have been updated.'), $history['results'][1]['note']);
+        self::assertEquals(Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE, $history['results'][1]['note_type_id']);
     }
 
     /**

@@ -598,18 +598,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
      */
     protected function _checkChangedNote($_recordId, $_expectedText = array(), $_changedNoteNumber = 3)
     {
-        $tinebaseJson = new Tinebase_Frontend_Json();
-        $history = $tinebaseJson->searchNotes(array(array(
-            'field' => 'record_id',
-            'operator' => 'equals',
-            'value' => $_recordId
-        ), array(
-            'field' => "record_model",
-            'operator' => "equals",
-            'value' => 'Addressbook_Model_Contact'
-        )), array(
-            'sort' => array('note_type_id', 'creation_time')
-        ));
+        $history = $this->_getRecordHistory($_recordId, Addressbook_Model_Contact::class);
         $this->assertEquals($_changedNoteNumber, $history['totalcount'], print_r($history, TRUE));
         foreach ($history['results'] as $note) {
             if ($note['note_type_id'] === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED) {
