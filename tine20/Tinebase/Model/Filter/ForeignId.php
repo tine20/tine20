@@ -63,7 +63,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
     protected function _setFilterGroup()
     {
         if ($this->_doJoin) {
-            $this->_options['subTablename'] = uniqid();
+            $this->_options['subTablename'] = uniqid('a'); // prefix is very important, uniqid might return only digits, we'd be in trouble in mysql then
         }
 
         return parent::_setFilterGroup();
