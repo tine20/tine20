@@ -76,9 +76,11 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
             ));
             $iterateResult = $iterator->iterate($location);
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Filed ' . $iterateResult['totalcount'] . ' message(s) to location ' . print_r($location->toArray(), true));
-            $result += $iterateResult['totalcount'];
+            if ($iterateResult !== false) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Filed ' . $iterateResult['totalcount'] . ' message(s) to location ' . print_r($location->toArray(), true));
+                $result += $iterateResult['totalcount'];
+            }
         }
 
         return $result;
