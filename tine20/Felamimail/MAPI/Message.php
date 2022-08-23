@@ -13,10 +13,106 @@
  */
 
 use Hfig\MAPI\Mime\HeaderCollection;
+use Hfig\MAPI\Mime\Swiftmailer\Adapter\DependencySet;
+use Hfig\MAPI\Mime\Swiftmailer\Attachment;
 use Hfig\MAPI\Mime\Swiftmailer\Message as BaseMessage;
 
 class Felamimail_MAPI_Message extends BaseMessage
 {
+    public function toMime()
+    {
+        DependencySet::register();
+
+        $message = new \Swift_Message();
+        $message->setEncoder(new \Swift_Mime_ContentEncoder_RawContentEncoder());
+
+
+        // get headers
+        $headers = $this->translatePropertyHeaders();
+
+        // add them to the message
+        $add = [$message, 'setTo']; // function
+        $this->addRecipientHeaders('To', $headers, $add);
+        $headers->unset('To');
+
+        $add = [$message, 'setCc']; // function
+        $this->addRecipientHeaders('Cc', $headers, $add);
+        $headers->unset('Cc');
+
+        $add = [$message, 'setBcc']; // function
+        $this->addRecipientHeaders('Bcc', $headers, $add);
+        $headers->unset('Bcc');
+
+        $add = [$message, 'setFrom']; // function
+        $this->addRecipientHeaders('From', $headers, $add);
+        $headers->unset('From');
+
+        // skip parsing invalid message id
+        $id = $headers->getValue('Message-ID');
+        if ($id) {
+            $message->setId(trim($id, '<>'));
+        }
+        $message->setDate(new \DateTime($headers->getValue('Date')));
+        if ($boundary = $this->getMimeBoundary($headers)) {
+            $message->setBoundary($boundary);
+        }
+
+
+        $headers->unset('Message-ID');
+        $headers->unset('Date');
+        $headers->unset('Mime-Version');
+        $headers->unset('Content-Type');
+
+        $add = [$message->getHeaders(), 'addTextHeader'];
+        $this->addPlainHeaders($headers, $add);
+
+
+        // body
+        $hasHtml = false;
+        $bodyBoundary = '';
+        if ($boundary) {
+            if (preg_match('~^_(\d\d\d)_([^_]+)_~', $boundary, $matches)) {
+                $bodyBoundary = sprintf('_%03d_%s_', (int)$matches[1]+1, $matches[2]);
+            }
+        }
+        try {
+            $html = $this->getBodyHTML();
+            if ($html) {
+                $hasHtml = true;
+                // build multi-part
+                // (simple method is to just call addPart() on message but we can't control the ID
+                $multipart = new \Swift_Attachment();
+                $multipart->setContentType('multipart/alternative');
+                $multipart->setEncoder($message->getEncoder());
+                if ($bodyBoundary) {
+                    $multipart->setBoundary($bodyBoundary);
+                }
+                $multipart->setBody($this->getBody(), 'text/plain');
+
+                $part = new \Swift_MimePart($html, 'text/html', null);
+                $part->setEncoder($message->getEncoder());
+
+
+                $message->attach($multipart);
+                $multipart->setChildren(array_merge($multipart->getChildren(), [$part]));
+            } else {
+                $message->setBody($this->getBody(), 'text/plain');
+            }
+        } catch (\Exception $e) {
+            // ignore invalid HTML body
+        }
+        
+        // attachments
+        foreach ($this->getAttachments() as $a) {
+            $wa = Attachment::wrap($a);
+            $attachment = $wa->toMime();
+
+            $message->attach($attachment);
+        }
+
+        return $message;
+    }
+    
     protected function translatePropertyHeaders()
     {
         $rawHeaders = new HeaderCollection();
