@@ -1537,13 +1537,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      *
      */
     resolveFilterInParams: function (params, sentFolderSelected) {
+        let targetFilters = params?.filter?.[0].filters?.[0].filters;
+        
+        if (!targetFilters) {
+            return;
+        }
+        
         const from = sentFolderSelected ? 'query' : 'to';
         const to = sentFolderSelected ? 'to' : 'query';
         const searchField = sentFolderSelected ? 'to' : 'query';
-        const searchFilter =  _.find(params.filter[0].filters[0].filters, {field: searchField});
+        const searchFilter =  _.find(targetFilters, {field: searchField});
         // remove exist from filter 
-        const oldFilter = params.filter[0] && params.filter[0].filters[0].filters
-            ? _.remove(params.filter[0].filters[0].filters, {field: from}) : [];
+        const oldFilter = targetFilters ? _.remove(targetFilters, {field: from}) : [];
         const toFilter = {
             field: to,
             operator: 'contains',
@@ -1552,9 +1557,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         // concat or add target filter if not exist
         if (!searchFilter) {
             if (oldFilter.length > 0) {
-                params.filter[0].filters[0].filters = params.filter[0].filters[0].filters.concat(toFilter);
+                targetFilters.concat(toFilter);
             } else {
-                params.filter[0].filters[0].filters.push(toFilter);
+                targetFilters.push(toFilter);
             }
         }
     },
