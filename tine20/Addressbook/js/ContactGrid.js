@@ -198,6 +198,11 @@ Tine.Addressbook.ContactGridPanel.preferredAddressRenderer = function(value) {
     }
 };
 
+Tine.Addressbook.ContactGridPanel.languageRenderer = function(value) {
+    var allLanguages = Locale.getTranslationList('Language');
+    return allLanguages[value];
+};
+
 /**
  * Statically constructs the columns used to represent a contact. Reused by ListMemberGridPanel + ListMemberRoleGridPanel
  */
@@ -249,7 +254,7 @@ Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
         { id: 'email_home', header: i18n._('Email (private)'), dataIndex: 'email_home' },
         { id: 'url', header: i18n._('Web'), dataIndex: 'url' },
         { id: 'url_home', header: i18n._('URL (private)'), dataIndex: 'url_home' },
-        { id: 'language', header: i18n._('Language'), dataIndex: 'language' },
+        { id: 'language', header: i18n._('Language'), dataIndex: 'language', renderer: Tine.Addressbook.ContactGridPanel.languageRenderer },
         { id: 'note', header: i18n._('Note'), dataIndex: 'note' },
         { id: 'tz', header: i18n._('Timezone'), dataIndex: 'tz' },
         { id: 'geo', header: i18n._('Geo'), dataIndex: 'geo' },
