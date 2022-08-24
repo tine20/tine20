@@ -1427,6 +1427,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 }
                 $message->body = str_replace("\r", '', $body);
                 $message->body = $this->_purifyBodyContent($message->body);
+                $message['body_content_type_of_body_property_of_this_record'] = Zend_Mime::TYPE_HTML;
             }
         } else {
             $content = Tinebase_FileSystem::getInstance()->getNodeContents($node);

@@ -420,13 +420,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     initContent: function (message) {
         if (!this.record.get('body')) {
-            var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
-                format = message === undefined
+            const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
+            let format = message === undefined
                     ? account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : 'text/html'
                     : message.getBodyType();
 
             if (!this.msgBody) {
-                var message = this.getMessageFromConfig();
+                message = this.getMessageFromConfig();
                 if (message) {
                     if (message.bodyIsFetched() && account.get('preserve_format')) {
                         // format of the received message. this is the format to preserve
@@ -529,9 +529,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 });
             }
         }
-
+        
         if (this.replyTo) {
-            if (format == 'text/plain') {
+            if (format === 'text/plain') {
                 this.msgBody = String('> ' + this.msgBody).replace(/\r?\n/g, '\n> ');
             } else {
                 this.msgBody = '<br/>'
