@@ -1571,7 +1571,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
 Tine.widgets.dialog.EditDialog.getConstructor = function(recordClass) {
     if (_.isString(recordClass)) recordClass = Tine.Tinebase.data.RecordMgr.get(recordClass);
-    if (! recordClass.getMeta) return null;
+    if (recordClass && !recordClass.getMeta) return null;
     var appName = recordClass.getMeta('appName'),
         modelName = recordClass.getMeta('modelName'),
         editDialogClass = _.get(Tine, `${appName}.${modelName}EditDialog`);
