@@ -52,7 +52,12 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (isset(Tinebase_Core::getConfig()->samba)) {
             $this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false);
         }
-        $this->_hasMasterSieveAccess = Tinebase_EmailUser::sieveBackendSupportsMasterPassword();
+        try {
+            $this->_hasMasterSieveAccess = Tinebase_EmailUser::sieveBackendSupportsMasterPassword();
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            $this->_hasMasterSieveAccess = false;
+        }
     }
     
     /**

@@ -47,10 +47,11 @@ class Tinebase_NotificationTest extends \PHPUnit\Framework\TestCase
         $this->_mailer->flush();
         
         // create contact with special chars
+        $email = 'silke@' . TestServer::getPrimaryMailDomain();
         $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
             'n_family'  => 'Hüßgen',
             'n_given'   => 'Silke',
-            'email'     => Tinebase_Core::getUser()->accountEmailAddress,
+            'email'     => $email,
         )), FALSE);
 
         // send notification
@@ -63,7 +64,7 @@ class Tinebase_NotificationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, count($messages));
         $headers = $messages[0]->getHeaders();
         $this->assertEquals('=?UTF-8?Q?=C3=A4=C3=B6=C3=BC=20unittest=20notification?=', $headers['Subject'][0]);
-        $this->assertEquals('"=?UTF-8?Q?Silke=20H=C3=BC=C3=9Fgen?=" <' . Tinebase_Core::getUser()->accountEmailAddress . '>', $headers['To'][0]);
+        $this->assertEquals('"=?UTF-8?Q?Silke=20H=C3=BC=C3=9Fgen?=" <' . $email . '>', $headers['To'][0]);
         $this->assertEquals('UTF-8', $messages[0]->getCharset());
     }
 }
