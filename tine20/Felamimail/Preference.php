@@ -226,7 +226,9 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
                     </options>';
                 break;
             case self::EML_FORWARD:
-                $preference->value      = 1;
+                // FIXME this should be a boolean! but we need to use the string here because of the check in
+                //       MessageEditDialog.js - when the pref is changed by the user, it is also a string value
+                $preference->value      = '0';
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
