@@ -2064,3 +2064,15 @@ msgstr "In Einzelkontakte umwandeln"
 
 msgid "Loading Recipients..."
 msgstr "Empfänger laden..."
+
+msgid "Sieve vacation has been updated:"
+msgstr "Sieve Abwesenheitsnotiz wurde aktualisiert:"
+
+msgid "Vacation message is now active."
+msgstr "Abwesenheitsbenachrichtigung ist jetzt aktiv"
+
+msgid "Vacation message is now inactive."
+msgstr "Abwesenheitsbenachrichtigung ist jetzt deaktiviert"
+
+msgid "Sieve rules have been updated."
+msgstr "Sieve Filterregelen wurden aktualisiert"

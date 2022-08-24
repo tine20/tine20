@@ -143,9 +143,6 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 'poll_id'                   => [
                     self::COLUMNS               => ['poll_id'],
                 ],
-                'mute'                      => [ // index auf boolean... macht nicht viel sinn, das muß weg!
-                    self::COLUMNS               => ['mute'],
-                ],
             ],
         ],
 

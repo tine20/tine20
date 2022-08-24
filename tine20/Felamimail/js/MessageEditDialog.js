@@ -373,6 +373,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
 
         var attachments = [];
+        // FIXME should be changed when we fix the saving of yes/no user preferences as boolean/int values
         if ((Tine[this.app.appName].registry.get('preferences').get('emlForward')
                 && (! Tine[this.app.appName].registry.get('preferences').get('emlForward') ||
                     Tine[this.app.appName].registry.get('preferences').get('emlForward') === '0'

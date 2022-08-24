@@ -668,7 +668,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }]
         ];
     },
-
+    
+    // can other email accounts process aliasse and forward too ? check request
+    // how to init them in email account edit dialog ?
     initAliasesGrid: function(commonConfig) {
         let smtpPrimarydomain = Tine.Tinebase.registry.get('primarydomain');
         let smtpSecondarydomains = Tine.Tinebase.registry.get('secondarydomains');
@@ -677,22 +679,22 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (smtpPrimarydomain.length) {
             domains.push(smtpPrimarydomain);
         }
-        let app = this.app;
+        const app = Tine.Tinebase.appMgr.get('Admin');
 
         let smtpAliasesDispatchFlag = Tine.Tinebase.registry.get('smtpAliasesDispatchFlag');
 
         let cm = [{
             id: 'email',
-            header: this.app.i18n.gettext('E-mail Alias'),
+            header: app.i18n.gettext('E-mail Alias'),
             dataIndex: 'email',
             width: 260,
             hideable: false,
             sortable: true,
             quickaddField: new Ext.form.TextField({
-                emptyText: this.app.i18n.gettext('Add an alias address...'),
+                emptyText: app.i18n.gettext('Add an alias address...'),
                 vtype: 'email'
             }),
-            editor: new Ext.form.TextField({allowBlank: false})
+            editor: new Ext.form.TextField({allowBlank: false}),
         }];
 
         let gridPlugins = [];
@@ -700,7 +702,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.aliasesDispatchCheckColumn = new Ext.grid.CheckColumn({
                 id: 'dispatch_address',
                 header: '...',
-                tooltip: this.app.i18n.gettext('This alias can be used for sending e-mails.'),
+                tooltip: app.i18n.gettext('This alias can be used for sending e-mails.'),
                 dataIndex: 'dispatch_address',
                 width: 40,
                 hideable: false,
@@ -713,11 +715,11 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
                 onNewentry: function(value) {
-                    var split = value.email ? value.email.split('@') : [];
-                    if (split.length != 2 || split[1].split('.').length < 2) {
+                    const split = value.email ? value.email.split('@') : [];
+                    if (split.length !== 2 || split[1].split('.').length < 2) {
                         return false;
                     }
-                    var domain = split[1];
+                    const domain = split[1];
                     if (domains.indexOf(domain) > -1) {
                         if (smtpAliasesDispatchFlag) {
                             value.dispatch_address = 1;
@@ -740,12 +742,13 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, commonConfig)
         );
         this.aliasesGrid.render(document.body);
+        return this.aliasesGrid;
     },
 
     initForwardsGrid: function(commonConfig) {
         let aliasesStore = this.aliasesGrid.getStore();
-        let app = this.app;
-        let record = this.record;
+        const app = Tine.Tinebase.appMgr.get('Admin');
+        let record = this.record ?? commonConfig.record;
 
         this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
@@ -764,13 +767,13 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 },
                 cm: new Ext.grid.ColumnModel([{
                     id: 'email',
-                    header: this.app.i18n.gettext('E-mail Forward'),
+                    header: app.i18n.gettext('E-mail Forward'),
                     dataIndex: 'email',
                     width: 300,
                     hideable: false,
                     sortable: true,
                     quickaddField: new Ext.form.TextField({
-                        emptyText: this.app.i18n.gettext('Add a forwarding address...'),
+                        emptyText: app.i18n.gettext('Add a forwarding address...'),
                         vtype: 'email'
                     }),
                     editor: new Ext.form.TextField({allowBlank: false})
@@ -778,6 +781,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, commonConfig)
         );
         this.forwardsGrid.render(document.body);
+        
+        return this.forwardsGrid;
     },
 
     initPasswordConfirmWindow: function() {

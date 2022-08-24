@@ -1537,13 +1537,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      *
      */
     resolveFilterInParams: function (params, sentFolderSelected) {
+        let targetFilters = params?.filter?.[0].filters?.[0].filters;
+        
+        if (!targetFilters) {
+            return;
+        }
+        
         const from = sentFolderSelected ? 'query' : 'to';
         const to = sentFolderSelected ? 'to' : 'query';
         const searchField = sentFolderSelected ? 'to' : 'query';
-        const searchFilter =  _.find(params.filter[0].filters[0].filters, {field: searchField});
+        const searchFilter =  _.find(targetFilters, {field: searchField});
         // remove exist from filter 
-        const oldFilter = params.filter[0] && params.filter[0].filters[0].filters
-            ? _.remove(params.filter[0].filters[0].filters, {field: from}) : [];
+        const oldFilter = targetFilters ? _.remove(targetFilters, {field: from}) : [];
         const toFilter = {
             field: to,
             operator: 'contains',
@@ -1552,9 +1557,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         // concat or add target filter if not exist
         if (!searchFilter) {
             if (oldFilter.length > 0) {
-                params.filter[0].filters[0].filters = params.filter[0].filters[0].filters.concat(toFilter);
+                targetFilters.concat(toFilter);
             } else {
-                params.filter[0].filters[0].filters.push(toFilter);
+                targetFilters.push(toFilter);
             }
         }
     },
@@ -1766,12 +1771,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         const popupWindow = Tine.Tasks.TaskEditDialog.openWindow({
             contentPanelConstructorInterceptor: async (config) => {
-                const waitingText = Tine.Tinebase.appMgr.isEnabled('Tasks') ? Tine.Tinebase.appMgr.get('Tasks').i18n._('Creating new Task...') : 'Creating new Task...';
+                const isTaskEnabled = Tine.Tinebase.appMgr.isEnabled('Tasks');
+                const waitingText = isTaskEnabled ? Tine.Tinebase.appMgr.get('Tasks').i18n._('Creating new Task...') : 'Creating new Task...';
                 const mask = await config.setWaitText(waitingText);
                 
                 const messageData = msg.data;
                 const body = Tine.Tinebase.common.html2text(messageData?.body || '');
-                const subject = messageData?.subject ?? '';
+                const subject = messageData?.subject ? messageData.subject : isTaskEnabled ? Tine.Tinebase.appMgr.get('Tasks').i18n._('New Task') : 'New Task';
                 config.record = Tine.Tinebase.data.Record.setFromJson(await Tine.Tasks.saveTask(Ext.apply(Tine.Tasks.Model.Task.getDefaultData(), {
                     summary: subject,
                     description: body

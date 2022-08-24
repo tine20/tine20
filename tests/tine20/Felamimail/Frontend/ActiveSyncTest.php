@@ -1165,11 +1165,17 @@ cj48L2Rpdj48L2Rpdj4=&#13;
             'displayName' => $folder1->localname,
         ]);
         $newGlobalName = $folder1->localname;
-        $this->_createdFolders[] = $folder1->localname;
+        $this->_createdFolders = [$folder1->localname];
         $newFolder = $controller->updateFolder($folder);
 
         $fmailFolder = Felamimail_Controller_Folder::getInstance()->get($newFolder->serverId);
         self::assertEquals($folder->displayName, $fmailFolder->localname);
         self::assertEquals($newGlobalName, $fmailFolder->globalname);
+
+        // try to rename folder via tine afterwards
+        $newName = 'abcde';
+        $renamed = Felamimail_Controller_Folder::getInstance()->rename($fmailFolder->account_id, $newName, $fmailFolder->globalname);
+        $this->_createdFolders = [$newName];
+        self::assertEquals($newName, $renamed->globalname);
     }
 }

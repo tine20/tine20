@@ -537,9 +537,39 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             __METHOD__ . '::' . __LINE__ . ' Put updated SIEVE script ' . $this->_scriptName);
 
         $this->_putScript($account, $script);
+        $this->_addSystemNotes($account, $_vacation, $_rules);
         $script = $this->getSieveScript($account);
         
         return $script->getSieve();
+    }
+
+    /**
+     * @param Felamimail_Model_Account $account
+     * @param Felamimail_Model_Sieve_Vacation|null $vacation
+     * @param Tinebase_Record_RecordSet|null $rules (Felamimail_Model_Sieve_Rule)
+     * @return void
+     * @throws Tinebase_Exception_NotFound
+     * @todo add modlog later
+     */
+    protected function _addSystemNotes($account, $vacation, $rules)
+    {
+        $translation = Tinebase_Translation::getTranslation('Felamimail');
+        if ($vacation) {
+            $text = $translation->_('Sieve vacation has been updated:');
+            if ($vacation->enabled) {
+                $text .= $translation->_('Vacation message is now active.');
+            } else {
+                $text .= $translation->_('Vacation message is now inactive.');
+            }
+            Tinebase_Notes::getInstance()->addSystemNote($account, Tinebase_Core::getUser(),
+                Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE, $text);
+        }
+        if ($rules) {
+            $text = $translation->_('Sieve rules have been updated.');
+            Tinebase_Notes::getInstance()->addSystemNote($account, Tinebase_Core::getUser(),
+                Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE, $text);
+        }
+
     }
     
     /**

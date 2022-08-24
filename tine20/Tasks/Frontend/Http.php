@@ -18,5 +18,16 @@
 class Tasks_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
     protected $_applicationName = 'Tasks';
-    
+
+    /**
+     * export tasks
+     *
+     * @param string $filter JSON encoded string with items ids for multi export or item filter
+     * @param string $options format or export definition id
+     */
+    public function exportTasks($filter, $options)
+    {
+        $filter = new Tasks_Model_TaskFilter(Zend_Json::decode($filter));
+        parent::_export($filter, Zend_Json::decode($options));
+    }
 }

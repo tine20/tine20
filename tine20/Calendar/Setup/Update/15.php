@@ -16,12 +16,17 @@ class Calendar_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE015_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE015_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE015_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE015_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
+            ],
+            self::RELEASE015_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
         self::PRIO_NORMAL_APP_STRUCTURE        => [
@@ -80,10 +85,24 @@ class Calendar_Setup_Update_15 extends Setup_Update_Abstract
             </index>'));
         }
 
-        if ($this->getTableVersion('cal_events') < 18) {
+        if ($this->getTableVersion('cal_events') < 19) {
             $this->setTableVersion('cal_events', 19);
         }
 
         $this->addApplicationUpdate('Calendar', '15.2', self::RELEASE015_UPDATE002);
+    }
+
+    public function update003()
+    {
+        Setup_SchemaTool::updateSchema([
+            Calendar_Model_Event::class,
+            Tinebase_Model_Container::class,
+        ]);
+
+        if ($this->getTableVersion('cal_events') < 19) {
+            $this->setTableVersion('cal_events', 19);
+        }
+
+        $this->addApplicationUpdate('Calendar', '15.3', self::RELEASE015_UPDATE003);
     }
 }
