@@ -1271,7 +1271,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     updateEmailQuotas: function () {
         if (this.asAdminModule) {
-            if (! this.emailImapUser) {
+            if (! this.emailImapUser || ! this.record.data.email_imap_user) {
                 return;
             }
             if (this.emailImapUser.hasOwnProperty('emailMailQuota')) {
