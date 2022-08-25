@@ -301,11 +301,16 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
      */
     protected function _beforeUpdate(&$emailUserData)
     {
+        $this->_checkExistingUser($emailUserData);
+    }
+
+    protected function _checkExistingUser(&$emailUserData)
+    {
+        // prevent duplicate loginname
         $result = $this->_getExistingUser($emailUserData);
         if (count($result) > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
-                . __LINE__ . ' Found old record - Switching from USERID ' . print_r($result, true) . ' to ' . $emailUserData['userid']);
-            $emailUserData['oldUserId'] = $result[0];
+            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            throw new Tinebase_Exception_SystemGeneric($translate->_('Email account already exists'));
         }
     }
 
@@ -316,18 +321,13 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
      */
     protected function _beforeAdd(&$emailUserData)
     {
-        // prevent duplicate loginname
-        $result = $this->_getExistingUser($emailUserData);
-        if (count($result) > 0) {
-            $translate = Tinebase_Translation::getTranslation('Tinebase');
-            throw new Tinebase_Exception_SystemGeneric($translate->_('Email account already exists'));
-        }
+        $this->_checkExistingUser($emailUserData);
     }
 
     protected function _getExistingUser($emailUserData)
     {
         $select = $this->_getSelect();
-        
+
         if (! empty($emailUserData['loginname'])) {
             $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'loginname') . " = ?",
                 $emailUserData['loginname']);
