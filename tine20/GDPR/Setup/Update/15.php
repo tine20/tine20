@@ -80,24 +80,29 @@ class GDPR_Setup_Update_15 extends Setup_Update_Abstract
 
         $appId = Tinebase_Application::getInstance()->getApplicationByName(Addressbook_Config::APP_NAME)->getId();
 
-        Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
-            'name' => GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_EXPIRY_CUSTOM_FIELD_NAME,
-            'application_id' => $appId,
-            'model' => Addressbook_Model_Contact::class,
-            'is_system' => true,
-            'definition' => [
-                Tinebase_Model_CustomField_Config::DEF_FIELD => [
-                    TMCC::LABEL             => 'GDPR Data Expiry Date',
-                    TMCC::TYPE              => TMCC::TYPE_DATE,
-                    TMCC::NULLABLE          => true,
-                    TMCC::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                ],
-            ]
-        ], true));
+        try {
+            Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
+                'name' => GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_EXPIRY_CUSTOM_FIELD_NAME,
+                'application_id' => $appId,
+                'model' => Addressbook_Model_Contact::class,
+                'is_system' => true,
+                'definition' => [
+                    Tinebase_Model_CustomField_Config::DEF_FIELD => [
+                        TMCC::LABEL => 'GDPR Data Expiry Date',
+                        TMCC::TYPE => TMCC::TYPE_DATE,
+                        TMCC::NULLABLE => true,
+                        TMCC::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                    ],
+                ]
+            ], true));
+        } catch (Exception $e) {
+            // duplicate
+            Tinebase_Exception::log($e);
+        }
 
         $scheduler = Tinebase_Core::getScheduler();
         GDPR_Scheduler_Task::addDeleteExpiredDataTask($scheduler);
 
-        $this->addApplicationUpdate(GDPR_Config::APPNAME, '15.2', self::RELEASE015_UPDATE001);
+        $this->addApplicationUpdate(GDPR_Config::APPNAME, '15.2', self::RELEASE015_UPDATE002);
     }
 }
