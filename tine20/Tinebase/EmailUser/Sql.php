@@ -121,7 +121,8 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
     public function inspectDeleteUser(Tinebase_Model_FullUser $_user)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' Delete ' . $this->_configKey . ' email settings for user ' . $_user->accountLoginName);
+            . ' Delete ' . $this->_configKey . ' email settings for user ' . $_user->accountLoginName
+            . ' emailUserId: ' . $_user->getId());
         
         $this->deleteUserById($_user->getId());
     }
