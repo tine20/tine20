@@ -128,7 +128,7 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
     },
     
     getTitle: function() {
-        var result = this.get('n_fn');
+        var result = this.get('n_fileas');
 
         var tinebaseApp = new Tine.Tinebase.Application({
             appName: 'Tinebase'
