@@ -297,19 +297,19 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     },
     
     setDisabled: function (bool, what) {
-        if (what && what !== 'time') {
+        if (what !== 'time') {
             if (this.dateField) {
                 this.dateField.setDisabled(bool);
             } else {
-                this.dateFieldDisabled = true;
+                this.dateFieldDisabled = bool;
             }
         }
         
-        if (what && what !== 'date') {
+        if (what !== 'date') {
             if(this.timeField) {
                 this.timeField.setDisabled(bool);
             } else {
-                this.timeFieldDisabled = true;
+                this.timeFieldDisabled = bool;
             }
         }
         
