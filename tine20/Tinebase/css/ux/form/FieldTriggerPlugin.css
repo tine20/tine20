@@ -41,8 +41,24 @@
 }
 
 .x-form-field-wrap.x-form-field-trigger-wrap.x-form-field-twin-trigger-wrap > .x-form-trigger-plugin {
-    right: 32px;
+    /*right: 32px;*/
     top: 0px;
+}
+
+.x-form-field-wrap.x-form-field-trigger-wrap.x-form-field-twin-trigger-wrap.x-form-trigger-plugin-wrap > img:nth-child(3) {
+    right: 32px;
+}
+
+.x-form-field-wrap.x-form-field-trigger-wrap.x-form-field-twin-trigger-wrap.x-form-trigger-plugin-wrap > img:nth-child(4) {
+    right: 48px;
+}
+
+.x-form-field-wrap.x-form-field-trigger-wrap.x-form-field-twin-trigger-wrap.x-form-trigger-plugin-wrap > img:nth-child(5) {
+    right: 64px;
+}
+
+.x-form-field-wrap.x-form-field-trigger-wrap.x-form-field-twin-trigger-wrap.x-form-trigger-plugin-wrap > img:nth-child(6) {
+    right: 80px;
 }
 
 .x-trigger-wrap-focus + .x-form-trigger.x-form-trigger-plugin {
