@@ -44,12 +44,6 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
      *
      */
     const USEINADB = 'useInAdb';
-   
-    /**
-     * use for default note
-     *
-     */
-    const AUTOATTACHNOTE = 'autoAttachNote';
     
     /**
      * show delete confirmation
@@ -115,7 +109,6 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             self::MARKEMAILREAD,
             self::UPDATEINTERVAL,
             self::USEINADB,
-            self::AUTOATTACHNOTE,
             self::CONFIRM_DELETE,
             self::EML_FORWARD,
             self::DEFAULT_FONT,
@@ -149,10 +142,6 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             self::USEINADB  => array(
                 'label'         => $translate->_('Use for mailto links'),
                 'description'   => $translate->_('Use Felamimail in mailto links, otherwise use the default desktop client.'),
-            ),
-            self::AUTOATTACHNOTE  => array(
-                'label'         => $translate->_('Use for NOTES'),
-                'description'   => $translate->_('Save Note default Value.'),
             ),
             self::CONFIRM_DELETE  => array(
                 'label'         => $translate->_('Confirm Delete'),
@@ -211,12 +200,6 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
                     </option>';
                 }
                 $preference->options    .= '</options>';
-                break;
-            case self::AUTOATTACHNOTE:
-                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
-                    <options>
-                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
-                    </options>';
                 break;
             case self::CONFIRM_DELETE:
                 $preference->value      = 1;

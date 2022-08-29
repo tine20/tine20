@@ -1006,6 +1006,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             'migration_approved',
             'from',
             'organization',
+            'message_sent_copy_behavior',
         );
         $diff = $_record->diff($_oldRecord)->diff;
         foreach ($diff as $key => $value) {

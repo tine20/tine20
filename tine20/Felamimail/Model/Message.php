@@ -36,6 +36,8 @@
  * @property    boolean $massMailingFlag    true if message should be treated as mass mailing
  * @property    array   $fileLocations      file locations of this message
  * @property    boolean $is_spam_suspicions true if is spam suspicions
+ * @property    array   $sent_copy_folder   target folder ids when save copy message to source folder
+
  */
 class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tinebase_BL_DataInterface
 {
@@ -177,6 +179,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
         'fileLocations'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'is_spam_suspicions'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true), // originally categories handled by Tinebase_Tags
+        'sent_copy_folder'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
