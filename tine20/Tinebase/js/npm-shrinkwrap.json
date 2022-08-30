@@ -5063,9 +5063,9 @@
       }
     },
     "email-addresses": {
-      "version": "3.1.0",
-      "resolved": "https://registry.npmjs.org/email-addresses/-/email-addresses-3.1.0.tgz",
-      "integrity": "sha512-k0/r7GrWVL32kZlGwfPNgB2Y/mMXVTq/decgLczm/j34whdaspNrZO8CnXPf1laaHxI6ptUlsnAxN+UAPw+fzg=="
+      "version": "5.0.0",
+      "resolved": "https://registry.npmjs.org/email-addresses/-/email-addresses-5.0.0.tgz",
+      "integrity": "sha512-4OIPYlA6JXqtVn8zpHpGiI7vE6EQOAg16aGnDMIAlZVinnoZ8208tW1hAbjWydgN/4PLTT9q+O1K6AH/vALJGw=="
     },
     "emoji-regex": {
       "version": "7.0.3",
