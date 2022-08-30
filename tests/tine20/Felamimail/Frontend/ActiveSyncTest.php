@@ -1022,7 +1022,10 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
         
         $inbox = $this->_emailTestClass->getFolder('INBOX');
         
-        $this->assertEquals(1, $inbox->cache_timestamp->compare(Tinebase_DateTime::now()->subSecond(15)), 'inbox cache has not been updated: ' . print_r($inbox, TRUE));
+        $this->assertEquals(1, $inbox->cache_timestamp->compare(
+            Tinebase_DateTime::now()->subSecond(15)),
+            'inbox cache has not been updated: ' . print_r($inbox, TRUE)
+        );
     }
 
     /**
@@ -1116,6 +1119,10 @@ cj48L2Rpdj48L2Rpdj4=&#13;
         self::assertEquals(1, count($message->to), 'message should have 1 recipient: ' . print_r($message->to, true));
     }
 
+    /**
+     * @param string $name
+     * @return Felamimail_Model_Folder
+     */
     public function testCreateFolder($name = 'syncroTestFolder')
     {
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
@@ -1151,6 +1158,31 @@ cj48L2Rpdj48L2Rpdj4=&#13;
         $fmailFolder = Felamimail_Controller_Folder::getInstance()->get($newFolder->serverId);
         self::assertEquals($folder->displayName, $fmailFolder->localname);
         self::assertEquals($newGlobalName, $fmailFolder->globalname);
+    }
+
+    public function testMoveMessage()
+    {
+        $emailFileHeader = 'multipart/mixed';
+        $originalMessage = $this->_emailTestClass->messageTestHelper(
+            'multipart_mixed.eml',
+            $emailFileHeader
+        );
+
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+
+        // move message to folder
+        $folder = $this->testCreateFolder();
+        $serverId = $controller->moveItem(null, $originalMessage->getId(), $folder->getId());
+        $message = Felamimail_Controller_Message::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [[
+                'field' => 'folder_id', 'operator' => 'equals', 'value' => $folder->getId()
+        ]]))->getFirstRecord();
+        $this->_createdMessages->addRecord($message);
+
+        self::assertEquals($message->getId(), $serverId, 'returned server id should be the cache message id');
+
+        $updatedFolder = Felamimail_Controller_Cache_Folder::getInstance()->getIMAPFolderCounter($folder);
+        self::assertEquals(1, $updatedFolder->imap_totalcount, print_r($updatedFolder->toArray(), true));
     }
 
     public function testMoveFolderToRoot()

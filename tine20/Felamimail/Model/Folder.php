@@ -25,6 +25,7 @@
  * @property  boolean $is_selectable
  * @property  boolean $supports_condstore
  * @property  integer $imap_lastmodseq
+ * @property  integer $imap_totalcount
  */
 class Felamimail_Model_Folder extends Tinebase_Record_Abstract
 {
