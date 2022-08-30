@@ -163,7 +163,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $folder = Felamimail_Controller_Folder::getInstance()->get($message->folder_id);
         $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
 
-        $this->_checkMessageAccount($message, $account);
+        Felamimail_Controller_Account::getInstance()->checkAccess($message, $account);
 
         $message = $this->_getCompleteMessageContent($message, $account, $_partId, $mimeType);
 
@@ -186,26 +186,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             __METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
 
         return $message;
-    }
-
-    /**
-     * check if account of message is belonging to user (or a shared account)
-     *
-     * @param Felamimail_Model_Message $message
-     * @param Felamimail_Model_Account $account
-     * @throws Tinebase_Exception_AccessDenied
-     *
-     * @todo think about moving this to get() / _checkGrant()
-     */
-    protected function _checkMessageAccount($message, $account = NULL)
-    {
-        $account = $account ?: Felamimail_Controller_Account::getInstance()->get($message->account_id);
-        if ($account->type !== Felamimail_Model_Account::TYPE_SHARED && $account->user_id !== Tinebase_Core::getUser()->getId()) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' Current user ' . Tinebase_Core::getUser()->getId()
-                . ' has no right to access account: ' . print_r($account->toArray(), true));
-            throw new Tinebase_Exception_AccessDenied('You are not allowed to access this message');
-        }
     }
 
     /**
@@ -287,7 +267,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         /** @var Felamimail_Model_Message $message */
         $message = $this->get($messageId);
-        $this->_checkMessageAccount($message);
+        Felamimail_Controller_Account::getInstance()->checkAccess($message);
         $message->sendReadingConfirmation();
     }
 
@@ -1364,7 +1344,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     public function getResourcePartStructure($cid, $messageId)
     {
         $message = $this->get($messageId);
-        $this->_checkMessageAccount($message);
+        Felamimail_Controller_Account::getInstance()->checkAccess($message);
 
         $attachments = $this->getAttachments($messageId);
 

@@ -6,10 +6,10 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        use other/shared namespaces
- * @todo        extend Tinebase_Controller_Record Abstract and add modlog fields and acl
+ * @todo        extend Tinebase_Controller_Record Abstract and add modlog fields
  */
 
 /**
@@ -120,6 +120,8 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         if (empty($filterValues['account_id'])) {
             throw new Felamimail_Exception('No account id set in search filter. Check default account preference!');
         }
+
+        Felamimail_Controller_Account::getInstance()->checkAccountAcl($filterValues['account_id']);
         
         // get folders from db
         $filter = new Felamimail_Model_FolderFilter(array(
@@ -135,10 +137,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         $this->_lastSearchCount[Tinebase_Core::getUser()->getId()][$filterValues['account_id']] = count($result);
         
         // sort folders
-        $account = Felamimail_Controller_Account::getInstance()->get($filterValues['account_id']);
-        $result = $this->_sortFolders($result, $filterValues['globalname']);
-        
-        return $result;
+        return $this->_sortFolders($result, $filterValues['globalname']);
     }
 
     /**
@@ -163,18 +162,25 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      */
     public function get($_id)
     {
-        return $this->_backend->get($_id);
+        $folder = $this->_backend->get($_id);
+        /** @var Felamimail_Model_Folder $folder */
+        Felamimail_Controller_Account::getInstance()->checkAccess($folder);
+        return $folder;
     }
 
     /**
      * get multiple folders
      * 
      * @param string|array $_ids
-     * @return Tinebase_RecordSet
+     * @return Tinebase_Record_RecordSet
      */
     public function getMultiple($_ids)
     {
-        return $this->_backend->getMultiple($_ids);
+        $result = $this->_backend->getMultiple($_ids);
+        foreach ($result as $folder) {
+            Felamimail_Controller_Account::getInstance()->checkAccess($folder);
+        }
+        return $result;
     }
     
     /**
@@ -187,7 +193,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     public function getByBackendAndGlobalName($_accountId, $_globalName)
     {
         $accountId = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId->getId() : $_accountId;
-        
+
         $filter = new Felamimail_Model_FolderFilter(array(
             array('field' => 'account_id', 'operator' => 'equals', 'value' => $accountId),
             array('field' => 'globalname', 'operator' => 'equals', 'value' => $_globalName),
@@ -197,6 +203,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         if (count($folders) > 0) {
             $result = $folders->getFirstRecord();
+            Felamimail_Controller_Account::getInstance()->checkAccess($result);
         } else {
             throw new Tinebase_Exception_NotFound("Folder $_globalName not found.");
         }
@@ -338,6 +345,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      */
     public function update(Felamimail_Model_Folder $_folder)
     {
+        Felamimail_Controller_Account::getInstance()->checkAccess($_folder);
         $_folder->supports_condstore = $this->supportsCondStore($_folder);
         return $this->_backend->update($_folder);
     }
@@ -610,7 +618,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      */
     public function emptyFolder($_folderId, $_deleteSubfolders = FALSE)
     {
-        $folder = $this->_backend->get($_folderId);
+        $folder = $this->get($_folderId);
         $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
         
         $imap = Felamimail_Backend_ImapFactory::factory($account);
@@ -630,8 +638,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             $this->deleteSubfolders($folder);
         }
         
-        $folder = Felamimail_Controller_Cache_Message::getInstance()->clear($_folderId);
-        return $folder;
+        return Felamimail_Controller_Cache_Message::getInstance()->clear($_folderId);
     }
     
     /**
@@ -643,6 +650,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     public function deleteSubfolders(Felamimail_Model_Folder $_folder, $_subfolders = NULL)
     {
         $account = Felamimail_Controller_Account::getInstance()->get($_folder->account_id);
+        Felamimail_Controller_Account::getInstance()->checkAccountAcl($account);
         $subfolders = ($_subfolders === NULL) ? $this->getSubfolders($account, $_folder->globalname) : $_subfolders;
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete ' . count($subfolders) . ' subfolders of ' . $_folder->globalname);
@@ -787,6 +795,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     public function getSubfolders($_account, $_globalname)
     {
         $account = ($_account instanceof Felamimail_Model_Account) ? $_account : Felamimail_Controller_Account::getInstance()->get($_account);
+        Felamimail_Controller_Account::getInstance()->checkAccountAcl($account);
         $globalname = (empty($_globalname)) ? '' : $_globalname . $account->delimiter;
         
         $filter = new Felamimail_Model_FolderFilter(array(
