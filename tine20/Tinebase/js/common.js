@@ -858,9 +858,9 @@ Tine.Tinebase.common = {
             return result;
         }
         
-        const addressParser = await import(/* webpackChunkName: "Tinebase/js/email-addresses" */ 'email-addresses');
         addresses = addresses.replaceAll(';', ',');
-        addresses = addresses.replaceAll(/^[^A-Za-z0-9<]+|[^A-Za-z0-9>]+$/g, '');
+        
+        const addressParser = await import(/* webpackChunkName: "Tinebase/js/email-addresses" */ 'email-addresses');
         const parsedList = addressParser.parseAddressList(addresses);
         
         let emailArray = _.map(parsedList, (parsed) => {
