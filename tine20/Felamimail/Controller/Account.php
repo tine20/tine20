@@ -2332,4 +2332,38 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 'User is not allowed to send a message with this account');
         }
     }
+
+    /**
+     * @param Tinebase_Record_Abstract $record
+     * @param Felamimail_Model_Account|null $account
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function checkAccess(Tinebase_Record_Abstract $record, Felamimail_Model_Account $account = null)
+    {
+        if (! $record->has('account_id')) {
+            throw new Tinebase_Exception_InvalidArgument('record has no account_id property');
+        }
+        $account = $account ?: Felamimail_Controller_Account::getInstance()->get($record->account_id);
+        $this->checkAccountAcl($account);
+    }
+
+    /**
+     * @param string|Felamimail_Model_Account $account
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function checkAccountAcl($account)
+    {
+        if (! $account instanceof Felamimail_Model_Account) {
+            $account = Felamimail_Controller_Account::getInstance()->get($account);
+        }
+        if ($account->type !== Felamimail_Model_Account::TYPE_SHARED && $account->user_id !== Tinebase_Core::getUser()->getId()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Current user ' . Tinebase_Core::getUser()->getId()
+                . ' has no right to access account: ' . print_r($account->toArray(), true));
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to access this account');
+        }
+    }
 }
