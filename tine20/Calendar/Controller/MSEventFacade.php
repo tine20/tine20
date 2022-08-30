@@ -1231,7 +1231,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                 $baseEvent = $this->getExdateResolvedEvents(new Calendar_Model_EventFilter([
                     ['field' => 'id', 'operator' => 'equals', 'value' => $event->isRecurException() ? $event->base_event_id : $event->getId()],
                 ]), 'get')->getFirstRecord();
-                if (Calendar_Model_Attender::getAttendee($baseEvent->attendee, $attendee)) {
+                if ($baseEvent && Calendar_Model_Attender::getAttendee($baseEvent->attendee, $attendee)) {
                     $eventLength = $baseEvent->dtstart->diff($baseEvent->dtend);
                     $remove = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
                     $add = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
