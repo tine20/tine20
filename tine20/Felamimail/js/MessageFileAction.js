@@ -78,11 +78,9 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                 return;
             }
             this.splitButton = this.items[0];
-            
             if (this.mode !== 'fileInstant') {
                 this.splitButton.disabled = false;
                 this.splitButton.enableToggle = true;
-                this.splitButton.pressed = Tine.Felamimail.registry.get('preferences').get('autoAttachNote') === "1";
             
                 // check suggestions (file_location) for reply/forward
                 if (this.composeDialog) {
@@ -92,7 +90,6 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
 
             this.splitButton.on('toggle', this.onToggle, this);
         }
-        
         return this.splitButton;
     },
     
@@ -103,7 +100,6 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
         
         this.syncRecipients();
     },
-    
     
     onToggle: function() {
         if (! this.splitButton) {
@@ -128,13 +124,13 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
         this.splitButton.fireEvent('selectionchange', this.splitButton, selection);
     },
 
-    showFileMenu: function () {
+    showFileMenu: async function () {
         this.initSplitButton();
         
         const selection = _.map(this.initialConfig.selections, 'data');
-
-        if (! this.suggestionsLoaded || this.mode === 'fileInstant') {
-            this.loadSuggestions(selection);
+    
+        if (!this.suggestionsLoaded || this.mode === 'fileInstant') {
+            await this.loadSuggestions(selection);
         }
     
         if (this.composeDialog) {
@@ -227,23 +223,23 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
         this.splitButton.fireEvent('selectionchange', this.splitButton, selection);
     },
     
-    loadSuggestions: function(messages) {
+    loadSuggestions: async function (messages) {
         const suggestionIds = [];
-
+    
         this.setIconClass('x-btn-wait');
         this.menu.hide();
         this.menu.removeAll();
-
-        return Tine.Felamimail.getFileSuggestions(messages).then((suggestions) => {
+        
+        return await Tine.Felamimail.getFileSuggestions(messages).then((suggestions) => {
             //sort by suggestion.type so file_location record survives deduplication
-            
+        
             _.each(_.sortBy(suggestions, 'type'), (suggestion) => {
                 let model = null;
                 let record = null;
                 let id;
                 let suggestionId;
                 let fileTarget;
-
+            
                 // file_location means message reference is already filed (global registry)
                 if (suggestion.type === 'file_location') {
                     id = suggestion.record.record_id;
@@ -252,7 +248,7 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                         model: Tine.Tinebase.data.RecordMgr.get(suggestion.record.model),
                         data: id
                     };
-                    
+                
                 } else {
                     model = Tine.Tinebase.data.RecordMgr.get(suggestion.model);
                     record = Tine.Tinebase.data.Record.setFromJson(suggestion.record, model);
@@ -262,10 +258,10 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                         model: model,
                         data: id
                     };
-
+                
                 }
                 suggestionId = fileTarget.model.getPhpClassName() + '-' + id;
-
+            
                 if (suggestionIds.indexOf(suggestionId) < 0) {
                     this.menu.addItem({
                         itemId: suggestionId,
@@ -279,13 +275,50 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                     suggestionIds.push(suggestionId);
                 }
             });
-
+            
+            this.addDefaultSentImapFolder();
             this.addStaticMenuItems();
             this.addDownloadMenuItem();
-
+        
             this.suggestionsLoaded = true;
             this.setIconClass('action_file');
         });
+    },
+    
+    addDefaultSentImapFolder: function() {
+        // get account sent folder config
+        const defaultImapItem = this.getDefaultSentImapItem();
+        if (!defaultImapItem) return;
+
+        this.selectionHandler(defaultImapItem, null);
+    },
+    
+    getDefaultSentImapItem: function () {
+        if (!this?.composeDialog?.record) return null;
+        
+        const accountId = this.composeDialog.record.get('account_id');
+        const currentAccount = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(accountId);
+        const sentFolder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(currentAccount.getSendFolderId());
+        const selectedFolderState = Ext.state.Manager.get('Felamimail-TreePanel');
+        const selectedFolder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(selectedFolderState?.selected);
+        
+        const messageCopyFolderType = currentAccount.get('message_sent_copy_behavior') ?? 'sent';
+        if (messageCopyFolderType === 'skip') return null;
+        
+        const defaultFolder = messageCopyFolderType === 'source' ? selectedFolder : sentFolder;
+        if (!defaultFolder) return null;
+        
+        const model = Tine.Tinebase.data.RecordMgr.get(defaultFolder.appName, defaultFolder.modelName);
+        const title = defaultFolder.get('globalname');
+        const defaultImapItem = new Ext.menu.Item();
+        
+        defaultImapItem.fileTarget = {
+            type: 'folder',
+            record_title: `${title} [IMAP]`,
+            model: model,
+            data: defaultFolder.data
+        };
+        return defaultImapItem;
     },
 
     addStaticMenuItems: function() {
@@ -308,6 +341,14 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                 return menu;
             }, [])
         });
+
+        // only available for composing messages
+        if (this?.composeDialog?.record) {
+            this.menu.addItem({
+                text: this.app.i18n._('Select other IMAP folder'),
+                handler: this.selectImapFolder.createDelegate(this),
+            });
+        }
     },
 
     addDownloadMenuItem: function() {
@@ -383,23 +424,32 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
      * returns currently selected locations
      */
     getSelected: function() {
-        return _.reduce(this.menu.items.items, (selected, item) => {
+        if (!this?.menu?.items?.items) {
+            const defaultImapItem = this.getDefaultSentImapItem();
+            if (defaultImapItem) {
+                const selection = this.itemToLocation(defaultImapItem);
+                return [selection];
+            }
+        }
+        
+        return _.reduce(this?.menu?.items?.items, (selected, item) => {
             if (item.checked) {
                 selected.push(this.itemToLocation(item));
             }
             return selected;
         }, []);
     },
-
+    
     /**
      * converts (internal) item representation to location
      * @param item
      * @return {{type: string, model: String, record_id: data|{email}|*}}
      */
     itemToLocation:function(item) {
+        const app = item.fileTarget?.model?.getMeta?.('appName') ?? null;
         return {
-            type: item.fileTarget.model.getMeta('appName') === 'Filemanager' ? 'node' : 'attachment',
-            model: item.fileTarget.model.getPhpClassName(),
+            type: !app ? 'attachment' : app === 'Felamimail' ? 'folder' : 'node',
+            model: item.fileTarget?.model?.getPhpClassName?.(),
             record_id: item.fileTarget.data,
             record_title: item.fileTarget.record_title
         };
@@ -446,6 +496,31 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
             data: nodeData,
         };
         this.selectionHandler(fakeItem, e)
+    },
+    
+    selectImapFolder: function(item, e) {
+        const accountId = this.composeDialog.record.get('account_id');
+        const currentAccount = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(accountId);
+        const selectPanel = Tine.Felamimail.FolderSelectPanel.openWindow({
+            account: currentAccount,
+            listeners: {
+                scope: this,
+                folderselect: async function (node) {
+                    if (!node.attributes) return;
+                    const record = Tine.Tinebase.data.Record.setFromJson(node.attributes, Tine.Felamimail.Model.Folder);
+                    const model = Tine.Tinebase.data.RecordMgr.get('Felamimail', 'Folder');
+                    const fakeItem = new Ext.menu.Item();
+                    fakeItem.fileTarget = {
+                        type: 'folder',
+                        record_title: `${record.data.globalname} [IMAP]`,
+                        model: model,
+                        data: record.data,
+                    };
+                    this.selectionHandler(fakeItem, e)
+                    selectPanel.close();
+                }
+            }
+        });
     },
 
     selectAttachRecord: function(item, e, model) {

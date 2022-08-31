@@ -108,31 +108,6 @@ describe('message', () => {
     });
 });
 
-describe.skip('email note preference', () => {
-    test('open Felamimail settings and set note=yes', async () => {
-        await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
-        await expect(page).toClick('.x-menu-item-text', {text: 'E-Mail'});
-        await page.waitForTimeout(2000);
-        await lib.setPreference(page,'E-Mail', 'autoAttachNote', 'ja');
-    });
-    test('open compose dialog and check button pressed', async () => {
-        await page.waitForTimeout(3000);
-        let popupWindow = await lib.getEditDialog('Verfassen');
-        await popupWindow.waitForSelector('.x-btn.x-btn-text-icon.x-btn-pressed');
-        await popupWindow.close();
-    });
-    test.skip('open Felamimail settings and set note=no', async () => {
-        await page.waitForTimeout(2000);
-        await lib.setPreference(page,'E-Mail', 'autoAttachNote', 'nein');
-    });
-    test.skip('open editDialog and check button unpressed', async () => {
-        await page.waitForTimeout(2000);
-        let popupWindow = await lib.getEditDialog('Verfassen');
-        if (await popupWindow.$('.x-btn.x-btn-text-icon.x-btn-pressed') !== null) return Promise.reject('Error: The button is pressed');
-        await popupWindow.close();
-    });
-});
-
 afterAll(async () => {
     browser.close();
 });

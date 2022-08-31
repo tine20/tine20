@@ -231,9 +231,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 selectionchange: this.onFileMessageSelectionChange
             }
         });
-        
+
+        const accountId = this.accountId;
+        const currentAccount = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(accountId);
+        const type = currentAccount.get('message_sent_copy_behavior');
         this.button_fileMessage = new Ext.SplitButton(this.action_fileRecord);
-        
+        this.button_fileMessage.pressed = type && type !== 'skip';
+    
         this.action_toggleReadingConfirmation = new Ext.Action({
             text: this.app.i18n._('Reading Confirmation'),
             handler: this.onToggleReadingConfirmation,
@@ -658,7 +662,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }, this);
 
         this.htmlEditor.on('toggleFormat', this.onToggleFormat, this);
-
         this.initHtmlEditorDD();
     },
 
@@ -1039,7 +1042,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     onFileMessageSelectionChange: function(btn, selection) {
-        var text = this.app.formatMessage('{locationCount, plural, one {This message will be filed at the following location} other {This message will be filed at the following locations}}: {locationsHtml}', {
+        const text = this.app.formatMessage('{locationCount, plural, one {This message will be filed at the following location} other {This message will be filed at the following locations}}: {locationsHtml}', {
                 locationCount: selection.length,
                 locationsHtml: Tine.Felamimail.MessageFileAction.getFileLocationText(selection, ', ')
             });
@@ -1208,8 +1211,25 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.record.get('massMailingFlag')) {
             this.massMailingInfoText.show();
         }
-
+        
+        this.updateFileLocations();
+        this.onFileMessageSelectionChange('', this.action_fileRecord.getSelected());
         this.onAfterRecordLoad();
+    },
+    
+    updateFileLocations: function () {
+        const selections = this?.button_fileMessage?.pressed ? this.action_fileRecord.getSelected() : [];
+        const imapFolderIds = _.map(selections, (selection) => {
+            if (selection?.type && selection.type === 'folder') {
+                return selection.record_id.id;
+            }
+        });
+        const fileLocations = _.filter(selections, (selection) => {
+            return selection?.type && selection.type !== 'folder';
+        });
+    
+        this.record.set('fileLocations',fileLocations);
+        this.record.set('sent_copy_folder', imapFolderIds);
     },
 
     /**
@@ -1265,10 +1285,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Felamimail.MessageEditDialog.superclass.onRecordUpdate.call(this);
 
         this.record.set('account_id', account.get('original_id'));
-        
-        if (this.button_fileMessage.pressed) {
-            this.record.set('fileLocations', this.action_fileRecord.getSelected());
-        }
+        this.updateFileLocations();
 
         // need to sync once again to make sure we have the correct recipients
         this.recipientGrid.syncRecipientsToRecord();

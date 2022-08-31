@@ -16,6 +16,7 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE015_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE015_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE015_UPDATE003 = __CLASS__ . '::update003';
     
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -32,6 +33,10 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE015_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
     ];
@@ -95,5 +100,26 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Felamimail', '15.2',self::RELEASE015_UPDATE002);
+    }
+
+
+    public function update003()
+    {
+        if ($this->getTableVersion('felamimail_account') < 29) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>message_sent_copy_behavior</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <default>sent</default>
+                </field>
+            ');
+            $this->_backend->addCol('felamimail_account', $declaration);
+            $this->setTableVersion('felamimail_account', 29);
+        }
+        $db = $this->getDb();
+        $db->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'preferences WHERE name = "autoAttachNote"');
+
+        $this->addApplicationUpdate('Felamimail', '15.3', self::RELEASE015_UPDATE003);
     }
 }
