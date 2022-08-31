@@ -146,6 +146,21 @@ class Tinebase_EmailUser_XpropsFacade
             $result = isset($record->xprops()[$xprop])
                 ? $record->xprops()[$xprop]
                 : ($userIdAsFallback ? $record->getId() : null);
+            if (! $result) {
+                // check if we get user id from imap or smtp user
+                if ($xprop === self::XPROP_EMAIL_USERID_IMAP
+                    && $record->has('email_imap_user')
+                    && isset($record->email_imap_user['emailUserId'])
+                ) {
+                    $result = $record->email_imap_user['emailUserId'];
+                }
+                if (! $result
+                    && $record->has('email_smtp_user')
+                    && isset($record->email_smtp_user['emailUserId'])
+                ) {
+                    $result = $record->email_smtp_user['emailUserId'];
+                }
+            }
         } else {
             // TODO support other id properties?
             $result = $record->getId();

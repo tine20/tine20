@@ -264,7 +264,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         }
     }
 
-    public function testUpdateSystemAccount()
+    public function testUpdateSystemAccountReplyTo()
     {
         $systemaccount = TestServer::getInstance()->getTestEmailAccount();
         if (! $systemaccount) {
