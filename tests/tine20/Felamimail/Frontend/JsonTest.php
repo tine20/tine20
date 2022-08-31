@@ -2063,8 +2063,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $this->assertFalse(isset($regData['defaults']));
         $this->assertFalse(isset($regData['accounts']));
         $supportedFlags = Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_TINE20_FLAG)
-            ? 6
-            : 5;
+            ? 7
+            : 6;
         $this->assertEquals($supportedFlags, $regData['supportedFlags']['totalcount']);
     }
 

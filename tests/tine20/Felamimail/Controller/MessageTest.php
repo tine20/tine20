@@ -1126,14 +1126,15 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
      * @param mixed $_toMove
      * @param Felamimail_Model_Folder $_folder
      */
-    protected function _moveTestHelper($_toMove, $_folder)
+    protected function _moveTestHelper($_toMove, $_folder, $_keepOriginalMessage = false)
     {
-        Felamimail_Controller_Message_Move::getInstance()->moveMessages($_toMove, $_folder);
+        Felamimail_Controller_Folder::getInstance()->emptyFolder($_folder);
+        Felamimail_Controller_Message_Move::getInstance()->moveMessages($_toMove, $_folder, $_keepOriginalMessage);
         $message = $this->_searchMessage('multipart/mixed', $_folder);
         
-        $folder = $this->_cache->updateCache($_folder, 30);
+        $folder = $this->_cache->updateCache($_folder, 30, 10);
         while ($folder->cache_status === Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE) {
-            $folder = $this->_cache->updateCache($folder, 30);
+            $folder = $this->_cache->updateCache($folder, 30, 10);
         }
         $result = $this->_getController()->search($this->_getFilter($folder->getId()));
         foreach ($result as $messageInCache) {
@@ -1848,5 +1849,190 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         $this->assertStringContainsString('111111', $message->body);
         $this->assertEquals('text/html', $message->structure['contentType'], print_r($message->structure, true));
         $this->assertEquals(1, print_r($message->structure['partId'], true));
+    }
+
+    /**
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function testMessageUpdateWithTags()
+    {
+        $inbox = $this->_getFolder('INBOX');
+        $cachedMessage = $this->messageTestHelper('multipart_alternative.eml', null, $inbox);
+        $cachedMessage = $this->_testMessageAttachTags($cachedMessage, $inbox);
+        $this->_testMessageDetachTags($cachedMessage, $inbox);
+    }
+
+    /**
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function testMessageMoveWithTags()
+    {
+        $inbox = $this->_getFolder('INBOX');
+        $targetFolder = $this->_getFolder('trash');
+        $cachedMessage = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed', $inbox);
+        $cachedMessageWithTags = $this->_testMessageAttachTags($cachedMessage, $inbox);
+
+        $this->_moveTestHelper($cachedMessageWithTags, $targetFolder);
+
+        $tags = Tinebase_Tags::getInstance()->getTagsOfRecord($cachedMessageWithTags);
+        self::assertEquals(0, $tags->count());
+        
+        $result = $this->_getController()->search($this->_getFilter($targetFolder->getId()));
+        // check if tags also updated?
+        foreach ($result as $message) {
+            $tags = Tinebase_Tags::getInstance()->getTagsOfRecord($message);
+            self::assertEquals($cachedMessageWithTags->flags, $message->flags, 'tags should be the same');
+            self::assertEquals(1, $tags->count());
+        }
+    }
+
+    /**
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function testMessageCopyWithTags()
+    {
+        $inbox = $this->_getFolder('INBOX');
+        $targetFolder = $this->_getFolder('trash');
+        $cachedMessage = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed', $inbox);
+        $cachedMessageWithTags = $this->_testMessageAttachTags($cachedMessage, $inbox);
+
+        $this->_moveTestHelper($cachedMessageWithTags, $targetFolder, true);
+
+        $tags = Tinebase_Tags::getInstance()->getTagsOfRecord($cachedMessageWithTags);
+        self::assertEquals(1, $tags->count());
+
+        $result = $this->_getController()->search($this->_getFilter($targetFolder->getId()));
+        // check if tags also updated?
+        foreach ($result as $message) {
+            $tags = Tinebase_Tags::getInstance()->getTagsOfRecord($message);
+            self::assertEquals($cachedMessageWithTags->flags, $message->flags, 'tags should be the same');
+            self::assertEquals(1, $tags->count());
+        }
+    }
+
+    /**
+     * test delete in different accounts
+     *
+     * @group longrunning
+     */
+    public function testMessagesDeleteWithTags()
+    {
+        $inbox = $this->_getFolder('INBOX');
+        $cachedMessage = $this->messageTestHelper('multipart_alternative.eml', null, $inbox);
+        $this->_testMessageAttachTags($cachedMessage, $inbox);
+
+        $filter = new Felamimail_Model_MessageFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($cachedMessage->getId()))
+        ));
+
+        // delete message
+        $this->_getController()->delete($cachedMessage);
+
+        $this->_cache->updateCache($inbox);
+        $result = $this->_getController()->search($filter);
+
+        foreach ($result as $message) {
+            $tags = Tinebase_Tags::getInstance()->getTagsOfRecord($message);
+            $this->assertEquals(0, $tags->count());
+            $this->assertEquals(count($cachedMessage->flags) + 1, count($message->flags), 'Tag not found in message ' . $message->subject);
+        }
+    }
+
+    /**
+     * test delete in different accounts
+     *
+     * @group longrunning
+     */
+    public function testMessagesDeleteByFolderWithTags()
+    {
+        $inbox = $this->_getFolder('INBOX');
+        $filter = $this->_getFilter($inbox->getId());
+        $cachedMessage = $this->messageTestHelper('multipart_alternative.eml', null, $inbox);
+
+        $this->_testMessageAttachTags($cachedMessage, $inbox);
+
+        // empty index
+        Felamimail_Controller_Folder::getInstance()->emptyFolder($inbox);
+
+        $this->_cache->updateCache($inbox);
+        $result = $this->_getController()->search($filter);
+
+        foreach ($result as $message) {
+            $tags = Tinebase_Tags::getInstance()->getTagsOfRecord($message);
+            $this->assertEquals(0, $tags->count());
+            $this->assertEquals(count($cachedMessage->flags) + 1, count($message->flags), 'Tag not found in message ' . $message->subject);
+        }
+    }
+
+    /**
+     * test message attach tags
+     */
+    public function _testMessageAttachTags($_cachedMessage, $_folder)
+    {
+        $filter = new Felamimail_Model_MessageFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($_cachedMessage->getId()))
+        ));
+
+        $tagData = array(
+            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+            'name'  => 'tag::testMessageAttachTags',
+            'description' => 'testMessageAttachTags',
+            'color' => '#009B31',
+        );
+
+        Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tagData);
+        $result = $this->_getController()->search($filter);
+
+        foreach ($result as $message) {
+            $tags = Tinebase_Tags::getInstance()->getTagsOfRecord($message);
+            $this->assertEquals(1, $tags->count());
+            $this->assertEquals(count($_cachedMessage->flags) + 1, count($message->flags), 'Tag not found in contact ' . $message->subject);
+        }
+        
+        return $result->getFirstRecord();
+    }
+
+    /**
+     * test message detach tags
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function _testMessageDetachTags($_cachedMessage, $_folder)
+    {
+        $filter = $this->_getFilter($_folder->getId());
+
+        $tagData1 = array(
+            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+            'name'  => 'tagMulti::test1',
+            'description' => 'testMessageDetachTags',
+            'color' => '#009B31',
+        );
+        $tag1 = Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tagData1);
+
+        $tagData2 = array(
+            'type'  => Tinebase_Model_Tag::TYPE_PERSONAL,
+            'name'  => 'tagMulti::test2',
+            'description' => 'testDetachTagToMultipleRecords2',
+            'color' => '#ff9B31',
+        );
+        $tag2 = Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tagData2);
+        $result = $this->_getController()->search($filter);
+        $tasgIds = [$tag1->getId(), $tag2->getId()];
+
+        foreach ($result as $message) {
+            $this->assertEquals(count($_cachedMessage->flags) + 2, count($message->flags), 'Tags not found in message ' . $message->subject);
+        }
+
+        // Try to remove the created Tags
+        try {
+            Tinebase_Tags::getInstance()->detachTagsFromMultipleRecords($filter, $tasgIds);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            $this->fail('failed to detach tags: ' . print_r($tasgIds, TRUE) . ' / exception: ' . $zdse);
+        }
+
+        $result = $this->_getController()->search($filter);
+
+        foreach ($result as $message) {
+            $this->assertEquals(count($_cachedMessage->flags), count($message->flags), 'Tags should not be found not found in message ' . $message->subject);
+        }
     }
 }

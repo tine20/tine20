@@ -195,12 +195,15 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             } else {
                 throw new Tinebase_Exception_UnexpectedValue('$_messages must be instance of Felamimail_Model_Message');
             }
-
+            $messageIds = ($messages instanceof Tinebase_Record_RecordSet) ? $messages->getArrayOfIds() : $messages;
             $where = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('message_id') . ' IN (?)',
-                    ($messages instanceof Tinebase_Record_RecordSet) ? $messages->getArrayOfIds() : $messages)
+                $this->_db->quoteInto($this->_db->quoteIdentifier('message_id') . ' IN (?)', $messageIds)
             );
             $this->_db->delete($this->_tablePrefix . $this->_foreignTables['flags']['table'], $where);
+
+            $this->setMessageTags( new Felamimail_Model_MessageFilter([
+                array('field' => 'id', 'operator' => 'in', 'value' => $messageIds)
+            ]), [], 'clear');
 
             $flags = (array)$_flags;
             $touchedMessages = array();
@@ -218,7 +221,11 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
                     $this->_db->insert($this->_tablePrefix . $this->_foreignTables['flags']['table'], $data);
                 }
             }
-
+            
+            $this->setMessageTags( new Felamimail_Model_MessageFilter([
+                array('field' => 'id', 'operator' => 'in', 'value' => $messageIds)
+            ]), $flags, 'add');
+            
             // touch messages so sync can find the updates
             $this->updateMultiple($touchedMessages, array('timestamp' => Tinebase_DateTime::now()));
 
@@ -255,6 +262,24 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         
         $this->_db->delete($this->_tablePrefix . $this->_foreignTables['flags']['table'], $where);
     }
+
+    /**
+     * Deletes entries
+     *
+     * @param string|integer|Tinebase_Record_Interface|array $_id
+     * @return int The number of affected rows.
+     * @throws Felamimail_Exception
+     */
+    public function delete($_id)
+    {
+        if ((is_array($_id) && sizeof($_id) > 0) || is_string($_id)) {
+            $this->setMessageTags( new Felamimail_Model_MessageFilter([
+                array('field' => 'id', 'operator' => 'in', 'value' => $_id)
+            ]), [], 'clear');
+        }
+        
+        return parent::delete($_id);
+    }
     
     /**
      * delete all cached messages for one folder
@@ -264,6 +289,9 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     public function deleteByFolderId($_folderId)
     {
         $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
+
+        $filter = $this->_getMessageFilterWithFolderId($_folderId);
+        $this->setMessageTags($filter, [], 'clear');
         
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $folderId)
@@ -349,5 +377,43 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         );
         
         return $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
+    }
+
+    /**
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Felamimail_Exception
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function setMessageTags(Felamimail_Model_MessageFilter $filter, $_flags, $_mode)
+    {
+        $tagIds = array_filter($_flags, function ($flag) { return strlen($flag)=== 40;});
+        $tags = sizeof($tagIds) > 0 ? Tinebase_Tags::getInstance()->getTagsById($tagIds) : [];
+        
+        if ($_mode === 'clear') {
+            try {
+                $messages = $this->search($filter);
+                if (sizeof($tags) === 0) {
+                    $tags = Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($messages);
+                }
+                
+                if ($tags) {
+                    Tinebase_Tags::getInstance()->detachTagsFromMultipleRecords($filter, $tags->getId());
+                }
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                throw new Felamimail_Exception('failed to detach tags: ' . print_r($tags, TRUE));
+            }
+        }
+        
+        if ($_mode === 'add') {
+            foreach ($tags as $tag) {
+                try {
+                    Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tag);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    throw new Felamimail_Exception('failed to attach tags: ' . print_r($tag->getId(), TRUE));
+                }
+
+            }
+        }
     }
 }

@@ -28,7 +28,12 @@ class Felamimail_Convert_Message_Json extends Tinebase_Convert_Json
     public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records = NULL, $_filter = NULL, $_pagination = NULL)
     {
         $this->_dehydrateFileLocations($_records);
-
+        
+        foreach ($_records as $record) {
+            $tags = Tinebase_Tags::getInstance()->getTagsById($record['flags']);
+            $record->tags = new Tinebase_Record_RecordSet(Tinebase_Model_Tag::class, $tags);
+        }
+        
         return parent::fromTine20RecordSet($_records, $_filter, $_pagination);
     }
 
@@ -146,5 +151,4 @@ class Felamimail_Convert_Message_Json extends Tinebase_Convert_Json
         
         return $record;
     }
-    
 }

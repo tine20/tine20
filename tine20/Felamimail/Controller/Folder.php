@@ -390,8 +390,8 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             }
         }
         
-        $this->_deleteFolderOnIMAP($_accountId, $_folderName);
         $this->_deleteFolderInCache($_accountId, $folder);
+        $this->_deleteFolderOnIMAP($_accountId, $_folderName);
     }
 
     /**
