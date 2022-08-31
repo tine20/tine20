@@ -121,9 +121,6 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         this.stateful = true;
         this.stateId = 'ux.popupwindow-' + this.contentPanelConstructor;
 
-        // window decoration and location bar count to window height
-        this.height += 20;
-
         Ext.ux.PopupWindow.superclass.initComponent.call(this);
     },
 
@@ -131,17 +128,20 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         // open popup window first to save time
         if (! this.popup) {
             try {
-                // NOTE: safaris devicePixelRatio is always 2 and does not change with zoom-level 
-                this.evalDevicePixelRatio = !Ext.isSafari;
-                
                 // NOTE: FF scales windows itself -> no need for adoption
-                // NOTE: Chrome/FF on MacOS with retina display have their devicePixelRatio multiplied by 2
-                //       what about mac-mini? -> pls. report
-                const devicePixelRatio = Ext.isGecko ? 1 : (window.devicePixelRatio / (Ext.isMac ? 2 : 1));
-                if (this.evalDevicePixelRatio && devicePixelRatio) {
-                    this.width = Math.round(this.width * devicePixelRatio);
-                    this.height = Math.round(this.height * devicePixelRatio);
+                if (!Ext.isGecko) {
+                    const zoomRatiosAvailable = [ 0.25, 1/3, 0.5, 2/3, 0.75, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4, 5 ];
+                    const widthCorrection = 16;
+                    const cssPixelRatio = (window.outerWidth-widthCorrection) / window.innerWidth;
+                    const diffs = zoomRatiosAvailable.map((r) => {return Math.abs(r-cssPixelRatio)});
+                    const zoomRatio = zoomRatiosAvailable[diffs.indexOf(Math.min.apply(Math, diffs))];
+
+                    this.width = Math.round(this.width * zoomRatio);
+                    this.height = Math.round(this.height * zoomRatio);
                 }
+
+                // safari counts window decoration to window height oo
+                this.height += Ext.isSafari ? 28 : 0;
 
                 //limit the window size
                 this.width = Math.min(screen.availWidth, this.width);
