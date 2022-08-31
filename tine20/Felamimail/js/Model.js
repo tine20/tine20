@@ -52,7 +52,8 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
       { name: 'reply_to' },
       { name: 'fileLocations' },
       { name: 'from_node' }, // JS only - contains node data if opened from Filemanager
-      { name: 'is_spam_suspicions', type: 'bool' }
+      { name: 'is_spam_suspicions', type: 'bool' },
+      { name: 'tags'},
     ], {
     appName: 'Felamimail',
     modelName: 'Message', // gettext('GENDER_Message')
@@ -203,7 +204,8 @@ Tine.Felamimail.Model.Message.getFilterModel = function() {
             valueStore: Tine.Felamimail.loadFlagsStore()
         }},
         {label: app.i18n._('Received'),    field: 'received',      valueType: 'date', pastOnly: true},
-        {label: app.i18n._('Size'),        field: 'size',          valueType: 'number'}
+        {label: app.i18n._('Size'),        field: 'size',          valueType: 'number'},
+        {filtertype: 'tinebase.tag', app: app},
     ];
 };
 
@@ -439,7 +441,7 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
       { name: 'quota_usage',         type: 'int' },
       { name: 'quota_limit',         type: 'int' },
       { name: 'client_access_time', type: 'date', dateFormat: Date.patterns.ISO8601Long  }, // client only {@see Tine.Felamimail.folderBackend#updateMessageCache}
-      { name: 'unread_children', type: 'Array', defaultValue: [] } // client only / array of unread child ids
+      { name: 'unread_children', type: 'Array', defaultValue: [] }, // client only / array of unread child ids
 ], {
     // translations for system folders:
     // i18n._('INBOX') i18n._('Drafts') i18n._('Sent') i18n._('Templates') i18n._('Junk') i18n._('Trash')
