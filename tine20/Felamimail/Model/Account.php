@@ -31,6 +31,7 @@
  * @property  string $sieve_notification_move_folder
  * @property  string $sieve_hostname
  * @property  string $migration_approved
+ * @property  string $message_sent_copy_behavior
  * @property  Tinebase_Model_EmailUser $email_imap_user
  * @property  Tinebase_Model_EmailUser $email_smtp_user
  * @property  Tinebase_Record_RecordSet $aliases (Tinebase_Model_EmailUser_Alias)
@@ -88,6 +89,28 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
      * @var string
      */
     const SIEVE_NOTIFICATION_MOVE_INACTIVE = 'INACTIVE';
+    
+    /**
+     * 
+     * copy message to configured sent folder, only available when compose/reply/forward message
+     *
+     * @var string
+     */
+    const MESSAGE_COPY_FOLDER_SENT = 'sent'; 
+
+    /**
+     * copy message to folder of source mail, only available when compose/reply/forward message
+     *
+     * @var string
+     */
+    const MESSAGE_COPY_FOLDER_SOURCE = 'source';
+
+    /**
+     * skip copy message to folder
+     *
+     * @var string
+     */
+    const MESSAGE_COPY_FOLDER_SKIP = 'skip';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -647,7 +670,23 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 ],
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::NULLABLE => true,
-            ]
+            ],
+            'message_sent_copy_behavior' => [
+                self::TYPE =>               self::TYPE_STRING,
+                self::SYSTEM => true,
+                self::VALIDATORS => [
+                    Zend_Validate_InArray::class => [
+                        self::MESSAGE_COPY_FOLDER_SKIP,
+                        self::MESSAGE_COPY_FOLDER_SENT,
+                        self::MESSAGE_COPY_FOLDER_SOURCE,
+                    ],
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::DEFAULT_VALUE => self::MESSAGE_COPY_FOLDER_SENT
+                ],
+                self::INPUT_FILTERS             => [
+                    Zend_Filter_Empty::class => self::MESSAGE_COPY_FOLDER_SENT,
+                ],
+            ],
         ]
     ];
 

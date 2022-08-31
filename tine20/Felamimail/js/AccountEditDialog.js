@@ -153,6 +153,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'preserve_format':
                 case 'organization':
                 case 'reply_to':
+                case 'save_sent_mail_copy':
                 case 'sent_folder':
                 case 'trash_folder':
                 case 'drafts_folder':
@@ -213,6 +214,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     break;
                 case 'visibility':
                     item.setDisabled(this.record.get('type') === 'system');
+                    break;
+                case 'save_sent_mail_to_source':
+                    item.setDisabled(this.record.get('message_sent_copy_behavior') === 'skip');
                     break;
                 default:
                     item.setDisabled(! this.asAdminModule && (this.isSystemAccount() || ! this.hasEditAccountRight));
@@ -736,6 +740,32 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 xtype: 'columnform',
                 formDefaults: commonFormDefaults,
                 items: [[{
+                    hideLabel: true,
+                    xtype: 'checkbox',
+                    boxLabel: this.app.i18n._('Save copy of sent mail on mail server'),
+                    name: 'save_sent_mail_copy',
+                    checked: me.record.get('message_sent_copy_behavior') !== 'skip',
+                    listeners: {
+                        'check': (checkbox, value) => {
+                            const mode = value ? 'sent' : 'skip';
+                            me.record.set('message_sent_copy_behavior', mode);
+                            this.getForm().findField('sent_folder').setDisabled(!value);
+                            this.getForm().findField('save_sent_mail_to_source').setDisabled(!value);
+                        },
+                    },
+                }], [{
+                    hideLabel: true,
+                    xtype: 'checkbox',
+                    name: 'save_sent_mail_to_source',
+                    boxLabel: this.app.i18n._('Folder of the source mail if it is not your INBOX.'),
+                    checked: me.record.get('message_sent_copy_behavior') === 'source',
+                    listeners: {
+                        'check': (checkbox, value) => {
+                            const mode = value ? 'source' : 'sent';
+                            me.record.set('message_sent_copy_behavior', mode);
+                        },
+                    },
+                }], [{
                     fieldLabel: this.app.i18n._('Sent Folder Name'),
                     name: 'sent_folder',
                     xtype: 'felamimailfolderselect',

@@ -326,10 +326,10 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param boolean $_saveInSent
      * @param Felamimail_Model_Message $_message
      */
-    protected function _sendMailViaTransport(Zend_Mail $_mail,
+    protected function _sendMailViaTransport(Zend_Mail                $_mail,
                                              Felamimail_Model_Account $_account,
                                              Felamimail_Model_Message $_message = null,
-                                             $_saveInSent = false)
+                                             bool                     $_saveInSent = false)
     {
         $smtpConfig = $_account->getSmtpConfig();
         if (empty($smtpConfig) || ! isset($smtpConfig['hostname'])) {
@@ -341,12 +341,21 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         Tinebase_Smtp::getInstance()->sendMessage($_mail, $transport);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Sending successful.');
+        
+        if ($_message) {
+            if (!isset($_message['sent_copy_folder']) && $_account->message_sent_copy_behavior !== Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SKIP) {
+                $sentFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($_account, Felamimail_Model_Folder::FOLDER_SENT);
+                $_message['sent_copy_folder'] = [$sentFolder->getId()];
+            }
 
-        if ($_saveInSent) {
-            $sentFolder = $this->_saveInSent($transport, $_account, $this->_getAdditionalHeaders($_message));
-            $this->_fileSentMessage($_message, $sentFolder);
+            if (isset($_message['sent_copy_folder']) && sizeof($_message['sent_copy_folder']) > 0) {
+                $folders = $this->_saveMessageCopyToImapFolders($transport, $_account, $_message);
+                if ($folders[0]) {
+                    $this->_fileSentMessage($_message, $folders[0]);
+                }
+            }
         }
-
+        
         // add reply/forward flags if set
         if ($_message && ! empty($_message->flags)
             && ($_message->flags == Zend_Mail_Storage::FLAG_ANSWERED || $_message->flags == Zend_Mail_Storage::FLAG_PASSED)
@@ -414,41 +423,45 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      *
      * @param Felamimail_Transport $_transport
      * @param Felamimail_Model_Account $_account
-     * @param array $_additionalHeaders
-     * @return Felamimail_Model_Folder
+     * @param Felamimail_Model_Message $_message
+     * @throws Felamimail_Exception_IMAPInvalidCredentials
+     * @throws Zend_Mail_Transport_Exception
      */
-    protected function _saveInSent(Felamimail_Transport_Interface $_transport, Felamimail_Model_Account $_account, $_additionalHeaders = array())
+    protected function _saveMessageCopyToImapFolders(Felamimail_Transport_Interface $_transport, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message)
     {
-        try {
-            $mailAsString = $_transport->getRawMessage(NULL, $_additionalHeaders);
-            $sentFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($_account, Felamimail_Model_Folder::FOLDER_SENT);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                ' About to save message in sent folder (' . $sentFolder->globalname . ') ...');
-            
-            Felamimail_Backend_ImapFactory::factory($_account)->appendMessage(
-                $mailAsString,
-                Felamimail_Model_Folder::encodeFolderName($sentFolder->globalname)
-            );
-            
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                . ' Saved sent message in "' . $sentFolder->globalname . '".'
-            );
-        } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                . ' Could not save sent message in "' . $sentFolder->globalname . '".'
-                . ' Please check if a folder with this name exists.'
-                . '(' . $zmpe->getMessage() . ')'
-            );
-        } catch (Zend_Mail_Storage_Exception $zmse) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                . ' Could not save sent message in "' . $sentFolder->globalname . '".'
-                . ' Please check if a folder with this name exists.'
-                . '(' . $zmse->getMessage() . ')'
-            );
+        $additionalHeaders = $this->_getAdditionalHeaders($_message);
+        $mailAsString = $_transport->getRawMessage(NULL, $additionalHeaders);
+        $imapFolderIds = $_message['sent_copy_folder'];
+        $folders = Felamimail_Controller_Folder::getInstance()->getMultiple($imapFolderIds);
+        
+        foreach ($folders as $targetFolder) {
+            try {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' About to save message in folder (' . $targetFolder->globalname . ') ...');
+                
+                Felamimail_Backend_ImapFactory::factory($_account)->appendMessage(
+                    $mailAsString,
+                    Felamimail_Model_Folder::encodeFolderName($targetFolder->globalname)
+                );
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Saved sent message in "' . $targetFolder->globalname . '".'
+                );
+            } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' Could not save sent message in "' . $targetFolder->globalname . '".'
+                    . ' Please check if a folder with this name exists.'
+                    . '(' . $zmpe->getMessage() . ')'
+                );
+            } catch (Zend_Mail_Storage_Exception $zmse) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' Could not save sent message in "' . $targetFolder->globalname . '".'
+                    . ' Please check if a folder with this name exists.'
+                    . '(' . $zmse->getMessage() . ')'
+                );
+            }
         }
-
-        return $sentFolder;
+        
+        return $folders;
     }
     
     /**

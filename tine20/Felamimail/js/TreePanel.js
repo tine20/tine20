@@ -224,7 +224,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     getState: function() {
         return {
             paths: this.getExpandedPaths(this.getRootNode()),
-            selected: _.get(this.getSelectionModel().getSelectedNode(), 'id')
+            selected: _.get(this.getSelectionModel().getSelectedNode(), 'id'),
+            selectedGlobalName: _.get(this.getSelectionModel().getSelectedNode(), 'attributes.globalname'),
         }
     },
 
