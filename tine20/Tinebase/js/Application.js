@@ -133,7 +133,7 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
      * @return {Boolean}
      */
     featureEnabled: function(featureName) {
-        var featureConfig = Tine[this.appName].registry.get("config").features,
+        var featureConfig = Tine[this.appName].registry.get("config")?.features,
             result = featureConfig && featureConfig.value[featureName];
 
         if (result == undefined) {
