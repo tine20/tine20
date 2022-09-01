@@ -1292,3 +1292,6 @@ msgstr "E-Mail-Verteiler Mitglieder"
 
 msgid "Group Member"
 msgstr "Gruppenmitglied"
+
+msgid "E-Mail (all)"
+msgstr "E-Mail (alle)"
