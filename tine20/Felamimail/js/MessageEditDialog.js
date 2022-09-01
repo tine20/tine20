@@ -232,12 +232,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         });
 
-        const accountId = this.accountId;
-        const currentAccount = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(accountId);
-        const type = currentAccount.get('message_sent_copy_behavior');
         this.button_fileMessage = new Ext.SplitButton(this.action_fileRecord);
-        this.button_fileMessage.pressed = type && type !== 'skip';
-    
+
         this.action_toggleReadingConfirmation = new Ext.Action({
             text: this.app.i18n._('Reading Confirmation'),
             handler: this.onToggleReadingConfirmation,
@@ -335,6 +331,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.initSubject();
         this.initContent();
 
+        const currentAccount = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
+
         // legacy handling:...
         // TODO add this information to attachment(s) + flags and remove this
         if (this.replyTo) {
@@ -350,6 +348,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.record.get('massMailingFlag')) {
             this.button_massMailing.toggle();
         }
+
+        this.button_fileMessage.toggle(currentAccount.get('message_sent_copy_behavior') !== 'skip');
 
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::initRecord() -> record:');
         Tine.log.debug(this.record);
