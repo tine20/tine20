@@ -1633,6 +1633,10 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         foreach (array('reason', 'enabled', 'subject', 'from', 'days') as $field) {
             $this->assertEquals($vacationData[$field], $result[$field], 'vacation data mismatch: ' . $field);
         }
+
+        $translation = Tinebase_Translation::getTranslation('Felamimail');
+        $this->_assertHistoryNote($this->_account, $translation->_('Sieve vacation has been updated:') . ' ' .
+            $translation->_('Vacation message is now active.'), Felamimail_Model_Account::class);
     }
 
     /**
@@ -1689,18 +1693,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         // check if message is in test folder
         $this->_searchForMessageBySubject($messageData['subject'], $this->_testFolderName);
 
-        $history = $this->_getRecordHistory($this->_account['id'], Felamimail_Model_Account::class);
-        self::assertGreaterThan(1, $history['totalcount'], 'no update note created');
-
-        $notes = array_filter($history['results'], function($note) {
-            return $note['note_type_id'] === Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE;
-        });
-        self::assertCount(1, $notes, 'no update note found:' . print_r($history['results'], true));
-        $notesMatching = array_filter($notes, function($note) {
-            $translation = Tinebase_Translation::getTranslation('Felamimail');
-            return $note['note'] === $translation->_('Sieve rules have been updated.');
-        });
-        self::assertCount(1, $notesMatching, print_r($notes, true));
+        $translation = Tinebase_Translation::getTranslation('Felamimail');
+        $this->_assertHistoryNote($this->_account, $translation->_('Sieve rules have been updated.'), Felamimail_Model_Account::class);
     }
 
     /**
