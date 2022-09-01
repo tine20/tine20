@@ -35,16 +35,19 @@ module.exports = {
         await inputUploadHandle.uploadFile(file);
     },
 
-    getNewWindow: async function () {
+    getNewWindow: function () {
         return new Promise((fulfill) => browser.once('targetcreated', (target) => fulfill(target.page())));
     },
 
     getEditDialog: async function (btnText, win) {
         await expect(win || page).toMatchElement('.x-btn-text', {text: btnText});
         await page.waitForTimeout(100); // wait for btn to get active
+        let popupWindow = this.getNewWindow();
         await expect(win || page).toClick('.x-btn-text', {text: btnText});
-        let popupWindow = await this.getNewWindow();
-        await popupWindow.waitForSelector('.ext-el-mask');
+        popupWindow = await popupWindow;
+        try {
+            await popupWindow.waitForSelector('.ext-el-mask', {timeout: 5000});
+        } catch {}
         await popupWindow.waitForFunction(() => !document.querySelector('.ext-el-mask'));
         await popupWindow.screenshot({path: 'screenshots/test.png'});
         return popupWindow;
