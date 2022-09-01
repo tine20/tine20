@@ -416,25 +416,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             allowMultiple: false,
             hidden: !Tine.Tinebase.appMgr.isEnabled('Tasks')
         });
-    
+
         // initial tagging actions from parent
         Tine.Felamimail.GridPanel.superclass.initActions.call(this);
-        
-        // overwrite parent action
-        this.action_deleteRecord = new Ext.Action({
-            requiredGrant: 'deleteGrant',
-            allowMultiple: true,
-            text: this.app.i18n._('Delete'),
-            handler: this.onDeleteRecords,
-            disabled: true,
-            iconCls: 'action_delete',
-            scope: this
-        });
 
-        this.actionUpdater = new Tine.widgets.ActionUpdater({
-            recordClass: this.recordClass,
-            evalGrants: this.evalGrants
-        });
+        this.action_deleteRecord.setText(this.app.i18n._('Delete'));
+        this.action_deleteRecord.initialConfig.translationObject = null;
 
         this.actionUpdater.addActions([
             this.action_deleteRecord,
@@ -480,6 +467,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             ],
         });
     },
+
+    // we don't delete messages, we move them to trash
+    disableDeleteActionCheckServiceMap () {},
 
     /**
      * upload new file and add to store
