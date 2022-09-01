@@ -21,7 +21,7 @@ describe('Mainpage', () => {
         await page.type('.x-form-text.x-form-field.x-form-invalid', 'favorite');
         await page.waitForSelector('.x-panel.x-wdgt-pickergrid.x-grid-panel.x-masked-relative.x-masked');
         await expect(page).toClick('.x-btn-image.action_saveAndClose');
-        await page.waitForTimeout(1000); //wait for save the favorite
+        await page.waitForTimeout(2000); //wait for save the favorite
     });
 
     test('save shared favorite', async () => {
@@ -37,7 +37,7 @@ describe('Mainpage', () => {
         await page.click('.x-form-checkbox.x-form-field');
         await page.waitForFunction(() => !document.querySelector('.x-panel.x-wdgt-pickergrid.x-grid-panel.x-masked-relative.x-masked'));
         await expect(page).toClick('.x-btn-image.action_saveAndClose');
-        await page.waitForTimeout(1000); //wait for save the favorite
+        await page.waitForTimeout(2000); //wait for save the favorite
     });
 
     test('edit favorite', async () => {
@@ -53,7 +53,7 @@ describe('Mainpage', () => {
         await page.waitForSelector('.x-window.x-resizable-pinned');
         await page.screenshot({path: 'screenshots/openFavorite1.png'});
         await page.waitForSelector('.x-panel.x-wdgt-pickergrid.x-grid-panel.x-masked-relative.x-masked');
-        await page.keyboard.press('Escape');
+        await expect(page).toClick('.x-btn-image.action_cancel');
         await page.waitForFunction(() => !document.querySelector('.x-window.x-resizable-pinned'));
     });
 
@@ -69,7 +69,7 @@ describe('Mainpage', () => {
         await expect(page).toClick('.x-menu-item-icon.action_edit', {visible: true});
         await page.waitForSelector('.x-window.x-resizable-pinned');
         await page.waitForFunction(() => !document.querySelector('.x-panel.x-wdgt-pickergrid.x-grid-panel.x-masked-relative.x-masked'));
-        await page.keyboard.press('Escape');
+        await expect(page).toClick('.x-btn-image.action_cancel');
         await page.waitForFunction(() => !document.querySelector('.x-window.x-resizable-pinned'));
     });
 });
