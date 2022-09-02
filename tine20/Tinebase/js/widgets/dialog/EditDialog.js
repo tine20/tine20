@@ -1321,10 +1321,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
                     // NOTE: update event in local mode should have resolved data (like in remote mode)
                     this.getForm().items.items.forEach((field) => {
-                        if (me.recordClass.hasField(field.name)) {
+                        const cfName = _.get(String(field.name).match(/^customfield_(.+)$/), '[1]');
+                        if (me.recordClass.hasField(field.name) || cfName) {
+                            const path = cfName ? `customfields[${cfName}]` : field.name;
+
                             // recordPickers
                             if (field?.selectedRecord?.data) {
-                                recordData[field.name] = field.selectedRecord.data;
+                                _.set(recordData, path, field.selectedRecord.data);
                             }
                             // @TODO recordsPickers & pickerGrids?
                         }

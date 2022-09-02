@@ -180,6 +180,7 @@ Tine.widgets.container.SelectionComboBox = Ext.extend(Ext.form.ComboBox, {
         
         if (this.defaultContainer) {
             this.selectedContainer = this.defaultContainer;
+            this.selectedRecord = Tine.Tinebase.data.Record.setFromJson(this.defaultContainer, Tine.Tinebase.Model.Container);
             this.value = this.defaultContainer.name;
         }
         this.on('blur', function() {
@@ -438,7 +439,8 @@ Tine.widgets.container.SelectionComboBox = Ext.extend(Ext.form.ComboBox, {
 
         container.set('is_container_node', !!!Tine.Tinebase.container.pathIsContainer(container.get('path')));
         this.selectedContainer = container.data;
-        
+        this.selectedRecord = container;
+
         // make sure other is _last_ entry in list
         this.store.remove(this.otherRecord);
         this.store.add(this.otherRecord);
