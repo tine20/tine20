@@ -148,7 +148,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
                     $_value = $vals;
                 }
             }
-            $this->_foreignIds = (array) $_value;
+            $this->_foreignIds = $this->_valueIsNull ? null : (array) $_value;
             $this->_value = null;
 
         } else {
