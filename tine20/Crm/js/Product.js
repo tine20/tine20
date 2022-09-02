@@ -232,7 +232,7 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                                 salesprice: record.data.salesprice,
                                 remark_price: record.data.salesprice,
                                 remark_quantity: 1,
-                                name: record.data.name,
+                                name: record.getTitle(),
                                 relation_type: 'product',
                                 related_id: record.id,
                                 id: record.id
