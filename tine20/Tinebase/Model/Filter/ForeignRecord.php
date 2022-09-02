@@ -133,7 +133,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
             if (is_array($_value) && isset($_value['id'])) {
                 $_value = [$_value['id']];
             }
-            $this->_foreignIds = (array) $_value;
+            $this->_foreignIds = $this->_valueIsNull ? null : (array) $_value;
             $this->_value = null;
 
         } else {
