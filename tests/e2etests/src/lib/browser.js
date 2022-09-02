@@ -132,13 +132,19 @@ module.exports = {
         }
 
 	try {
-            browser = await puppeteer.launch({
+            const opts = {
                 headless: process.env.TEST_MODE != 'debug',
                 //ignoreDefaultArgs: ['--enable-automation'],
                 //slowMo: 250,
                 //defaultViewport: {width: 1366, height: 768},
                 args: args
-            });
+            };
+
+            if (process.platform === "darwin") {
+                opts.executablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+            }
+
+            browser = await puppeteer.launch(opts);
 	} catch (e) {
 	    console.log(e);
 	}
