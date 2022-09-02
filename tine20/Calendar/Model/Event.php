@@ -807,7 +807,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function getDeepLink()
     {
-        return Tinebase_Core::getUrl() . '/#/Calendar/showEvent/' . $this->getId();
+        return Tinebase_Core::getUrl() . '/#/Calendar/Event/' . $this->getId();
     }
 
     /**
