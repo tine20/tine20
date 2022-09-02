@@ -657,7 +657,22 @@ sortInfo: {
 
         this.addSorted(record);
     },
-    
+
+    /**
+     * replace record
+     * @param {Ext.data.Record} o old record
+     * @param {Ext.data.Record} n new record
+     */
+    replaceRecord: function(o, n) {
+        const r = this.getById(o.id); // refetch record as it might be outdated in the meantime
+        const idx = this.indexOf(r);
+        this.remove(r);
+        this.insert(idx, n);
+        if (n.modified || n.dirty) {
+            this.modified.push(n);
+        }
+    },
+
     /**
      * Remove Records from the Store and fires the {@link #remove} event.
      * @param {Ext.data.Record/Ext.data.Record[]} record The record object or array of records to remove from the cache.
