@@ -1522,6 +1522,23 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $this->_testProjectRelationFilter($contact, 'in', $newProject);
         $this->_testProjectRelationFilter($contact, 'equals', $newProject);
 
+        // test that filter equals '' [or null or any other empty] works
+        $result = Addressbook_Controller_Contact::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+                array(
+                    'field'     => 'foreignRecord',
+                    'operator'  => 'equals',
+                    'value' => array(
+                        'linkType'      => 'relation',
+                        'appName'       => 'Projects',
+                        'modelName'     => 'Project',
+                        'filters'       => '',
+                    )
+                ),
+            ]));
+        $this->assertFalse($result->getById($contact['id']));
+        $this->assertGreaterThan(0, $result->count());
+
         return $contact;
     }
 
