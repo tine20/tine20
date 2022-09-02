@@ -123,8 +123,6 @@ module.exports = {
 
     getBrowser: async function (app, module) {
 
-        let browser;
-
         expect.setDefaultOptions({timeout: 5000});
 
         args = ['--lang=de-DE,de'];
