@@ -37,7 +37,7 @@ class Tinebase_FileSystemTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         if (empty(Tinebase_Core::getConfig()->filesdir)) {
             $this->markTestSkipped('filesystem base path not found');
         }

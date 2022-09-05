@@ -867,10 +867,6 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
 
     public function testFileManagerReplication()
     {
-        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Pgsql) {
-            static::markTestSkipped('on CI it failes, locally on ansible vagrant with pgsql it runs, even if all tests run!');
-        }
-        
         Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
             ->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
         $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
@@ -994,12 +990,7 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
         $modifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
         $this->assertTrue($result, 'applyReplicationModLogs failed');
-        // update hash of FileObject
-        /*
-        $mod = $modifications->getFirstRecord();
-        $modifications->removeRecord($mod);
-        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
-        $this->assertTrue($result, 'applyReplicationModLogs failed');*/
+
         // update acl_node of FileNode
         $mod = $modifications->getFirstRecord();
         $modifications->removeRecord($mod);

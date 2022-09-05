@@ -1312,6 +1312,21 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         return $fh;
     }
 
+    protected function _assertHistoryNote($record, $translatedString, $model, $expectedNumber = 1)
+    {
+        $history = $this->_getRecordHistory($record['id'], $model);
+        self::assertGreaterThan($expectedNumber, $history['totalcount'], 'no update note created');
+
+        $notes = array_filter($history['results'], function($note) {
+            return $note['note_type_id'] === Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE;
+        });
+        self::assertCount($expectedNumber, $notes, 'no update note found:' . print_r($history['results'], true));
+        $notesMatching = array_filter($notes, function($note) use ($translatedString) {
+            return $note['note'] === $translatedString;
+        });
+        self::assertCount(1, $notesMatching, print_r($notes, true));
+    }
+
     protected function _getRecordHistory($id, $model)
     {
         $tinebaseJson = new Tinebase_Frontend_Json();
