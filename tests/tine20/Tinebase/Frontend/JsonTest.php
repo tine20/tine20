@@ -1062,4 +1062,13 @@ class Tinebase_Frontend_JsonTest extends TestCase
         // the empty filter gets removed
         static::assertEquals(1, count($result['filter']));
     }
+
+    public function testChangePasswordWithNullValues()
+    {
+        $credentials = TestServer::getInstance()->getTestCredentials();
+        $result = $this->_instance->changePassword($credentials['password'], null);
+        self::assertEquals(['success' => 1], $result);
+        $result = $this->_instance->changePassword( null, $credentials['password']);
+        self::assertEquals(['success' => 1], $result);
+    }
 }
