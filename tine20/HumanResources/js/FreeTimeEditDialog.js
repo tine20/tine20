@@ -192,7 +192,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
 
     onBeforeDateSelect: function(datePicker, dateValue) {
-        return !!this.form.findField('scheduled_remaining_vacation_days').getValue();
+        let type = this.typePicker.selectedRecord || this.record.get('type') || {};
+        return type.id !== 'vacation' || !!this.form.findField('scheduled_remaining_vacation_days').getValue();
     },
     
     onDateSelect: function(datePicker, dateValue) {
@@ -341,7 +342,21 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
 
     initTypePicker: function() {
-        this.typePicker = Tine.widgets.form.FieldManager.get('HumanResources', 'FreeTime', 'type', Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
+        this.typePicker = Tine.widgets.form.FieldManager.get('HumanResources', 'FreeTime', 'type', Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG, {
+            additionalFilters: [{field: 'allow_planning', operator: 'equals', value: true}],
+            listeners: {
+                select: (c, type) => {
+                    if (type.id === 'vacation' && 0 > this.form.findField('scheduled_remaining_vacation_days').getValue()) {
+                        Ext.MessageBox.show({
+                            buttons: Ext.Msg.OK,
+                            icon: Ext.MessageBox.WARNING,
+                            title: this.app.i18n._('Not enough vacation days'),
+                            msg: this.app.i18n._('The number of selected vacation days exceeds possible vacation days!')
+                        });
+                    }
+                }
+            }
+        });
     },
 
     getFormItems: function() {
