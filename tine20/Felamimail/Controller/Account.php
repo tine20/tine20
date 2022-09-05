@@ -1208,14 +1208,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     }
 
     /**
-     * inspect update of one record (after update)
+     * inspect update of one record (after setReleatedData)
      *
-     * @param   Felamimail_Model_Account $updatedRecord   the just updated record
-     * @param   Felamimail_Model_Account $record          the update record
-     * @param   Felamimail_Model_Account $currentRecord   the current record (before update)
+     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
      * @return  void
      */
-    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    protected function _inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord)
     {
         switch ($updatedRecord->type) {
             case Felamimail_Model_Account::TYPE_SYSTEM:
@@ -1256,10 +1256,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 $sieveRecord = new Felamimail_Model_Sieve_Vacation($record->sieve_vacation, TRUE);
                 $ruleRecords = new Tinebase_Record_RecordSet(Felamimail_Model_Sieve_Rule::class, array_values($record->sieve_rules));
 
-                $record = Felamimail_Controller_Sieve::getInstance()->setSieveScript($updatedRecord->getId(), $sieveRecord, $ruleRecords);
+                $script = Felamimail_Controller_Sieve::getInstance()->setSieveScript($updatedRecord, $sieveRecord, $ruleRecords);
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' Update sieve script : ' . print_r($record, true));
+                    __METHOD__ . '::' . __LINE__ . ' Updated sieve script : ' . $script);
             }
         } catch (Felamimail_Exception_SievePutScriptFail $fespsf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(

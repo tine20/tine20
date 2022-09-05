@@ -393,6 +393,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      *
      * @param Tinebase_Model_Note $_note
      * @param boolean $skipModlog
+     * @return Tinebase_Model_Note
      */
     public function addNote(Tinebase_Model_Note $_note, $skipModlog = false)
     {
@@ -414,6 +415,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         }
         
         $this->_notesTable->insert($data);
+        return $_note;
     }
 
     /**
@@ -447,7 +449,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         }
         $user = ($_userId instanceof Tinebase_Model_User) ? $_userId : Tinebase_User::getInstance()->getUserById($_userId);
         
-        $translate = Tinebase_Translation::getTranslation('Tinebase');
+        $translate = Tinebase_Translation::getTranslation();
         $noteText = $translate->_($_type) . ' ' . $translate->_('by') . ' ' . $user->accountDisplayName;
         
         if ($_mods !== NULL) {
