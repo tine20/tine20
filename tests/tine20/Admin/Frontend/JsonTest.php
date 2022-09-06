@@ -866,8 +866,9 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
     public function testPhpinfo()
     {
         $info = $this->_json->getServerInfo();
-        $this->assertStringContainsString("phpinfo()", $info['html']);
-        $this->assertStringContainsString("PHP Version =>", $info['html']);
+        self::assertArrayHasKey('html', $info);
+        self::assertStringContainsString("phpinfo()", $info['html']);
+        self::assertStringContainsString("PHP Version =>", $info['html']);
     }
 
     protected function createExampleAppRecord()
