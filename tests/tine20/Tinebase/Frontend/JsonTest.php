@@ -1058,6 +1058,8 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
     public function testChangePasswordWithNullValues()
     {
+        $this->_skipIfLDAPBackend();
+
         $credentials = TestServer::getInstance()->getTestCredentials();
         $result = $this->_instance->changePassword($credentials['password'], null);
         self::assertEquals(['success' => 1], $result);
