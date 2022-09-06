@@ -427,7 +427,9 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         const contact = value.data ?? '';
         let recipients = [contact];
         
-        if (contact?.email === '' && (contact?.type === 'group' || contact?.type === 'list')) {
+        if (contact?.email === '' && (contact?.type === 'group' ||
+            contact?.type === 'list' ||
+            contact?.type === 'mailingList')) {
             recipients = await this.resolveGroupContact(contact);
         }
         
