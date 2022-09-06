@@ -133,9 +133,22 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
                 }
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Update messages in local cache: move them to target folder');
-                $this->_backend->updateMultiple($_messages->getArrayOfIds(), [
-                    'folder_id' => $folderId
-                ]);
+                try {
+                    $this->_backend->updateMultiple($_messages->getArrayOfIds(), [
+                        'folder_id' => $folderId
+                    ]);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' Could not move messages: ' . $zdse->getMessage());
+                    try {
+                        $number = $this->_backend->delete($_messages->getArrayOfIds());
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                            __METHOD__ . '::' . __LINE__ . ' Deleted ' . $number . ' messages from cache');
+                    } catch (Zend_Db_Statement_Exception $zdse) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                            ' Error deleting cached messages from folder ' . $folderName . ': ' . $zdse->getMessage());
+                    }
+                }
             }
         }
 
