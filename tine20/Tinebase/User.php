@@ -877,6 +877,11 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 . ' User backend is not instanceof Tinebase_User_Ldap, nothing to sync');
             return true;
         }
+
+        $userIdsInSqlBackend = [];
+        if (isset($options['deleteUsers']) && $options['deleteUsers']) {
+            $userIdsInSqlBackend = self::_getLdapUserController()->getAllUserIdsFromSqlBackend();
+        }
         
         $users = self::_getLdapUserController()->getUsersFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
         
@@ -896,7 +901,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         }
 
         if (isset($options['deleteUsers']) && $options['deleteUsers']) {
-            self::_syncDeletedUsers($users);
+            self::_syncDeletedUsers($users, $userIdsInSqlBackend);
         }
 
         self::_getLdapGroupController()->resetClassCache();
@@ -911,12 +916,12 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * deletes user in tine20 db that no longer exist in sync backend
      *
      * @param Tinebase_Record_RecordSet $usersInSyncBackend
+     * @param array $userIdsInSqlBackend
      */
-    protected static function _syncDeletedUsers(Tinebase_Record_RecordSet $usersInSyncBackend)
+    protected static function _syncDeletedUsers(Tinebase_Record_RecordSet $usersInSyncBackend, array $userIdsInSqlBackend)
     {
         $oldContainerAcl = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
 
-        $userIdsInSqlBackend = self::_getLdapUserController()->getAllUserIdsFromSqlBackend();
         $deletedInSyncBackend = array_diff($userIdsInSqlBackend, $usersInSyncBackend->getArrayOfIds());
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
