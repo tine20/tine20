@@ -125,6 +125,7 @@ describe('filterBar', () => {
     test('default search', async () => {
         try {
             await expect(page).toClick('.t-app-felamimail button', {text: 'Details verbergen'});
+            await page.waitForTimeout(2000);
         } catch (e) {
             console.log('details also not activate')
         }
@@ -133,16 +134,22 @@ describe('filterBar', () => {
             , clip: {x: 1000, y: 0, width: 1366 - 1000, height: 100}
         });
         await page.type('.t-app-felamimail .x-toolbar-right-row .x-form-text.x-form-field.x-form-empty-field', 'Test Search');
-        await page.keyboard.press('Enter');
+        await page.waitForTimeout(2000);
+        await page.click('div.t-app-felamimail .x-form-trigger.x-form-search-trigger')
+        await page.waitForTimeout(2000);
         await page.screenshot({
             path: 'screenshots/StandardBedienhinweise/9_standardbedienhinweise_suchfilter_x_button.png'
             , clip: {x: 1000, y: 0, width: 1366 - 1000, height: 100}
         });
+        await page.click('div.t-app-felamimail .x-form-trigger.x-form-clear-trigger');
+        await page.click('div.t-app-felamimail .x-form-trigger.x-form-search-trigger');
+        await page.waitForTimeout(2000);
     });
 
     test('details display', async () => {
         try {
             await expect(page).toClick('.t-app-felamimail button', {text: 'Details anzeigen'});
+            await page.waitForTimeout(2000);
         } catch (e) {
             console.log('details also activate')
         }
