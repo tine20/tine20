@@ -1430,8 +1430,10 @@ new Ext.Panel({
 
     // private
     onEnable : function(){
-        this.getActionEl().removeClass(this.disabledClass);
-        this.el.dom.disabled = false;
+        if (!this.isDestroyed) {
+            this.getActionEl().removeClass(this.disabledClass);
+            this.el.dom.disabled = false;
+        }
     },
 
     /**
