@@ -130,7 +130,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _sendMassMailing(Felamimail_Model_Message $_message)
     {
-        foreach ($_message->to as $to) {
+        foreach ($_message->bcc as $to) {
             $clonedMessage = clone $_message;
             $clonedMessage->to = [$to];
             $clonedMessage->cc = [];

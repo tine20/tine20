@@ -900,7 +900,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
             $massMailingMessage = new Felamimail_Model_Message([
                 'account_id' => $this->_account->getId(),
                 'subject' => 'test poll mass mailing',
-                'to' => [
+                'bcc' => [
                     [
                         "email" => Tinebase_Core::getUser()->accountEmailAddress,
                         "name" => '',

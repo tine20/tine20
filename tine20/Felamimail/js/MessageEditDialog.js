@@ -1027,9 +1027,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var active = !this.record.get('massMailingFlag');
 
         this.record.set('massMailingFlag', active);
-        this.recipientGrid.disableRecipientsCombo(active);
+        this.recipientGrid.switchMassMailingRecipients(active);
 
-        // this.recipientGrid.store.each((r) => {r.set('type', 'BCC')});
         this.recipientGrid.view.refresh();
 
         if (active) {
@@ -1046,9 +1045,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 locationCount: selection.length,
                 locationsHtml: Tine.Felamimail.MessageFileAction.getFileLocationText(selection, ', ')
             });
-
+        
         this.messageFileInfoText.update(text);
         this.messageFileInfoText.setVisible(selection.length);
+
         this.doLayout();
     },
     
