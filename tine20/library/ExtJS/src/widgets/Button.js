@@ -493,7 +493,7 @@ Ext.Button = Ext.extend(Ext.BoxComponent, {
      */
     setText : function(text){
         this.text = text;
-        if(this.el){
+        if(this.el && !this.isDestroyed){
             this.btnEl.update(text || '&#160;');
             this.setButtonClass();
         }
@@ -565,7 +565,7 @@ Ext.Button = Ext.extend(Ext.BoxComponent, {
     },
 
     onDisableChange : function(disabled){
-        if(this.el){
+        if(this.el && !this.isDestroyed){
             if(!Ext.isIE6 || !this.text){
                 this.el[disabled ? 'addClass' : 'removeClass'](this.disabledClass);
             }
