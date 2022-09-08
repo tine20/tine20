@@ -365,7 +365,13 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * usage: method=Admin.setPasswords [-d] [-v] userlist.csv [-- pw=password sendmail=1 pwlist=pws.csv]
+     * set passwords for given user accounts (csv with email addresses) - random pw is generated if not in csv
+     *
+     * usage: method=Admin.setPasswords [-d] [-v] userlist.csv [-- pw=password sendmail=1 pwlist=pws.csv updateaccount=1]
+     *
+     * - sendmail=1 -> sends mail to user with pw
+     * - pwlist=pws.csv -> creates csv file with the users and their new pws
+     * - updateaccount=1 -> also updates user-accounts (for example to create user email accounts)
      *
      * @param Zend_Console_Getopt $opts
      * @return integer
@@ -378,7 +384,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         // input csv/user list
         if (! isset($args['userlist_csv'])) {
-            echo "userlist file param required or file not found. usage: method=Admin.setRandomPasswords [-d] userlist.csv\n";
+            echo "userlist file param required or file not found. usage: method=Admin.setPasswords [-d] userlist.csv\n";
             return 2;
         }
 
@@ -404,7 +410,8 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
 
             $sendmail = isset($args['sendmail']) && (bool) $args['sendmail'];
-            $this->_setPasswordsForUsers($opts, $users, $pw, $sendmail);
+            $updateaccount = isset($args['updateaccount']) && (bool) $args['updateaccount'];
+            $this->_setPasswordsForUsers($opts, $users, $pw, $sendmail, $updateaccount);
         }
 
         return 0;
@@ -446,12 +453,13 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @param array $users
      * @param string|array $pw
      * @param boolean $sendmail
+     * @param boolean $updateaccount
      *
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      */
-    protected function _setPasswordsForUsers(Zend_Console_Getopt $opts, $users, $pw = null, $sendmail = false)
+    protected function _setPasswordsForUsers(Zend_Console_Getopt $opts, $users, $pw = null, bool $sendmail = false, bool $updateaccount = false)
     {
         $pwCsv = '';
 
@@ -477,14 +485,26 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 $newPw = $pw ?? Tinebase_User::generateRandomPassword(8);
             }
 
+            if ($updateaccount) {
+                if (! $opts->d) {
+                    Admin_Controller_User::getInstance()->update($fullUser, $newPw, $newPw);
+                } else {
+                    echo "--DRYRUN-- updating user " . $userdata[0] . "\n";
+                }
+            } else {
+                if (! $opts->d) {
+                    Tinebase_User::getInstance()->setPassword($user, $newPw);
+                } else {
+                    echo "--DRYRUN-- setting pw for user " . $userdata[0] . "\n";
+                }
+            }
+
             if (! $opts->d) {
-                Tinebase_User::getInstance()->setPassword($user, $newPw);
                 if ($sendmail && ! empty($userdata[1])) {
                     echo "sending mail to " . $userdata[1] . "\n";
                     Tinebase_User::getInstance()->sendPasswordChangeMail($fullUser, $newPw, $userdata[1]);
                 }
             } else {
-                echo "--DRYRUN-- setting pw for user " . $userdata[0] . "\n";
                 if ($sendmail && ! empty($userdata[1])) {
                     echo "--DRYRUN-- sending mail to " . $userdata[1] . "\n";
                 } else {
