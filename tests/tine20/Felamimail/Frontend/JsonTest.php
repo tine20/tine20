@@ -873,8 +873,6 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
      */
     public function testReplyMessageWithLongHeader()
     {
-        self::markTestSkipped('FIXME: fails at random');
-
         $messageInSent = $this->_sendMessage($this->_account->sent_folder, array(
             'references' => '<c95d8187-2c71-437e-adb8-5e1dcdbdc507@email.test.org>
    <2601bbfa-566e-4490-a3db-aad005733d32@email.test.org>
@@ -1042,13 +1040,11 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $message['flags']), 'forwarded flag missing in flags: ' . print_r($message, TRUE));
     }
 
-    protected function _appendMessageforForwarding()
+    protected function _appendMessageforForwarding($file = 'multipart_related.eml', $subject = 'Tine 2.0 bei Metaways - Verbessurngsvorschlag')
     {
         $testFolder = $this->_getFolder($this->_testFolderName);
-        $message = fopen(dirname(__FILE__) . '/../files/multipart_related.eml', 'r');
+        $message = fopen(dirname(__FILE__) . '/../files/' . $file, 'r');
         Felamimail_Controller_Message::getInstance()->appendMessage($testFolder, $message);
-
-        $subject = 'Tine 2.0 bei Metaways - Verbessurngsvorschlag';
         return $this->_searchForMessageBySubject($subject, $this->_testFolderName);
     }
 
