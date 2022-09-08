@@ -253,9 +253,11 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
                         await this.addRecipientTokenFromContacts(mailAddresses, memberContacts);
                     } else {
                         const token = this.getRecipientTokenFromContact(contact);
-                        const existToken = _.find(mailAddresses, {email: token.email});
-                        if (!existToken) {
-                            mailAddresses.push(token);
+                        if (token) {
+                            const existToken = _.find(mailAddresses, {email: token.email});
+                            if (!existToken) {
+                                mailAddresses.push(token);
+                            }
                         }
                     }
                 })

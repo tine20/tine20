@@ -298,7 +298,7 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
         
         const accountId = this.composeDialog.record.get('account_id');
         const currentAccount = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(accountId);
-        const sentFolder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(currentAccount.getSendFolderId());
+        const sentFolder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(currentAccount.getSpecialFolderId('sent_folder'));
         const selectedFolderState = Ext.state.Manager.get('Felamimail-TreePanel');
         const selectedFolder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(selectedFolderState?.selected);
         

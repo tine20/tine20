@@ -978,16 +978,24 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }
     },
     
-    disableRecipientsCombo(disable) {
-        if (this.store && disable) {
+    /**
+     * switch mass mailing recipients
+     *
+     * we replace recipient type to bcc in mass mailing mode
+     * @param disable
+     */
+    switchMassMailingRecipients(massMode) {
+        this.allowTypeSelect = !massMode;
+        
+        if (!this.store) return;
+
+        if (massMode) {
             _.map(this.store.data.items, (record, index) => {
-                record.data.type = 'to';
+                record.data.type = 'bcc';
                 this.store.removeAt(index);
                 this.store.insert(index,record);
             })
         }
-        
-        this.allowTypeSelect = !disable;
     }
 });
 
