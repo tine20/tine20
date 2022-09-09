@@ -385,12 +385,21 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $dates = array();
         foreach($contracts as $contract) {
         
-            $fd = $this->_getFirstDate($contract, $firstDate);
-            $ld = $this->_getLastDate($contract, $lastDate);
+            $fd = clone $firstDate;
+            $ld = clone $lastDate;
             
             // on calendar search we have to do this to get the right interval:
             $fd->subSecond(1);
             $ld->addSecond(1);
+
+            /** @var string $feastCalSeq */
+            $feastCalSeq = Tinebase_Container::getInstance()->getContentSequence($contract->feast_calendar_id);
+            $cacheKey = 'getFeastDays' .
+                md5($contract->feast_calendar_id . '#' . $feastCalSeq . '#' . $fd->toString() . $ld->toString());
+            if (false !== ($cachedDates = Tinebase_Core::getCache()->load($cacheKey))) {
+                $dates = array_merge($dates, $cachedDates);
+                continue;
+            }
             
             $periodFilter = new Calendar_Model_PeriodFilter(
                 array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $fd, 'until' => $ld)));
@@ -403,7 +412,8 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             Calendar_Model_Rrule::mergeRecurrenceSet($events, $fd, $ld);
             
             $events->setTimezone(Tinebase_Core::getUserTimezone());
-            
+
+            $newDates = [];
             foreach($events as $event) {
                 if (! $event->isInPeriod($periodFilter)) {
                     continue;
@@ -415,13 +425,15 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
                     while ($i < $days) {
                         $dateOfEvent = clone $event->dtstart;
                         $dateOfEvent->addDay($i);
-                        $dates[] = $dateOfEvent;
+                        $newDates[] = $dateOfEvent;
                         $i++;
                     }
                 } else {
-                    $dates[] = $event->dtstart;
+                    $newDates[] = $event->dtstart;
                 }
             }
+            Tinebase_Core::getCache()->save($newDates, $cacheKey, [], 7 * 24 * 3600);
+            $dates = array_merge($dates, $newDates);
         }
         
         return array_unique($dates);
