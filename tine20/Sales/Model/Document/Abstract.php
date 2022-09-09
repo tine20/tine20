@@ -515,6 +515,15 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             self::FLD_COST_CENTER_ID,
             self::FLD_DESCRIPTION,
         ];
+
+        $thisCFs = Tinebase_CustomField::getInstance()->searchConfig(new Tinebase_Model_CustomField_ConfigFilter([
+            ['field' => 'model', 'operator' => 'equals', 'value' => get_class($this)]
+        ], '', ['ignoreAcl' => true]))->name;
+        $sourceCFs = Tinebase_CustomField::getInstance()->searchConfig(new Tinebase_Model_CustomField_ConfigFilter([
+            ['field' => 'model', 'operator' => 'equals', 'value' => get_class($sourceDocument)]
+        ], '', ['ignoreAcl' => true]))->name;
+        $properties = array_merge($properties, array_intersect($thisCFs, $sourceCFs));
+
         foreach ($properties as $property) {
             if ($this->has($property) && $sourceDocument->has($property)) {
                 $this->{$property} = $sourceDocument->{$property};
