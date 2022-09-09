@@ -365,6 +365,8 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $savedDocument = $this->_instance->saveDocument_Offer($document->toArray(true));
         $savedDocument[Sales_Model_Document_Offer::FLD_OFFER_STATUS] = Sales_Model_Document_Offer::STATUS_RELEASED;
         $savedDocument = $this->_instance->saveDocument_Offer($savedDocument);
+        $this->assertNotSame($customer->getId(), $savedDocument[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['id']);
+        $this->assertSame($customer->getId(), $savedDocument[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['original_id']);
 
         $result = $this->_instance->createFollowupDocument((new Sales_Model_Document_Transition([
             Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
@@ -376,6 +378,11 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
             Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE =>
                 Sales_Model_Document_Order::class,
         ]))->toArray());
+
+        $this->assertNotSame($customer->getId(), $result[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['id']);
+        $this->assertNotSame($savedDocument[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['id'],
+            $result[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['id']);
+        $this->assertSame($customer->getId(), $result[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['original_id']);
     }
 
     public function testOrderDocument()
