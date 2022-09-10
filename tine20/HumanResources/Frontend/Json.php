@@ -485,11 +485,11 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * returns feast days and freedays of an employee for the freetime edit dialog
      * 
      * @param string  $_employeeId
-     * @param integer $_year
+     * @param integer $_yearMonth
      * @param string  $_freeTimeId deprecated do not used anymore!
      * @param string  $_accountId used for vacation calculations (account period might differ from $_year)
      */
-    public function getFeastAndFreeDays($_employeeId, $_year = NULL, $_freeTimeId = NULL, $_accountId = NULL)
+    public function getFeastAndFreeDays($_employeeId, $_yearMonth = NULL, $_freeTimeId = NULL, $_accountId = NULL)
     {
         $cController = HumanResources_Controller_Contract::getInstance();
         $eController = HumanResources_Controller_Employee::getInstance();
@@ -502,19 +502,27 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // set period to search for
         $minDate = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
-        if ($_year) {
-            $minDate->setDate($_year, 1, 1);
+        if ($_yearMonth) {
+            if (strpos($_yearMonth, '-') !== false) {
+                $minDate = new Tinebase_DateTime($_yearMonth . '-01 00:00:00', Tinebase_Core::getUserTimezone());
+            } else {
+                $minDate->setDate($_yearMonth, 1, 1);
+            }
         } else {
             $minDate->setDate($minDate->format('Y'), 1, 1);
         }
         
         /* vacation computation -> shoud be extra call!*/
-        $account = $_accountId ? $aController->get($_accountId) : $aController->getByEmployeeYear($_employeeId, $_year);
+        $account = $_accountId ? $aController->get($_accountId) : $aController->getByEmployeeYear($_employeeId, $minDate->format('Y'));
         $vacation = HumanResources_Controller_Account::getInstance()->resolveVacation($account);
         /* end vacation computation */
         
         $maxDate = clone $minDate;
-        $maxDate->addYear(1)->subSecond(1);
+        if (strpos($_yearMonth, '-') !== false) {
+            $maxDate->addMonth(1)->subSecond(1);
+        } else {
+            $maxDate->addYear(1)->subSecond(1);
+        }
 
         // find contracts of the year in which the vacation days will be taken
         $contracts = $cController->getValidContracts([
@@ -562,7 +570,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
             }
             // search feast days
-            $feastDays = array_merge($cController->getFeastDays($contract, $startDay, $stopDay), $feastDays);
+            $feastDays = array_merge($cController->getFeastDays($contract, $startDay, $stopDay->setTime(23,59,59)), $feastDays);
         }
         
         // set time to 0
@@ -571,9 +579,11 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         // prepare free time filter, add employee_id
-        // @TODO limit freetimes/freedays to given period (be aware might be multiple accounts)
-        $freeTimeFilter = new HumanResources_Model_FreeTimeFilter(array(), 'AND');
-        $freeTimeFilter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
+        $freeTimeFilter = new HumanResources_Model_FreeTimeFilter([
+            ['field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId],
+            ['field' => 'firstday_date', 'operator' => 'before_or_equals', 'value' => $maxDate],
+            ['field' => 'lastday_date', 'operator' => 'after_or_equals', 'value' => $minDate],
+        ]);
         
         // prepare free day filter
         $freeDayFilter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
@@ -583,7 +593,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $allFreeDayFilter = clone $freeDayFilter;
         $allFreeDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $allFreeTimes->id)));
         $allFreeDays = $fdController->search($allFreeDayFilter);
-        $freeTimeTypes = HumanResources_Controller_FreeTimeType::getInstance()->getAll();
+        static $freeTimeTypes = null;
+        if (null === $freeTimeTypes) {
+            $freeTimeTypes = HumanResources_Controller_FreeTimeType::getInstance()->getAll();
+        }
 
         // TODO: remove results property, just return results array itself
         return array(

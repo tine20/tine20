@@ -873,8 +873,6 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
      */
     public function testReplyMessageWithLongHeader()
     {
-        self::markTestSkipped('FIXME: fails at random');
-
         $messageInSent = $this->_sendMessage($this->_account->sent_folder, array(
             'references' => '<c95d8187-2c71-437e-adb8-5e1dcdbdc507@email.test.org>
    <2601bbfa-566e-4490-a3db-aad005733d32@email.test.org>
@@ -1042,13 +1040,11 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $message['flags']), 'forwarded flag missing in flags: ' . print_r($message, TRUE));
     }
 
-    protected function _appendMessageforForwarding()
+    protected function _appendMessageforForwarding($file = 'multipart_related.eml', $subject = 'Tine 2.0 bei Metaways - Verbessurngsvorschlag')
     {
         $testFolder = $this->_getFolder($this->_testFolderName);
-        $message = fopen(dirname(__FILE__) . '/../files/multipart_related.eml', 'r');
+        $message = fopen(dirname(__FILE__) . '/../files/' . $file, 'r');
         Felamimail_Controller_Message::getInstance()->appendMessage($testFolder, $message);
-
-        $subject = 'Tine 2.0 bei Metaways - Verbessurngsvorschlag';
         return $this->_searchForMessageBySubject($subject, $this->_testFolderName);
     }
 
@@ -1633,6 +1629,10 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         foreach (array('reason', 'enabled', 'subject', 'from', 'days') as $field) {
             $this->assertEquals($vacationData[$field], $result[$field], 'vacation data mismatch: ' . $field);
         }
+
+        $translation = Tinebase_Translation::getTranslation('Felamimail');
+        $this->_assertHistoryNote($this->_account, $translation->_('Sieve vacation has been updated:') . ' ' .
+            $translation->_('Vacation message is now active.'), Felamimail_Model_Account::class);
     }
 
     /**
@@ -1689,18 +1689,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         // check if message is in test folder
         $this->_searchForMessageBySubject($messageData['subject'], $this->_testFolderName);
 
-        $history = $this->_getRecordHistory($this->_account['id'], Felamimail_Model_Account::class);
-        self::assertGreaterThan(1, $history['totalcount'], 'no update note created');
-
-        $notes = array_filter($history['results'], function($note) {
-            return $note['note_type_id'] === Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE;
-        });
-        self::assertCount(1, $notes, 'no update note found:' . print_r($history['results'], true));
-        $notesMatching = array_filter($notes, function($note) {
-            $translation = Tinebase_Translation::getTranslation('Felamimail');
-            return $note['note'] === $translation->_('Sieve rules have been updated.');
-        });
-        self::assertCount(1, $notesMatching, print_r($notes, true));
+        $translation = Tinebase_Translation::getTranslation('Felamimail');
+        $this->_assertHistoryNote($this->_account, $translation->_('Sieve rules have been updated.'), Felamimail_Model_Account::class);
     }
 
     /**

@@ -15,6 +15,7 @@ class Addressbook_Setup_Update_14 extends Setup_Update_Abstract
     const RELEASE014_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE014_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE014_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE014_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE => [
@@ -31,6 +32,10 @@ class Addressbook_Setup_Update_14 extends Setup_Update_Abstract
             self::RELEASE014_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE014_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
     ];
@@ -52,6 +57,13 @@ class Addressbook_Setup_Update_14 extends Setup_Update_Abstract
         Tinebase_ImportExportDefinition::getInstance()->getExportDefinitionsForApplication(
             Tinebase_Application::getInstance()->getApplicationByName('Addressbook'));
         $this->addApplicationUpdate('Addressbook', '14.3', self::RELEASE014_UPDATE003);
+    }
+
+    public function update004()
+    {
+        $importExportDefinition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_pdf');
+        Tinebase_ImportExportDefinition::getInstance()->delete($importExportDefinition->getId());
+        $this->addApplicationUpdate('Addressbook', '14.4', self::RELEASE014_UPDATE004);
     }
 
 }

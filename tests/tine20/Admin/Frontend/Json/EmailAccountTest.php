@@ -442,14 +442,18 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $account->sieve_rules = [];
         $account->sieve_vacation = $vacationData;
         
-        $result = $this->_json->saveEmailAccount($account->toArray());
+        $this->_json->saveEmailAccount($account->toArray());
         $script = $this->_json->getSieveScript($account->getId());
         $this->assertStringContainsString('currentdate', $script);
 
         $account->sieve_rules = $this->_getSieveRuleData();
-        $result = $this->_json->saveEmailAccount($account->toArray());
+        $this->_json->saveEmailAccount($account->toArray());
         $script = $this->_json->getSieveScript($account->getId());
         $this->assertStringContainsString('currentdate', $script);
+
+        $translation = Tinebase_Translation::getTranslation('Felamimail');
+        $this->_assertHistoryNote($account, $translation->_('Sieve vacation has been updated:') . ' ' .
+            $translation->_('Vacation message is now active.'), Felamimail_Model_Account::class, 2);
     }
 
     public function testSetSieveRules()

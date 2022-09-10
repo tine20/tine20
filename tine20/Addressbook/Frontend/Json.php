@@ -197,7 +197,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }, $addressData);
             // need to filter modified type from client
             $types = array_map(function ($address) {
-                if (! $address 
+                if (! $address || ! isset($address['type'])
                     || $address['type'] === '' 
                     || strpos($address['type'], 'Member') !== false
                     || $address['type'] === 'mailingList') 

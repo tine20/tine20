@@ -130,7 +130,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _sendMassMailing(Felamimail_Model_Message $_message)
     {
-        foreach ($_message->to as $to) {
+        foreach ($_message->bcc as $to) {
             $clonedMessage = clone $_message;
             $clonedMessage->to = [$to];
             $clonedMessage->cc = [];
@@ -718,7 +718,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             $value = implode(',', $value);
         }
 
-        if (is_scalar($value) && strlen($value) + strlen($key) > 998) {
+        if (is_scalar($value) && strlen($value) + strlen($key) >= 998) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Trimming header ' . $key);
             

@@ -499,7 +499,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     public function setSieveScript($_accountId, Felamimail_Model_Sieve_Vacation $_vacation = null, Tinebase_Record_RecordSet $_rules = null)
     {
-        $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
+        $account = $_accountId instanceof Felamimail_Model_Account
+            ? $_accountId
+            : Felamimail_Controller_Account::getInstance()->get($_accountId);
         
         $this->_checkAccountEditGrant($account);
         $this->_setSieveBackendAndAuthenticate($account);
@@ -557,9 +559,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         if ($vacation) {
             $text = $translation->_('Sieve vacation has been updated:');
             if ($vacation->enabled) {
-                $text .= $translation->_('Vacation message is now active.');
+                $text .= ' ' . $translation->_('Vacation message is now active.');
             } else {
-                $text .= $translation->_('Vacation message is now inactive.');
+                $text .= ' ' . $translation->_('Vacation message is now inactive.');
             }
             Tinebase_Notes::getInstance()->addSystemNote($account, Tinebase_Core::getUser(),
                 Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE, $text);
@@ -569,7 +571,6 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             Tinebase_Notes::getInstance()->addSystemNote($account, Tinebase_Core::getUser(),
                 Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE, $text);
         }
-
     }
     
     /**
