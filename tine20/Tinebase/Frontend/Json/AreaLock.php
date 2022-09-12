@@ -205,6 +205,7 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
 
         // do the tedious task of getting the mfa user config "ready"
         try {
+            $mfa->setPersistUserConfigDelegator(function() { return true; });
             $testUserCfg->updateUserNewRecordCallback($user, Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId()));
             $testUserCfg->runConvertToData();
             $user->mfa_configs->removeById($testUserCfg->getId());
@@ -226,6 +227,7 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
                 throw $e;
             }
         } finally {
+            $mfa->setPersistUserConfigDelegator(null);
             // clean up, eventually we created something persistent
             $testUserCfg->updateUserOldRecordCallback(Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId()), $user);
         }
