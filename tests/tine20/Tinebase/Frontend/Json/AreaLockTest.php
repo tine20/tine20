@@ -25,6 +25,13 @@ class Tinebase_Frontend_Json_AreaLockTest extends TestCase
         parent::setUp();
 
         $this->_instance = new Tinebase_Frontend_Json();
+        Tinebase_Auth_MFA::destroyInstances();
+    }
+
+    public function tearDown(): void
+    {
+        parent::tearDown();
+        Tinebase_Auth_MFA::destroyInstances();
     }
 
     /**
@@ -154,6 +161,39 @@ class Tinebase_Frontend_Json_AreaLockTest extends TestCase
 
         // force cleanup
         Tinebase_Core::setUser($this->_personas['sclever']);
+    }
+
+    public function testMFASelfServiceYubico()
+    {
+        $mfaConfig = [
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_YubicoOTPConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG =>
+                new Tinebase_Model_MFA_YubicoOTPConfig(),
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS =>
+                Tinebase_Auth_MFA_YubicoOTPAdapter::class,
+            Tinebase_Model_MFA_Config::FLD_USER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_YubicoOTPUserConfig::class,
+            Tinebase_Model_MFA_Config::FLD_ALLOW_SELF_SERVICE => true,
+        ];
+        $this->_createAreaLockConfig([], $mfaConfig);
+        $areaLockFE = new Tinebase_Frontend_Json_AreaLock();
+
+        $userCfg = [
+            Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'pin',
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS => Tinebase_Model_MFA_YubicoOTPUserConfig::class,
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG => [
+                Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_PUBLIC_ID => 'vvdbnfkgbhvl',
+                Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_PRIVAT_ID => '001ae6aa4ea2',
+                Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_AES_KEY => '8d18af5df8ab52a6f4b95d34a17f252b',
+                Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_CC_ID => '',
+                Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_ACCOUNT_ID => '',
+                Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_COUNTER => NULL,
+                Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_SESSIONC => NULL,
+            ],
+        ];
+
+        $areaLockFE->saveMFAUserConfig('pin', $userCfg, 'vvdbnfkgbhvlieulfkccjdttncjtbhbkkeflvlbvubnb');
     }
 
     public function testSaveMFAUserConfig()
