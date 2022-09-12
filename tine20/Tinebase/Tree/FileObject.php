@@ -660,6 +660,21 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         return $stmt->rowCount();
     }
 
+    public function updateRevisionByHash(string $hash, array $data)
+    {
+        $this->_db->update(SQL_TABLE_PREFIX . $this->_revisionsTableName, $data,
+            $this->_db->quoteInto($this->_db->quoteIdentifier('hash') . ' = ?', $hash));
+    }
+
+    public function getLastAvScanTimeForHash(string $hash): ?string
+    {
+        return $this->_db->select()->from(SQL_TABLE_PREFIX . $this->_revisionsTableName, [new Zend_Db_Expr('MAX(lastavscan_time)')])
+            ->where($this->_db->quoteIdentifier('hash') . ' = ?', $hash)
+            ->group('hash')
+            ->query(Zend_Db::FETCH_NUM)
+            ->fetchColumn(0) ?: null;
+    }
+
     /**
      * @param array $_hashes
      * @param bool $_forUpdate

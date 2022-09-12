@@ -4214,11 +4214,7 @@ class Tinebase_FileSystem implements
             . ' updating... ');
 
         $avScanner = Tinebase_FileSystem_AVScan_Factory::getScanner();
-
         $result = true;
-        $fh = null;
-        $db = Tinebase_Core::getDb();
-        $transManager = Tinebase_TransactionManager::getInstance();
 
         if (!($baseDir = opendir($this->_basePath))) {
             Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('can not open basedir'));
@@ -4244,73 +4240,41 @@ class Tinebase_FileSystem implements
                     continue;
                 }
                 if ($fileSize > Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
-                        ->{Tinebase_Config::FILESYSTEM_AVSCAN_MAXFSIZE}) {
+                        ->{Tinebase_Config::FILESYSTEM_AVSCAN_MAXFSIZE} || 0 === $fileSize) {
                     continue;
                 }
 
                 $fh = null;
                 $scanResult = null;
-                $transId = $transManager->startTransaction($db);
                 try {
-                    $fileObjectRevisions = $this->_fileObjectBackend->getRevisionForHashes([$hashDir . $file], true);
-
-                    if (count($fileObjectRevisions) === 0) {
-                        $transManager->commitTransaction($transId);
-                        $transId = null;
+                    $lastScan = $this->_fileObjectBackend->getLastAvScanTimeForHash($hashDir . $file);
+                    if (!$lastScan || Tinebase_DateTime::now()->subHour(12)
+                            ->isEarlier(new Tinebase_DateTime($lastScan))) {
                         continue;
                     }
 
-                    foreach ($fileObjectRevisions as $fObjId => $revisions) {
-                        foreach ($revisions as $revision) {
-                            $this->_fileObjectBackend->setRevision($revision);
-                            /** @var \Tinebase_Model_Tree_FileObject $fObj */
-                            $fObj = $this->_fileObjectBackend->get($fObjId, true);
-                            if ($fObj->lastavscan_time && Tinebase_DateTime::now()->subHour(12)
-                                    ->isEarlier(new Tinebase_DateTime($fObj->lastavscan_time))) {
-                                continue;
-                            }
-
-                            if ($fObj->hash !== ($hashDir . $file)) {
-                                Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue(
-                                    'file objects hash not as expected: ' . $fObj->getId() . ' rev: ' . $fObj->revision
-                                    . ' hash: ' . $fObj->hash . ' expected hash: ' . $hashDir . $file));
-                                $result = false;
-                                continue;
-                            }
-                            if (null === $scanResult) {
-                                if (false === ($fh = fopen($path, 'r'))) {
-                                    Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue(
-                                        'could not open file ' . $path . ' for reading... skipping'));
-                                    $result = false;
-                                    $fh = null;
-                                    continue 3;
-                                }
-
-                                $scanResult = $avScanner->scan($fh);
-                                fclose($fh);
-                                $fh = null;
-                                if (Tinebase_FileSystem_AVScan_Result::RESULT_ERROR === $scanResult->result) {
-                                    $result = false;
-                                }
-                            }
-
-                            $fObj->lastavscan_time = Tinebase_DateTime::now();
-                            $fObj->is_quarantined =
-                                Tinebase_FileSystem_AVScan_Result::RESULT_FOUND === $scanResult->result;
-                            $this->_fileObjectBackend->update($fObj);
-                        }
+                    if (false === ($fh = fopen($path, 'r'))) {
+                        Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue(
+                            'could not open file ' . $path . ' for reading... skipping'));
+                        $result = false;
+                        continue;
                     }
 
-                    $transManager->commitTransaction($transId);
-                    $transId = null;
+                    $scanResult = $avScanner->scan($fh);
+                    fclose($fh);
+                    $fh = null;
+
+                    if (Tinebase_FileSystem_AVScan_Result::RESULT_ERROR === $scanResult->result) {
+                        $result = false;
+                    } else {
+                        $this->_fileObjectBackend->updateRevisionByHash($hashDir . $file, [
+                            'lastavscan_time' => Tinebase_DateTime::now()->toString(),
+                            'is_quarantined' => Tinebase_FileSystem_AVScan_Result::RESULT_FOUND === $scanResult->result,
+                        ]);
+                    }
                 } finally {
-                    $this->_fileObjectBackend->setRevision(null);
-                    if (null !== $transId) {
-                        $transManager->rollBack();
-                    }
-                    if (null !== $fh) {
+                    if ($fh) {
                         fclose($fh);
-                        $fh = null;
                     }
                 }
             }
