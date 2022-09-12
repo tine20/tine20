@@ -394,8 +394,8 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
 
             /** @var string $feastCalSeq */
             $feastCalSeq = Tinebase_Container::getInstance()->getContentSequence($contract->feast_calendar_id);
-            $cacheKey = 'getFeastDays' .
-                md5($contract->feast_calendar_id . '#' . $feastCalSeq . '#' . $fd->toString() . $ld->toString());
+            $cacheKey = Tinebase_Helper::convertCacheId('getFeastDays' .
+                md5($contract->feast_calendar_id . '#' . $feastCalSeq . '#' . $fd->toString() . $ld->toString()));
             if (false !== ($cachedDates = Tinebase_Core::getCache()->load($cacheKey))) {
                 $dates = array_merge($dates, $cachedDates);
                 continue;
