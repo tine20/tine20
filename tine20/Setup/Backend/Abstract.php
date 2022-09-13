@@ -297,14 +297,15 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     }
     
     /**
-     * removes table from database (and from application table if app id is given
+     * removes table from database (and from application table if app id or name is given
      * 
      * @param string $_tableName
-     * @param string $_applicationId
+     * @param ?string $_applicationId
      */
-    public function dropTable($_tableName, $_applicationId = NULL)
+    public function dropTable($_tableName, $_applicationId = 'Tinebase')
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Dropping table ' . $_tableName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Dropping table ' . $_tableName);
         $statement = "DROP TABLE IF EXISTS " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
         $this->execQueryVoid($statement);
         
@@ -321,7 +322,8 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      */
     public function renameTable($_tableName, $_newName)
     {
-        $statement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . ' RENAME TO ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_newName);
+        $statement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName)
+            . ' RENAME TO ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_newName);
         $this->execQueryVoid($statement);
     }
     
