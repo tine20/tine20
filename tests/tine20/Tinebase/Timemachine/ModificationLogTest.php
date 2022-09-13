@@ -463,6 +463,53 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
         static::assertSame(0, $containerModifications->count(), 'should have 0 mod logs to process');
     }
 
+    public function testCustomFieldReplication()
+    {
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+
+        $cf = Tinebase_CustomFieldTest::getCustomField();
+        $cf = Admin_Controller_Customfield::getInstance()->create($cf);
+        $cf->grants = [Tinebase_Model_CustomField_Grant::GRANT_READ];
+        Admin_Controller_Customfield::getInstance()->update($cf);
+
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()
+            ->getReplicationModificationsByInstanceSeq($instance_seq);
+        static::assertSame(2, $modifications->count(), 'should have 2 mod logs to process');
+
+        // rollback
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        // create the customfield
+        $mod = $modifications->getFirstRecord();
+        static::assertNotNull($mod);
+        $this->assertStringContainsString('readGrant', $mod->new_value);
+        $this->assertStringContainsString('writeGrant', $mod->new_value);
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()
+            ->applyReplicationModLogs(new Tinebase_Record_RecordSet(Tinebase_Model_ModificationLog::class, [$mod]));
+        static::assertTrue($result, 'applyReplicationModLogs failed');
+        $grants = Tinebase_CustomField::getInstance()->getGrants($cf->getId());
+        $this->assertSame(1, $grants->count());
+        $this->assertTrue($grants->getFirstRecord()->readGrant);
+        $this->assertTrue($grants->getFirstRecord()->writeGrant);
+        $this->assertStringContainsString('readGrant', $grants->getFirstRecord()->account_grant);
+        $this->assertStringContainsString('writeGrant', $grants->getFirstRecord()->account_grant);
+
+        // set grant
+        $mod = $modifications->getFirstRecord();
+        static::assertNotNull($mod);
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()
+            ->applyReplicationModLogs(new Tinebase_Record_RecordSet(Tinebase_Model_ModificationLog::class, [$mod]));
+        static::assertTrue($result, 'applyReplicationModLogs failed');
+        $grants = Tinebase_CustomField::getInstance()->getGrants($cf->getId());
+        $this->assertSame(1, $grants->count());
+        $this->assertTrue($grants->getFirstRecord()->readGrant);
+        $this->assertFalse($grants->getFirstRecord()->writeGrant);
+        $this->assertSame('readGrant', $grants->getFirstRecord()->account_grant);
+    }
+
     public function testCalendarEventReplication()
     {
         $container = new Tinebase_Model_Container([
