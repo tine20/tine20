@@ -216,6 +216,10 @@ function make_image() {
             alpine_branch=3.16
             alpine_php_package=php8
             ;;
+        8.1)
+            alpine_branch=3.16
+            alpine_php_package=php81
+            ;;
         *)
             echo "$0: unsupported php version -- ${php_version}!"
             exit 1

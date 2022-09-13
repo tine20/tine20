@@ -21,8 +21,25 @@ FROM ${SOURCE_IMAGE} as source-copy
 FROM ${BUILT_IMAGE} as test-built
 ARG NPM_INSTALL_COMMAND="npm --no-optional install"
 ARG TINE20ROOT=/usr/share
+ARG ALPINE_PHP_PACKAGE=php7
 
-RUN apk add --update --no-cache git mysql-client jq rsync composer build-base
+RUN apk add --update --no-cache git mysql-client jq rsync build-base
+RUN if [ "${ALPINE_PHP_PACKAGE}" == "php81" ]; then \
+        EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"; \
+        php -r "copy('https://getcomposer.org/installer', '/composer-setup.php');"; \
+        ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', '/composer-setup.php');")"; \
+        if [ "$EXPECTED_CHECKSUM" != "$ACTUAL_CHECKSUM" ]; then \
+            >&2 echo 'ERROR: Invalid installer checksum'; \
+            rm /composer-setup.php; \
+            exit 1; \
+        fi; \
+        php /composer-setup.php --install-dir=/usr/bin --filename=composer; \
+        RESULT=$?; \
+        rm /composer-setup.php; \
+        exit $RESULT; \
+    else \
+      apk add --no-cache composer; \
+    fi
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/main/ npm=12.22.12-r0 nodejs=12.22.12-r0
 
 COPY etc /config
