@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -1637,6 +1637,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             if ($this->_rawData) {
                 if ($_value instanceof DateTime) {
                     $_value = $_value->format('Y-m-d H:i:s');
+                } elseif ($_value instanceof Tinebase_Record_RecordSet) {
+                    $values = [];
+                    foreach ($_value as $v) $values[] = $this->_convertToString($v);
+                    $_value = join(', ', $values);
                 } elseif (method_exists($_value, 'toArray')) {
                     $_value = $_value->toArray();
                 } elseif (method_exists($_value, 'getId')) {
@@ -1652,10 +1656,14 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                         $this->_config->datetimeformat);
                 } elseif($_value instanceof Tinebase_Model_CustomField_Config) {
                     $_value = $_value->value->__toString();
+                } elseif ($_value instanceof Tinebase_Config_KeyFieldRecord) {
+                    $_value = $_value->__toString();
                 } elseif ($_value instanceof Tinebase_Record_Interface) {
                     $_value = $_value->getTitle();
                 } elseif ($_value instanceof Tinebase_Record_RecordSet) {
-                    $_value = join(', ', $_value->getTitle());
+                    $values = [];
+                    foreach ($_value as $v) $values[] = $this->_convertToString($v);
+                    $_value = join(', ', $values);
                 } elseif (method_exists($_value, '__toString')) {
                     $_value = $_value->__toString();
                 } else {

@@ -278,7 +278,8 @@ class Addressbook_Controller_ListTest extends TestCase
             $this->_instance->update($list);
             self::fail('exception expected for already used email address');
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
-            self::assertEquals('E-Mail address is already given. Please choose another one.', $tesg->getMessage());
+            self::assertEquals(Tinebase_Translation::getTranslation(Addressbook_Config::APP_NAME)
+                ->_('E-Mail address is already given. Please choose another one.'), $tesg->getMessage());
         }
     }
     

@@ -35,6 +35,11 @@ class Addressbook_Export_XlsTest extends TestCase
         $positionIndex = array_search('Salutation', $arrayData[2], true);
         static::assertNotEquals(false, $positionIndex, 'can\'t find Salutation in: ' . print_r($arrayData[2], true));
         static::assertEquals('Mr', $arrayData[3][$positionIndex], $positionIndex . ' ' . print_r($arrayData[3], true));
+
+        $positionIndex = array_search('Tags', $arrayData[2], true);
+        static::assertNotSame(false, $positionIndex);
+        static::assertStringContainsString('tag1', $arrayData[3][$positionIndex]);
+        static::assertStringContainsString('tag2', $arrayData[3][$positionIndex]);
     }
 
     /**
@@ -70,6 +75,10 @@ class Addressbook_Export_XlsTest extends TestCase
         $testContact->n_given = 'Test Contact Name 123';
         $testContact->n_family = 'Test Name';
         $testContact->salutation = 'MR';
+        $testContact->tags = [
+            ['name' => 'tag1'],
+            ['name' => 'tag2'],
+        ];
 
         $testContact = Addressbook_Controller_Contact::getInstance()->create($testContact);
 
