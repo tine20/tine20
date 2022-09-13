@@ -444,7 +444,8 @@ class Addressbook_Controller_ListTest extends TestCase
         self::assertFalse(Felamimail_Sieve_AdbList::$adbListSieveAuthFailure, 'auth failure while trying to put sieve script');
 
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($updatedList)->getSieve();
-        self::assertStringContainsString('reject "Your email has been rejected"', $script);
+        self::assertStringContainsString('reject "' . Tinebase_Translation::getTranslation(Felamimail_Config::APP_NAME)
+                ->_('Your email has been rejected') . '"', $script);
         self::assertStringContainsString($this->_personas['sclever']->accountEmailAddress, $script);
     }
 
