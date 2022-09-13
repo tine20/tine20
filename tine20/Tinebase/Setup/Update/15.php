@@ -31,6 +31,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE015 = __CLASS__ . '::update015';
     const RELEASE015_UPDATE016 = __CLASS__ . '::update016';
     const RELEASE015_UPDATE017 = __CLASS__ . '::update017';
+    const RELEASE015_UPDATE018 = __CLASS__ . '::update018';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE       => [
@@ -108,6 +109,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE016          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update016',
+            ],
+            self::RELEASE015_UPDATE018          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update018',
             ],
         ],
     ];
@@ -376,5 +381,13 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.17', self::RELEASE015_UPDATE017);
+    }
+
+    public function update018()
+    {
+        // remove import table from app tables (this might not have happened in 15.16)
+        Tinebase_Application::getInstance()->removeApplicationTable('Tinebase', 'import');
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.18', self::RELEASE015_UPDATE018);
     }
 }
