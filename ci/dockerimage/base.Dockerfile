@@ -133,6 +133,7 @@ RUN addgroup -S -g 150 tine20 && \
     mkdir -p /run/nginx && \
     mkdir -p /etc/php7/php-fpm.d/ && \
     mkdir -p /etc/php8/php-fpm.d/ && \
+    mkdir -p /etc/php81/php-fpm.d/ && \
     rm -r /etc/nginx/http.d && \
     rm /etc/nginx/nginx.conf && \
     mkdir -p /etc/nginx/conf.d/ && \
