@@ -28,10 +28,13 @@ class Tinebase_Model_AreaLockConfig extends Tinebase_Record_Abstract
 
     public const FLD_AREAS = 'areas';
     public const FLD_AREA_NAME = 'area_name';
-    public const FLD_MFAS = 'mfas';
-    public const FLD_VALIDITY = 'validity';
     public const FLD_LIFETIME = 'lifetime';
+    public const FLD_MFAS = 'mfas';
+    public const FLD_POLICY = 'policy';
+    public const FLD_VALIDITY = 'validity';
 
+    public const POLICY_REQUIRED = 'required';
+    public const POLICY_ENCOURAGED = 'encouraged';
     /**
      * supported validity
      */
@@ -140,7 +143,6 @@ class Tinebase_Model_AreaLockConfig extends Tinebase_Record_Abstract
             ],
             self::FLD_VALIDITY => [
                 'type'          => 'string',
-                'length'        => 255,
                 'validators'    => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     'presence' => 'required',
@@ -159,6 +161,17 @@ class Tinebase_Model_AreaLockConfig extends Tinebase_Record_Abstract
                 'type'          => 'integer',
                 'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'label'         => 'Lifetime in Minutes', // _('Lifetime in Minutes')
+            ],
+            self::FLD_POLICY => [
+                self::LABEL         => 'Policy', // _('Policy')
+                self::TYPE          => self::TYPE_STRING,
+                self::VALIDATORS    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::DEFAULT_VALUE => self::POLICY_ENCOURAGED,
+                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
+                    [Zend_Validate_InArray::class, [self::POLICY_ENCOURAGED, self::POLICY_REQUIRED]],
+                ],
+                self::DEFAULT_VAL   => self::POLICY_ENCOURAGED,
             ],
         ]
     ];

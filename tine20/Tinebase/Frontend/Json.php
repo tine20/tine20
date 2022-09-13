@@ -642,6 +642,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'jsonKey' => Tinebase_Core::get('jsonKey'),
             'welcomeMessage' => "Welcome to Tine 2.0!"
         );
+        if (isset(Tinebase_Core::getUser()->xprops()[Tinebase_Model_AreaLockConfig::class][Tinebase_Model_AreaLockConfig::POLICY_ENCOURAGED])) {
+            $response['encourage_mfa'] = true;
+        }
 
         if (!headers_sent()) {
             $cookieOptions = Tinebase_Helper::getDefaultCookieSettings();

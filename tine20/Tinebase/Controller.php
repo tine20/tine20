@@ -837,15 +837,22 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function _validateSecondFactor(Tinebase_Model_AccessLog $accessLog, Tinebase_Model_FullUser $user): void
     {
+        $required = false;
         $areaLock = Tinebase_AreaLock::getInstance();
         $userConfigIntersection = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
         if ($areaLock->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
+            /** @var Tinebase_Model_AreaLockConfig $areaConfig */
             foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN) as $areaConfig) {
+                if (Tinebase_Model_AreaLockConfig::POLICY_REQUIRED ===
+                        $areaConfig->{Tinebase_Model_AreaLockConfig::FLD_POLICY}) {
+                    $required = true;
+                }
                 $userConfigIntersection->mergeById($areaConfig->getUserMFAIntersection($user));
             }
 
             // user has no 2FA config -> currently its sort of optional -> no check
-            if ($this->_forceUnlockLoginArea && count($userConfigIntersection->mfa_configs) === 0) {
+            if (!$required && $this->_forceUnlockLoginArea && count($userConfigIntersection->mfa_configs) === 0) {
+                $user->xprops()[Tinebase_Model_AreaLockConfig::class][Tinebase_Model_AreaLockConfig::POLICY_ENCOURAGED] = true;
                 $areaLock->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
                 return;
             }
