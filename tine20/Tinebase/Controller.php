@@ -129,6 +129,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         $this->_loginUser($user, $accessLog, $password);
 
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::USER_PASSWORD_POLICY)
+                ->{Tinebase_Config::CHECK_AT_LOGIN}) {
+            try {
+                Tinebase_User_PasswordPolicy::checkPasswordPolicy($password, $user);
+            } catch (Tinebase_Exception_PasswordPolicyViolation $e) {
+                Tinebase_Core::get(Tinebase_Core::SESSION)->mustChangePassword = $e->getMessage();
+            }
+        }
         if (Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN}) {
             $userController = Tinebase_User::getInstance();
             if ($userController instanceof Tinebase_User_Sql) {
@@ -852,7 +860,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
             // user has no 2FA config -> currently its sort of optional -> no check
             if (!$required && $this->_forceUnlockLoginArea && count($userConfigIntersection->mfa_configs) === 0) {
-                $user->xprops()[Tinebase_Model_AreaLockConfig::class][Tinebase_Model_AreaLockConfig::POLICY_ENCOURAGED] = true;
+                Tinebase_Core::get(Tinebase_Core::SESSION)->encourage_mfa = true;
                 $areaLock->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
                 return;
             }

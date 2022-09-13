@@ -642,8 +642,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'jsonKey' => Tinebase_Core::get('jsonKey'),
             'welcomeMessage' => "Welcome to Tine 2.0!"
         );
-        if (isset(Tinebase_Core::getUser()->xprops()[Tinebase_Model_AreaLockConfig::class][Tinebase_Model_AreaLockConfig::POLICY_ENCOURAGED])) {
+        if (Tinebase_Core::get(Tinebase_Core::SESSION)->encourage_mfa) {
             $response['encourage_mfa'] = true;
+        }
+        if (Tinebase_Core::get(Tinebase_Core::SESSION)->mustChangePassword) {
+            $response['mustChangePassword'] = Tinebase_Core::get(Tinebase_Core::SESSION)->mustChangePassword;
         }
 
         if (!headers_sent()) {
@@ -924,6 +927,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'additionaldomains' => isset($smtpConfig['additionaldomains']) ? $smtpConfig['additionaldomains'] : '',
             'smtpAliasesDispatchFlag' => Tinebase_EmailUser::smtpAliasesDispatchFlag(),
         );
+
+        if (Tinebase_Core::get(Tinebase_Core::SESSION)->encourage_mfa) {
+            $userRegistryData['encourage_mfa'] = true;
+        }
+        if (Tinebase_Core::get(Tinebase_Core::SESSION)->mustChangePassword) {
+            $userRegistryData['mustChangePassword'] = Tinebase_Core::get(Tinebase_Core::SESSION)->mustChangePassword;
+        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' User registry: ' . print_r($userRegistryData, TRUE));
