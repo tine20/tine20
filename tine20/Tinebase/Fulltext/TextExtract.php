@@ -85,8 +85,15 @@ class Tinebase_Fulltext_TextExtract
         $tempFileName = Tinebase_TempFile::getTempPath();
         $blobFileName = $_fileObject->getFilesystemPath();
         
-        // tika may complain, aka not return status 0 if file is empty or unreadable
         if (! is_readable($blobFileName) || ($fSize = filesize($blobFileName)) === 0 || false === $fSize) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Tika does not like empty or unreadable files - skipping!');
+            return $tempFileName;
+        }
+
+        if (mime_content_type($blobFileName) === 'application/encrypted') {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Tika does not like encrypted files - skipping!');
             return $tempFileName;
         }
 
@@ -105,7 +112,7 @@ class Tinebase_Fulltext_TextExtract
         
         if ($result !== 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                . " tika did not return status 0. maybe the java runtime is missing? \n command: $cmd\n output:"
+                . " Tika did not return status 0.\n command: $cmd\n output:"
                 . $errMsg . print_r($output, true) . ' ' . print_r($result, true));
             
             if (file_exists($tempFileName)) {
@@ -118,7 +125,7 @@ class Tinebase_Fulltext_TextExtract
             return false;
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' tika success!');
+                . ' Tika success!');
         }
         
         return $tempFileName;
