@@ -2358,7 +2358,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertEquals(Zend_Mime::TYPE_HTML, $message['body_content_type'], $message['body']);
         self::assertTrue(isset($message['attachments']), 'no attachments found: ' . print_r($message, true));
         self::assertEquals(1, count($message['attachments']));
-        self::assertEquals(34926, $message['attachments'][0]['size']);
+        self::assertEquals(34875, $message['attachments'][0]['size']);
         self::assertEquals(0, $message['attachments'][0]['partId']);
         self::assertInstanceOf(GuzzleHttp\Psr7\CachingStream::class, $message['attachments'][0]['contentstream']);
         self::assertEquals('2010-05-05 16:25:40', $message['sent']);

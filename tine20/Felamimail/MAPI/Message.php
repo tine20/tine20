@@ -14,7 +14,7 @@
 
 use Hfig\MAPI\Mime\HeaderCollection;
 use Hfig\MAPI\Mime\Swiftmailer\Adapter\DependencySet;
-use Hfig\MAPI\Mime\Swiftmailer\Attachment;
+use Felamimail_MAPI_Attachment as Attachment;
 use Hfig\MAPI\Mime\Swiftmailer\Message as BaseMessage;
 
 class Felamimail_MAPI_Message extends BaseMessage
