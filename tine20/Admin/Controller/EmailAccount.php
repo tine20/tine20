@@ -94,8 +94,10 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     public function get($_id, $_EmailAccountId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
         $this->_checkRight('get');
+        $record = $this->_backend->get($_id);
+        $this->resolveAccountEmailUsers($record);
         
-        return $this->_backend->get($_id);
+        return $record;
     }
 
     /**
@@ -225,9 +227,6 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             $user->accountEmailAddress = $_record->email;
             Admin_Controller_User::getInstance()->update($user);
         }
-        if ($_record->type !== Felamimail_Model_Account::TYPE_USER) {
-            $this->updateAccountEmailUsers($_record);
-        }
     }
 
     /**
@@ -240,6 +239,10 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
+        if ($record->type !== Felamimail_Model_Account::TYPE_USER) {
+            $this->updateAccountEmailUsers($record);
+        }
+        
         if ($currentRecord->type === Felamimail_Model_Account::TYPE_SYSTEM
             && (   $this->_backend->doConvertToShared($updatedRecord, $currentRecord, false)
                 || $this->_backend->doConvertToUserInternal($updatedRecord, $currentRecord, false)

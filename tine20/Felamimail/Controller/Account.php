@@ -1007,6 +1007,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             'from',
             'organization',
             'message_sent_copy_behavior',
+            'email_imap_user',
+            'email_smtp_user',
         );
         $diff = $_record->diff($_oldRecord)->diff;
         foreach ($diff as $key => $value) {
