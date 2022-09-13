@@ -182,4 +182,20 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
         /** @var Tinebase_Model_CustomField_Config $_record */
         Tinebase_CustomField::getInstance()->setGrants($_record, $_record->grants);
     }
+
+    /**
+     * inspect update of one record (after setReleatedData)
+     *
+     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
+     * @return  void
+     */
+    protected function _inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord)
+    {
+        $updatedRecord->grants = Tinebase_CustomField::getInstance()->getGrants($updatedRecord)->toArray();
+        if ($currentRecord->grants instanceof Tinebase_Record_RecordSet) {
+            $currentRecord->grants = $currentRecord->grants->toArray();
+        }
+    }
 }
