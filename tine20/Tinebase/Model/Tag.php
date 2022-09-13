@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Tags
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -71,6 +71,7 @@ class Tinebase_Model_Tag extends Tinebase_Record_Abstract
         'createModule'      => false,
         'exposeHttpApi'     => false,
         'exposeJsonApi'     => false,
+        self::TITLE_PROPERTY => 'name',
 
         'appName'           => 'Tinebase',
         'modelName'         => 'Tag',

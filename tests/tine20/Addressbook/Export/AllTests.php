@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -21,6 +21,7 @@ class Addressbook_Export_AllTests
         $suite->addTestSuite(Addressbook_Export_CsvTest::class);
         $suite->addTestSuite(Addressbook_Export_DocTest::class);
         $suite->addTestSuite(Addressbook_Export_VCardTest::class);
+        $suite->addTestSuite(Addressbook_Export_XlsTest::class);
         return $suite;
     }
 }
