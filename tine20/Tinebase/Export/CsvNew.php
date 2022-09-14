@@ -102,7 +102,7 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
 
         if (is_resource($_fileHandle)) {
             $this->_filehandle = $_fileHandle;
-        } elseif (!($this->_filehandle = fopen('php://memory', 'w'))) {
+        } elseif (!($this->_filehandle = fopen('php://memory', 'w+'))) {
             throw new Tinebase_Exception_Backend('could not create export memory stream');
         }
 
@@ -206,6 +206,18 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
             throw new Tinebase_Exception_Backend('could not copy csv stream to stdout');
         }
         fclose($this->_filehandle);
+    }
+
+    public function save(string $target): void
+    {
+        if (!($fh = fopen($target, 'w'))) {
+            throw new Tinebase_Exception_Backend('could not open target ' . $target);
+        }
+        try {
+            $this->write($fh);
+        } finally {
+            fclose($fh);
+        }
     }
 
     public function csvInjectionEscaping($_value)
