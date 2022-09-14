@@ -430,7 +430,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     protected function _generateUserWithSchema2($_account)
     {
         $result = $_account->accountLastName;
-        for ($i=0, $iMax = strlen($_account->accountFirstName); $i < $iMax; $i++) {
+        for ($i=0, $iMax = strlen((string)$_account->accountFirstName); $i < $iMax; $i++) {
         
             $userName = strtolower(substr(Tinebase_Helper::replaceSpecialChars($_account->accountFirstName), 0, $i+1) . Tinebase_Helper::replaceSpecialChars($_account->accountLastName));
             if (! $this->nameExists('accountLoginName', $userName)) {
@@ -451,7 +451,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     protected function _generateUserWithSchema3($_account)
     {
         $result = $_account->accountLastName;
-        for ($i=0, $iMax = strlen($_account->accountFirstName); $i < $iMax; $i++) {
+        for ($i=0, $iMax = strlen((string)$_account->accountFirstName); $i < $iMax; $i++) {
         
             $userName = strtolower(substr(Tinebase_Helper::replaceSpecialChars($_account->accountFirstName), 0, $i+1) . '.' . Tinebase_Helper::replaceSpecialChars($_account->accountLastName));
             if (! $this->nameExists('accountLoginName', $userName)) {

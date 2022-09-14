@@ -400,7 +400,7 @@ class Tinebase_Tags
         if ( ($_tag->type == Tinebase_Model_Tag::TYPE_PERSONAL && $_tag->owner == $currentAccountId) ||
         ($_tag->type == Tinebase_Model_Tag::TYPE_SHARED && $manageSharedTagsRight) ) {
 
-            $tagId = $_tag->getId();
+            $tagId = (string)$_tag->getId();
             if (strlen($tagId) != 40) {
                 throw new Tinebase_Exception_AccessDenied('Could not update non-existing tag.');
             }

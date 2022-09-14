@@ -43,7 +43,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->assertIsArray($document[Sales_Model_Document_Abstract::FLD_BOILERPLATES]);
         $this->assertCount(1, $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES]);
         $this->assertNotSame($boilerplate->getId(), $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0]['id']);
-        $this->assertSame('0', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Document_Abstract::FLD_LOCALLY_CHANGED]);
+        $this->assertEquals('0', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Document_Abstract::FLD_LOCALLY_CHANGED]);
         $this->assertSame($boilerplate->{Sales_Model_Boilerplate::FLD_BOILERPLATE},
             $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Boilerplate::FLD_BOILERPLATE]);
 
@@ -52,19 +52,19 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $document = $this->_instance->getDocument_Offer($document['id']);
 
         $this->assertNotSame($boilerplate->getId(), $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0]['id']);
-        $this->assertSame('0', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Document_Abstract::FLD_LOCALLY_CHANGED]);
+        $this->assertEquals('0', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Document_Abstract::FLD_LOCALLY_CHANGED]);
         $this->assertSame($boilerplate->{Sales_Model_Boilerplate::FLD_BOILERPLATE},
             $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Boilerplate::FLD_BOILERPLATE]);
 
         $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Boilerplate::FLD_BOILERPLATE] =
             'local stuff';
         $document = $this->_instance->saveDocument_Offer($document);
-        $this->assertSame('1', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Document_Abstract::FLD_LOCALLY_CHANGED]);
+        $this->assertEquals('1', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Document_Abstract::FLD_LOCALLY_CHANGED]);
 
         $boilerplate->{Sales_Model_Boilerplate::FLD_BOILERPLATE} = 'not cascading';
         $boilerplate = Sales_Controller_Boilerplate::getInstance()->update($boilerplate);
         $document = $this->_instance->getDocument_Offer($document['id']);
-        $this->assertSame('1', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Document_Abstract::FLD_LOCALLY_CHANGED]);
+        $this->assertEquals('1', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Document_Abstract::FLD_LOCALLY_CHANGED]);
         $this->assertNotSame($boilerplate->{Sales_Model_Boilerplate::FLD_BOILERPLATE},
             $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Boilerplate::FLD_BOILERPLATE]);
         $this->assertSame('local stuff', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Boilerplate::FLD_BOILERPLATE]);
@@ -72,7 +72,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0] =
             $boilerplate = Sales_BoilerplateControllerTest::getBoilerplate()->toArray(false);
         $document = $this->_instance->saveDocument_Offer($document);
-        $this->assertSame('1', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Document_Abstract::FLD_LOCALLY_CHANGED]);
+        $this->assertEquals('1', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Document_Abstract::FLD_LOCALLY_CHANGED]);
         $this->assertSame($boilerplate[Sales_Model_Boilerplate::FLD_BOILERPLATE],
             $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Boilerplate::FLD_BOILERPLATE]);
     }

@@ -60,7 +60,7 @@ class Felamimail_Message extends Zend_Mail_Message
      */
     public static function convertText($_string, $_isHeader = TRUE, $_ellipsis = 0)
     {
-        $string = $_string;
+        $string = (string)$_string;
         if (preg_match('/=?[\d,\w,-]*?[q,Q,b,B]?.*?=/', $string)) {
             $string = preg_replace_callback('/(=[1-9,a-f]{2})/', function ($matches) { 
                 return strtoupper($matches[1]);

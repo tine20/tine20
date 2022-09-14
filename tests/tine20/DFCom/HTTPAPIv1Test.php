@@ -101,8 +101,8 @@ class DFCom_HTTPAPIv1Test extends TestCase
 
         $this->assertNotNull($device->lastSeen);
         $this->assertSame('EVO-Line 4.3', $device->deviceString, 'deviceString');
-        $this->assertSame('1111', $device->serialNumber, 'serialNumber');
-        $this->assertSame('0', $device->digitalStatus, 'digitalStatus');
+        $this->assertEquals('1111', $device->serialNumber, 'serialNumber');
+        $this->assertEquals('0', $device->digitalStatus, 'digitalStatus');
 
         // default lists
         $this->assertTrue(!!preg_match('/df_setup_list=(.*),(.*' . $authKey . ')/', $body, $matches), 'df_setup_list missing');

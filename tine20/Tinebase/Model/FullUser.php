@@ -468,7 +468,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
      */
     public function shortenUsername(int $reserveRight = 0)
     {
-        $username = $this->accountLoginName;
+        $username = (string)$this->accountLoginName;
         $maxLoginNameLength = Tinebase_Config::getInstance()->get(Tinebase_Config::MAX_USERNAME_LENGTH);
         if (!empty($maxLoginNameLength) && strlen($username) > $maxLoginNameLength - $reserveRight) {
             $username = substr($username, 0, $maxLoginNameLength - $reserveRight);

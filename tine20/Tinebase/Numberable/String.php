@@ -100,7 +100,7 @@ class Tinebase_Numberable_String extends Tinebase_Numberable
      */
     protected function _cutStringConvertToInt($value)
     {
-        $_value = $value;
+        $_value = (string)$value;
         if (($len = strlen($this->_prefix)) > 0)
         {
             if (strpos($_value, $this->_prefix) !== 0) {

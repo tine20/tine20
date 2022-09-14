@@ -52,7 +52,7 @@ class Tinebase_Exception extends Exception
      * @param int $code
      * @param Throwable $previous
      */
-    public function __construct($message = null, $code = null, $previous = null)
+    public function __construct($message = null, $code = 0, $previous = null)
     {
         if (! $this->_appName) {
             $c = explode('_', get_class($this));

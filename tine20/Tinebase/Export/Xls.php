@@ -385,7 +385,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             }
             /** @var Cell $cell */
             foreach($cellIter as $cell) {
-                if (false !== strpos($cell->getValue(), $_search)) {
+                if (false !== strpos((string)$cell->getValue(), $_search)) {
                     return $cell;
                 }
             }
@@ -432,7 +432,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             }
             /** @var Cell $cell */
             foreach($cellIter as $cell) {
-                if (false !== strpos($cell->getValue(), '${twig:') &&
+                if (false !== strpos((string)$cell->getValue(), '${twig:') &&
                         preg_match_all('/(\${twig:(.+?[^%=])})/s', $cell->getValue(), $matches, PREG_SET_ORDER)) {
                     foreach($matches as $match) {
                         $this->_twigMapping[$i] = $match[1];
@@ -448,7 +448,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
         foreach($this->_spreadsheet->getActiveSheet()->getDrawingCollection() as $drawing) {
             $desc = $drawing->getDescription();
-            if (false !== strpos($desc, '${twig:') &&
+            if (false !== strpos((string)$desc, '${twig:') &&
                 preg_match_all('/(\${twig:(.+?[^%=])})/s', $desc, $matches, PREG_SET_ORDER)
             ) {
                 foreach ($matches as $match) {

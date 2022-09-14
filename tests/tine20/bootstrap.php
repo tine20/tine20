@@ -9,7 +9,7 @@ define('PATH_TO_TINE_LIBRARY', dirname(__FILE__). '/../../tine20/library');
 define('PATH_TO_TEST_DIR', dirname(__FILE__));
 
 // phpunit wants to handle the errors / report all errors + restore the default error handler
-error_reporting(E_ALL);
+error_reporting(E_ALL | E_DEPRECATED);
 restore_error_handler();
 
 // disable sending cookies

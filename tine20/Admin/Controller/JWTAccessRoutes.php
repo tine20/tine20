@@ -73,10 +73,20 @@ class Admin_Controller_JWTAccessRoutes extends Tinebase_Controller_Record_Abstra
         foreach (static::getInstance()->search($filter) as $jwtRoutes) {
             if (in_array($route, $jwtRoutes->{Admin_Model_JWTAccessRoutes::FLD_ROUTES})) {
 
+                $tks = \explode('.', $token);
+                if (\count($tks) !== 3) {
+                    throw new UnexpectedValueException('Wrong number of segments');
+                }
+                $headerRaw = JWT::urlsafeB64Decode($tks[0]);
+                if (null === ($header = JWT::jsonDecode($headerRaw))) {
+                    throw new UnexpectedValueException('Invalid header encoding');
+                }
+                if (empty($header->alg)) {
+                    throw new UnexpectedValueException('Empty algorithm');
+                }
                 // just check the JWT is valid, then set user and be done
                 try {
-                    JWT::decode($token, $jwtRoutes->{Admin_Model_JWTAccessRoutes::FLD_KEY},
-                        array_keys(JWT::$supported_algs));
+                    JWT::decode($token, new \Firebase\JWT\Key($jwtRoutes->{Admin_Model_JWTAccessRoutes::FLD_KEY}, $header->alg));
                 } catch (SignatureInvalidException $e) {
                     // only if we could not apply this key to check the signature it makes sense to try the next one
                     // all other exceptions are not recoverable

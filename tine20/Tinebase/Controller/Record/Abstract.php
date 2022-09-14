@@ -2882,7 +2882,7 @@ abstract class Tinebase_Controller_Record_Abstract
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating a dependent record on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
         }
 
-        if (strlen($_record->{$_property}->getId()) < 40) {
+        if (strlen((string)$_record->{$_property}->getId()) < 40) {
             $_record->{$_property}->setId(Tinebase_Record_Abstract::generateUID());
         }
         $_record->{$_property}->{$_fieldConfig[TMCC::REF_ID_FIELD]} = $_createdRecord->getId();
@@ -3031,7 +3031,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 $rec = new $recordClassName(array(),true);
                 $rec->setFromJsonInUsersTimezone($recordArray);
 
-                if (strlen($rec->getId()) < 40) {
+                if (strlen((string)$rec->getId()) < 40) {
                     $rec->{$rec->getIdProperty()} = Tinebase_Record_Abstract::generateUID();
                 }
 
@@ -3040,7 +3040,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $_record->{$_property} = $rs;
         } else {
             foreach ($_record->{$_property} as $rec) {
-                if (strlen($rec->getId()) < 40) {
+                if (strlen((string)$rec->getId()) < 40) {
                     $rec->{$rec->getIdProperty()} = Tinebase_Record_Abstract::generateUID();
                 }
             }
@@ -3058,7 +3058,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         foreach ($_record->{$_property} as $record) {
             $record->{$_fieldConfig['refIdField']} = $_createdRecord->getId();
-            if (! $record->getId() || strlen($record->getId()) != 40) {
+            if (! $record->getId() || strlen((string)$record->getId()) != 40) {
                 $record->{$record->getIdProperty()} = NULL;
             }
             $new->addRecord($controller->create($record));

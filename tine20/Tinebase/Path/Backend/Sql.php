@@ -467,7 +467,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 foreach (static::$_modelStore as $id => $record) {
                     $parentResult->removeById($id);
                     foreach($values as $value) {
-                        if (mb_stripos($record->{$field}, $value) === 0 && strlen($record->{$field}) === strlen($value)) {
+                        if (mb_stripos((string)$record->{$field}, (string)$value) === 0 && strlen($record->{$field}) === strlen($value)) {
                             $parentResult->addRecord($record);
                             break;
                         }
@@ -480,7 +480,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 if ($field === 'path') {
                     foreach (static::$_modelStore as $id => $record) {
                         $parentResult->removeById($id);
-                        $fvalue = preg_replace('# +#u', ' ', trim(preg_replace('#[^\w\d ]|_#u', ' ', $record->{$field})));
+                        $fvalue = preg_replace('# +#u', ' ', trim(preg_replace('#[^\w\d ]|_#u', ' ', (string)$record->{$field})));
                         $success = true;
                         foreach($values as $value) {
                             if (mb_stripos($fvalue, $value) === false) {
@@ -499,7 +499,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                         foreach($values as $value) {
                             if (($pos = mb_stripos($record->{$field}, $value)) !== false) {
                                 if ('shadow_path' === $field) {
-                                    if ($pos + mb_strlen($value) === mb_strlen($record->{$field}) ||
+                                    if ($pos + mb_strlen($value) === mb_strlen((string)$record->{$field}) ||
                                             mb_stripos($record->{$field}, $value . '/') !== false ||
                                             mb_stripos($record->{$field}, $value . '{') !== false) {
                                         $parentResult->addRecord($record);

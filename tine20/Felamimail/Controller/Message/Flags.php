@@ -202,7 +202,7 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
     protected function _updateFlagsOnImap($_imapMessageUids, $_flags, $_imapBackend, $_mode)
     {
         $flagsToChange = array_filter($_flags, function($val, $key) {
-            return in_array($val, array_keys(self::$_allowedFlags)) || strlen($val) === 40;
+            return in_array($val, array_keys(self::$_allowedFlags)) || strlen((string)$val) === 40;
         }, ARRAY_FILTER_USE_BOTH); 
         
         if (empty($flagsToChange)) {

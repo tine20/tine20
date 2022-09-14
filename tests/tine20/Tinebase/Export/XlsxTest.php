@@ -441,7 +441,7 @@ class Tinebase_Export_XlsxTest extends TestCase
         ]));
         $token = JWT::encode([
             'iss' => 'unittest'
-        ], 'unittest');
+        ], 'unittest', 'HS256');
 
         $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
             'POST /Tinebase/export/' . $definitionId . ' HTTP/1.1' . "\r\n"
