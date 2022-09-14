@@ -419,8 +419,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      *
      * @return int
      */
-    #[\ReturnTypeWillChange]
-    public function count()
+    public function count(): int
     {
         return count($this->_listOfRecords);
     }
@@ -430,8 +429,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * 
      * @return iterator
      */
-    #[\ReturnTypeWillChange]
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->_listOfRecords);
     }
@@ -439,8 +437,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * required by ArrayAccess interface
      */
-    #[\ReturnTypeWillChange]
-    public function offsetExists($_offset)
+    public function offsetExists($_offset): bool
     {
         return isset($this->_listOfRecords[$_offset]);
     }
@@ -448,6 +445,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * required by ArrayAccess interface
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($_offset)
     {
         if (! is_int($_offset)) {
@@ -463,8 +461,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * required by ArrayAccess interface
      */
-    #[\ReturnTypeWillChange]
-    public function offsetSet($_offset, $_value)
+    public function offsetSet($_offset, $_value): void
     {
         if (! $_value instanceof $this->_recordClass) {
             throw new Tinebase_Exception_Record_NotAllowed('Attempt to add/set record of wrong record class. Should be ' . $this->_recordClass);
@@ -513,8 +510,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * required by ArrayAccess interface
      */
-    #[\ReturnTypeWillChange]
-    public function offsetUnset($_offset)
+    public function offsetUnset($_offset): void
     {
         $id = $this->_listOfRecords[$_offset]->getId();
         if ($id) {
