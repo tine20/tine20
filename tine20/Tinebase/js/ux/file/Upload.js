@@ -223,7 +223,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      * 
      * @return {Ext.Record} Ext.ux.file.Upload.file
      */
-    upload: function() {
+    upload: async function() {
         if ((
                 (! Ext.isGecko && window.XMLHttpRequest && window.File && window.FileList) || // safari, chrome, ...?
                 (Ext.isGecko && window.FileReader) // FF
@@ -231,6 +231,10 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      
             // free browse plugin
             this.getInput();
+    
+            if (typeof this.file.getFile === 'function') {
+                this.file = await this.file.getFile();
+            }
             
             if (this.isHtml5ChunkedUpload()) {
                 // calculate optimal maxChunkSize
