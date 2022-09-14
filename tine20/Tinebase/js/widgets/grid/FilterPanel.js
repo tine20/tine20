@@ -226,10 +226,18 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         }
         
         filterPanel.doLayout();
-        if (filterPanel.activeSheet) {
-         // solve layout problems (#6332)
-            filterPanel.setActiveSheet(filterPanel.activeSheet);
+
+        // solve layout problems (#6332)
+        let parentSheet = filterPanel;
+        let activeSheet = parentSheet.activeSheet;
+        while (activeSheet && activeSheet.activeSheet !== activeSheet) {
+            parentSheet = activeSheet;
+            activeSheet = activeSheet.activeSheet;
         }
+        if (activeSheet) {
+            parentSheet.setActiveSheet(activeSheet);
+        }
+        
         this.manageHeight.defer(100, this);
         
         this.fireEvent('filterpanelactivate', this, filterPanel);
