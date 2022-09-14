@@ -1154,26 +1154,25 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     }
     
     ###### iterator interface ###########
-    #[\ReturnTypeWillChange]
-    public function rewind() {
-        return reset($this->_filterObjects);
+    public function rewind(): void {
+        reset($this->_filterObjects);
     }
 
+    #[\ReturnTypeWillChange]
     public function current() {
         return current($this->_filterObjects);
     }
 
+    #[\ReturnTypeWillChange]
     public function key() {
         return key($this->_filterObjects);
     }
 
-    #[\ReturnTypeWillChange]
-    public function next() {
-        return next($this->_filterObjects);
+    public function next(): void {
+        next($this->_filterObjects);
     }
 
-    #[\ReturnTypeWillChange]
-    public function valid() {
+    public function valid(): bool {
         return $this->current() !== false;
     }
 }

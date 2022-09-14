@@ -41,7 +41,7 @@ class Tinebase_Session_SaveHandler_Redis extends SessionHandler implements Zend_
     /**
      * @inheritDoc
      */
-    public function open($save_path, $name)
+    public function open($save_path, $name): bool
     {
         return true;
     }
@@ -49,7 +49,7 @@ class Tinebase_Session_SaveHandler_Redis extends SessionHandler implements Zend_
     /**
      * @inheritDoc
      */
-    public function close()
+    public function close(): bool
     {
         return true;
     }
@@ -57,6 +57,7 @@ class Tinebase_Session_SaveHandler_Redis extends SessionHandler implements Zend_
     /**
      * @inheritDoc
      */
+    #[\ReturnTypeWillChange]
     public function read($id)
     {
         if (false !== ($data = $this->_redis->get($this->_prefix . $id))) {
@@ -71,7 +72,7 @@ class Tinebase_Session_SaveHandler_Redis extends SessionHandler implements Zend_
     /**
      * @inheritDoc
      */
-    public function write($id, $data)
+    public function write($id, $data): bool
     {
         return true === $this->_redis->setEx($this->_prefix . $id, $this->_lifeTimeSec, $data);
     }
@@ -79,7 +80,7 @@ class Tinebase_Session_SaveHandler_Redis extends SessionHandler implements Zend_
     /**
      * @inheritDoc
      */
-    public function destroy($id)
+    public function destroy($id): bool
     {
         return false !== $this->_redis->del($this->_prefix . $id);
     }
@@ -87,6 +88,7 @@ class Tinebase_Session_SaveHandler_Redis extends SessionHandler implements Zend_
     /**
      * @inheritDoc
      */
+    #[\ReturnTypeWillChange]
     public function gc($maxlifetime)
     {
         if ($this->_lifeTimeSec <= $maxlifetime) {
@@ -115,7 +117,7 @@ class Tinebase_Session_SaveHandler_Redis extends SessionHandler implements Zend_
      * Note this value is returned internally to PHP for processing.
      * </p>
      */
-    public function validateId($session_id)
+    public function validateId($session_id): bool
     {
         return 1 === (int)$this->_redis->exists($this->_prefix . $session_id);
     }
