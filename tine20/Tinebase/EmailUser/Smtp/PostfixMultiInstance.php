@@ -333,7 +333,7 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
                     
                     case 'emailAliases':
                     case 'emailForwards':
-                        $data[$keyMapping] = explode(',', $value);
+                        $data[$keyMapping] = explode(',', (string)$value);
                         // Get rid of TineEmail -> username mapping.
                         $tineEmailAlias = array_search($_rawdata[$this->_propertyMapping['emailUsername']], $data[$keyMapping]);
                         if ($tineEmailAlias !== false) {

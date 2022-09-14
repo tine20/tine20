@@ -52,7 +52,7 @@ class Tinebase_EmailUser_Smtp_LdapMailSchema extends Tinebase_EmailUser_Ldap imp
     {
         $smtpUser = parent::_ldap2User($_user, $_ldapEntry);
         $emailAliases = array();
-        $allowedDomains = explode(',', Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP)['secondarydomains']);
+        $allowedDomains = explode(',', (string)(Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP)['secondarydomains']));
         
         if (isset($_ldapEntry['mail'])) foreach ($_ldapEntry['mail'] as $mail) {
             if (isset($_user['accountEmailAddress']) && ($_user['accountEmailAddress'] != $mail)) {
