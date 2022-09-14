@@ -1826,8 +1826,19 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if ($filename === null) {
             if (method_exists($this, 'write')) {
                 ob_start();
-                $this->write();
-                $output = ob_get_clean();
+                $fh = null;
+                try {
+                    $this->write($fh = fopen('php://temp', 'w+'));
+                    $output = ob_get_clean();
+                    if (false === $output || 0 === strlen($output)) {
+                        rewind($fh);
+                        $output = stream_get_contents($fh);
+                    }
+                } finally {
+                    if ($fh) {
+                        fclose($fh);
+                    }
+                }
                 $filename = Tinebase_TempFile::getTempPath();
                 file_put_contents($filename, $output);
             } else {
