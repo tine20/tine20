@@ -1102,10 +1102,11 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         
         // now let's test the getFeastAndFreeTimes method with the same fixtures
-        
+        $accountController->createMissingAccounts(2013, $employee);
         $result = $this->_json->getFeastAndFreeDays($employee->getId(), "2013");
         $res = $result['results'];
-        $this->assertEquals(22, $res['remainingVacation']);
+        $this->assertEquals(0, $res['remainingVacation']); // no longer employed?!
+        $this->assertEquals(22, $res['vacation']['actual_remaining_vacation_days']);
         $this->assertEquals(104, count($res['excludeDates']));
         $this->assertEquals(11, count($res['feastDays']));
         $this->assertEquals(1, count($res['contracts']));
@@ -1135,7 +1136,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $result = $this->_json->getFeastAndFreeDays($employee->getId(), "2013");
         $res = $result['results'];
-        $this->assertEquals(19, $res['remainingVacation']);
+        $this->assertEquals(19, $res['vacation']['actual_remaining_vacation_days']);
         
         // overwrite last 2 days of previous vacation with sickness
         $day->subDay(1);
@@ -1159,7 +1160,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $result = $this->_json->getFeastAndFreeDays($employee->getId(), "2013");
         $res = $result['results'];
-        $this->assertEquals(21, $res['remainingVacation']);
+        $this->assertEquals(21, $res['vacation']['actual_remaining_vacation_days']);
     }
     
     /**
@@ -1350,7 +1351,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $result = $this->_json->getFeastAndFreeDays($recordData['id'], "2014");
 
             $res = $result['results'];
-            $this->assertEquals(2, $res['remainingVacation']);
+            $this->assertEquals(2, $res['vacation']['actual_remaining_vacation_days']);
             $this->assertEquals(8, count($res['excludeDates']));
             
             $this->assertEquals(1, count($res['feastDays']));
@@ -1681,7 +1682,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $res = $this->_json->getFeastAndFreeDays($recordData['id'], 2014);
         
-        $this->assertEquals(28, $res['results']['remainingVacation']);
+        $this->assertEquals(28, $res['results']['vacation']['actual_remaining_vacation_days']);
         
         // create vacation days
         $day = Tinebase_DateTime::now()->setDate(2014, 1, 2)->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
@@ -1807,7 +1808,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $res = $this->_json->getFeastAndFreeDays($recordData['id'], 2014);
         
-        $this->assertEquals(17, $res['results']['remainingVacation']);
+        $this->assertEquals(17, $res['results']['vacation']['actual_remaining_vacation_days']);
         
         $account = $this->_json->getAccount($account['id']);
         

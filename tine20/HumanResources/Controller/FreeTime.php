@@ -115,12 +115,13 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
     public function getRemainingVacationDays($employeeId, DateTime $actualUntil = null, DateTime $expiryReferenceDate = null)
     {
         $accountController = HumanResources_Controller_Account::getInstance();
-        $currentAccount = $accountController->getByEmployeeYear($employeeId, ($actualUntil ?: Tinebase_DateTime::now())->format('Y'));
+        $currentAccountYear = ($actualUntil ?: Tinebase_DateTime::now())->format('Y');
+        $currentAccount = $accountController->getByEmployeeYear($employeeId, $currentAccountYear);
         $actualUntil = $actualUntil ?: Tinebase_DateTime::now()->addYear(100);
         $expiryReferenceDate = $expiryReferenceDate ?: Tinebase_DateTime::now();
-        $currentVacations = $accountController->resolveVacation($currentAccount, $actualUntil);
+        $currentVacations = $currentAccount ? $accountController->resolveVacation($currentAccount, $actualUntil) : ['actual_remaining_vacation_days' => 0];
         $remainingPreviousVacationDays = 0;
-        $previousAccount = $accountController->getByEmployeeYear($employeeId, $currentAccount->year-1);
+        $previousAccount = $accountController->getByEmployeeYear($employeeId, --$currentAccountYear);
         
         if ($previousAccount) {
             $previousVacations = $accountController->resolveVacation($previousAccount, $actualUntil);
