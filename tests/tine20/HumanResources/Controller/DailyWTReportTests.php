@@ -157,7 +157,7 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
 
         $notes = Tinebase_Notes::getInstance()->getNotesOfRecord(get_class($report), $report->getId(), 'Sql', false);
         // only one created note
-        $this->assertCount(1, $notes);
+        $this->assertCount(2, $notes);
 
         $ts = clone $this->_ts->filter('description', 'Gießen der Pflanzen')->getFirstRecord();
         unset($ts->id);
@@ -181,8 +181,8 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
 
         $notes = Tinebase_Notes::getInstance()->getNotesOfRecord(get_class($report), $report->getId(), 'Sql', false);
         // update notes too now, one working time correction, one recalc
-        $this->assertCount(3, $notes);
-        $note = $notes->find('seq', 3);
+        $this->assertCount(5, $notes);
+        $note = $notes->find('seq', 5);
         $this->assertNotNull($note, 'recalc note not found');
         $added = Tinebase_Translation::getTranslation(Tinebase_Config::APP_NAME, Tinebase_Core::getLocale())->_('added');
         $wt = Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME, Tinebase_Core::getLocale())

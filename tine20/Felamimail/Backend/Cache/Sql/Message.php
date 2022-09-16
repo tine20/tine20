@@ -387,7 +387,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      */
     public function setMessageTags(Felamimail_Model_MessageFilter $filter, $_flags, $_mode)
     {
-        $tagIds = array_filter($_flags, function ($flag) { return strlen($flag)=== 40;});
+        $tagIds = array_filter($_flags, function ($flag) { return strlen((string)$flag)=== 40;});
         $tags = sizeof($tagIds) > 0 ? Tinebase_Tags::getInstance()->getTagsById($tagIds) : [];
         
         if ($_mode === 'clear') {

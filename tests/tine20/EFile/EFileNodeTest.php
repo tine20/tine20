@@ -271,7 +271,7 @@ class EFile_EFileNodeTest extends TestCase
         $savedNode = $fmFE->saveNode($node);
         static::assertArrayHasKey(EFile_Config::TREE_NODE_FLD_FILE_METADATA, $savedNode);
         static::assertArrayHasKey(EFile_Model_FileMetadata::FLD_IS_HYBRID, $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA]);
-        static::assertSame('0', $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA][EFile_Model_FileMetadata::FLD_IS_HYBRID]);
+        static::assertEquals('0', $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA][EFile_Model_FileMetadata::FLD_IS_HYBRID]);
         if (null === ($contact = Addressbook_Config::getInstallationRepresentative())) {
             $str = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST) ?: 'tine20';
         } else {
@@ -288,7 +288,7 @@ class EFile_EFileNodeTest extends TestCase
         static::assertArrayHasKey('id', $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA][EFile_Model_FileMetadata::FLD_FINAL_DECREE_BY]);
         static::assertSame($this->_personas['sclever']->contact_id, $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA][EFile_Model_FileMetadata::FLD_FINAL_DECREE_BY]['id']);
         static::assertArrayHasKey(EFile_Model_FileMetadata::FLD_IS_HYBRID, $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA]);
-        static::assertSame('0', $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA][EFile_Model_FileMetadata::FLD_IS_HYBRID]);
+        static::assertEquals('0', $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA][EFile_Model_FileMetadata::FLD_IS_HYBRID]);
         static::assertSame($str, $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA][EFile_Model_FileMetadata::FLD_COMMISSIONED_OFFICE]);
         static::assertArrayHasKey(EFile_Model_FileMetadata::FLD_FINAL_DECREE_BY, $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA]);
     }

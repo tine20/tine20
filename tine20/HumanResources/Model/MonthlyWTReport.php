@@ -36,6 +36,7 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
     const FLDS_DAILY_WT_REPORTS                 = 'dailywtreports';
     const FLDS_IS_CLEARED                       = 'is_cleared';
     const FLDS_LAST_CALCULATION                 = 'last_calc';
+    const FLDS_SYSTEM_REMARK                    = 'system_remark';
     const FLDS_WORKING_TIME_ACTUAL              = 'working_time_actual';
     const FLDS_WORKING_TIME_TARGET              = 'working_time_target';
     const FLDS_WORKING_TIME_CORRECTION          = 'working_time_correction';
@@ -55,7 +56,7 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 2,
+        self::VERSION                   => 3,
         self::RECORD_NAME               => 'Monthly Working Time Report', // gettext('GENDER_Monthly Working Time Report')
         self::RECORDS_NAME              => 'Monthly Working Time Reports', // ngettext('Monthly Working Time Report', 'Monthly Working Time Reports', n)
         self::TITLE_PROPERTY            => self::FLDS_MONTH,
@@ -240,6 +241,16 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
                 ],
                 self::DEFAULT_VAL                   => 0,
                 self::COPY_OMIT                     => true,
+            ],
+            self::FLDS_SYSTEM_REMARK            => [
+                self::LABEL                         => 'System Remark', // _('System Remark')
+                self::TYPE                          => 'text',
+                self::VALIDATORS                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::NULLABLE                      => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+                self::QUERY_FILTER                  => true,
             ],
             // data-transport for exports
             HumanResources_Model_DailyWTReport::FLDS_WORKING_TIMES => [

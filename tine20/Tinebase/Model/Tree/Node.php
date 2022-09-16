@@ -618,11 +618,11 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             return true;
         }
         if ($this->type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
-            if (strlen($this->name) === 3 &&
+            if (strlen((string)$this->name) === 3 &&
                     Tinebase_FileSystem_Previews::getInstance()->getBasePathNode()->getId() === $this->parent_id) {
                 return false;
             }
-            if (strlen($this->name) === 37 && null !== $this->parent_id &&
+            if (strlen((string)$this->name) === 37 && null !== $this->parent_id &&
                     Tinebase_FileSystem_Previews::getInstance()->getBasePathNode()->getId() ===
                     Tinebase_FileSystem::getInstance()->get($this->parent_id)->parent_id) {
                 return false;

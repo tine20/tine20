@@ -127,7 +127,7 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
         }
 
         $now = new Tinebase_DateTime('now', $tz);
-        if (strlen($_period) > 1) {
+        if (strlen((string)$_period) > 1) {
             if (strpos($_period, '-') !== false) {
                 $_period = str_replace('-', '', $_period);
                 $now->sub(new DateInterval($_period));

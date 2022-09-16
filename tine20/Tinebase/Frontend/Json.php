@@ -310,7 +310,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $inTag = new Tinebase_Model_Tag($tag);
         
-        if (strlen($inTag->getId()) < 40) {
+        if (strlen((string)$inTag->getId()) < 40) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' creating tag: ' . print_r($inTag->toArray(), true));
             $outTag = Tinebase_Tags::getInstance()->createTag($inTag);
         } else {

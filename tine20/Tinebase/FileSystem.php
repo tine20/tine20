@@ -706,8 +706,9 @@ class Tinebase_FileSystem implements
         return true;
     }
 
-    public function getRealPathForHash($_hash)
+    public function getRealPathForHash(?string $_hash): ?string
     {
+        if (!$_hash) return $_hash;
         return $this->_basePath . '/' . substr($_hash, 0, 3) . '/' . substr($_hash, 3);
     }
 
@@ -2449,7 +2450,7 @@ class Tinebase_FileSystem implements
         $pathParts = is_array($path) ? $path : $this->_splitPath($path);
         array_unshift($pathParts, '@' . $revision);
 
-        return sha1(implode(null, $pathParts));
+        return sha1(implode('', $pathParts));
     }
     
     /**

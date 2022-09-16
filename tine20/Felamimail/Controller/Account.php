@@ -1498,7 +1498,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
 
         // update delimiter
-        $delimiter = (! empty($_capabilities['namespace']['personal']))
+        $delimiter = (string)(! empty($_capabilities['namespace']['personal']))
             ? $_capabilities['namespace']['personal']['delimiter'] : '/';
 
         // care for multiple backslashes (for example from Domino IMAP server)

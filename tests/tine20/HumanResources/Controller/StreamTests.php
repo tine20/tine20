@@ -205,7 +205,7 @@ class HumanResources_Controller_StreamTests extends HumanResources_TestCase
         $ts2Duration = $ts2->duration;
         $should = $streamModality->{HumanResources_Model_StreamModality::FLD_HOURS_INTERVAL};
 
-        static::assertSame('0', $reports->getFirstRecord()->{HumanResources_Model_StreamModalReport::FLD_OVERFLOW_IN});
+        static::assertEquals('0', $reports->getFirstRecord()->{HumanResources_Model_StreamModalReport::FLD_OVERFLOW_IN});
         static::assertEquals($ts1Duration, $reports->getFirstRecord()->{HumanResources_Model_StreamModalReport::FLD_IS});
         static::assertEquals($ts1Duration - $should, $reports->getFirstRecord()->{HumanResources_Model_StreamModalReport::FLD_OVERFLOW_OUT});
 

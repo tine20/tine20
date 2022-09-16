@@ -199,7 +199,7 @@ class Tinebase_Twig
             }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('addNewLine',
             function ($str) {
-                return (is_scalar($str) && strlen($str) > 0) ? $str . "\n" : $str;
+                return (is_scalar($str) && strlen((string)$str) > 0) ? $str . "\n" : $str;
             }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('dateFormat', function ($date, $format) {
             if (!($date instanceof DateTime)) {

@@ -275,7 +275,7 @@ class VCardProperty
 function split_quoted_string($d, $s, $n = 0)
 {
     $quote = false;
-    $len = strlen($s);
+    $len = strlen((string)$s);
     for ($i = 0; $i < $len && ($n == 0 || $n > 1); $i++) {
         $c = $s[$i];
         if ($c == '"') {

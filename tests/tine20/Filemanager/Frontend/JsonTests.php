@@ -547,7 +547,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             'SELECT acl_node FROM ' . SQL_TABLE_PREFIX . 'tree_nodes WHERE id = "' . $toBeDeleted['id'] . '"')
             ->fetchColumn(), $node['id'], 'deleted node has not been updated');
 
-        static::assertSame(Tinebase_Core::getDb()->query(
+        static::assertEquals(Tinebase_Core::getDb()->query(
             'SELECT is_deleted FROM ' . SQL_TABLE_PREFIX . 'tree_nodes WHERE id = "' . $toBeDeleted['id'] . '"')
             ->fetchColumn(), '1', 'deleted node has not been deleted');
     }

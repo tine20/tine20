@@ -202,7 +202,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                         case 'png' : {}
                         case 'JPEG' : {
                             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Photo: passing on invalid ' . $property['TYPE'] . ' image as is (' . strlen($property->getValue()) .')' );
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Photo: passing on invalid ' . $property['TYPE'] . ' image as is (' . strlen((string)$property->getValue()) .')' );
                             $jpegphoto = $property->getValue();
                             break;
                         }

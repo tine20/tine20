@@ -551,6 +551,7 @@ class Tinebase_Mail extends Zend_Mail
      */
     protected static function _appendCharsetFilter(Zend_Mime_Part $_part, $charset)
     {
+        $charset = strtolower((string)$charset);
         if ('utf8' === $charset) {
             $charset = 'utf-8';
         } elseif ('us-ascii' === $charset) {

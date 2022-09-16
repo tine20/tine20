@@ -240,9 +240,9 @@ class EFile_Controller extends Tinebase_Controller_Event
     public static function nameChildByParent($_parent, $_child, $_recursive = false, $_updateChild = false)
     {
         // strip token from node name
-        if (strlen($_child->{EFile_Config::TREE_NODE_FLD_TIER_TOKEN}) > 0 && strpos($_child->name,
+        if (strlen((string)$_child->{EFile_Config::TREE_NODE_FLD_TIER_TOKEN}) > 0 && strpos($_child->name,
                 $_child->{EFile_Config::TREE_NODE_FLD_TIER_TOKEN} . self::TIER_TOKEN_SEPERATOR) === 0) {
-            $_child->name = substr($_child->name, strlen($_child->{EFile_Config::TREE_NODE_FLD_TIER_TOKEN}) +
+            $_child->name = substr($_child->name, strlen((string)$_child->{EFile_Config::TREE_NODE_FLD_TIER_TOKEN}) +
                 strlen(self::TIER_TOKEN_SEPERATOR));
         }
 
@@ -452,7 +452,7 @@ class EFile_Controller extends Tinebase_Controller_Event
             static::nameChildByParent($parent, $_record);
         }
 
-        $namePart = substr($_record->name, strlen($_record->{EFile_Config::TREE_NODE_FLD_TIER_TOKEN}) +
+        $namePart = substr($_record->name, strlen((string)$_record->{EFile_Config::TREE_NODE_FLD_TIER_TOKEN}) +
             strlen(self::TIER_TOKEN_SEPERATOR));
         foreach (EFile_Config::getInstance()->{EFile_Config::NODE_NAME_DENIED_SUBSTRINGS} as $denySubstr) {
             if (strpos($namePart, $denySubstr) !== false) {

@@ -70,6 +70,8 @@ class Hash_Password_MD5
      */
     public function validate($hash, $password)
     {
+        $hash = (string)$hash;
+        $password = (string)$password;
         $hash = (($pos = strpos($hash, '}')) !== false) ? substr($hash, $pos + 1) : $hash;
         
         switch (strlen($hash)) {

@@ -108,7 +108,7 @@ class Tinebase_Controller_MunicipalityKey extends Tinebase_Controller_Record_Abs
             $pattern = ['000','0000','00','0'];
             
             foreach ($pattern as $part) {
-                if (substr($key, -strlen($part)) == $part) {
+                if (substr($key, 0 - strlen($part)) == $part) {
                     $key = substr($key, 0, strlen($key) - strlen($part));
                     $result = $this->_searchMunicipalityKey($key);
                     if ($result) {

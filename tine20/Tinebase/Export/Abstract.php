@@ -1758,7 +1758,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
                 $fileName = $this->getDownloadFilename();
                 $pInfo = pathinfo($fileName);
-                if (strlen($this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME}) > 0) {
+                if (strlen((string)$this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME}) > 0) {
                     $pInfoFL = pathinfo($this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME});
                     $fileName = $pInfoFL['filename'] . '.' . $pInfo['extension'];
                     $pInfo['filename'] = $pInfoFL['filename'];
@@ -1776,7 +1776,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             case Tinebase_Model_Tree_FileLocation::TYPE_ATTACHMENT:
                 $fileName = $this->getDownloadFilename();
                 $pInfo = pathinfo($fileName);
-                if (strlen($this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME}) > 0) {
+                if (strlen((string)$this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME}) > 0) {
                     $pInfo = pathinfo($fileName);
                     $pInfoFL = pathinfo($this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME});
                     $fileName = $pInfoFL['filename'] . '.' . $pInfo['extension'];

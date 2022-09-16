@@ -710,8 +710,19 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 
         $key = $conf->get(OnlyOfficeIntegrator_Config::JWT_SECRET);
         try {
+            $tks = \explode('.', $token[1]);
+            if (\count($tks) !== 3) {
+                throw new UnexpectedValueException('Wrong number of segments');
+            }
+            $headerRaw = JWT::urlsafeB64Decode($tks[0]);
+            if (null === ($header = JWT::jsonDecode($headerRaw))) {
+                throw new UnexpectedValueException('Invalid header encoding');
+            }
+            if (empty($header->alg)) {
+                throw new UnexpectedValueException('Empty algorithm');
+            }
             JWT::$leeway = 10;
-            $decoded = json_decode(json_encode(JWT::decode($token[1], $key, array('HS256'))), true);
+            $decoded = json_decode(json_encode(JWT::decode($token[1], new Firebase\JWT\Key($key, $header->alg))), true);
         } catch (Exception $e) {
             throw new Tinebase_Exception_AccessDenied('auth token not valid: ' . $e->getMessage());
         }

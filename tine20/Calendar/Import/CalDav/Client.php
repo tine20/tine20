@@ -614,7 +614,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
     protected function _getEventIdFromName($name)
     {
         $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
-        if (strlen($id) > 40) {
+        if (strlen((string)$id) > 40) {
             $id = sha1($id);
         }
         return $id;

@@ -139,7 +139,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         
         $event->container_id = $container->getId();
         $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
-        if (strlen($id) > 40) {
+        if (strlen((string)$id) > 40) {
             $id = sha1($id);
         }
         $event->setId($id);
@@ -500,7 +500,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      */
     public function getSize() 
     {
-        return strlen($this->_getVEvent());
+        return strlen((string)$this->_getVEvent());
     }
     
     /**
