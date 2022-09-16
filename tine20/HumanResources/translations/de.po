@@ -1252,6 +1252,15 @@ msgstr "Neuberechnung"
 msgid "Legend"
 msgstr "Legende"
 
+msgid "Remaining vacation"
+msgstr "Resturlaub"
+
+msgid "Present remaining vacation based on accepted scheduled vacations days including non expired vacations of previous periods"
+msgstr "Derzeitiger Resturlaub incl. Resturlaubstage aus Vorperioden basierend auf den akzeptiert geplanten Urlaubstagen"
+
+msgid "{remainingVacation} days"
+msgstr "{remainingVacation} Tage"
+
 #: js/AttendanceRecorder.js:78
 msgid "Clock in"
 msgstr "Einstempeln"
