@@ -181,9 +181,16 @@ class HumanResources_Controller_WorkingTimeScheme extends Tinebase_Controller_Re
      */
     public function getWorkingTimeAccount(?HumanResources_Model_Employee $employee)
     {
-        $timeaccountId = HumanResources_Config::getInstance()->get(HumanResources_Config::WORKING_TIME_TIMEACCOUNT);
         $tac = Timetracker_Controller_Timeaccount::getInstance();
-        $aclUsage = $tac->assertPublicUsage();
+        $dc = HumanResources_Controller_Division::getInstance();
+
+        $assertACLUsageCallbacks = [
+            $tac->assertPublicUsage(),
+            $dc->assertPublicUsage(),
+        ];
+        $division = $employee && $employee->division_id ? $dc->get($employee->division_id) : null;
+        $timeaccountId = ($division ? $division->{HumanResources_Model_Division::FLD_WORKING_TIME_TIMEACCOUNT_ID} : null) ?:
+            HumanResources_Config::getInstance()->get(HumanResources_Config::WORKING_TIME_TIMEACCOUNT);
 
         try {
             if ($timeaccountId) {
@@ -210,7 +217,9 @@ class HumanResources_Controller_WorkingTimeScheme extends Tinebase_Controller_Re
 
             }
         } finally {
-            $aclUsage();
+            foreach(array_reverse($assertACLUsageCallbacks) as $assertACLUsageCallback) {
+                $assertACLUsageCallback();
+            }
         }
 
         return $timeaccount;

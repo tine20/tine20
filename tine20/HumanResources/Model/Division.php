@@ -19,6 +19,8 @@ class HumanResources_Model_Division extends Tinebase_Record_NewAbstract
     public const TABLE_NAME         = 'humanresources_division';
 
     public const FLD_TITLE          = 'title';
+    public const FLD_WORKING_TIME_TIMEACCOUNT_ID = 'wt_ta_id';
+
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -42,6 +44,9 @@ class HumanResources_Model_Division extends Tinebase_Record_NewAbstract
         self::EXTENDS_CONTAINER         => self::FLD_CONTAINER_ID,
         self::GRANTS_MODEL              => HumanResources_Model_DivisionGrants::class,
         self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_WORKING_TIME_TIMEACCOUNT_ID          => [],
+            ],
             Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
                 Tinebase_Record_Expander::PROPERTY_CLASS_GRANTS         => [],
                 Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
@@ -61,6 +66,18 @@ class HumanResources_Model_Division extends Tinebase_Record_NewAbstract
                 self::LABEL                     => 'Title', // _('Title')
                 self::TYPE                      => self::TYPE_STRING,
                 self::QUERY_FILTER              => true,
+            ],
+            self::FLD_WORKING_TIME_TIMEACCOUNT_ID => [
+                self::LABEL                         => 'Timetracker time account for working time tracking of this division', // _('Timetracker time account for working time tracking of this division')
+                self::TYPE                          => self::TYPE_RECORD,
+                self::NULLABLE                      => true,
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY          => true,
+                ],
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Timetracker_Config::APP_NAME,
+                    self::MODEL_NAME                    => Timetracker_Model_Timeaccount::MODEL_NAME_PART,
+                ],
             ],
         ],
     ];
