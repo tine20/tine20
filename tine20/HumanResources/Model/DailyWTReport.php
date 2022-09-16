@@ -73,7 +73,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        'version' => 4,
+        'version' => 5,
         'recordName' => 'Daily Working Time Report', // gettext('GENDER_Daily Working Time Report')
         'recordsName' => 'Daily Working Time Reports', // ngettext('Daily Working Time Report', 'Daily Working Time Reports', n)
         'containerProperty' => null,
@@ -333,6 +333,26 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::DEFAULT_VAL           => 0,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
                 self::INPUT_FILTERS         => ['Zend_Filter_Empty' => 0],
+            ],
+            HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE_PREVIOUS => [
+                self::TYPE                          => self::TYPE_INTEGER,
+                self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_DURATION_SEC,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+                self::LABEL                         => 'Working Time Balance Previous Day', // _('Working Time Balance Previous Day')
+                self::VALIDATORS                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::DEFAULT_VAL                   => 0,
+            ],
+            HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE => [
+                self::TYPE                          => self::TYPE_INTEGER,
+                self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_DURATION_SEC,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+                self::LABEL                         => 'Working Time Balance', // _('Working Time Balance')
+                self::VALIDATORS                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::DEFAULT_VAL                   => 0,
             ],
             // z.b. krankheit, urlaub, feiertag (bei regelarbeit leer)
             'system_remark' => [

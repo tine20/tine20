@@ -1528,6 +1528,9 @@ msgstr "Urlaubstage eines Kalenderjahrs"
 msgid "Calculate all Reports"
 msgstr "Berechnen alle Berichte"
 
+msgid "Working Time Balance Previous Day"
+msgstr "Arbeitszeit-Saldo Vortag"
+
 #: js/CostCenterGridPanel.js:58
 msgid "CostCenter"
 msgid_plural "CostCenters"
