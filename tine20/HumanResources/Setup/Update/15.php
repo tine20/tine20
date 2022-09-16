@@ -26,6 +26,7 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE010 = __CLASS__ . '::update010';
     const RELEASE015_UPDATE011 = __CLASS__ . '::update011';
     const RELEASE015_UPDATE012 = __CLASS__ . '::update012';
+    const RELEASE015_UPDATE013 = __CLASS__ . '::update013';
 
     static protected $_allUpdates = [
         // we'll do some querys here and we want them done before any schema tool comes along to play
@@ -67,6 +68,10 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE012          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update012',
+            ],
+            self::RELEASE015_UPDATE013          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update013',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -283,5 +288,14 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
         HumanResources_Scheduler_Task::addAttendanceRecorderRunBLTask(Tinebase_Scheduler::getInstance());
         
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '15.12', self::RELEASE015_UPDATE012);
+    }
+
+    public function update013()
+    {
+        Setup_SchemaTool::updateSchema([
+            HumanResources_Model_Division::class,
+        ]);
+
+        $this->addApplicationUpdate('HumanResources', '15.13', self::RELEASE015_UPDATE013);
     }
 }
