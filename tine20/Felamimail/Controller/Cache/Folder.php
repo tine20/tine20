@@ -340,7 +340,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                     continue;
                     
                 } else {
-                    $delimiter = (strlen($folderData['delimiter']) === 1) ? $folderData['delimiter'] : '';
+                    $delimiter = (strlen((string)$folderData['delimiter']) === 1) ? $folderData['delimiter'] : '';
                     
                     $folder = new Felamimail_Model_Folder(array(
                         'localname'          => $folderData['localName'],
@@ -354,7 +354,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                         'imap_status'        => Felamimail_Model_Folder::IMAP_STATUS_OK,
                         'user_id'            => Tinebase_Core::getUser()->getId(),
                         'parent'             => $parentFolder,
-                        'system_folder'      => in_array(strtolower($folderData['localName']), $systemFolders),
+                        'system_folder'      => in_array(strtolower((string)$folderData['localName']), $systemFolders),
                         'delimiter'          => $delimiter,
                     ));
                     

@@ -128,7 +128,7 @@ class Tinebase_Export_Csv extends Tinebase_Export_AbstractDeprecated implements 
                         $dataElement = '\'' . $dataElement;
                 }
             }
-            $escapedDataElement = (! is_array($dataElement)) ? preg_replace("/$enclosure/", $escapeEnclosure . $enclosure , $dataElement) : '';
+            $escapedDataElement = (! is_array($dataElement)) ? preg_replace("/$enclosure/", $escapeEnclosure . $enclosure , (string)$dataElement) : '';
             $string .= $enclosure . $escapedDataElement . $enclosure;
             $writeDelimiter = true;
         } 

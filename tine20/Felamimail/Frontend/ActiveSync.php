@@ -632,10 +632,12 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         if ($airSyncBaseType == Syncroton_Command_Sync::BODY_TYPE_MIME) {
             // getMessagePart will return Zend_Mime_Part
             $messageBody = $this->_contentController->getMessagePart($entry);
-            $messageBody = stream_get_contents($messageBody->getRawStream());
+            if (false === ($messageBody = stream_get_contents($messageBody->getRawStream()))) {
+                $messageBody = '';
+            }
             
         } else {
-            $messageBody = $this->_contentController->getMessageBody(
+            $messageBody = (string)$this->_contentController->getMessageBody(
                 $entry,
                 null,
                 $airSyncBaseType == 2 ? Zend_Mime::TYPE_HTML : Zend_Mime::TYPE_TEXT

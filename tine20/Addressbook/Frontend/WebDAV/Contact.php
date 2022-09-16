@@ -81,7 +81,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
         $contact->container_id = $container->getId();
         
         $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
-        $id = strlen($id) > 40 ? sha1($id) : $id;
+        $id = strlen((string)$id) > 40 ? sha1($id) : $id;
         $contact->setId($id);
         
         try {
@@ -246,7 +246,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
      */
     public function getSize() 
     {
-        return strlen($this->_getVCard());
+        return strlen((string)$this->_getVCard());
     }
 
     /**
@@ -312,7 +312,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
     {
         if (! $this->_contact instanceof Addressbook_Model_Contact) {
             $id = ($pos = strpos($this->_contact, '.')) === false ? $this->_contact : substr($this->_contact, 0, $pos);
-            $id = strlen($id) > 40 ? sha1($id) : $id;
+            $id = strlen((string)$id) > 40 ? sha1($id) : $id;
             
             try {
                 $this->_contact = Addressbook_Controller_Contact::getInstance()->get($id);

@@ -146,9 +146,12 @@ class Tinebase_ImageHelper
     public static function parseImageLink($link)
     {
         $params = array();
+        $link = parse_url((string)$link, PHP_URL_QUERY);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . parse_url($link, PHP_URL_QUERY));
-        parse_str(parse_url($link, PHP_URL_QUERY), $params);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $link);
+        if (is_string($link)) {
+            parse_str($link, $params);
+        }
         $params['isNewImage'] = false;
         if (isset($params['application']) && $params['application'] == 'Tinebase') {
             $params['isNewImage'] = true;

@@ -1324,7 +1324,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
      */
     static public function getUTCDateFromStringInUsertime($dateString)
     {
-        if (strlen($dateString) < 10) {
+        if (strlen((string)$dateString) < 10) {
             $date = date_create($dateString, new DateTimeZone ((string) Tinebase_Core::getUserTimezone()));
         } else {
             $date = date_create($dateString);

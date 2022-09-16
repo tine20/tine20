@@ -114,7 +114,7 @@ class Phone_Controller_Call extends Tinebase_Controller_Record_Abstract
      */
     public function resolveInternalNumber($number)
     {
-        $number = preg_replace('/[^\d\+]/u', '', $number);
+        $number = preg_replace('/[^\d\+]/u', '', (string)$number);
         if (empty($number)) {
             return $number;
         }

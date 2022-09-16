@@ -2055,7 +2055,7 @@ class Tinebase_Core
      */
     public static function filterInputForDatabase($string)
     {
-        $string = Tinebase_Helper::mbConvertTo($string);
+        $string = (string)Tinebase_Helper::mbConvertTo($string);
 
         if (($db = self::getDb()) instanceof Zend_Db_Adapter_Pdo_Mysql &&
                 ! Tinebase_Backend_Sql_Adapter_Pdo_Mysql::supportsUTF8MB4($db)) {

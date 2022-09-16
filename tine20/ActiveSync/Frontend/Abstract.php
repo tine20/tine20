@@ -801,7 +801,7 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
      */
     protected function _truncateField($record, $fieldName, $syncrotonValue, $fieldLength = 255)
     {
-        if ($fieldLength && mb_strlen($syncrotonValue) > $fieldLength) {
+        if ($fieldLength && mb_strlen((string)$syncrotonValue) > $fieldLength) {
             $record->$fieldName = mb_substr($syncrotonValue, 0, $fieldLength);
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                 . ' field truncated: ' . $fieldName . ' / was: ' . $syncrotonValue . ' / truncated value: ' . $record->$fieldName);

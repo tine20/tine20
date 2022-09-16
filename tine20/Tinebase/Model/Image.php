@@ -273,7 +273,7 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
             $blob = $this->blob;
         }
 
-        if ($_maxSize) {
+        if ($_maxSize && !empty($blob)) {
             $originalSize = strlen($blob);
             if ($originalSize > $_maxSize) {
 

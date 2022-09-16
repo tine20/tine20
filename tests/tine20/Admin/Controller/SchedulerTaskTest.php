@@ -31,12 +31,12 @@ class Admin_Controller_SchedulerTaskTest extends TestCase
         $this->assertSame($task->{Admin_Model_SchedulerTask::FLD_CONFIG_CLASS}, $createdTask->{Admin_Model_SchedulerTask::FLD_CONFIG_CLASS});
         $this->assertSame($createdTask->getId(), $createdTask->{Admin_Model_SchedulerTask::FLD_CONFIG}->{Admin_Model_SchedulerTask_Abstract::FLD_PARENT_ID});
         $this->assertNull($createdTask->last_run);
-        $this->assertSame('0', $createdTask->failure_count);
+        $this->assertEquals('0', $createdTask->failure_count);
 
         $this->assertTrue(Tinebase_Scheduler::getInstance()->run());
 
         $runTask = Admin_Controller_SchedulerTask::getInstance()->get($createdTask->getId());
         $this->assertNotNull($runTask->last_run);
-        $this->assertSame('0', $runTask->failure_count);
+        $this->assertEquals('0', $runTask->failure_count);
     }
 }

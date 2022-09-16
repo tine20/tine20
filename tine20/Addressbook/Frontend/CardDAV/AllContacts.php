@@ -234,7 +234,7 @@ class Addressbook_Frontend_CardDAV_AllContacts extends Sabre\DAV\Collection impl
     protected function _getIdFromName($_name)
     {
         $id = ($pos = strrpos($_name, '.')) === false ? $_name : substr($_name, 0, $pos);
-        $id = strlen($id) > 40 ? sha1($id) : $id;
+        $id = strlen((string)$id) > 40 ? sha1($id) : $id;
     
         return $id;
     }

@@ -1025,8 +1025,8 @@ class OnlyOfficeIntegrator_JsonTests extends TestCase
             return $editorConfigArray;
         }
 
-        $editorConfig = json_decode(json_encode(JWT::decode($editorConfigArray['token'],
-            OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}, ['HS256'])), true);
+        $editorConfig = json_decode(json_encode(JWT::decode($editorConfigArray['token'], new \Firebase\JWT\Key(
+            OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256'))), true);
         unset($editorConfigArray['token']);
         static::assertSame($editorConfig, $editorConfigArray);
 
@@ -1047,7 +1047,7 @@ class OnlyOfficeIntegrator_JsonTests extends TestCase
                     $tempFile->getId()],
             ]), new Tinebase_Model_Pagination(['limit' => 1]))->getFirstRecord();
         static::assertNotNull($token, 'did not find access token in db');
-        static::assertSame((string)OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION,
+        static::assertEquals((string)OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION,
             $token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION});
         static::assertArrayHasKey('url', $editorConfig['document'], $msg);
         static::assertStringContainsString(OnlyOfficeIntegrator_Config::APP_NAME . '/getDocument/' . $token
@@ -1131,7 +1131,8 @@ class OnlyOfficeIntegrator_JsonTests extends TestCase
         }
 
         $editorConfig = json_decode(json_encode(JWT::decode($editorConfigArray['token'],
-            OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}, ['HS256'])), true);
+            new \Firebase\JWT\Key(OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET},
+                'HS256'))), true);
         unset($editorConfigArray['token']);
         static::assertSame($editorConfig, $editorConfigArray);
 
@@ -1206,14 +1207,14 @@ class OnlyOfficeIntegrator_JsonTests extends TestCase
         file_put_contents('tine20:///Tinebase/folders/shared/ootest/test.txt', 'blub');
         $node = Tinebase_FileSystem::getInstance()->stat('/Tinebase/folders/shared/ootest/test.txt');
 
-        $editorConfigArray = $this->_uit->getEditorConfigForNodeId($node->getId(), $node->revision);
+        $editorConfigArray = $this->_uit->getEditorConfigForNodeId($node->getId(), (string)$node->revision);
 
         if (!$assert) {
             return $editorConfigArray;
         }
 
-        $editorConfig = json_decode(json_encode(JWT::decode($editorConfigArray['token'],
-            OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}, ['HS256'])), true);
+        $editorConfig = json_decode(json_encode(JWT::decode($editorConfigArray['token'], new \Firebase\JWT\Key(
+            OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256'))), true);
         unset($editorConfigArray['token']);
         static::assertSame($editorConfig, $editorConfigArray);
 

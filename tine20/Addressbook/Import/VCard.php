@@ -309,7 +309,7 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         $_data['n_suffix'] = (isset($components[4])) ? $components[4] : '';
         
         // Tine20 don't support nickname, but it's a common feature, so this allow mapping to customField
-        if (strlen($this->_options['mapNicknameToField'])>0) {
+        if (strlen((string)$this->_options['mapNicknameToField'])>0) {
             if ($_card->getProperty('NICKNAME')) $_data[$this->_options['mapNicknameToField']] = $_card->getProperty('NICKNAME')->value;
         }
         

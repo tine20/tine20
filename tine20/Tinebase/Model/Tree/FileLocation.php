@@ -161,7 +161,7 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
             if ($node->parent_id != $pNode->getId()) {
                 throw new Tinebase_Exception_UnexpectedValue(self::FLD_NODE_ID . ' contains invalid node id');
             }
-            if (strlen($this->{self::FLD_FILE_NAME}) > 0 && $this->{self::FLD_FILE_NAME} !== $node->name) {
+            if (strlen((string)$this->{self::FLD_FILE_NAME}) > 0 && $this->{self::FLD_FILE_NAME} !== $node->name) {
                 throw new Tinebase_Exception_UnexpectedValue(self::FLD_FILE_NAME . ' mismatches nodes name');
             }
             return $node;

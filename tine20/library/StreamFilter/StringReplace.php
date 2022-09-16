@@ -6,7 +6,7 @@
  * @subpackage  StreamFilter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 class StreamFilter_StringReplace extends php_user_filter
 {
@@ -18,7 +18,7 @@ class StreamFilter_StringReplace extends php_user_filter
      * (non-PHPdoc)
      * @see php_user_filter::filter()
      */
-    public function filter($in, $out, &$consumed, $closing)
+    public function filter($in, $out, &$consumed, $closing): int
     {
         while ($bucket = stream_bucket_make_writeable($in)) {
             $searchFn = $this->_searchIsRegExp ? 'preg_replace' : 'str_replace';
@@ -39,7 +39,7 @@ class StreamFilter_StringReplace extends php_user_filter
      * (non-PHPdoc)
      * @see php_user_filter::onCreate()
      */
-    public function onCreate()
+    public function onCreate(): bool
     {
         if (isset($this->params['search'])) {
             $this->_search = $this->params['search'];
@@ -50,6 +50,8 @@ class StreamFilter_StringReplace extends php_user_filter
         if (isset($this->params['searchIsRegExp'])) {
             $this->_searchIsRegExp = $this->params['searchIsRegExp'];
         }
+
+        return true;
     }
 }
 stream_filter_register('str.replace', 'StreamFilter_StringReplace');

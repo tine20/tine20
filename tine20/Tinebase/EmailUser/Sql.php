@@ -137,7 +137,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $id) . ' OR ' .
             $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' LIKE ?',
-                substr($id, 0,32) . '#~#%')
+                substr((string)$id, 0,32) . '#~#%')
         );
         $this->_appendClientIdOrDomain($where);
         
@@ -307,7 +307,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             '(' . $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?',
             $_userId) . ' OR ' .
             $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' LIKE ?',
-                substr($_userId, 0,32) . '#~#%') . ')'
+                substr((string)$_userId, 0,32) . '#~#%') . ')'
         );
         $this->_appendClientIdOrDomain($where);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .

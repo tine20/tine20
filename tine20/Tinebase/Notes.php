@@ -410,7 +410,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         
         $data = $_note->toArray(FALSE, FALSE);
 
-        if (mb_strlen($data['note']) > 65535) {
+        if (mb_strlen((string)$data['note']) > 65535) {
             $data['note'] = mb_substr($data['note'], 0, 65535);
         }
         
@@ -812,7 +812,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $data = $_record->toArray(false, false);
 
         if (!isset($data['id'])) throw new Tinebase_Exception_Backend('id not set');
-        if (mb_strlen($data['note']) > 65535) {
+        if (mb_strlen((string)$data['note']) > 65535) {
             $data['note'] = mb_substr($data['note'], 0, 65535);
         }
 
