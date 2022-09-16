@@ -285,7 +285,7 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         
         $xml = $testDoc->saveXML();
         
-        $this->assertEquals(preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', null, $xml), $xml);
+        $this->assertEquals(preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', '', $xml), $xml);
         
         self::encodeXml($testDoc);
     }

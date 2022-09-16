@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "21cf75a9dd9f065efb2d898d24e65b9f",
+    "content-hash": "981765ba00a5811ce3ca72bbacb053e4",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -4749,11 +4749,11 @@
         },
         {
             "name": "phpoffice/phpexcel",
-            "version": "1.8.2pl3",
+            "version": "1.8.2pl4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/PHPExcel.git",
-                "reference": "192b59089c9fdd85025c97c8f52ea7554ad4496f"
+                "reference": "4de03cec3f15f0d5524dd8c340bbe3486e982248"
             },
             "require": {
                 "ext-mbstring": "*",
@@ -4800,7 +4800,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2022-04-27T11:44:37+00:00"
+            "time": "2022-09-22T19:06:45+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",
@@ -10763,16 +10763,16 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.5.1",
+            "version": "1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "f73cf97d25eb3ff62011db2d53c2398e1f30abed"
+                "reference": "f9c848bcc7ea0d0301bcbfb9350da31151a479ff"
             },
             "require": {
                 "ext-ctype": "*",
                 "php": ">=7.4.0",
-                "zendframework/zendframework1": "1.12.20pl60 as 1.12.20"
+                "zendframework/zendframework1": "1.12.20pl61 as 1.12.20"
             },
             "require-dev": {
                 "phing/phing": "2.6.1-p0",
@@ -10803,7 +10803,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2022-09-20T09:26:13+00:00"
+            "time": "2022-09-22T18:57:49+00:00"
         },
         {
             "name": "thecodingmachine/safe",
@@ -11667,11 +11667,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl60",
+            "version": "1.12.20pl61",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/zendframework1.git",
-                "reference": "79b61879e425f7df1cace1080d313c20ba977250"
+                "reference": "7b16470eb5a064052f0dbc4f3d846bf2c9a645dc"
             },
             "require": {
                 "php": ">=7.4.0"
@@ -11688,7 +11688,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2022-09-20T08:45:45+00:00"
+            "time": "2022-09-22T18:53:23+00:00"
         }
     ],
     "packages-dev": [
@@ -13332,7 +13332,7 @@
         },
         {
             "package": "phpoffice/phpexcel",
-            "version": "1.8.2.0-patch3",
+            "version": "1.8.2.0-patch4",
             "alias": "1.8.2",
             "alias_normalized": "1.8.2.0"
         },
@@ -13362,7 +13362,7 @@
         },
         {
             "package": "zendframework/zendframework1",
-            "version": "1.12.20.0-patch60",
+            "version": "1.12.20.0-patch61",
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0"
         }
