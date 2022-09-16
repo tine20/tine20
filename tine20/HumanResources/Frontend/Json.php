@@ -512,7 +512,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $minDate->setDate($minDate->format('Y'), 1, 1);
         }
         
-        /* vacation computation -> shoud be extra call!*/
+        /* vacation computation -> should be extra call! */
         $account = $_accountId ? $aController->get($_accountId) : $aController->getByEmployeeYear($_employeeId, $minDate->format('Y'));
         $vacation = HumanResources_Controller_Account::getInstance()->resolveVacation($account);
         /* end vacation computation */
@@ -601,8 +601,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // TODO: remove results property, just return results array itself
         return array(
             'results' => array(
-                'vacation'          => $vacation,
-                'remainingVacation' => intval(floor($vacation['scheduled_remaining_vacation_days'])),
+                'vacation'          => $vacation, // requested account only!
+                'remainingVacation' => $ftController->getRemainingVacationDays($employee), // including previous account (if not expired)
                 'excludeDates'      => $excludeDates,
                 'freeTimeTypes'     => $freeTimeTypes->toArray(),
                 'allFreeTimes'      => $allFreeTimes->toArray(),

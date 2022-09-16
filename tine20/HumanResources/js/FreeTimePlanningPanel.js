@@ -120,7 +120,17 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
         let columns = [
             colManager('number'),
             _.assign(colManager('account_id'), {width: 100}),
-            _.assign(colManager('division_id'), {width: 100})
+            _.assign(colManager('division_id'), {width: 100}),
+            {
+                width: 100,
+                id: 'remainingVacation',
+                header: this.app.formatMessage('Remaining vacation'),
+                tooltip: this.app.formatMessage('Present remaining vacation based on accepted scheduled vacations days including non expired vacations of previous periods'),
+                renderer: (value, metaData, record, rowIndex, colIndex, store) => {
+                    const remainingVacation  = _.get(record, `feastAndFreeDays[${this.periodPicker.getValue().from.format('Y')}].remainingVacation`, null);
+                    return remainingVacation ? this.app.formatMessage('{remainingVacation} days', { remainingVacation }) : '';
+                }
+            }
         ];
 
         let period = me.periodPicker.getValue();
