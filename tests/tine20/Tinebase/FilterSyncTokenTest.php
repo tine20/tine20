@@ -238,10 +238,10 @@ class Tinebase_FilterSyncTokenTest extends TestCase
         ], true));
 
         $stmt = $db->select()->from($backend->getTablePrefix() . $backend->getTableName(), ['count(*)']);
-        static::assertSame('2', $stmt->query()->fetchColumn());
+        static::assertEquals('2', $stmt->query()->fetchColumn());
 
         static::assertSame(1, $backend->deleteByAge(1));
-        static::assertSame('1', $stmt->query()->fetchColumn());
+        static::assertEquals('1', $stmt->query()->fetchColumn());
     }
 
     public function testBackendDeleteByFilterMax()
@@ -263,10 +263,10 @@ class Tinebase_FilterSyncTokenTest extends TestCase
         ], true));
 
         $stmt = $db->select()->from($backend->getTablePrefix() . $backend->getTableName(), ['count(*)']);
-        static::assertSame('2', $stmt->query()->fetchColumn());
+        static::assertEquals('2', $stmt->query()->fetchColumn());
 
         static::assertSame(1, $backend->deleteByFilterMax(1));
-        static::assertSame('1', $stmt->query()->fetchColumn());
+        static::assertEquals('1', $stmt->query()->fetchColumn());
 
         // test survivor is still there:
         $backend->get($survivor->getId());
@@ -291,10 +291,10 @@ class Tinebase_FilterSyncTokenTest extends TestCase
         ], true));
 
         $stmt = $db->select()->from($backend->getTablePrefix() . $backend->getTableName(), ['count(*)']);
-        static::assertSame('2', $stmt->query()->fetchColumn());
+        static::assertEquals('2', $stmt->query()->fetchColumn());
 
         static::assertSame(1, $backend->deleteByMaxTotal(1));
-        static::assertSame('1', $stmt->query()->fetchColumn());
+        static::assertEquals('1', $stmt->query()->fetchColumn());
 
         // test survivor is still there:
         $backend->get($survivor->getId());

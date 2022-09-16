@@ -1013,7 +1013,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             'n_suffix' => 86,
             'n_short' => 86,
          ] as $field => $allowedLength) {
-            if (isset($_data[$field]) && mb_strlen($_data[$field]) > $allowedLength) {
+            if (isset($_data[$field]) && mb_strlen((string)$_data[$field]) > $allowedLength) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Field has been truncated: '
                         . $field . ' original data: ' . $_data[$field]);
@@ -1085,7 +1085,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
     public function getMsisdn()
     {
         foreach (['tel_cell_normalized', 'tel_cell_private_normalized','tel_car_normalized'] as $property) {
-            if (strlen($this->{$property}) > 0) {
+            if (strlen((string)$this->{$property}) > 0) {
                 return substr(ltrim(ltrim($this->{$property}, '0'), '+'), 0, 15);
             }
         }
@@ -1157,7 +1157,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 . " Photo did not change -> preserving current photo");
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__
-                . " Setting new contact photo (" . strlen($newPhotoBlob) . "KB)");
+                . " Setting new contact photo (" . strlen((string)$newPhotoBlob) . "KB)");
             $this->jpegphoto = $newPhotoBlob;
         }
     }

@@ -1348,7 +1348,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         foreach ($messages as $cachedMessage) {
             if (isset($flags[$cachedMessage->messageuid]) || array_key_exists($cachedMessage->messageuid, $flags)) {
                 $newFlags = array_filter($flags[$cachedMessage->messageuid]['flags'], function($val, $key) use ($supportedFlags) {
-                    return in_array($val, $supportedFlags) || strlen($val) === 40;
+                    return in_array($val, $supportedFlags) || strlen((string)$val) === 40;
                 }, ARRAY_FILTER_USE_BOTH);
                 
                 if ($checkDiff) {

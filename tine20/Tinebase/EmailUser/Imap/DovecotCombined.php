@@ -266,7 +266,7 @@ class Tinebase_EmailUser_Imap_DovecotCombined extends Tinebase_EmailUser_Sql imp
         $rawData[$this->_propertyMapping['emailForwardOnly']] = '0'; // will be overwritten later
         $rawData[$this->_propertyMapping['emailUserId']]      = $_user->getId();
         $rawData[$this->_propertyMapping['emailUsername']]    = $_user->accountLoginName;
-        $rawData[$this->_propertyMapping['emailHome']]        = '/' . $_user->accountLoginName . '_' . substr($_user->getId(), 0,8);
+        $rawData[$this->_propertyMapping['emailHome']]        = '/' . $_user->accountLoginName . '_' . substr((string)$_user->getId(), 0,8);
         
         $rawData['domain']     = $this->_config['domain'];
         

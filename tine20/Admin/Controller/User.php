@@ -487,7 +487,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     protected function _checkLoginNameLength(Tinebase_Model_FullUser $user)
     {
         $maxLoginNameLength = Tinebase_Config::getInstance()->get(Tinebase_Config::MAX_USERNAME_LENGTH);
-        if (!empty($maxLoginNameLength) && strlen($user->accountLoginName) > $maxLoginNameLength) {
+        if (!empty($maxLoginNameLength) && strlen((string)$user->accountLoginName) > $maxLoginNameLength) {
             throw new Tinebase_Exception_SystemGeneric('The login name exceeds the maximum length of  ' . $maxLoginNameLength . ' characters. Please choose another one.');
         }
         return TRUE;

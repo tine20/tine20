@@ -54,6 +54,10 @@
     },
     {
       "type": "git",
+      "url": "https://github.com/tine20/oauth2-server.git"
+    },
+    {
+      "type": "git",
       "url": "https://github.com/tine20/zendframework1.git"
     },
     {
@@ -82,17 +86,17 @@
     "ext-openssl": "*",
     "ext-xml": "*",
     "ext-zip": "*",
-    "benmorel/gsm-charset-converter": "^0.2.0",
+    "benmorel/gsm-charset-converter": "^0.2",
     "composer/semver": "*",
     "doctrine/dbal": "2.13.3pl1 as 2.13.3",
     "doctrine/orm": "^2",
     "ezyang/htmlpurifier": "^4",
-    "firebase/php-jwt": "^5",
+    "firebase/php-jwt": "^6",
     "giggsey/libphonenumber-for-php": "^8",
     "hfig/mapi": "^1.2",
     "jumbojett/openid-connect-php": "dev-master",
     "laminas/laminas-diactoros": "^2.7",
-    "laminas/laminas-http": "^2.14",
+    "laminas/laminas-http": "^2.16",
     "laminas/laminas-httphandlerrunner": "^2",
     "laminas/laminas-stdlib": "^3.5",
     "laminas/laminas-stratigility": "^3.2",
@@ -101,13 +105,14 @@
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",
     "nl.idaas/openid-server": "^0.1.7",
+    "league/oauth2-server": "8.3.5pl1 as 8.3.5",
     "php-http/curl-client": "^2.1",
     "phpoffice/phpexcel": "1.8.2pl3 as 1.8.2",
-    "phpoffice/phpspreadsheet": "1.18.0pl1 as 1.18.0",
+    "phpoffice/phpspreadsheet": "1.24.1pl2 as 1.24.1",
     "phpoffice/phpword": "^0.18",
     "psr/http-server-middleware": "^1.0",
     "sabre/dav": "1.8.12pl1 as 1.8.12",
-    "sabre/vobject": "3.5.3pl1 as 2.1.0",
+    "sabre/vobject": "3.5.3pl3 as 2.1.0",
     "sentry/sentry": "^3",
     "simplesamlphp/simplesamlphp": "v1.18.*",
     "spomky-labs/otphp": "^10.0",
@@ -119,12 +124,12 @@
     "syncroton/syncroton": "1.4.11",
     "tine20/composerapploader": "1.0.*",
     "twig/extensions": "^1.5",
-    "twig/twig": "v1.44.5pl1",
+    "twig/twig": "dev-pu/pm/php81comp as v1.44.6",
     "validator/livr": "dev-master#6309697f926a20e1267cc15ee5b847b5c6ecdbcd",
     "web-auth/webauthn-lib": "^3.3",
     "xenolope/quahog": "^2.1",
     "zbateson/mail-mime-parser": "2.*",
-    "zendframework/zendframework1": "1.12.20pl58 as 1.12.20"
+    "zendframework/zendframework1": "dev-pu/pm/php81Comp as 1.12.20"
   },
   "require-dev": {
     "laminas/laminas-psr7bridge": "^1",

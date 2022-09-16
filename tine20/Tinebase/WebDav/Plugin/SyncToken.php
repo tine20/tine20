@@ -115,7 +115,7 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Sabre\DAV\ServerPlugin
         $syncToken = '';
         $syncTokenList = $report->getElementsByTagNameNS('urn:DAV', 'sync-token');
         if ($syncTokenList->length == 1) {
-            $syncToken = $syncTokenList->item(0)->textContent; //?!? //nodeValue;
+            $syncToken = (string)$syncTokenList->item(0)->textContent; //?!? //nodeValue;
         }
         if (strlen($syncToken) > 0 ) {
             // Sync-token must start with our prefix

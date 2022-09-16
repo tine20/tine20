@@ -316,7 +316,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         }
 
         $filterModel = $this->_getPluginForFilterModel($_filterModel);
-        $decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : $this->_prepareParameter($_filter);
+        $decodedFilter = is_array($_filter) || strlen((string)$_filter) == 40 ? $_filter : $this->_prepareParameter($_filter);
 
         if (is_array($decodedFilter)) {
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterModel);

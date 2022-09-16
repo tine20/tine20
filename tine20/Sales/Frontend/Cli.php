@@ -85,7 +85,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             // if day argument is given, validate
             if (array_key_exists('day', $args)) {
-                $split = explode('-', $args['day']);
+                $split = explode('-', (string)$args['day']);
                 if (!count($split == 3)) {
                     // failure
                 } else {

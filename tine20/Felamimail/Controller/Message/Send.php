@@ -718,11 +718,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             $value = implode(',', $value);
         }
 
-        if (is_scalar($value) && strlen($value) + strlen($key) >= 998) {
+        if (is_scalar($value) && strlen((string)$value) + strlen($key) >= 998) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Trimming header ' . $key);
             
-            $value = substr(trim($value), 0, (995 - strlen($key)));
+            $value = substr(trim((string)$value), 0, (995 - strlen((string)$key)));
 
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . $value);

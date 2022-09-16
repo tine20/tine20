@@ -719,8 +719,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         $cacheId = 'getMessageBody_'
             . $_message->getId()
-            . str_replace('.', '', $_partId)
-            . substr($_contentType, -4)
+            . str_replace('.', '', (string)$_partId)
+            . substr((string)$_contentType, -4)
             . (($_account !== NULL) ? 'acc' : '');
 
         return $cacheId;
@@ -782,7 +782,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 continue;
             }
 
-            $body = Tinebase_Mail::getDecodedContent($bodyPart, $partStructure);
+            $body = (string)Tinebase_Mail::getDecodedContent($bodyPart, $partStructure);
 
             if ($partStructure['contentType'] != Zend_Mime::TYPE_TEXT) {
                 $bodyCharCountBefore = strlen($body);
@@ -943,7 +943,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         $cache = Tinebase_Core::getCache();
         $cacheId = Tinebase_Helper::convertCacheId(
-            'getMessageHeaders' . $message->getId() . str_replace('.', '', $_partId)
+            'getMessageHeaders' . $message->getId() . str_replace('.', '', (string)$_partId)
         );
         if ($cache->test($cacheId)) {
             return $cache->load($cacheId);

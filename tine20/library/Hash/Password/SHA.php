@@ -68,7 +68,8 @@ class Hash_Password_SHA
      */
     public function validate($hash, $password)
     {
-        $hash = (($pos = strpos($hash, '}')) !== false) ? substr($hash, $pos + 1) : $hash;
+        $password = (string)$password;
+        $hash = (string)((($pos = strpos($hash, '}')) !== false) ? substr($hash, $pos + 1) : $hash);
         
         switch (strlen($hash)) {
             case 28: // SHA

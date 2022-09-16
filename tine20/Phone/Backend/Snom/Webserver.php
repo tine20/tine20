@@ -53,7 +53,7 @@ class Phone_Backend_Snom_Webserver
      */
     public function dialNumber($_phoneAddress, $_number, $_user = NULL, $_pass = NULL)
     {
-        if (strlen($_number) === 0) {
+        if (strlen((string)$_number) === 0) {
             throw new Phone_Exception_Snom('No number to dial');
         }
         $responseBody = $this->sendCommand($_phoneAddress, array('number' => $_number), $_user, $_pass);

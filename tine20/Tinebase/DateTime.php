@@ -61,7 +61,7 @@ class Tinebase_DateTime extends DateTime
     /**
      * @see http://bugs.php.net/bug.php?id=46891
      */
-    public function __sleep(){
+    public function __sleep() {
         $this->__sDT = $this->format('Y-m-d H:i:s');
         $tz = $this->getTimezone();
         $this->__sDTZ = $tz? $tz->getName() : 'UTC';
@@ -71,7 +71,7 @@ class Tinebase_DateTime extends DateTime
     /**
      * @see http://bugs.php.net/bug.php?id=46891
      */
-    public function __wakeup() {
+    public function __wakeup(): void {
         $this->__construct($this->__sDT, new DateTimeZone($this->__sDTZ ? $this->__sDTZ : 'UTC'));
         $this->__sDT = $this->__sDTZ = NULL;
     }
@@ -117,10 +117,8 @@ class Tinebase_DateTime extends DateTime
             $this->setTimezone('UTC');
         }
 
-        if (PHP_VERSION_ID >= 70100) {
-            list ($h, $m, $i) = explode(' ', $this->format('H i s'));
-            parent::setTime($h, $m, $i, 0);
-        }
+        list ($h, $m, $i) = explode(' ', $this->format('H i s'));
+        parent::setTime($h, $m, $i, 0);
     }
     
     /**
@@ -430,13 +428,9 @@ class Tinebase_DateTime extends DateTime
      * @note PHP 7.1 added param $microseconds
      */
     #[\ReturnTypeWillChange]
-    public function setTime($hour, $minute, $second = 0, $microseconds = null)
+    public function setTime($hour, $minute, $second = 0, $microseconds = 0)
     {
-        if (PHP_VERSION_ID < 70100) {
-            parent::setTime($hour, $minute, $second);
-        } else {
-            parent::setTime($hour, $minute, $second, $microseconds);
-        }
+        parent::setTime($hour, $minute, $second, $microseconds);
         return $this;
     }
     

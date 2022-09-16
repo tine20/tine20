@@ -542,7 +542,7 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
             OnlyOfficeIntegrator_Model_AccessToken::FLDS_TOKEN . ' = "' . $token . '"');
 
         $node = Tinebase_FileSystem::getInstance()->stat('/Tinebase/folders/shared/ootest/test.txt');
-        (new OnlyOfficeIntegrator_Frontend_Json())->getEditorConfigForNodeId($node->getId(), $node->revision);
+        (new OnlyOfficeIntegrator_Frontend_Json())->getEditorConfigForNodeId($node->getId(), (string)$node->revision);
 
         $fh = fopen('php://memory', 'rw');
         fwrite($fh, json_encode($reqBody = [
