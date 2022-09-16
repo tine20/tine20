@@ -120,23 +120,51 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
         if (null === $_previousMonthlyWTR) {
             $_previousMonthlyWTR = $this->getPreviousMonthlyWTR($_monthlyWTR);
         }
-        if (null !== $_previousMonthlyWTR) {
-            $_monthlyWTR->working_time_balance_previous = $_previousMonthlyWTR->working_time_balance;
-        } else {
-            $_monthlyWTR->working_time_balance_previous = 0;
-        }
 
         $rs = new Tinebase_Record_RecordSet(HumanResources_Model_MonthlyWTReport::class, [$_monthlyWTR]);
         Tinebase_ModelConfiguration::resolveRecordsPropertiesForRecordSet($rs,
             HumanResources_Model_MonthlyWTReport::getConfiguration());
+        $_monthlyWTR->dailywtreports->sort('date');
         $currentRecord = clone $_monthlyWTR;
+
+        $firstDay = $_monthlyWTR->dailywtreports->getFirstRecord();
+        if (null !== $_previousMonthlyWTR) {
+            $_monthlyWTR->working_time_balance_previous = $_previousMonthlyWTR->working_time_balance;
+            if ((int)$firstDay->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE_PREVIOUS} !==
+                    (int)$_previousMonthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE}) {
+                $firstDay->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE_PREVIOUS} =
+                    (int)$_previousMonthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE};
+            }
+        } else {
+            $_monthlyWTR->working_time_balance_previous = 0;
+            if (0 !== (int)$firstDay->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE_PREVIOUS}) {
+                $firstDay->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE_PREVIOUS} = 0;
+            }
+        }
 
         $isTime = 0;
         $shouldTime = 0;
+        $prevDay = null;
         /** @var HumanResources_Model_DailyWTReport $dailyWTR */
         foreach ($_monthlyWTR->dailywtreports as $dailyWTR) {
-            $isTime += $dailyWTR->getIsWorkingTime();
-            $shouldTime += $dailyWTR->getShouldWorkingTime();
+            $is = $dailyWTR->getIsWorkingTime();
+            $should = $dailyWTR->getShouldWorkingTime();
+            if ($prevDay && (int)$dailyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE_PREVIOUS}
+                    !== (int)$prevDay->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE}) {
+                $dailyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE_PREVIOUS} =
+                    (int)$prevDay->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE};
+            }
+            $balance = $is - $should +
+                $dailyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE_PREVIOUS};
+            if ($balance !== (int)$dailyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE}) {
+                $dailyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE} = $balance;
+            }
+            if ($dailyWTR->isDirty()) {
+                HumanResources_Controller_DailyWTReport::getInstance()->update(clone $dailyWTR);
+            }
+            $isTime += $is;
+            $shouldTime += $should;
+            $prevDay = $dailyWTR;
         }
 
         $_monthlyWTR->working_time_actual = $isTime;
@@ -144,6 +172,23 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
         $_monthlyWTR->working_time_balance = $_monthlyWTR->working_time_balance_previous +
             $_monthlyWTR->working_time_actual - $_monthlyWTR->working_time_target +
             $_monthlyWTR->working_time_correction;
+
+        if ((int)$_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE} !== (int)$_monthlyWTR
+                ->{HumanResources_Model_MonthlyWTReport::FLDS_DAILY_WT_REPORTS}->getLastRecord()
+                ->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE}
+                + (int)$_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_CORRECTION}) {
+            // well this is bad...
+            Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue(
+                'monthly balance mismatches last days balance for month ' .
+                $_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_MONTH} . ' for employee '
+                . $_monthlyWTR->getIdFromProperty(HumanResources_Model_MonthlyWTReport::FLDS_EMPLOYEE_ID)));
+
+            $_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_SYSTEM_REMARK} = 'balance of last day mismatches monthly balance';
+        } elseif (!empty($_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_SYSTEM_REMARK})) {
+            $_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_SYSTEM_REMARK} =
+                str_replace('balance of last day mismatches monthly balance', '',
+                    $_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_SYSTEM_REMARK});
+        }
 
         if (!$currentRecord->diff($_monthlyWTR)->isEmpty()) {
             $_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_LAST_CALCULATION} = Tinebase_DateTime::now();
