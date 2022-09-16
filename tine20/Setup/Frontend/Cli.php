@@ -511,12 +511,17 @@ class Setup_Frontend_Cli
      * uninstall applications
      *
      * @param Zend_Console_Getopt $_opts
+     * @return bool
      */
-    protected function _uninstall(Zend_Console_Getopt $_opts)
+    protected function _uninstall(Zend_Console_Getopt $_opts): bool
     {
         $controller = Setup_Controller::getInstance();
         
-        if($_opts->uninstall === true) {
+        if ($_opts->uninstall === true) {
+            $backend = Setup_Backend_Factory::factory();
+            if (! $backend->tableExists('applications')) {
+                return 0;
+            }
             $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
         } else {
             $applications = new Tinebase_Record_RecordSet('Tinebase_Model_Application');
@@ -538,6 +543,7 @@ class Setup_Frontend_Cli
         $uninstallCount = $controller->uninstallApplications($applications->name);
         
         echo "Successfully uninstalled " . $uninstallCount . " applications.\n";
+        return 0;
     }
 
     protected function _removemailaccounts()
