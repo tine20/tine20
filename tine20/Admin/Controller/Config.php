@@ -202,7 +202,7 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
         $appConfigObject = Tinebase_Config::getAppConfig($_app->name);
         $definition = $appConfigObject->getDefinition($_config->name);
 
-        $_config->value = json_decode($_config->value, true);
+        $_config->value = json_decode((string)$_config->value, true);
 
         if (isset($definition['type']) && Tinebase_Config_Abstract::TYPE_RECORD === $definition['type'] &&
                 $_config->value) {

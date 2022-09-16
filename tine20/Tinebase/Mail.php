@@ -674,7 +674,7 @@ class Tinebase_Mail extends Zend_Mail
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Input: ' . $text);
         
-        $lines = preg_split('/\r\n|\n|\r/', $text);
+        $lines = preg_split('/\r\n|\n|\r/', (string)$text);
         $result = array();
         $indention = 0;
         foreach ($lines as $line) {

@@ -95,6 +95,7 @@ class Calendar_Convert_Event_VCalendar_Factory
      */
     static public function parseUserAgent($_userAgent)
     {
+        if (!$_userAgent) $_userAgent = '';
         if (isset(self::$_parsedUserAgentCache[$_userAgent])) {
             return self::$_parsedUserAgentCache[$_userAgent];
         }

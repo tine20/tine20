@@ -258,7 +258,7 @@ class Felamimail_Sieve_Vacation
         $addresses = count($this->_addresses) > 0 ? ":addresses {$this->_quoteString($this->_addresses)} " : null;
         
         if (!empty($this->_subject)) {
-            $subject = iconv_mime_encode(null, $this->_subject, array(
+            $subject = iconv_mime_encode('', $this->_subject, array(
                 'scheme'        => 'Q',
                 'line-length'   => 500,
             ));

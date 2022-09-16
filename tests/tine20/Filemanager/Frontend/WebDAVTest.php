@@ -69,7 +69,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
      */
     public function testGetNodeForPath()
     {
-        $node = $this->_getWebDAVTree()->getNodeForPath(null);
+        $node = $this->_getWebDAVTree()->getNodeForPath('');
         
         $this->assertInstanceOf('Tinebase_WebDav_Root', $node, 'wrong node class');
         

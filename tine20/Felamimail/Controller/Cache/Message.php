@@ -1026,7 +1026,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     public function _filterEmailAddressBeforeAddingToCache($email)
     {
         // TODO remove filterInputForDatabase when we finally support utf8mb4!
-        return Tinebase_Core::filterInputForDatabase(mb_substr($email, 0, 254));
+        return Tinebase_Core::filterInputForDatabase(mb_substr((string)$email, 0, 254));
     }
     
     /**

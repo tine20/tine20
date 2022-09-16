@@ -538,7 +538,7 @@ class ActiveSync_TimezoneConverter
             $startDateParsed['ts']     = strtotime($_startDate);
         } elseif (is_int($_startDate)) {
             $startDateParsed['ts']     = $_startDate;
-            $startDateParsed['string'] = strftime("%Y-%m-%d", $_startDate);
+            $startDateParsed['string'] = date('Y-m-d', $_startDate);
         }
         else {
             throw new Tinebase_Exception_InvalidArgument('$startDate Parameter should be either a Timestamp or a Datestring parseable by strtotime.');
@@ -618,8 +618,8 @@ class ActiveSync_TimezoneConverter
 
         if ($transitions) {
             foreach ($transitions as $index => $transition) {
-                if (strftime('%Y', $transition['ts']) == $_year) {
-                    if (isset($transitions[$index + 1]) && strftime('%Y', $transitions[$index]['ts']) == strftime('%Y', $transitions[$index + 1]['ts'])) {
+                if (date('Y', $transition['ts']) == $_year) {
+                    if (isset($transitions[$index + 1]) && date('Y', $transitions[$index]['ts']) == date('Y', $transitions[$index + 1]['ts'])) {
                         $daylightTransition = $transition['isdst'] ? $transition : $transitions[$index + 1];
                         $standardTransition = $transition['isdst'] ? $transitions[$index + 1] : $transition;
                     } else {

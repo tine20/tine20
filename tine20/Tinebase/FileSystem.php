@@ -750,7 +750,7 @@ class Tinebase_FileSystem implements
             }
         }
 
-        if (is_file($_hashFile)) {
+        if ($_hashFile && is_file($_hashFile)) {
             $updatedFileObject->size = filesize($_hashFile);
             if (null !== ($mimeType = $this->_getMimeType($_node->name, $_hashFile))) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
