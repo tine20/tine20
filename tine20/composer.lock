@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "01546a7cfdfe6346eaaab493934db5e3",
+    "content-hash": "db9911d639c97d897d92066a27ced3e1",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -11417,11 +11417,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "dev-pu/pm/php81Comp",
+            "version": "1.12.20pl59",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/zendframework1.git",
-                "reference": "dc5734c6d73f61231d1437a938f9d7e56d085245"
+                "reference": "f0a352c9093d9d634aab587bac2500d9044793be"
             },
             "require": {
                 "php": ">=7.4.0"
@@ -11438,7 +11438,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2022-09-13T20:40:30+00:00"
+            "time": "2022-09-19T11:37:07+00:00"
         }
     ],
     "packages-dev": [
@@ -13174,7 +13174,7 @@
         },
         {
             "package": "zendframework/zendframework1",
-            "version": "dev-pu/pm/php81Comp",
+            "version": "1.12.20.0-patch59",
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0"
         }
@@ -13183,13 +13183,12 @@
     "stability-flags": {
         "jumbojett/openid-connect-php": 20,
         "twig/twig": 20,
-        "validator/livr": 20,
-        "zendframework/zendframework1": 20
+        "validator/livr": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "7.4 - 8.0",
+        "php": "7.4 - 8.1",
         "ext-spl": "*",
         "ext-simplexml": "*",
         "ext-bcmath": "*",
