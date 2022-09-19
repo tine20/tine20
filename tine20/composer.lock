@@ -11421,7 +11421,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/zendframework1.git",
-                "reference": "1f6e4772e984ec4b9ccc7aad36c97e7df9c45eaa"
+                "reference": "dc5734c6d73f61231d1437a938f9d7e56d085245"
             },
             "require": {
                 "php": ">=7.4.0"
