@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db9911d639c97d897d92066a27ced3e1",
+    "content-hash": "5d797971bb8b3c1c55fcf9e5c13929f7",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -5830,11 +5830,11 @@
         },
         {
             "name": "sabre/vobject",
-            "version": "3.5.3pl3",
+            "version": "3.5.3pl4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/vobject.git",
-                "reference": "790165d51c46e09a730fded8c82ce8a64fd5acc5"
+                "reference": "1fce67649d3b773f1becb138c017e51c0b9e938e"
             },
             "require": {
                 "ext-mbstring": "*",
@@ -5919,7 +5919,7 @@
                 "forum": "https://groups.google.com/group/sabredav-discuss",
                 "source": "https://github.com/fruux/sabre-vobject"
             },
-            "time": "2022-09-15T07:21:45+00:00"
+            "time": "2022-09-19T07:58:48+00:00"
         },
         {
             "name": "sabre/xml",
@@ -10556,19 +10556,20 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.4.11",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "efde8a27ff092910d0e935a7465cef8391c29fd2"
+                "reference": "3af34056a8ca332b4c6e4d00fdcf34040124bd14"
             },
             "require": {
-                "php": ">=5.3.0",
-                "zendframework/zendframework1": "1.12.*"
+                "ext-ctype": "*",
+                "php": ">=7.4.0",
+                "zendframework/zendframework1": "1.12.20pl59 as 1.12.20"
             },
             "require-dev": {
                 "phing/phing": "2.6.1-p0",
-                "phpunit/phpunit": "3.7.*"
+                "phpunit/phpunit": "^8.5"
             },
             "type": "library",
             "autoload": {
@@ -10576,15 +10577,26 @@
                     "Syncroton": [
                         "lib/",
                         "tests/"
+                    ],
+                    "Zend_": [
+                        "vendor/zendframework/zendframework1/library"
                     ]
                 }
+            },
+            "scripts": {
+                "php8test": [
+                    "cd tests/docker; docker-compose run cli8 ash -c 'cd /src/tests; ../vendor/bin/phpunit --color Syncroton/AllTests.php'; cd ../..;"
+                ],
+                "php81test": [
+                    "cd tests/docker; docker-compose run cli81 ash -c 'cd /src/tests; ../vendor/bin/phpunit --color Syncroton/AllTests.php'; cd ../..;"
+                ]
             },
             "license": [
                 "LGPL-3"
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2021-11-19T15:16:17+00:00"
+            "time": "2022-09-19T12:06:37+00:00"
         },
         {
             "name": "thecodingmachine/safe",
@@ -10804,11 +10816,11 @@
         },
         {
             "name": "twig/twig",
-            "version": "dev-pu/pm/php81comp",
+            "version": "v1.44.6pl3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/Twig.git",
-                "reference": "0a281785b64cfa9382e2c91b4511fdd972ee60b2"
+                "reference": "acfb833e9c9b907945dc2a14a0a8d496db114ac9"
             },
             "require": {
                 "php": ">=7.4",
@@ -10862,7 +10874,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2022-09-14T15:11:51+00:00"
+            "time": "2022-09-19T13:23:28+00:00"
         },
         {
             "name": "validator/livr",
@@ -13162,13 +13174,13 @@
         },
         {
             "package": "sabre/vobject",
-            "version": "3.5.3.0-patch3",
+            "version": "3.5.3.0-patch4",
             "alias": "2.1.0",
             "alias_normalized": "2.1.0.0"
         },
         {
             "package": "twig/twig",
-            "version": "dev-pu/pm/php81comp",
+            "version": "1.44.6.0-patch3",
             "alias": "v1.44.6",
             "alias_normalized": "1.44.6.0"
         },
@@ -13182,7 +13194,6 @@
     "minimum-stability": "RC",
     "stability-flags": {
         "jumbojett/openid-connect-php": 20,
-        "twig/twig": 20,
         "validator/livr": 20
     },
     "prefer-stable": false,
