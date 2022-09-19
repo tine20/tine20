@@ -70,7 +70,7 @@
     }
   ],
   "require": {
-    "php": "7.4 - 8.0",
+    "php": "7.4 - 8.1",
     "ext-SPL": "*",
     "ext-SimpleXML": "*",
     "ext-bcmath": "*",
@@ -129,7 +129,7 @@
     "web-auth/webauthn-lib": "^3.3",
     "xenolope/quahog": "^2.1",
     "zbateson/mail-mime-parser": "2.*",
-    "zendframework/zendframework1": "dev-pu/pm/php81Comp as 1.12.20"
+    "zendframework/zendframework1": "1.12.20pl59 as 1.12.20"
   },
   "require-dev": {
     "laminas/laminas-psr7bridge": "^1",
