@@ -30,25 +30,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     initComponent: function() {
         Tine.Sales.CustomerEditDialog.superclass.initComponent.call(this);
     },
-    
-    /**
-     * 
-     */
-    isValid: function() {
-        var isValid = true,
-            form = this.getForm();
-        
-        isValid = Tine.Sales.CustomerEditDialog.superclass.isValid.call(this)
 
-        if (Ext.isEmpty(form.findField('adr_street').getValue()) && Ext.isEmpty(form.findField('adr_pobox').getValue())) {
-            isValid = false;
-            var msg = this.app.i18n._('Either street or postbox is required!');
-            form.markInvalid( {'adr_street': msg, 'adr_pobox': msg});
-        }
-
-        return isValid;
-    },
-    
     /**
      * executed after record got updated from proxy
      */
@@ -368,12 +350,10 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 
                             }], [{
                                 name: 'adr_postalcode',
-                                allowBlank: false,
                                 fieldLabel: this.app.i18n._('Postalcode'),
                                 columnWidth: 0.5
                             }, {
                                 name: 'adr_locality',
-                                allowBlank: false,
                                 fieldLabel: this.app.i18n._('Locality'),
                                 columnWidth: 0.5
                             }], [{
