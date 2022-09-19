@@ -93,7 +93,7 @@ if (!empty($currentCmds)) {
 }
 unset($out);
 if (!empty($updates)) {
-    $composerCmds[] = ['composer update --ignore-platform-reqs ' . join(' ', $updates)];
+    $composerCmds[] = ['composer update ' . join(' ', $updates)];
 }
 
 foreach (array_reverse($composerCmds) as $cmds) {
@@ -111,7 +111,7 @@ foreach (array_reverse($composerCmds) as $cmds) {
 
 // update composer.lock file
 if (empty($composerCmds)) {
-    $cmd = 'composer update --ignore-platform-reqs nothing';
+    $cmd = 'composer update nothing';
     echo $cmd . PHP_EOL;
     exec($cmd, $out, $ret);
     if (0 !== $ret) {

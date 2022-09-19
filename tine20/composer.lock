@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d797971bb8b3c1c55fcf9e5c13929f7",
+    "content-hash": "b65b39efd8cc3ac44b2df0c33d677932",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3447,14 +3447,17 @@
         },
         {
             "name": "metaways/opendocument",
-            "version": "1.2",
+            "version": "1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/OpenDocument.git",
-                "reference": "fea9b9d94ab36a3c28368d69bf209d4e8b2b87ce"
+                "reference": "1602ee9a64c4e1ce865c7d76efad677e1d4da7a2"
             },
             "require": {
-                "php": ">=7.0.0"
+                "php": "7.4 - 8.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.5"
             },
             "type": "project",
             "autoload": {
@@ -3464,6 +3467,14 @@
                         "tests/"
                     ]
                 }
+            },
+            "scripts": {
+                "php8test": [
+                    "cd tests/docker; docker-compose run cli8 ash -c 'cd /src/tests; ../vendor/bin/phpunit --color OpenDocument/AllTests.php'; cd ../..;"
+                ],
+                "php81test": [
+                    "cd tests/docker; docker-compose run cli81 ash -c 'cd /src/tests; ../vendor/bin/phpunit --color OpenDocument/AllTests.php'; cd ../..;"
+                ]
             },
             "license": [
                 "New BSD License"
@@ -3475,7 +3486,7 @@
                 "OpenDocument",
                 "Template"
             ],
-            "time": "2020-03-09T12:15:55+00:00"
+            "time": "2022-09-19T14:23:43+00:00"
         },
         {
             "name": "metaways/timezoneconvert",
