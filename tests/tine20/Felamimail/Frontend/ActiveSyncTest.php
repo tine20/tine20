@@ -418,6 +418,13 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         // check content
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
         $this->assertStringContainsString('Test', $completeMessage->body);
+
+        // check if mail is in sent folder
+        $emailAccount = TestServer::getInstance()->getTestEmailAccount();
+        $sent = $this->_emailTestClass->getFolder($emailAccount->sent_folder);
+        $message = $this->_emailTestClass->searchAndCacheMessage($testHeaderValue, $sent);
+        $this->_createdMessages->addRecord($message);
+        $this->assertEquals("Test", $message->subject);
     }
     
     /**
