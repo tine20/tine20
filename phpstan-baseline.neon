@@ -6,26 +6,6 @@ parameters:
 			path: tine20/ActiveSync/Controller.php
 
 		-
-			message: "#^Parameter \\$_class of method ActiveSync_Controller_Device\\:\\:setDeviceContentFilter\\(\\) has invalid type unknown_type\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Controller/Device.php
-
-		-
-			message: "#^Parameter \\$_deviceId of method ActiveSync_Controller_Device\\:\\:setDeviceContentFilter\\(\\) has invalid type unknown_type\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Controller/Device.php
-
-		-
-			message: "#^Parameter \\$_filterId of method ActiveSync_Controller_Device\\:\\:setDeviceContentFilter\\(\\) has invalid type unknown_type\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Controller/Device.php
-
-		-
-			message: "#^Variable \\$_filterId in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Controller/Device.php
-
-		-
 			message: "#^Access to an undefined property Syncroton_Model_ISyncState\\:\\:\\$lastsync\\.$#"
 			count: 1
 			path: tine20/ActiveSync/Frontend/Abstract.php

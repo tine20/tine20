@@ -107,9 +107,9 @@ class ActiveSync_Controller_Device extends Tinebase_Controller_Record_Abstract
     /**
      * set filter for different ActiveSync content types
      * 
-     * @param unknown_type $_deviceId
-     * @param unknown_type $_class
-     * @param unknown_type $_filterId
+     * @param string $_deviceId
+     * @param string $_class
+     * @param string $_filterId
      * 
      * @return ActiveSync_Model_Device
      * @throws ActiveSync_Exception
@@ -118,13 +118,13 @@ class ActiveSync_Controller_Device extends Tinebase_Controller_Record_Abstract
     {
         $device = $this->_backend->get($_deviceId);
         
-        if($device->owner_id != Tinebase_Core::getUser()->getId()) {
+        if ($device->owner_id != Tinebase_Core::getUser()->getId()) {
             throw new Tinebase_Exception_AccessDenied('not owner of device ' . $_deviceId);
         }
         
         $filterId = empty($_filterId) ? null : $_filterId;
         
-        switch($_class) {
+        switch ($_class) {
             case Syncroton_Data_Factory::CLASS_CALENDAR:
                 $device->calendarfilter_id = $filterId;
                 break;
@@ -144,9 +144,10 @@ class ActiveSync_Controller_Device extends Tinebase_Controller_Record_Abstract
             default:
                 throw new ActiveSync_Exception('unsupported class ' . $_class);
         }
-        
+
+        /** @var ActiveSync_Model_Device $device */
         $device = $this->_backend->update($device);
-        
+
         return $device;
     }
 
