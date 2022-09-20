@@ -119,7 +119,7 @@ class Sales_Frontend_WebDAV_Import extends \Sabre\DAV\Collection implements \Sab
             $etags[] = $child->getETag();
         }
         
-        return '"' . sha1(implode(null, $etags)) . '"';
+        return '"' . sha1(implode('', $etags)) . '"';
     }
     
     /**

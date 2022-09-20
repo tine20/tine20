@@ -51,7 +51,7 @@ class Calendar_Convert_Event_VCalendar_Thunderbird extends Calendar_Convert_Even
      */
     protected function _addEventAttendee(\Sabre\VObject\Component\VEvent $vevent, Calendar_Model_Event $event)
     {
-        if (version_compare($this->_version, '1.0b2' , '>')) {
+        if (!$this->_version || version_compare($this->_version, '1.0b2' , '>')) {
             parent::_addEventAttendee($vevent, $event);
         } else {
             // special handling for Lightning <= 1.0b2
@@ -62,7 +62,7 @@ class Calendar_Convert_Event_VCalendar_Thunderbird extends Calendar_Convert_Even
                 $attendeeEmail = $eventAttendee->getEmail();
                 if ($attendeeEmail) {
                     $parameters = array(
-                        'CN'       => str_replace(',', null, $eventAttendee->getName()),
+                        'CN'       => str_replace(',', '', $eventAttendee->getName()),
                         'CUTYPE'   => Calendar_Convert_Event_VCalendar_Abstract::$cutypeMap[$eventAttendee->user_type],
                         'PARTSTAT' => $eventAttendee->status,
                         'ROLE'     => "{$eventAttendee->role}-PARTICIPANT",

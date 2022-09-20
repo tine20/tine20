@@ -462,11 +462,11 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $summary = $this->_protocol->fetch(array('UID', 'FLAGS', 'RFC822.HEADER', 'INTERNALDATE', 'RFC822.SIZE', 'BODYSTRUCTURE'), $from, $to, $useUid);
         
         // sometimes ctype_digit($from) is false even if we got a single message, maybe mailserver dependend
-        $singleMessage = ($to === null && ctype_digit($from) || isset($summary['UID']));
+        $singleMessage = ($to === null && ctype_digit((string)$from) || isset($summary['UID']));
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' from: ' . print_r($from, true) . ' to: ' . print_r($to, true)
-            . ' ctype_digit(from): ' . (int) ctype_digit($from)
+            . ' ctype_digit(from): ' . (int) ctype_digit((string)$from)
             . ' single message: ' . (int) $singleMessage
             . ' useUid: ' . (int) $useUid);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

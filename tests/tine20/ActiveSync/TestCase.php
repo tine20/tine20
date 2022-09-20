@@ -20,7 +20,7 @@ abstract class ActiveSync_TestCase extends TestCase
      * 
      * @var string
      */
-    protected $_applicationName;
+    protected $_applicationName = 'Calendar';
     
     /**
      * @var ActiveSync_Model_Device

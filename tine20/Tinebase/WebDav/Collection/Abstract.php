@@ -272,7 +272,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
             $etags[] = $child->getETag();
         }
         
-        return '"' . sha1(implode(null, $etags)) . '"';
+        return '"' . sha1(implode('', $etags)) . '"';
     }
     
     /**

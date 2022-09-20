@@ -111,7 +111,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
       */
      protected function _enforceValueType($type)
      {
-         switch (strtoupper($type)) {
+         switch (strtoupper((string)$type)) {
              case 'VARCHAR':
              case 'TEXT':
                  $this->_enforceStringValue();

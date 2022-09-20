@@ -390,7 +390,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends \PHPUnit\Framework\Te
         $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics');
         
         // remove alarm part from vcalendar
-        $vcalendar = preg_replace('/BEGIN:VALARM.*END:VALARM(\n|\r\n)/s', null, $vcalendar);
+        $vcalendar = preg_replace('/BEGIN:VALARM.*END:VALARM(\n|\r\n)/s', '', $vcalendar);
         
         // add a sequence
         $vcalendar = preg_replace('/DTSTAMP:20111007T160719Z(\n|\r\n)/s', "DTSTAMP:20121007T160719Z\nSEQUENCE:5\n", $vcalendar);

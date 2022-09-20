@@ -155,7 +155,7 @@ class Tinebase_Twig
             $n->getSymbol(NumberFormatter::GROUPING_SEPARATOR_SYMBOL));
 
         $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('removeSpace', function($str) {
-            return str_replace(' ', '', $str);
+            return str_replace(' ', '', (string)$str);
         }));
         $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('transliterate', function($str) {
             return Tinebase_Helper::replaceSpecialChars($str, false);
@@ -209,7 +209,7 @@ class Tinebase_Twig
             return Tinebase_Translation::dateToStringInTzAndLocaleFormat($date, null, null, $format);
         }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('relationTranslateModel', function ($model) {
-            if (! class_exists($model)) return $model;
+            if (!$model || !class_exists($model)) return $model;
             return $model::getRecordName();
         }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('keyField', function ($appName, $keyFieldName, $key, $locale = null) {

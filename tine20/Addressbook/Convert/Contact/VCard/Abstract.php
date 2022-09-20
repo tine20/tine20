@@ -258,7 +258,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     break;
                     
                 case 'URL':
-                    switch (strtoupper($property['TYPE'])) {
+                    switch (strtoupper((string)($property['TYPE']))) { /** @phpstan-ignore-line */
                         case 'HOME':
                             $data['url_home'] = $property->getValue();
                             break;

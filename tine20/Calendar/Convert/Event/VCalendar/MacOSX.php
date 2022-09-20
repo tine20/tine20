@@ -87,12 +87,12 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
         // NOTE: when the organizer edits the event he becomes attendee anyway, see comments in MSEventFacade::update
 
         // in mavericks iCal adds organiser as attendee without role
-        if (version_compare($this->_version, '10.9', '>=') && version_compare($this->_version, '10.10', '<')) {
+        if ($this->_version && version_compare($this->_version, '10.9', '>=') && version_compare($this->_version, '10.10', '<')) {
             if (!isset($calAddress['ROLE'])) {
                 return NULL;
             }
         // in yosemite iCal adds organiser with role "chair" but has no roles for other attendee
-        } else if (version_compare($this->_version, '10.10', '>=')) {
+        } elseif ($this->_version && version_compare($this->_version, '10.10', '>=')) {
             if (isset($calAddress['ROLE']) && $calAddress['ROLE'] == 'CHAIR') {
                 return NULL;
             }
@@ -204,7 +204,7 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
                 preg_match('/UNTIL=([\dTZ]+)(?=;?)/', $vevent->RRULE, $matches);
                 $dtUntil = Calendar_Convert_Event_VCalendar_Abstract::getUTCDateFromStringInUsertime(substr($matches[1], 0, 8));
                 return 'UNTIL=' . $dtUntil->format(Tinebase_Record_Abstract::ISO8601LONG);
-            }, $event->rrule);
+            }, (string)$event->rrule);
         }
         return $return;
     }
