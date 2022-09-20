@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "070de224a4ad8ecd4667b1460ace3709",
+    "content-hash": "5291dfc39baae34ddc20adc29d9731ac",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -4982,24 +4982,24 @@
         },
         {
             "name": "pimple/pimple",
-            "version": "v3.4.0",
+            "version": "v3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silexphp/Pimple.git",
-                "reference": "86406047271859ffc13424a048541f4531f53601"
+                "reference": "a94b3a4db7fb774b3d78dad2315ddc07629e1bed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/86406047271859ffc13424a048541f4531f53601",
-                "reference": "86406047271859ffc13424a048541f4531f53601",
+                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/a94b3a4db7fb774b3d78dad2315ddc07629e1bed",
+                "reference": "a94b3a4db7fb774b3d78dad2315ddc07629e1bed",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.5",
-                "psr/container": "^1.1"
+                "psr/container": "^1.1 || ^2.0"
             },
             "require-dev": {
-                "symfony/phpunit-bridge": "^5.0"
+                "symfony/phpunit-bridge": "^5.4@dev"
             },
             "type": "library",
             "extra": {
@@ -5028,7 +5028,10 @@
                 "container",
                 "dependency injection"
             ],
-            "time": "2021-03-06T08:28:00+00:00"
+            "support": {
+                "source": "https://github.com/silexphp/Pimple/tree/v3.5.0"
+            },
+            "time": "2021-10-28T11:13:42+00:00"
         },
         {
             "name": "psr/cache",
@@ -5850,11 +5853,11 @@
         },
         {
             "name": "sabre/vobject",
-            "version": "3.5.3pl5",
+            "version": "3.5.3pl6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/vobject.git",
-                "reference": "8ccca967cf706af5c3b5beb803322853429b6330"
+                "reference": "cabc050a4a42c19c89157e3587cb5d68e72ffa04"
             },
             "require": {
                 "ext-mbstring": "*",
@@ -5939,7 +5942,7 @@
                 "forum": "https://groups.google.com/group/sabredav-discuss",
                 "source": "https://github.com/fruux/sabre-vobject"
             },
-            "time": "2022-09-20T07:51:23+00:00"
+            "time": "2022-09-20T10:50:57+00:00"
         },
         {
             "name": "sabre/xml",
@@ -13205,7 +13208,7 @@
         },
         {
             "package": "sabre/vobject",
-            "version": "3.5.3.0-patch5",
+            "version": "3.5.3.0-patch6",
             "alias": "2.1.0",
             "alias_normalized": "2.1.0.0"
         },
