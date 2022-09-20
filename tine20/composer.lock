@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "070de224a4ad8ecd4667b1460ace3709",
+    "content-hash": "5291dfc39baae34ddc20adc29d9731ac",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -4801,6 +4801,9 @@
                 "container",
                 "dependency injection"
             ],
+            "support": {
+                "source": "https://github.com/silexphp/Pimple/tree/v3.5.0"
+            },
             "time": "2021-10-28T11:13:42+00:00"
         },
         {
@@ -5593,11 +5596,11 @@
         },
         {
             "name": "sabre/vobject",
-            "version": "3.5.3pl5",
+            "version": "3.5.3pl6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/vobject.git",
-                "reference": "8ccca967cf706af5c3b5beb803322853429b6330"
+                "reference": "cabc050a4a42c19c89157e3587cb5d68e72ffa04"
             },
             "require": {
                 "ext-mbstring": "*",
@@ -5682,7 +5685,7 @@
                 "forum": "https://groups.google.com/group/sabredav-discuss",
                 "source": "https://github.com/fruux/sabre-vobject"
             },
-            "time": "2022-09-20T07:51:23+00:00"
+            "time": "2022-09-20T10:50:57+00:00"
         },
         {
             "name": "sabre/xml",
@@ -12285,52 +12288,52 @@
     ],
     "aliases": [
         {
-            "alias": "2.13.3",
-            "alias_normalized": "2.13.3.0",
+            "package": "doctrine/dbal",
             "version": "2.13.3.0-patch1",
-            "package": "doctrine/dbal"
+            "alias": "2.13.3",
+            "alias_normalized": "2.13.3.0"
         },
         {
-            "alias": "8.3.5",
-            "alias_normalized": "8.3.5.0",
+            "package": "league/oauth2-server",
             "version": "8.3.5.0-patch1",
-            "package": "league/oauth2-server"
+            "alias": "8.3.5",
+            "alias_normalized": "8.3.5.0"
         },
         {
-            "alias": "1.8.2",
-            "alias_normalized": "1.8.2.0",
+            "package": "phpoffice/phpexcel",
             "version": "1.8.2.0-patch3",
-            "package": "phpoffice/phpexcel"
+            "alias": "1.8.2",
+            "alias_normalized": "1.8.2.0"
         },
         {
-            "alias": "1.24.1",
-            "alias_normalized": "1.24.1.0",
+            "package": "phpoffice/phpspreadsheet",
             "version": "1.24.1.0-patch2",
-            "package": "phpoffice/phpspreadsheet"
+            "alias": "1.24.1",
+            "alias_normalized": "1.24.1.0"
         },
         {
-            "alias": "1.8.12",
-            "alias_normalized": "1.8.12.0",
+            "package": "sabre/dav",
             "version": "1.8.12.0-patch1",
-            "package": "sabre/dav"
+            "alias": "1.8.12",
+            "alias_normalized": "1.8.12.0"
         },
         {
+            "package": "sabre/vobject",
+            "version": "3.5.3.0-patch6",
             "alias": "2.1.0",
-            "alias_normalized": "2.1.0.0",
-            "version": "3.5.3.0-patch5",
-            "package": "sabre/vobject"
+            "alias_normalized": "2.1.0.0"
         },
         {
-            "alias": "v1.44.6",
-            "alias_normalized": "1.44.6.0",
+            "package": "twig/twig",
             "version": "1.44.6.0-patch3",
-            "package": "twig/twig"
+            "alias": "v1.44.6",
+            "alias_normalized": "1.44.6.0"
         },
         {
-            "alias": "1.12.20",
-            "alias_normalized": "1.12.20.0",
+            "package": "zendframework/zendframework1",
             "version": "1.12.20.0-patch60",
-            "package": "zendframework/zendframework1"
+            "alias": "1.12.20",
+            "alias_normalized": "1.12.20.0"
         }
     ],
     "minimum-stability": "RC",
@@ -12362,5 +12365,6 @@
     "platform-overrides": {
         "php": "7.4",
         "ext-filter": "7.4"
-    }
+    },
+    "plugin-api-version": "2.3.0"
 }
