@@ -1407,6 +1407,10 @@
             "keywords": [
                 "html"
             ],
+            "support": {
+                "issues": "https://github.com/ezyang/htmlpurifier/issues",
+                "source": "https://github.com/ezyang/htmlpurifier/tree/v4.16.0"
+            },
             "time": "2022-09-18T07:06:19+00:00"
         },
         {
@@ -2933,38 +2937,37 @@
         },
         {
             "name": "league/uri",
-            "version": "6.8.0",
+            "version": "6.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/uri.git",
-                "reference": "a700b4656e4c54371b799ac61e300ab25a2d1d39"
+                "reference": "d3b50812dd51f3fbf176344cc2981db03d10fe06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/uri/zipball/a700b4656e4c54371b799ac61e300ab25a2d1d39",
-                "reference": "a700b4656e4c54371b799ac61e300ab25a2d1d39",
+                "url": "https://api.github.com/repos/thephpleague/uri/zipball/d3b50812dd51f3fbf176344cc2981db03d10fe06",
+                "reference": "d3b50812dd51f3fbf176344cc2981db03d10fe06",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "league/uri-interfaces": "^2.3",
-                "php": "^8.1",
-                "psr/http-message": "^1.0.1"
+                "php": "^7.4 || ^8.0",
+                "psr/http-message": "^1.0"
             },
             "conflict": {
                 "league/uri-schemes": "^1.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^v3.9.5",
-                "nyholm/psr7": "^1.5.1",
-                "php-http/psr7-integration-tests": "^1.1.1",
-                "phpbench/phpbench": "^1.2.6",
-                "phpstan/phpstan": "^1.8.5",
+                "friendsofphp/php-cs-fixer": "^v3.3.2",
+                "nyholm/psr7": "^1.5",
+                "php-http/psr7-integration-tests": "^1.1",
+                "phpstan/phpstan": "^1.2.0",
                 "phpstan/phpstan-deprecation-rules": "^1.0",
-                "phpstan/phpstan-phpunit": "^1.1.1",
-                "phpstan/phpstan-strict-rules": "^1.4.3",
-                "phpunit/phpunit": "^9.5.24",
-                "psr/http-factory": "^1.0.1"
+                "phpstan/phpstan-phpunit": "^1.0.0",
+                "phpstan/phpstan-strict-rules": "^1.1.0",
+                "phpunit/phpunit": "^9.5.10",
+                "psr/http-factory": "^1.0"
             },
             "suggest": {
                 "ext-fileinfo": "Needed to create Data URI from a filepath",
@@ -3017,7 +3020,19 @@
                 "url",
                 "ws"
             ],
-            "time": "2022-09-13T19:58:47+00:00"
+            "support": {
+                "docs": "https://uri.thephpleague.com",
+                "forum": "https://thephpleague.slack.com",
+                "issues": "https://github.com/thephpleague/uri/issues",
+                "source": "https://github.com/thephpleague/uri/tree/6.7.2"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/nyamsprod",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-09-13T19:50:42+00:00"
         },
         {
             "name": "league/uri-interfaces",
@@ -12286,52 +12301,52 @@
     ],
     "aliases": [
         {
-            "alias": "2.13.3",
-            "alias_normalized": "2.13.3.0",
+            "package": "doctrine/dbal",
             "version": "2.13.3.0-patch1",
-            "package": "doctrine/dbal"
+            "alias": "2.13.3",
+            "alias_normalized": "2.13.3.0"
         },
         {
-            "alias": "8.3.5",
-            "alias_normalized": "8.3.5.0",
+            "package": "league/oauth2-server",
             "version": "8.3.5.0-patch1",
-            "package": "league/oauth2-server"
+            "alias": "8.3.5",
+            "alias_normalized": "8.3.5.0"
         },
         {
-            "alias": "1.8.2",
-            "alias_normalized": "1.8.2.0",
+            "package": "phpoffice/phpexcel",
             "version": "1.8.2.0-patch3",
-            "package": "phpoffice/phpexcel"
+            "alias": "1.8.2",
+            "alias_normalized": "1.8.2.0"
         },
         {
-            "alias": "1.24.1",
-            "alias_normalized": "1.24.1.0",
+            "package": "phpoffice/phpspreadsheet",
             "version": "1.24.1.0-patch2",
-            "package": "phpoffice/phpspreadsheet"
+            "alias": "1.24.1",
+            "alias_normalized": "1.24.1.0"
         },
         {
-            "alias": "1.8.12",
-            "alias_normalized": "1.8.12.0",
+            "package": "sabre/dav",
             "version": "1.8.12.0-patch1",
-            "package": "sabre/dav"
+            "alias": "1.8.12",
+            "alias_normalized": "1.8.12.0"
         },
         {
-            "alias": "2.1.0",
-            "alias_normalized": "2.1.0.0",
+            "package": "sabre/vobject",
             "version": "3.5.3.0-patch6",
-            "package": "sabre/vobject"
+            "alias": "2.1.0",
+            "alias_normalized": "2.1.0.0"
         },
         {
-            "alias": "v1.44.6",
-            "alias_normalized": "1.44.6.0",
+            "package": "twig/twig",
             "version": "1.44.6.0-patch3",
-            "package": "twig/twig"
+            "alias": "v1.44.6",
+            "alias_normalized": "1.44.6.0"
         },
         {
-            "alias": "1.12.20",
-            "alias_normalized": "1.12.20.0",
+            "package": "zendframework/zendframework1",
             "version": "1.12.20.0-patch60",
-            "package": "zendframework/zendframework1"
+            "alias": "1.12.20",
+            "alias_normalized": "1.12.20.0"
         }
     ],
     "minimum-stability": "RC",
@@ -12363,5 +12378,6 @@
     "platform-overrides": {
         "php": "7.4",
         "ext-filter": "7.4"
-    }
+    },
+    "plugin-api-version": "2.3.0"
 }
