@@ -695,7 +695,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         foreach($cellIterator as $cell) {
             $this->_cloneGroupEndRow[] = array(
                 'column'        => $cell->getColumn(),
-                'value'         => str_replace($replace, '', $cell->getValue()),
+                'value'         => str_replace($replace, '', (string)$cell->getValue()),
                 'XFIndex'       => $cell->getXfIndex()
             );
             $cell->setValue(null);

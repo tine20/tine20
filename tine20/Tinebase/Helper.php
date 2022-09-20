@@ -223,7 +223,7 @@ class Tinebase_Helper
         $search  = array('ä',  'ü',  'ö',  'ß',  'é', 'è', 'ê', 'ó' ,'ô', 'á', 'ź', 'Ä',  'Ü',  'Ö',  'É', 'È', 'Ê', 'Ó' ,'Ô', 'Á', 'Ź');
         $replace = array('ae', 'ue', 'oe', 'ss', 'e', 'e', 'e', 'o', 'o', 'a', 'z', 'Ae', 'Ue', 'Oe', 'E', 'E', 'E', 'O', 'O', 'a', 'z');
         
-        $output = str_replace($search, $replace, $_input);
+        $output = str_replace($search, $replace, (string)$_input);
 
         if ($_replaceWhitespace) {
             $pattern = '/[^a-zA-Z0-9._\-]/';

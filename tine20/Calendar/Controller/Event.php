@@ -1694,7 +1694,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
-        if (preg_match('/^fakeid(.*)\/(.*)/', $_id, $matches)) {
+        if ($_id && preg_match('/^fakeid(.*)\/(.*)/', $_id, $matches)) {
             $baseEvent = $this->get($matches[1]);
             $exceptions = $this->getRecurExceptions($baseEvent);
             $originalDtStart = new Tinebase_DateTime($matches[2]);

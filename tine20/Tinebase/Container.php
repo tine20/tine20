@@ -1666,7 +1666,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             $row['id']   = $row['containerid'];
             $container = new Tinebase_Model_Container($row, TRUE);
             
-            $grantsArray = array_unique(explode(',', $row['account_grants']));
+            $grantsArray = array_unique(explode(',', (string)$row['account_grants']));
             $container->account_grants = $this->_getGrantsFromArray($grantsArray, $accountId,
                 $container->getGrantClass())->toArray();
             

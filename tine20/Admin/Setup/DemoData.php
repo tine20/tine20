@@ -333,7 +333,7 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _generateRandomColor()
     {
-        mt_srand((double)microtime()*1000000);
+        mt_srand((int)microtime()*1000000);
         $color = '';
         while (strlen($color) < 6) {
             $color .= sprintf("%02X", mt_rand(0, 255));

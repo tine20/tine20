@@ -256,7 +256,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         if (! $this->_isDbmailSieve()) {
             // and: no from for dbmail vacations
             $from = $_account->from;
-            if (strpos($from, '@') === FALSE) {
+            if (strpos((string)$from, '@') === FALSE) {
                 $from .= ' <' . $_account->email . '>';
             }
             $_vacation->from = $from;

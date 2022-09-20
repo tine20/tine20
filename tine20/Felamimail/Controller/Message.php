@@ -601,7 +601,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
 
             $section = $_partId . '.TEXT';
-        } else if (preg_match('/winmail-([0-9]+)/', $_partId, $matches)) {
+        } elseif ($_partId && preg_match('/winmail-([0-9]+)/', $_partId, $matches)) {
             // winmail.dat part requested
             $_message = $this->getCompleteMessage($_message);
             if (isset($_message->attachments[$matches[1]])) {

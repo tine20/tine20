@@ -25,7 +25,7 @@
  * @property string     mime
  * @property string     blob
  */
-class Tinebase_Model_Image extends Tinebase_Record_Abstract 
+class Tinebase_Model_Image extends Tinebase_Record_Abstract
 {
     /**
      * preserves ratio and cropes image on the oversize side
@@ -178,12 +178,12 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
                     // crop width
                     $dst_image = imagecreatetruecolor($dst_width, $dst_height);
                     $this->assertTransparency($dst_image, $src_image);
-                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, $this->height * $dst_ratio, $this->height);
+                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, (int)$this->height * $dst_ratio, (int)$this->height);
                 } else {
                     // crop heights
                     $dst_image = imagecreatetruecolor($dst_width, $dst_height);
                     $this->assertTransparency($dst_image, $src_image);
-                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, $this->width, $this->width / $dst_ratio);
+                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, (int)$this->width, (int)$this->width / $dst_ratio);
                 }
                 break;
             case self::RATIOMODE_PRESERVNOFILL:
@@ -200,7 +200,7 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
                 $dst_ratio = $dst_width/$dst_height;
                 $dst_image = imagecreatetruecolor($dst_width, $dst_height);
                 $this->assertTransparency($dst_image, $src_image);
-                imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, $this->width, $this->height);
+                imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, (int)$dst_width, (int)$dst_height, (int)$this->width, (int)$this->height);
                 break;
             default: 
                 throw new Tinebase_Exception_InvalidArgument('Ratiomode not supported.');
