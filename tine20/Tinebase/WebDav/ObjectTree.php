@@ -50,7 +50,11 @@ class Tinebase_WebDav_ObjectTree extends \Sabre\DAV\ObjectTree
                     explode('/', trim($destinationParentPath->flatpath, '/')) !== 4)) {
                 throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file to: ' . $destinationPath);
             }
-            $sourceNode->rename($destinationParent->getPath() . '/' . $destinationName);
+            try {
+                $sourceNode->rename($destinationParent->getPath() . '/' . $destinationName);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
+            }
         } else {
             $this->copy($sourcePath,$destinationPath);
             $this->getNodeForPath($sourcePath)->delete();
