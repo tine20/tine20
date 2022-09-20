@@ -112,7 +112,7 @@
     "phpoffice/phpword": "^0.18",
     "psr/http-server-middleware": "^1.0",
     "sabre/dav": "1.8.12pl1 as 1.8.12",
-    "sabre/vobject": "3.5.3pl5 as 2.1.0",
+    "sabre/vobject": "3.5.3pl6 as 2.1.0",
     "sentry/sentry": "^3",
     "simplesamlphp/simplesamlphp": "v1.18.*",
     "spomky-labs/otphp": "^10.0",
