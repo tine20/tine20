@@ -112,7 +112,7 @@
     "phpoffice/phpword": "^0.18",
     "psr/http-server-middleware": "^1.0",
     "sabre/dav": "1.8.12pl1 as 1.8.12",
-    "sabre/vobject": "3.5.3pl4 as 2.1.0",
+    "sabre/vobject": "3.5.3pl5 as 2.1.0",
     "sentry/sentry": "^3",
     "simplesamlphp/simplesamlphp": "v1.18.*",
     "spomky-labs/otphp": "^10.0",
@@ -121,7 +121,7 @@
     "symfony/config": "^4",
     "symfony/dependency-injection": "^4",
     "symfony/http-client": "^4",
-    "syncroton/syncroton": "1.5.0",
+    "syncroton/syncroton": "^1.5",
     "tine20/composerapploader": "1.0.*",
     "twig/extensions": "^1.5",
     "twig/twig": "v1.44.6pl3 as v1.44.6",
@@ -129,7 +129,7 @@
     "web-auth/webauthn-lib": "^3.3",
     "xenolope/quahog": "^2.1",
     "zbateson/mail-mime-parser": "2.*",
-    "zendframework/zendframework1": "1.12.20pl59 as 1.12.20"
+    "zendframework/zendframework1": "1.12.20pl60 as 1.12.20"
   },
   "require-dev": {
     "laminas/laminas-psr7bridge": "^1",
