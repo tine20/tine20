@@ -95,6 +95,7 @@
     "laminas/laminas-httphandlerrunner": "^2",
     "laminas/laminas-stdlib": "^3.5",
     "laminas/laminas-stratigility": "^3.2",
+    "laminas/laminas-zendframework-bridge": "^1.6",
     "metaways/opendocument": "1.2",
     "metaways/timezoneconvert": "1.*",
     "mtdowling/cron-expression": "^1.2 | ^2.0",
