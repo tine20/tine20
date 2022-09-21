@@ -93,7 +93,7 @@ if (!empty($currentCmds)) {
 }
 unset($out);
 if (!empty($updates)) {
-    $composerCmds[] = ['composer update --ignore-platform-req=ext-simplexml --ignore-platform-req=ext-bcmath --ignore-platform-req=ext-dom --ignore-platform-req=ext-gd --ignore-platform-req=ext-intl --ignore-platform-req=ext-xml --ignore-platform-req=ext-xml --ignore-platform-req=ext-zip --ignore-platform-req=ext-curl --ignore-platform-req=ext-xmlwriter --ignore-platform-req=ext-xmlreader ' . join(' ', $updates)];
+    $composerCmds[] = ['composer update --ignore-platform-req=ext-simplexml --ignore-platform-req=ext-bcmath --ignore-platform-req=ext-dom --ignore-platform-req=ext-gd --ignore-platform-req=ext-intl --ignore-platform-req=ext-xml --ignore-platform-req=ext-xml --ignore-platform-req=ext-zip --ignore-platform-req=ext-curl --ignore-platform-req=ext-xmlwriter --ignore-platform-req=ext-xmlreader --ignore-platform-req=ext-mbstring ' . join(' ', $updates)];
 }
 
 foreach (array_reverse($composerCmds) as $cmds) {
@@ -111,7 +111,7 @@ foreach (array_reverse($composerCmds) as $cmds) {
 
 // update composer.lock file
 if (empty($composerCmds)) {
-    $cmd = 'composer update --ignore-platform-req=ext-simplexml --ignore-platform-req=ext-bcmath --ignore-platform-req=ext-dom --ignore-platform-req=ext-gd --ignore-platform-req=ext-intl --ignore-platform-req=ext-xml --ignore-platform-req=ext-xml --ignore-platform-req=ext-zip --ignore-platform-req=ext-curl --ignore-platform-req=ext-xmlwriter --ignore-platform-req=ext-xmlreader nothing';
+    $cmd = 'composer update --ignore-platform-req=ext-simplexml --ignore-platform-req=ext-bcmath --ignore-platform-req=ext-dom --ignore-platform-req=ext-gd --ignore-platform-req=ext-intl --ignore-platform-req=ext-xml --ignore-platform-req=ext-xml --ignore-platform-req=ext-zip --ignore-platform-req=ext-curl --ignore-platform-req=ext-xmlwriter --ignore-platform-req=ext-xmlreader --ignore-platform-req=ext-mbstring nothing';
     echo $cmd . PHP_EOL;
     exec($cmd, $out, $ret);
     if (0 !== $ret) {
