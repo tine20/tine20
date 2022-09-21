@@ -1,0 +1,37 @@
+- name: check if release has already been deployed
+  stat:
+    path: "{{tine20_releases_path}}/{{tine20_release}}/Tinebase"
+  register: deployed
+
+- name: create directory for customer release
+  file:
+    path: "{{tine20_releases_path}}/{{tine20_release}}"
+    state: directory
+    owner: root
+    group: root
+  become: true
+  when:
+    - deployed.stat.isdir is not defined
+
+#- debug: var=tine20repo
+
+- name: unpack extrapackages
+  unarchive:
+    src: "{{tine20repo}}/{{tine20_release}}/tine20-{{item}}_{{tine20_release}}.tar.bz2"
+    dest: "{{tine20_releases_path}}/{{tine20_release}}"
+    copy: false
+    # coming with ansible 2.2 - replace copy with that
+    # remote_src: yes
+  become: true
+  with_items: "{{tine20_packages}}"
+  when:
+    - tine20_release is defined
+    - tine20_packages is defined
+    - deployed.stat.isdir is not defined
+
+- name: link /usr/share/tine20 to appropriate release
+  file:
+    path: "/usr/share/tine20"
+    src: "{{ tine20_releases_path }}/{{ tine20_release }}"
+    state: link
+  become: true
