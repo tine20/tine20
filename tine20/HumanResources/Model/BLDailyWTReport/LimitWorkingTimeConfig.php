@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -27,6 +27,7 @@ class HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig extends Tineba
 
     const FLDS_START_TIME = 'start_time';
     const FLDS_END_TIME = 'end_time';
+    const FLDS_MAX_DURATION = 'max_duration';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -57,7 +58,12 @@ class HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig extends Tineba
             ],
             self::FLDS_END_TIME         => [
                 self::TYPE                  => self::TYPE_TIME,
-                self::LABEL                 => 'End time', // _('Type')
+                self::LABEL                 => 'End time', // _('End time')
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            self::FLDS_MAX_DURATION     => [
+                self::TYPE                  => self::TYPE_INTEGER,
+                self::LABEL                 => 'Maximum duration', // _('Maximum duration')
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
         ],
