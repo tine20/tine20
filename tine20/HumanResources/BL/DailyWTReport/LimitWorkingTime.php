@@ -6,7 +6,7 @@
  * @subpackage  BL
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -47,6 +47,7 @@ class HumanResources_BL_DailyWTReport_LimitWorkingTime implements Tinebase_BL_El
 
         $this->_checkEvaluationPeriodStart($_data);
         $this->_checkEvaluationPeriodEnd($_data);
+        $this->_checkMaxDuration($_data);
     }
 
     /**
@@ -104,5 +105,32 @@ class HumanResources_BL_DailyWTReport_LimitWorkingTime implements Tinebase_BL_El
                 return;
             }
         } while (true);
+    }
+
+    protected function _checkMaxDuration(HumanResources_BL_DailyWTReport_Data $_data): void
+    {
+        if (!($maxDuration =
+                $this->_config->{HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::FLDS_MAX_DURATION})) {
+            return;
+        }
+
+        $duration = 0;
+        reset($_data->timeSlots);
+        while ($timeSlot = current($_data->timeSlots)) { /** @var HumanResources_BL_DailyWTReport_TimeSlot $timeSlot */
+            $duration += $timeSlot->end->getTimestamp() - $timeSlot->start->getTimestamp();
+
+            if ($duration > $maxDuration) {
+                if ($maxDuration - $duration !== $timeSlot->end->getTimestamp() - $timeSlot->start->getTimestamp()) {
+                    $timeSlot->end->subSecond($maxDuration - $duration);
+                    if (!next($_data->timeSlots)) {
+                        return;
+                    }
+                }
+
+                $key = key($_data->timeSlots);
+                $_data->timeSlots = array_slice($_data->timeSlots, 0, array_search($key, array_keys($_data->timeSlots), true));
+                return;
+            }
+        }
     }
 }
