@@ -1,0 +1,17 @@
+---
+
+config_path: "/etc/tine20"
+tine20_activate_maintenance_mode: true
+tine20_run_update: true
+tine20_document_root: "/usr/share/tine20"
+
+# for tarball packages
+tine20_releases_path: "/usr/share/tine20_releases"
+tine20_release: "2022.11.1~rc3"
+tine20repo: "https://packages.tine20.com/maintenance/source"
+tine20_packages:
+  - allinone
+#  - humanresources
+#  - projects
+#  - usermanual
+#  - ...

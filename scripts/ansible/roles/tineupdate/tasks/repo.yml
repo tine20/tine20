@@ -1,0 +1,33 @@
+# TODO add some kind of switch? sometimes, python-apt is needed
+# TODO this is deprecated - repo stuff
+- name: install python-apt package
+  apt:
+    name: python3-apt
+    state: present
+
+- name: import repo key
+  apt_key: 
+    id: 8825FD82
+    state: present
+    keyserver: keys.gnupg.net
+
+- name: add tine20 repository
+  apt_repository:
+    repo: "{{tine20repo}}"
+    state: present
+  when: tine20repo is defined
+
+- name: execute apt-get update
+  apt: update_cache=yes
+
+- name: apt unhold tine packages
+  shell: apt-mark unhold tine20*
+
+- name: update tine20 package
+  apt:
+    pkg: "{{ tine20_meta_package }}"
+    state: latest
+  when: not ansible_check_mode
+
+- name: apt hold tine packages
+  shell: apt-mark hold tine20*

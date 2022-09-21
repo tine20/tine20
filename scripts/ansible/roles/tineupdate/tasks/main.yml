@@ -1,0 +1,36 @@
+---
+
+- name: activate maintenance mode
+  shell: sudo -u www-data php {{ tine20_document_root }}/setup.php
+   --config {{ config_path }}/config.inc.php --maintenance_mode -- state=all
+  run_once: true
+  when: tine20_activate_maintenance_mode|bool
+
+- include: repo.yml
+  when: tine20_packages is not defined
+
+- include: tarball.yml
+  when: tine20_packages is defined
+
+- name: run tine20 update script
+  shell: sudo -u www-data php {{ tine20_document_root }}/setup.php
+   --config {{ config_path }}/config.inc.php --update
+  run_once: true
+  when: tine20_run_update|bool
+
+- name: disable maintenance mode
+  shell: sudo -u www-data php {{ tine20_document_root }}/setup.php
+   --config {{ config_path }}/config.inc.php --maintenance_mode -- state=off
+  run_once: true
+  when: tine20_activate_maintenance_mode|bool
+
+- name: check if worker is available
+  stat:
+    path: /lib/systemd/system/tine20-worker.service
+  register: tine20workerservice
+
+- name: restart tine20-worker
+  service:
+    name: tine20-worker
+    state: restarted
+  when: tine20workerservice.stat.exists
