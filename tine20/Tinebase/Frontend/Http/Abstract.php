@@ -41,7 +41,11 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         if ('pdf' === $format && ! Tinebase_Export::doPdfLegacyHandling()) {
             $switchFormat = 'newPDF';
         } else {
-            $switchFormat = $format;
+            if ($export instanceof Tinebase_Export_CsvNew) {
+                $switchFormat = 'newCsv';
+            } else {
+                $switchFormat = $format;
+            }
         }
 
         if (strpos($format, 'new') === 0) {
