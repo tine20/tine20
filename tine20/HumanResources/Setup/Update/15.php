@@ -29,6 +29,7 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE013 = __CLASS__ . '::update013';
     const RELEASE015_UPDATE014 = __CLASS__ . '::update014';
     const RELEASE015_UPDATE015 = __CLASS__ . '::update015';
+    const RELEASE015_UPDATE016 = __CLASS__ . '::update016';
 
     static protected $_allUpdates = [
         // we'll do some querys here and we want them done before any schema tool comes along to play
@@ -78,6 +79,10 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE014          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update014',
+            ],
+            self::RELEASE015_UPDATE016          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update016',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -324,5 +329,23 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
         HumanResources_Setup_Initialize::addPeristentObserverFreeTime();
 
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '15.15', self::RELEASE015_UPDATE015);
+    }
+
+    public function update016()
+    {
+        foreach ($this->getDb()->query('SELECT id, start_date, end_date from ' . SQL_TABLE_PREFIX . 'humanresources_contract')->fetchAll(Zend_Db::FETCH_NUM) as $row) {
+            $start = new Tinebase_DateTime($row[1]);
+            $start->setTimezone('Europe/Berlin');
+            $start = $start->format('Y-m-d 00:00:00');
+            $end = new Tinebase_DateTime($row[2]);
+            $end->setTimezone('Europe/Berlin');
+            $end = $end->format('Y-m-d 00:00:00');
+            $this->getDb()->update(SQL_TABLE_PREFIX . 'humanresources_contract', [
+                'start_date' => $start,
+                'end_date' => $end,
+            ], $this->getDb()->quoteInto('id = ?', $row[0]));
+        }
+
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '15.16', self::RELEASE015_UPDATE016);
     }
 }

@@ -562,7 +562,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                         if ($day->compare($startDay) < 0) $day->addWeek(1);
                         while ($day->compare($stopDay) < 1) {
                             $exdate = clone $day;
-                            $exdate->setTimezone(Tinebase_Core::getUserTimezone());
                             $excludeDates[] = $exdate;
                             $day->addWeek(1);
                         }
