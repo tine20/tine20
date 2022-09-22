@@ -876,6 +876,21 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                             $_eventObject->observable->start_date);
                     }
 
+                } elseif ($_eventObject->observable instanceof HumanResources_Model_FreeTime) {
+                    /* order matters start */
+                    $tsRaii = new Tinebase_RAII(Timetracker_Controller_Timesheet::getInstance()->assertPublicUsage());
+                    $mRaii = new Tinebase_RAII(HumanResources_Controller_MonthlyWTReport::getInstance()->assertPublicUsage());
+                    $dRaii = new Tinebase_RAII($this->assertPublicUsage());
+                    /* order matters end */
+
+                    $this->calculateReportsForEmployee(HumanResources_Controller_Employee::getInstance()->get(
+                        $_eventObject->observable->getIdFromProperty('employee_id')), $_eventObject->observable->start_date);
+
+                    /* order matters start */
+                    unset($dRaii);
+                    unset($mRaii);
+                    unset($tsRaii);
+                    /* order matters end */
                 }
                 break;
         }
