@@ -37,10 +37,15 @@ class Tinebase_BroadcastHub
 
     public function pushAfterCommit(string $verb, string $model, string $recordId, ?string $containerId): void
     {
-        Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(
-            function() use($verb, $model, $recordId, $containerId) {
-                Tinebase_BroadcastHub::getInstance()->push($verb, $model, $recordId, $containerId);
-        });
+        $tam = Tinebase_TransactionManager::getInstance();
+        if ($tam->hasOpenTransactions() === false) {
+            $this->push($verb, $model, $recordId, $containerId);
+        } else {
+            $tam->registerAfterCommitCallback(
+                function() use($verb, $model, $recordId, $containerId) {
+                    Tinebase_BroadcastHub::getInstance()->push($verb, $model, $recordId, $containerId);
+            });
+        }
     }
 
     protected $_config;
