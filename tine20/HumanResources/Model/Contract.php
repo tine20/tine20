@@ -38,7 +38,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 4,
+        'version'         => 5,
         'recordName'      => 'Contract', // ngettext('Contract', 'Contracts', n)
         'recordsName'     => 'Contracts', // gettext('GENDER_Contract')
         'hasRelations'    => FALSE,
@@ -94,7 +94,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
             'start_date'        => array(
                 'label'      => 'Start Date',    // _('Start Date')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'type'       => 'datetime',
+                'type'       => 'date',
                 'sortable'   => FALSE,
                 'showInDetailsPanel' => TRUE,
                 'nullable' => true,
@@ -104,7 +104,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
                 'nullable' => TRUE,
                 'label'   => 'End Date',    // _('End Date')
-                'type'    => 'datetime',
+                'type'    => 'date',
                 'sortable'   => FALSE,
                 'showInDetailsPanel' => TRUE
             ),

@@ -1458,10 +1458,10 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
             'freedays' => [['duration' => '1', 'date' => '2013-01-11 00:00:00']],
         ]));
-        
-        $employeeJson['contracts'][0]['vacation_days'] = 31;
+
+        $recordData['contracts'][0]['vacation_days'] = 31;
         try {
-            $employeeJson = $this->_json->saveEmployee($employeeJson);
+            $this->_json->saveEmployee($recordData);
             $this->fail('an exception should be thrown');
         } catch (Exception $e) {
             $this->assertTrue($e instanceof HumanResources_Exception_ContractNotEditable, $e->getMessage());
