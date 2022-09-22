@@ -408,6 +408,7 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
     protected function _initializePersistentObserver()
     {
         static::addPeristentObserverTT();
+        static::addPeristentObserverFreeTime();
     }
 
     public static function addPeristentObserverTT()
@@ -417,6 +418,18 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
                 'observable_model'      => Timetracker_Model_Timesheet::class,
                 'observer_model'        => HumanResources_Controller_DailyWTReport::class,
                 'observer_identifier'   => 'wtreport',
+                'observed_event'        => Tinebase_Event_Record_Update::class,
+            ])
+        );
+    }
+
+    public static function addPeristentObserverFreeTime()
+    {
+        Tinebase_Record_PersistentObserver::getInstance()->addObserver(
+            new Tinebase_Model_PersistentObserver([
+                'observable_model'      => HumanResources_Model_FreeTime::class,
+                'observer_model'        => HumanResources_Controller_DailyWTReport::class,
+                'observer_identifier'   => 'wtreportFT',
                 'observed_event'        => Tinebase_Event_Record_Update::class,
             ])
         );

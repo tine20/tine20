@@ -163,7 +163,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord)
     {
-        $this->_inspect($updatedRecord);
+        $this->_inspect($updatedRecord, $currentRecord);
     }
 
     /**
@@ -178,7 +178,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         $this->_inspect($createdRecord);
     }
 
-    protected function _inspect($record)
+    protected function _inspect($record, $oldRecord = null)
     {
         if (empty($freeDays = $record->freedays)) {
             return;
@@ -196,6 +196,24 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         if ($record->type == 'sickness') {
             $this->_handleOverwrittenVacation($record);
         }
+
+        if ((null === $oldRecord && $record->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS} !==
+                \HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED) || ($oldRecord &&
+                $oldRecord->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS} !==
+                    \HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED &&
+                    $record->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS} !==
+                    \HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED)) {
+            return;
+        }
+
+        $event = new Tinebase_Event_Record_Update();
+        $event->observable = clone $record;
+        if ($oldRecord && $oldRecord->firstday_date->isEarlier($record->firstday_date)) {
+            $event->observable->firstday_date = $oldRecord->firstday_date;
+        }
+        Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function() use($event) {
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
+        });
     }
    
    /**
