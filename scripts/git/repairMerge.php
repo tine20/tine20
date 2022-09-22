@@ -92,7 +92,7 @@ if (!empty($currentCmds)) {
     $composerCmds[] = $currentCmds;
 }
 unset($out);
-$composerIgnores = '--ignore-platform-req=ext-sockets --ignore-platform-req=ext-simplexml --ignore-platform-req=ext-bcmath --ignore-platform-req=ext-dom --ignore-platform-req=ext-gd --ignore-platform-req=ext-intl --ignore-platform-req=ext-xml --ignore-platform-req=ext-xml --ignore-platform-req=ext-zip --ignore-platform-req=ext-curl --ignore-platform-req=ext-xmlwriter --ignore-platform-req=ext-xmlreader';
+$composerIgnores = '--ignore-platform-req=ext-sockets --ignore-platform-req=ext-simplexml --ignore-platform-req=ext-bcmath --ignore-platform-req=ext-dom --ignore-platform-req=ext-gd --ignore-platform-req=ext-intl --ignore-platform-req=ext-xml --ignore-platform-req=ext-xml --ignore-platform-req=ext-zip --ignore-platform-req=ext-curl --ignore-platform-req=ext-xmlwriter --ignore-platform-req=ext-xmlreader --ignore-platform-req=ext-mbstring';
 
 if (!empty($updates)) {
     $composerCmds[] = ['composer update ' . $composerIgnores . ' ' . join(' ', $updates)];
