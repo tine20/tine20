@@ -4270,7 +4270,8 @@ class Tinebase_FileSystem implements
                     } else {
                         $this->_fileObjectBackend->updateRevisionByHash($hashDir . $file, [
                             'lastavscan_time' => Tinebase_DateTime::now()->toString(),
-                            'is_quarantined' => Tinebase_FileSystem_AVScan_Result::RESULT_FOUND === $scanResult->result,
+                            'is_quarantined' =>
+                                Tinebase_FileSystem_AVScan_Result::RESULT_FOUND === $scanResult->result ? 1 : 0,
                         ]);
                     }
                 } finally {
