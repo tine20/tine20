@@ -162,7 +162,7 @@ class Tasks_Convert_Task_VCalendar_GenericTest extends \PHPUnit\Framework\TestCa
         
         $vcalendar = Tasks_Frontend_WebDAV_TaskTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning.ics');
         // remove alarm part from vcalendar
-        $vcalendar = preg_replace('/BEGIN:VALARM.*END:VALARM(\n|\r\n)/s', null, $vcalendar);
+        $vcalendar = preg_replace('/BEGIN:VALARM.*END:VALARM(\n|\r\n)/s', '', $vcalendar);
         
         $task = $converter->toTine20Model($vcalendar, $task);
         

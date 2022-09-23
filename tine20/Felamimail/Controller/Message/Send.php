@@ -557,7 +557,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _setMailBody(Tinebase_Mail $_mail, Felamimail_Model_Message $_message)
     {
-        if (strpos($_message->body, '-----BEGIN PGP MESSAGE-----') === 0) {
+        if (strpos((string)$_message->body, '-----BEGIN PGP MESSAGE-----') === 0) {
             $_mail->setBodyPGPMime($_message->body);
             return;
         }
