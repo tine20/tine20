@@ -991,7 +991,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     public function addMessageToCache(Felamimail_Model_Message $_message)
     {
         $_message->from_email = $this->_filterEmailAddressBeforeAddingToCache($_message->from_email);
-        $_message->from_name  = Tinebase_Core::filterInputForDatabase(mb_substr($_message->from_name,  0, 254));
+        $_message->from_name  = Tinebase_Core::filterInputForDatabase(mb_substr((string)$_message->from_name,  0, 254));
         foreach (['to', 'cc', 'bcc'] as $type) {
             $recipients = $_message->{$type};
             if (! is_array($recipients)) {

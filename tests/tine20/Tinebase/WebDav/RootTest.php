@@ -43,7 +43,7 @@ class Tinebase_WebDav_RootTest extends TestCase
      */
     public function testGetChildren()
     {
-        $children = $this->_getWebDAVTree()->getNodeForPath(null)->getChildren();
+        $children = $this->_getWebDAVTree()->getNodeForPath('')->getChildren();
         
         $this->assertEquals(6, count($children));
     }
