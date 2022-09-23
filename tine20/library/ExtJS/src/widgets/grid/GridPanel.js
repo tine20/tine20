@@ -657,13 +657,14 @@ function(grid, rowIndex, columnIndex, e) {
                 c = cm.getColumnById(s.id);
                 if(c){
                     oldIndex = cm.getIndexById(s.id);
+                    
+                    cm.setHidden(oldIndex, !!s.hidden);
+                    c.hidden = !!s.hidden;
+                    c.width = s.width;
+
                     if(oldIndex !== i){
                         cm.moveColumn(oldIndex, i);
                     }
-
-                    cm.setHidden(oldIndex, s.hidden);
-                    c.hidden = s.hidden;
-                    c.width = s.width;
                 }
             }
         }
