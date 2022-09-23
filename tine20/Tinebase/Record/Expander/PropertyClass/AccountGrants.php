@@ -37,7 +37,7 @@ class Tinebase_Record_Expander_PropertyClass_AccountGrants extends Tinebase_Reco
                 $delegateRecord = $record->{$mc->delegateAclField};
                 if (!$delegateRecord instanceof Tinebase_Record_Interface) {
                     if (!isset($funcCache[$delegateRecord])) {
-                        $funcCache[$delegateRecord] = $mc->fields[$mc->delegateAclField][Tinebase_Record_Abstract::CONFIG][Tinebase_Record_Abstract::CONTROLLER_CLASS_NAME]::getInstance()->get($delegateRecord);
+                        $funcCache[$delegateRecord] = $mc->fields[$mc->delegateAclField][Tinebase_Record_Abstract::CONFIG][Tinebase_Record_Abstract::CONTROLLER_CLASS_NAME]::getInstance()->get($delegateRecord, null, true, true);
                     }
                     $delegateRecord = $funcCache[$delegateRecord];
                 } elseif (!isset($funcCache[$delegateRecord->getId()])) {
