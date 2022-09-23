@@ -80,14 +80,24 @@ class HumanResources_BL_DailyWTReport_Data implements Tinebase_BL_DataInterface
         foreach ($_timeSheets as $timeSheet) {
             $timeSlot = new HumanResources_BL_DailyWTReport_TimeSlot();
             $timeSlot->start = new Tinebase_DateTime($timeSheet->start_date->format('Y-m-d ') . $timeSheet->start_time);
-            $timeSlot->end = $timeSlot->start->getClone()->addMinute($timeSheet->duration);
+            if ($timeSheet->end_time) {
+                $timeSlot->end = new Tinebase_DateTime($timeSheet->start_date->format('Y-m-d ') . $timeSheet->end_time);
+            } else {
+                $timeSlot->end = $timeSlot->start->getClone()->addMinute($timeSheet->duration);
+            }
             $timeSlot->timeAccountId = $timeSheet->getIdFromProperty('timeaccount_id');
             $timeSlot->timeSheetId = $timeSheet->getId();
 
             // TODO add same day assertions? which TZ?
-            if (!$this->allowTimesheetOverlap && false !== ($lastSlot = end($this->timeSlots))) {
+            if (!$this->allowTimesheetOverlap && false !== ($lastSlot = end($this->timeSlots))) { /** @var HumanResources_BL_DailyWTReport_TimeSlot $lastSlot */
                 if ($timeSlot->start->isEarlier($lastSlot->end)) {
-                    throw new Tinebase_Exception_BL('timesheets must not overlap');
+                    if (strcmp($timeSlot->start->format('Y-m-d H:i'), $lastSlot->end->format('Y-m-d H:i')) > 0) {
+                        throw new Tinebase_Exception_BL('timesheets must not overlap');
+                    }
+                    $timeSlot->start = clone $lastSlot->end;
+                    if ($timeSlot->start->isLater($timeSlot->end)) {
+                        throw new Tinebase_Exception_BL('timesheets must not overlap');
+                    }
                 }
             }
             $newRelation = clone $relation;
