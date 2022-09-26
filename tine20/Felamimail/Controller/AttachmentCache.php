@@ -100,12 +100,7 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
         }
         rewind($stream);
 
-        if (!$fileName || false === ($name = iconv(mb_detect_encoding($fileName), "UTF-8//IGNORE", $fileName))) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
-                __LINE__ . ' no usable filename available');
-
-            $name = 'unknown file name ' . uniqid();
-        }
+        $name = $this->_sanitizeFilename($fileName);
 
         $_record->attachments = new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class, [
             new Tinebase_Model_Tree_Node([
@@ -114,6 +109,28 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
                 'stream' => $stream,
             ], true)
         ]);
+    }
+
+    /**
+     * @param mixed $filename
+     * @return string
+     */
+    protected function _sanitizeFilename($filename): string
+    {
+        $fallback = 'unknown_file_name_' . uniqid();
+        if (!$filename) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                __LINE__ . ' No usable filename available');
+            return $fallback;
+        }
+
+        if (! mb_detect_encoding($filename) || false === ($name = iconv(mb_detect_encoding($filename), "UTF-8//IGNORE", $filename))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                __LINE__ . ' No usable filename available: ' . $filename);
+            return $fallback;
+        }
+
+        return $name;
     }
 
     /**
