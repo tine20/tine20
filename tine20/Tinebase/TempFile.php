@@ -406,7 +406,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
     }
 
     /**
-     * @param $id
+     * @param Tinebase_Model_TempFile|string $id
      * @return int
      * @throws Tinebase_Exception_InvalidArgument
      */
@@ -416,7 +416,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         if (file_exists($tempfile->path)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Deleting temp file ' . $tempfile->path);
-            unlink($tempfile->path);
+            @unlink($tempfile->path);
         }
         return $this->delete($id);
     }
