@@ -68,16 +68,16 @@ describe('message', () => {
         await page.keyboard.press('Escape')
     })
 
-    let attachement;
+    let attachment;
     test.skip('download attachments', async () => {
         newMail.click({clickCount: 2});
         popupWindow = await lib.getNewWindow();
         //await popupWindow.waitForSelector('.ext-el-mask');
         await popupWindow.waitForFunction(() => !document.querySelector('.ext-el-mask'));
         await popupWindow.waitForSelector('.tinebase-download-link');
-        attachement = await popupWindow.$$('.tinebase-download-link');
-        await attachement[1].hover();
-        await attachement[1].click('tinebase-download-link-wait');
+        attachment = await popupWindow.$$('.tinebase-download-link');
+        await attachment[1].hover();
+        await attachment[1].click('tinebase-download-link-wait');
 
         let file = await lib.download(popupWindow, '.x-menu-item-text', {text:'Herunterladen'});
 
@@ -88,9 +88,9 @@ describe('message', () => {
 
     test.skip('file attachment', async () => {
         await popupWindow.waitForSelector('.tinebase-download-link');
-        attachement = await popupWindow.$$('.tinebase-download-link');
-        await attachement[1].hover();
-        await attachement[1].click('tinebase-download-link-wait');
+        attachment = await popupWindow.$$('.tinebase-download-link');
+        await attachment[1].hover();
+        await attachment[1].click('tinebase-download-link-wait');
         await expect(popupWindow).toClick('.x-menu-item-text',
             {text: new RegExp('Datei.*'), visible: true});
         await popupWindow.waitForSelector('.x-grid3-row.x-grid3-row-first');

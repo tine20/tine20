@@ -10,6 +10,7 @@ Ext.ns('Tine.Filemanager');
 
 require('Filemanager/js/QuickLookRegistry');
 require('Filemanager/js/DocumentPreview');
+require('Filemanager/js/QuickLookMediaPanel');
 
 Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
 
@@ -58,6 +59,29 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
 
         this.registry = Tine.Filemanager.QuickLookRegistry;
 
+        this.tbar = new Ext.Toolbar({
+            items: [{
+                xtype: 'tbfill',
+                order: 50
+            }, Tine.Filemanager.nodeActionsMgr.get('download', {
+                hidden: this.record.constructor.getPhpClassName() === 'Felamimail_Model_Message'
+            }) ],
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key: 'Tine-Filemanager-QuicklookPanel'
+            }],
+        });
+
+        this.actionUpdater = new Tine.widgets.ActionUpdater({
+            evalGrants: true
+        });
+
+        this.actionUpdater.addActions(this.tbar.items);
+
+        if (this.tbar.items.getCount() < 2) {
+            this.tbar.hide();
+        }
+
         this.action_close = new Ext.Action({
             text: this.app.i18n._('Close'),
             minWidth: 70,
@@ -91,6 +115,7 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
                     this.onNavigate(e);
                     break;
                 default:
+                    this.cardPanel.layout.activeItem.fireEvent('keydown', e);
                     break;
             }
         }, this);
@@ -123,6 +148,7 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
                 Tine.log.info('Using ' + previewPanelXtype + ' to show ' + this.record.get('contenttype') + ' preview.');
                 previewPanel = Ext.create({
                     xtype: previewPanelXtype,
+                    initialApp: this.initialApp,
                     nodeRecord: this.record
                 });
             } else if (this.registry.hasExtension(fileExtension)) {
@@ -130,6 +156,7 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
                 Tine.log.info('Using ' + previewPanelXtype + ' to show ' + this.record.get('contenttype') + ' preview.');
                 previewPanel = Ext.create({
                     xtype: previewPanelXtype,
+                    initialApp: this.initialApp,
                     nodeRecord: this.record
                 });
             } else {
@@ -139,6 +166,7 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
                     record: this.record
                 });
             }
+            this.actionUpdater.updateActions([this.record]);
             this.cardPanelsByRecordId[this.record.id] = previewPanel.id;
             this.cardPanel.add(previewPanel);
         }

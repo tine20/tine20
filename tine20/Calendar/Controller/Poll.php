@@ -371,7 +371,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             }
             $alarms->id = null;
         }
-        // attachements
+        // attachments
         $attachments = null;
         if (isset($event->attachments)) {
             if ($event->attachments instanceof Tinebase_Record_RecordSet) {

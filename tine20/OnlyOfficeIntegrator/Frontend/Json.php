@@ -719,7 +719,7 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $ctrl = Tinebase_Core::getApplicationInstance(current(explode('_', $model)), $model);
         $record = $ctrl->get($recordId);
 
-        // check nodeid is an attachement!
+        // check nodeid is an attachment!
         $path = Tinebase_FileSystem::getInstance()->getPathOfNode($attachmentNodeId, true);
         $basePath = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentBasePath($record);
         if (strpos($path, $basePath) !== 0) {

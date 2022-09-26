@@ -75,7 +75,7 @@ Promise.all([
     Ext.ux.ItemRegistry.registerItem('Tinebase-FileUploadGrid-ContextMenu', editDocumentAction, 5);
 
     // preview panel
-    Ext.ux.ItemRegistry.registerItem('Tine-Filemanager-DocumentPreview', editDocumentAction, 100);
+    Ext.ux.ItemRegistry.registerItem('Tine-Filemanager-QuicklookPanel', editDocumentAction, 100);
 
     // dblclick actions
     Tine.on('filesystem.fileDoubleClick', (fileNode, dblClickHandlers) => {

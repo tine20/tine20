@@ -138,4 +138,14 @@ class Felamimail_Model_MessageFileLocation extends Tinebase_Record_Abstract
             ),
         )
     );
+
+    public function __set($_name, $_value)
+    {
+        if ($_name === 'type' && $_value === 'fm_node') {
+            // \Tinebase_Model_Tree_FileLocation::FLD_TYPE compat
+            $_value = 'node';
+        }
+
+        parent::__set($_name, $_value);
+    }
 }

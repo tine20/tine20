@@ -66,7 +66,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             const mask = new win.Ext.LoadMask(mainCardPanel.el, { msg: maskMsg })
                             await createPaperSlip(mask)
                             const attachments = record.get('attachments')
-                            const mdates = _.map(attachments, (attachement) => {return _.compact([attachement.last_modified_time, attachement.creation_time]).sort().pop()})
+                            const mdates = _.map(attachments, (attachment) => {return _.compact([attachment.last_modified_time, attachment.creation_time]).sort().pop()})
                             const attachment = attachments[mdates.indexOf([...mdates].sort().pop())]
                             Object.assign(config, {
                                 recordData: attachment,

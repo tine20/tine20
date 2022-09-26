@@ -273,9 +273,9 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         ]];
         $updateEvent['tags'] = [['name' => 'testtag1']];
         $path = Tinebase_TempFile::getTempPath();
-        file_put_contents($path, 'testAttachementData');
+        file_put_contents($path, 'testAttachmentData');
         $updateEvent['attachments'] = [[
-                'name'      => 'testAttachementData.txt',
+                'name'      => 'testAttachmentData.txt',
                 'tempFile'  => ['id' => Tinebase_TempFile::getInstance()->createTempFile($path)->getId()]
         ]];
         $updateEvent['customfields'] = [
@@ -314,9 +314,9 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         ];
         $changedAlternative['tags'][] = ['name' => 'testtag2'];
         $path = Tinebase_TempFile::getTempPath();
-        file_put_contents($path, 'testAttachementData1');
+        file_put_contents($path, 'testAttachmentData1');
         $changedAlternative['attachments'][] = [
-            'name'      => 'testAttachementData1.txt',
+            'name'      => 'testAttachmentData1.txt',
             'tempFile'  => ['id' => Tinebase_TempFile::getInstance()->createTempFile($path)->getId()]
         ];
         $changedAlternative['customfields'][$cField2->name] = 'test field1';

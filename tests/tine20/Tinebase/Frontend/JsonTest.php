@@ -205,7 +205,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         static::assertSame('data1', file_get_contents('tine20://' . $path . '/test.txt'));
     }
 
-    public function testRestoreRevisionAttachement()
+    public function testRestoreRevisionAttachment()
     {
         if (!Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
             static::markTestSkipped('modlog not active');
@@ -237,7 +237,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         static::assertSame($content, file_get_contents('tine20://' . $path));
     }
 
-    public function testRestoreRevisionAttachementNodeId()
+    public function testRestoreRevisionAttachmentNodeId()
     {
         if (!Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
             static::markTestSkipped('modlog not active');
