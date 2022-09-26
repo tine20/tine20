@@ -304,8 +304,9 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
      * fetch structure from cache or imap server, parse it and store it into cache
      * 
      * @return array
+     * @throws Tinebase_Exception_NotFound
      */
-    protected function _fetchStructure()
+    protected function _fetchStructure(): array
     {
         if ($structureFromCache = $this->_getStructureFromCache()) {
             return $structureFromCache;
@@ -327,10 +328,9 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
             }
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
-                __METHOD__ . '::' . __LINE__ . ' Message structure fetching failed (5 times) ... message might be broken on IMAP server');
-            $summary = Felamimail_Controller_Cache_Message::getInstance()->getMessageSummary($this->messageuid, $this->account_id, $this->folder_id);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' broken summary: ' . print_r($summary, true));
+                __METHOD__ . '::' . __LINE__ . ' Message structure fetching failed (5 times)'
+                . ' ... message might be broken / or already deleted on IMAP server');
+            throw new Tinebase_Exception_NotFound('Message summary not found: '. $this->messageuid);
         }
         $this->_setStructure($result);
         return $result;
