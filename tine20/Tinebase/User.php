@@ -670,7 +670,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected static function _checkAndUpdateCurrentUser(Tinebase_Model_FullUser $currentUser, Tinebase_Model_FullUser $user, array $options)
+    protected static function _checkAndUpdateCurrentUser(Tinebase_Model_FullUser $currentUser, Tinebase_Model_FullUser $user, array $options = [])
     {
        $fieldsToSync = [
             // true = REQUIRED, may be empty; false = OPTIONAL, omit if empty/missing; null IGNORE always
@@ -687,8 +687,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
             'accountLoginShell' => false, 
             'visibility' => false, 
             'accountStatus' => function($options) {
-                if (isset($options['syncAccountStatus']) && $options['syncAccountStatus']) {
-                    return true;
+                if (isset($options['syncAccountStatus'])) {
+                    return (bool) $options['syncAccountStatus'];
                 }
                 return null; 
             }, 
@@ -718,7 +718,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Diff found in field ' . $field  . ' current: ' . $currentUser->{$field} . ' new: ' . $user->{$field});
                 $currentUser->{$field} = $user->{$field};
-                $recordNeedsUpdate = true;                
+                $recordNeedsUpdate = true;
             }
         }
 
