@@ -3,16 +3,21 @@ services:
   db:
     image: mariadb:10.6
     command: --max-allowed-packet=209715210
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: &MYSQL_DATABASE tine20db
       MYSQL_USER: &MYSQL_USER tine20
       MYSQL_PASSWORD: &MYSQL_PASSWORD tine20
+    # use volume for persistent DB
+#    volumes:
+#      - "/var/lib/mysql:/var/lib/mysql"
     networks:
       - internal_network
 
   cache:
     image: redis:5.0.5
+    restart: always
     networks:
       - internal_network
 
@@ -30,12 +35,12 @@ services:
       TINE20_DATABASE_TABLEPREFIX: tine_
       TINE20_CACHING_BACKEND: Redis
       TINE20_CACHING_REDIS_HOST: cache
+      TINE20_ACTIONQUEUE_HOST: cache
       TINE20_SESSION_BACKEND: Redis
       TINE20_SESSION_HOST: cache
       TINE20_CREDENTIALCACHESHAREDKEY: change_me
       TINE20_SETUPUSER_USERNAME: tine20setup
       TINE20_SETUPUSER_PASSWORD: tine20setup
-      
     volumes:
       - "tine20_files:/var/lib/tine20/files"
     networks:

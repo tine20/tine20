@@ -2,6 +2,8 @@ Tine 2.0 Business Edition Docker Image
 ---
 [www.tine20.com](https://www.tine20.com/) | [GitHub](https://github.com/tine20/tine20) | [Dockerfile](https://github.com/tine20/tine20/blob/main/ci/dockerimage/Dockerfile)
 
+# TODO: update EN quickstart (from DE version)
+
 ### Quickstart
 This is an easy way to try out tine20. You need Docker and Docker Compose (https://docs.docker.com/compose/).
 
