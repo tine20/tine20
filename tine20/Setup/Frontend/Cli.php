@@ -1307,6 +1307,7 @@ class Setup_Frontend_Cli
         $db->query('SET foreign_key_checks = 0');
         $db->query('SET unique_checks = 0');
         foreach ($tables as $table) {
+            echo "Converting table $table ...";
             if ($db->query('SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = "' . $table .
                     '" AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '" AND ROW_FORMAT <> "Dynamic"')->fetchColumn()) {
                 try {
@@ -1323,9 +1324,15 @@ class Setup_Frontend_Cli
             if ($table === SQL_TABLE_PREFIX . 'tree_nodes') {
                 $setupBackend = new Setup_Backend_Mysql();
                 $db->query('SET foreign_key_checks = 1');
-                $setupBackend->dropForeignKey('tree_nodes', 'tree_nodes::parent_id--tree_nodes::id');
-                $db->query('SET foreign_key_checks = 0');
-                $setupBackend->dropIndex('tree_nodes', 'parent_id-name');
+                try {
+                    $setupBackend->dropForeignKey('tree_nodes', 'tree_nodes::parent_id--tree_nodes::id');
+                    $db->query('SET foreign_key_checks = 0');
+                    $setupBackend->dropIndex('tree_nodes', 'parent_id-name');
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    echo $zdse->getMessage() . "\n";
+                } finally {
+                    $db->query('SET foreign_key_checks = 0');
+                }
             }
 
             $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) .
@@ -1367,9 +1374,9 @@ class Setup_Frontend_Cli
                     </reference>
                 </index>'));
             }
+
+            echo "done\n";
         }
-
-
 
         $db->query('SET foreign_key_checks = 1');
         $db->query('SET unique_checks = 1');
@@ -1380,6 +1387,8 @@ class Setup_Frontend_Cli
         }
 
         Setup_Controller::getInstance()->clearCache();
+
+        return 0;
     }
 
     /**
