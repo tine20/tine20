@@ -659,7 +659,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 var contact = new Tine.Addressbook.Model.Contact(attender.get('user_id'));
                 this.phoneHook.setContactAndUpdateAction(contact);
             }
-            
+
+            items = _.compact(items);
             Tine.log.debug(items);
             
             this.ctxMenu = new Ext.menu.Menu({
