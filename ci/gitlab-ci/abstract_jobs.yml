@@ -52,6 +52,7 @@
     TINE20_EMAIL_IMAP: "active:true,host:dovecot,port:143,useSystemAccount:1,ssl:none,verifyPeer:0,backend:dovecot_imap,domain:mail.test,instanceName:tine.test,dovecot_host:db,dovecot_dbname:dovecot,dovecot_username:tine20,dovecot_password:tine20pw,dovecot_uid:vmail,dovecot_gid:vmail,dovecot_home:/var/vmail/%d/%u,dovecot_scheme:SSHA256"
     TINE20_EMAIL_SMTP: "active:true,backend:postfix,hostname:postfix,port:25,ssl:none,auth:none,name:postfix,primarydomain:mail.test,secondarydomains:secondary.test,instanceName:tine.test,postfix_host:db,postfix_dbname:postfix,postfix_username:tine20,postfix_password:tine20pw"
     TINE20_EMAIL_SIEVE: "hostname:dovecot,port:4190,ssl:none"
+    TINE20_ACTIONQUEUE: "false"
     NODE_TOTAL: $CI_NODE_TOTAL
     NODE_INDEX: $CI_NODE_INDEX
     TINE20_ACCEPTED_TERMS_VERSION: 1000
@@ -95,7 +96,6 @@
     - if test "${ARG_COPY_SOURCE}" == "true"; then ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/copy_source.sh; fi
     - rm /etc/supervisor.d/worker.ini || true
     - rm /etc/crontabs/tine20 || true
-    - rm /etc/confd/conf.d/worker.inc.php.toml || true 
     - /usr/sbin/confd -onetime -backend env
     - tine20_await_db
     - mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE DATABASE IF NOT EXISTS dovecot"
