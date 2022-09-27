@@ -59,4 +59,38 @@ return array(
     ),
 
     'credentialCacheSharedKey' => '{{getv "/credentialcachesharedkey"}}',
+
+    {{if (eq (getv "/logger" "true") "true")}}
+    'logger' => array (
+        'active' => true,
+        'filename' => '{{getv "/logger/filename" "php://stdout"}}',
+        'priority' => {{getv "/logger/priority" "5"}},
+        'logruntime' => true,
+        'logdifftime' => true,
+        'traceQueryOrigins' => true,
+        {{if exists "/logger/additionalwriters/filename"}}
+        'additionalWriters' => array(array(
+            'active' => true,
+            'filename' => '{{getv "/logger/additionalwriters/filename"}}',
+            'priority' => {{getv "/logger/additionalwriters/priority" "5"}},
+        )),
+        {{end}}
+    ),
+    {{end}}
+
+    {{if (eq (getv "/actionqueue" "true") "true")}}
+    'actionqueue' => array(
+        'active' => true,
+        'backend' => 'Redis',
+        'host' => '{{getv "/actionqueue/host" ""}}',
+        'port' => {{getv "/actionqueue/port" "6379"}},
+        'queueName' => 'actionqueue'
+    ),
+    {{end}}
+
+    'fulltext' => array(
+        'tikaJar' => '/usr/local/bin/tika.jar',
+    ),
+
+    'mapPanel' => {{getv "/mappanel" "true"}},
 );

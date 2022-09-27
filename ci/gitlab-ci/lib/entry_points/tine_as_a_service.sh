@@ -36,8 +36,6 @@ touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAMESPACE}/tine20.lo
 chown tine20:tine20 ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAMESPACE}/tine20.log
 
 echo "%%%% tine install ..." >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
-cp /etc/tine20/conf.d/disableGeoServices.inc.php.dist /etc/tine20/conf.d/disableGeoServices.inc.php
-
 tine20_install;
 
 echo "%%%% tine post install ..." >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
