@@ -19,7 +19,6 @@
     TEST_DOCKER: "true"
     TEST_BROWSER_LANGUAGE: en
     TINE20_INSTALL_LANG: de
-    TINE20_MAPPANEL: "false"
     ARG_COPY_SOURCE: "true"
     ARG_IMAGE: test-source
   services:
