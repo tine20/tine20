@@ -89,7 +89,7 @@ Tine.Calendar.EventContextTagsItem = Ext.extend(Ext.menu.Item, {
         var massAttach = this.menu.items.last().baseAction;
 
         massAttach.store.add(this.getSelectedRecords());
-        massAttach.win.okButton.handler = function() {
+        massAttach.okButton.handler = function() {
             var tags = [];
             massAttach.store.each(function(r) {
                 tags.push(r);
@@ -99,7 +99,7 @@ Tine.Calendar.EventContextTagsItem = Ext.extend(Ext.menu.Item, {
             this.updateRecord(tags);
 
         }.createDelegate(this);
-        massAttach.manageOkBtn = function() {if (this.win && this.win.okButton) this.win.okButton.setDisabled(false);};
+        massAttach.manageOkBtn = function() {if (this.okButton) this.okButton.setDisabled(false);};
     },
 
     /**
