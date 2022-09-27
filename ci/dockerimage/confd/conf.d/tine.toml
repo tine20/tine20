@@ -40,5 +40,4 @@ keys = [
     "/actionqueue",
     "/actionqueue/host",
     "/actionqueue/port",
-    "/mappanel",
 ]
