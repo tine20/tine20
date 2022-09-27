@@ -32,4 +32,13 @@ keys = [
     "/session/path",
     "/credentialcachesharedkey",
     "/filesystem/index_content",
+    "/logger",
+    "/logger/priority",
+    "/logger/filename",
+    "/logger/additionalwriters/filename",
+    "/logger/additionalwriters/priority",
+    "/actionqueue",
+    "/actionqueue/host",
+    "/actionqueue/port",
+    "/mappanel",
 ]
