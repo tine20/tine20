@@ -280,6 +280,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                 /** @var HumanResources_Model_DailyWTReport $oldReport */
                 $oldReport = null;
                 if (isset($existingReports[$dateStr])) {
+                    $existingReports[$dateStr] = $this->get($existingReports[$dateStr]->getId());
                     $oldReport = $existingReports[$dateStr];
                     if ($oldReport->is_cleared) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
@@ -340,7 +341,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                 }
                 $blPipeData->feastTimes = $this->_getFeastTimes($dateStr, $contract->feast_calendar_id);
 
-                $blPipeData->result = $oldReport ? $oldReport->getCleanClone() :
+                $blPipeData->result = $oldReport ? $oldReport->getCleanClone() : /* @phpstan-ignore-line */
                     new HumanResources_Model_DailyWTReport([
                         'employee_id' => $employee,
                         'monthlywtreport' => $monthlyWTR->getId(),
