@@ -37,6 +37,6 @@ class OnlyOfficeIntegrator_Setup_Update_15 extends Setup_Update_Abstract
     public function update001()
     {
         (new OnlyOfficeIntegrator_Setup_Initialize())->_initializeNewTemplateFiles();
-        $this->addApplicationUpdate('OnlyOfficeIntegrator', '15.1', self::RELEASE015_UPDATE000);
+        $this->addApplicationUpdate('OnlyOfficeIntegrator', '15.1', self::RELEASE015_UPDATE001);
     }
 }
