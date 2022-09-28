@@ -91,4 +91,8 @@ return array(
     'fulltext' => array(
         'tikaJar' => '/usr/local/bin/tika.jar',
     ),
+
+    {{ if exists "/url" }}
+    'tine20URL' => '{{getv "/url"}}',
+    {{ end }}
 );
