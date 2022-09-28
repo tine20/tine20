@@ -57,6 +57,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
     protected $_excelVersion;
 
+    protected $_findCellCacheOff = false;
 
     /**
      * the constructor
@@ -265,7 +266,9 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             }
         }
 
+        $this->_findCellCacheOff = true;
         $this->_renderTwigTemplate();
+        $this->_findCellCacheOff = false;
     }
 
     protected function _endGroup()
@@ -300,7 +303,9 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             }
         }
 
+        $this->_findCellCacheOff = true;
         $this->_renderTwigTemplate();
+        $this->_findCellCacheOff = false;
     }
 
     protected function _createDocument()
@@ -371,12 +376,25 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
      */
     protected function _findCell($_search)
     {
+        static $notFound = [];
+        $parts = explode('#', $_search);
+        $key = null;
+        if (!$this->_findCellCacheOff && count($parts) > 1 && is_numeric($parts[count($parts)-1])) {
+            $parts[count($parts)-1] = '0';
+            $key = join('#', $parts);
+            if (isset($notFound[$key])) {
+                return null;
+            }
+        }
+
         $sheet = $this->_spreadsheet->getActiveSheet();
 
-        $rowIter = $sheet->getRowIterator();
+        $rowIter = $sheet->getRowIterator()->seek($sheet->getHighestRow());
 
-        /** @var Row $row */
-        foreach($rowIter as $row) {
+        while($rowIter->valid()) {
+            /** @var Row $row */
+            $row = $rowIter->current();
+            $rowIter->prev();
             $cellIter = $row->getCellIterator();
             try {
                 $cellIter->setIterateOnlyExistingCells(true);
@@ -391,6 +409,9 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             }
         }
 
+        if (null !== $key) {
+            $notFound[$key] = true;
+        }
         return null;
     }
 
