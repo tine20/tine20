@@ -197,15 +197,18 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
      * @param resource $_outputStream
      * @throws Tinebase_Exception_Backend
      */
-    public function write($_outputStream = STDOUT)
+    public function write($_outputStream = null)
     {
         if (false === rewind($this->_filehandle)) {
             throw new Tinebase_Exception_Backend('could not rewind csv stream');
         }
-        if (false === stream_copy_to_stream($this->_filehandle, $_outputStream)) {
-            throw new Tinebase_Exception_Backend('could not copy csv stream to stdout');
+        if (null == $_outputStream) {
+            fpassthru($this->_filehandle);
+        } else {
+            if (false === stream_copy_to_stream($this->_filehandle, $_outputStream)) {
+                throw new Tinebase_Exception_Backend('could not copy csv stream to stdout');
+            }
         }
-        fclose($this->_filehandle);
     }
 
     public function save(string $target): void
