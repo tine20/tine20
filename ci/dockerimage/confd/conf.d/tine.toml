@@ -40,4 +40,5 @@ keys = [
     "/actionqueue",
     "/actionqueue/host",
     "/actionqueue/port",
+    "/url",
 ]
