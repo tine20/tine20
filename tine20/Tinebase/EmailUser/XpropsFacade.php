@@ -108,10 +108,28 @@ class Tinebase_EmailUser_XpropsFacade
         $user->setId($user_id);
     }
 
+    /**
+     * @param Tinebase_Record_Interface $record
+     * @param string $userId
+     * @param boolean $createIfEmpty
+     * @return mixed|string|null
+     */
     public static function setXprops($record, $userId = null, $createIfEmpty = true)
     {
         if (! $userId && $createIfEmpty) {
-            $userId = Tinebase_Record_Abstract::generateUID();
+            if (! empty($record->xprops()[self::XPROP_EMAIL_USERID_IMAP])) {
+                $userId = $record->xprops()[self::XPROP_EMAIL_USERID_IMAP];
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' SMTP_USERID emtpy - using IMAP_USERID: ' . $userId);
+            } else if (! empty($record->xprops()[self::XPROP_EMAIL_USERID_SMTP])) {
+                $userId = $record->xprops()[self::XPROP_EMAIL_USERID_SMTP];
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' IMAP_USERID emtpy - using SMTP_USERID: ' . $userId);
+            } else {
+                $userId = Tinebase_Record_Abstract::generateUID();
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Created new user id: ' . $userId);
+            }
         }
 
         $record->xprops()[self::XPROP_EMAIL_USERID_IMAP] = $userId;
@@ -123,7 +141,7 @@ class Tinebase_EmailUser_XpropsFacade
     public static function deleteEmailUsers($record)
     {
         $user = self::getEmailUserFromRecord($record);
-        Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP)->inspectDeleteUser($user);
+        Tinebase_EmailUser::getInstance()->inspectDeleteUser($user);
         Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->inspectDeleteUser($user);
     }
 
