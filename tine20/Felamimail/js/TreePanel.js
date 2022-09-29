@@ -654,7 +654,9 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         
         // if ctxNode was not expanded -> expand and everything is fine,
         if (!this.ctxNode.isExpanded()) {
-            this.ctxNode.reload();
+            if (Ext.isFunction(this.ctxNode.reload)) {
+                this.ctxNode.reload();
+            }
         } else {
             // otherwise so some magic
             this.ctxNode.appendChild(this.loader.createNode(folderData));
