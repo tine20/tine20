@@ -170,6 +170,11 @@ class Tinebase_Twig
             // that 'de' in there... probably the transliterator would be the best option, but we would need to find
             // the right way to use it, feel free to improve
         }));
+
+        $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('preg_replace', function($subject, $pattern, $replacement, int $limit=-1, int $count=null) {
+            return preg_replace($pattern, $replacement, $subject, $limit, $count);
+        }));
+
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('translate',
             function ($str) use($locale, $translate) {
                 $translatedStr = $translate->translate($str, $locale);
