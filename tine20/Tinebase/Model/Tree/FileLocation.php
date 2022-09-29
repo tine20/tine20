@@ -174,10 +174,15 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
         return $node;
     }
 
-    protected function _getFMNode()
+    protected function _getFMNode(): Tinebase_Model_Tree_Node
     {
+        if (empty($this->{self::FLD_FM_PATH})) {
+            throw new Tinebase_Exception_UnexpectedValue('fm_path missing');
+        }
         $fmCtrl = Filemanager_Controller_Node::getInstance();
-        return $fmCtrl->getFileNode(Tinebase_Model_Tree_Node_Path::createFromPath($fmCtrl->addBasePath($this
-            ->{self::FLD_FM_PATH})), $this->{self::FLD_REVISION} ?: null);
+        $fs = Tinebase_FileSystem::getInstance();
+        $path = Tinebase_Model_Tree_Node_Path::createFromPath($fmCtrl->addBasePath($this->{self::FLD_FM_PATH}));
+        $fs->checkPathACL($path, 'get');
+        return $fs->stat($path->statpath, $this->{self::FLD_REVISION} ?: null);
     }
 }
