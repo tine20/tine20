@@ -41,20 +41,28 @@ class Tinebase_Auth_CredentialCache_Adapter_Cookie implements Tinebase_Auth_Cred
     /**
      * getCache() - get the credential cache
      *
-     * @return NULL|Tinebase_Model_CredentialCache 
+     * @return ?Tinebase_Model_CredentialCache
      */
-    public function getCache()
+    public function getCache(): ?Tinebase_Model_CredentialCache
     {
-        $result = NULL;
+        $result = null;
         if (isset($_COOKIE[self::COOKIE_KEY]) && ! empty($_COOKIE[self::COOKIE_KEY])) {
-            $cacheId = Zend_Json::decode(base64_decode($_COOKIE[self::COOKIE_KEY]));
+            $decodedCookie = base64_decode($_COOKIE[self::COOKIE_KEY]);
+            try {
+                $cacheId = Zend_Json::decode($decodedCookie);
+            } catch (Zend_Json_Exception $zje) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Cookie decoding failed:' . $zje->getMessage()
+                    . ' (cookie: ' . $decodedCookie . ')');
+                return null;
+            }
             if (is_array($cacheId)) {
                 $result = new Tinebase_Model_CredentialCache($cacheId);
             } else {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' Could not get CC from cookie (cache is not an array)');
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' cache: ' . print_r($cacheId, true));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' cache: ' . print_r($cacheId, true));
             }
         } else {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
