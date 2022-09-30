@@ -57,7 +57,7 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
      * 
      * @return Addressbook_Model_Contact
      */
-    public function testAddRecordAttachments()
+    public function testAddRecordAttachments($assert = true)
     {
         $recordAttachments = Tinebase_FileSystem_RecordAttachments::getInstance();
         
@@ -71,6 +71,9 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
         $recordAttachments->addRecordAttachment($record, 'Test_xyz.txt', fopen(__FILE__, 'r'));
 
         $attachments = $this->testGetRecordAttachments($record);
+        if (!$assert) {
+            return $record;
+        }
         self::assertEquals(2, count($attachments));
 
         $adbJson = new Addressbook_Frontend_Json();
