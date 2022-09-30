@@ -585,9 +585,13 @@ class Tinebase_FileSystem implements
                 throw new Tinebase_Exception_UnexpectedValue("Source path and destination path must be different.");
             }
 
-            if (null !== ($deletedNode = $this->_getTreeNodeBackend()
-                    ->getChild($parentNode, $destinationNodeName, true, false)) && $deletedNode->is_deleted) {
-                $this->_updateDeletedNodeName($deletedNode);
+            if (null !== ($existingNode = $this->_getTreeNodeBackend()
+                    ->getChild($parentNode, $destinationNodeName, true, false))) {
+                if ($existingNode->is_deleted) {
+                    $this->_updateDeletedNodeName($existingNode);
+                } else {
+                    throw new Tinebase_Exception_UnexpectedValue("Destination file exists. Please remove before.");
+                }
             }
 
             if ($destinationNode->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
