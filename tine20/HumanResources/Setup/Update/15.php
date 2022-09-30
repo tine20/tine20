@@ -30,6 +30,7 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE014 = __CLASS__ . '::update014';
     const RELEASE015_UPDATE015 = __CLASS__ . '::update015';
     const RELEASE015_UPDATE016 = __CLASS__ . '::update016';
+    const RELEASE015_UPDATE017 = __CLASS__ . '::update017';
 
     static protected $_allUpdates = [
         // we'll do some querys here and we want them done before any schema tool comes along to play
@@ -83,6 +84,10 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE016          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update016',
+            ],
+            self::RELEASE015_UPDATE017          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update017',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -351,5 +356,17 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '15.16', self::RELEASE015_UPDATE016);
+    }
+
+    public function update017()
+    {
+        HumanResources_Setup_Initialize::addABSRSystemCustomField();
+
+        Setup_SchemaTool::updateSchema([
+            HumanResources_Model_FreeDay::class,
+            HumanResources_Model_FreeTimeType::class,
+        ]);
+
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '15.17', self::RELEASE015_UPDATE017);
     }
 }

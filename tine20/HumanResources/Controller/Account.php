@@ -246,6 +246,7 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
 
         $acceptedVacationFilter = clone $filter;
         $acceptedVacationFilter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $acceptedVacationTimes->id)));
+        $acceptedVacationFilter->addFilter(new Tinebase_Model_Filter_Bool(array('field' => 'sickoverwrite', 'operator' => 'equals', 'value' => false)));
         $scheduledTakenVacationDays = $freedayController->search($acceptedVacationFilter);
         
         $actualTakenVacationDays = $scheduledTakenVacationDays->filter(function($freeday) use ($actualUntil) {

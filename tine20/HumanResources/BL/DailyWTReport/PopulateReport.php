@@ -46,13 +46,14 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
             new Tinebase_Record_RecordSet(HumanResources_Model_BLDailyWTReport_WorkingTime::class);
 
         /** @var HumanResources_BL_DailyWTReport_TimeSlot $timeSlot */
+        $timeSlot = null;
         foreach ($_data->timeSlots as $timeSlot) {
             if (0 === $timeSlot->durationInSec()) {
                 continue;
             }
 
             if (null !== $lastSlot && null !== $someBreak) {
-                $timePaused += $someBreak->calculateTimePaused($lastSlot, $timeSlot);
+                $timePaused += $someBreak->calculateTimePaused($lastSlot, $timeSlot, true);
             }
             $duration = $timeSlot->durationInSec();
             $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
@@ -66,6 +67,9 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
             $timeWorked += $duration;
 
             $lastSlot = $timeSlot;
+        }
+        if ($timeSlot && $lastSlot !== $timeSlot && null !== $someBreak) {
+            $timePaused += $someBreak->calculateTimePaused($lastSlot, $timeSlot, true);
         }
 
         $_data->result->working_time_actual = $timeWorked;
@@ -92,30 +96,42 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
             $_data->result->working_time_total += $workingTimeTarget;
             $_data->result->working_time_actual += $workingTimeTarget;
         } elseif ($_data->freeTimes) {
-            $_data->freeTimes->sort(function ($r1, $r2) {
-                if ($r1->type->wage_type === HumanResources_Model_WageType::ID_SICK && $r2->type->wage_type !==
-                    HumanResources_Model_WageType::ID_SICK) return 1;
-                if ($r1->type->wage_type === HumanResources_Model_WageType::ID_VACATION && $r2->type->wage_type !==
-                    HumanResources_Model_WageType::ID_SICK && $r2->type->wage_type !==
-                    HumanResources_Model_WageType::ID_VACATION) return 1;
-                return strcmp((string)$r1->getId(), (string)$r2->getId());
-            });
-            if ($_data->freeTimes->getFirstRecord()->type instanceof HumanResources_Model_FreeTimeType) {
-                $wageType = $_data->freeTimes->getFirstRecord()->type->wage_type;
-                if ($workingTimeTarget > 0) {
+            /** @var HumanResources_Model_FreeTime $freeTime */
+            foreach ($_data->freeTimes as $freeTime) {
+                $strategy = $freeTime->type->workingTimeCalculationStrategy;
+                if (!$strategy instanceof HumanResources_Model_WTCalcStrategy) {
+                    $strategy = new HumanResources_Model_WTCalcStrategy();
+                }
+                $result = $strategy->apply($_data->result);
+                if ($result > 0 && $freeTime->type->wage_type) {
                     $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
                         'id' => Tinebase_Record_Abstract::generateUID(),
-                        HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => $wageType,
-                        HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $workingTimeTarget,
+                        HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => $freeTime->type->wage_type,
+                        HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $result,
                     ]));
+                    $_data->result->system_remark = $_data->result->system_remark .
+                        ($_data->result->system_remark ? ', ' : '') .
+                        $this->getWageType($freeTime->type->wage_type)->name;
                 }
-                $_data->result->system_remark = $this->getWageType($wageType)->name;
-                $_data->result->working_time_total += $workingTimeTarget;
-                $_data->result->working_time_actual += $workingTimeTarget;
-            } elseif (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                Tinebase_Core::getLogger()->notice(
-                    __METHOD__ . '::' . __LINE__ . ' "type" missing from freeTime: '
-                    . print_r($_data->freeTimes->getFirstRecord()->toArray(), true));
+            }
+        }
+
+        /** @var HumanResources_BL_DailyWTReport_TimeSlot $absenceTimeSlot */
+        foreach ($_data->absenceTimeSlots as $absenceTimeSlot) {
+            $strategy = $absenceTimeSlot->absenceReason->workingTimeCalculationStrategy;
+            if (!$strategy instanceof HumanResources_Model_WTCalcStrategy) {
+                $strategy = new HumanResources_Model_WTCalcStrategy();
+            }
+            $result = $strategy->apply($_data->result);
+            if ($result > 0 && $absenceTimeSlot->absenceReason->wage_type) {
+                $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
+                    'id' => Tinebase_Record_Abstract::generateUID(),
+                    HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => $absenceTimeSlot->absenceReason->wage_type,
+                    HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $result,
+                ]));
+                $_data->result->system_remark = $_data->result->system_remark .
+                    ($_data->result->system_remark ? ', ' : '') .
+                    $this->getWageType($absenceTimeSlot->absenceReason->wage_type)->name;
             }
         }
     }

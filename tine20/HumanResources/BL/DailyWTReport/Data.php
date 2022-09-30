@@ -44,6 +44,8 @@ class HumanResources_BL_DailyWTReport_Data implements Tinebase_BL_DataInterface
      */
     public $timeSlots = [];
 
+    public $absenceTimeSlots = [];
+
     /**
      * @var HumanResources_Model_DailyWTReport
      */
@@ -93,9 +95,9 @@ class HumanResources_BL_DailyWTReport_Data implements Tinebase_BL_DataInterface
             }
             $timeSlot->timeAccountId = $timeSheet->getIdFromProperty('timeaccount_id');
             $timeSlot->timeSheetId = $timeSheet->getId();
+            $timeSlot->absenceReason = $timeSheet->{HumanResources_Model_FreeTimeType::TT_TS_SYSCF_ABSENCE_REASON};
 
-            // TODO add same day assertions? which TZ?
-            if (!$this->allowTimesheetOverlap && $lastSlot) { /** @var HumanResources_BL_DailyWTReport_TimeSlot $lastSlot */
+            if (!$this->allowTimesheetOverlap && false !== ($lastSlot = end($this->timeSlots))) { /** @var HumanResources_BL_DailyWTReport_TimeSlot $lastSlot */
                 if ($timeSlot->start->isEarlier($lastSlot->end)) {
                     if (strcmp($timeSlot->start->format('Y-m-d H:i'), $lastSlot->end->format('Y-m-d H:i')) > 0) {
                         throw new Tinebase_Exception_BL('timesheets must not overlap');
@@ -127,6 +129,14 @@ class HumanResources_BL_DailyWTReport_Data implements Tinebase_BL_DataInterface
             $lastSlot = $timeSlot;
             $lastTs = $timeSheet;
         }
+        if (!empty($this->timeSlots) && $this->timeSlots[0]->absenceReason) {
+            $this->absenceTimeSlots[] = array_shift($this->timeSlots);
+        }
+        end($this->timeSlots);
+        if (!empty($this->timeSlots) && current($this->timeSlots)->absenceReason) {
+            $this->absenceTimeSlots[] = array_pop($this->timeSlots);
+        }
+        reset($this->timeSlots);
 
         $this->result->relations = $relations;
     }

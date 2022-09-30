@@ -178,24 +178,41 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         $this->_inspect($createdRecord);
     }
 
-    protected function _inspect($record, $oldRecord = null)
+    protected function _inspect(HumanResources_Model_FreeTime $record, ?HumanResources_Model_FreeTime $oldRecord = null)
     {
-        if (empty($freeDays = $record->freedays)) {
-            return;
+        if (!$record->freedays instanceof Tinebase_Record_RecordSet) {
+            $record->freedays = HumanResources_Controller_FreeDay::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_FreeDay::class, [
+                    ['field' => 'freetime_id', 'operator' => 'equals', 'value' => $record->getId()],
+                ])
+            );
         }
-
+        $freeDays = $record->freedays;
         // update first and last date
         $freeDays->sort('date', 'ASC');
-        $record->firstday_date = $freeDays->getFirstRecord()->date;
-        $freeDays->sort('date', 'DESC');
-        $record->lastday_date = $freeDays->getFirstRecord()->date;
-        $record->days_count = $freeDays->count();
+        $record->firstday_date = clone $freeDays->getFirstRecord()->date;
+        $record->lastday_date = clone $freeDays->getLastRecord()->date;
 
-        $this->_backend->update($record);
-
-        if ($record->type == 'sickness') {
-            $this->_handleOverwrittenVacation($record);
+        $ftt = HumanResources_Controller_FreeTimeType::getInstance()->get($record->getIdFromProperty('type'));
+        if (in_array($ftt->getIdFromProperty('wage_type'), [
+            HumanResources_Model_WageType::ID_SICK,
+            HumanResources_Model_WageType::ID_SICK_CHILD,
+            HumanResources_Model_WageType::ID_SICK_SICKPAY,
+        ])) {
+            $freeDays->filter('sickoverwrite', true)->sickoverwrite = false;
+            $this->_handleOverwrittenVacation($record, $oldRecord);
+        } elseif (!empty($freeDays)) {
+            $this->_markSickOverwrites($record);
         }
+
+        foreach ($freeDays as $freeDay) {
+            if ($freeDay->isDirty()) {
+                HumanResources_Controller_FreeDay::getInstance()->update($freeDay);
+            }
+        }
+
+        $record->days_count = $freeDays->filter('sickoverwrite', false)->count();
+        $this->_backend->update($record);
 
         if ((null === $oldRecord && $record->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS} !==
                 \HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED) || ($oldRecord &&
@@ -208,8 +225,8 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
 
         $event = new Tinebase_Event_Record_Update();
         $event->observable = clone $record;
-        if ($oldRecord && $oldRecord->firstday_date->isEarlier($record->firstday_date)) {
-            $event->observable->firstday_date = $oldRecord->firstday_date;
+        if ($oldRecord && $oldRecord->firstday_date && (!$record->firstday_date || $oldRecord->firstday_date->isEarlier($record->firstday_date))) {
+            $event->observable->firstday_date = clone $oldRecord->firstday_date;
         }
         Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function() use($event) {
             Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
@@ -228,64 +245,73 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
            $_record->employee_id = $_record->employee_id['id'];
        }
    }
-   
-   /**
-    * finds overwritten by sickness days overwritten vacation days. 
-    * deletes the overwritten vacation day and the vacation itself if days_count = 0
-    *
-    * @param Tinebase_Record_Interface $_record
-    */
-   protected function _handleOverwrittenVacation($_record) {
-       
-       $fdController = HumanResources_Controller_FreeDay::getInstance();
-       
-       $changedFreeTimes = array();
-       
-       foreach($_record->freedays as $freeday) {
-           
-           $vacationTimeFilter = new HumanResources_Model_FreeTimeFilter(array(
-               array('field' => 'type', 'operator' => 'equals', 'value' => 'vacation')
-           ));
-           $vacationTimeFilter->addFilter(new Tinebase_Model_Filter_Text(
-               array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->getIdFromProperty('employee_id'))
-           ));
-           
-           $vacationTimes = $this->search($vacationTimeFilter);
-           
-           $filter = new HumanResources_Model_FreeDayFilter(array(
-               array('field' => 'date', 'operator' => 'equals', 'value' => $freeday['date'])
-           ));
-           
-           $filter->addFilter(new Tinebase_Model_Filter_Text(
-               array('field' => 'freetime_id', 'operator' => 'not', 'value' => $_record->getId())
-               ));
-           $filter->addFilter(new Tinebase_Model_Filter_Text(
-               array('field' => 'freetime_id', 'operator' => 'in', 'value' => $vacationTimes->id)
-           ));
-           
-           $vacationDay = $fdController->search($filter)->getFirstRecord();
-           
-           if ($vacationDay) {
-               $fdController->delete($vacationDay->getId());
-               
-               $freeTime = $this->get($vacationDay->freetime_id);
-               
-               if (! isset($changedFreeTimes[$vacationDay->freetime_id])) {
-                   $changedFreeTimes[$vacationDay->freetime_id] = $freeTime;
+
+   protected function _markSickOverwrites(HumanResources_Model_FreeTime $_record)
+   {
+       if (!$_record->freedays instanceof Tinebase_Record_RecordSet || $_record->freedays->count() === 0) {
+           return;
+       }
+
+       $sickDays = HumanResources_Controller_FreeDay::getInstance()->search(
+           Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_FreeDay::class, [
+               ['field' => 'freetime_id', 'operator' => 'definedBy', 'value' => [
+                   ['field' => 'type', 'operator' => 'definedBy', 'value' => [
+                       ['field' => 'wage_type', 'operator' => 'in', 'value' => [
+                           HumanResources_Model_WageType::ID_SICK,
+                           HumanResources_Model_WageType::ID_SICK_CHILD,
+                           HumanResources_Model_WageType::ID_SICK_SICKPAY,
+                       ]],
+                   ]],
+                   ['field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->getIdFromProperty('employee_id')],
+                   ['field' => 'firstday_date', 'operator' => 'before_or_equals', 'value' => $_record->lastday_date],
+                   ['field' => 'lastday_date', 'operator' => 'after_or_equals', 'value' => $_record->firstday_date],
+                   ['field' => 'id', 'operator' => 'not', 'value' => $_record->getId()],
+               ]],
+           ]), null, false, ['date']);
+       foreach ($_record->freedays as $freeday) {
+           if (isset($sickDays[$freeday->date->toString()])) {
+               if (!$freeday->sickoverwrite) {
+                   $freeday->sickoverwrite = true;
                }
-               
-               $count = (int) $changedFreeTimes[$vacationDay->freetime_id]->days_count - 1;
-               $changedFreeTimes[$vacationDay->freetime_id]->days_count = $count;
+           } elseif ($freeday->sickoverwrite) {
+               $freeday->sickoverwrite = false;
            }
        }
-       
-       foreach($changedFreeTimes as $freeTimeId => $freetime) {
-           if ($freetime->days_count == 0) {
-               $this->delete($freetime->getId());
-           } else {
-               $freeTime->days_count = $count;
-               $this->update($freetime);
-           }
+   }
+
+   /**
+    * finds non sickness free days within the range of the given sickness records.
+    * then updates them, that will mark their days properly as overwritten or not
+    */
+   protected function _handleOverwrittenVacation(HumanResources_Model_FreeTime $_record, ?HumanResources_Model_FreeTime $_oldRecord)
+   {
+       if (!$_oldRecord || !$_oldRecord->lastday_date ||
+               ($_record->lastday_date && $_oldRecord->lastday_date < $_record->lastday_date)) {
+           $lastday_date = $_record->lastday_date;
+       } else {
+           $lastday_date = $_oldRecord->lastday_date;
+       }
+       if (!$_oldRecord || !$_oldRecord->firstday_date ||
+               ($_record->firstday_date && $_oldRecord->firstday_date > $_record->firstday_date)) {
+           $firstday_date = $_record->firstday_date;
+       } else {
+           $firstday_date = $_oldRecord->firstday_date;
+       }
+       foreach ($this->search(
+               Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_FreeTime::class, [
+                   ['field' => 'type', 'operator' => 'definedBy', 'value' => [
+                       ['field' => 'wage_type', 'operator' => 'notin', 'value' => [
+                           HumanResources_Model_WageType::ID_SICK,
+                           HumanResources_Model_WageType::ID_SICK_CHILD,
+                           HumanResources_Model_WageType::ID_SICK_SICKPAY,
+                       ]],
+                   ]],
+                   ['field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->getIdFromProperty('employee_id')],
+                   ['field' => 'firstday_date', 'operator' => 'before_or_equals', 'value' => $lastday_date],
+                   ['field' => 'lastday_date', 'operator' => 'after_or_equals', 'value' => $firstday_date],
+                   ['field' => 'id', 'operator' => 'not', 'value' => $_record->getId()],
+               ])) as $freeTime) {
+           $this->update($freeTime);
        }
    }
 }

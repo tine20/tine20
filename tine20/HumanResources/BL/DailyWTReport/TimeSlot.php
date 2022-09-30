@@ -48,9 +48,14 @@ class HumanResources_BL_DailyWTReport_TimeSlot
     public $timeSheetId;
 
     /**
+     * @var HumanResources_Model_FreeTimeType
+     */
+    public $absenceReason;
+
+    /**
      * @return int
      */
-    public function durationInSec()
+    public function durationInSec(): int
     {
         return $this->end->getTimestamp() - $this->start->getTimestamp();
     }
@@ -60,7 +65,7 @@ class HumanResources_BL_DailyWTReport_TimeSlot
      *
      * @return HumanResources_BL_DailyWTReport_TimeSlot
      */
-    public function getClone()
+    public function getClone(): self
     {
         $clone = clone $this;
         $clone->forcedBreakAtStart = 0;

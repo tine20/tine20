@@ -54,24 +54,13 @@ class HumanResources_BL_DailyWTReport_BreakTime implements Tinebase_BL_ElementIn
      * @return int
      */
     public function calculateTimePaused(HumanResources_BL_DailyWTReport_TimeSlot $timeSlotLast,
-            HumanResources_BL_DailyWTReport_TimeSlot $timeSlotNext) {
-        $timePaused = 0;
+            HumanResources_BL_DailyWTReport_TimeSlot $timeSlotNext, bool $includeForced = false): int {
         $slotInterSpace = $timeSlotNext->start->getTimestamp() - $timeSlotLast->end->getTimestamp();
-        if ($slotInterSpace >= $this->_minPauseDuration) { // minimum pause => 5 minutes;
-            $timePaused += $slotInterSpace;
-
-            // if there was a forced break time deduction at the end or start of the slots, we have to count it!
-            // even if its less than the minPauseDuration!
-        } else {
-            if ($timeSlotLast->forcedBreakAtEnd) {
-                $timePaused += $timeSlotLast->forcedBreakAtEnd;
-            }
-            if ($timeSlotNext->forcedBreakAtStart) {
-                $timePaused += $timeSlotNext->forcedBreakAtStart;
-            }
+        if ($slotInterSpace >= $this->_minPauseDuration || ($includeForced &&
+                ($timeSlotLast->forcedBreakAtEnd > 0 || $timeSlotNext->forcedBreakAtStart > 0))) { // minimum pause => default 5 minutes;
+            return $slotInterSpace;
         }
-
-        return $timePaused;
+        return 0;
     }
 
     protected function _execute(Tinebase_BL_DataInterface $_data)
@@ -127,6 +116,7 @@ class HumanResources_BL_DailyWTReport_BreakTime implements Tinebase_BL_ElementIn
 
                     } elseif ($overWorked > $forcedBreakTime) {
                         $_data->result->break_time_deduction += $forcedBreakTime;
+
                         // find start of forced break
                         $newEnd = $timeSlot->end->getClone()->subSecond($overWorked);
                         if ($newEnd != $timeSlot->start) {
