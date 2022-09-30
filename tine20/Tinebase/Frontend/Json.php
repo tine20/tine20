@@ -1662,6 +1662,47 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $tokenRecord->toArray();
     }
 
+    public function copyNodes(array $sources, array $target, bool $forceOverwrite = false): array
+    {
+        $sources = new Tinebase_Record_RecordSet(Tinebase_Model_Tree_FileLocation::class, $sources);
+        $target = new Tinebase_Model_Tree_FileLocation($target);
+
+        if (!empty($target->{Tinebase_Model_Tree_FileLocation::FLD_TYPE}) &&
+                Tinebase_Model_Tree_FileLocation::TYPE_FM_NODE !== $target->{Tinebase_Model_Tree_FileLocation::FLD_TYPE}) {
+            throw new Tinebase_Exception_AccessDenied('target file location needs to be a fm node');
+        }
+
+        $raii = Tinebase_RAII::getTransactionManagerRAII();
+        $targetNode = $target->getNode();
+        $fs = Tinebase_FileSystem::getInstance();
+        $targetPath = $fs->getPathOfNode($targetNode, true);
+        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $targetNode->type) {
+            if ($sources->count() > 1) {
+                throw new Tinebase_Exception_UnexpectedValue('can not copy multiple sources into one target file');
+            }
+            $fs->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath(dirname($targetPath)), 'add');
+        } else {
+            $fs->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath($targetPath), 'add');
+        }
+
+        $result = new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class);
+        /** @var Tinebase_Model_Tree_FileLocation $source */
+        foreach ($sources as $source) {
+            $sourcePath = $fs->getPathOfNode($source->getNode(), true);
+            if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $targetNode->type) {
+                if ($fs->fileExists($targetPath) && $forceOverwrite) {
+                    $fs->unlink($targetPath);
+                }
+            } elseif ($fs->fileExists($targetPath . '/' . basename($sourcePath)) && $forceOverwrite) {
+                $fs->unlink($targetPath);
+            }
+            $result->addRecord($fs->copy($sourcePath, $targetPath));
+        }
+        $raii->release();
+
+        return $this->_multipleRecordsToJson($result);
+    }
+
     public function restoreRevision($fileLocationSrc, $fileLocationTrgt = null)
     {
         $src = new Tinebase_Model_Tree_FileLocation($fileLocationSrc);
