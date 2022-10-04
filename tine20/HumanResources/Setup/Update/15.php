@@ -337,9 +337,13 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             $start = new Tinebase_DateTime($row[1]);
             $start->setTimezone('Europe/Berlin');
             $start = $start->format('Y-m-d 00:00:00');
-            $end = new Tinebase_DateTime($row[2]);
-            $end->setTimezone('Europe/Berlin');
-            $end = $end->format('Y-m-d 00:00:00');
+            if (null === $row[2]) {
+                $end = null;
+            } else {
+                $end = new Tinebase_DateTime($row[2]);
+                $end->setTimezone('Europe/Berlin');
+                $end = $end->format('Y-m-d 00:00:00');
+            }
             $this->getDb()->update(SQL_TABLE_PREFIX . 'humanresources_contract', [
                 'start_date' => $start,
                 'end_date' => $end,
