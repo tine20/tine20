@@ -451,7 +451,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     getTreePath: function(containerPath) {
         var _ = window.lodash,
             currentAccount = Tine.Tinebase.registry.get('currentAccount'),
-            treePath = '/' + this.getRootNode().id + containerPath
+            treePath = '/' + (this.getRootNode()?.id || '') + containerPath
                 .replace(/[0-9a-f]{40}\/folders\//, '')
                 .replace(new RegExp('^/personal/(' 
                     + _.escapeRegExp(currentAccount.accountLoginName) + '|'

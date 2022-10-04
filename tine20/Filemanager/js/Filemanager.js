@@ -126,19 +126,17 @@ Tine.Filemanager.NodeFilterPanel = Ext.extend(Tine.widgets.persistentfilter.Pick
  *
  * @param {String|Tine.Filemanager.Model.Node}
  * @param revision
- * @param appName
+ * @param appName deprecated
  * @returns {Ext.ux.file.Download}
  *
- * @todo move to Tine.Filemanager.FileRecordBackend
  */
 Tine.Filemanager.downloadFile = function(path, revision, appName) {
-    var _ = window.lodash;
-    appName = appName || 'Filemanager';
-    path = _.get(path, 'data.path') || _.get(path, 'path') || path;
-
-    return new Ext.ux.file.Download({
+    return new Ext.ux.file.Download(!_.isString(path) ? {
+        url: Tine.Filemanager.Model.Node.getDownloadUrl(path, revision)
+    } : {
+        // deprecated usage
         params: {
-            method: appName + '.downloadFile',
+            method: `${appName || 'Filemanager'}.downloadFile`,
             requestType: 'HTTP',
             id: '',
             path: path,

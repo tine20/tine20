@@ -102,7 +102,7 @@ class Addressbook_Export_DocTest extends TestCase
         ob_end_clean();
     }
 
-    public function testHttpExportAttachement()
+    public function testHttpExportAttachment()
     {
         $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
             'adr_one_street'   => 'Montgomery',

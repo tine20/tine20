@@ -29,6 +29,10 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
      */
     layout: 'fit',
 
+    nativelySupported: [
+        'image/jpeg', 'image/png', 'image/gif', 'image/apng', 'image/avif', 'image/svg+xml', 'image/webp',
+    ],
+
     initComponent: function () {
         this.addEvents(
             /**
@@ -38,34 +42,18 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
         );
 
         this.on('noPreviewAvailable', this.onNoPreviewAvailable, this);
+        this.on('keydown', this.onKeydown, this);
 
         if (!this.app) {
             this.app = Tine.Tinebase.appMgr.get('Filemanager');
         }
 
-        this.tbar = new Ext.Toolbar({
-            items: [{
-                xtype: 'tbfill',
-                order: 50
-            }],
-            plugins: [{
-                ptype: 'ux.itemregistry',
-                key: 'Tine-Filemanager-DocumentPreview'
-            }],
+        this.afterIsRendered().then(() => {
+            this.el.on('contextmenu', (e) => {
+                e.stopEvent();
+                return false;
+            })
         });
-
-        this.actionUpdater = new Tine.widgets.ActionUpdater({
-            evalGrants: true
-        });
-
-        this.actionUpdater.addActions(this.tbar.items);
-        this.on('show', () => {
-            this.actionUpdater.updateActions([this.record]);
-        });
-
-        if (this.tbar.items.getCount() < 2) {
-            this.tbar.hide();
-        }
 
         Tine.Filemanager.DocumentPreview.superclass.initComponent.apply(this, arguments);
 
@@ -84,16 +72,17 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
             records = [];
 
         // attachments preview
+        this.isAttachment = this.record.get('path').match(/^\/records/);
         if (! recordClass.hasField('preview_count') && recordClass.hasField('attachments')) {
             _.each(this.record.get('attachments'), function(attachmentData) {
                 records.push(new Tine.Tinebase.Model.Tree_Node(attachmentData));
             });
-        } else if (+this.record.get('preview_count')) {
+        } else {
             records.push(this.record);
         }
 
-        records = _.filter(records, function(record) {
-            return !!+record.get('preview_count');
+        records = _.filter(records, (record) => {
+            return this.useOriginal(record) || !!+record.get('preview_count');
         });
 
         if (! records.length) {
@@ -105,37 +94,70 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
             layout: 'anchor',
             bodyStyle: 'overflow-y: scroll;'
         }));
-        this.afterIsRendered().then(function () {
-            _.each(records, function(record) {
-                me.addPreviewPanelForRecord(me, record);
+        this.afterIsRendered().then(async () => {
+
+            const isRendered = records.map((record) => {
+                return me.addPreviewPanelForRecord(me, record);
             });
+
+            await Promise.all(isRendered);
         });
     },
 
+    useOriginal: function(record) {
+        const useOriginalSizeLimit = 0.5*1024*1024; // @TODO have pref or conf
+        const nativelySupported = this.nativelySupported.indexOf(record.get('contenttype')) >=0;
+        return nativelySupported && (record.get('size') <= useOriginalSizeLimit || !+record.get('preview_count'));
+    },
+
     addPreviewPanelForRecord: function (me, record) {
-        var _ = window.lodash;
-        _.range(record.get('preview_count')).forEach(function (previewNumber) {
-            var path = record.get('path'),
-                revision = record.get('revision');
+        const path = record.get('path');
+        const revision = record.get('revision');
+        const urls = [];
 
-            var url = Ext.urlEncode({
-                method: 'Tinebase.downloadPreview',
-                frontend: 'http',
-                _path: path,
-                _appId: me.initialApp ? me.initialApp.id : me.app.id,
-                _type: 'previews',
-                _num: previewNumber,
-                _revision: revision
-            }, Tine.Tinebase.tineInit.requestUrl + '?');
-
-            me.previewContainer.add({
-                html: '<img style="width: 100%;" src="' + url + '" />',
-                xtype: 'panel',
-                frame: true,
-                border: true
+        if (this.useOriginal(record)) {
+            urls.push(Tine.Filemanager.Model.Node.getDownloadUrl(record));
+        } else {
+            _.range(record.get('preview_count')).forEach((previewNumber) => {
+                urls.push(Ext.urlEncode({
+                    method: 'Tinebase.downloadPreview',
+                    frontend: 'http',
+                    _path: path,
+                    _appId: me.initialApp ? me.initialApp.id : me.app.id,
+                    _type: 'previews',
+                    _num: previewNumber,
+                    _revision: revision
+                }, Tine.Tinebase.tineInit.requestUrl + '?'));
             });
-            me.doLayout();
+        }
+
+        const isRendered = urls.map((url) => {
+            return new Promise((resolve) => {
+                me.previewContainer.add({
+                    html: '<img style="width: 100%;" src="' + url + '" /><div class="filemanager-quicklook-protect" />',
+                    xtype: 'panel',
+                    frame: true,
+                    border: true,
+                    afterRender: resolve
+                });
+            });
+
         });
+
+        me.doLayout();
+        return Promise.all(isRendered);
+    },
+
+    onKeydown: function(e) {
+        const key = e.getKey();
+        if (key.constrain(33, 36) === key) {
+            const scrollEl = this.previewContainer.el.child('.x-panel-body');
+            if (key < 35) {
+                scrollEl.scroll(key === e.PAGE_UP ? 'up' : 'down', Math.round(scrollEl.getHeight()*0.9), true);
+            } else {
+                scrollEl.scrollTo('top', key === e.HOME ? 0 : scrollEl.dom.scrollHeight);
+            }
+        }
     },
 
     /**
@@ -165,7 +187,6 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
                 text = '<b>' + me.app.i18n._('No preview available yet - Please try again in a few minutes.') + '</b>';
             }
 
-            
             me.add({
                 border: false,
                 layout: 'vbox',

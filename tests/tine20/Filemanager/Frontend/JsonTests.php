@@ -702,7 +702,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
     /**
      * @see 0013838: generic attachment renderer with previews
      */
-    public function testAddAttachementFromFilemanager()
+    public function testAddAttachmentFromFilemanager()
     {
         $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();
         $tempPath = Tinebase_TempFile::getTempPath();

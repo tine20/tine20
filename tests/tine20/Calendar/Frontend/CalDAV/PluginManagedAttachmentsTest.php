@@ -304,7 +304,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $this->server->httpRequest = $request;
         $this->server->exec();
         
-        // attachement folder is managed by tine20 itself
+        // attachment folder is managed by tine20 itself
         $this->assertEquals('HTTP/1.1 405 Method Not Allowed', $this->response->status);
     }
     

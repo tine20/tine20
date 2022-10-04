@@ -2349,10 +2349,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         ]];
         $event1->tags = [['name' => 'testtag1']];
         $path = Tinebase_TempFile::getTempPath();
-        file_put_contents($path, 'testAttachementData');
+        file_put_contents($path, 'testAttachmentData');
         $event1->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', [
             [
-                'name'      => 'testAttachementData.txt',
+                'name'      => 'testAttachmentData.txt',
                 'tempFile'  => Tinebase_TempFile::getInstance()->createTempFile($path)
             ]
         ], true);
@@ -2377,7 +2377,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         static::assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $createdEvent->attendee->getFirstRecord()
             ->status);
 
-        // update event, add more notes, relations, tags, attachements, customfields, alarms, attendees
+        // update event, add more notes, relations, tags, attachments, customfields, alarms, attendees
         $updateEvent = clone $createdEvent;
         $notes = $updateEvent->notes->toArray();
         $notes[] = [
@@ -2398,9 +2398,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $updateEvent->tags->addRecord(new Tinebase_Model_Tag(['name' => 'testtag2'], true));
         $updateEvent->attachments = clone $createdEvent->attachments;
         $path = Tinebase_TempFile::getTempPath();
-        file_put_contents($path, 'moreTestAttachementData');
+        file_put_contents($path, 'moreTestAttachmentData');
         $updateEvent->attachments->addRecord(new Tinebase_Model_Tree_Node([
-            'name'      => 'moreTestAttachementData.txt',
+            'name'      => 'moreTestAttachmentData.txt',
             'tempFile'  => Tinebase_TempFile::getInstance()->createTempFile($path)
         ], true));
         $updateEvent->xprops('customfields')[$cField2->name] = 'test field2';
@@ -2433,7 +2433,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedEvent->attendee->filter('user_id',
             $scleverContactId)->getFirstRecord()->status);
 
-        // update event, remove one note, relation, tag, attachement, customfield, alarm, attendee
+        // update event, remove one note, relation, tag, attachment, customfield, alarm, attendee
         $updateEvent = clone $updatedEvent;
         $notes = $updateEvent->notes->toArray();
         array_pop($notes);

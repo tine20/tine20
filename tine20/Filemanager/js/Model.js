@@ -38,6 +38,14 @@ Tine.Filemanager.Model.NodeMixin = {
             Tine.Tinebase.appMgr.get('Filemanager').getRoute(this.get('path'), this.get('type'))].join('/');
     },
 
+    /**
+     * returns download url for authenticated user
+     * @returns {String}
+     */
+    getDownloadUrl: function(revision) {
+        return Tine.Filemanager.Model.Node.getDownloadUrl(this, revision);
+    },
+
     mixinConfig: {
         before: {
             create(o, meta) {
@@ -123,7 +131,28 @@ Tine.Filemanager.Model.NodeMixin = {
                 contenttype: file.type ? file.type : file.fileType, // missing if safari and chrome 
             }));
         },
-        
+
+        getDownloadUrl: function(record, revision) {
+            record = record.data ? record : Tine.Tinebase.data.Record.setFromJson(record, Tine.Filemanager.Model.Node);
+
+            const path = record.get('path');
+            const [,root,modelName, recordId ] = String(path).split('/');
+
+            return  Ext.urlEncode(Object.assign({
+                frontend: 'http'
+            }, root === 'records' ? {
+                method: 'Tinebase.downloadRecordAttachment',
+                nodeId: record.get('id'),
+                recordId,
+                modelName
+            } : {
+                method: 'Filemanager.downloadFile',
+                path: record.get('path'),
+                id: record.get('id'),
+                revision: revision ?? record.get('revision')
+            }), Tine.Tinebase.tineInit.requestUrl + '?');
+        },
+
         getDefaultData: function (defaults) {
             return _.assign({
                 type: 'file',
