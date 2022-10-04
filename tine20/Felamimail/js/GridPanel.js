@@ -492,10 +492,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.importMask.show();
         
         const pms = _.map(fileSelector.files, (file) => {
-            return new Ext.ux.file.Upload({file: file}).upload().get('promise').then((upload) => {
+            const upload = new Ext.ux.file.Upload({file: file});
+            upload.upload();
+            return upload.promise.then((upload) => {
                 const tempFile = upload.fileRecord.get('tempFile');
                 return Tine.Felamimail.importMessage(folder.id, tempFile.id);
-            });             
+            });
         });
         
         await Promise.allSettled(pms);
