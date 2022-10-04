@@ -67,32 +67,31 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * will be called in Edit Dialog Mode
      */
     fillBottomToolbar: function() {
-        _.each([this.action_editInNewWindow, this.action_deleteRecord], (action) => {
-            action.initialConfig.actionUpdater = function (action) {
-                var selection = this.getGrid().getSelectionModel().getSelections();
-                if (selection.length != 1) {
-                    action.disable();
-                    return;
-                } else {
-                    var record = selection[0];
-                }
-                if (!record) {
-                    action.disable();
-                    return;
-                }
+        const nCondition = (action) => {
+            return this.getGrid().getSelectionModel().getSelections().length === 1;
+        };
+        const grantsCondition = () => {
+            const accountGrants = _.get(this, 'editDialog.record.data.account_grants', {});
+            return accountGrants['adminGrant'] || accountGrants['updateEmployeeDataGrant'];
+        };
+        const isEditableCondition = () => {
+            const contract = _.get(this.getGrid().getSelectionModel().getSelections(), '[0]')
+            return contract.get('is_editable') || contract.id.length == 13;
+        };
 
-                if (record.id.length == 13) {
-                    action.enable();
-                    return;
-                }
+        this.action_addInNewWindow.actionUpdater = (action) => {
+            action.setDisabled(!grantsCondition());
+        };
+        this.action_editInNewWindow.actionUpdater = (action) => {
+            action.setDisabled(!(nCondition(action) && isEditableCondition(action)));
+        };
+        this.action_deleteRecord.actionUpdater = (action) => {
+            action.setDisabled(!(nCondition(action) && grantsCondition(action)));
+        };
 
-                action.setDisabled(!(record.get('is_editable') == true)); // may be undefined
-            }
-        });
-        
-        var tbar = this.getBottomToolbar();
-        tbar.addButton(new Ext.Button(this.action_editInNewWindow));
+        const tbar = this.getBottomToolbar();
         tbar.addButton(new Ext.Button(this.action_addInNewWindow));
+        tbar.addButton(new Ext.Button(this.action_editInNewWindow));
         tbar.addButton(new Ext.Button(this.action_deleteRecord));
     },
     /**
