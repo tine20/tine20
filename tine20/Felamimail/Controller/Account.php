@@ -617,8 +617,33 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception
      */
-    public function checkEmailAccountContact($_record)
+    public function checkEmailAccountContact($_record, $_oldRecord = null)
     {
+        $diff = $_oldRecord ? $_oldRecord->diff($_record)->diff : $_record;
+
+        if (!empty($_oldRecord['contact_id'])) {
+            $expander = new Tinebase_Record_Expander(Felamimail_Model_Account::class, [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                    'contact_id' => []
+                ]
+            ]);
+            $expander->expand(new Tinebase_Record_RecordSet(Felamimail_Model_Account::class, [$_oldRecord]));
+        }
+        
+        $oldContainer = $_oldRecord['contact_id']['container_id'] ?? null;
+        $updatedContainer = $_record['contact_id']['container_id'] ?? null;
+
+        $isContainerUpdated = ((!empty($updatedContainer) || !empty($oldContainer))) && $updatedContainer !== $oldContainer;
+
+        if (!isset($diff['visibility'])
+            && !isset($diff['name'])
+            && !isset($diff['accountDisplayName']) 
+            && !isset($diff['email'])
+            && !$isContainerUpdated
+        ) {
+            return $_record;
+        }
+        
         if ($_record->type === Felamimail_Model_Account::TYPE_SHARED ||
             $_record->type === Felamimail_Model_Account::TYPE_USER ||
             $_record->type === Felamimail_Model_Account::TYPE_USER_INTERNAL ||
@@ -755,7 +780,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 $this->_beforeUpdateStandardAccount($_record, $_oldRecord);
         }
         $this->_checkSignature($_record);
-        $this->checkEmailAccountContact($_record);
+        $this->checkEmailAccountContact($_record, $_oldRecord);
     }
 
     /**
