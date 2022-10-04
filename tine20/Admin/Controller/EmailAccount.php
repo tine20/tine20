@@ -361,10 +361,6 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         $_records = $_records instanceof Tinebase_Record_RecordSet ? $_records : [$_records];
 
         foreach ($_records as $_record) {
-            if ($_record->type !== Felamimail_Model_Account::TYPE_SYSTEM) {
-                // TODO make this work for all system accounts (shared, user internal)
-                continue;
-            }
             if (!isset($_record->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP])) {
                 try {
                     $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
