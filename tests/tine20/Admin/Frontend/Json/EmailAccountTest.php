@@ -864,4 +864,18 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $this->assertEquals(array('bla@tine20.org', 'blubb@tine20.org'),
             $pseudoFullUser->smtpUser->emailAliases->email, 'emailAliases was not updated');
     }
+
+    public function testCreateSharedAccountWithInbox()
+    {
+        // change email address and check if email user is updated, too
+        $this->_testNeedsTransaction();
+        $sharedAccount = $this->testEmailAccountApiSharedAccount(false);
+        $json = new Felamimail_Frontend_Json();
+        $folders = $json->searchFolders([
+            ['field' => 'account_id', 'operator' => 'equals', 'value' => $sharedAccount['id']],
+            ['field' => 'globalname', 'operator' => 'equals', 'value' => ''],
+        ]);
+        self::assertEquals(4, $folders['totalcount'], 'should find 5 initial folders. got: '
+            . print_r($folders, true));
+    }
 }
