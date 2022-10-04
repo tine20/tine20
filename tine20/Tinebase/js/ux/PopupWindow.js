@@ -215,9 +215,18 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         this.screenX = _.isNumber(this.screenX) ? this.screenX : ((w / 2) - (width / 2)) + dualScreenLeft;
         this.screenY = _.isNumber(this.screenY) ? this.screenY : ((h / 2) - (height / 2)) + dualScreenTop;
 
-        return popup = window.open(url, windowName,
+        const popup = window.open(url, windowName,
             'width=' + width + ',height=' + height + ',screenY=' + this.screenY + ',screenX=' + this.screenX +
             ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
+
+        // NOTE: FF 105 on linux always opens new windows in fullscreen
+        // NOTE: in Chrome we don't have innerHeight that early
+        if (Ext.isGecko && Ext.isLinux) {
+            const heightOffset = popup.outerHeight - popup.innerHeight;
+            popup.resizeTo(width, heightOffset+height);
+        }
+
+        return popup;
     },
     
     getState : function() {
