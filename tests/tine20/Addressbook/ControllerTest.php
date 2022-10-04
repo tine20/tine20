@@ -697,9 +697,9 @@ class Addressbook_ControllerTest extends TestCase
         $updateContact->tags->addRecord(new Tinebase_Model_Tag(array('name' => 'testtag2'), true));
         $updateContact->attachments = clone $createdContact->attachments;
         $path = Tinebase_TempFile::getTempPath();
-        file_put_contents($path, 'moreTestAttachementData');
+        file_put_contents($path, 'moreTestAttachmentData');
         $updateContact->attachments->addRecord(new Tinebase_Model_Tree_Node(array(
-                'name'      => 'moreTestAttachementData.txt',
+                'name'      => 'moreTestAttachmentData.txt',
                 'tempFile'  => Tinebase_TempFile::getInstance()->createTempFile($path)
         ), true));
         $updateContact->xprops('customfields')[$cField2->name] = 'test field2';

@@ -458,17 +458,19 @@ Tine.Filemanager.nodeActions.Download = {
     disabled: true,
     scope: this,
     init: function() {
-        this.hidden = !Tine.Tinebase.configManager.get('downloadsAllowed');
+        this.hidden = this.hidden || !Tine.Tinebase.configManager.get('downloadsAllowed');
     },
     handler: function() {
         Tine.Filemanager.downloadFile(this.initialConfig.selections[0]);
     },
     actionUpdater: function(action, grants, records, isFilterSelect) {
-
-        var enabled = !isFilterSelect
-            && records && records.length == 1
+        const enabled = !isFilterSelect
+            && records && records.length === 1
             && records[0].get('type') != 'folder'
-            && window.lodash.get(records, '[0].data.account_grants.downloadGrant', false);
+            && (
+                String(_.get(records, '[0].data.path', '')).match(/^\/records/)
+                || _.get(records, '[0].data.account_grants.downloadGrant', false)
+            );
 
         action.setDisabled(!enabled);
     }

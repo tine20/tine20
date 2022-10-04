@@ -222,7 +222,7 @@ class Tinebase_Record_ExpanderTest extends TestCase
         }
     }
 
-    public function testExpandAttachements()
+    public function testExpandAttachments()
     {
         $createdContact = $this->_createAndUpdateContact();
         $adbController = Addressbook_Controller_Contact::getInstance();

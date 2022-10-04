@@ -702,10 +702,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected function _addRecordAttachment($record)
     {
         $path = Tinebase_TempFile::getTempPath();
-        file_put_contents($path, 'testAttachementData');
+        file_put_contents($path, 'testAttachmentData');
         $record->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array(
             array(
-                'name'      => 'testAttachementData.txt',
+                'name'      => 'testAttachmentData.txt',
                 'tempFile'  => Tinebase_TempFile::getInstance()->createTempFile($path)
             )
         ), true);

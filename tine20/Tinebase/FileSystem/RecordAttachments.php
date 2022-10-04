@@ -210,7 +210,7 @@ class Tinebase_FileSystem_RecordAttachments
     }
     
     /**
-     * add attachement to record
+     * add attachment to record
      * 
      * @param  Tinebase_Record_Interface $record
      * @param  string $name

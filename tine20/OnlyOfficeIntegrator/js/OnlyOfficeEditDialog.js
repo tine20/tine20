@@ -250,7 +250,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Component, {
         const url = event.data.url;
         const version = event.data.version;
         const fileLocationSrc = {
-            type: this.isAttachment ? 'attachement' : 'fm_node',
+            type: this.isAttachment ? 'attachment' : 'fm_node',
             revision: version
         };
 

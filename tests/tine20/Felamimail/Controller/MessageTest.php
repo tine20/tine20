@@ -1419,11 +1419,11 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
     }
 
     /**
-     * testNoAttachement
+     * testNoAttachment
      * 
      * @see 0008014: js client shows wrong attachment icon in grid
      */
-    public function testNoAttachement()
+    public function testNoAttachment()
     {
         $cachedMessage = $this->messageTestHelper('noattachment.eml');
         $this->assertEquals(0, $cachedMessage->has_attachment);

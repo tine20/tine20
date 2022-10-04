@@ -22,7 +22,7 @@
 class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
 {
     const TYPE_FM_NODE = 'fm_node';
-    const TYPE_ATTACHMENT = 'attachement';
+    const TYPE_ATTACHMENT = 'attachment';
     // user gets a download
     const TYPE_DOWNLOAD = 'download';
     // local filesystem, i.e. for CLI use
@@ -86,6 +86,15 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
         ],
     ];
 
+    public function __set($_name, $_value)
+    {
+        if ($_name === 'type' && $_value === 'attachement') {
+            // typo and \Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT compat
+            $_value = self::TYPE_ATTACHMENT;
+        }
+
+        parent::__set($_name, $_value);
+    }
     public function copyNodeTo(Tinebase_Model_Tree_Node $srcNode)
     {
         switch ($this->{self::FLD_TYPE}) {
@@ -129,7 +138,7 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
                 $node = $this->_getFMNode();
                 break;
             case self::TYPE_ATTACHMENT:
-                $node = $this->_getAttachementNode();
+                $node = $this->_getAttachmentNode();
                 break;
             default:
                 throw new Tinebase_Exception_UnexpectedValue('invalid type: ' . $this->{self::FLD_TYPE});
@@ -151,7 +160,7 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
         return [$record, $recordCtrl];
     }
 
-    protected function _getAttachementNode()
+    protected function _getAttachmentNode()
     {
         list($record) = $this->getAttachmentRecordAndCtrl();
         $fs = Tinebase_FileSystem::getInstance();

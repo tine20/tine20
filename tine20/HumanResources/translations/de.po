@@ -239,6 +239,9 @@ msgstr[1] "Abteilungen"
 msgid "Title"
 msgstr "Titel"
 
+msgid "Timetracker time account for working time tracking of this division"
+msgstr "Zeitkonto für die Arbeitszeiterfassung dieser Abteilung"
+
 #: Model/Contract.php:42 js/ContractGridPanel.js:42
 #: js/ContractEditDialog.js:237 js/ContractEditDialog.js:251
 msgid "Contract"

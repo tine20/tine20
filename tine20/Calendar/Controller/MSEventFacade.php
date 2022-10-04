@@ -757,7 +757,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     /**
      * converts a tine20 event to an iTIP event
      * 
-     * @param  Calendar_Model_Event $_event - must have exceptions, alarms & attachements resovled
+     * @param  Calendar_Model_Event $_event - must have exceptions, alarms & attachments resovled
      * @return Calendar_Model_Event 
      */
     protected function _toiTIP($_event)
