@@ -130,14 +130,14 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
         $firstDay = $_monthlyWTR->dailywtreports->getFirstRecord();
         if (null !== $_previousMonthlyWTR) {
             $_monthlyWTR->working_time_balance_previous = $_previousMonthlyWTR->working_time_balance;
-            if ((int)$firstDay->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE_PREVIOUS} !==
+            if ($firstDay && (int)$firstDay->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE_PREVIOUS} !==
                     (int)$_previousMonthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE}) {
                 $firstDay->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE_PREVIOUS} =
                     (int)$_previousMonthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE};
             }
         } else {
             $_monthlyWTR->working_time_balance_previous = 0;
-            if (0 !== (int)$firstDay->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE_PREVIOUS}) {
+            if ($firstDay && 0 !== (int)$firstDay->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE_PREVIOUS}) {
                 $firstDay->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE_PREVIOUS} = 0;
             }
         }
@@ -173,8 +173,9 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
             $_monthlyWTR->working_time_actual - $_monthlyWTR->working_time_target +
             $_monthlyWTR->working_time_correction;
 
-        if ((int)$_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE} !== (int)$_monthlyWTR
-                ->{HumanResources_Model_MonthlyWTReport::FLDS_DAILY_WT_REPORTS}->getLastRecord()
+        if ($_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_DAILY_WT_REPORTS}->getLastRecord() &&
+                (int)$_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE} !==
+                (int)$_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_DAILY_WT_REPORTS}->getLastRecord()
                 ->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE}
                 + (int)$_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_CORRECTION}) {
             // well this is bad...
