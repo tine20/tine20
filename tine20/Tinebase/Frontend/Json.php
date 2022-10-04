@@ -1694,7 +1694,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $fs->unlink($targetPath);
                 }
             } elseif ($fs->fileExists($targetPath . '/' . basename($sourcePath)) && $forceOverwrite) {
-                $fs->unlink($targetPath);
+                $fs->unlink($targetPath . '/' . basename($sourcePath));
             }
             $result->addRecord($fs->copy($sourcePath, $targetPath));
         }
