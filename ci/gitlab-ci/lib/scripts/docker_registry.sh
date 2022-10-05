@@ -56,3 +56,28 @@ docker_registry_login () {
     echo "docker login failed, aborting ..."
     return 1
 }
+
+docker_registry_release_image() {
+    name="$1"
+    desitination="$2"
+
+    from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
+
+    if [ -z "$CI_COMMIT_TAG" ]; then
+        echo "pushing nightly"
+        docker_registry_push "${from}" "${desitination}:dev-$(git describe --tags)"
+        return
+    fi
+
+    docker_registry_push "${from}" "${desitination}:${CI_COMMIT_TAG}"
+    docker_registry_push "${from}" "${desitination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+}
+
+docker_registry_push() {
+    from="$1"
+    to="$2"
+
+    docker pull "${from}"
+    docker tag "${from}" "${to}"
+    docker push "${to}"
+}
