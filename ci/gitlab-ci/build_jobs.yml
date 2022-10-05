@@ -125,6 +125,10 @@ docker_build_source:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-packages/
       variables:
           REUSE_IMAGES: "false"
+    # from deploy-customer-image-to-registry:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-customer-image-to-registry/
+      variables:
+          REUSE_IMAGES: "false"
     # 
     # run for any merge request or schedule
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -172,6 +176,8 @@ docker_build_built:
     - if: $DEPLOY_IMAGES_TO_DOCKERHUB == "true"
     # from docker build packages:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-packages/
+    # from deploy-customer-image-to-registry:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-customer-image-to-registry/
   timeout: 120m
   interruptible: true
 
