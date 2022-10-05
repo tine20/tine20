@@ -9,6 +9,7 @@
 Ext.ns('Tine.widgets.grid');
 
 import '../../Model/ImportExportDefinition';
+import { getType as allowOpen } from '../../../../OnlyOfficeIntegrator/js/OnlyOfficeTypes';
 
 /**
  * @namespace   Tine.widgets.grid
@@ -192,7 +193,7 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
                     {text: i18n._('Filemanager'), name: 'filesystem'}
                 ];
 
-                if (Tine.OnlyOfficeIntegrator) {
+                if (Tine.OnlyOfficeIntegrator && allowOpen(`export.${this.definition.format}`)) {
                     locationOptions.push({text: i18n._('Open'), name: 'open'});
                 }
                 
