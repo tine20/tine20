@@ -874,10 +874,12 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
         if (null === $fileType) {
-            throw new Tinebase_Exception_SystemGeneric('filetype of node is not supported');
+            throw new Tinebase_Exception_SystemGeneric(Tinebase_Translation::getTranslation(OnlyOfficeIntegrator_Config::APP_NAME)
+                ->translate("filetype of node is not supported"));
         }
         if (empty($node->revision)) {
-            throw new Tinebase_Exception_SystemGeneric('node has no revision, it might be a partial upload');
+            throw new Tinebase_Exception_SystemGeneric(Tinebase_Translation::getTranslation(OnlyOfficeIntegrator_Config::APP_NAME)
+                ->translate("node has no revision, it might be a partial upload"));
         }
 
         OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->invalidateTimeouts();
@@ -912,7 +914,9 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 if (OnlyOfficeIntegrator_Controller::getInstance()->isDocumentOpenInOOServer($accessToken)) {
                     // in case we would allow to open two different revisions at the same time, make sure that only one is writeable, all others need to be RO
                     throw new Tinebase_Exception_SystemGeneric(
-                        'this revision currently can\'t be opened as a different revision is already open', 647);
+                        Tinebase_Translation::getTranslation(OnlyOfficeIntegrator_Config::APP_NAME)
+                        ->translate("this revision currently can't be opened as a different revision is already open")
+                    , 647);
                 }
             }
 
