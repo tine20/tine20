@@ -72,6 +72,21 @@ deploy-built-image-to-dockerhub:
   timeout: 20m
   interruptible: false
 
+deploy-customer-image-to-registry:
+  extends: .abstract_jobs.docker
+  stage: deploy
+  script:
+    - !reference [.lib, script]
+    - docker login --username $CUSTOMER_IMAGE_REGISTRY_USERNAME --password $CUSTOMER_IMAGE_REGISTRY_PASSWORD $CUSTOMER_IMAGE_REGISTRY_REPO
+    - docker_registry_release_image built $CUSTOMER_IMAGE_REGISTRY_REPO
+  rules:
+    - if: $DEPLOY_CUSTOMER_IMAGE_TO_REGISTRY != "true"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-customer-image-to-registry/
+    - if: $CI_COMMIT_TAG
+  timeout: 20m
+  interruptible: false
+
 release-to-gitlab:
   extends: .abstract_jobs.docker
   variables:
