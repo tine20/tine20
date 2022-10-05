@@ -12,6 +12,7 @@
 Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
 
 import '../../Model/ImportExportDefinition';
+import { getType as allowOpen } from '../../../../OnlyOfficeIntegrator/js/OnlyOfficeTypes';
 
 /**
  * Generic 'Export' dialog
@@ -194,7 +195,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             
             let location = 'download';
 
-            if (Tine.OnlyOfficeIntegrator) {
+            if (Tine.OnlyOfficeIntegrator && allowOpen(`export.${definition.data.format}`)) {
                 locationOptions.push({text: i18n._('Open'), name: 'open'});
             }
             

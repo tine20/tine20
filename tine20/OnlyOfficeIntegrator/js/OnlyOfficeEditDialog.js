@@ -330,12 +330,11 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Component, {
                 config = await Tine.OnlyOfficeIntegrator.getEditorConfigForNodeId(recordId);
             }
         } catch(err) {
-            // if (_.get(err, 'data.code') === 647) {
             Ext.MessageBox.show({
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.WARNING,
-                title: this.app.i18n._('Outdated Revision'),
-                msg: this.app.i18n._('This revision of the document is outdated, please open the latest revision'),
+                title: this.app.i18n._('Error'),
+                msg: this.app.i18n._hidden(err.message),
                 fn: () => {this.window.close()}
             });
         }
