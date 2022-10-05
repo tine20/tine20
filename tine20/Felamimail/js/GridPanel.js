@@ -649,7 +649,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             id: 'tags',
             header: this.app.i18n._("Tags"),
             width: 24,
-            sortable: true,
+            sortable: false,
             dataIndex: 'tags',
             align: 'center',
             renderer: Tine.Tinebase.common.tagsRenderer
