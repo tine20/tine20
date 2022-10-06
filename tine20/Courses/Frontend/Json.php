@@ -197,6 +197,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteCourses($ids)
     {
+        parent::_setRequestContext(Admin_Controller_User::getInstance());
         return $this->_delete($ids, $this->_controller);
     }
 
