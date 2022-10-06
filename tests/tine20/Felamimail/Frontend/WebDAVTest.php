@@ -27,7 +27,7 @@ class Felamimail_Frontend_WebDAVTest extends TestCase
      */
     public function testgetNodeForPath()
     {
-        $node = $this->_getWebDAVTree()->getNodeForPath(null);
+        $node = $this->_getWebDAVTree()->getNodeForPath('');
         
         $this->assertInstanceOf('Tinebase_WebDav_Root', $node, 'wrong node class');
         
