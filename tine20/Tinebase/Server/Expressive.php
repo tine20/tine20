@@ -104,6 +104,16 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
 
             try {
                 $response = $middleWarePipe->handle($this->_request);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                self::setHttpHeader(self::HTTP_ERROR_CODE_NOT_FOUND);
+                return false;
+            } catch (Tinebase_Exception_AccessDenied $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                self::setHttpHeader(self::HTTP_ERROR_CODE_FORBIDDEN);
+                return false;
             } catch (ErrorException $ee) {
                 if (preg_match('/route\.cache\.[0-9a-f]+\): failed to open stream: No such file or directory/', $ee->getMessage())) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
@@ -127,7 +137,7 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
 
         } catch (Throwable $exception) {
             Tinebase_Exception::log($exception, false);
-            header('HTTP/1.0 500 Service Unavailable');
+            self::setHttpHeader(self::HTTP_ERROR_CODE_INTERNAL_SERVER_ERROR);
             return false;
         }
 
