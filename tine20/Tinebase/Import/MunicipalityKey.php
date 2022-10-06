@@ -58,7 +58,7 @@ class Tinebase_Import_MunicipalityKey extends Tinebase_Import_Xls_Abstract
    {
        $data = [];
        foreach ($_data as $key => $value) {
-           if (null === $this->_gebietsstand && strpos($value, 'Gebietsstand') !== false &&
+           if (null === $this->_gebietsstand && $value && strpos($value, 'Gebietsstand') !== false &&
                     preg_match('/Gebietsstand.*(\d\d)\.(\d\d)\.(\d\d\d\d)/', $value, $m)) {
                $this->_gebietsstand = new Tinebase_DateTime($m[3] . '-' . $m[2] . '-' . $m[1]);
                $this->_gebietsstand->hasTime(false);

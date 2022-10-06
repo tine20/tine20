@@ -178,12 +178,12 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
                     // crop width
                     $dst_image = imagecreatetruecolor($dst_width, $dst_height);
                     $this->assertTransparency($dst_image, $src_image);
-                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, (int)$this->height * $dst_ratio, (int)$this->height);
+                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, (int)($this->height * $dst_ratio), (int)$this->height);
                 } else {
                     // crop heights
                     $dst_image = imagecreatetruecolor($dst_width, $dst_height);
                     $this->assertTransparency($dst_image, $src_image);
-                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, (int)$this->width, (int)$this->width / $dst_ratio);
+                    imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_width, $dst_height, (int)$this->width, (int)($this->width / $dst_ratio));
                 }
                 break;
             case self::RATIOMODE_PRESERVNOFILL:

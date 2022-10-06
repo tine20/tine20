@@ -946,11 +946,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
      * 
      * @param string $_html
      * @param string $_eol
-     * @return string
+     * @return string|null
      */
     public static function convertHTMLToPlainTextWithQuotes($_html, $_eol = "\n")
     {
-        $html = $_html;
+        $html = (string)$_html;
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Original body string: ' . $_html);
         
         $dom = new DOMDocument('1.0', 'UTF-8');
@@ -970,6 +970,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' HTML (DOMDocument): ' . $dom->saveHTML());
         
         $bodyElements = $dom->getElementsByTagName('body');
+        $result = null;
         if ($bodyElements->length > 0) {
             $firstBodyNode = $bodyElements->item(0);
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Before quoting: ' . $firstBodyNode->nodeValue);
