@@ -178,16 +178,20 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
             }
         }, this));
 
-        this.popup.addEventListener('resize', _.debounce(_.bind(this.saveState, this), 150));
-
-        // NOTE: 'beforeunload' in Chrome does not help
+        // NOTE: 'beforeunload' in Chrome does not work and there is no event to detect window moves,
+        //       so we frequently check for state updates
         this.popup.setInterval(() => {
-            if (this.popup.screenX !== this.screenX || this.popup.screenY !== this.screenY) {
-                this.screenX = this.popup.screenX;
-                this.screenY = this.popup.screenY;
+            if (_.reduce(this.getState(), (save, value, key) => {
+                // save state if difference > 5% (to suppress annoying window manager effects)
+                if (Math.max(value, this[key])/Math.min(value, this[key]) > 1.05) {
+                    this[key] = value;
+                    save = true;
+                }
+                return save;
+            }, false)) {
                 this.saveState();
             }
-        }, 1000)
+        }, 2000);
     },
 
     /**
@@ -219,11 +223,17 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
             'width=' + width + ',height=' + height + ',screenY=' + this.screenY + ',screenX=' + this.screenX +
             ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
 
-        // NOTE: FF 105 on linux always opens new windows in fullscreen
-        // NOTE: in Chrome we don't have innerHeight that early
+        // FF 105 on linux always opens new windows in fullscreen
         if (Ext.isGecko && Ext.isLinux) {
+            // NOTE: resizeTo includes window decoration (in contrast to window.open)
             const heightOffset = popup.outerHeight - popup.innerHeight;
-            popup.resizeTo(width, heightOffset+height);
+            // NOTE: it's a race with some internal FF process we try to resize as soon as possible
+            //       there's no way to measure if the resize succeeded in this early stage
+            Array.from(Array(10)).forEach((v, i) => {
+                window.setTimeout(() => {
+                    popup.resizeTo(width, heightOffset + height);
+                }, i * 100);
+            });
         }
 
         return popup;
