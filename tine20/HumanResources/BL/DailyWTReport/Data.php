@@ -76,10 +76,16 @@ class HumanResources_BL_DailyWTReport_Data implements Tinebase_BL_DataInterface
                 'type'              => HumanResources_Model_DailyWTReport::MODEL_NAME_PART,
             ], true);
 
+        $lastTs = null;
+        $lastSlot = null;
         /** @var Timetracker_Model_Timesheet $timeSheet */
         foreach ($_timeSheets as $timeSheet) {
             $timeSlot = new HumanResources_BL_DailyWTReport_TimeSlot();
-            $timeSlot->start = new Tinebase_DateTime($timeSheet->start_date->format('Y-m-d ') . $timeSheet->start_time);
+            if ($lastSlot && ! $timeSheet->start_time) {
+                $timeSlot->start = $lastSlot->end->getClone();
+            } else {
+                $timeSlot->start = new Tinebase_DateTime($timeSheet->start_date->format('Y-m-d ') . $timeSheet->start_time);
+            }
             if ($timeSheet->end_time) {
                 $timeSlot->end = new Tinebase_DateTime($timeSheet->start_date->format('Y-m-d ') . $timeSheet->end_time);
             } else {
@@ -89,7 +95,7 @@ class HumanResources_BL_DailyWTReport_Data implements Tinebase_BL_DataInterface
             $timeSlot->timeSheetId = $timeSheet->getId();
 
             // TODO add same day assertions? which TZ?
-            if (!$this->allowTimesheetOverlap && false !== ($lastSlot = end($this->timeSlots))) { /** @var HumanResources_BL_DailyWTReport_TimeSlot $lastSlot */
+            if (!$this->allowTimesheetOverlap && $lastSlot) { /** @var HumanResources_BL_DailyWTReport_TimeSlot $lastSlot */
                 if ($timeSlot->start->isEarlier($lastSlot->end)) {
                     if (strcmp($timeSlot->start->format('Y-m-d H:i'), $lastSlot->end->format('Y-m-d H:i')) > 0) {
                         throw new Tinebase_Exception_BL('timesheets must not overlap');
@@ -100,11 +106,26 @@ class HumanResources_BL_DailyWTReport_Data implements Tinebase_BL_DataInterface
                     }
                 }
             }
+            if ($this->allowTimesheetOverlap && $lastTs && !$lastTs->start_time &&
+                    strcmp($timeSlot->start->format('Y-m-d H:i'), $lastSlot->end->format('Y-m-d H:i')) > 0) {
+                array_pop($this->timeSlots);
+            }
             $newRelation = clone $relation;
             $newRelation->related_id = $timeSheet->getId();
             $relations->addRecord($newRelation);
 
             $this->timeSlots[] = $timeSlot;
+            if ($this->allowTimesheetOverlap && $lastTs && !$lastTs->start_time &&
+                    strcmp($timeSlot->start->format('Y-m-d H:i'), $lastSlot->end->format('Y-m-d H:i')) > 0) {
+                $duration = $lastSlot->durationInSec();
+                $lastSlot->start = $timeSlot->end->getClone();
+                $lastSlot->end = $lastSlot->start->getClone()->addSecond($duration);
+                $this->timeSlots[] = $lastSlot;
+                $timeSheet = $lastTs;
+                $timeSlot = $lastSlot;
+            }
+            $lastSlot = $timeSlot;
+            $lastTs = $timeSheet;
         }
 
         $this->result->relations = $relations;

@@ -6,7 +6,7 @@
  * @subpackage  BL
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -107,6 +107,15 @@ class Tinebase_BL_Pipe implements Tinebase_BL_PipeContext
             if ($this->_pipe[$_before] instanceof $_class) {
                 return $this->_pipe[$_before];
             }
+        }
+        return null;
+    }
+
+    public function getFirstElementOfClass(string $_class): ?Tinebase_BL_ElementInterface
+    {
+        if (empty($this->_pipe)) $this->_init();
+        foreach($this->_pipe as $pipeElement) {
+            if ($pipeElement instanceof $_class) return $pipeElement;
         }
         return null;
     }
