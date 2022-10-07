@@ -265,9 +265,7 @@ class Tinebase_FileSystem_Previews
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' preview creation for file ' . $node->getId() . ' timed out');
                 }
 
-                // TODO do this in one update call?
-                $this->_fsController->updatePreviewErrorCount($node->hash, $node->preview_error_count + 1);
-                $this->_fsController->updatePreviewCount($node->hash, 0);
+                $this->writePreviewError($node);
 
                 return false;
             }
@@ -277,10 +275,7 @@ class Tinebase_FileSystem_Previews
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' preview creation for file ' . $node->getId() . ' failed');
             }
 
-            // TODO do this in one update call?
-            $this->_fsController->updatePreviewStatus($node->hash, $exception->getHttpStatus());
-            $this->_fsController->updatePreviewErrorCount($node->hash, $node->preview_error_count + 1);
-            $this->_fsController->updatePreviewCount($node->hash, 0);
+            $this->writePreviewError($node, (int)$exception->getHttpStatus());
 
             return false;
 
@@ -369,6 +364,20 @@ class Tinebase_FileSystem_Previews
         }
 
         return true;
+    }
+
+    protected function writePreviewError(Tinebase_Model_Tree_Node $node, ?int $httpStatus = null): void
+    {
+        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+        $this->_fsController->acquireWriteLock();
+
+        if (null !== $httpStatus) {
+            $this->_fsController->updatePreviewStatus($node->hash, $httpStatus);
+        }
+        $this->_fsController->updatePreviewErrorCount($node->hash, $node->preview_error_count + 1);
+        $this->_fsController->updatePreviewCount($node->hash, 0);
+
+        $transaction->release();
     }
 
     /**
