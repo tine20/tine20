@@ -348,7 +348,11 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                         'date' => clone $this->_currentDate,
                     ]);
                 $blPipeData->allowTimesheetOverlap = true;
-                if (isset($timeSheets[$dateStr])) {
+                if (null !== ($tsConvert = $blPipe
+                        ->getFirstElementOfClass(HumanResources_BL_DailyWTReport_ConvertTsPtWtToTimeSlot::class))) {
+                    /** @var HumanResources_BL_DailyWTReport_ConvertTsPtWtToTimeSlot $tsConvert */
+                    $tsConvert->setTimeSheets(isset($timeSheets[$dateStr]) ? $timeSheets[$dateStr] : null);
+                } elseif (isset($timeSheets[$dateStr])) {
                     if ($blPipe->hasInstanceOf(HumanResources_BL_DailyWTReport_BreakTime::class) ||
                         $blPipe->hasInstanceOf(HumanResources_BL_DailyWTReport_LimitWorkingTime::class)) {
                         $blPipeData->allowTimesheetOverlap = false;
@@ -652,7 +656,13 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
 
         $result = [];
         /** @var HumanResources_Model_DailyWTReport $dwtr */
-        foreach (HumanResources_Controller_DailyWTReport::getInstance()->search($filter) as $dwtr) {
+        foreach (HumanResources_Controller_DailyWTReport::getInstance()->search($filter, null, new Tinebase_Record_Expander(
+                    HumanResources_Model_DailyWTReport::class, [
+                        Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                            'employee_id' => [],
+                        ]
+                    ]
+                )) as $dwtr) {
             $dwtr->relations = Tinebase_Relations::getInstance()->getRelations(
                 HumanResources_Model_DailyWTReport::class,
                 Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,

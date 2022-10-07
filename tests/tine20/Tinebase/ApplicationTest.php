@@ -352,6 +352,7 @@ class Tinebase_ApplicationTest extends TestCase
                 HumanResources_Model_AttendanceRecorderDeviceRef::class,
                 HumanResources_Model_BLAttendanceRecorder_Config::class,
                 HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::class,
+                HumanResources_Model_BLDailyWTReport_ConvertTsPtWtToTimeSlot::class,
                 HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::class,
                 HumanResources_Model_BLDailyWTReport_BreakTimeConfig::class,
                 HumanResources_Model_BLDailyWTReport_Config::class,
