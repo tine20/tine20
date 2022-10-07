@@ -61,9 +61,12 @@ class Addressbook_Setup_Update_14 extends Setup_Update_Abstract
 
     public function update004()
     {
-        $importExportDefinition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_pdf');
-        Tinebase_ImportExportDefinition::getInstance()->delete($importExportDefinition->getId());
+        try {
+            $importExportDefinition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_pdf');
+            Tinebase_ImportExportDefinition::getInstance()->delete($importExportDefinition->getId());
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // already removed
+        }
         $this->addApplicationUpdate('Addressbook', '14.4', self::RELEASE014_UPDATE004);
     }
-
 }
