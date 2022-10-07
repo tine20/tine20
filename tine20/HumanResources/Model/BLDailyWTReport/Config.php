@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -41,6 +41,7 @@ class HumanResources_Model_BLDailyWTReport_Config extends Tinebase_Model_BLConfi
         $_defintion[self::FIELDS][self::FLDS_CLASSNAME][self::CONFIG][self::AVAILABLE_MODELS] = [
             HumanResources_Model_BLDailyWTReport_BreakTimeConfig::class,
             HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::class,
+            HumanResources_Model_BLDailyWTReport_ConvertTsPtWtToTimeSlot::class,
         ];
     }
 }

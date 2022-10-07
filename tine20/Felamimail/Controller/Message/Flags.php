@@ -114,21 +114,26 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_mode. ' flags: ' . print_r($_flags, TRUE));
 
+        $ids = null;
         if ($_messages instanceof Tinebase_Model_Filter_FilterGroup) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' searching for msgs');
             $ids = $this->search($_messages, null, false, true);
-            $_messages = new Felamimail_Model_MessageFilter([
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' sorting found msgs');
+            $ids = $this->search(new Felamimail_Model_MessageFilter([
                 ['field' => 'id', 'operator' => 'in', 'value' => $ids],
+            ]), new Tinebase_Model_Pagination(['sort' => 'folder_id']), false, true);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' done');
+            $_messages = new Felamimail_Model_MessageFilter([
+                ['field' => 'id', 'operator' => 'in', 'value' => array_slice($ids, 0, 100)],
             ]);
+            $ids = array_slice($ids, 100);
         }
-        // only get the first 100 messages if we got a filtergroup
-        $pagination = ($_messages instanceof Tinebase_Model_Filter_FilterGroup)
-            ? new Tinebase_Model_Pagination(array('sort' => 'folder_id', 'start' => 0, 'limit' => 100))
-            : NULL;
-        $messagesToUpdate = $this->_convertToRecordSet($_messages, TRUE, $pagination);
+        $messagesToUpdate = $this->_convertToRecordSet($_messages, true);
         
         $lastFolderId       = null;
         $imapBackend        = null;
-        $folderCounterById  = array();
+        $folderCounterById  = [];
+        $imapMessageUids    = [];
         
         while (count($messagesToUpdate) > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
@@ -177,8 +182,10 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
             
             // get next 100 messages if we had a filter
             if ($_messages instanceof Tinebase_Model_Filter_FilterGroup) {
-                $pagination->start += 100;
-                $messagesToUpdate = $this->_convertToRecordSet($_messages, TRUE, $pagination);
+                $_messages->getFilter('id')->setValue(array_slice($ids, 0, 100));
+                $ids = array_slice($ids, 100);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' fetching more msgs');
+                $messagesToUpdate = $this->_convertToRecordSet($_messages, true);
             } else {
                 $messagesToUpdate = array();
             }
