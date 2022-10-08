@@ -87,6 +87,12 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
             ],
         ],
 
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'workingTimeCalculationStrategy'          => [],
+            ],
+        ],
+
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,
             self::INDEXES                   => [
@@ -170,6 +176,7 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
             ],
             'workingTimeCalculationStrategy' => [
                 self::TYPE              => self::TYPE_DYNAMIC_RECORD,
+                self::LABEL             => 'Working time calculation strategy', // _('Working time calculation strategy')
                 self::NULLABLE          => true,
                 self::CONFIG            => [
                     self::PERSISTENT        => true,

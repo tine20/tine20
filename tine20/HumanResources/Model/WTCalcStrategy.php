@@ -21,14 +21,17 @@ class HumanResources_Model_WTCalcStrategy extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::RECORD_NAME               => 'Working Time Calculation Strategy', // _('Working Time Calculation Strategy')
+        self::RECORD_NAME               => 'Working Time Calculation Strategy', // gettext('GENDER_Working Time Calculation Strategy')
+        self::RECORDS_NAME               => 'Working Time Calculation Strategies', // ngettext('Working Time Calculation Strategy', 'Working Time Calculation Strategies', n)
         self::APP_NAME                  => HumanResources_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
+        self::TITLE_PROPERTY            => "{% if fillDailyTarget %}Fill to daily target time{% else %}none{% endif %}",
 
 
         self::FIELDS                    => [
             self::FLD_FILL_DAILY_TARGET     => [
                 self::TYPE                      => self::TYPE_BOOLEAN,
+                self::LABEL                     => 'Fill to daily target time' // _('Fill to daily target time')
             ],
         ],
     ];
