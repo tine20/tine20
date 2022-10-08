@@ -83,7 +83,7 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             action.setDisabled(!grantsCondition());
         };
         this.action_editInNewWindow.actionUpdater = (action) => {
-            action.setDisabled(!(nCondition(action) && isEditableCondition(action)));
+            action.setDisabled(!(nCondition(action) /*&& isEditableCondition(action) always allow to open*/));
         };
         this.action_deleteRecord.actionUpdater = (action) => {
             action.setDisabled(!(nCondition(action) && grantsCondition(action)));
