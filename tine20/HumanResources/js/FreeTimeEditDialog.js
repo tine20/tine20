@@ -264,11 +264,11 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 let employee = _.get(me, 'employeePicker.selectedRecord.data', me.record.get('employee_id'));
                 let account = _.get(me, 'accountPicker.selectedRecord.data', me.record.get('account_id'));
 
+                this.setDisabled(!employee);
                 if (!employee) {
                     if (me.accountPicker) {
                         me.accountPicker.clearValue();
                     }
-                    this.setDisabled(true);
                     return;
                 }
                 const employeeFilter = [{
