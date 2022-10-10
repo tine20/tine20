@@ -46,14 +46,14 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     /**
      * translation object
      *
-     * @var Zend_Translate
+     * @var Zend_Translate_Adapter
      */
     protected $_translate;
 
     /**
      * translation object
      *
-     * @var Zend_Translate
+     * @var Zend_Translate_Adapter
      */
     protected $_tinebaseTranslate;
 
