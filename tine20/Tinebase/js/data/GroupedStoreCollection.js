@@ -186,7 +186,7 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
         Ext.each(records, function (record) {
             Ext.each(this.getGroupNames(record), function (groupName) {
                 var store = this.get(groupName),
-                    existingRecord = record.id != 0 ? store.getById(record.id) : null;
+                    existingRecord = store && record.id != 0 ? store.getById(record.id) : null;
 
                 // NOTE: record might be existing as it was added to a cloneStore
                 if (existingRecord) {
