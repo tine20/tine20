@@ -39,6 +39,7 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
     const TABLE_NAME = 'humanresources_freetimetype';
 
     const TT_TS_SYSCF_CLOCK_OUT_REASON = 'clock_out_reason';
+    const TT_TS_SYSCF_ABSENCE_REASON = 'absence_reason';
 
     const ID_SICKNESS       = 'sickness';
     const ID_VACATION       = 'vacation';
@@ -56,7 +57,7 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 3,
+        self::VERSION                   => 4,
         self::RECORD_NAME               => 'Absence reason', // gettext('GENDER_Absence reason')
         self::RECORDS_NAME              => 'Absence reasons', // ngettext('Absence reason', 'Absence reasons', n)
         self::TITLE_PROPERTY            => 'name',
@@ -83,6 +84,12 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
                         'referencedColumnName'  => 'id'
                     ]],
                 ],
+            ],
+        ],
+
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'workingTimeCalculationStrategy'          => [],
             ],
         ],
 
@@ -123,12 +130,12 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
             ],
             'wage_type' => [
                 self::TYPE              => self::TYPE_RECORD,
-                self::LENGTH            => 40,
+                self::NULLABLE          => true,
                 self::CONFIG            => [
                     self::APP_NAME          => HumanResources_Config::APP_NAME,
                     self::MODEL_NAME        => HumanResources_Model_WageType::MODEL_NAME_PART,
                 ],
-                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
+                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true,],
                 self::LABEL             => 'Wage type', // _('Wage type')
                 self::QUERY_FILTER      => true,
             ],
@@ -152,7 +159,6 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
             ],
             'timeaccount' => [
                 self::TYPE              => self::TYPE_RECORD,
-                self::LENGTH            => 40,
                 self::CONFIG            => [
                     self::APP_NAME          => Timetracker_Config::APP_NAME,
                     self::MODEL_NAME        => Timetracker_Model_Timeaccount::MODEL_NAME_PART,
@@ -167,7 +173,16 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Color', // _('Color')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-            ]
+            ],
+            'workingTimeCalculationStrategy' => [
+                self::TYPE              => self::TYPE_DYNAMIC_RECORD,
+                self::LABEL             => 'Working time calculation strategy', // _('Working time calculation strategy')
+                self::NULLABLE          => true,
+                self::CONFIG            => [
+                    self::PERSISTENT        => true,
+                    self::MODEL_NAME        => HumanResources_Model_WTCalcStrategy::class,
+                ],
+            ],
         ]
     ];
 }

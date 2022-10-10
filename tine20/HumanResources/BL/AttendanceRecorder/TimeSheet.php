@@ -228,6 +228,8 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
             if ($record->{HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID}) {
                 $fttId = $record->getIdFromProperty(HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID);
                 $ftt = HumanResources_Controller_FreeTimeType::getInstance()->get($fttId);
+                $ts->{HumanResources_Model_FreeTimeType::TT_TS_SYSCF_CLOCK_OUT_REASON} = $fttId;
+                // FIXME write test or check if test is available
                 if ($ftt->enable_timetracking) {
                     if ($ftt->timeaccount) {
                         $fttTA = Timetracker_Controller_Timeaccount::getInstance()->get($ftt->getIdFromProperty('timeaccount'));
@@ -244,11 +246,12 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                         'start_time' => $startDate->format('H:i:00'),
                         'end_time' => $startDate->format('H:i:00'),
                         'duration' => 0,
-                        HumanResources_Model_FreeTimeType::TT_TS_SYSCF_CLOCK_OUT_REASON => $fttId,
+                        HumanResources_Model_FreeTimeType::TT_TS_SYSCF_ABSENCE_REASON => $fttId,
                         'description' => sprintf($translate->_('Clock out: %1$s'), $startDate->format('H:i:s')),
                     ], true));
                     $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['fttTS'] = $fttTS->getId();
                 }
+                $ts->{HumanResources_Model_FreeTimeType::TT_TS_SYSCF_CLOCK_OUT_REASON} = $fttId;
             }
             $ts->description = $ts->description . ' ' . sprintf($translate->_('Clock out: %1$s'),
                     $record->{HumanResources_Model_AttendanceRecord::FLD_TIMESTAMP}->format('H:i:s'));

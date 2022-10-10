@@ -686,15 +686,28 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             ['field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $this->_endDate->format('Y-m-d')],
         ];
 
-        // fetch all timesheets of an employee of the current and last month
+        // fetch all accepted timesheets of an employee within current start/end date
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Timetracker_Model_Timesheet::class,
             $filterData
         );
 
+        $timeSheets = Timetracker_Controller_Timesheet::getInstance()->search($filter);
+        (new Tinebase_Record_Expander(Timetracker_Model_Timesheet::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                HumanResources_Model_FreeTimeType::TT_TS_SYSCF_ABSENCE_REASON => [],
+                HumanResources_Model_FreeTimeType::TT_TS_SYSCF_CLOCK_OUT_REASON => [],
+            ],
+        ]))->expand($timeSheets);
+        // remove timesheets that have an absence reason with no wage_type assigned
+        $timeSheets = $timeSheets->filter(function(Timetracker_Model_Timesheet $ts) {
+            return empty($ts->{HumanResources_Model_FreeTimeType::TT_TS_SYSCF_ABSENCE_REASON}) ||
+                !empty($ts->{HumanResources_Model_FreeTimeType::TT_TS_SYSCF_ABSENCE_REASON}->wage_type);
+        });
+
         $result = [];
         /** @var Timetracker_Model_Timesheet $ts */
-        foreach (Timetracker_Controller_Timesheet::getInstance()->search($filter) as $ts) {
+        foreach ($timeSheets as $ts) {
             $day = $ts->start_date->format('Y-m-d');
             if (!isset($result[$day])) {
                 $result[$day] = new Tinebase_Record_RecordSet(Timetracker_Model_Timesheet::class, []);
@@ -744,7 +757,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             /** @var HumanResources_Model_FreeDay $fd */
             foreach ($ft->freedays as $fd) {
                 $day = $fd->date->format('Y-m-d');
-                if ($day >= $start && $day <= $end) {
+                if (!$fd->sickoverwrite && $day >= $start && $day <= $end) {
                     if (!isset($result[$day])) {
                         $result[$day] = new Tinebase_Record_RecordSet(HumanResources_Model_FreeTime::class, []);
                     }

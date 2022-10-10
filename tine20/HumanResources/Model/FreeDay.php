@@ -31,7 +31,7 @@ class HumanResources_Model_FreeDay extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 3,
+        'version'           => 4,
         'recordName'        => 'Free Day', // ngettext('Free Day', 'Free Days', n)
         'recordsName'       => 'Free Days', // gettext('GENDER_Free Day')
         'hasRelations'      => FALSE,
@@ -93,6 +93,10 @@ class HumanResources_Model_FreeDay extends Tinebase_Record_Abstract
                 'type' => 'float',
                 'default' => 1
             ),
+            'sickoverwrite' => [
+                self::TYPE => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL => 0,
+            ]
         ),
     );
 }

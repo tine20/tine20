@@ -362,7 +362,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
             listWidth: 276,
             listeners: { select: (combo, type) => {
                 this.onESC();
-                this.onWTClock('clockPause', { [FLD_FREETIMETYPE_ID]: type.id }, btn)
+                this.onWTClock('clockOut', { [FLD_FREETIMETYPE_ID]: type.id }, btn)
             }}
         });
         picker.onTriggerClick();

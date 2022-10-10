@@ -1293,8 +1293,12 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $result = $this->_json->searchFreeTimeTypes(null, null);
         $this->assertArrayHasKey('results', $result);
         $this->assertTrue(count($result['results']) > 0);
-        $this->assertArrayHasKey('wage_type', $result['results'][0]);
-        $this->assertArrayHasKey('name', $result['results'][0]['wage_type']);
+        foreach ($result['results'] as $ftt) {
+            if (isset($ftt['wage_type']['name'])) {
+                return;
+            }
+        }
+        $this->fail('not a single wage_type got resolved');
     }
 
     public function testDeleteFreeTimeTypes()
