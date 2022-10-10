@@ -254,13 +254,13 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         if (! this[contentType + suffix]) {
             try {
                 this[contentType + suffix] = def && def.xtype ? Ext.create(def) :
-                    new Tine[def.appName || this.app.appName][contentType + suffix]({
+                    new Tine[def.appName || this.app.appName][contentType + suffix](Object.assign({
                         app: def.appName ? Tine.Tinebase.appMgr.get(def.appName) : this.app,
                         plugins: (() => {
                             const wp = this.getWestPanel();
                             return wp && wp.getFilterPlugin ? [wp.getFilterPlugin(contentType)] : []
                         })()
-                    });
+                    }, def));
 
                 if (this[contentType + suffix].cls) {
                     this[contentType + suffix].cls = this[contentType + suffix].cls + ' t-contenttype-' + contentType.toLowerCase();
