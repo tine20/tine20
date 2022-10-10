@@ -43,7 +43,11 @@ class Tinebase_Model_Converter_DynamicRecord implements Tinebase_Model_Converter
             $blob->runConvertToRecord();
             return $blob;
         }
-        $model = $record->{$this->_property};
+        if ($this->_staticModel) {
+            $model = $this->_staticModel;
+        } else {
+            $model = $record->{$this->_property};
+        }
         if (true === $this->_persistent && is_string($blob)) {
             $blob = json_decode($blob, true);
         }

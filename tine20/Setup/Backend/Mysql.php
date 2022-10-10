@@ -128,7 +128,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     }
 
     /**
-     * return list of all foreign key names for given table
+     * return list of all foreign key names that point to given table
      *
      * @param string $tableName
      * @return array list of foreignkey names

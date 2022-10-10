@@ -464,6 +464,11 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
     {
         $appId = Tinebase_Application::getInstance()->getApplicationByName(Timetracker_Config::APP_NAME)->getId();
 
+        if (null !== Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($appId,
+                HumanResources_Model_FreeTimeType::TT_TS_SYSCF_ABSENCE_REASON, Timetracker_Model_Timesheet::class, true)) {
+            return;
+        }
+
         Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
             'name' => HumanResources_Model_FreeTimeType::TT_TS_SYSCF_ABSENCE_REASON,
             'application_id' => $appId,
