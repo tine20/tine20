@@ -10,6 +10,8 @@
  *
  */
 
+use ZipStream\ZipStream;
+
 /**
  * HumanResources MonthlyWTReport Ods generation class
  *
@@ -34,8 +36,16 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
      */
     protected $_weekSummary;
 
+    protected $_orgController;
+    protected $_orgOptions;
+    protected $_isMultiWTR = false;
+    protected $_multiExports = [];
+
     public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
+        $this->_orgController = $_controller;
+        $this->_orgOptions = $_additionalOptions;
+
         parent::__construct($_filter, $_controller, $_additionalOptions);
 
         // group by week (Kalender Woche)
@@ -50,12 +60,82 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
         return 'newOds';
     }
 
+    public function getDownloadContentType()
+    {
+        if ($this->_isMultiWTR) {
+            return 'application/zip';
+        }
+        return parent::getDownloadContentType();
+    }
+
+    public function getDownloadFilename($_appName = null, $_format = null)
+    {
+        if ($this->_isMultiWTR) {
+            return $this->_translate->translate(HumanResources_Model_MonthlyWTReport::getConfiguration()->recordName)
+                . '_export.zip';
+        }
+        $name = parent::getDownloadFilename($_appName, $_format);
+        $name .= " {$this->_monthlyWTR->month} {$this->_monthlyWTR->employee_id->n_fn}.ods";
+        return preg_replace(['/^export_humanresources_/', '/\.ods(.+?)/', '/\s/'], ['', '', '_'], $name);
+    }
+
+    public function write($_target = 'php://output')
+    {
+        if (!$this->_isMultiWTR) {
+            parent::write($_target);
+            return;
+        }
+
+        $targetRaii = null;
+        if (!is_resource($_target)) {
+            if (false === ($_target = fopen($_target, 'w'))) {
+                throw new Tinebase_Exception_Backend('can not open write target');
+            }
+            $targetRaii = new Tinebase_RAII(function() use($_target) { fclose($_target); });
+        }
+        $options = new \ZipStream\Option\Archive();
+        $options->setOutputStream($_target);
+        $zip = new ZipStream($this->getDownloadFilename(), $options);
+
+        /** @var self $export */
+        foreach ($this->_multiExports as $export) {
+            if (false === ($fh = fopen('php://temp', 'w+'))) {
+                throw new Tinebase_Exception_Backend('can not open temp stream');
+            }
+            $raii = new Tinebase_RAII(function() use($fh) { fclose($fh); });
+            $export->write($fh);
+            if (!rewind($fh)) {
+                throw new Tinebase_Exception_Backend('can not rewind temp stream');
+            }
+            $zip->addFileFromStream($export->getDownloadFilename(), $fh);
+            unset($raii);
+        }
+
+        $zip->finish();
+        unset($targetRaii);
+    }
+
     protected function _onBeforeExportRecords()
     {
         parent::_onBeforeExportRecords();
 
-        $this->_monthlyWTR = HumanResources_Controller_MonthlyWTReport::getInstance()->search($this->_filter)
-            ->getFirstRecord();
+        $mWTRs = HumanResources_Controller_MonthlyWTReport::getInstance()->search($this->_filter);
+        if ($mWTRs->count() > 1) {
+            $this->_isMultiWTR = true;
+            foreach ($mWTRs as $mWTR) {
+                $export = new self(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    HumanResources_Model_MonthlyWTReport::class, [
+                        ['field' => 'id', 'operator' => 'equals', 'value' => $mWTR->getId()],
+                ]), $this->_orgController, $this->_orgOptions);
+                $export->generate();
+                $this->_multiExports[] = $export;
+            }
+            // that will export 0 records
+            $this->_records = [];
+            return;
+        }
+
+        $this->_monthlyWTR = $mWTRs->getFirstRecord();
 
         if (null === $this->_monthlyWTR) {
             // that will export 0 records
@@ -103,6 +183,8 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
      */
     protected function _getTwigContext(array $context)
     {
+        if ($this->_isMultiWTR) return parent::_getTwigContext($context);
+        
         $context['monthlyWTR'] = $this->_monthlyWTR;
         $context['weekSummary'] = $this->_weekSummary;
         
@@ -116,13 +198,6 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
             ->getTakenVacationDays($this->_monthlyWTR->employee_id, $this->_monthlyWTR->getPeriod());
         
         return parent::_getTwigContext($context);
-    }
-
-    public function getDownloadFilename($_appName = null, $_format = null)
-    {
-        $name = parent::getDownloadFilename($_appName, $_format);
-        $name .= " {$this->_monthlyWTR->month} {$this->_monthlyWTR->employee_id->n_fn}.ods";
-        return preg_replace(['/^export_humanresources_/', '/\.ods(.+?)/', '/\s/'], ['', '', '_'], $name);
     }
     
     protected function _endGroup()

@@ -5,7 +5,7 @@
     <name>Monthly Report</name>
     <type>export</type>
     <favorite>true</favorite>
-    <scope>single</scope>
+    <scope>multi</scope>
     <plugin>HumanResources_Export_Ods_MonthlyWTReport</plugin>
     <description>...</description>
     <template>tine20:///Tinebase/folders/shared/export/templates/HumanResources/monthlyWTReport.ods</template>
