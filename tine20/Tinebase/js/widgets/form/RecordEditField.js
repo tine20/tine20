@@ -52,7 +52,8 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
         const owningRecordFieldDefinitions = _.get(owningRecordClass, 'getFieldDefinitions') ? owningRecordClass.getFieldDefinitions() : null;
         const ownFieldDefinition = _.get(_.find(owningRecordFieldDefinitions, {name: this.fieldName}), 'fieldDefinition');
         const classNameField = _.get(ownFieldDefinition, 'config.refModelField');
-        const className = _.get(this.owningRecord, 'data.'+classNameField);
+        const className = _.get(this.owningRecord, 'data.'+classNameField)
+            || _.get(ownFieldDefinition, 'config.modelName'); // not yet dynamic field :)
         this.recordClass = className ? Tine.Tinebase.data.RecordMgr.get(className) || this.recordClass : this.recordClass;
     },
     

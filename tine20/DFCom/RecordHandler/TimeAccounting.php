@@ -115,12 +115,16 @@ class DFCom_RecordHandler_TimeAccounting
                         ->setEmployee($this->employee)
                         ->setAccount(Tinebase_User::getInstance()->getFullUserById($this->employee->account_id))
                         ->setTimeStamp($dateTime);
+
                     if (self::FUNCTION_KEY_CLOCKIN === $this->deviceData['functionKey']) {
                         HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn($cfg);
                     } elseif (self::FUNCTION_KEY_CLOCKOUT === $this->deviceData['functionKey']) {
                         HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut($cfg);
                     } elseif (self::FUNCTION_KEY_ABSENCE === $this->deviceData['functionKey']) {
-                        HumanResources_Controller_AttendanceRecorder::getInstance()->clockPause($cfg);
+                        if (isset($this->deviceData['functionValue'])) {
+                            $cfg->setFreetimetypeId($this->deviceData['functionValue']);
+                        };
+                        HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut($cfg);
                     }
                     $result = false;
                     // fallthrough to display info

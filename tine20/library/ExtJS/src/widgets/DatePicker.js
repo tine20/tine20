@@ -164,6 +164,8 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
                  this.value.clearTime(true) : new Date().clearTime();
 
         this.setSelected(_.isArray(this.selections) ? this.selections : []);
+        this.dateStyles = this.dateStyles || {};
+        this.selectionStyles = this.selectionStyles || {};
         
         this.addEvents(
             /**
@@ -219,6 +221,11 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
             this.disabledDatesRE = dd;
         }
         this.initDisabledDays();
+        this.update(this.value, true);
+    },
+
+    setDatesStyles: function(stys){
+        this.dateStyles = stys;
         this.update(this.value, true);
     },
 
@@ -685,18 +692,44 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
 
     // private
     update : function(date, forceRefresh){
+        var setCellStyles = function(cal, cell, dateStyles) {
+            if (Object.keys(dateStyles).join(',').match(/background-/)) {
+                cell.className += ' x-date-background-style';
+            }
+
+            // save original style
+            const originalStyles = JSON.parse(cell.dataset.originalStyles || '{}');
+            const allDateStyles = Object.assign({}, originalStyles || {}, dateStyles);
+            Object.keys(dateStyles).forEach((name) => {
+                if(originalStyles[name] === undefined) {
+                    originalStyles[name] = cell.style[name];
+                }
+            });
+            cell.dataset.originalStyles = JSON.stringify(originalStyles);
+
+            Ext.DomHelper.applyStyles(cell, allDateStyles || {});
+        };
+
         if(this.rendered){
 	        var vd = this.activeDate, vis = this.isVisible();
 	        this.activeDate = date;
 	        if(!forceRefresh && vd && this.el){
 	            var t = date.getTime();
 	            if(vd.getMonth() == date.getMonth() && vd.getFullYear() == date.getFullYear()){
-	                this.cells.removeClass('x-date-selected');
+                    this.cells.each((cell) => {
+                        if (cell.hasClass('x-date-selected') && !cell.hasClass('x-date-disabled')) {
+                            Ext.DomHelper.applyStyles(cell, JSON.parse(cell.dom.dataset.originalStyles || '{}'));
+                            cell.removeClass('x-date-background-style');
+                            cell.removeClass('x-date-selected');
+                        }
+                    });
+
 	                // this.cells.removeClass('x-date-multiselect');
 	                this.cells.each(function(c){
 	                    if (this.allowMultiSelection) {
                             if (_.indexOf(this.selections, c.dom.firstChild.dateValue) >= 0) {
                                 c.addClass('x-date-selected');
+                                setCellStyles(this, c.dom, this.selectionStyles);
                             }
                         } else {
                             if (c.dom.firstChild.dateValue == t) {
@@ -755,6 +788,7 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
 	        var setCellClass = function(cal, cell){
 	            cell.title = '';
 	            var t = d.getTime();
+                var ft = d.format(cal.format);
 	            cell.firstChild.dateValue = t;
 	            if(t == today){
 	                cell.className += ' x-date-today';
@@ -797,10 +831,13 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
 	                }
 	            }
 	            // apply dateClss
-                const dateClss = _.get(this.dateClss, t);
+                const dateClss = _.get(cal.dateClss, ft);
                 if(dateClss) {
                     cell.className += ' ' + dateClss;
                 }
+                // apply dateStyles
+                const dateStyles = _.get(cal.dateStyles, ft, {});
+                setCellStyles(cal, cell, dateStyles)
 	        };
 	
 	        var i = 0;

@@ -20,18 +20,18 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
 {
     public static $freeTimeTypes = [
         // NOTE: no feastday type as feastdays are treated via feastday cal which is shared and not per user
-        ['name' => '[S] Sickness',                               'system' => true,  'color' => '#F4D03F', 'wage_type' => HumanResources_Model_WageType::ID_SICK,          'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false, 'id' => HumanResources_Model_FreeTimeType::ID_SICKNESS], // gettext('[S] Sickness')
-        ['name' => '[C] Sickness of Child',                      'system' => false, 'color' => '#F4D03F', 'wage_type' => HumanResources_Model_WageType::ID_SICK_CHILD,    'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false], // gettext('[C] Sickness of Child')
+        ['name' => '[S] Sickness',                               'system' => true,  'color' => '#F4D03F', 'wage_type' => HumanResources_Model_WageType::ID_SICK,          'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false, 'id' => HumanResources_Model_FreeTimeType::ID_SICKNESS, 'workingTimeCalculationStrategy' => [HumanResources_Model_WTCalcStrategy::FLD_FILL_DAILY_TARGET => true]], // gettext('[S] Sickness')
+        ['name' => '[C] Sickness of Child',                      'system' => false, 'color' => '#F4D03F', 'wage_type' => HumanResources_Model_WageType::ID_SICK_CHILD,    'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false, 'workingTimeCalculationStrategy' => [HumanResources_Model_WTCalcStrategy::FLD_FILL_DAILY_TARGET => true]], // gettext('[C] Sickness of Child')
         ['name' => '[7] Sick pay - Sickness from 7nth week on',  'system' => false, 'color' => '#F4D03F', 'wage_type' => HumanResources_Model_WageType::ID_SICK_SICKPAY,  'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false], // gettext('[7] Sick pay - Sickness from 7nth week on')
         ['name' => '[V] Vacation',                               'system' => true,  'color' => '#2ECC71', 'wage_type' => HumanResources_Model_WageType::ID_VACATION,      'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false, 'id' => HumanResources_Model_FreeTimeType::ID_VACATION], // gettext('[V] Vacation')
         ['name' => '[P] Special Vacation',                       'system' => false, 'color' => '#58D68D', 'wage_type' => HumanResources_Model_WageType::ID_VACATION,      'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false], // gettext('[P] Special Vacation')
-        ['name' => '[U] Unpaid Vacation',                        'system' => false, 'color' => '#82E0AA', 'wage_type' => HumanResources_Model_WageType::ID_VACATION,      'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false], // gettext('[U] Unpaid Vacation')
-        ['name' => '[H] Short Business trip',                    'system' => false, 'color' => '#3498DB', 'wage_type' => HumanResources_Model_WageType::ID_SALARY,        'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true], // gettext('[S] Short Business trip')
-        ['name' => '[B] Business trip',                          'system' => false, 'color' => '#2E86C1', 'wage_type' => HumanResources_Model_WageType::ID_SALARY,        'allow_booking' => true,  'allow_planning' => true,  'enable_timetracking' => false], // gettext('[B] Business trip')
-        ['name' => '[D] Visit doctor',                           'system' => false, 'color' => '#F7DC6F', 'wage_type' => HumanResources_Model_WageType::ID_SALARY,        'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true], // gettext('[D] Visit doctor')
-        ['name' => '[F] Flex time reduction',                    'system' => true,  'color' => '#27AE60', 'wage_type' => HumanResources_Model_WageType::ID_NO_WAGE,       'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false], // gettext('[F] Flex time reduction')
-        ['name' => '[R] Break',                                  'system' => true,  'color' => '#ABEBC6', 'wage_type' => HumanResources_Model_WageType::ID_NO_WAGE,       'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true], // gettext('[R] Break')
-        ['name' => '[T] Training',                               'system' => true,  'color' => '#5DADE2', 'wage_type' => HumanResources_Model_WageType::ID_SALARY,        'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => true], // gettext('[T] Training')
+        ['name' => '[U] Unpaid Vacation',                        'system' => false, 'color' => '#82E0AA', 'wage_type' => HumanResources_Model_WageType::ID_NO_WAGE,       'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false], // gettext('[U] Unpaid Vacation')
+        ['name' => '[H] Short Business trip',                    'system' => false, 'color' => '#3498DB', 'wage_type' => HumanResources_Model_WageType::ID_SALARY,        'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true, 'workingTimeCalculationStrategy' => [HumanResources_Model_WTCalcStrategy::FLD_FILL_DAILY_TARGET => true]], // gettext('[S] Short Business trip')
+        ['name' => '[B] Business trip',                          'system' => false, 'color' => '#2E86C1', 'wage_type' => HumanResources_Model_WageType::ID_SALARY,        'allow_booking' => true,  'allow_planning' => true,  'enable_timetracking' => false, 'workingTimeCalculationStrategy' => [HumanResources_Model_WTCalcStrategy::FLD_FILL_DAILY_TARGET => true]], // gettext('[B] Business trip')
+        ['name' => '[D] Visit doctor',                           'system' => false, 'color' => '#F7DC6F', 'wage_type' => HumanResources_Model_WageType::ID_SALARY,        'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true, 'workingTimeCalculationStrategy' => [HumanResources_Model_WTCalcStrategy::FLD_FILL_DAILY_TARGET => true]], // gettext('[D] Visit doctor')
+        ['name' => '[F] Flex time reduction',                    'system' => true,  'color' => '#27AE60', 'wage_type' => null,                                            'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false], // gettext('[F] Flex time reduction')
+        ['name' => '[R] Break',                                  'system' => true,  'color' => '#ABEBC6', 'wage_type' => null,                                            'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true], // gettext('[R] Break')
+        ['name' => '[T] Training',                               'system' => true,  'color' => '#5DADE2', 'wage_type' => HumanResources_Model_WageType::ID_SALARY,        'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => true, 'workingTimeCalculationStrategy' => [HumanResources_Model_WTCalcStrategy::FLD_FILL_DAILY_TARGET => true]], // gettext('[T] Training')
     ];
 
     public static function addAttendanceRecorderDevices()
@@ -403,6 +403,7 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
     protected function _initializeCORSystemCustomField()
     {
         static::addCORSystemCustomField();
+        static::addABSRSystemCustomField();
     }
 
     protected function _initializePersistentObserver()
@@ -447,6 +448,35 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
             'definition' => [
                 Tinebase_Model_CustomField_Config::DEF_FIELD => [
                     TMCC::LABEL             => 'Clock out reason',
+                    TMCC::TYPE              => TMCC::TYPE_RECORD,
+                    TMCC::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true,],
+                    TMCC::NULLABLE          => true,
+                    TMCC::CONFIG            => [
+                        TMCC::APP_NAME          => HumanResources_Config::APP_NAME,
+                        TMCC::MODEL_NAME        => HumanResources_Model_FreeTimeType::MODEL_NAME_PART,
+                    ],
+                ],
+            ]
+        ], true));
+    }
+
+    public static function addABSRSystemCustomField()
+    {
+        $appId = Tinebase_Application::getInstance()->getApplicationByName(Timetracker_Config::APP_NAME)->getId();
+
+        if (null !== Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($appId,
+                HumanResources_Model_FreeTimeType::TT_TS_SYSCF_ABSENCE_REASON, Timetracker_Model_Timesheet::class, true)) {
+            return;
+        }
+
+        Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
+            'name' => HumanResources_Model_FreeTimeType::TT_TS_SYSCF_ABSENCE_REASON,
+            'application_id' => $appId,
+            'model' => Timetracker_Model_Timesheet::class,
+            'is_system' => true,
+            'definition' => [
+                Tinebase_Model_CustomField_Config::DEF_FIELD => [
+                    TMCC::LABEL             => 'Absence reason',
                     TMCC::TYPE              => TMCC::TYPE_RECORD,
                     TMCC::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true,],
                     TMCC::NULLABLE          => true,

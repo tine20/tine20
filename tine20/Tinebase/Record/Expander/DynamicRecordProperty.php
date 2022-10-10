@@ -28,6 +28,10 @@ class Tinebase_Record_Expander_DynamicRecordProperty extends Tinebase_Record_Exp
 
     protected function _lookForDataToFetch(Tinebase_Record_RecordSet $_records)
     {
+        if (!isset($this->_mccCfg[MCC::REF_MODEL_FIELD])) {
+            return;
+        }
+        
         $this->_addRecordsToProcess($_records);
         $ids = [];
         /** @var Tinebase_Record_NewAbstract $record */

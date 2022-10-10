@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Converter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -24,15 +24,13 @@ class Tinebase_Model_Converter_DynamicRecord implements Tinebase_Model_Converter
 
     protected $_property;
     protected $_persistent;
+    protected $_staticModel;
 
-    /**
-     * Tinebase_Model_Converter_DynamicRecord constructor.
-     * @param $_property
-     */
-    public function __construct($_property, $_persistent = false)
+    public function __construct(?string $_property, $_persistent = false, ?string $_staticModel = null)
     {
         $this->_property = $_property;
         $this->_persistent = $_persistent;
+        $this->_staticModel = $_staticModel;
     }
 
     /**
@@ -45,7 +43,11 @@ class Tinebase_Model_Converter_DynamicRecord implements Tinebase_Model_Converter
             $blob->runConvertToRecord();
             return $blob;
         }
-        $model = $record->{$this->_property};
+        if ($this->_staticModel) {
+            $model = $this->_staticModel;
+        } else {
+            $model = $record->{$this->_property};
+        }
         if (true === $this->_persistent && is_string($blob)) {
             $blob = json_decode($blob, true);
         }
