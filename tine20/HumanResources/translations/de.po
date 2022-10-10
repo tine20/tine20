@@ -1534,6 +1534,9 @@ msgstr "Berechnen alle Berichte"
 msgid "Working Time Balance Previous Day"
 msgstr "Arbeitszeit-Saldo Vortag"
 
+msgid "Working Time Balance"
+msgstr "Arbeitszeit-Saldo"
+
 #: js/CostCenterGridPanel.js:58
 msgid "CostCenter"
 msgid_plural "CostCenters"
@@ -1764,9 +1767,6 @@ msgstr "Arbeitszeiterfassung"
 
 #~ msgid "Transponder Id"
 #~ msgstr "Transponder"
-
-#~ msgid "Working Time Balance"
-#~ msgstr "Arbeitszeit Saldo"
 
 #~ msgid "[FD] Feast day"
 #~ msgstr "[F] Feiertag"

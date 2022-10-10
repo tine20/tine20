@@ -348,12 +348,28 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     groupTextTpl: null,
 
     /**
-     * cols to exclude
+     * cols to exclude (blacklist)
      *
      * @type String[]
      * @cfg hideColumns
      */
     hideColumns: null,
+
+    /**
+     * cols to include (whitelist)
+     *
+     * @type String[]
+     * @cfg showColumns
+     */
+    showColumns: null,
+
+    /**
+     * exclude or really 'hide'
+     *
+     * @type String
+     * @cfg hideColumnsMode hide|exclude
+     */
+    hideColumnsMode: 'exclude',
 
     /**
      * @property selectionModel
@@ -625,8 +641,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     return;
                 }
 
-                if (this.hideColumns && this.hideColumns.indexOf(key) !== -1) {
-                    return;
+                if ( config && (
+                    (this.hideColumns && this.hideColumns.indexOf(key) !== -1) || // blacklist
+                    (this.showColumns && this.showColumns.indexOf(key) === -1)    // whitelist
+                )) {
+                    if (this.hideColumnsMode === 'exclude') {
+                        return;
+                    }
+                    config.hideable = config.hidden = true;
                 }
 
                 if (config) {
