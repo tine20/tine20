@@ -1901,7 +1901,7 @@ msgid ""
 "again or contact your administrator."
 msgstr ""
 "Leider konnte der Server auf Ihre Anfrage nicht antworten. Bitte "
-"aktualisieren Sie Ihren Browser und versuchen Sie es anschliessend noch "
+"aktualisieren Sie Ihren Browser und versuchen Sie es anschließend noch "
 "einmal. Im erneuten Fehlerfall kontaktieren Sie bitte Ihren Administrator."
 
 #: js/ExceptionHandler.js:266
@@ -1937,7 +1937,7 @@ msgid ""
 "browser, try again or contact your administrator."
 msgstr ""
 "Sie haben versucht auf eine Methode zuzugreifen, die nicht existiert. Bitte "
-"aktualisieren Sie Ihren Browser und versuchen Sie es anschliessend noch "
+"aktualisieren Sie Ihren Browser und versuchen Sie es anschließend noch "
 "einmal. Im erneuten Fehlerfall kontaktieren Sie bitte Ihren Administrator."
 
 #: js/widgets/persistentfilter/PickerPanel.js:130
