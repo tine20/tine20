@@ -177,6 +177,8 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
     public function update005()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->_backend->dropForeignKey(HumanResources_Model_FreeTimeType::TABLE_NAME,
+            key($this->_backend->getExistingForeignKeys(HumanResources_Model_WageType::TABLE_NAME)));
         Setup_SchemaTool::updateSchema([
             HumanResources_Model_FreeTime::class,
             HumanResources_Model_FreeTimeType::class,
