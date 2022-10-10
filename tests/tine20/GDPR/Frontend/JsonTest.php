@@ -135,7 +135,7 @@ class GDPR_Frontend_JsonTest extends TestCase
 
 
         // test withdrawdate
-        $now = Tinebase_DateTime::now()->toString();
+        $now = Tinebase_DateTime::now()->toString('Y-m-d 00:00:00');
         $updatedContact[GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME][0]['withdrawDate']
             = $now;
         $updatedContact = $adbJsonFE->saveContact($updatedContact);
@@ -144,8 +144,8 @@ class GDPR_Frontend_JsonTest extends TestCase
             GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME]), 'resolving did not work');
         static::assertCount(2, $updatedContact[
             GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME], 'expect 2 intended purposes');
-        static::assertTrue($updatedContact[GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME][0]
-            ['withdrawDate'] === $now);
+        static::assertSame($now,
+            $updatedContact[GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME][0]['withdrawDate']);
 
         unset($updatedContact[GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME][1]);
         $adbJsonFE->saveContact($updatedContact);

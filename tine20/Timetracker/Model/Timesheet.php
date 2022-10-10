@@ -5,7 +5,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -228,8 +228,6 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
                 //'type'                  => 'date',
                 'type'                  => 'datetime_separated_date',
-                // strip time information from datetime string
-                'inputFilters'          => array('Zend_Filter_PregReplace' => array('/(\d{4}-\d{2}-\d{2}).*/', '$1'))
             ),
             'start_time'            => array(
                 'label'                 => 'Start time', // _('Start time')

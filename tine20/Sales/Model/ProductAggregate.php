@@ -105,7 +105,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
             'last_autobill' => array(
                 'label'      => NULL,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-                'type'       => 'datetime',
+                'type'       => 'date',
                 'default'    => NULL
             ),
             'billing_point' => array(
@@ -115,11 +115,11 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE, Zend_Filter_Input::DEFAULT_VALUE => 'begin')
             ),
             'start_date' => array(
-                'type' => 'datetime',
+                'type' => 'date',
                 'label'      => 'Start Date',    // _('Start Date')
             ),
             'end_date' => array(
-                'type' => 'datetime',
+                'type' => 'date',
                 'label'      => 'End Date',    // _('End Date')
             ),
             'json_attributes'   => array(

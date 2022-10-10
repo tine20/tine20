@@ -496,7 +496,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      */
     public function setTimezone($_timezone, $_recursive = TRUE)
     {
-        foreach ($this->_datetimeFields as $field) {
+        foreach (array_merge($this->_datetimeFields, $this->_dateFields) as $field) {
             if (!isset($this->_properties[$field])) continue;
             
             if (!is_array($this->_properties[$field])) {
@@ -805,7 +805,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      */
     public function _convertISO8601ToDateTime(array &$_data)
     {
-        foreach (array($this->_datetimeFields, $this->_dateFields) as $dtFields) {
+        foreach (array($this->_datetimeFields, $this->_dateFields) as $isDate => $dtFields) {
             foreach ($dtFields as $field) {
                 if (!isset($_data[$field])) {
                     continue;
@@ -827,12 +827,26 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                             if ($dataValue instanceof DateTime) {
                                 continue;
                             }
-                            
-                            $value[$dataKey] = (int)$dataValue == 0 || is_array($dataValue) ? NULL : new Tinebase_DateTime($dataValue);
+
+                            if ((int)$dataValue == 0 || is_array($dataValue)) {
+                                $dataValue = null;
+                            } else {
+                                $dataValue = new Tinebase_DateTime($dataValue);
+                                if ($isDate) {
+                                    $dataValue->hasTime(false);
+                                }
+                            }
+                            $value[$dataKey] = $dataValue;
                         }
                     } else {
-                        $value = (int)$value == 0 || is_array($value) ? NULL : new Tinebase_DateTime($value);
-                        
+                        if ((int)$value == 0 || is_array($value)) {
+                            $value = null;
+                        } else {
+                            $value = new Tinebase_DateTime($value);
+                            if ($isDate) {
+                                $value->hasTime(false);
+                            }
+                        }
                     }
                 } catch (Tinebase_Exception_Date $zde) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Error while converting date field "' . $field . '": ' . $zde->getMessage());

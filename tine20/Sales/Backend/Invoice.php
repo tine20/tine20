@@ -68,7 +68,6 @@ class Sales_Backend_Invoice extends Tinebase_Backend_Sql_Abstract
         $select->where($this->_tableName . '.creation_time < tsc.last_modified_time AND ' . $this->_tableName . '.cleared <> \'CLEARED\' AND ' . $this->_tableName . '.is_deleted = 0');
         $select->order($this->_tableName . '.creation_time DESC');
 
-        $result = array();
         $stmt = $this->_db->query($select);
         $stmt->setFetchMode(Zend_Db::FETCH_NUM);
         return $stmt->fetchAll();

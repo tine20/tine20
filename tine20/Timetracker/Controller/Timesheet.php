@@ -171,14 +171,16 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      */
     protected function _calculateTimes(Timetracker_Model_Timesheet $_record)
     {
+        $start_date = $_record->start_date instanceof Tinebase_DateTime ? $_record->start_date->format('Y-m-d') :
+            substr((string)$_record->start_date, 0, 10);
         $duration = $_record->duration;
         $start = $_record->start_time;
         $end = $_record->end_time;
 
         // If start and end ist given calculate duration and overwrite default
         if (isset($start) && isset($end)){
-            $start = new dateTime($_record->start_date . ' ' . $start);
-            $end = new dateTime($_record->start_date . ' ' . $end);
+            $start = new DateTime($start_date . ' ' . $start);
+            $end = new DateTime($start_date . ' ' . $end);
             
             if ($end < $start) {
                 $end = $end->modify('+1 days');
@@ -188,14 +190,14 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             $_record->duration = $duration = $dtDiff->h * 60 + $dtDiff->i;
         } else if (isset($duration) && isset($start)){
             // If duration and start is set calculate the end
-            $start = new dateTime($_record->start_date . ' ' . $start);
+            $start = new DateTime($start_date . ' ' . $start);
             
             $end = $start->modify('+' . $duration . ' minutes');
             $_record->end_time = $end->format('H:i');
 
         } else if (isset($duration) && isset($end)){
             // If start is not set but duration and end calculate start instead
-            $end = new dateTime($_record->start_date . ' ' . $end);
+            $end = new DateTime($start_date . ' ' . $end);
 
             $start = $end->modify('-' . $duration . ' minutes');
             $_record->start_time = $start->format('H:i');

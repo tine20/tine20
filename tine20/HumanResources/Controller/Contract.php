@@ -133,7 +133,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
     public function getFreeTimes($contract)
     {
         $freeTimeFilter = new HumanResources_Model_FreeTimeFilter(array(
-            array('field' => 'firstday_date', 'operator' => 'after_or_equals', 'value' => $contract->start_date),
+            array('field' => 'lastday_date', 'operator' => 'after_or_equals', 'value' => $contract->start_date),
         ));
         
         if ($contract->end_date !== NULL) {
