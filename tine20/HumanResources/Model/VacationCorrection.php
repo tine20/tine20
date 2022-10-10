@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /**
- * Working Time Corretion Model
+ * Vacation Correction Model
  *
  * @package     HumanResources
  * @subpackage  Model
@@ -10,18 +10,17 @@
  *
  */
 
-class HumanResources_Model_WTRCorrection extends Tinebase_Record_NewAbstract
+class HumanResources_Model_VacationCorrection extends Tinebase_Record_NewAbstract
 {
-    const TABLE_NAME = 'wtr_correction';
-    const MODEL_NAME_PART = 'WTRCorrection';
+    const TABLE_NAME = 'vacation_correction';
+    const MODEL_NAME_PART = 'VacationCorrection';
 
     const FLD_CORRECTION = 'correction';
     const FLD_DESCRIPTION = 'description';
     const FLD_EMPLOYEE_ID = 'employee_id';
     const FLD_STATUS = 'status';
     const FLD_TITLE = 'title';
-    const FLD_WTR_MONTHLY = 'wtr_monthly';
-    const FLD_WTR_DAILY = 'wtr_daily';
+    const FLD_ACCOUNT_ID = 'account_id';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -30,8 +29,8 @@ class HumanResources_Model_WTRCorrection extends Tinebase_Record_NewAbstract
      */
     protected static $_modelConfiguration = [
         self::VERSION               => 1,
-        self::RECORD_NAME           => 'Working time correction', // gettext('GENDER_Working time correction')
-        self::RECORDS_NAME          => 'Working time corrections', // ngettext('Working time corrections', 'Working time corrections', n)
+        self::RECORD_NAME           => 'Vacation correction', // gettext('GENDER_Vacation correction')
+        self::RECORDS_NAME          => 'Vacation corrections', // ngettext('Vacation corrections', 'Vacation corrections', n)
         self::MODLOG_ACTIVE         => true,
         self::HAS_ATTACHMENTS       => true,
         self::TITLE_PROPERTY        => self::FLD_TITLE,
@@ -73,25 +72,18 @@ class HumanResources_Model_WTRCorrection extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
             ],
-            self::FLD_WTR_DAILY         => [
+            self::FLD_ACCOUNT_ID        => [
                 self::TYPE                  => self::TYPE_RECORD,
                 self::CONFIG                => [
                     self::APP_NAME              => HumanResources_Config::APP_NAME,
-                    self::MODEL_NAME            => HumanResources_Model_DailyWTReport::MODEL_NAME_PART,
+                    self::MODEL_NAME            => 'Account',
                 ],
                 self::DISABLED              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::NULLABLE              => true,
-            ],
-            self::FLD_WTR_MONTHLY       => [
-                self::TYPE                  => self::TYPE_RECORD,
-                self::CONFIG                => [
-                    self::APP_NAME              => HumanResources_Config::APP_NAME,
-                    self::MODEL_NAME            => HumanResources_Model_MonthlyWTReport::MODEL_NAME_PART,
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
-                self::DISABLED              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::NULLABLE              => true,
+                self::NULLABLE              => false,
             ],
             self::FLD_TITLE             => [
                 self::TYPE                  => self::TYPE_STRING,
@@ -110,7 +102,6 @@ class HumanResources_Model_WTRCorrection extends Tinebase_Record_NewAbstract
             ],
             self::FLD_CORRECTION        => [
                 self::TYPE                  => self::TYPE_INTEGER,
-                self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::LABEL                 => 'Correction', // _('Correction')
                 self::VALIDATORS            => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,

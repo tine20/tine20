@@ -263,6 +263,13 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
             return $actualUntil ? $freeday->date < $actualUntil : true;
         });
 
+        $vacCorrections = HumanResources_Controller_VacationCorrection::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_VacationCorrection::class, [
+                ['field' => HumanResources_Model_VacationCorrection::FLD_ACCOUNT_ID, 'operator' => 'equals', 'value' => $account->getId()],
+            ]));
+
+        $possibleVacationDays += (int)$vacCorrections->sum(HumanResources_Model_VacationCorrection::FLD_CORRECTION);
+
         return [
             'vacation_expiary_date'             => HumanResources_Config::getInstance()->getVacationExpirationDate($account->year),
             'possible_vacation_days'            => intval($possibleVacationDays),

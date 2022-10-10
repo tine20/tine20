@@ -173,6 +173,20 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
                     'type' => 'integer'
                 )
             ),
+            'vacation_corrections'              => [
+                self::TYPE                          => self::TYPE_RECORDS,
+                self::LABEL                         => 'Vacation Correction Requests', // _('Vacation Correction Requests')
+                self::NULLABLE                      => true,
+                self::DOCTRINE_IGNORE               => true,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => HumanResources_Config::APP_NAME,
+                    self::MODEL_NAME                    => HumanResources_Model_VacationCorrection::MODEL_NAME_PART,
+                    self::REF_ID_FIELD                  => HumanResources_Model_VacationCorrection::FLD_ACCOUNT_ID,
+                ],
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+            ],
         )
     );
 
