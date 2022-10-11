@@ -92,7 +92,7 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
 
         static::assertSame(true, HumanResources_Controller_DailyWTReport::getInstance()->calculateAllReports());
 
-        $days = Tinebase_DateTime::now()->diff($this->employee->contracts->getFirstRecord()->start_date, true)->days;
+        $days = Tinebase_DateTime::now()->diff($this->employee->contracts->getFirstRecord()->start_date, true)->days + 1;
 
         $reportResult = HumanResources_Controller_DailyWTReport::getInstance()->lastReportCalculationResult;
         static::assertCount(1, $reportResult, 'expect reports being generated for one employee');
@@ -282,7 +282,7 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
             $report = $result->filter('date', $day)->getFirstRecord();
 
             self::assertNotNull($report);
-            if ($report->date->format('Y-m-d') === $ts->start_date) {
+            if ($report->date->format('Y-m-d') === $ts->start_date->format('Y-m-d')) {
                 $workTime += 900;
                 $this->assertEquals(5400, $report->break_time_net); // 30 min forced, 60 min natural
                 $this->assertEquals(1800, $report->break_time_deduction); // 30 min forced

@@ -1507,7 +1507,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      */
     public function _convertISO8601ToDateTime(array &$_data)
     {
-        foreach ([static::$_configurationObject->datetimeFields, static::$_configurationObject->dateFields] as $dtFields) {
+        foreach ([static::$_configurationObject->datetimeFields, static::$_configurationObject->dateFields] as $isDate => $dtFields) {
             foreach ($dtFields as $field) {
                 if (!isset($_data[$field])) {
                     continue;
@@ -1529,11 +1529,25 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
                             continue;
                         }
 
-                        $value[$dataKey] =  (int)$dataValue == 0 ? NULL : new Tinebase_DateTime($dataValue);
+                        if ((int)$dataValue == 0 || is_array($dataValue)) {
+                            $dataValue = null;
+                        } else {
+                            $dataValue = new Tinebase_DateTime($dataValue);
+                            if ($isDate) {
+                                $dataValue->hasTime(false);
+                            }
+                        }
+                        $value[$dataKey] = $dataValue;
                     }
                 } else {
-                    $value = (int)$value == 0 ? NULL : new Tinebase_DateTime($value);
-
+                    if ((int)$value == 0 || is_array($value)) {
+                        $value = null;
+                    } else {
+                        $value = new Tinebase_DateTime($value);
+                        if ($isDate) {
+                            $value->hasTime(false);
+                        }
+                    }
                 }
 
                 $_data[$field] = $value;
@@ -1614,7 +1628,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      */
     public function setTimezone($_timezone, $_recursive = TRUE)
     {
-        foreach (static::$_configurationObject->datetimeFields as $field) {
+        foreach (array_merge(static::$_configurationObject->datetimeFields, static::$_configurationObject->dateFields) as $field) {
             if (!isset($this->_data[$field])) continue;
 
             if (!is_array($this->_data[$field])) {

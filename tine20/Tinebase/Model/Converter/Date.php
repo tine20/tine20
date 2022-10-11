@@ -21,6 +21,22 @@
 class Tinebase_Model_Converter_Date extends Tinebase_Model_Converter_DateTime
 {
     /**
+     * @param $blob
+     * @return mixed
+     */
+    public function convertToRecord($record, $key, $blob)
+    {
+        if (!$blob instanceof Tinebase_DateTime) {
+            if (0 === (int)$blob) {
+                return null;
+            }
+            $blob = new Tinebase_DateTime($blob);
+        }
+        $blob->hasTime(false);
+        return $blob;
+    }
+
+    /**
      * @param $fieldValue
      * @return string
      */

@@ -84,7 +84,7 @@ class HumanResources_TestCase extends TestCase
         $contractController = HumanResources_Controller_Contract::getInstance();
         $employeeController = HumanResources_Controller_Employee::getInstance();
         $this->employee = $employeeController->create($this->employee, false);
-        $contract = $this->_getContract(new Tinebase_DateTime('2018-07-01 00:00:00'));
+        $contract = $this->_getContract('2018-07-01 00:00:00');
         $contract->employee_id = $this->employee->getId();
         //  @todo add more contract properties ?
         $contract = $contractController->create($contract);
