@@ -221,6 +221,7 @@ abstract class Tinebase_Controller_Record_Abstract
     public const ACTION_CREATE = 'create';
     public const ACTION_UPDATE = 'update';
     public const ACTION_DELETE = 'delete';
+    public const ACTION_UNDELETE = 'undelete';
 
     protected $_getMultipleGrant = Tinebase_Model_Grants::GRANT_READ;
     protected $_requiredFilterACLget = [Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_ADMIN];
