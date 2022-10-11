@@ -551,6 +551,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->sharedTimesheet->id = NULL;
         $this->_timesheetController->create($this->sharedTimesheet);
 
+        sleep(1);
+        
         $maybeRecreated = $this->_invoiceController->checkForContractOrInvoiceUpdates();
         if (isset($maybeRecreated[0])) {
             $result = $maybeRecreated;
@@ -565,7 +567,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $result = $maybeRecreated;
         }
 
-        $this->_checkInvoiceUpdateExistingTimeaccount($result[0]);
+        $this->_checkInvoiceUpdateExistingTimeaccount($result[1]);
     }
 
     protected function _checkInvoiceUpdateExistingTimeaccount($invoiceId, $result = 4)
