@@ -177,8 +177,9 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
     public function update005()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
-        $this->_backend->dropForeignKey(HumanResources_Model_FreeTimeType::TABLE_NAME,
-            key($this->_backend->getExistingForeignKeys(HumanResources_Model_WageType::TABLE_NAME)));
+        if ($key = key($this->_backend->getExistingForeignKeys(HumanResources_Model_WageType::TABLE_NAME))) {
+            $this->_backend->dropForeignKey(HumanResources_Model_FreeTimeType::TABLE_NAME, $key);
+        }
         Setup_SchemaTool::updateSchema([
             HumanResources_Model_FreeTime::class,
             HumanResources_Model_FreeTimeType::class,
@@ -371,8 +372,9 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
 
         HumanResources_Setup_Initialize::addABSRSystemCustomField();
 
-        $this->_backend->dropForeignKey(HumanResources_Model_FreeTimeType::TABLE_NAME,
-            key($this->_backend->getExistingForeignKeys(HumanResources_Model_WageType::TABLE_NAME)));
+        if ($key = key($this->_backend->getExistingForeignKeys(HumanResources_Model_WageType::TABLE_NAME))) {
+            $this->_backend->dropForeignKey(HumanResources_Model_FreeTimeType::TABLE_NAME, $key);
+        }
 
         Setup_SchemaTool::updateSchema([
             HumanResources_Model_FreeDay::class,
