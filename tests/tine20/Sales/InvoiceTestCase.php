@@ -220,6 +220,7 @@ class Sales_InvoiceTestCase extends TestCase
         $this->_referenceDate->subYear(1);
         $this->_referenceDate->setDate($this->_referenceDate->format('Y'), 1 ,1);
         $this->_referenceDate->setTime(0,0,0);
+        $this->_referenceDate->hasTime(false);
         
         $this->_referenceYear = $this->_referenceDate->format('Y');
         $this->_lastMonthDays = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);

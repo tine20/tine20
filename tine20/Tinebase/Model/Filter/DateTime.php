@@ -32,26 +32,13 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
         $result = parent::toArray($_valueToJson);
        
         if ($this->_operator != 'within' && $_valueToJson == true && $result['value']) {
-            $date = new Tinebase_DateTime($result['value']);
+            $date = new Tinebase_DateTime($result['value'],
+                isset($this->_options['timezone']) ? $this->_options['timezone'] : null);
             $date->setTimezone(Tinebase_Core::getUserTimezone());
             $result['value'] = $date->toString(Tinebase_Record_Abstract::ISO8601LONG);
         }
         
         return $result;
-    }
-    
-    /**
-     * sets value
-     *
-     * @param mixed $_value
-     */
-    public function setValue($_value)
-    {
-        if ($this->_operator != 'within' && $_value) {
-            $_value = $this->_convertStringToUTC($_value);
-        }
-        
-        $this->_value = $_value;
     }
     
     /**
@@ -100,5 +87,62 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
         }
         
         return $value;
+    }
+
+    /**
+     * sets value
+     *
+     * @param mixed $_value
+     */
+    public function setValue($_value)
+    {
+        if ($this->_operator !== 'within' && $_value) {
+            $_value = $this->_convertStringToUTC($_value);
+        }
+
+        $this->_value = $_value;
+    }
+
+    /**
+     * convert string in user time to UTC
+     *
+     * @param string $_string
+     * @return string
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _convertStringToUTC($_string)
+    {
+        if (preg_match('/^(day|week|month|year)/', $_string, $matches)) {
+            if ($matches[1] === 'day') {
+                $date = $this->_getDate(null);
+            } else {
+                throw new Tinebase_Exception_InvalidArgument('date string not recognized / not supported: ' . $_string);
+            }
+            switch ($this->getOperator()) {
+                case 'before':
+                case 'after_or_equals':
+                    $date->setTime(0, 0, 0);
+                    break;
+                case 'after':
+                case 'before_or_equals':
+                    $date->setTime(23, 59, 59);
+                    break;
+            }
+            switch ($_string) {
+                case Tinebase_Model_Filter_Date::DAY_THIS:
+                    $string = $date->toString();
+                    break;
+                case Tinebase_Model_Filter_Date::DAY_LAST:
+                    $string = $date->subDay(1)->toString();
+                    break;
+                case Tinebase_Model_Filter_Date::DAY_NEXT:
+                    $string = $date->addDay(1)->toString();
+                    break;
+                default:
+                    throw new Tinebase_Exception_InvalidArgument('date string not recognized / not supported: ' . $_string);
+            }
+            $_string = $string;
+        }
+        return parent::_convertStringToUTC($_string);
     }
 }

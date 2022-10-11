@@ -124,48 +124,46 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
     }
 
     /**
-     * convert string in user time to UTC
+     * sets value
      *
-     * @param string $_string
-     * @return string
-     * @throws Tinebase_Exception_InvalidArgument
+     * @param mixed $_value
      */
-    protected function _convertStringToUTC($_string)
+    public function setValue($_value)
     {
-        if (preg_match('/^(day|week|month|year)/', $_string, $matches)) {
-            if ($matches[1] === 'day') {
-                $date = Tinebase_DateTime::now();
-            } else {
-                throw new Tinebase_Exception_InvalidArgument('date string not recognized / not supported: ' . $_string);
+        if ($this->_operator !== 'within' && $this->_operator !== 'inweek' && $_value) {
+            if (preg_match('/^(day|week|month|year)/', $_value, $matches)) {
+                if ($matches[1] === 'day') {
+                    $date = $this->_getDate();
+                } else {
+                    throw new Tinebase_Exception_InvalidArgument('date string not recognized / not supported: ' . $_value);
+                }
+                switch ($this->getOperator()) {
+                    case 'before':
+                    case 'after_or_equals':
+                        $date->setTime(0, 0, 0);
+                        break;
+                    case 'after':
+                    case 'before_or_equals':
+                        $date->setTime(23, 59, 59);
+                        break;
+                }
+                switch ($_value) {
+                    case Tinebase_Model_Filter_Date::DAY_THIS:
+                        $_value = $date->toString();
+                        break;
+                    case Tinebase_Model_Filter_Date::DAY_LAST:
+                        $_value = $date->subDay(1)->toString();
+                        break;
+                    case Tinebase_Model_Filter_Date::DAY_NEXT:
+                        $_value = $date->addDay(1)->toString();
+                        break;
+                    default:
+                        throw new Tinebase_Exception_InvalidArgument('date string not recognized / not supported: ' . $_value);
+                }
             }
-            switch ($this->getOperator()) {
-                case 'before':
-                case 'after_or_equals':
-                    $date->setTime(0, 0, 0);
-                    break;
-                case 'after':
-                case 'before_or_equals':
-                    $date->setTime(23, 59, 59);
-                    break;
-            }
-            switch ($_string) {
-                case Tinebase_Model_Filter_Date::DAY_THIS:
-                    $string = $date->toString();
-                    break;
-                case Tinebase_Model_Filter_Date::DAY_LAST:
-                    $string = $date->subDay(1)->toString();
-                    break;
-                case Tinebase_Model_Filter_Date::DAY_NEXT:
-                    $string = $date->addDay(1)->toString();
-                    break;
-                default:
-                    throw new Tinebase_Exception_InvalidArgument('date string not recognized / not supported: ' . $_string);
-            }
-        } else {
-            $string = $_string;
         }
 
-        return parent::_convertStringToUTC($string);
+        $this->_value = $_value;
     }
 
     /**
@@ -197,7 +195,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                 }
             }
 
-            $date = $this->_getDate(NULL, TRUE);
+            $date = $this->_getDate();
             
             // special values like this week, ...
             switch ($_value) {
@@ -306,7 +304,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                 /******* try to create datetime from value string *********/
                 default:
                     try {
-                        $date = $this->_getDate($_value, TRUE);
+                        $date = $this->_getDate($_value);
                         
                         $value = array(
                             $date->toString($this->_dateFormat),
@@ -319,7 +317,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     }
             }
         } elseif ($_operator === 'inweek') {
-            $date = $this->_getDate(NULL, TRUE);
+            $date = $this->_getDate();
             
             if ($_value < 1) {
                 $_value = $date->get('W');
@@ -331,7 +329,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                 throw new Tinebase_Exception_InvalidArgument('array value not allowed for operator ' . $_operator);
             }
 
-            $value = substr($_value, 0, 10);
+            $value = substr((string)$_value, 0, 10);
         }
         
         return $value;
@@ -423,10 +421,9 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      * returns the current date if no $date string is given (needed for mocking only)
      * 
      * @param string $date
-     * @param boolean $usertimezone
      * @return Tinebase_DateTime
      */
-    protected function _getDate($date = NULL, $usertimezone = FALSE)
+    protected function _getDate($date = null)
     {
         if (! $date) {
             $date = Tinebase_DateTime::now();
@@ -434,8 +431,8 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
             $date = new Tinebase_DateTime($date);
         }
         
-        if ($usertimezone) {
-            $date->setTimezone(Tinebase_Core::getUserTimezone());
+        if (isset($this->_options['timezone'])) {
+            $date->setTimezone($this->_options['timezone']);
         }
         
         return $date;
