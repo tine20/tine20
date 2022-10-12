@@ -17,18 +17,18 @@ Tine.Filemanager.nodeContextMenu = {
      * @param {} button
      * @param {} event
      */
-    onPause: function (button, event) {
-
+    onPause: async function (button, event) {
+    
         var grid = this.scope;
         var gridStore = grid.store;
         gridStore.suspendEvents();
         var selectedRows = grid.selectionModel.getSelections();
-        for(var i=0; i < selectedRows.length; i++) {
+        for (var i = 0; i < selectedRows.length; i++) {
             var fileRecord = selectedRows[i];
-            if(fileRecord.fileRecord) {
+            if (fileRecord.fileRecord) {
                 fileRecord = fileRecord.fileRecord;
             }
-            var upload = Tine.Tinebase.uploadManager.getUpload(fileRecord.get('uploadKey'));
+            var upload = await Tine.Tinebase.uploadManager.getUpload(fileRecord.get('uploadKey'));
             if (upload) {
                 upload.setPaused(true);
             }
@@ -44,24 +44,24 @@ Tine.Filemanager.nodeContextMenu = {
      * @param {} button
      * @param {} event
      */
-    onResume: function (button, event) {
-        
+    onResume: async function (button, event) {
+    
         var grid = this.scope;
         var gridStore = grid.store;
         gridStore.suspendEvents();
         var selectedRows = grid.selectionModel.getSelections();
-        for(var i=0; i < selectedRows.length; i++) {
+        for (var i = 0; i < selectedRows.length; i++) {
             var fileRecord = selectedRows[i];
-            if(fileRecord.fileRecord) {
+            if (fileRecord.fileRecord) {
                 fileRecord = fileRecord.fileRecord;
             }
-            var upload = Tine.Tinebase.uploadManager.getUpload(fileRecord.get('uploadKey'));
+            var upload = await Tine.Tinebase.uploadManager.getUpload(fileRecord.get('uploadKey'));
             upload.resumeUpload();
         }
         gridStore.resumeEvents();
         grid.actionUpdater.updateActions(gridStore);
         this.scope.selectionModel.deselectRange(0, this.scope.selectionModel.getCount());
-
+    
     },
     
     /**
