@@ -186,6 +186,8 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      */
     protected function _inspectAfterCreate(Tinebase_Record_Interface $_newRecord, Tinebase_Record_Interface $_recordToCreate)
     {
+        Tinebase_Timemachine_ModificationLog::getInstance()
+            ->setRecordMetaData($_newRecord, Tinebase_Controller_Record_Abstract::ACTION_CREATE);
         $this->_writeModLog($_newRecord, null);
         Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED);
 
@@ -254,6 +256,11 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         $newRecord = parent::update($_record);
 
         if (true === $_doModLog) {
+            Tinebase_Timemachine_ModificationLog::getInstance()
+                ->setRecordMetaData($newRecord, (bool)$newRecord->is_deleted === (bool)$oldRecord->is_deleted ?
+                    Tinebase_Controller_Record_Abstract::ACTION_UPDATE : ($newRecord->is_deleted ?
+                        Tinebase_Controller_Record_Abstract::ACTION_DELETE :
+                        Tinebase_Controller_Record_Abstract::ACTION_UNDELETE), $oldRecord);
             $currentMods = $this->_writeModLog($newRecord, $oldRecord);
             if (null !== $currentMods && $currentMods->count() > 0) {
                 Tinebase_Notes::getInstance()->addSystemNote($newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
@@ -279,6 +286,11 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      */
     public function updated(Tinebase_Record_Interface $_newRecord, Tinebase_Record_Interface $_oldRecord)
     {
+        Tinebase_Timemachine_ModificationLog::getInstance()
+            ->setRecordMetaData($_newRecord, (bool)$_newRecord->is_deleted === (bool)$_oldRecord->is_deleted ?
+                Tinebase_Controller_Record_Abstract::ACTION_UPDATE : ($_newRecord->is_deleted ?
+                    Tinebase_Controller_Record_Abstract::ACTION_DELETE :
+                    Tinebase_Controller_Record_Abstract::ACTION_UNDELETE), $_oldRecord);
         $currentMods = $this->_writeModLog($_newRecord, $_oldRecord);
         if (null !== $currentMods && $currentMods->count() > 0) {
             Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
@@ -317,6 +329,11 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         if (null !== $oldRecords) {
             foreach ($oldRecords as $oldRecord) {
                 $newRecord = $this->get($oldRecord->getId());
+                Tinebase_Timemachine_ModificationLog::getInstance()
+                    ->setRecordMetaData($newRecord, (bool)$newRecord->is_deleted === (bool)$oldRecord->is_deleted ?
+                        Tinebase_Controller_Record_Abstract::ACTION_UPDATE : ($newRecord->is_deleted ?
+                            Tinebase_Controller_Record_Abstract::ACTION_DELETE :
+                            Tinebase_Controller_Record_Abstract::ACTION_UNDELETE), $oldRecord);
                 $currentMods = $this->_writeModLog($newRecord, $oldRecord);
                 if (null !== $currentMods && $currentMods->count() > 0) {
                     Tinebase_Notes::getInstance()->addSystemNote($newRecord, Tinebase_Core::getUser(),
@@ -338,8 +355,9 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             list($accountId, $now) = Tinebase_Timemachine_ModificationLog::getCurrentAccountIdAndTime();
             /** @var Tinebase_Model_Tree_Node $node */
             foreach($this->getMultiple($_ids) as $node) {
-                $node->last_modified_by = $accountId;
-                $node->last_modified_time = $now;
+                $node->deleted_by = $accountId;
+                $node->deleted_time = $now;
+                $node->is_deleted = 1;
                 $this->_writeModLog(null, $node);
             }
         }
