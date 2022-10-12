@@ -581,7 +581,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 $earliestStartDate = $startDate;
             }
         }
-        
+
+        if ($earliestStartDate) {
+            $earliestStartDate->hasTime(false);
+        }
+        if ($latestEndDate) {
+            $latestEndDate->hasTime(false);
+        }
         return array($invoicePositions, $earliestStartDate, $latestEndDate);
     }
 
