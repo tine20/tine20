@@ -3653,7 +3653,7 @@ HumanResources_CliTests.testSetContractsEndDate */
         }
     }
 
-    public function fileMessageAttachment($location, $message, $attachment)
+    public function fileMessageAttachment($location, $message, $attachment, $forceOverwrite = false)
     {
         $recordId = is_array($location['record_id']) && isset($location['record_id']['id'])
             ? $location['record_id']['id']

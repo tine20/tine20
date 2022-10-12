@@ -432,6 +432,10 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
      * @returns (Ext.ux.file.Upload} Upload object
      */ 
     async getUpload(uploadId, fileObject) {
+        if (!uploadId) {
+            return null;
+        }
+        
         if (this.fileObjects[uploadId] && !this.uploads[uploadId]) {
             if (typeof this.fileObjects[uploadId].getFile === 'function') {
                 this.fileObjects[uploadId] = await this.fileObjects[uploadId].getFile();

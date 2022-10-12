@@ -1608,15 +1608,14 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         return $parent;
     }
 
-    protected function _createNodeFromTempfile($targetPath, $filename, $tempFile)
+    protected function _createNodeFromTempfile($targetPath, $filename, $tempFile, $_forceOverwrite = false)
     {
         try {
             $node = $this->createNodes(
                 array($targetPath . '/' . $filename),
                 Tinebase_Model_Tree_FileObject::TYPE_FILE,
                 array($tempFile->getId()),
-                /* $_forceOverwrite */
-                false
+                $_forceOverwrite
             )->getFirstRecord();
         } catch (Filemanager_Exception_NodeExists $fene) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
@@ -1646,10 +1645,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         return $targetPath;
     }
 
-    public function fileMessageAttachment($location, $message, $attachment)
+    public function fileMessageAttachment($location, $message, $attachment, $forceOverwrite = false)
     {
         if ($location->type === Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT) {
-            return parent::fileMessageAttachment($location, $message, $attachment);
+            return parent::fileMessageAttachment($location, $message, $attachment, $forceOverwrite);
         }
 
         $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile(
@@ -1658,7 +1657,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
         $filename = $this->_getfiledAttachmentFilename($attachment, $message);
         $targetPath = $this->_getLocationTargetPath($location);
-        $node = $this->_createNodeFromTempfile($targetPath, $filename, $tempFile);
+        $node = $this->_createNodeFromTempfile($targetPath, $filename, $tempFile, $forceOverwrite);
 
         return $node ? $this->get($node->parent_id) : false;
     }

@@ -626,9 +626,11 @@ msgstr "Prüfe…"
 msgid "Overwrite Existing File?"
 msgstr "Bestehende Datei Überschreiben?"
 
-#: js/FilePicker.js:465
-msgid "Do you really want to overwrite the selected file?"
-msgstr "Wollen Sie wirklich die ausgewählten Dateien überschreiben?"
+msgid "Do you really want to overwrite the existing files?"
+msgstr "Wollen Sie wirklich die bestehende Datei überschreiben?"
+
+msgid "{attachmentCount, plural, one {Do you really want to overwrite the existing file?} other {Do you really want to overwrite the existing files?}}"
+msgstr "{attachmentCount, plural, one {Wollen Sie die bestehende Datei wirklich überschreiben?} other {Wollen Sie die bestehenden Dateien wirklich überschreiben?}}"
 
 #: js/FilePicker.js:497
 msgid "Content type"

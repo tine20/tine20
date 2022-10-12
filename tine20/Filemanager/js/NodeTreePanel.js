@@ -351,8 +351,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                         return;
                     }
             
-                    let forbidden = /[\/\\\:*?"<>|]/;
-                    if (forbidden.test(text)) {
+                    if (!Tine.Filemanager.Model.Node.isNameValid(text)) {
                         Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('Illegal characters: ') + forbidden);
                         return;
                     }
@@ -479,6 +478,9 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
         var keys = path.split(this.pathSeparator);
         var curNode = this.root;
+        
+        if (!curNode) return;
+        
         var curPath = curNode.attributes.path;
         var index = 1;
         var f = function(){

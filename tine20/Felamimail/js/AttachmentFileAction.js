@@ -41,6 +41,7 @@ Tine.Tinebase.appMgr.isInitialised('Felamimail').then(async () => {
 
 /**
  * @param {Function} fileFn
+ * @param config
  * @returns {Ext.Action}
  */
 const getFileAttachmentAction = (fileFn, config) => {
@@ -53,24 +54,41 @@ const getFileAttachmentAction = (fileFn, config) => {
             text: app.i18n._('File (in Filemanager) ...'),
             hidden: !Tine.Tinebase.common.hasRight('run', 'Filemanager'),
             handler: (action, e) => {
+                // we don't set constrain here because user should be able to select both folder and file as target
                 const filePickerDialog = new Tine.Filemanager.FilePickerDialog({
-                    constraint: 'folder',
+                    mode: 'target',
                     singleSelect: true,
-                    requiredGrants: ['addGrant']
+                    requiredGrants: ['addGrant'],
+                    files: config.attachments,
                 });
 
                 filePickerDialog.on('selected', async (nodes) => {
+                    if (config.attachments.length === 1) {
+                        config.attachments[0].filename = filePickerDialog.filePicker.fileName;
+                    }
+                    
+                    const type = _.get(nodes, '[0].type');
+                    let path = _.get(nodes, '[0].path');
+                    let recordId =  _.get(nodes[0], 'nodeRecord.data', nodes[0]);
+                    
+                    //attachment data only accept folder node as location
+                    if (type === 'file') {
+                        path = Tine.Filemanager.Model.Node.dirname(path);
+                        recordId = _.get(nodes[0], 'parent_id');
+                    }
+
                     const attachmentCount = await fileFn([{
                         type: 'fm_node',
                         model: 'Filemanager_Model_Node',
-                        fm_path: _.get(nodes, '[0].path'),
-                        record_id: _.get(nodes[0], 'nodeRecord.data', nodes[0]),
-                    }], action);
+                        fm_path: path,
+                        record_id: recordId,
+                    }], action, config.attachments);
 
                     const msg = app.formatMessage('{attachmentCount, plural, one {Attachment was saved} other {# Attachments where saved}}',
-                        { attachmentCount });
+                        {attachmentCount});
                     Ext.ux.MessageBox.msg(app.formatMessage('Success'), msg);
                 });
+                
                 filePickerDialog.openWindow();
             }
         }, {
