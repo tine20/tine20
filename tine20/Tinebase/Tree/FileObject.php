@@ -375,6 +375,8 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
      */
     protected function _inspectAfterCreate(Tinebase_Record_Interface $_newRecord, Tinebase_Record_Interface $_recordToCreate)
     {
+        Tinebase_Timemachine_ModificationLog::getInstance()
+            ->setRecordMetaData($_newRecord, Tinebase_Controller_Record_Abstract::ACTION_CREATE);
         $this->_writeModLog($_newRecord, null);
     }
 
@@ -393,6 +395,11 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         $oldRecord = $this->get($_record->getId(), true);
         $newRecord = parent::update($_record);
 
+        Tinebase_Timemachine_ModificationLog::getInstance()
+            ->setRecordMetaData($newRecord, (bool)$newRecord->is_deleted === (bool)$oldRecord->is_deleted ?
+                Tinebase_Controller_Record_Abstract::ACTION_UPDATE : ($newRecord->is_deleted ?
+                    Tinebase_Controller_Record_Abstract::ACTION_DELETE :
+                    Tinebase_Controller_Record_Abstract::ACTION_UNDELETE), $oldRecord);
         $currentMods = $this->_writeModLog($newRecord, $oldRecord);
         if (null !== $currentMods && $currentMods->count() > 0) {
             /** @var Tinebase_Model_ModificationLog $mod */
@@ -435,7 +442,11 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
     protected function _inspectBeforeSoftDelete(array $_ids)
     {
         if (!empty($_ids)) {
+            list($accountId, $now) = Tinebase_Timemachine_ModificationLog::getCurrentAccountIdAndTime();
             foreach($this->getMultiple($_ids) as $object) {
+                $object->deleted_by = $accountId;
+                $object->deleted_time = $now;
+                $object->is_deleted = 1;
                 $this->_writeModLog(null, $object);
             }
         }
@@ -709,7 +720,6 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
                 $record = new Tinebase_Model_Tree_FileObject($diff->diff);
                 $this->_prepareReplicationRecord($record);
-                Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'create');
                 $this->create($record);
                 if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $record->type && null !== $record->hash &&
                         !is_file($record->getFilesystemPath())) {
@@ -730,7 +740,6 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 $currentRecord = clone $record;
                 $record->applyDiff($diff);
                 $this->_prepareReplicationRecord($record);
-                Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'update', $currentRecord);
                 if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $record->type && $record->size > 0
                         && $currentRecord->hash !== $record->hash && null !== $record->hash
                         && !is_file($record->getFilesystemPath())) {

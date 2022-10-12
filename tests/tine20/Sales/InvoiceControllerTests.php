@@ -593,6 +593,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->sharedTimesheet = $this->_timesheetController->create($this->sharedTimesheet);
 
         $result = $this->_invoiceController->checkForContractOrInvoiceUpdates();
+
         $this->assertEmpty($result);
 
         sleep(1);
