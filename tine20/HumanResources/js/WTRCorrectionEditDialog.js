@@ -17,7 +17,7 @@ class WTRCorrectionEditDialog extends Tine.widgets.dialog.EditDialog {
         const isNewRecord = !this.record.get('creation_time');
         const grants = _.get(employee, 'data.division_id.account_grants', {});
         const isOwn = Tine.Tinebase.registry.get('currentAccount').accountId === _.get(employee, 'data.account_id.accountId');
-        const processStatusPicker = this.getForm().findField('status')
+        const processStatusPicker = this.getForm().findField('status');
         const processStatus = processStatusPicker.getValue();
         const allowUpdate = grants.adminGrant || grants.updateChangeRequestGrant ||
             (processStatus === 'REQUESTED' && (isNewRecord || (isOwn && grants.createOwnChangeRequestGrant) || grants.createChangeRequestGrant));
@@ -35,4 +35,5 @@ class WTRCorrectionEditDialog extends Tine.widgets.dialog.EditDialog {
 }
 
 Tine.HumanResources.WTRCorrectionEditDialog = WTRCorrectionEditDialog;
+
 export default WTRCorrectionEditDialog

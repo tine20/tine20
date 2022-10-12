@@ -7,6 +7,8 @@
  */
 Ext.ns('Tine.HumanResources');
 
+import vacationCorrectionPicker from "./VacationCorrectionPicker";
+
 /**
  * @namespace   Tine.HumanResources
  * @class       Tine.HumanResources.AccountEditDialog
@@ -27,7 +29,7 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
     evalGrants: false,
 
     windowWidth: 600,
-    windowHeight: 560,
+    windowHeight: 700,
     
     /**
      * inits the component
@@ -49,7 +51,8 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
             return;
         }
         Tine.HumanResources.AccountEditDialog.superclass.onRecordLoad.call(this);
-
+        // this.vacationCorrectionPicker.setValue(this.record.get('vacation_corrections'));
+        // debugger
         var employee = this.record.get('employee_id'),
             name = employee ? employee.n_fn : 'unknown';
 
@@ -66,7 +69,11 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
      */
     getFormItems: function() {
         // columnForm defaults
-        var cfDefaults = {xtype: 'textfield', readOnly: true, columnWidth: .5, anchor: '100%'};
+        const cfDefaults = {xtype: 'textfield', columnWidth: .5, anchor: '100%'};
+        const accountFieldManager = _.bind(Tine.widgets.form.FieldManager.get,
+            Tine.widgets.form.FieldManager, 'HumanResources', 'Account', _,
+            Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
+
         return {
             xtype: 'tabpanel',
             plain:true,
@@ -98,10 +105,17 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
                             formDefaults: cfDefaults,
                             labelAlign: 'top',
                             items: [[
-                                {fieldLabel: this.app.i18n._('Possible vaction days'), name: 'possible_vacation_days', columnWidth: 1/4 },
-                                {fieldLabel: this.app.i18n._('Requested vaction days'), name: 'scheduled_requested_vacation_days', columnWidth: 1/4 },
-                                {fieldLabel: this.app.i18n._('Taken vaction days'), name: 'scheduled_taken_vacation_days', columnWidth: 1/4 },
-                                {fieldLabel: this.app.i18n._('Remaining vaction days'), name: 'scheduled_remaining_vacation_days', columnWidth: 1/4 },
+                                {fieldLabel: this.app.i18n._('Possible vaction days'), name: 'possible_vacation_days', columnWidth: 1/4, readOnly: true },
+                                {fieldLabel: this.app.i18n._('Requested vaction days'), name: 'scheduled_requested_vacation_days', columnWidth: 1/4, readOnly: true },
+                                {fieldLabel: this.app.i18n._('Taken vaction days'), name: 'scheduled_taken_vacation_days', columnWidth: 1/4, readOnly: true },
+                                {fieldLabel: this.app.i18n._('Remaining vaction days'), name: 'scheduled_remaining_vacation_days', columnWidth: 1/4, readOnly: true },
+                            ],[
+                                this.vacationCorrectionPicker = new vacationCorrectionPicker({
+                                    columnWidth: 1,
+                                    name: 'vacation_corrections',
+                                    height: 112,
+                                    editDialog: this
+                                })
                             ]]
                         }]
                     }, {

@@ -32,6 +32,7 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE016 = __CLASS__ . '::update016';
     const RELEASE015_UPDATE017 = __CLASS__ . '::update017';
     const RELEASE015_UPDATE018 = __CLASS__ . '::update018';
+    const RELEASE015_UPDATE019 = __CLASS__ . '::update019';
 
     static protected $_allUpdates = [
         // we'll do some querys here and we want them done before any schema tool comes along to play
@@ -89,6 +90,10 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE017          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update017',
+            ],
+            self::RELEASE015_UPDATE019          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update019',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -460,5 +465,14 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '15.18', self::RELEASE015_UPDATE018);
+    }
+
+    public function update019()
+    {
+        Setup_SchemaTool::updateSchema([
+            HumanResources_Model_VacationCorrection::class,
+        ]);
+        
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '15.19', self::RELEASE015_UPDATE019);
     }
 }
