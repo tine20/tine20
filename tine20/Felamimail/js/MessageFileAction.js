@@ -8,6 +8,8 @@
  */
 
 
+import RecordEditFieldTriggerPlugin from "../../Tinebase/js/widgets/form/RecordEditFieldTriggerPlugin";
+
 /**
  * @namespace   Tine.widgets.tags
  * @class       Tine.widgets.tags.TagsMassDetachAction
@@ -551,7 +553,8 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                 },
                 items: Tine.widgets.form.RecordPickerManager.get(model.getMeta('appName'), model.getMeta('modelName'), {
                     fieldLabel: model.getRecordName(),
-                    name: 'attachRecord'
+                    name: 'attachRecord',
+                    plugins: [new RecordEditFieldTriggerPlugin({})]
                 })
             })
         });

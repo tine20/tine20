@@ -69,6 +69,21 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
             ],
         ],
 
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'vacation_corrections' => [],
+                'employee_id' => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'division_id' => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
+                                Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+
         'table'             => array(
             'name'    => 'humanresources_account',
             'indexes' => array(
@@ -173,6 +188,20 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
                     'type' => 'integer'
                 )
             ),
+            'vacation_corrections'              => [
+                self::TYPE                          => self::TYPE_RECORDS,
+                self::LABEL                         => 'Vacation Corrections', // _('Vacation Corrections')
+                self::NULLABLE                      => true,
+                self::DOCTRINE_IGNORE               => true,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => HumanResources_Config::APP_NAME,
+                    self::MODEL_NAME                    => HumanResources_Model_VacationCorrection::MODEL_NAME_PART,
+                    self::REF_ID_FIELD                  => HumanResources_Model_VacationCorrection::FLD_ACCOUNT_ID,
+                ],
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+            ],
         )
     );
 

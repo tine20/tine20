@@ -1591,6 +1591,12 @@ msgstr "Die unentschuldigten Krankheitstage konnten nicht als Urlaub gebucht wer
 msgid "Workingtime Tracking"
 msgstr "Arbeitszeiterfassung"
 
+msgid "Vacation correction"
+msgid_plural "Vacation corrections"
+msgstr[0] "Urlaubs-Korrektur"
+msgstr[1] "Urlaubs-Korrekturen"
+
+
 #~ msgid "The grant to create free times and working time reports change requests and see basic employee, contract and account data for all employees in this division."
 #~ msgstr "Die Berechtigung Änderungsanträge auf Arbeitszeitberichte und Abwesenheiten für alle Mitarbeiter dieser Abteilung zu erstellen."
 
