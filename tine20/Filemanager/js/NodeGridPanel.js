@@ -982,12 +982,12 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {} button
      * @param {} event
      */
-    onRemove: function (button, event) {
+    onRemove: async function (button, event) {
         var selectedRows = this.selectionModel.getSelections();
         for (var i = 0; i < selectedRows.length; i += 1) {
             this.store.remove(selectedRows[i]);
-            var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
-
+            var upload = await Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
+        
             if (upload) {
                 upload.setPaused(true);
             }

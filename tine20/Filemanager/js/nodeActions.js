@@ -181,8 +181,8 @@ Tine.Filemanager.nodeActions.CreateFolder = {
 
             gridWdgt.newInlineRecord(newRecord, 'name', async (localRecord) => {
                 let text = localRecord.get('name');
-                let forbidden = /[\/\\\:*?"<>|]/;
-                if (forbidden.test(text)) {
+                
+                if (!Tine.Filemanager.Model.Node.isNameValid(text)) {
                     Ext.Msg.alert(String.format(app.i18n._('Not renamed {0}'), nodeName), app.i18n._('Illegal characters: ') + forbidden);
                     return;
                 }
@@ -287,9 +287,8 @@ Tine.Filemanager.nodeActions.Rename = {
                         Ext.Msg.alert(String.format(i18n._('Not renamed {0}'), nodeName), String.format(i18n._('You have to supply a {0} name!'), nodeName));
                         return;
                     }
-
-                    let forbidden = /[\/\\\:*?"<>|]/;
-                    if (forbidden.test(text)) {
+                    
+                    if (!Tine.Filemanager.Model.Node.isNameValid(text)) {
                         Ext.Msg.alert(String.format(app.i18n._('Not renamed {0}'), nodeName), app.i18n._('Illegal characters: ') + forbidden);
                         return;
                     }
@@ -393,7 +392,7 @@ Tine.Filemanager.nodeActions.Delete = {
                     var node = nodes[i];
 
                     if (node.fileRecord) {
-                        var upload = Tine.Tinebase.uploadManager.getUpload(node.fileRecord.get('uploadKey'));
+                        var upload = await Tine.Tinebase.uploadManager.getUpload(node.fileRecord.get('uploadKey'));
                         if (upload) {
                             upload.setPaused(true);
                             Tine.Tinebase.uploadManager.unregisterUpload(upload.id);

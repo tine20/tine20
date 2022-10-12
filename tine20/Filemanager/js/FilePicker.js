@@ -30,10 +30,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
      * A constraint allows to alter the selection behaviour of the picker, for example only allow to select files.
      * By default, file and folder are allowed to be selected, the concrete implementation needs to define it's purpose
      */
-    constraint: function (name) {
-        let forbidden = /[\/\\\:*?"<>|]/;
-        return !forbidden.test(name);
-    },
+    constraint: null,
 
     /**
      * @cfg {Array} requiredGrants
@@ -54,6 +51,14 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
      */
     initialPath: null,
     
+    /**
+     * @cfg {String} files
+     * @property {String} files
+     * (initial) files
+     * files to be saved
+     */
+    files: [],
+    
     // private
     app: null,
     layout: 'fit',
@@ -68,7 +73,11 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         this.allowMultiple = this.hasOwnProperty('singleSelect') ? ! this.singleSelect : this.allowMultiple;
         this.requiredGrants = this.requiredGrants ? this.requiredGrants : (this.mode === 'source' ? ['readGrant'] : ['editGrant']);
         
-        this.allowCreateNewFile = this.mode === 'target' && this.constraint !== 'folder';
+        if (!this.fileName && this.files.length === 1) {
+            this.fileName = this.files[0]?.filename;
+        }
+        
+        this.allowCreateNewFile = this.mode === 'target' && this.constraint !== 'folder' && (this.fileName || this.files.length === 1);
         
         var model = Tine.Filemanager.Model.Node;
         this.app = Tine.Tinebase.appMgr.get(model.getMeta('appName'));
@@ -208,7 +217,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             id: 'newFile',
             type: 'file',
             name: fileName,
-            path: basePath + '/' + fileName
+            path: `${basePath}${fileName}`
         };
 
         if(basePath && this.checkConstraint([node])) {
@@ -238,14 +247,15 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
 
         //  Clear previous selection
         this.selection = [];
-
-        var me = this;
-        Ext.each(nodes, function (node) {
-            me.selection.push(node.data || node);
+        
+        _.each(nodes, (node) => {
+            this.selection.push(node.data || node);
         });
 
         if (this.mode === 'target' && this.selection.length) {
-            this.fileNameField.setValue(this.selection[0].name);
+            if (this.selection[0].type === 'file') {
+                this.fileNameField.setValue(this.selection[0].name);
+            }
         }
 
         this.validSelection = true;
@@ -266,25 +276,24 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         if (this.treePanel) {
             return this.treePanel;
         }
-
-        var me = this;
-        var treePanel = new Tine.Filemanager.NodeTreePanel({
+        this.treePanel = new Tine.Filemanager.NodeTreePanel({
             height: 200,
             width: 200,
             readOnly: true,
             filterMode: 'filterToolbar',
             // fixme: NodeTreePanel fetches grid via app registry
-            onSelectionChange: Tine.widgets.container.TreePanel.prototype.onSelectionChange
+            onSelectionChange: this.onTreeSelectionChange.createDelegate(this),
         });
-
-        treePanel.getSelectionModel().on('selectionchange', function (selectionModel) {
-            var treeNode = selectionModel.getSelectedNode();
-            me.updateSelection([
-                _.get(treeNode, 'attributes')
-            ]);
-        });
-
-        return treePanel;
+        
+        return this.treePanel;
+    },
+    
+    onTreeSelectionChange(sm, nodes) {
+        Tine.widgets.container.TreePanel.prototype.onSelectionChange.apply(this.treePanel, arguments);
+        const treeNode = sm.getSelectedNode();
+        this.updateSelection([
+            _.get(treeNode, 'attributes')
+        ]);
     },
 
     assertRowSelection: function() {
@@ -354,12 +363,11 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
      * @returns {boolean}
      */
     checkConstraint: function (nodes) {
-        var me = this;
-        var valid = true;
+        let valid = true;
 
-        Ext.each(nodes, function (node) {
+        _.each(nodes, (node) => {
             node = node.data ? node : new Tine.Filemanager.Model.Node(node);
-            if (!me.checkNodeConstraint(node)) {
+            if (!this.checkNodeConstraint(node)) {
                 valid = false;
                 return false;
             }
@@ -402,6 +410,10 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
 
         if (_.isRegExp(this.constraint)) {
             return node.get('path').match(this.constraint);
+        }
+        
+        if (!Tine.Filemanager.Model.Node.isNameValid(node.get('name'))) {
+            return false;
         }
         
         if (_.isFunction(this.constraint)) {
@@ -448,31 +460,45 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
      * 
      * @return {Promise<unknown>}
      */
-    validateSelection: async function() {
-        if (this.mode !== 'target' || this.constraint === 'folder') {
+    validateSelection: async function(files = null) {
+        if (this.mode !== 'target') {
             return true;
         }
-
-        return new Promise((resolve) => {
+    
+        files = files ?? this.files;
+        
+        return new Promise(async (resolve) => {
             const loadMask = new Ext.LoadMask(this.getEl(), {
                 msg: this.app.i18n._('Checking ...'),
                 removeMask: true
             });
+            
             loadMask.show();
+            
+            try {
+                const path = _.get(this.selection, '[0].type') === 'file' ? Tine.Filemanager.Model.Node.dirname(_.get(this.selection, '[0].path')) : _.get(this.selection, '[0].path');
+                
+                const filter = [
+                    {field: 'path', operator: 'equals', value: path},
+                ];
+                const field = this.fileNameField;
+                this.fileName = field.getValue();
 
-            Tine.Filemanager.searchNodes([
-                {field: 'path', operator: 'equals', value: _.get(this.selection, '[0].path')}
-            ]).then((results) => {
-                loadMask.hide();
-                const title = i18n._('Overwrite Existing File?');
-                const msg = i18n._('Do you really want to overwrite the selected file?');
-                Ext.MessageBox.confirm(title, msg, (btn) => {
-                    resolve(btn === 'yes');
-                });
-            }).catch(() => {
+                const filenames = this.files.length > 1 ? _.map(files, 'filename') : [this.fileName];
+                
+                if (filenames.length > 0) {
+                    filter.push({field: 'name', operator: 'in', value: filenames});
+                }
+                
+                const result = await Tine.Filemanager.searchNodes(filter);
+                
+                resolve(result.results.length === 0);
+            } catch (e) {
                 // NOTE: path filter throws an error in not existent
                 resolve(true);
-            })
+            }
+    
+            loadMask.hide();
         });
     },
 

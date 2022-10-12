@@ -346,7 +346,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function fileAttachments($id, $locations, $attachments = [], $model = 'Felamimail_Model_Message')
+    public function fileAttachments($id, $locations, $attachments = [], $model = 'Felamimail_Model_Message', $forceOverwrite = false)
     {
         return [
             'success' => Felamimail_Controller_Message_File::getInstance()->fileAttachments(
@@ -357,7 +357,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     true
                 ),
                 $attachments,
-                $model
+                $model,
+                $forceOverwrite
             )
         ];
     }

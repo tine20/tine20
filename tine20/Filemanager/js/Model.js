@@ -106,6 +106,11 @@ Tine.Filemanager.Model.NodeMixin = {
             return '/' + path + (isFolder || self.type(path) === 'folder' ? '/' : '');
         },
         
+        isNameValid: function (name) {
+            const forbidden = /[\/\\\:*?"<>|]/;
+            return !forbidden.test(name);
+        },
+        
         getExtension: function(filename) {
             const self = Tine.Filemanager.Model.Node;
             return self.extension(filename);
@@ -163,7 +168,7 @@ Tine.Filemanager.Model.NodeMixin = {
                 revision_size: 0,
                 isIndexed: false
             }, defaults);
-        }
+        },
     }
 };
 

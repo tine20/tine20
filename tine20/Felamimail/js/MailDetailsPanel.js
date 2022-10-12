@@ -391,7 +391,11 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                             }
                         }, {
                             xtype: 'menuseparator'
-                        }, getFileAttachmentAction(async (locations) => {
+                        }, getFileAttachmentAction(async (locations, action, updatedAttachments = null) => {
+                            if (updatedAttachments) {
+                                attachments = updatedAttachments;
+                            }
+                            
                             return await this.attachmentAnnimation(target,async () => {
                                 if (locations === 'download') {
                                     Ext.ux.file.Download.start({
@@ -404,11 +408,13 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                                         }
                                     });
                                 } else {
-                                    await Tine.Felamimail.fileAttachments(messageId, locations, attachments, sourceModel);
+                                    await Tine.Felamimail.fileAttachments(messageId, locations, attachments, sourceModel, true);
                                 }
                                 return attachments.length;
                             })
 
+                        }, {
+                            attachments: attachments,
                         })
                     ]
                 });
@@ -435,11 +441,11 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 var action = parts[1];
 
                 var html = '';
-                if (action == 'show') {
-                    var recordHeaders = this.record.get('headers');
+                if (action === 'show') {
+                    const recordHeaders = this.record.get('headers');
 
-                    for (header in recordHeaders) {
-                        if (recordHeaders.hasOwnProperty(header) && (header != 'to' || header != 'cc' || header != 'bcc')) {
+                    for (let header in recordHeaders) {
+                        if (recordHeaders.hasOwnProperty(header) && (header !== 'to' || header !== 'cc' || header !== 'bcc')) {
                             html += '<br/><b>' + header + ':</b> '
                                 + Ext.util.Format.htmlEncode(recordHeaders[header]);
                         }

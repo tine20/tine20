@@ -200,12 +200,12 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} button
      * @param {} event
      */
-    onRemove: function (button, event) {
-
+    onRemove: async function (button, event) {
+    
         var selectedRows = this.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; i += 1) {
             this.store.remove(selectedRows[i]);
-            var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
+            var upload = await Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
             if (upload) {
                 upload.setPaused(true);
             }
@@ -218,11 +218,11 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} button
      * @param {} event
      */
-    onPause: function (button, event) {
-
+    onPause: async function (button, event) {
+    
         var selectedRows = this.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; i++) {
-            var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
+            var upload = await Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
             if (upload) {
                 upload.setPaused(true);
             }
@@ -236,11 +236,11 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} button
      * @param {} event
      */
-    onResume: function (button, event) {
-
+    onResume: async function (button, event) {
+    
         var selectedRows = this.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; i++) {
-            var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
+            var upload = await Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
             upload.resumeUpload();
         }
         this.getSelectionModel().deselectRange(0, this.getSelectionModel().getCount());

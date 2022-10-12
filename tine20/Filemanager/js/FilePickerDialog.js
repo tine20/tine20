@@ -34,10 +34,7 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
      * A constraint allows to alter the selection behaviour of the picker, for example only allow to select files.
      * By default, file and folder are allowed to be selected, the concrete implementation needs to define it's purpose
      */
-    constraint: function (name) {
-        let forbidden = /[\/\\\:*?"<>|]/;
-        return !forbidden.test(name);
-    },
+    constraint: null,
 
     /**
      * @cfg {Array} requiredGrants
@@ -51,6 +48,8 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
      * (initial) fileName
      */
     fileName: null,
+    
+    files: [],
 
     /**
      * initial path
@@ -124,7 +123,8 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
                 constraint: this.constraint,
                 allowMultiple: this.allowMultiple,
                 fileName: this.fileName,
-                initialPath: this.initialPath
+                initialPath: this.initialPath,
+                files: this.files,
             });
 
             this.filePicker.on('nodeSelected', this.onNodesSelected.createDelegate(this));
@@ -174,5 +174,27 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         }, config));
 
         return this.window;
-    }
+    },
+    
+    
+    /**
+     * generic apply changes handler
+     * @param {Boolean} closeWindow
+     */
+    onButtonApply: async function (closeWindow) {
+        const result = await this.filePicker.validateSelection();
+        const attachmentCount = this.files.length;
+        const msg = this.app.formatMessage('{attachmentCount, plural, one {Do you really want to overwrite the existing file?} other {Do you really want to overwrite the existing files?}}',
+            {attachmentCount});
+        if (!result) {
+            if (await Ext.MessageBox.confirm(
+                i18n._('Overwrite?'),
+                msg,
+            ) === 'yes') {
+                Tine.Filemanager.FilePickerDialog.superclass.onButtonApply.call(this, closeWindow);
+            }
+        } else {
+            Tine.Filemanager.FilePickerDialog.superclass.onButtonApply.call(this, closeWindow);
+        }
+    },
 });

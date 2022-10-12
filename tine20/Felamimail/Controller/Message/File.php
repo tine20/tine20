@@ -208,6 +208,7 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
      * @param $locations
      * @param $attachments
      * @param string $model
+     * @param bool $forceOverwrite
      * @return bool
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_NotFound
@@ -215,7 +216,7 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
      * @todo support more models
      * @todo return false if filing fails?
      */
-    public function fileAttachments($id, $locations, $attachments, $model = 'Felamimail_Model_Message')
+    public function fileAttachments($id, $locations, $attachments, $model, $forceOverwrite = false)
     {
         if (empty($attachments)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -236,7 +237,7 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
                     . ' Filing attachment with controller ' . get_class($recordController));
 
                 /** @var Tinebase_Controller_Record_Abstract $recordController */
-                $recordController->fileMessageAttachment($location, $message, $attachment);
+                $recordController->fileMessageAttachment($location, $message, $attachment, $forceOverwrite);
             }
         }
 
