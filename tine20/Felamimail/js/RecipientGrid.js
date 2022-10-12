@@ -547,7 +547,10 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         
         contactCtxMenu.addMenuItem(this.action_remove);
-        contactCtxMenu.showAt(position);
+        
+        if (!this.isDbClick) {
+            contactCtxMenu.showAt(position);
+        }
     },
     
     /**
@@ -584,11 +587,14 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     
     // private
     onCellDblClick: function onCellClick(g, row, col, e) {
+        this.isDbClick = true;
         this.startEditing(row, col);
     },
     
     // private
     onCellClick: async function onCellClick(g, row, col, e) {
+        this.isDbClick = false;
+        
         if (col === 0) {
             this.startEditing(row, col);
         } 
@@ -873,7 +879,24 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
         const updatedRecipients = [];
         const duplicatedRecipients = [];
-    
+        let skipUpdate = true;
+        
+        if (recipients.length === 1) {
+            const oldEmailData = oldRecord.get('address');
+            
+            if (oldEmailData === '') {
+                skipUpdate = false;
+            } else {
+                _.each(recipients[0], (value, key) => {
+                    if (oldEmailData[key] !== value) {
+                        skipUpdate = false;
+                    }
+                })
+            }
+        }
+        
+        if (skipUpdate) return;
+        
         if (index > -1 && oldRecord.get('address') !== '') {
             this.store.remove(oldRecord);
         }
