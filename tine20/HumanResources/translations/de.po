@@ -141,6 +141,9 @@ msgstr "Pause stemplen: %1$s"
 msgid "Monthly Report"
 msgstr "Monatsbericht"
 
+msgid "Monthly Report (Clock Times)"
+msgstr "Monatsbericht (Stempelzeiten)"
+
 #: Controller.php:74
 msgid "You do not have admin rights on HumanResources"
 msgstr "Sie haben keine Administratorenrechte am Modul Human Ressources"
