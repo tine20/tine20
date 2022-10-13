@@ -68,7 +68,7 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
 
             $lastSlot = $timeSlot;
         }
-        if ($timeSlot && $lastSlot !== $timeSlot && null !== $someBreak) {
+        if ($timeSlot && $lastSlot && $lastSlot !== $timeSlot && null !== $someBreak) {
             $timePaused += $someBreak->calculateTimePaused($lastSlot, $timeSlot, true);
         }
 
