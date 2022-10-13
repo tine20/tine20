@@ -226,7 +226,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         (!_.get(record, 'data.creation_time') && this.recordClass.hasField && this.recordClass.hasField(('creation_time'))) ?
             'create' : 'update';
 
-        const commitBroadcastTransaction = startBroadcastTransaction(record, action, options.timeout);
+        const commitBroadcastTransaction = startBroadcastTransaction(record, action, options?.timeout);
 
         options = options || {};
         options.params = options.params || {};
@@ -288,7 +288,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         const recordIds = this.getRecordIds(records);
         const commitBroadcastTransactions = recordIds.map((recordId) => {
             const record = new this.recordClass({}, recordId)
-            return _.partial(startBroadcastTransaction(record, 'delete', options.timeout), record);
+            return _.partial(startBroadcastTransaction(record, 'delete', options?.timeout), record);
         });
 
         options = options || {};
