@@ -74,6 +74,10 @@
     background-color: #F3F6F7;
 }
 
+.x-box-item .x-ux-display-background-border{
+    position: relative;
+}
+
 .x-ux-display .x-ux-display-declaration {
     color:#A0A0A0;
     font-size:12px;
