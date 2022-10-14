@@ -797,6 +797,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 
             $relations = null;
 
+            $updated = false;
             foreach ($invoicePositions as $position)
             {
                 $found = false;
@@ -808,9 +809,11 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' updating invoice position: ' . $oldPosition->id . ' with model: ' . $oldPosition->model . ' and accountable_id: ' . $oldPosition->accountable_id . ' in month: ' . $oldPosition->month . ' for invoice: ' . $id);
                         }
-                        //update the $invoice->price_net, price_gross too?!?
-                        $oldPosition->quantity += $position->quantity;
-                        $ipc->update($oldPosition);
+                        if ((float)$oldPosition->quantity !== (float)$position->quantity) {
+                            $oldPosition->quantity = $position->quantity;
+                            $ipc->update($oldPosition);
+                            $updated = true;
+                        }
                         $found = true;
                         break;
                     }
@@ -822,6 +825,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     }
                     $position->invoice_id = $invoice->getId();
                     $ipc->create($position);
+                    $updated = true;
 
                     if (null === $relations) {
                         $relations = $invoice->relations->toArray();
@@ -845,7 +849,12 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 $invoice->relations = $relations;
             }
 
-            $this->update($invoice);
+            if ($invoice->isDirty()) {
+                $this->update($invoice);
+            }
+            if ($updated) {
+                $result[] = $invoice->getId();
+            }
 
             // mark the invoiced accountables as accounted / invoiced
             foreach($billableAccountables as $ba) {
@@ -1220,6 +1229,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 
                     $productAggregate->runConvertToRecord();
                     $productAggregate->setTimezone(Tinebase_Core::getUserTimezone());
+
+                    // update the invoice to set creation time after all the last_modified_time of the updates above here
+                    $this->_backend->updateMultiple([$invoice->getId()], ['creation_time' => Tinebase_DateTime::now()->setTimezone('UTC')->toString()]);
                 }
                 
                 $doSleep = true;
