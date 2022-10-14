@@ -851,6 +851,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 
             if ($invoice->isDirty()) {
                 $this->update($invoice);
+                $updated = true;
             }
             if ($updated) {
                 $result[] = $invoice->getId();
@@ -861,6 +862,14 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 if ($ba['partOfInvoice']) {
                     $ba['ac']->conjunctInvoiceWithBillables($invoice);
                 }
+            }
+
+            if ($updated) {
+                $dt = Tinebase_DateTime::now()->setTimezone('UTC')->toString();
+                $this->_backend->updateMultiple([$invoice->getId()], [
+                    'creation_time' => $dt,
+                    'last_modified_time' => $dt,
+                ]);
             }
 
         } elseif (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {

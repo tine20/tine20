@@ -523,22 +523,34 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
     {
         $result = $this->_createInvoiceUpdateRecreationFixtures();
 
+        sleep(1);
+
         $this->sharedTimesheet->id = NULL;
         $this->_timesheetController->create($this->sharedTimesheet);
 
-        //check that the timesheet is not being picked up, we pick up only modifications, not newly created ts
-        $this->assertEmpty($this->_invoiceController->checkForUpdate($result['created'][1]));
+        $result = $this->_invoiceController->checkForUpdate($result['created'][1]);
+        $this->assertArrayHasKey(0, $result);
+
+        sleep(1);
+
+        $this->assertEmpty($this->_invoiceController->checkForUpdate($result[0]));
     }
 
     public function testCheckForContractOrInvoiceUpdatesExistingTimeaccount()
     {
         $this->_createInvoiceUpdateRecreationFixtures();
 
+        sleep(1);
+
         $this->sharedTimesheet->id = NULL;
         $this->_timesheetController->create($this->sharedTimesheet);
 
-        //check that the timesheet is not being picked up, we pick up only modifications, not newly created ts
-        $this->assertEmpty($this->_invoiceController->checkForContractOrInvoiceUpdates());
+        $result = $this->_invoiceController->checkForContractOrInvoiceUpdates();
+        $this->assertArrayHasKey(0, $result);
+
+        sleep(1);
+
+        $this->assertEmpty($this->_invoiceController->checkForUpdate($result[0]));
     }
 
     protected function _checkInvoiceUpdateExistingTimeaccount($invoiceId, $result = 4)
@@ -559,11 +571,14 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
     {
         $this->_createInvoiceUpdateRecreationFixtures();
 
+        sleep(1);
+
         $oldTimesheet = $this->sharedTimesheet;
         $this->sharedTimesheet->id = NULL;
         $this->sharedTimesheet = $this->_timesheetController->create($this->sharedTimesheet);
 
-        $this->assertEmpty($this->_invoiceController->checkForContractOrInvoiceUpdates());
+        $result = $this->_invoiceController->checkForContractOrInvoiceUpdates();
+        $this->assertArrayHasKey(0, $result);
 
         sleep(1);
 
