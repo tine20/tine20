@@ -519,55 +519,26 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertEquals(1, $positions->count());
     }
 
-    public function testInvoiceUpdateExistingTimeaccount()
+    public function testInvoiceUpdateAddTimesheet()
     {
         $result = $this->_createInvoiceUpdateRecreationFixtures();
 
         $this->sharedTimesheet->id = NULL;
         $this->_timesheetController->create($this->sharedTimesheet);
 
-        $maybeRecreated = $this->_invoiceController->checkForUpdate($result['created'][1]);
-        if (isset($maybeRecreated[0])) {
-            $result = $maybeRecreated;
-        } else {
-            $result = array($result['created'][1]);
-        }
-
-        $this->_checkInvoiceUpdateExistingTimeaccount($result[0]);
-
-        //check that the same update run doesnt do anything anymore
-        $maybeRecreated = $this->_invoiceController->checkForUpdate($result[0]);
-        if (isset($maybeRecreated[0])) {
-            $result = $maybeRecreated;
-        }
-
-        $this->_checkInvoiceUpdateExistingTimeaccount($result[0]);
+        //check that the timesheet is not being picked up, we pick up only modifications, not newly created ts
+        $this->assertEmpty($this->_invoiceController->checkForUpdate($result['created'][1]));
     }
 
     public function testCheckForContractOrInvoiceUpdatesExistingTimeaccount()
     {
-        $result = $this->_createInvoiceUpdateRecreationFixtures();
+        $this->_createInvoiceUpdateRecreationFixtures();
 
         $this->sharedTimesheet->id = NULL;
         $this->_timesheetController->create($this->sharedTimesheet);
 
-        sleep(1);
-        
-        $maybeRecreated = $this->_invoiceController->checkForContractOrInvoiceUpdates();
-        if (isset($maybeRecreated[0])) {
-            $result = $maybeRecreated;
-        } else {
-            $result = array($result['created'][1]);
-        }
-
-        $this->_checkInvoiceUpdateExistingTimeaccount($result[0]);
-
-        $maybeRecreated = $this->_invoiceController->checkForContractOrInvoiceUpdates();
-        if (isset($maybeRecreated[0])) {
-            $result = $maybeRecreated;
-        }
-
-        $this->_checkInvoiceUpdateExistingTimeaccount($result[1]);
+        //check that the timesheet is not being picked up, we pick up only modifications, not newly created ts
+        $this->assertEmpty($this->_invoiceController->checkForContractOrInvoiceUpdates());
     }
 
     protected function _checkInvoiceUpdateExistingTimeaccount($invoiceId, $result = 4)
@@ -592,9 +563,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->sharedTimesheet->id = NULL;
         $this->sharedTimesheet = $this->_timesheetController->create($this->sharedTimesheet);
 
-        $result = $this->_invoiceController->checkForContractOrInvoiceUpdates();
-
-        $this->assertEmpty($result);
+        $this->assertEmpty($this->_invoiceController->checkForContractOrInvoiceUpdates());
 
         sleep(1);
 
@@ -629,40 +598,26 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
 
         $this->_timesheetController->create($this->sharedTimesheet);
 
-        $maybeRecreated = $this->_invoiceController->checkForUpdate($result['created'][1]);
-        if (isset($maybeRecreated[0])) {
-            $result = $maybeRecreated;
-        } else {
-            $result = array($result['created'][1]);
-        }
+        $result = $this->_invoiceController->checkForUpdate($result['created'][1]);
+        $this->assertArrayHasKey(0, $result);
 
         $this->_checkInvoiceUpdateWithNewTimeaccount($result[0]);
 
         //check that the same update run doesnt do anything anymore
-        $maybeRecreated = $this->_invoiceController->checkForUpdate($result[0]);
-        if (isset($maybeRecreated[0])) {
-            $result = $maybeRecreated;
-        }
-
-        $this->_checkInvoiceUpdateWithNewTimeaccount($result[0]);
+        $this->assertEmpty($this->_invoiceController->checkForUpdate($result[0]));
     }
 
     public function testCheckForContractOrInvoiceUpdatesWithNewTimeaccount()
     {
         $this->_createInvoiceUpdateRecreationFixtures(false);
 
-        $this->sharedTimesheet->setId(null);
         $this->_timesheetController->create($this->sharedTimesheet);
 
-        sleep(1);
-
-        // THIS is a bug.... seriously?!?
         $result = $this->_invoiceController->checkForContractOrInvoiceUpdates();
-        $this->assertEmpty($result);
+        $this->assertArrayHasKey(0, $result);
+        $this->_checkInvoiceUpdateWithNewTimeaccount($result[0]);
 
-        $result = $this->_invoiceController->checkForContractOrInvoiceUpdates();
-        $this->assertArrayHasKey(1, $result);
-        $this->_checkInvoiceUpdateWithNewTimeaccount($result[1]);
+        $this->assertEmpty($this->_invoiceController->checkForContractOrInvoiceUpdates());
     }
 
     /**
