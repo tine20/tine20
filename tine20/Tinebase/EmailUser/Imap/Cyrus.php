@@ -18,7 +18,7 @@
  * @subpackage User
  * @todo add quota support
  */
-class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract implements Tinebase_EmailUser_Imap_Interface
+class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_SqlAbstract implements Tinebase_EmailUser_Imap_Interface
 {
     /**
      * 

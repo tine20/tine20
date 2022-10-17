@@ -16,7 +16,7 @@
  * @package Tinebase
  * @subpackage User
  */
-abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin_LdapInterface
+abstract class Tinebase_User_Plugin_LdapAbstract extends Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_LdapInterface
 {
     /**
      * @var Tinebase_Ldap
@@ -44,15 +44,6 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
      * @var array
      */
     protected $_options = array();
-
-    /**
-     * supportAliasesDispatchFlag
-     *
-     * @var boolean
-     *
-     * @todo remove DRY (see Tinebase_User_Plugin_Abstract)
-     */
-    protected $_supportAliasesDispatchFlag = false;
 
     /**
      * the constructor
@@ -91,17 +82,6 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
     public function inspectAddUser(Tinebase_Model_FullUser $_user, array &$_ldapData)
     {
         $this->_user2ldap($_user, $_ldapData);
-    }
-
-    /**
-     * @param Tinebase_Model_FullUser $_user
-     */
-    public function inspectDeleteUser(Tinebase_Model_FullUser $_user)
-    {
-        /* this function is empty on purpose: need to provide valid target for
-         * Tinebase_User_Ldap, line 623. If needed other extensions (backends)
-         * can inherit this target if needed.
-         */
     }
 
     /**
@@ -155,20 +135,6 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
     }
 
     /**
-     * inspect set password
-     * 
-     * @param string   $_userId
-     * @param string   $_password
-     * @param boolean  $_encrypt
-     * @param boolean  $_mustChange
-     * @param array    $_ldapData    the data to be written to ldap
-     */
-    public function inspectSetPassword($_userId, $_password, $_encrypt, $_mustChange, array &$_ldapData)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Nothing to be done on password change.');
-    }
-
-    /**
      * inspect setStatus
      * 
      * @param string  $_status    the status
@@ -209,28 +175,6 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
     public function setLdap(Tinebase_Ldap $_ldap)
     {
         $this->_ldap = $_ldap;
-    }
-    
-    /**
-     * Check if we should append domain name or not
-     *
-     * @param  string $_userName
-     * @return string
-     *
-     * @todo remove code duplication with \Tinebase_User_Plugin_Abstract::_appendDomain
-     */
-    protected function _appendDomain($_userName)
-    {
-        $domainConfigKey = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'domain' : 'primarydomain';
-        
-        if (!empty($this->_config[$domainConfigKey])) {
-            $domain = '@' . $this->_config[$domainConfigKey];
-            if (strpos($_userName, $domain) === FALSE) {
-                $_userName .= $domain;
-            }
-        }
-        
-        return $_userName;
     }
 
     /**
@@ -277,43 +221,5 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
             $systemDefaults['emailAuth'] = $this->_config['auth'];
         }
         return $systemDefaults;
-    }
-
-    /**
-     * @param $accountId
-     * @param $accountLoginName
-     * @param $accountEmailAddress
-     * @param null $alternativeLoginName
-     * @return string|null
-     *
-     * @todo remove code duplication with \Tinebase_User_Plugin_Abstract::getLoginName
-     */
-    public function getLoginName($accountId, $accountLoginName, $accountEmailAddress, $alternativeLoginName = null)
-    {
-        $domainConfigKey = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'domain' : 'primarydomain';
-        if (isset($this->_config['useEmailAsUsername']) && $this->_config['useEmailAsUsername']) {
-            $emailUsername = $accountEmailAddress;
-        } else if (isset($this->_config['instanceName']) && ! empty($this->_config['instanceName'])) {
-            $emailUsername = $accountId . '@' . $this->_config['instanceName'];
-        } else if (isset($this->_config[$domainConfigKey]) && $this->_config[$domainConfigKey] !== null) {
-            $emailUsername = $this->_appendDomain($accountLoginName);
-        } else if ($alternativeLoginName !== null) {
-            $emailUsername = $alternativeLoginName;
-        } else {
-            $emailUsername = $accountLoginName;
-        }
-
-        return $emailUsername;
-    }
-
-    /**
-     * @return bool
-     *
-     * @todo remove DRY (see Tinebase_User_Plugin_Abstract)
-     * @todo make this a generic "capabilities" feature
-     */
-    public function supportsAliasesDispatchFlag()
-    {
-        return $this->_supportAliasesDispatchFlag;
     }
 }

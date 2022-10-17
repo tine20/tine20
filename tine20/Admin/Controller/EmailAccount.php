@@ -331,19 +331,22 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         }
 
         if (isset($account['email_imap_user'])) {
-            $fullUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
-            $newFullUser = clone($fullUser);
-
-            $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-            $emailUserBackend->updateUser($fullUser, $newFullUser);
+            $emailUserBackend = Tinebase_EmailUser::getInstance();
+            if (method_exists($emailUserBackend, 'updateUser')) {
+                $fullUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
+                $newFullUser = clone($fullUser);
+                $emailUserBackend->updateUser($fullUser, $newFullUser);
+            }
         }
 
         if (isset($account['email_smtp_user'])) {
-            $fullUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
-            $newFullUser = clone($fullUser);
-
             $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
-            $emailUserBackend->updateUser($fullUser, $newFullUser);
+            if (method_exists($emailUserBackend, 'updateUser')) {
+                $fullUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
+                $newFullUser = clone($fullUser);
+
+                $emailUserBackend->updateUser($fullUser, $newFullUser);
+            }
         }
     }
 
