@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -155,7 +155,13 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
         if ($message->getId()) {
             // make sure we have the current message with headers, ...
             $message = $this->get($message->getId());
-            $headers = $this->getMessageHeaders($message, null, true);
+            try {
+                $headers = $this->getMessageHeaders($message, null, true);
+            } catch (Felamimail_Exception_IMAPMessageNotFound $feimnf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $feimnf->getMessage());
+                $headers = [];
+            }
             foreach (Felamimail_Controller_Message_File::getInstance()->getSenderContactsOfMessage($message)
                      as $sender
             ) {
