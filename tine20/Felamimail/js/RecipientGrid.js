@@ -254,8 +254,11 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                         e = e.browserEvent;
                         const clipboardData = e.clipboardData || window.clipboardData;
                         const pastedData = clipboardData.getData('Text');
-                        const value = pastedData.replaceAll("\r\n", ',');
-                        
+                        // replace new line to comma , and then remove start/ending special chars
+                        const value = _.compact(_.map(pastedData.replace(/\r?\n/, '\n').split('\n'), (email) => {
+                            return String(email).replace(/^[,;]+|[,;]+$/, '');
+                        })).join(',').replace(/^[,;]+|[,;]+$/, '');
+    
                         if (!this.loadMask) {
                             this.loadMask = new Ext.LoadMask(Ext.getBody(), {msg: app.i18n._('Loading Mail Addresses')});
                         }
