@@ -3963,15 +3963,22 @@ class Tinebase_FileSystem implements
         $alarmController = Tinebase_Alarm::getInstance();
 
         do {
-            $node = $this->get($nodeId, true);
+            try {
+                $node = $this->get($nodeId, true);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                // TODO is return true ok in this case?
+                return true;
+            }
             $notificationProps = $node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION);
 
             if (! is_array($notificationProps) || count($notificationProps) === 0) {
                 continue;
             }
 
-            //sort it to handle user settings first, then group settings!
-            //TODO write a test that tests this!
+            // sort it to handle user settings first, then group settings!
+            // TODO write a test that tests this!
             usort($notificationProps, function($a, $b) {
                 if (is_array($a) && isset($a[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) &&
                     $a[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
@@ -4198,8 +4205,8 @@ class Tinebase_FileSystem implements
      */
     public function avScan()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' starting... ');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' starting... ');
 
         if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF ===
                 Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
