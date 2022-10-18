@@ -214,10 +214,10 @@ Tine.Tinebase.tineInit = {
                 e.stopEvent();
                 const EditDialog = Tine.widgets.dialog.EditDialog.getConstructor(recordClass);
                 if (EditDialog?.openWindow) {
-                    EditDialog.openWindow({recordId: recordId, record: {id: recordId}});
+                    EditDialog.openWindow({recordId: recordId, record: {id: recordId}, mode: 'remote'});
                 }
             }
-
+            
             if (target && href && href !== '#') {
                 // open internal links in same window (use router)
                 if (window.isMainWindow === true) {
@@ -234,11 +234,10 @@ Tine.Tinebase.tineInit = {
                     e.preventDefault();
 
                     if (e.ctrlKey || e.metaKey) {
-                        var win = window.open(href, '_blank', null, true);
+                        const win = window.open(href, '_blank', null, true);
                         win.opener = null;
                     } else {
                         window.opener.location.href = href;
-                        window.close();
                     }
                 }
             } else {
