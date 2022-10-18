@@ -221,12 +221,14 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         };
 
         if(basePath && this.checkConstraint([node])) {
-            field.clearInvalid();
-            this.fileName = fileName;
-            this.selection = [node];
-            this.validSelection = true;
-            this.assertRowSelection();
-            this.fireEvent('nodeSelected', this.selection);
+            if (this.selection[0] && this.selection[0].type === 'file') {
+                field.clearInvalid();
+                this.fileName = fileName;
+                this.selection = [node];
+                this.validSelection = true;
+                this.assertRowSelection();
+                this.fireEvent('nodeSelected', this.selection);
+            }
         } else {
             this.selection = [];
             this.validSelection = false;
