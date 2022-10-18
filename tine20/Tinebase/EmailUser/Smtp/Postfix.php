@@ -355,24 +355,32 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
      * 
      * @param array $_smtpSettings
      */
-    protected function _createDefaultDestinations($_smtpSettings)
+    protected function _createDefaultDestinations(array $_smtpSettings)
     {
+        $username = $_smtpSettings[$this->_propertyMapping['emailUsername']];
+
         // create email -> username alias
         $this->_addDestination(array(
             'userid'        => $_smtpSettings[$this->_propertyMapping['emailUserId']],   // userID
             'source'        => $_smtpSettings[$this->_propertyMapping['emailAddress']],  // TineEmail
-            'destination'   => $_smtpSettings[$this->_propertyMapping['emailUsername']], // email
+            'destination'   => $username,
         ));
         
         // create username -> username alias if email and username are different
         if ((! isset($this->_config['onlyemaildestination']) || ! $this->_config['onlyemaildestination'])
             && $_smtpSettings[$this->_propertyMapping['emailUsername']] != $_smtpSettings[$this->_propertyMapping['emailAddress']]
         ) {
-            $this->_addDestination(array(
-                'userid'      => $_smtpSettings[$this->_propertyMapping['emailUserId']],   // userID
-                'source'      => $_smtpSettings[$this->_propertyMapping['emailUsername']], // username
-                'destination' => $_smtpSettings[$this->_propertyMapping['emailUsername']], // username
-            ));
+            // only do this if we don't have emailUsername already in the sources
+            $sources = isset($_smtpSettings['source']) ? array_filter($_smtpSettings, function ($source) use ($username) {
+                return (is_array($source) && isset($source['email']) && $source['email'] === $username || $source === $username);
+            }) : [];
+            if (count($sources) === 0) {
+                $this->_addDestination(array(
+                    'userid' => $_smtpSettings[$this->_propertyMapping['emailUserId']],   // userID
+                    'source' => $username,
+                    'destination' => $username,
+                ));
+            }
         }
     }
     
