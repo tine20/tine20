@@ -2247,6 +2247,11 @@ class Setup_Controller
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Uninstall ' . $_application);
         try {
             $applicationTables = Tinebase_Application::getInstance()->getApplicationTables($_application);
+            $applicationTables = array_diff($applicationTables, [
+                'applications',
+                'application_states',
+                'application_tables'
+            ]);
         } catch (Zend_Db_Statement_Exception $zdse) {
             Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $zdse);
             throw new Setup_Exception('Could not uninstall ' . $_application . ' (you might need to remove the tables by yourself): ' . $zdse->getMessage());
@@ -2311,7 +2316,13 @@ class Setup_Controller
                 throw new Setup_Exception('dead lock detected oldCount: ' . $oldCount);
             }
         } while (count($applicationTables) > 0);
-        
+
+        if ($_application->name == 'Tinebase') {
+            $db->query('DROP TABLE ' . SQL_TABLE_PREFIX . 'applications');
+            $db->query('DROP TABLE ' . SQL_TABLE_PREFIX . 'application_states');
+            $db->query('DROP TABLE ' . SQL_TABLE_PREFIX . 'application_tables');
+        }
+
         if ($disabledFK) {
             if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
                 Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " Enabling foreign key checks again... ");
