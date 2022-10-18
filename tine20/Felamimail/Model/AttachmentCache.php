@@ -98,7 +98,7 @@ class Felamimail_Model_AttachmentCache extends Tinebase_Record_NewAbstract
     public function setFromArray(array &$_data)
     {
         parent::setFromArray($_data);
-        if (isset($_data['id'])) {
+        if (isset($_data['id']) && is_string($_data['id'])) {
             $this->fillFromId($_data['id']);
         }
     }
