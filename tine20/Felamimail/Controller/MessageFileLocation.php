@@ -64,15 +64,15 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
      */
     public function getLocationsByReference($referenceString)
     {
+        if (is_array($referenceString)) {
+            // only use the first element?
+            $referenceString = array_pop($referenceString);
+        }
+
         if (empty($referenceString)) {
             return new Tinebase_Record_RecordSet(Felamimail_Model_MessageFileLocation::class);
         }
 
-        if (is_array($referenceString)) {
-            // only use the first element?
-            $referenceString = array_pop($referenceString);
-        }  
-      
         if (strpos(',', $referenceString) !== false) {
             $references = explode(',', $referenceString);
         } else if (strpos($referenceString,' ') !== false) {
