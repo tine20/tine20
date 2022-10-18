@@ -117,7 +117,6 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
             ],
         ],
 
-        // why do i have to define this -> autodefine???
         'table'             => [
             'name'    => 'humanresources_wt_dailyreport',
             'indexes' => [

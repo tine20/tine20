@@ -33,7 +33,7 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         MCC::TYPE_FULLTEXT              => 'text',
         MCC::TYPE_STRICTFULLTEXT        => 'text',
         MCC::TYPE_DATETIME              => 'datetime',
-        MCC::TYPE_DATE                  => 'datetime',
+        MCC::TYPE_DATE                  => 'date',
         MCC::TYPE_TIME                  => 'time',
         MCC::TYPE_INTEGER               => 'integer',
         MCC::TYPE_BIGINT                => 'bigint',

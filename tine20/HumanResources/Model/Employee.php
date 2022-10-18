@@ -218,7 +218,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
             ),
             'bday' => array(
                 'label' => 'Birthday', //_('Birthday')
-                'type'  => 'datetime',
+                'type'  => 'date',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 self::REQUIRED_GRANTS => [

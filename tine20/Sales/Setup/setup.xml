@@ -55,7 +55,7 @@
         </table>
         <table>
             <name>sales_contracts</name>
-            <version>10</version>
+            <version>11</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -93,11 +93,11 @@
                 </field>
                 <field>
                     <name>start_date</name>
-                    <type>datetime</type>
+                    <type>date</type>
                 </field>
                 <field>
                     <name>end_date</name>
-                    <type>datetime</type>
+                    <type>date</type>
                 </field>
                 <field>
                     <name>billing_address_id</name>
@@ -448,7 +448,7 @@
         </table>
         <table>
             <name>sales_purchase_invoices</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -496,11 +496,11 @@
                 </field>
                 <field>
                     <name>payed_at</name>
-                    <type>datetime</type>
+                    <type>date</type>
                 </field> 
                 <field>
                     <name>dunned_at</name>
-                    <type>datetime</type>
+                    <type>date</type>
                 </field> 
                 <field>
                     <name>payment_method</name>
@@ -613,7 +613,7 @@
         </table>
         <table>
             <name>sales_sales_invoices</name>
-            <version>7</version>
+            <version>8</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -706,11 +706,11 @@
                 </field>
                 <field>
                     <name>start_date</name>
-                    <type>datetime</type>
+                    <type>date</type>
                 </field> 
                 <field>
                     <name>end_date</name>
-                    <type>datetime</type>
+                    <type>date</type>
                 </field>
                 <field>
                     <name>created_by</name>
@@ -768,7 +768,7 @@
         </table>
         <table>
             <name>sales_product_agg</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -802,7 +802,7 @@
                 </field>
                 <field>
                     <name>last_autobill</name>
-                    <type>datetime</type>
+                    <type>date</type>
                     <notnull>false</notnull>
                     <default>null</default>
                 </field>
@@ -814,11 +814,11 @@
                 </field>
                 <field>
                     <name>start_date</name>
-                    <type>datetime</type>
+                    <type>date</type>
                 </field>
                 <field>
                     <name>end_date</name>
-                    <type>datetime</type>
+                    <type>date</type>
                 </field>
                 <field>
                     <name>created_by</name>

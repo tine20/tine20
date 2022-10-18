@@ -269,7 +269,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
                ]],
            ]), null, false, ['date']);
        foreach ($_record->freedays as $freeday) {
-           if (isset($sickDays[$freeday->date->toString()])) {
+           if (isset($sickDays[$freeday->date->format('Y-m-d')])) {
                if (!$freeday->sickoverwrite) {
                    $freeday->sickoverwrite = true;
                }
