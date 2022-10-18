@@ -15,7 +15,7 @@
  * @package    Tinebase
  * @subpackage EmailUser
  */
-abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
+abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
 {
     /**
      * user table name with prefix
