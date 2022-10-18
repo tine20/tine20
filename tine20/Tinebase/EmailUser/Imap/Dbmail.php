@@ -18,7 +18,7 @@
  * 
  * @todo generalize some logic and move it to abstract parent class
  */
-class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract implements Tinebase_EmailUser_Imap_Interface
+class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_SqlAbstract implements Tinebase_EmailUser_Imap_Interface
 {
     /**
      * @var Zend_Db_Adapter
@@ -112,7 +112,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract imple
         $this->_userTable = $this->_config['prefix'] . $this->_config['userTable'];
         
         // connect to DB
-        $this->_getDb($this->_config);
+        $this->_getDb();
         
         $columns = Tinebase_Db_Table::getTableDescriptionFromCache('dbmail_users', $this->_db);
         if((isset($columns['tine20_userid']) || array_key_exists('tine20_userid', $columns)) && (isset($columns['tine20_clientid']) || array_key_exists('tine20_clientid', $columns))) {

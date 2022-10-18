@@ -105,10 +105,11 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
      * @param boolean  $_mustChange
      * @param array    $_ldapData    the data to be written to ldap
      */
-    public function inspectSetPassword($_userId, $_password, $_encrypt, $_mustChange, array &$_ldapData)
+    public function inspectSetPassword($_userId, $_password, $_encrypt = true, $_mustChange = false, array &$_ldapData = [])
     {
         if ($_encrypt !== true) {
-            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' can not transform crypted password into nt/lm samba password. Make sure to reset password for user ' . $_userId);
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
+                . ' can not transform crypted password into nt/lm samba password. Make sure to reset password for user ' . $_userId);
         } else {
             $_ldapData['sambantpassword'] = Tinebase_User_Abstract::encryptPassword($_password, Tinebase_User_Abstract::ENCRYPT_NTPASSWORD);
             $_ldapData['sambalmpassword'] = array();

@@ -9086,11 +9086,6 @@ parameters:
 			path: tine20/Tinebase/User/Ldap.php
 
 		-
-			message: "#^Access to an undefined property Tinebase_User_Plugin_Abstract\\:\\:\\$_subconfigKey\\.$#"
-			count: 1
-			path: tine20/Tinebase/User/Plugin/Abstract.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Adapter_Abstract\\:\\:\\$table_prefix\\.$#"
 			count: 7
 			path: tine20/Tinebase/User/Sql.php

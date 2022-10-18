@@ -15,7 +15,7 @@
  * @package    Tinebase
  * @subpackage EmailUser
  */
-class Tinebase_EmailUser_Smtp_Standard extends Tinebase_User_Plugin_Abstract implements Tinebase_EmailUser_Smtp_Interface
+class Tinebase_EmailUser_Smtp_Standard extends Tinebase_User_Plugin_SqlAbstract implements Tinebase_EmailUser_Smtp_Interface
 {
     /**
      * email user config defaults
