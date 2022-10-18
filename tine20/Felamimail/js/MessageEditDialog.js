@@ -723,6 +723,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         return me.saveAsDraftPromise = retryAllRejectedPromises([() => {
             return Tine.Felamimail.saveDraft(me.record.data)
+                // TODO log failures here for debugging
                 .then((savedDraft) => {
                     if (!me.draftUid) {
                         this.updateFolderCount('drafts_folder', 1);
@@ -1011,10 +1012,14 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         const targetFolderId = account ? account.getSpecialFolderId(folderName) : null;
         const targetFolder = targetFolderId ? this.app.getFolderStore().getById(targetFolderId) : null;
 
-        targetFolder.set('cache_unreadcount', targetFolder.get('cache_unreadcount') + count);
-        targetFolder.set('cache_totalcount', targetFolder.get('cache_totalcount') + count);
-        targetFolder.set('cache_status', 'pending');
-        targetFolder.commit();
+        if (targetFolder) {
+            targetFolder.set('cache_unreadcount', targetFolder.get('cache_unreadcount') + count);
+            targetFolder.set('cache_totalcount', targetFolder.get('cache_totalcount') + count);
+            targetFolder.set('cache_status', 'pending');
+            targetFolder.commit();
+        } else {
+            Tine.log.info('Tine.Felamimail.MessageEditDialog::updateFolderCount() - target folder ' + folderName + ' no found');
+        }
     },
 
     /**
