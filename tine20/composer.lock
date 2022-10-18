@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "981765ba00a5811ce3ca72bbacb053e4",
+    "content-hash": "3ff884ba8f9db2d8f0b53729074ea91d",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -4804,11 +4804,11 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "1.24.1pl2",
+            "version": "1.24.1pl3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/PhpSpreadsheet.git",
-                "reference": "b47b0828d720cbad05eab85010bd9dc9618793d1"
+                "reference": "cb0fe7836404920d02e4a4610baf98a67debebac"
             },
             "require": {
                 "ext-ctype": "*",
@@ -4913,7 +4913,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2022-09-16T12:38:14+00:00"
+            "time": "2022-10-18T07:51:42+00:00"
         },
         {
             "name": "phpoffice/phpword",
@@ -13338,7 +13338,7 @@
         },
         {
             "package": "phpoffice/phpspreadsheet",
-            "version": "1.24.1.0-patch2",
+            "version": "1.24.1.0-patch3",
             "alias": "1.24.1",
             "alias_normalized": "1.24.1.0"
         },

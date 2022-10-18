@@ -41,7 +41,7 @@ class HumanResources_Export_MonthlyWTReportTest extends HumanResources_TestCase
         $export->generate();
         $export->save($tempfile);
 
-        $this->assertGreaterThan(4000, filesize($tempfile));
+        $this->assertGreaterThan(8000, filesize($tempfile));
 
 
         $spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load($tempfile);
