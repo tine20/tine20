@@ -1,0 +1,90 @@
+---
+
+# TODO
+#- name: install docker and docker-composer
+
+- name: Create and start services
+  community.docker.docker_compose:
+    project_name: tine
+    definition:
+      version: '2'
+      services:
+        web:
+          image: "{{ tineinstalldocker_tine_image }}"
+          restart: always
+          depends_on:
+            - db
+            - cache
+          environment:
+            ### TODO add ansible vars for this
+            TINE20_DATABASE_HOST: db
+            TINE20_DATABASE_DBNAME: "tine"
+            TINE20_DATABASE_USERNAME: "tine"
+            # TODO add random pw
+            TINE20_DATABASE_PASSWORD: "change_me"
+            TINE20_DATABASE_TABLEPREFIX: tine_
+            TINE20_CACHING_BACKEND: Redis
+            TINE20_CACHING_REDIS_HOST: cache
+            TINE20_ACTIONQUEUE_HOST: cache
+            TINE20_SESSION_BACKEND: Redis
+            TINE20_SESSION_HOST: cache
+            # TODO add random pw
+            TINE20_CREDENTIALCACHESHAREDKEY: change_me
+            TINE20_SETUPUSER_USERNAME: tine20setup
+            TINE20_SETUPUSER_PASSWORD: tine20setup
+            TINE20_URL: http://localhost
+            TINE20_INSTALL: "true"
+            TINE20_ACCEPTED_TERMS_VERSION: 10000
+            TINE20_LOGIN_USERNAME: admin
+            # TODO add random pw
+            TINE20_LOGIN_PASSWORD: admin
+          volumes:
+            - "tine20_files:/var/lib/tine20/files"
+          networks:
+            - external_network
+            - internal_network
+          ports:
+            - "127.0.0.1:4000:80"
+
+        db:
+          image: mariadb:10.6
+          command: --max-allowed-packet=209715210
+          restart: always
+          environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: tine
+            MYSQL_USER: tine
+            MYSQL_PASSWORD: "change_me"
+          volumes:
+            - "/var/lib/mysql:/var/lib/mysql"
+          networks:
+            - internal_network
+
+        cache:
+          image: redis:5.0.5
+          restart: always
+          networks:
+            - internal_network
+
+      volumes:
+        tine20_files:
+
+      networks:
+        external_network:
+        internal_network:
+          internal: true
+
+  register: output
+
+- ansible.builtin.debug:
+    var: output
+
+### TODO make this work
+#- ansible.builtin.assert:
+#    that:
+#      - "web.tine_web_1.state.running"
+#      - "db.tine_db_1.state.running"
+#      - "db.tine_cache_1.state.running"
+#  check_mode: false
+
+### TODO add ssl/traefik if configured
