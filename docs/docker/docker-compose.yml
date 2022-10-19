@@ -1,7 +1,7 @@
 version: '2'
 services:
   web:
-    image: tinegroupware/tine:2021.11
+    image: tinegroupware/tine:2022
     restart: always
     depends_on:
       - db
@@ -35,9 +35,9 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: &MYSQL_DATABASE tine20db
-      MYSQL_USER: &MYSQL_USER tine20
-      MYSQL_PASSWORD: &MYSQL_PASSWORD tine20
+      MYSQL_DATABASE: &MYSQL_DATABASE tine
+      MYSQL_USER: &MYSQL_USER tine
+      MYSQL_PASSWORD: &MYSQL_PASSWORD tine
     # use volume for persistent DB
 #    volumes:
 #      - "/var/lib/mysql:/var/lib/mysql"
