@@ -32,8 +32,16 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE016 = __CLASS__ . '::update016';
     const RELEASE015_UPDATE017 = __CLASS__ . '::update017';
     const RELEASE015_UPDATE018 = __CLASS__ . '::update018';
+    const RELEASE015_UPDATE019 = __CLASS__ . '::update019';
+    const RELEASE015_UPDATE020 = __CLASS__ . '::update020';
 
     static protected $_allUpdates = [
+        self::PRIO_TINEBASE_BEFORE_STRUCT   => [
+            self::RELEASE015_UPDATE019          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update019',
+            ],
+        ],
         self::PRIO_TINEBASE_STRUCTURE       => [
             self::RELEASE015_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
@@ -91,6 +99,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE017          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update017',
+            ],
+            self::RELEASE015_UPDATE020          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update020',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -150,14 +162,17 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update004()
     {
-        if ($this->getTableVersion('importexport_definition') < 14) {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        if (!$this->_backend->columnExists('skip_upstream_updates', 'importexport_definition')) {
             $this->_backend->addCol('importexport_definition', new Setup_Backend_Schema_Field_Xml(
                 '<field>
                     <name>skip_upstream_updates</name>
                     <type>boolean</type>
                     <default>false</default>
                 </field>'));
-            $this->setTableVersion('tags', 14);
+        }
+        if ($this->getTableVersion('importexport_definition') < 14) {
+            $this->setTableVersion('importexport_definition', 14);
         };
 
         $this->addApplicationUpdate('Tinebase', '15.4', self::RELEASE015_UPDATE004);
@@ -187,6 +202,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update007()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
         if ($this->getTableVersion('importexport_definition') < 14) {
             $this->setTableVersion('importexport_definition', 14);
         };
@@ -245,12 +261,13 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update011()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->_backend->alterCol('config', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                <name>value</name>
+                <type>text</type>
+            </field>'));
         if ($this->getTableVersion('config') < 2) {
-            $this->_backend->alterCol('config', new Setup_Backend_Schema_Field_Xml(
-                '<field>
-                    <name>value</name>
-                    <type>text</type>
-                </field>'));
             $this->setTableVersion('config', 2);
         }
         $this->addApplicationUpdate('Tinebase', '15.11', self::RELEASE015_UPDATE011);
@@ -362,6 +379,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update016()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
         $scheduler = Tinebase_Scheduler::getInstance();
         if ($scheduler->hasTask('Tinebase_Controller_ScheduledImport')) {
             $scheduler->removeTask('Tinebase_Controller_ScheduledImport');
@@ -389,5 +407,225 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
         Tinebase_Application::getInstance()->removeApplicationTable('Tinebase', 'import');
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.18', self::RELEASE015_UPDATE018);
+    }
+
+    public function update019()
+    {
+        $columns = [
+            Tinebase_Model_MunicipalityKey::TABLE_NAME => [
+                Tinebase_Model_MunicipalityKey::FLD_GEBIETSSTAND,
+                Tinebase_Model_MunicipalityKey::FLD_BEVOELKERUNGSSTAND,
+            ],
+        ];
+
+        if (Tinebase_Application::getInstance()->isInstalled('EFile')) {
+            $columns[EFile_Model_FileMetadata::TABLE_NAME] = [
+                EFile_Model_FileMetadata::FLD_DURATION_START,
+                EFile_Model_FileMetadata::FLD_DURATION_END,
+                EFile_Model_FileMetadata::FLD_FINAL_DECREE_DATE,
+                EFile_Model_FileMetadata::FLD_RETENTION_PERIOD_END_DATE,
+                EFile_Model_FileMetadata::FLD_DISPOSAL_DATE,
+            ];
+        }
+        if (Tinebase_Application::getInstance()->isInstalled('GDPR')) {
+            $columns['gdpr_dataintendedpurposerecords'] = [
+                'agreeDate',
+                'withdrawDate'
+            ];
+            $columns[Addressbook_Model_Contact::TABLE_NAME] = [
+                GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_EXPIRY_CUSTOM_FIELD_NAME,
+            ];
+        }
+        if (Tinebase_Application::getInstance()->isInstalled('HumanResources')) {
+            $columns['humanresources_contract'] = [
+                'start_date',
+                'end_date',
+            ];
+            $columns['humanresources_costcenter'] = [
+                'start_date',
+            ];
+            $columns['humanresources_wt_dailyreport'] = [
+                'date',
+            ];
+            $columns['humanresources_employee'] = [
+                'bday',
+                'employment_begin',
+                'employment_end',
+            ];
+            $columns[HumanResources_Model_FreeTime::TABLE_NAME] = [
+                'firstday_date',
+                'lastday_date',
+            ];
+            $columns[HumanResources_Model_StreamModality::TABLE_NAME] = [
+                HumanResources_Model_StreamModality::FLD_START,
+                HumanResources_Model_StreamModality::FLD_END,
+                HumanResources_Model_StreamModality::FLD_TRACKING_START,
+                HumanResources_Model_StreamModality::FLD_TRACKING_END,
+            ];
+            $columns[HumanResources_Model_StreamModalReport::TABLE_NAME] = [
+                HumanResources_Model_StreamModalReport::FLD_START,
+                HumanResources_Model_StreamModalReport::FLD_END,
+            ];
+        }
+        if (Tinebase_Application::getInstance()->isInstalled('Projects')) {
+            $columns[Projects_Model_Project::TABLE_NAME] = [
+                Projects_Model_Project::FLD_START,
+                Projects_Model_Project::FLD_END,
+            ];
+        }
+        if (Tinebase_Application::getInstance()->isInstalled('Sales')) {
+            $columns[Sales_Model_Boilerplate::TABLE_NAME] = [
+                Sales_Model_Boilerplate::FLD_FROM,
+                Sales_Model_Boilerplate::FLD_UNTIL,
+            ];
+            $columns[Sales_Model_Document_Invoice::TABLE_NAME] = [
+                Sales_Model_Document_Abstract::FLD_DOCUMENT_DATE,
+            ];
+            $columns[Sales_Model_Document_Delivery::TABLE_NAME] = [
+                Sales_Model_Document_Abstract::FLD_DOCUMENT_DATE,
+            ];
+            $columns[Sales_Model_Document_Offer::TABLE_NAME] = [
+                Sales_Model_Document_Abstract::FLD_DOCUMENT_DATE,
+            ];
+            $columns[Sales_Model_Document_Order::TABLE_NAME] = [
+                Sales_Model_Document_Abstract::FLD_DOCUMENT_DATE,
+            ];
+            $columns['sales_contracts'] = [
+                'start_date',
+                'end_date',
+            ];
+            $columns['sales_sales_invoices'] = [
+                'start_date',
+                'end_date',
+            ];
+            $columns['sales_product_agg'] = [
+                'start_date',
+                'end_date',
+                'last_autobill',
+            ];
+            $columns['sales_purchase_invoices'] = [
+                'payed_at',
+                'dunned_at',
+            ];
+        }
+
+        $db = $this->getDb();
+        foreach ($columns as $table => $cols) {
+            if (!$this->_backend->tableExists($table)) {
+                continue;
+            }
+            $query = 'UPDATE ' . SQL_TABLE_PREFIX . $table . ' SET ';
+            $first = true;
+            foreach ($cols as $col) {
+                if (!$this->_backend->columnExists($col, $table)) {
+                    continue;
+                }
+                $query .= (!$first ? ', ' : '') . $db->quoteIdentifier($col) . ' = CONVERT_TZ('.
+                    $db->quoteIdentifier($col) . ', "UTC", "CET")';
+                $first = false;
+            }
+            if ($first) {
+                continue;
+            }
+            $db->query($query);
+        }
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.19', self::RELEASE015_UPDATE019);
+    }
+
+    public function update020()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $classes = [
+            Tinebase_Model_MunicipalityKey::class,
+        ];
+        if (Tinebase_Application::getInstance()->isInstalled('EFile')) {
+            $classes[] = EFile_Model_FileMetadata::class;
+        }
+        if (Tinebase_Application::getInstance()->isInstalled('GDPR')) {
+            $classes[] = GDPR_Model_DataIntendedPurposeRecord::class;
+            $classes[] = Addressbook_Model_Contact::class;
+        }
+        if (Tinebase_Application::getInstance()->isInstalled('HumanResources')) {
+            $classes[] = HumanResources_Model_Contract::class;
+            $classes[] = HumanResources_Model_CostCenter::class;
+            $classes[] = HumanResources_Model_DailyWTReport::class;
+            $classes[] = HumanResources_Model_Employee::class;
+            $classes[] = HumanResources_Model_FreeTime::class;
+            $classes[] = HumanResources_Model_StreamModality::class;
+            $classes[] = HumanResources_Model_StreamModalReport::class;
+        }
+        if (Tinebase_Application::getInstance()->isInstalled('Projects')) {
+            $classes[] = Projects_Model_Project::class;
+        }
+        if (Tinebase_Application::getInstance()->isInstalled('Sales')) {
+            $classes[] = Sales_Model_Boilerplate::class;
+            $classes[] = Sales_Model_Document_Invoice::class;
+            $classes[] = Sales_Model_Document_Delivery::class;
+            $classes[] = Sales_Model_Document_Offer::class;
+            $classes[] = Sales_Model_Document_Order::class;
+            $query = $this->_backend->addAlterCol('', 'sales_contracts', new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>start_date</name>
+                    <type>date</type>
+                </field>'));
+            $this->getDb()->query($this->_backend->addAlterCol($query, 'sales_contracts', new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>end_date</name>
+                    <type>date</type>
+                </field>')));
+            if ($this->getTableVersion('sales_contracts') < 11) {
+                $this->setTableVersion('sales_contracts', 11);
+            }
+            $query = $this->_backend->addAlterCol('', 'sales_sales_invoices', new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>start_date</name>
+                    <type>date</type>
+                </field>'));
+            $this->getDb()->query($this->_backend->addAlterCol($query, 'sales_sales_invoices', new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>end_date</name>
+                    <type>date</type>
+                </field>')));
+            if ($this->getTableVersion('sales_sales_invoices') < 8) {
+                $this->setTableVersion('sales_sales_invoices', 8);
+            }
+            $query = $this->_backend->addAlterCol('', 'sales_product_agg', new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>start_date</name>
+                    <type>date</type>
+                </field>'));
+            $this->getDb()->query($this->_backend->addAlterCol($query, 'sales_product_agg', new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>end_date</name>
+                    <type>date</type>
+                </field>')));
+            $this->getDb()->query($this->_backend->addAlterCol($query, 'sales_product_agg', new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>last_autobill</name>
+                    <type>date</type>
+                    <notnull>false</notnull>
+                    <default>null</default>
+                </field>')));
+            if ($this->getTableVersion('sales_product_agg') < 6) {
+                $this->setTableVersion('sales_product_agg', 6);
+            }
+            $query = $this->_backend->addAlterCol('', 'sales_purchase_invoices', new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>payed_at</name>
+                    <type>date</type>
+                </field>'));
+            $this->getDb()->query($this->_backend->addAlterCol($query, 'sales_purchase_invoices', new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>dunned_at</name>
+                    <type>date</type>
+                </field>')));
+            if ($this->getTableVersion('sales_purchase_invoices') < 6) {
+                $this->setTableVersion('sales_purchase_invoices', 6);
+            }
+        }
+        Setup_SchemaTool::updateSchema(array_unique($classes));
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.20', self::RELEASE015_UPDATE020);
     }
 }

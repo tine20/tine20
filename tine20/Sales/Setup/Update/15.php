@@ -135,6 +135,7 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update002()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
         if ($this->getTableVersion('sales_customers') < 4) {
             $declaration = new Setup_Backend_Schema_Field_Xml('
                <field>
@@ -152,6 +153,7 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update003()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
         if (class_exists('HumanResources_Config') &&
             Tinebase_Application::getInstance()->isInstalled(HumanResources_Config::APP_NAME)) {
             $this->_backend->renameTable('sales_divisions', 'humanresources_division');

@@ -173,6 +173,7 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update004()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
         $this->getDb()->query('ALTER TABLE ' . SQL_TABLE_PREFIX . HumanResources_Model_FreeTime::TABLE_NAME .
             ' CHANGE `status` `' . HumanResources_Model_FreeTime::FLD_TYPE_STATUS . '` varchar(40)');
 

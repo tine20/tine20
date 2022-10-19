@@ -48,6 +48,7 @@ class Calendar_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update001()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
         if (!$this->_backend->columnExists('status_with_grant', 'cal_resources')) {
             $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
@@ -67,6 +68,7 @@ class Calendar_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update002()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
         if (! $this->_backend->columnExists('location_record', 'cal_events')) {
             $this->_backend->addCol('cal_events', new Setup_Backend_Schema_Field_Xml(
                 '<field>
