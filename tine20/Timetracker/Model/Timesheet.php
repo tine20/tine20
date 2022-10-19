@@ -276,7 +276,9 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
             ),
             'accounting_time_factor'    => array(
                 'label'                 => 'Projecttime Accounting factor', // _('Projecttime Accounting factor')
-                'inputFilters'          => array('Zend_Filter_Empty' => 1),
+                'inputFilters'          => [
+                    Zend_Filter_Callback::class => [['callback' => [self::class, 'filterEmptyNonZero']]]
+                ],
                 'type'                  => 'float',
                 'default'               => 1
             ),
@@ -346,5 +348,9 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
     public function getUnit()
     {
         return 'hour'; // _('hour')
+    }
+
+    public static function filterEmptyNonZero($data) { 
+        return empty($data) && $data !== 0 && $data !== '0' ? 1 : $data; 
     }
 }
