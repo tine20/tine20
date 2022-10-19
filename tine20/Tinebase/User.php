@@ -670,28 +670,51 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected static function _checkAndUpdateCurrentUser(Tinebase_Model_FullUser $currentUser, Tinebase_Model_FullUser $user, array $options)
+    protected static function _checkAndUpdateCurrentUser(Tinebase_Model_FullUser $currentUser, Tinebase_Model_FullUser $user, array $options = [])
     {
-        $fieldsToSync = ['accountLoginName', 'accountLastPasswordChange', 'accountExpires', 'accountPrimaryGroup',
-            'accountDisplayName', 'accountLastName', 'accountFirstName', 'accountFullName', 'accountEmailAddress',
-            'accountHomeDirectory', 'accountLoginShell', 'visibility'];
-        $nonEmptyFields = ['visibility'];
-        if (isset($options['syncAccountStatus']) && $options['syncAccountStatus']) {
-            $fieldsToSync[] = 'accountStatus';
-        }
+       $fieldsToSync = [
+            // true = REQUIRED, may be empty; false = OPTIONAL, omit if empty/missing; null IGNORE always
+            'accountLoginName' => true, 
+            'accountLastPasswordChange' => false, 
+            'accountExpires' => false, 
+            'accountPrimaryGroup' => true,
+            'accountDisplayName' => false, 
+            'accountLastName' => true, 
+            'accountFirstName' => true, 
+            'accountFullName' => false, 
+            'accountEmailAddress' => true,
+            'accountHomeDirectory' => false, 
+            'accountLoginShell' => false, 
+            'visibility' => false, 
+            'accountStatus' => function($options) {
+                if (isset($options['syncAccountStatus'])) {
+                    return (bool) $options['syncAccountStatus'];
+                }
+                return null; 
+            }, 
+        ];
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Fields to sync: ' . print_r($fieldsToSync, true));
+            . ' Fields to sync (bool: sync empty?): ' . print_r($fieldsToSync, true));
 
         $recordNeedsUpdate = false;
-        foreach ($fieldsToSync as $field) {
-            if ($currentUser->{$field} !== $user->{$field} && (! empty($user->{$field}) || ! in_array($field, $nonEmptyFields))) {
-                // ldap might not have time information on datetime fields, so we ignore these, if the date matches
-                if ($user->{$field} instanceof Tinebase_DateTime && $currentUser->{$field} instanceof Tinebase_DateTime
+        foreach ($fieldsToSync as $field => $syncRequired) {
+            // IGNORE field even if not empty
+            if ($syncRequired === null) {
+                continue;
+            }
+            // Ignore OPTIONAL fields if empty or missing
+            else if (($syncRequired === false) && empty($user->{$field})) {
+                continue;
+            }
+            // ldap might not have time information on datetime fields, so we ignore these, if the date matches
+            else if ($user->{$field} instanceof Tinebase_DateTime && $currentUser->{$field} instanceof Tinebase_DateTime
                     && $user->{$field}->hasSameDate($currentUser->{$field})
-                ) {
-                    continue;
-                }
+            ) {
+                continue;
+            }
+            // SYNC NON-EMPTY OPTIONAL or REQUIRED fields
+            else if ($currentUser->{$field} !== $user->{$field}) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Diff found in field ' . $field  . ' current: ' . $currentUser->{$field} . ' new: ' . $user->{$field});
                 $currentUser->{$field} = $user->{$field};
