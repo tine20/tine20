@@ -3,6 +3,16 @@
 # TODO
 #- name: install docker and docker-composer
 
+- name: Log into private registry
+  docker_login:
+    registry: "{{ tineinstalldocker_registry_url }}"
+    username: "{{ tineinstalldocker_registry_username }}"
+    password: "{{ tineinstalldocker_registry_password }}"
+  when:
+    - tineinstalldocker_registry_url is defined
+    - tineinstalldocker_registry_username is defined
+    - tineinstalldocker_registry_password is defined
+
 - name: Create and start services
   community.docker.docker_compose:
     project_name: tine
@@ -32,7 +42,7 @@
             TINE20_CREDENTIALCACHESHAREDKEY: change_me
             TINE20_SETUPUSER_USERNAME: tine20setup
             TINE20_SETUPUSER_PASSWORD: tine20setup
-            TINE20_URL: http://localhost
+            TINE20_URL: "{{ tineinstalldocker_tine_url }}"
             TINE20_INSTALL: "true"
             TINE20_ACCEPTED_TERMS_VERSION: 10000
             TINE20_LOGIN_USERNAME: admin
