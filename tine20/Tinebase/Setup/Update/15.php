@@ -515,19 +515,32 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
                 continue;
             }
             $query = 'UPDATE ' . SQL_TABLE_PREFIX . $table . ' SET ';
+            $select = 'SELECT id';
             $first = true;
             foreach ($cols as $col) {
                 if (!$this->_backend->columnExists($col, $table)) {
                     continue;
                 }
-                $query .= (!$first ? ', ' : '') . $db->quoteIdentifier($col) . ' = CONVERT_TZ('.
-                    $db->quoteIdentifier($col) . ', "UTC", "CET")';
+                $query .= (!$first ? ', ' : '') . $db->quoteIdentifier($col) . ' = ?';
+                $select .= ', ' . $db->quoteIdentifier($col);
                 $first = false;
             }
             if ($first) {
                 continue;
             }
-            $db->query($query);
+            $query .= ' WHERE id = ?';
+            $select .=  'id FROM ' . SQL_TABLE_PREFIX . $table;
+            foreach ($db->query($select)->fetchAll(Zend_Db::FETCH_NUM) as $row) {
+                $q = $query;
+                for ($i = 1; $i < count($row); ++$i) {
+                    $col = $row[$i];
+                    try {
+                        $col = (new Tinebase_DateTime($col, 'UTC'))->setTimezone('CET')->toString();
+                    } catch (Exception $e) {}
+                    $q = $db->quoteInto($q, $col, null, 1);
+                }
+                $db->query($db->quoteInto($q, $row[0], null, 1));
+            }
         }
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.19', self::RELEASE015_UPDATE019);
