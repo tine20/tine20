@@ -48,6 +48,7 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update001()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
         $declaration = new Setup_Backend_Schema_Field_Xml('
               <field>
                     <name>date_enabled</name>
@@ -64,6 +65,7 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update002()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
         if ($this->getTableVersion('felamimail_account') < 28) {
             $accounts = Felamimail_Controller_Account::getInstance()->getBackend()->getAll();
 
@@ -105,6 +107,7 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update003()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
         if ($this->getTableVersion('felamimail_account') < 29) {
             $declaration = new Setup_Backend_Schema_Field_Xml('
                 <field>
