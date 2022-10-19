@@ -1998,10 +1998,13 @@ class Tinebase_Core
                 $hostname = $request->getHttpHost();
                 $protocol = $request->getScheme();
             }
+            // TODO support PORT here?
+            $port = null;
         } else {
             $protocol = parse_url($configUrl, PHP_URL_SCHEME);
             $hostname = parse_url($configUrl, PHP_URL_HOST);
             $pathname = parse_url($configUrl, PHP_URL_PATH);
+            $port = parse_url($configUrl, PHP_URL_PORT);
         }
 
         switch ($part) {
@@ -2026,6 +2029,9 @@ class Tinebase_Core
                 break;
         }
 
+        if (! in_array($part, [self::GET_URL_PATH, self::GET_URL_HOST, self::GET_URL_PROTOCOL]) && ! empty($port)) {
+            $url .= ':' . $port;
+        }
         return $url;
     }
 
