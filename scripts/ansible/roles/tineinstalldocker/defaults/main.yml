@@ -1,2 +1,3 @@
 ---
 tineinstalldocker_tine_image: "tinegroupware/tine:2022"
+tineinstalldocker_tine_url: "http://localhost"
