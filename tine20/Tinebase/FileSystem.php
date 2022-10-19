@@ -4546,8 +4546,9 @@ class Tinebase_FileSystem implements
    
         if (! $softQuota) {
             $userEmails = [];
-            $users = Tinebase_User::getInstance()->getUsers();
-
+            $ids = Tinebase_User::getInstance()->getActiveUserIds();
+            $users = Tinebase_User::getInstance()->getMultiple(array_unique($ids));
+            
             foreach ($users as $user) {
                 if (! empty($user['contact_id'])) {
                     $userEmails[] = $contactsBackend->get($user->contact_id);
