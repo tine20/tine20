@@ -218,18 +218,29 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
     },
     
     /**
-     * resets the query and removes all records that match it
+     * recursive resets the query and removes all records that match it
      * 
      * @param {String} field
      * @param {String} value
      */
     resetQueryAndRemoveRecords: function(field, value) {
         this.queriesPending.remove(this.getKey(field, value));
-        var toRemove = this.query(field, value);
-        toRemove.each(function(record) {
+        const toRemove = this.query(field, value);
+        
+        toRemove.items.forEach((record) => {
+            const parentKey = this.getKey(field, record.get(field));
+            const currentKey = this.getKey(field, record.get('path'));
+    
+            if(this.queriesDone.indexOf(parentKey) > -1) {
+                this.queriesDone.remove(parentKey);
+            } else {
+                if (this.queriesDone.indexOf(currentKey) > -1) {
+                    this.queriesDone.remove(currentKey);
+                }
+            }
+
             this.remove(record);
-            this.queriesDone.remove(this.getKey(field, record.get(field)));
-        }, this);
+        });
     },
     
     /**
@@ -277,4 +288,3 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
         return result.first() || null;
     }    
 });
-
