@@ -21,6 +21,14 @@ services:
       TINE20_SETUPUSER_USERNAME: tine20setup
       TINE20_SETUPUSER_PASSWORD: tine20setup
       TINE20_URL: http://localhost
+      ### install+update tine automatically
+      #TINE_INSTALL: "true"
+      ### needed for auto-install
+      #TINE20_ACCEPTED_TERMS_VERSION: 10000
+      #TINE20_LOGIN_USERNAME: admin
+      #TINE20_LOGIN_PASSWORD: change_me
+      ### apps to install - if omitted, all available apps are installed
+      #TINE20_APPLICATION_TO_INSTALL: "Addressbook,Felamimail,Calendar,Filemanager"
     volumes:
       - "tine20_files:/var/lib/tine20/files"
     networks:
