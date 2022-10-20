@@ -97,11 +97,14 @@ abstract class Tinebase_User_Plugin_Abstract
     /**
      * update/set email user password
      *
-     * @param  string  $_userId
-     * @param  string  $_password
-     * @param  bool    $_encrypt encrypt password
+     * @param string $_userId
+     * @param string $_password
+     * @param bool $_encrypt
+     * @param bool $_mustChange
+     * @param array $_additionalData
+     * @return void
      */
-    public function inspectSetPassword($_userId, $_password, $_encrypt = true)
+    public function inspectSetPassword($_userId, string $_password, bool $_encrypt = true, bool $_mustChange = false, array &$_additionalData = [])
     {
         // do nothing here - implement in plugin if needed
     }

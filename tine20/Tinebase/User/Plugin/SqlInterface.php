@@ -39,15 +39,18 @@ interface Tinebase_User_Plugin_SqlInterface extends Tinebase_User_Plugin_Interfa
      * @param Tinebase_Model_FullUser  $_newUserProperties
      */
     public function inspectUpdateUser(Tinebase_Model_FullUser $_updatedUser, Tinebase_Model_FullUser $_newUserProperties);
-    
+
     /**
      * update/set email user password
-     * 
-     * @param  string  $_userId
-     * @param  string  $_password
-     * @param  bool    $_encrypt encrypt password
+     *
+     * @param string $_userId
+     * @param string $_password
+     * @param bool $_encrypt
+     * @param bool $_mustChange
+     * @param array $_additionalData
+     * @return void
      */
-    public function inspectSetPassword($_userId, $_password, $_encrypt = TRUE);
+    public function inspectSetPassword($_userId, string $_password, bool $_encrypt = true, bool $_mustChange = false, array &$_additionalData = []);
 
     /**
      * delete user by id
