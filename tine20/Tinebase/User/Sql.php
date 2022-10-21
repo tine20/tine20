@@ -580,7 +580,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @param bool $encrypt encrypt password
      * @throws Tinebase_Exception_Backend
      */
-    protected function _setPluginsPassword(Tinebase_Model_User $user, $password, $encrypt = TRUE)
+    protected function _setPluginsPassword(Tinebase_Model_User $user, $password, $encrypt = true)
     {
         foreach ($this->_sqlPlugins as $plugin) {
             try {

@@ -71,15 +71,18 @@ class Tinebase_EmailUser_Imap_Standard extends Tinebase_User_Plugin_SqlAbstract 
             $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, $_user->emailUser);
         }
     }
-    
+
     /**
      * update/set email user password
-     * 
-     * @param  string  $_userId
-     * @param  string  $_password
-     * @param  bool    $_encrypt encrypt password
+     *
+     * @param string $_userId
+     * @param string $_password
+     * @param bool $_encrypt
+     * @param bool $_mustChange
+     * @param array $_additionalData
+     * @return void
      */
-    public function inspectSetPassword($_userId, $_password, $_encrypt = TRUE)
+    public function inspectSetPassword($_userId, string $_password, bool $_encrypt = true, bool $_mustChange = false, array &$_additionalData = [])
     {
         // do nothing
     }

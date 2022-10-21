@@ -95,34 +95,35 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
         
         $_ldapData['sambaacctflags'] = $acctFlags;
     }
-    
+
     /**
-     * inspect set password
-     * 
-     * @param string   $_userId
-     * @param string   $_password
-     * @param boolean  $_encrypt
-     * @param boolean  $_mustChange
-     * @param array    $_ldapData    the data to be written to ldap
+     * update/set email user password
+     *
+     * @param string $_userId
+     * @param string $_password
+     * @param bool $_encrypt
+     * @param bool $_mustChange
+     * @param array $_additionalData
+     * @return void
      */
-    public function inspectSetPassword($_userId, $_password, $_encrypt = true, $_mustChange = false, array &$_ldapData = [])
+    public function inspectSetPassword($_userId, string $_password, bool $_encrypt = true, bool $_mustChange = false, array &$_additionalData = [])
     {
         if ($_encrypt !== true) {
             Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
                 . ' can not transform crypted password into nt/lm samba password. Make sure to reset password for user ' . $_userId);
         } else {
-            $_ldapData['sambantpassword'] = Tinebase_User_Abstract::encryptPassword($_password, Tinebase_User_Abstract::ENCRYPT_NTPASSWORD);
-            $_ldapData['sambalmpassword'] = array();
+            $_additionalData['sambantpassword'] = Tinebase_User_Abstract::encryptPassword($_password, Tinebase_User_Abstract::ENCRYPT_NTPASSWORD);
+            $_additionalData['sambalmpassword'] = array();
             
             if ($_mustChange === true) {
-                $_ldapData['sambapwdmustchange'] = '1';
-                $_ldapData['sambapwdcanchange']  = '1';
-                $_ldapData['sambapwdlastset']    = array();
+                $_additionalData['sambapwdmustchange'] = '1';
+                $_additionalData['sambapwdcanchange']  = '1';
+                $_additionalData['sambapwdlastset']    = array();
                 
             } else if ($_mustChange === false) {
-                $_ldapData['sambapwdmustchange'] = '2147483647';
-                $_ldapData['sambapwdcanchange']  = '1';
-                $_ldapData['sambapwdlastset']    = Tinebase_DateTime::now()->getTimestamp();
+                $_additionalData['sambapwdmustchange'] = '2147483647';
+                $_additionalData['sambapwdcanchange']  = '1';
+                $_additionalData['sambapwdlastset']    = Tinebase_DateTime::now()->getTimestamp();
                                 
             } else if ($_mustChange === null &&
                 $_userId instanceof Tinebase_Model_FullUser && 
@@ -130,10 +131,9 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
                 isset($_userId->sambaSAM->pwdMustChange) && 
                 isset($_userId->sambaSAM->pwdCanChange)) {
                     
-                $_ldapData['sambapwdmustchange'] = $_userId->sambaSAM->pwdMustChange->getTimestamp();
-                $_ldapData['sambapwdcanchange']  = $_userId->sambaSAM->pwdCanChange->getTimestamp();
-                $_ldapData['sambapwdlastset']    = array();
-                
+                $_additionalData['sambapwdmustchange'] = $_userId->sambaSAM->pwdMustChange->getTimestamp();
+                $_additionalData['sambapwdcanchange']  = $_userId->sambaSAM->pwdCanChange->getTimestamp();
+                $_additionalData['sambapwdlastset']    = array();
             }
         }
     }

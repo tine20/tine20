@@ -32,17 +32,18 @@ interface Tinebase_User_Plugin_LdapInterface extends Tinebase_User_Plugin_Interf
      * @param  array $_ldapEntry
      */
     public function inspectGetUserByProperty(Tinebase_Model_User $_user, array &$_ldapEntry);
-      
+
     /**
-     * inspect set password
-     * 
-     * @param  string   $_userId
-     * @param  string   $_password
-     * @param  boolean  $_encrypt
-     * @param  boolean  $_mustChange
-     * @param  array    $_ldapData    the data to be written to ldap
+     * update/set email user password
+     *
+     * @param string $_userId
+     * @param string $_password
+     * @param bool $_encrypt
+     * @param bool $_mustChange
+     * @param array $_additionalData
+     * @return void
      */
-    public function inspectSetPassword($_userId, $_password, $_encrypt, $_mustChange, array &$_ldapData);
+    public function inspectSetPassword($_userId, string $_password, bool $_encrypt = true, bool $_mustChange = false, array &$_additionalData = []);
     
     /**
      * inspect data used to update user
