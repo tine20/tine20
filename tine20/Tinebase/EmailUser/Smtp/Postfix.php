@@ -365,25 +365,26 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
             'source'        => $_smtpSettings[$this->_propertyMapping['emailAddress']],  // TineEmail
             'destination'   => $username,
         ));
-        
+
         // create username -> username alias if email and username are different
         if ((! isset($this->_config['onlyemaildestination']) || ! $this->_config['onlyemaildestination'])
             && $_smtpSettings[$this->_propertyMapping['emailUsername']] != $_smtpSettings[$this->_propertyMapping['emailAddress']]
         ) {
+            // FIXME not working yet ...
             // only do this if we don't have emailUsername already in the sources
-            $sources = isset($_smtpSettings['source']) ? array_filter($_smtpSettings, function ($source) use ($username) {
-                return (is_array($source) && isset($source['email']) && $source['email'] === $username || $source === $username);
-            }) : [];
-            if (count($sources) === 0) {
+//            $sources = isset($_smtpSettings['source']) ? array_filter($_smtpSettings, function ($source) use ($username) {
+//                return (is_array($source) && isset($source['email']) && $source['email'] === $username || $source === $username);
+//            }) : [];
+//            if (count($sources) === 0) {
                 $this->_addDestination(array(
                     'userid' => $_smtpSettings[$this->_propertyMapping['emailUserId']],   // userID
                     'source' => $username,
                     'destination' => $username,
                 ));
-            }
+//            }
         }
     }
-    
+
     /**
      * add destination
      * 
