@@ -307,13 +307,17 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
         const messageCopyFolderType = currentAccount.get('message_sent_copy_behavior') ?? 'sent';
         if (messageCopyFolderType === 'skip') return null;
         
-        const defaultFolder = messageCopyFolderType === 'source' ? selectedFolder : sentFolder;
+        let defaultFolder = messageCopyFolderType === 'source' ? selectedFolder : sentFolder;
         if (!defaultFolder) return null;
         
-        const model = Tine.Tinebase.data.RecordMgr.get(defaultFolder.appName, defaultFolder.modelName);
-        const title = defaultFolder.get('globalname');
-        const defaultImapItem = new Ext.menu.Item();
+        if (messageCopyFolderType === 'source' && defaultFolder.get('globalname') === 'INBOX') {
+            defaultFolder = sentFolder;
+        }
         
+        const model = Tine.Tinebase.data.RecordMgr.get(defaultFolder.appName, defaultFolder.modelName);
+        const defaultImapItem = new Ext.menu.Item();
+        const title = defaultFolder.isSystemFolder() ? this.app.i18n._(defaultFolder.get('globalname')) : defaultFolder.get('globalname');
+    
         defaultImapItem.fileTarget = {
             type: 'folder',
             record_title: `${title} [IMAP]`,
@@ -511,10 +515,12 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                     if (!node.attributes) return;
                     const record = Tine.Tinebase.data.Record.setFromJson(node.attributes, Tine.Felamimail.Model.Folder);
                     const model = Tine.Tinebase.data.RecordMgr.get('Felamimail', 'Folder');
+                    const title = record.isSystemFolder() ? this.app.i18n._(record.get('globalname')) : record.get('globalname');
+    
                     const fakeItem = new Ext.menu.Item();
                     fakeItem.fileTarget = {
                         type: 'folder',
-                        record_title: `${record.data.globalname} [IMAP]`,
+                        record_title: `${title} [IMAP]`,
                         model: model,
                         data: record.data,
                     };
