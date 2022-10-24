@@ -484,6 +484,16 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
     },
     
     /**
+     * is this folder the system folder?
+     *
+     * @return {Boolean}
+     */
+    isSystemFolder: function() {
+        const systemFolderList = ['INBOX', 'Drafts', 'Sent', 'Templates', 'Junk', 'Trash'];
+        return systemFolderList.includes(this.get('globalname'));
+    },
+    
+    /**
      * returns true if current folder needs an update
      */
     needsUpdate: function(updateInterval) {
