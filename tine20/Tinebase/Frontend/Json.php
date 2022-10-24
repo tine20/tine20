@@ -774,7 +774,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         $importExportContainer = Tinebase_Config::getInstance()->get(Tinebase_Config::IMPORT_EXPORT_DEFAULT_CONTAINER);
-        $registryData['defaultImportExportContainer'] = $importExportContainer ? Tinebase_Container::getInstance()->get($importExportContainer)->toArray() : null;
+        try {
+            $registryData['defaultImportExportContainer'] = $importExportContainer ? Tinebase_Container::getInstance()->get($importExportContainer)->toArray() : null;
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                __METHOD__ . '::' . __LINE__ . ' Could not get default export container: ' . $tenf->getMessage());
+            $registryData['defaultImportExportContainer'] = null;
+        }
         
         return $registryData;
     }
