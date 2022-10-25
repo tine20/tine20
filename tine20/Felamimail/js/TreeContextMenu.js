@@ -143,7 +143,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
             var accountId = this.ctxNode.attributes.account_id;
             var account = this.accountStore.getById(accountId);
 
-            if (account.get('type') == 'system') {
+            if (account.get('type') === 'system' || account.get('type') === 'shared') {
                 var popupWindow = Tine.Felamimail.sieve.NotificationDialog.openWindow({
                     record: account
                 });
