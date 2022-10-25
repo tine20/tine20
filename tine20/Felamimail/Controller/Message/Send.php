@@ -347,7 +347,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             $sentFolder = $this->_saveInSent($transport, $_account, $this->_getAdditionalHeaders($_message));
             $this->_fileSentMessage($_message, $sentFolder);
         } else if ($_message) {
-            if (!isset($_message['sent_copy_folder']) && $_account->message_sent_copy_behavior !== Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SKIP) {
+            if ((!isset($_message['sent_copy_folder']) || sizeof($_message['sent_copy_folder']) === 0) && $_account->message_sent_copy_behavior !== Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SKIP) {
                 $sentFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($_account, Felamimail_Model_Folder::FOLDER_SENT);
                 $_message['sent_copy_folder'] = [$sentFolder->getId()];
             }
