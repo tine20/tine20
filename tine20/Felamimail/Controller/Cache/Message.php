@@ -810,7 +810,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * 
      * @param array $_messages
      * @param Felamimail_Model_Folder $_folder
-     * @return Felamimail_Model_Folder
      */
     protected function _addMessagesToCacheAndIncreaseCounters($_messages, $_folder)
     {
@@ -840,7 +839,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Added some new (unread) messages to cache.");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . " Added some new (unread) messages to cache.");
     }
     
     /**

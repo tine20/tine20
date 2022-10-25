@@ -1028,15 +1028,24 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string|Felamimail_Model_Message $_messageId
      * @param string $_partId
      * @param boolean $_skipEmptyAttachments
+     * @param integer $recursionCounter
      * @return array
+     * @refactor split into smaller functions
      */
-    public function getAttachments($_messageId, $_partId = null, $_skipEmptyAttachments = false)
+    public function getAttachments($_messageId, $_partId = null, $_skipEmptyAttachments = false, $recursionCounter = 0)
     {
         if (!$_messageId instanceof Felamimail_Model_Message) {
             /** @var Felamimail_Model_Message $message */
             $message = $this->_backend->get($_messageId);
         } else {
             $message = $_messageId;
+        }
+
+        if ($recursionCounter > 20) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . ' Could not find attachments for part (> 20 recursive calls) '
+                . $_partId . ' in message ' . print_r($message->toArray(), true));
+            return [];
         }
 
         $structure = $message->getPartStructure($_partId);
@@ -1049,7 +1058,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 // handle single part messages with attachment-like content (like a pdf file)
                 $structure['parts'] = array($structure);
             } else {
-                return array();
+                return [];
             }
         }
 
@@ -1062,12 +1071,18 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
 
             if ($part['type'] == 'multipart') {
-                $attachments = array_merge($attachments, $this->getAttachments($message, $part['partId']));
+                $attachments = array_merge($attachments, $this->getAttachments(
+                    $message,
+                    $part['partId'],
+                    $_skipEmptyAttachments,
+                    ++$recursionCounter)
+                );
             } else {
                 $filename = $this->_getAttachmentFilename($part);
 
-                if ($part['type'] == 'text' &&
-                    (!is_array($part['disposition']) || ($part['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && !(isset($part['disposition']["parameters"]) || array_key_exists("parameters", $part['disposition']))))
+                if ($part['type'] == 'text'
+                    && (!is_array($part['disposition']) || ($part['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE
+                        && !(isset($part['disposition']["parameters"]) || array_key_exists("parameters", $part['disposition']))))
                 ) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . ' Skipping DISPOSITION_INLINE attachment with name ' . $filename);
@@ -1108,7 +1123,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     }
                 }
 
-                // if its not a winmail.dat, or the winmail.dat couldn't be expanded 
+                // if it's not a winmail.dat, or the winmail.dat couldn't be expanded
                 // properly because it has richtext embedded, return attachment as it is
                 if (empty($expanded) && isset($part['contentType']) && isset($part['partId'])) {
 
