@@ -70,7 +70,7 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
             typeAhead: true,
             triggerAction: 'all',
             emptyText: i18n._('Add new Element...'),
-            selectOnFocus:true,
+            expandOnFocus:true,
             blurOnSelect: true
         });
 

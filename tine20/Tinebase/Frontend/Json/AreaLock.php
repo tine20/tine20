@@ -180,6 +180,7 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
         $user->mfa_configs->removeById($userCfg->getId());
         $user->mfa_configs->addRecord($userCfg);
         Tinebase_User::getInstance()->updateUser($user);
+        Tinebase_Core::get(Tinebase_Core::SESSION)->encourage_mfa = false;
 
         return true;
     }

@@ -1801,9 +1801,11 @@ msgid "Contributors"
 msgstr " Mitwirkenden"
 
 #: js/MainScreenPanel.js:179
-msgid "Your password expired. Please enter a new user password:"
-msgstr ""
-"Ihr Passwort ist abgelaufen. Bitte setzen Sie ein neues Benutzer-Passwort:"
+msgid "Your password expired."
+msgstr "Ihr Passwort ist abgelaufen."
+
+msgid "You need to set a new password."
+msgstr "Sie müssen ein neues Passwort setzen."
 
 #: js/ExceptionHandler.js:169
 msgid "Authorisation Required"
@@ -4065,6 +4067,18 @@ msgstr "Token vom Gerät {mfaDevice.device_name}"
 
 msgid "{{ code }} is your {{ app.branding.title }} security code."
 msgstr "Ihr {{ app.branding.title }} Sicherheitscode ist {{ code }}."
+
+msgid "Multi Factor Authentication"
+msgstr "Multi Faktor Authentifikation"
+
+msgid "We strongly encourage you to enable Multi-Factor Authentication for added security."
+msgstr "Für zusätzliche Sicherheit empfehlen wir Ihnen dringend, die Multi-Faktor-Authentifizierung zu aktivieren."
+
+msgid "Multi-Factor Authentication adds an extra layer of protection to logins. Once enabled & configured, each time you sing in you will be asked to enter both your username & password as well as a second factor such as a security code."
+msgstr "Die Multi-Faktor-Authentifizierung bietet einen zusätzlichen Schutz für die Anmeldung. Sobald sie aktiviert und konfiguriert ist werden Sie jedes Mal, wenn Sie sich anmelden, aufgefordert sowohl Ihren Benutzernamen und Passwort als auch einen zweiten Faktor wie z.B. einen Sicherheitscode einzugeben."
+
+msgid "Multi Factor Authentication Device Configuration"
+msgstr "Multi Faktor Authentifikations Geräte Konfiguration"
 
 #: js/LicenseScreen.js:35
 msgid "License"
