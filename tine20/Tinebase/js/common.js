@@ -105,9 +105,10 @@ Tine.Tinebase.common = {
             metadata.css = 'tine-gird-cell-datetime';
         }
 
-        var dateObj = $_iso8601 instanceof Date ? $_iso8601 : Date.parseDate($_iso8601, Date.patterns.ISO8601Long);
-        
-        return Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium'));
+        const dateObj = $_iso8601 instanceof Date ? $_iso8601 : Date.parseDate($_iso8601, Date.patterns.ISO8601Long);
+
+        const dayPrefix = dateObj ? (dateObj.format('l').substr(0,2) + ' ') : '';
+        return dayPrefix + Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium'));
     },
 
     /**
@@ -122,9 +123,10 @@ Tine.Tinebase.common = {
             metadata.css = (metadata.css || '') + ' tine-gird-cell-date';
         }
 
-        var dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
-        
-        return Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', 'medium'));
+        const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
+
+        const dayPrefix = dateObj ? (dateObj.format('l').substr(0,2) + ' ') : '';
+        return dayPrefix + Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', 'medium'));
     },
     
     /**
