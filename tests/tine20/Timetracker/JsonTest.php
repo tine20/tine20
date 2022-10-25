@@ -581,6 +581,9 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         //$timesheetData['container_id'] = $timesheetData['container_id']['id'];
         $timesheetData['account_id'] = $timesheetData['account_id']['accountId'];
         $timesheetData['timeaccount_id'] = $timesheetData['timeaccount_id']['id'];
+        $timesheetData['is_billable'] = false;
+        $timesheetData['accounting_time_factor'] = 0;
+        $timesheetData['accounting_time'] = 0;
 
         $timesheetUpdated = $this->_json->saveTimesheet($timesheetData);
 
@@ -590,6 +593,8 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetUpdated['last_modified_by']['accountId']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetUpdated['account_id']['accountId'], 'account is not resolved');
         $this->assertEquals($timesheetData['timeaccount_id'], $timesheetUpdated['timeaccount_id']['id'], 'timeaccount is not resolved');
+        $this->assertEquals(0, $timesheetUpdated['accounting_time_factor'], 'accounting_time_factor is not resolved');
+        $this->assertEquals(0, $timesheetUpdated['accounting_time'], 'accounting_time is not resolved');
 
         // cleanup, if the timeaccount is still in use,  need to set confirm request context for delete method
         Timetracker_Controller_Timeaccount::getInstance()->setRequestContext(['confirm' => true]);

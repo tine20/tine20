@@ -54,7 +54,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         Tine.Timetracker.TimesheetEditDialog.superclass.onRecordLoad.call(this);
 
         // TODO get timeaccount from filter if set - should be done in grid (onCreateNewRecord)
-        var timeaccount = this.record.get('timeaccount_id');
+        const timeaccount = this.record.get('timeaccount_id');
         if (timeaccount) {
             this.onTimeaccountUpdate(null, new Tine.Timetracker.Model.Timeaccount(timeaccount));
         }
@@ -65,7 +65,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         // set factor from timeaccount except it was manually changed before
         if (timeaccount) {
             if (!this.factorChanged) {
-                this.factor = timeaccount.data.accounting_time_factor;
+                this.factor = this.timeaccount.data.accounting_time_factor;
             }
             this.getForm().findField('accounting_time_factor').setValue(this.factor);
 
@@ -80,6 +80,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @param {} timeaccount
      */
     onTimeaccountUpdate: function(field, timeaccount) {
+        this.timeAccount = timeaccount;
         // check for manage_timeaccounts right
         var manageRight = Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts');
         
@@ -129,7 +130,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             this.getForm().findField('timeaccount_description').setValue(timeaccount.data.description);
 
             this.getForm().findField('is_billable').setDisabled(notBillable);
-            this.disableBillableFields(notBillable);
+            this.disableBillableFields(!this.getForm().findField('is_billable').checked);
             this.getForm().findField('is_cleared').setDisabled(notClearable);
             this.disableClearedFields(notClearable);
         }
@@ -211,6 +212,11 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 this.factorChanged = true;
             }
             this.getForm().findField('accounting_time').setValue(accountingTime);
+    
+            const isBillable = this.getForm().findField('is_billable').getValue();
+            if (!isBillable) {
+                this.getForm().findField('accounting_time').setValue(0);
+            }
         }
     },
 
@@ -238,6 +244,9 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 this.getForm().findField('is_cleared').setDisabled(true);
 
             } else {
+                if (!this.factorChanged) {
+                    this.factor = this.timeAccount.data.accounting_time_factor;
+                }
                 this.getForm().findField('accounting_time_factor').setValue(this.factor);
                 this.calculateAccountingTime();
                 this.disableBillableFields(false);
