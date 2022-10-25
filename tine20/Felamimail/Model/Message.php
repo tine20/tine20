@@ -588,7 +588,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
         if ($_partId == null) {
             // maybe we want no part at all => just return the whole structure
             $result = $structure;
-        } else if (isset($structure['partId']) && $structure['partId'] == $_partId) {
+        } else if (isset($structure['partId']) && $structure['partId'] == $_partId && $structure['contentType'] !== Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
             // maybe we want the first part => just return the whole structure
             $result = $structure;
         } else {
