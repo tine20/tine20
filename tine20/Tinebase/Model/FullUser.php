@@ -437,30 +437,30 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     /**
      * returns TRUE if user has to change his/her password (compare sambaSAM->pwdMustChange with Tinebase_DateTime::now())
      *
-     * TODO switch check AUTH backend?
-     *
-     * @return boolean
+     * @return ?string
      */
-    public function mustChangePassword()
+    public function mustChangePassword(): ?string
     {
         switch (Tinebase_User::getConfiguredBackend()) {
             case Tinebase_User::ACTIVEDIRECTORY:
-                return $this->_sambaSamPasswordChangeNeeded();
-                break;
-                
             case Tinebase_User::LDAP:
-                return $this->_sambaSamPasswordChangeNeeded();
+                if($this->_sambaSamPasswordChangeNeeded()) {
+                    return Tinebase_Translation::getTranslation()->translate('Your password expired.');
+                }
                 break;
-                
             default:
-                if (Tinebase_Auth::getConfiguredBackend() === Tinebase_Auth::SQL) {
-                    return $this->_sqlPasswordChangeNeeded();
-                } else {
-                    // no pw change needed for non-sql auth backends
-                    return false;
+                if (Tinebase_Auth::getConfiguredBackend() === Tinebase_Auth::SQL && $this->_sqlPasswordChangeNeeded()) {
+                    return Tinebase_Translation::getTranslation()->translate('Your password expired.');
                 }
                 break;
         }
+
+        // password complexity check
+        if (Tinebase_Core::get(Tinebase_Core::SESSION)->mustChangePassword) {
+            return Tinebase_Core::get(Tinebase_Core::SESSION)->mustChangePassword;
+        }
+
+        return null;
     }
     
     /**

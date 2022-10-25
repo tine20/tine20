@@ -526,6 +526,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 throw new Tinebase_Exception_SystemGeneric('The new password must be different from the old one.'); // _('The new password must be different from the old one.')
             }
             Tinebase_User::getInstance()->setPassword($user, $_newPassword, true, false);
+            Tinebase_Core::get(Tinebase_Core::SESSION)->mustChangePassword = null;
+            Tinebase_Core::get(Tinebase_Core::SESSION)->currentAccount->password_must_change = false;
         } else {
             $pinAuth = Tinebase_Auth_Factory::factory(Tinebase_Auth::PIN);
             $pinAuth->setIdentity($loginName)->setCredential($_oldPassword);

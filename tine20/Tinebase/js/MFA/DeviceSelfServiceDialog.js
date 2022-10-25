@@ -16,6 +16,8 @@ Tine.Tinebase.MFA.DeviceSelfServiceDialog = Ext.extend(Tine.Tinebase.dialog.Dial
     layout: 'vbox',
 
     initComponent() {
+        this.window.setTitle(i18n._('Multi Factor Authentication Device Configuration'));
+
         this.MFAPanel = new UserConfigPanel({
             selfServiceMode: true,
             enableBbar: true,
@@ -78,6 +80,7 @@ Tine.Tinebase.MFA.DeviceSelfServiceDialog = Ext.extend(Tine.Tinebase.dialog.Dial
         try {
             this.refresh.disable();
             const userConfigData = await Tine.Tinebase_AreaLock.saveMFAUserConfig(record.get('mfa_config_id'), {... record.data}, MFAPassword);
+            Tine.Tinebase.registry.set('encourage_mfa', false);
             await this.loadMFADevices();
         } catch (exception) {
             this.refresh.enable();

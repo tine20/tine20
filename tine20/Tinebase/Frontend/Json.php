@@ -931,9 +931,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (Tinebase_Core::get(Tinebase_Core::SESSION)->encourage_mfa) {
             $userRegistryData['encourage_mfa'] = true;
         }
-        if (Tinebase_Core::get(Tinebase_Core::SESSION)->mustChangePassword) {
-            $userRegistryData['mustChangePassword'] = Tinebase_Core::get(Tinebase_Core::SESSION)->mustChangePassword;
-        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' User registry: ' . print_r($userRegistryData, TRUE));

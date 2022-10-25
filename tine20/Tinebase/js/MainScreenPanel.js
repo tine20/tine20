@@ -176,9 +176,25 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
         
         if (Tine.Tinebase.registry.get('mustchangepw') && Tine.Tinebase.configManager.get('changepw')) {
             var passwordDialog = new Tine.Tinebase.PasswordChangeDialog({
-                title: i18n._('Your password expired. Please enter a new user password:')
+                dialogText: Tine.Tinebase.registry.get('mustchangepw') + '\n' + i18n._('You need to set a new password.')
             });
             passwordDialog.show();
+        }
+
+        // don't bother user with two dialogs at one login
+        else if (Tine.Tinebase.registry.get('encourage_mfa')) {
+            Ext.MessageBox.show({
+                title: i18n._('Multi Factor Authentication'),
+                msg: `
+                    ${i18n._('We strongly encourage you to enable Multi-Factor Authentication for added security.')}<br />
+                    <br />
+                    ${i18n._('Multi-Factor Authentication adds an extra layer of protection to logins. Once enabled & configured, each time you sing in you will be asked to enter both your username & password as well as a second factor such as a security code.')}
+                `,
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.WARNING,
+            }).then(() => {
+                Tine.Tinebase.MFA.DeviceSelfServiceDialog.openWindow({})
+            });
         }
     },
 
