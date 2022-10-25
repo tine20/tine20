@@ -219,6 +219,11 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             }
             $_record->accounting_time = $method($duration * (float)$factor / $minutes) * $minutes;
         }
+        
+        if ($_record->is_billable === false) {
+            $_record->accounting_time_factor = 0;
+            $_record->accounting_time = 0;
+        }
     }
     
     /**
