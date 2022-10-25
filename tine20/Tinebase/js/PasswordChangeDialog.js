@@ -20,7 +20,7 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
     closeAction: 'close',
     modal: true,
     width: 350,
-    height: 230,
+    height: 350,
     minWidth: 350,
     minHeight: 230,
     layout: 'fit',
@@ -28,6 +28,7 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
     title: null,
     // password or pin
     pwType: 'password',
+    dialogText: '',
 
     initComponent: function() {
         this.currentAccount = Tine.Tinebase.registry.get('currentAccount');
@@ -49,6 +50,13 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                 anchor: '100%'
             },
             items: [{
+                xtype: 'textarea',
+                readOnly: true,
+                hideLabel: true,
+                style: 'padding-bottom: 10px;',
+                hidden: !this.dialogText,
+                value: this.dialogText
+            }, {
                 id: 'oldPassword',
                 clipboard: false,
                 fieldLabel: String.format(i18n._('Old {0}'), this.passwordLabel),
@@ -108,6 +116,7 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                                                     password: values.newPassword
                                                 }
                                             });
+                                            Tine.Tinebase.registry.set('mustchangepw', '');
                                         }
                                     } else {
                                         Ext.MessageBox.show({

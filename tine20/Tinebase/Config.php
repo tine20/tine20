@@ -506,6 +506,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const USER_PASSWORD_POLICY= 'userPwPolicy';
 
+    const CHECK_AT_LOGIN = 'checkAtLogin';
+
     /**
      * DOWNLOAD_PASSWORD_POLICY
      *
@@ -2065,8 +2067,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => true,
-            // TODO move to class constant when we no longer need to support php 5.5
             'content'               => [
+                self::CHECK_AT_LOGIN    => [
+                    // _('Check password policies at login')
+                    self::LABEL             => 'Check password policies at login',
+                    self::DESCRIPTION       => 'Check password policies at login',
+                    self::TYPE              => self::TYPE_BOOL,
+                    self::CLIENTREGISTRYINCLUDE => true,
+                    self::SETBYSETUPMODULE  => true,
+                    self::SETBYADMINMODULE  => false,
+                ],
                 self::PASSWORD_MANDATORY => array(
                     //_('A password must be set')
                     'label'                 => 'A password must be set',

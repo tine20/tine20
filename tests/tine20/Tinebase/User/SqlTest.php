@@ -417,12 +417,12 @@ class Tinebase_User_SqlTest extends TestCase
     public function testPasswordMustChange()
     {
         $user = $this->testAddUser();
-        self::assertTrue($user->mustChangePassword());
+        self::assertTrue(is_string($user->mustChangePassword()));
 
         $user->setPassword(Tinebase_Record_Abstract::generateUID(20));
         // refetch
         $user = Tinebase_User::getInstance()->getFullUserById($user->getId());
-        self::assertFalse($user->mustChangePassword());
+        self::assertNull($user->mustChangePassword());
 
         // change days config to 10
         Tinebase_Config::getInstance()->set(Tinebase_Config::PASSWORD_POLICY_CHANGE_AFTER, 10);
@@ -440,6 +440,6 @@ class Tinebase_User_SqlTest extends TestCase
 
         // refetch
         $user = Tinebase_User::getInstance()->getFullUserById($user->getId());
-        self::assertTrue($user->mustChangePassword(), 'user should need pw change: ' . print_r($user->toArray(), true));
+        self::assertTrue(is_string($user->mustChangePassword()), 'user should need pw change: ' . print_r($user->toArray(), true));
     }
 }
