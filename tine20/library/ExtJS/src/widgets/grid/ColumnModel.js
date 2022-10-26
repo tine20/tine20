@@ -211,6 +211,7 @@ Ext.grid.ColumnModel = Ext.extend(Ext.util.Observable, {
         }, this.defaults);
 
         this.config = config;
+        this.columns ? this.columns = config : null;
         this.lookup = {};
 
         for(i = 0, len = config.length; i < len; i++){
