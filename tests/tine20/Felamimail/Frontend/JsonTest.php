@@ -403,6 +403,24 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     }
 
     /**
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function testCreateSentFolderBySentMessage()
+    {
+        Felamimail_Controller_Folder::getInstance()->delete($this->_account->getId(), 'Sent');
+
+        $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain);
+        $messageToSend['bcc'] = array(Tinebase_Core::getUser()->accountEmailAddress);
+        $messageToSend['sent_copy_folder'] = [];
+
+        $this->_json->saveMessage($messageToSend);
+
+        Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), 'Sent');
+
+    }
+
+    /**
      * test Send Message With Recipient Data
      */
     public function testSendMessageWithRecipientData()
