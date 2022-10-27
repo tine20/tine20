@@ -78,6 +78,7 @@ abstract class Tinebase_User_Plugin_LdapAbstract extends Tinebase_User_Plugin_Ab
     /**
      * @param Tinebase_Model_FullUser $_user
      * @param array $_ldapData
+     * @refactor to same signature as \Tinebase_User_Plugin_Abstract::inspectAddUser
      */
     public function inspectAddUser(Tinebase_Model_FullUser $_user, array &$_ldapData)
     {
@@ -87,6 +88,7 @@ abstract class Tinebase_User_Plugin_LdapAbstract extends Tinebase_User_Plugin_Ab
     /**
      * @param Tinebase_Model_User $_user
      * @param array $_ldapEntry
+     * @refactor to same signature as \Tinebase_User_Plugin_Abstract::inspectGetUserByProperty
      */
     public function inspectGetUserByProperty(Tinebase_Model_User $_user, array &$_ldapEntry)
     {
@@ -96,7 +98,8 @@ abstract class Tinebase_User_Plugin_LdapAbstract extends Tinebase_User_Plugin_Ab
         
         $user = $this->_ldap2User($_user, $_ldapEntry);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($user->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($user->toArray(), TRUE));
         
         if ($this instanceof Tinebase_EmailUser_Ldap) {
             // TODO this should be moved to Tinebase_EmailUser_Ldap
@@ -163,6 +166,7 @@ abstract class Tinebase_User_Plugin_LdapAbstract extends Tinebase_User_Plugin_Ab
      * @param Tinebase_Model_FullUser $_user
      * @param array $_ldapData
      * @param array $_ldapEntry
+     * @refactor to same signature as \Tinebase_User_Plugin_Abstract::inspectUpdateUser
      */
     public function inspectUpdateUser(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry)
     {
