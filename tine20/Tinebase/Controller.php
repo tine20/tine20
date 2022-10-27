@@ -129,14 +129,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         $this->_loginUser($user, $accessLog, $password);
 
-        if (Tinebase_Config::getInstance()->get(Tinebase_Config::USER_PASSWORD_POLICY)
-                ->{Tinebase_Config::CHECK_AT_LOGIN}) {
-            try {
-                Tinebase_User_PasswordPolicy::checkPasswordPolicy($password, $user);
-            } catch (Tinebase_Exception_PasswordPolicyViolation $e) {
-                Tinebase_Core::get(Tinebase_Core::SESSION)->mustChangePassword = $e->getMessage();
-            }
-        }
+        $this->_checkPasswordPolicyAtLogin($password, $user);
+
         if (Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN}) {
             $userController = Tinebase_User::getInstance();
             if ($userController instanceof Tinebase_User_Sql) {
@@ -153,6 +147,21 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
 
         return true;
+    }
+
+    protected function _checkPasswordPolicyAtLogin($password, $user)
+    {
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::USER_PASSWORD_POLICY)
+            ->{Tinebase_Config::CHECK_AT_LOGIN}) {
+            try {
+                Tinebase_User_PasswordPolicy::checkPasswordPolicy($password, $user);
+            } catch (Tinebase_Exception_PasswordPolicyViolation $e) {
+                $session = Tinebase_Core::get(Tinebase_Core::SESSION);
+                if ($session) {
+                    $session->mustChangePassword = $e->getMessage();
+                }
+            }
+        }
     }
 
     protected function _throwMFAException(Tinebase_Model_AreaLockConfig $config, Tinebase_Record_RecordSet $feCfg)
