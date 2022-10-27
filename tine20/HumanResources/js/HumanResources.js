@@ -21,6 +21,7 @@ import './FreeTimePlanningPanel'
 import './DivisionEditDialog'
 import './Timetracker/hooks'
 import './AttendanceRecorder'
+import './freeTimeType'
 
 Tine.HumanResources.Application = Ext.extend(Tine.Tinebase.Application, {
 

@@ -516,9 +516,12 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
     },
 
     onKeyDown: function(e) {
-        const freeTimeType = _.find(this.freeTimeTypes, {'abbreviation': String.fromCharCode(e.getKey())});
+        const char = String.fromCharCode(e.getKey());
+        const freeTimeType = _.find(this.freeTimeTypes, (freeTimeType) => {
+            return Tine.HumanResources.Model.FreeTimeType.getAbbreviation(freeTimeType) === char;
+        });
         
-        if (freeTimeType) {
+        if (freeTimeType && !e.shiftKey && !e.ctrlKey) {
             this.freeTimeType = freeTimeType;
             window.setTimeout(() => {
                 this.freeTimeType = null

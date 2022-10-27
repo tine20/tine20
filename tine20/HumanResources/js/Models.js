@@ -1,12 +1,12 @@
 /*
-* Tine 2.0
-* 
-* @package     HumanResources
-* @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
-* @author      Alexander Stintzing <a.stintzing@metaways.de>
-* @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
-*/
+ * Tine 2.0
+ *
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiß <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2022-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ */
 Ext.namespace('Tine.HumanResources.Model');
+
 Tine.HumanResources.Model.FreeTimeMixin = {
     statics: {
         /**
@@ -52,5 +52,24 @@ Tine.HumanResources.Model.FreeTimeMixin = {
                 return freeTimes.concat(_.filter(_.get(feastAndFreeDays, 'allFreeTimes', []), (freeTime) => {return _.indexOf(freeDayIds, freeTime.id) >= 0}));
             }, []));
         },
+    }
+};
+
+Tine.HumanResources.Model.FreeTimeTypeMixin = {
+    statics: {
+        getAbbreviation(freeTimeTypeData) {
+            const app = Tine.Tinebase.appMgr.get('HumanResources');
+            const name = app.i18n._hidden(freeTimeTypeData.name);
+            return name.match(/.*\[(.+)\].*/)?.[1] || freeTimeTypeData.abbreviation;
+        }
+    },
+
+    getTitle() {
+        const app = Tine.Tinebase.appMgr.get('HumanResources');
+        return app.i18n._hidden(this.get('name'));
+    },
+
+    getAbbreviation() {
+        return Tine.HumanResources.Model.FreeTimeType.getAbbreviation(this.data);
     }
 };

@@ -20,13 +20,10 @@ const colorLegend = Ext.extend(Ext.Panel, {
             stateIdSuffix: '-Legend',
             initActions: Ext.emptyFn,
             initFilterPanel: Ext.emptyFn,
-            getColumnModel: Ext.emptyFn,
+            showColumns: ['color', 'name'],
+            hideMode: 'delete',
             initComponent: function() {
                 this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('HumanResources');
-                this.gridConfig.cm = new Ext.grid.ColumnModel({
-                    columns: this.getColumns()
-                });
-                this.gridConfig.autoExpandColumn = 'name';
 
                 // allow dbclick to open
                 this.action_editInNewWindow = new Ext.Action({hidden: true});
@@ -38,13 +35,6 @@ const colorLegend = Ext.extend(Ext.Panel, {
                 this.store.on('load', () => {
                     this.setHeight(this.grid.view.el.child('.x-grid3-body').getHeight() + this.grid.view.el.child('.x-grid3-header').getHeight());
                 })
-            },
-
-            getColumns() {
-                return [
-                    {id: 'type', header: '&nbsp;', dataIndex: 'color', width: 10, hidden: false, renderer: Tine.Tinebase.common.colorRenderer,},
-                    {id: 'name', header: this.app.i18n._('Name'), width: 100, sortable: true, dataIndex: 'name'}
-                ];
             },
 
             onStoreBeforeload: function(store, options) {
