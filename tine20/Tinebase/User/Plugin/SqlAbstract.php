@@ -42,6 +42,16 @@ abstract class Tinebase_User_Plugin_SqlAbstract extends Tinebase_User_Plugin_Abs
     protected static $_dbConnections =  [];
 
     /**
+     * inspect get user by property
+     *
+     * @param Tinebase_Model_User  $_user  the user object
+     */
+    public function inspectGetUserByProperty(Tinebase_Model_User $_user)
+    {
+        // do nothing here - implement in plugin if needed
+    }
+
+    /**
      * inspect data used to create user
      * 
      * @param Tinebase_Model_FullUser  $_addedUser
