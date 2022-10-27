@@ -452,7 +452,7 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
 
             var i18nQuestion = this.i18nDeleteQuestion ?
                 this.app.i18n.n_hidden(this.i18nDeleteQuestion[0], this.i18nDeleteQuestion[1], records.length) :
-                String.format(i18n.ngettext('Do you really want to delete the selected record?',
+                String.format(this.app.i18n.ngettext('Do you really want to delete the selected record?',
                     'Do you really want to delete the selected records?', records.length), recordNames);
             Ext.MessageBox.confirm(i18n._('Confirm'), i18nQuestion, function(btn) {
                 if (btn == 'yes') {

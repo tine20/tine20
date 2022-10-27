@@ -688,6 +688,12 @@ msgstr "Arbeitszeit wird ausgewertet von {{start_time|date(\"H:i\")}} bis {{end_
 msgid "Start time"
 msgstr "Startzeit"
 
+msgid "End time"
+msgstr "Endzeit"
+
+msgid "Maximum duration"
+msgstr "Maximalzeit"
+
 #: Model/BLDailyWTReport/BreakTimeConfig.php:47
 msgid "Break Time"
 msgid_plural "Break Times"
