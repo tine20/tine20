@@ -416,10 +416,6 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
                     </options>';
                 break;
-            case self::DEFAULTALARM_MINUTESBEFORE:
-                $preference->value      = 15;
-                $preference->options    = '';
-                break;
             case self::DEFAULTATTENDEE_STRATEGY:
                 $translate = Tinebase_Translation::getTranslation($this->_application);
                 $preference->value      = 'me';
@@ -447,6 +443,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                         </option>
                     </options>';
                 break;
+            case self::DEFAULTALARM_MINUTESBEFORE:
             case self::DEFAULT_TIMEINCREMENT:
                 $preference->value      = 15;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>

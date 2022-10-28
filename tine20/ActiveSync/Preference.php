@@ -112,6 +112,9 @@ class ActiveSync_Preference extends Tinebase_Preference_Abstract
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
         }
         
+        $preference['account_id'] = $_accountId;
+        $preference['account_type'] = $_accountType;
+        
         return $preference;
     }
     
@@ -121,21 +124,21 @@ class ActiveSync_Preference extends Tinebase_Preference_Abstract
      * @param string $_value
      * @return array
      */
-    protected function _getSpecialOptions($_value)
+    protected function _getSpecialOptions($_value, $_accountId = null)
     {
         $result = array();
         switch($_value) {
             case self::DEFAULTADDRESSBOOK:
-                $result = $this->_getDefaultContainerOptions(Addressbook_Model_Contact::class);
+                $result = $this->_getDefaultContainerOptions(Addressbook_Model_Contact::class, $_accountId);
                 break;
             case self::DEFAULTCALENDAR:
-                $result = $this->_getDefaultContainerOptions(Calendar_Model_Event::class);
+                $result = $this->_getDefaultContainerOptions(Calendar_Model_Event::class, $_accountId);
                 break;
             case self::DEFAULTTASKLIST:
-                $result = $this->_getDefaultContainerOptions(Tasks_Model_Task::class);
+                $result = $this->_getDefaultContainerOptions(Tasks_Model_Task::class, $_accountId);
                 break;
             default:
-                $result = parent::_getSpecialOptions($_value);
+                $result = parent::_getSpecialOptions($_value, $_accountId);
         }
         
         return $result;

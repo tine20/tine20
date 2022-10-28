@@ -1460,6 +1460,42 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * save preferences for application
+     *
+     * @param array $data json encoded preferences data
+     * @return array with the changed prefs
+     *
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function savePreferences($data, $accountId = null)
+    {
+        $decodedData = $this->_prepareParameter($data);
+
+        $result = array();
+        // save default preference
+        if (!$accountId) {
+            foreach ($decodedData as $applicationName => $data) {
+                $backend = Tinebase_Core::getPreference($applicationName);
+                if ($backend !== NULL) {
+                    $backend->saveAdminPreferences($data);
+                }
+            }
+        } else {
+            // save other user preference
+            if (!Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_ACCOUNTS)) {
+                throw new Tinebase_Exception_AccessDenied('user has not right to manage preference for other users');
+            }
+            $json = new Tinebase_Frontend_Json();
+            return $json->savePreferences($data, $accountId);
+        }
+        
+        return array(
+            'status'    => 'success',
+            'results'   => $result
+        );
+    }
+
+    /**
      * save quotas
      * @param string $application
      * @param array $additionalData

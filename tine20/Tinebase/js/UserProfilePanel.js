@@ -28,39 +28,54 @@ Tine.Tinebase.UserProfilePanel = Ext.extend(Ext.Panel, {
         labelSeparator: ''
     },
     bodyStyle: 'padding:5px',
+    accountId: null,
     
     initComponent: function() {
-        Tine.Tinebase.getUserProfile(Tine.Tinebase.registry.get('currentAccount').accountId, this.onData.createDelegate(this));
+        const accountId = this.accountId ?? Tine.Tinebase.registry.get('currentAccount').accountId;
+        this.updateUserProfile(accountId);
         this.items = [];
         
         this.supr().initComponent.apply(this, arguments);
     },
     
+    updateUserProfile: function (accountId) {
+        Tine.Tinebase.getUserProfile(accountId, this.onData.createDelegate(this));
+    },
+    
     onData: function(userProfileInfo) {
-        var userProfile      = userProfileInfo.userProfile,
-            readableFields   = userProfileInfo.readableFields,
-            updateableFields = userProfileInfo.updateableFields;
+        if (!userProfileInfo?.userProfile) return;
+        
+        const userProfile  = userProfileInfo.userProfile;
+        const readableFields   = userProfileInfo.readableFields;
+        const updateableFields = userProfileInfo.updateableFields;
             
-        var adbI18n = new Locale.Gettext();
+        const adbI18n = new Locale.Gettext();
         adbI18n.textdomain('Addressbook');
         
         Ext.each(readableFields, function(fieldName) {
             // don't display generic fields
-            var fieldDefinition = Tine.Addressbook.Model.Contact.getField(fieldName);
+            const fieldDefinition = Tine.Addressbook.Model.Contact.getField(fieldName);
             
             if (! fieldDefinition) {
                 return;
             }
             
             switch (fieldName) {
-                default: 
-                    this.add(new Ext.form.TextField({
+                default:
+                    const item = new Ext.form.TextField({
                         hidden: this.genericFields.indexOf(fieldName) >= 0,
-                        name: fieldName, 
+                        name: fieldName,
                         value: userProfile[fieldName],
                         fieldLabel: adbI18n._hidden(fieldDefinition.label),
                         readOnly: updateableFields.indexOf(fieldName) < 0
-                    }));
+                    })
+    
+                    const idx = this.items.findIndex('name',fieldName);
+                    if (idx > -1) {
+                        this.remove(this.items.get(idx));
+                    } 
+                    
+                    this.add(item);
                     break;
             }
         }, this);

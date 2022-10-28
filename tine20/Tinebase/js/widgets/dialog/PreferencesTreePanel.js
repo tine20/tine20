@@ -51,7 +51,7 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
      * select initial node
      */
     selectInitialNode: function() {
-        var initialNode = (this.initialNodeId !== null) ? this.getNodeById(this.initialNodeId) : this.getRootNode();
+        const initialNode = (this.initialNodeId !== null) ? this.getNodeById(this.initialNodeId) : this.getRootNode();
         this.fireEvent('click', initialNode);
     },
     
@@ -63,27 +63,39 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
     initTreeNodes: function() {
         
         // general preferences are tree root
-        var treeRoot = new Ext.tree.TreeNode({
-            text: i18n._('General Preferences'),
-            id: 'Tinebase',
+        const treeRoot = new Ext.tree.TreeNode({
+            text: i18n._('All Settings'),
+            id: 'All',
             draggable: false,
             allowDrop: false,
             expanded: true
         });
+        const genericNode = new Ext.tree.TreeNode({
+            text: i18n._('General Preferences'),
+            id: 'Tinebase',
+            draggable: false,
+            allowDrop: false,
+            expanded: true,
+        });
+        const applicationsNode = new Ext.tree.TreeNode({
+            text: i18n._('Application Settings'),
+            id: 'Applications',
+            draggable: false,
+            allowDrop: false,
+            expanded: true,
+            readyOnly: true,
+        });
+        
         this.setRootNode(treeRoot);
+        treeRoot.appendChild(genericNode);
+        treeRoot.appendChild(applicationsNode);
         
         // add all apps
-        var allApps = Tine.Tinebase.appMgr.getAll();
-
-        // sort nodes by translated title (text property)
-//        new Ext.tree.TreeSorter(this, {
-//            folderSort: true,
-//            dir: "asc"
-//        });
+        const allApps = Tine.Tinebase.appMgr.getAll();
 
         // add "My Profile"
         if (Tine.Tinebase.common.hasRight('manage_own_profile', 'Tinebase')) {
-            var profileNode = new Ext.tree.TreeNode({
+            const profileNode = new Ext.tree.TreeNode({
                 text: i18n._('My Profile'),
                 cls: 'file',
                 iconCls: 'tinebase-accounttype-user',
@@ -92,20 +104,28 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
             });
             treeRoot.appendChild(profileNode);
         }
+    
+        // sort nodes by translated title (text property)
+        this.treeSorter = new Ext.tree.TreeSorter(this, {
+            dir: "asc",
+            priorityProperty: 'id',
+            priorityList: ['Tinebase', 'Tinebase.UserProfile', 'Applications'],
+        });
         
         // console.log(allApps);
         allApps.each(function(app) {
             if (app && Ext.isFunction(app.getTitle)) {
-                
-                var node = new Ext.tree.TreeNode({
-                    text: app.getTitle(),
-                    cls: 'file',
-                    id: app.appName,
-                    iconCls: app.getIconCls('PreferencesTreePanel'),
-                    leaf: null
-                });
-        
-                treeRoot.appendChild(node);
+                if (app.appName !== 'Tinebase') {
+                    const node = new Ext.tree.TreeNode({
+                        text: app.getTitle(),
+                        cls: 'file',
+                        id: app.appName,
+                        iconCls: app.getIconCls('PreferencesTreePanel'),
+                        leaf: null
+                    });
+    
+                    applicationsNode.appendChild(node);
+                }
             }
         }, this);
     },
@@ -118,6 +138,9 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
     initHandlers: function() {
         this.on('click', function(node){
             // note: if node is clicked, it is not selected!
+            if (node.id === 'Applications' || node.id === 'All') {
+                return;
+            }
             node.getOwnerTree().selectPath(node.getPath());
             node.expand();
             
@@ -126,7 +149,6 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
 
             // add panel to card panel to show prefs for chosen app
             parentPanel.showPrefsForApp(node.id);
-            
         }, this);
         
         this.on('beforeexpand', function(_panel) {
@@ -140,19 +162,39 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
 
     /**
      * check grants for tree nodes / apps
-     * 
+     *
      * @param {Bool} adminMode
+     * @param accountId
      */
-    checkGrants: function(adminMode) {
-        var root = this.getRootNode();
-                
-        root.eachChild(function(node) {
-            // enable or disable according to admin rights / admin mode
-            if (!Tine.Tinebase.common.hasRight('admin', node.id) && adminMode) {
+    checkGrants: function(adminMode, accountId = '0') {
+        const root = this.getRootNode();
+        
+        const validate = (node, hasRight) => {
+            if (!hasRight && adminMode) {
                 node.disable();
             } else {
                 node.enable();
             }
+        }
+        
+        root.eachChild((node) => {
+            // enable or disable according to admin rights / admin mode
+            switch (node.id) {
+                case 'Tinebase':
+                    validate(node, Tine.Tinebase.common.hasRight('admin', node.id));
+                    break;
+                case 'Tinebase.UserProfile':
+                    const hasRight = (Tine.Tinebase.common.hasRight('manage_accounts', 'Admin') && accountId !== '0')
+                     || accountId === _.get(Tine.Tinebase.registry.get('currentAccount'), 'accountId');
+                    validate(node, hasRight);
+                    break;
+                case 'Applications':
+                    _.each(node.childNodes, (appNode) => {
+                        validate(appNode, Tine.Tinebase.common.hasRight('admin', appNode.id));
+                    });
+                    break;
+            }
         });
+
     }
 });

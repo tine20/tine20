@@ -417,6 +417,109 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         
         $this->assertEquals(0, $role['roleMembers']['totalcount'], 'role members should be empty: ' . print_r($role['roleMembers'], TRUE));
     }
+
+    /**
+     * save admin prefs
+     *
+     */
+    public function testSaveAdminPreferences()
+    {
+        // add new default pref
+        $pref = $this->_getPreferenceWithOptions();
+        $pref = Tinebase_Core::getPreference()->create($pref);
+
+        $prefData = array();
+        $prefData['Tinebase'][$pref->getId()] = array('value' => 'test', 'type' => 'forced');
+        $tfj = new Tinebase_Frontend_Json();
+        $this->_json->savePreferences($prefData);
+
+        // search saved prefs
+        $results = $tfj->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter());
+        
+        // check results
+        $this->assertTrue(isset($results['results']));
+        $this->assertEquals(12, $results['totalcount']);
+        $this->assertEquals($prefData['Tinebase'][$pref->getId()]['value'], $results['results'][2]['value']);
+        $this->assertEquals($prefData['Tinebase'][$pref->getId()]['type'], $results['results'][2]['type']);
+    }
+
+    /**
+     * tests if 'use default' appears in options and if it can be selected and if it changes if default changes
+     */
+    public function testGetSetChangeDefaultAdminPref()
+    {
+        $tfj = new Tinebase_Frontend_Json();
+        $results = $tfj->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter(false, true));
+
+        foreach ($results['results'] as $result) {
+            if ($result['name'] == Tinebase_Preference::LOCALE) {
+                $locale = $result;
+            }
+        }
+        foreach ($locale['options'] as $option) {
+            if ($option[0] == Tinebase_Model_Preference::DEFAULT_VALUE) {
+                $result = $option;
+                $defaultString = $option[1];
+            }
+        }
+
+        $this->assertTrue(isset($defaultString));
+        $this->assertStringContainsString('(auto)', $defaultString);
+
+        // set user pref to en first then to 'use default'
+        Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE} = 'en';
+        Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE} = Tinebase_Model_Preference::DEFAULT_VALUE;
+        $this->assertEquals('auto', Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE});
+
+        // set new default locale
+        $prefData['Tinebase']['default' . $locale['id']] = array('value' => 'de', 'type' => 'default', 'name' => Tinebase_Preference::LOCALE);
+        $this->_json->savePreferences($prefData);
+
+        $sclever = Tinebase_Helper::array_value('sclever',Zend_Registry::get('personas'));
+        $filters = $this->_getPreferenceFilter(false, FALSE, $sclever->getId());
+        $results = $tfj->searchPreferencesForApplication('Tinebase', $filters);
+        
+        foreach ($results['results'] as $result) {
+            if ($result['name'] == Tinebase_Preference::LOCALE) {
+                $updatedLocale = $result;
+            }
+        }
+
+        foreach ($updatedLocale['options'] as $option) {
+            if ($option[0] == Tinebase_Model_Preference::DEFAULT_VALUE) {
+                $result = $option;
+                $defaultString = $option[1];
+            }
+        }
+        
+        $this->assertEquals(count($locale['options']), count($updatedLocale['options']), 'option count has to be equal');
+        $this->assertStringContainsString('(Deutsch)', $defaultString);
+        $this->assertEquals('de', Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE});
+    }
+
+    /**
+     * tests if 'use default' appears in options and if it can be selected and if it changes if default changes
+     */
+    public function testGetAdminPrefWithConatiners()
+    {
+        $tfj = new Tinebase_Frontend_Json();
+        $results = $tfj->searchPreferencesForApplication('Addressbook', $this->_getPreferenceFilter(false, true));
+
+        foreach ($results['results'] as $result) {
+            if ($result['name'] == Addressbook_Preference::DEFAULTADDRESSBOOK) {
+                $locale = $result;
+            }
+        }
+        foreach ($locale['options'] as $option) {
+            if ($option[0] == Tinebase_Model_Preference::DEFAULT_VALUE) {
+                $result = $option;
+                $defaultString = $option[1];
+            }
+        }
+
+        $this->assertTrue(isset($defaultString));
+        $this->assertStringContainsString('default (Personal default)', $defaultString);
+    }
     
     /**
      * try to save tag and update without rights
@@ -829,6 +932,72 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
             Tinebase_Model_Grants::GRANT_DELETE    => false,
             Tinebase_Model_Grants::GRANT_ADMIN     => true
         ));
+    }
+
+    /**
+     * get preference with options
+     *
+     * @return Tinebase_Model_Preference
+     */
+    public function _getPreferenceWithOptions()
+    {
+        return new Tinebase_Model_Preference(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+            'name'              => 'defaultapp',
+            'value'             => 'value1',
+            'account_id'        => '0',
+            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+            'type'              => Tinebase_Model_Preference::TYPE_ADMIN,
+            'options'           => '<?xml version="1.0" encoding="UTF-8"?>
+                <options>
+                    <option>
+                        <label>option1</label>
+                        <value>value1</value>
+                    </option>
+                    <option>
+                        <label>option2</label>
+                        <value>value2</value>
+                    </option>
+                </options>'
+        ));
+    }
+
+    /******************** protected helper funcs ************************/
+
+    /**
+     * get preference filter
+     *
+     * @param bool $_savedPrefs
+     * @return array
+     */
+    public function _getPreferenceFilter($_savedPrefs = FALSE, $_adminPrefs = FALSE, $_userId = NULL)
+    {
+        if ($_userId === NULL) {
+            $_userId = Tinebase_Core::getUser()->getId();
+        }
+
+        $result = array(
+            array(
+                'field' => 'account',
+                'operator' => 'equals',
+                'value' => array(
+                    'accountId'     => ($_adminPrefs) ? 0 : $_userId,
+                    'accountType'   => ($_adminPrefs)
+                        ? Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE
+                        : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
+                )
+            )
+        );
+
+        if ($_savedPrefs) {
+            $result[] = array(
+                'field' => 'name',
+                'operator' => 'contains',
+                'value' => 'defaultapp'
+            );
+        }
+
+        return $result;
     }
 
     /**
