@@ -81,9 +81,12 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             
             if (in_array($uri->getScheme(), array('http', 'https'))) {
                 $allowedOrigins = array_merge(
-                    (array) Tinebase_Core::getConfig()->get(Tinebase_Config::ALLOWEDJSONORIGINS, array()),
-                    array($this->_request->getServer('SERVER_NAME'))
-                );
+                    (array) Tinebase_Core::getConfig()->get(Tinebase_Config::ALLOWEDJSONORIGINS, []), [
+                        $this->_request->getServer('SERVER_NAME'),
+                        'appassets.tine-android-platform.local', // needed for android apps
+                        '127.0.0.1',
+                        'localhost',
+                ]);
                 
                 if (in_array($uri->getHost(), $allowedOrigins)) {
                     // this headers have to be sent, for any CORS'ed JSON request

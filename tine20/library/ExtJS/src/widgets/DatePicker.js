@@ -836,7 +836,10 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
                     cell.className += ' ' + dateClss;
                 }
                 // apply dateStyles
-                const dateStyles = _.get(cal.dateStyles, ft, {});
+                const dateStyles = _.get({... cal.dateStyles}, ft, {});
+                if (_.indexOf(cal.selections, cell.firstChild.dateValue) >= 0) {
+                    Object.assign(dateStyles, cal.selectionStyles);
+                }
                 setCellStyles(cal, cell, dateStyles)
 	        };
 	
