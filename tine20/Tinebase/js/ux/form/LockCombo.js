@@ -65,35 +65,36 @@ Ext.ux.form.LockCombo = Ext.extend(Ext.form.ComboBox, {
     },
 
     initTrigger : function(){
-
-        var ts = this.trigger.select('.x-form-trigger', true);
+        const ts = this.trigger.select('.x-form-trigger', true);
         this.wrap.setStyle('overflow', 'hidden');
-        var triggerField = this;
+        const triggerField = this;
+        
         ts.each(function(t, all, index){
             t.hide = function(){
-                var w = triggerField.wrap.getWidth();
+                const w = triggerField.wrap.getWidth();
                 this.dom.style.display = 'none';
                 triggerField.el.setWidth(w-triggerField.trigger.getWidth());
             };
             t.show = function(){
-                var w = triggerField.wrap.getWidth();
+                const w = triggerField.wrap.getWidth();
                 this.dom.style.display = '';
                 triggerField.el.setWidth(w-triggerField.trigger.getWidth());
             };
-            var triggerIndex = 'Trigger'+(index+1);
+            const triggerIndex = 'Trigger'+(index+1);
 
             if(this['hide'+triggerIndex]){
                 t.dom.style.display = 'none';
             }
             t.on("click", this['on'+triggerIndex+'Click'], this, {preventDefault:true});
     
-            if(t.id == 'trigger2') {
-                if(this.hiddenFieldData == '0') {
-                    var _cssClass = this.trigger2ClassLocked.toString();
+            if(t.id === 'trigger2') {
+                t.set({'ext:qtip': i18n._('When preference is locked, normal user can not edit the preference anymore.')});
+                if(this.hiddenFieldData === '0') {
+                    const _cssClass = this.trigger2ClassLocked.toString();
                     t.addClass(_cssClass);
                 }
-                if(this.hiddenFieldData == '1' || !this.hiddenFieldData) {
-                    var _cssClass = this.trigger2ClassUnlocked.toString();
+                if(this.hiddenFieldData === '1' || !this.hiddenFieldData) {
+                    const _cssClass = this.trigger2ClassUnlocked.toString();
                     t.addClass(_cssClass);
                 }                
             }
@@ -121,7 +122,7 @@ Ext.ux.form.LockCombo = Ext.extend(Ext.form.ComboBox, {
             this.el.focus();
         }else {
             this.onFocus({});
-            if(this.triggerAction == 'all') {
+            if(this.triggerAction === 'all') {
                 this.doQuery(this.allQuery, true);
             } else {
                 this.doQuery(this.getRawValue());
@@ -131,28 +132,25 @@ Ext.ux.form.LockCombo = Ext.extend(Ext.form.ComboBox, {
     },
     
     onTrigger2Click : function(){
-
-        var _currentValue = Ext.getCmp(this.hiddenFieldId).getValue();
+        const _currentValue = Ext.getCmp(this.hiddenFieldId).getValue();
+        const ts = this.trigger.select('.x-form-trigger', true);
         
-        var ts = this.trigger.select('.x-form-trigger', true);
-
-
-        if (_currentValue == '0') {
+        if (_currentValue === '0') {
             Ext.getCmp(this.hiddenFieldId).dom.value = '1';
      
-            var _cssClass = this.trigger2ClassUnlocked.toString();
+            const _cssClass = this.trigger2ClassUnlocked.toString();
             ts.each(function(t, all, index){
-                if (t.id == 'trigger2') {
+                if (t.id === 'trigger2') {
                     t.dom.className = "x-form-trigger " + _cssClass;
                 }
             });
         }
         else  {
             Ext.getCmp(this.hiddenFieldId).dom.value = '0';
-
-            var _cssClass = this.trigger2ClassLocked.toString();
+    
+            const _cssClass = this.trigger2ClassLocked.toString();
             ts.each(function(t, all, index){
-                if (t.id == 'trigger2') {
+                if (t.id === 'trigger2') {
                     t.dom.className = "x-form-trigger " + _cssClass;
                 }
             });

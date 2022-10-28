@@ -72,7 +72,7 @@ Tine.widgets.TimezoneChooser = Ext.extend(Ext.form.ComboBox, {
         var currentTimezone = Tine.Tinebase.registry.get('timeZone');
         var newTimezone = record.get('timezone');
         
-        if (newTimezone != currentTimezone) {
+        if (newTimezone !== currentTimezone) {
             Ext.MessageBox.wait(i18n._('Setting new timezone...'), i18n._('Please Wait'));
             
             Ext.Ajax.request({

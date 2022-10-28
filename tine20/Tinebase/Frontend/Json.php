@@ -1208,21 +1208,23 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'totalcount'    => count($result)
         );
     }
-    
+
     /**
      * save preferences for application
-     *
-     * @param string    $data       json encoded preferences data
-     * @param bool      $adminMode  submit in admin mode?
-     * @return array with the changed prefs
-     *
+     * 
      * @todo move saving of user values to preferences controller
      */
-    public function savePreferences($data, $adminMode)
+    public function savePreferences($data, $accountId = null): array
     {
         $decodedData = $this->_prepareParameter($data);
-        
         $result = array();
+        $accountId = $accountId === null ? Tinebase_Core::getUser()->getId() : $accountId;
+
+        if ($accountId !== Tinebase_Core::getUser()->getId() 
+            && !Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_ACCOUNTS)) {
+            throw new Tinebase_Exception_AccessDenied('No permission to edit other user preferences !');
+        }
+        
         foreach ($decodedData as $applicationName => $data) {
             
             if ($applicationName == 'Tinebase.UserProfile') {
@@ -1235,22 +1237,23 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             } else {
                 $backend = Tinebase_Core::getPreference($applicationName);
                 if ($backend !== NULL) {
-                    if ($adminMode) {
-                        $backend->saveAdminPreferences($data);
-                        // TODO return preference values?
-                        $result = array();
-                    } else {
-                        // set user prefs
-                        foreach ($data as $name => $value) {
-                            try {
-                                $backend->doSpecialJsonFrontendActions($this, $name, $value['value'], $applicationName);
+                    // set user prefs
+                    foreach ($data as $name => $value) {
+                        try {
+                            $name = $value['name'] ?? $name;
+                            $backend->doSpecialJsonFrontendActions($this, $name, $value['value'], $applicationName, $accountId);
+                            
+                            if (!$accountId) {
                                 $backend->$name = $value['value'];
                                 $result[$applicationName][] = array('name' => $name, 'value' => $backend->$name);
-                            } catch (Exception $e) {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
-                                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
-                                        . 'Could not save preference '. $name . ' -> ' . $e->getMessage());
+                            } else {
+                                $backend->setValueForUser($name, $value['value'], $accountId);
+                                $result[$applicationName][] = array('name' => $name, 'value' => $value['value']);
                             }
+                        } catch (Exception $e) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
+                                    . 'Could not save preference '. $name . ' -> ' . $e->getMessage());
                         }
                     }
                 }
@@ -1485,7 +1488,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                         $app = Tinebase_Application::getInstance()->getApplicationById($record->application_id);
                     }
                     $preference = Tinebase_Core::getPreference($app->name, TRUE);
-                    $preference->resolveOptions($record);
+                    $preference->resolveOptions($record, $accountFilterArray['value']['accountId']);
                     if ($record->type == Tinebase_Model_Preference::TYPE_DEFAULT || ! $adminMode && $record->type == Tinebase_Model_Preference::TYPE_ADMIN) {
                         $record->value = Tinebase_Model_Preference::DEFAULT_VALUE;
                     }

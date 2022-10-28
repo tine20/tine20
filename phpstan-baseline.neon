@@ -7992,7 +7992,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Tinebase_Model_Filter_FilterGroup\\:\\:getAccountFilter\\(\\)\\.$#"
-			count: 1
+			count: 2
 			path: tine20/Tinebase/Preference/Abstract.php
 
 		-
@@ -9592,4 +9592,3 @@ parameters:
 			message: "#^Variable \\$pluralForm might not be defined\\.$#"
 			count: 1
 			path: tine20/langHelper.php
-

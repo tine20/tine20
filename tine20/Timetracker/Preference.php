@@ -109,7 +109,7 @@ class Timetracker_Preference extends Tinebase_Preference_Abstract
      * @param string $_value
      * @return array
      */
-    protected function _getSpecialOptions($_value)
+    protected function _getSpecialOptions($_value, $_accountId = null)
     {
         $translate = Tinebase_Translation::getTranslation($this->_application);
         
@@ -148,7 +148,7 @@ class Timetracker_Preference extends Tinebase_Preference_Abstract
                 return $availableTags;
                 break;
             default:
-                $result = parent::_getSpecialOptions($_value);
+                $result = parent::_getSpecialOptions($_value, $_accountId);
         }
         
         return $result;

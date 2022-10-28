@@ -136,7 +136,7 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
      * @param string $_value
      * @return array
      */
-    protected function _getSpecialOptions($_value)
+    protected function _getSpecialOptions($_value, $_accountId = null)
     {
         $translate = Tinebase_Translation::getTranslation($this->_application);
         $result = array();
@@ -165,8 +165,11 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
                     $result[] = array('default', $translate->_('default'));
                 }
                 break;
+            case self::DEFAULTCONTAINER_OPTIONS:
+                $result = $this->_getDefaultContainerOptions(null, $_accountId);
+                break;
             default:
-                $result = parent::_getSpecialOptions($_value);
+                $result = parent::_getSpecialOptions($_value, $_accountId);
         }
     
         return $result;

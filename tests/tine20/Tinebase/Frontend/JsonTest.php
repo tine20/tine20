@@ -449,22 +449,78 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $pref = Tinebase_Core::getPreference()->create($pref);
         
         // search prefs
-        $results = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter(TRUE, FALSE, '2'));
+        $filters = $this->_getPreferenceFilter(TRUE, FALSE, '2');
+        $results = $this->_instance->searchPreferencesForApplication('Tinebase', $filters);
         
         // check results
         $this->assertTrue(isset($results['results']));
         $this->assertEquals(1, $results['totalcount']);
+
+        $sclever = Tinebase_Helper::array_value('sclever',Zend_Registry::get('personas'));
+        $filters = $this->_getPreferenceFilter(false, FALSE, $sclever->getId());
+        $results1 = $this->_instance->searchPreferencesForApplication('ActiveSync', $filters, $sclever->getId());
+        
+        $filters = $this->_getPreferenceFilter(false, FALSE, Tinebase_Core::getUser()->getId());
+        $results2 = $this->_instance->searchPreferencesForApplication('ActiveSync', $filters, Tinebase_Core::getUser()->getId());
+
+        // check results
+        $this->assertNotEquals($results2['results'][0]['options'], $results1['results'][0]['options'], 'the options of user application preferences should be different');
     }
+
+    /**
+     * search preferences of another user
+     *
+     * @todo add check for the case that searching user has no admin rights
+     */
+    public function testSearchPreferencesOfOtherUsersApp()
+    {
+        // add new default pref
+        $pref = $this->_getPreferenceWithOptions();
+        $pref->account_id   = '2';
+        $pref->account_type = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
+        $pref = Tinebase_Core::getPreference()->create($pref);
+
+        $sclever = Tinebase_Helper::array_value('sclever',Zend_Registry::get('personas'));
+        
+        // search prefs
+        $filters =  array(
+            array(
+                'field' => 'account',
+                'operator' => 'equals',
+                'value' => array(
+                    'accountId'     => $sclever->getId(),
+                    'accountType'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                )
+            )
+        );
+        
+        $results = $this->_instance->searchPreferencesForApplication('Addressbook', $filters);
+
+        // check results
+        $this->assertTrue(isset($results['results']));
+        $this->assertEquals(4, $results['totalcount']);
+
+        $this->assertEquals( 'user', $results['results'][0]['account_type']);
+
+        $results = $this->_instance->searchPreferencesForApplication('Felamimail', $filters);
+
+        // check results
+        $this->assertTrue(isset($results['results']));
+        $this->assertEquals(7, $results['totalcount']);
+
+        $this->assertEquals( 'user', $results['results'][0]['account_type']);
+    }
+    
+    
     
     /**
      * save preferences for user
      *
-     * @todo add test for saving of other users prefs and acl check
      */
     public function testSavePreferences()
     {
         $prefData = $this->_getUserPreferenceData();
-        $this->_instance->savePreferences($prefData, false);
+        $this->_instance->savePreferences($prefData, null);
 
         // search saved prefs
         $results = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter(FALSE));
@@ -473,53 +529,65 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $this->assertTrue(isset($results['results']));
         $this->assertGreaterThan(2, $results['totalcount']);
         
+        foreach ($results['results'] as $result) {
+            $this->assertTrue(is_array($result['options']), 'options missing');
+            switch ($result['name']) {
+                case 'timezone':
+                    $this->assertEquals('Europe/Amsterdam', $result['value']);
+                    break;
+                case 'locale':
+                    $this->assertEquals('de', $result['value']);                   
+                    break;
+                case 'defaultapp':
+                    $this->assertEquals('Timetracker', $result['value']);                    
+                    break;
+                
+            }
+            $savedPrefData['Tinebase'][$result['name']] = array('value' => $result['value']);
+        }
+    }
+
+    /**
+     * save preferences for user
+     *
+     * @todo add test for saving of other users prefs and acl check
+     */
+    public function testSavePreferencesOtherUser()
+    {
+        $sclever = Tinebase_Helper::array_value('sclever',Zend_Registry::get('personas'));
+        $prefData = $this->_getUserPreferenceData();
+        $this->_instance->savePreferences($prefData, $sclever['accountId']);
+
+        // search saved other user prefs
+        $sclever = Tinebase_Helper::array_value('sclever',Zend_Registry::get('personas'));
+        $filters = $this->_getPreferenceFilter(false, FALSE, $sclever->getId());
+        $results = $this->_instance->searchPreferencesForApplication('Tinebase', $filters);
+
+        // check results
+        $this->assertTrue(isset($results['results']));
+        $this->assertGreaterThan(2, $results['totalcount']);
+
         $savedPrefData = array();
         foreach ($results['results'] as $result) {
-            if ($result['name'] == 'timezone') {
-                $savedPrefData['Tinebase'][$result['name']] = array('value' => $result['value']);
-            
+            $savedPrefData['Tinebase'][$result['name']] = array('value' => $result['value']);
+
+            if ($result['name'] === 'timezone') {
                 $this->assertTrue(is_array($result['options']), 'options missing');
                 $this->assertGreaterThan(100, count($result['options']));
             }
         }
-        $this->assertEquals($prefData, $savedPrefData);
-    }
-    
-    /**
-     * tests if 'use default' appears in options and if it can be selected and if it changes if default changes
-     */
-    public function testGetSetChangeDefaultPref()
-    {
-        $locale = $this->_getLocalePref();
-        foreach ($locale['options'] as $option) {
-            if ($option[0] == Tinebase_Model_Preference::DEFAULT_VALUE) {
-                $result = $option;
-                $defaultString = $option[1];
-            }
-        }
-        
-        $this->assertTrue(isset($defaultString));
-        $this->assertStringContainsString('(auto)', $defaultString);
+        $this->assertEquals($prefData['Tinebase']['locale'], $savedPrefData['Tinebase']['locale']);
+        $this->assertEquals($prefData['Tinebase']['timezone'], $savedPrefData['Tinebase']['timezone']);
+        $this->assertEquals($prefData['Tinebase']['defaultapp'], $savedPrefData['Tinebase']['defaultapp']);
 
-        // set user pref to en first then to 'use default'
-        Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE} = 'en';
-        Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE} = Tinebase_Model_Preference::DEFAULT_VALUE;
-        $this->assertEquals('auto', Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE});
-        
-        // set new default locale
-        $prefData['Tinebase']['default' . $locale['id']] = array('value' => 'de', 'type' => 'default', 'name' => Tinebase_Preference::LOCALE);
-        $this->_instance->savePreferences($prefData, true);
-        
-        $updatedLocale = $this->_getLocalePref();
-        foreach ($updatedLocale['options'] as $option) {
-            if ($option[0] == Tinebase_Model_Preference::DEFAULT_VALUE) {
-                $result = $option;
-                $defaultString = $option[1];
-            }
+        // save without account manage right
+        try {
+            $this->_originalRoleRights = $this->_removeRoleRight('Admin', Admin_Acl_Rights::MANAGE_ACCOUNTS, true);
+            $this->_instance->savePreferences($prefData, $sclever['accountId']);
+            self::fail('should throw Tinebase_Exception_AccessDenied');
+        } catch (Tinebase_Exception_AccessDenied $e) {
+            self::assertEquals("No permission to edit other user preferences !", $e->getMessage());
         }
-        $this->assertEquals(count($locale['options']), count($updatedLocale['options']), 'option count has to be equal');
-        $this->assertStringContainsString('(Deutsch)', $defaultString);
-        $this->assertEquals('de', Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE});
     }
     
     /**
@@ -544,12 +612,11 @@ class Tinebase_Frontend_JsonTest extends TestCase
      */
     public function testGetAdminPreferences()
     {
-        $this->testGetSetChangeDefaultPref();
-        
         // set new default locale
+        $afj = new Admin_Frontend_Json();
         $locale = $this->_getLocalePref();
         $prefData['Tinebase'][$locale['id']] = array('value' => 'de', 'type' => 'default', 'name' => Tinebase_Preference::LOCALE);
-        $this->_instance->savePreferences($prefData, true);
+        $afj->savePreferences($prefData);
         
         // check as admin
         $results = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter(FALSE, TRUE));
@@ -566,30 +633,6 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $locale = $this->_getLocalePref();
         $this->assertEquals(Tinebase_Model_Preference::TYPE_ADMIN, $locale['type'], 'pref should be of type admin: ' . print_r($locale, TRUE));
         $this->assertEquals(Tinebase_Model_Preference::DEFAULT_VALUE, $locale['value'], 'pref should be default value: ' . print_r($locale, TRUE));
-    }
-    
-    /**
-     * save admin prefs
-     *
-     */
-    public function testSaveAdminPreferences()
-    {
-        // add new default pref
-        $pref = $this->_getPreferenceWithOptions();
-        $pref = Tinebase_Core::getPreference()->create($pref);
-        
-        $prefData = array();
-        $prefData['Tinebase'][$pref->getId()] = array('value' => 'test', 'type' => 'forced');
-        $this->_instance->savePreferences($prefData, true);
-
-        // search saved prefs
-        $results = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter(TRUE));
-        
-        // check results
-        $this->assertTrue(isset($results['results']));
-        $this->assertEquals(1, $results['totalcount']);
-        $this->assertEquals($prefData['Tinebase'][$pref->getId()]['value'], $results['results'][0]['value']);
-        $this->assertEquals($prefData['Tinebase'][$pref->getId()]['type'], $results['results'][0]['type']);
     }
     
     /**
@@ -749,6 +792,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
      */
     public function testGetUserProfile()
     {
+        $this->_originalRoleRights = $this->_removeRoleRight('Tinebase', Tinebase_Acl_Rights_Abstract::ADMIN);
         $profile = $this->_instance->getUserProfile(Tinebase_Core::getUser()->getId());
 
         $this->assertTrue(is_array($profile));
@@ -978,7 +1022,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
      * @param bool $_savedPrefs
      * @return array
      */
-    protected function _getPreferenceFilter($_savedPrefs = FALSE, $_adminPrefs = FALSE, $_userId = NULL)
+    public function _getPreferenceFilter($_savedPrefs = FALSE, $_adminPrefs = FALSE, $_userId = NULL)
     {
         if ($_userId === NULL) {
             $_userId = Tinebase_Core::getUser()->getId();
@@ -1018,6 +1062,8 @@ class Tinebase_Frontend_JsonTest extends TestCase
         return array(
             'Tinebase' => array(
                 'timezone' => array('value' => 'Europe/Amsterdam'),
+                'locale' => array('value' => 'de'),
+                'defaultapp' => array('value' => 'Timetracker'),
             )
         );
     }
@@ -1027,7 +1073,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
      *
      * @return Tinebase_Model_Preference
      */
-    protected function _getPreferenceWithOptions()
+    public function _getPreferenceWithOptions()
     {
         return new Tinebase_Model_Preference(array(
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),

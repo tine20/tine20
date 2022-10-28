@@ -340,7 +340,7 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
      *
      * @todo add application title translations?
      */
-    protected function _getSpecialOptions($_value)
+    protected function _getSpecialOptions($_value, $_accountId = null)
     {
         $result = array();
 
@@ -378,7 +378,7 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 break;
 
             default:
-                $result = parent::_getSpecialOptions($_value);
+                $result = parent::_getSpecialOptions($_value, $_accountId);
                 break;
         }
 
@@ -393,8 +393,9 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
      * @param string $name
      * @param string $value
      * @param string $appName
+     * @param string $accountId
      */
-    public function doSpecialJsonFrontendActions(Tinebase_Frontend_Json_Abstract $_jsonFrontend, $name, $value, $appName)
+    public function doSpecialJsonFrontendActions(Tinebase_Frontend_Json_Abstract $_jsonFrontend, $name, $value, $appName, $accountId = null)
     {
         if ($appName == $this->_application) {
             // get default prefs if value = use default
@@ -404,15 +405,22 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
             }
             
             $session = Tinebase_Core::get(Tinebase_Session::SESSION);
+            $saveAsPreference = (bool)$accountId;
+            
+            if ($accountId && $accountId !== Tinebase_Core::getUser()->getId()) {
+                return;
+            }
             
             switch ($name) {
                 case Tinebase_Preference::LOCALE:
                     unset($session->userLocale);
-                    $_jsonFrontend->setLocale($value, FALSE, TRUE);
+                    $setCookie = (bool)$accountId === false;
+                    $_jsonFrontend->setLocale($value, $saveAsPreference, $setCookie, $accountId);
+                    
                     break;
                 case Tinebase_Preference::TIMEZONE:
                     unset($session->timezone);
-                    $_jsonFrontend->setTimezone($value, FALSE);
+                    $_jsonFrontend->setTimezone($value, $saveAsPreference, $accountId);
                     break;
             }
         }
