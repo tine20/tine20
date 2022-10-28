@@ -182,7 +182,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             } else {
                 // only admins can search for other users prefs
                 $accountFilter = $_filter->getAccountFilter();
-                if (($accountFilterValue = $accountFilter->getValue())
+                $accountFilterValue = $accountFilter->getValue();
+                if ($accountFilterValue
                     && $accountFilterValue['accountId'] != $userId
                     && $accountFilterValue['accountType'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
                 ) {
@@ -232,12 +233,22 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     protected function _addDefaultAndRemoveUndefinedPrefs(Tinebase_Record_RecordSet $_prefs, Tinebase_Model_Filter_FilterGroup $_filter)
     {
         $allAppPrefs = $this->getAllApplicationPreferences();
-        
+        $accountFilter = $_filter->getAccountFilter();
+        $accountFilterValue = $accountFilter ? $accountFilter->getValue() : null;
+        $accountId = null;
+        if (!empty($accountFilterValue['accountType'])) {
+            if ($accountFilterValue['accountType'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+                $accountId = $accountFilterValue['accountId'];
+            }
+            if ($accountFilterValue['accountType'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE) {
+                $accountId = 0;
+            }
+        }
         // add default prefs if not already in array (only if no name or type filters are set)
         if (! $_filter->isFilterSet('name') && ! $_filter->isFilterSet('type')) {
             $dbPrefNames = $_prefs->name;
             foreach($allAppPrefs as $prefName) {
-                $default = $this->getApplicationPreferenceDefaults($prefName);
+                $default = $this->getApplicationPreferenceDefaults($prefName, $accountId);
                 if (($idx = array_search($prefName, $dbPrefNames)) !== false) {
                     $_prefs[$idx]->options = $default->options;
                     $_prefs[$idx]->uiconfig = $default->uiconfig;
@@ -268,8 +279,9 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @param string $name
      * @param string $value
      * @param string $appName
+     * @param string $accountId
      */
-    public function doSpecialJsonFrontendActions(Tinebase_Frontend_Json_Abstract $_jsonFrontend, $name, $value, $appName)
+    public function doSpecialJsonFrontendActions(Tinebase_Frontend_Json_Abstract $_jsonFrontend, $name, $value, $appName, $accountId)
     {
     }
 
@@ -281,9 +293,9 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @return string
      * @throws Tinebase_Exception_NotFound if no default given and no pref found
      */
-    public function getValue($_preferenceName, $_default = NULL)
+    public function getValue($_preferenceName, $_default = NULL, $_accountId = null)
     {
-        $accountId = $this->_getAccountId();
+        $accountId = $_accountId ?? $this->_getAccountId();
 
         try {
             $result = $this->getValueForUser(
@@ -457,9 +469,9 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @param string $_preferenceName
      * @param string $_value
      */
-    public function setValue($_preferenceName, $_value)
+    public function setValue($_preferenceName, $_value, $_accountId = null)
     {
-        $accountId = $this->_getAccountId();
+        $accountId = $_accountId ?? $this->_getAccountId();
         return $this->setValueForUser($_preferenceName, $_value, $accountId);
     }
 
@@ -591,16 +603,16 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * 
      * @param Tinebase_Model_Preference $_preference
      */
-    public function resolveOptions(Tinebase_Model_Preference $_preference)
+    public function resolveOptions(Tinebase_Model_Preference $_preference, $_accountId = null)
     {
         $options = array();
         if (! empty($_preference->options)) {
-             $options = $this->_convertXmlOptionsToArray($_preference->options);
+             $options = $this->_convertXmlOptionsToArray($_preference->options, $_accountId);
         }
         
-        // get default pref
+        // get default pref / other user pref
         if (! in_array($_preference->name, $this->_skipDefaultOption)) {
-            $default = $this->_getDefaultPreference($_preference->name);
+            $default = $this->_getDefaultPreference($_preference->name, null, $_accountId);
             
             // check if value is in options and use that label
             $valueLabel = $default->value;
@@ -614,6 +626,11 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             if (is_array($valueLabel)) {
                 $valueLabel = implode(',', $valueLabel);
             }
+
+            if ($valueLabel === 'Personal default') {
+                $valueLabel = Tinebase_Translation::getTranslation('Tinebase')->_('Personal default');
+            }
+            
             $defaultLabel = Tinebase_Translation::getTranslation('Tinebase')->_('default') . 
                 ' (' . $valueLabel . ')';
             
@@ -636,13 +653,13 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @param string $_xmlOptions
      * @return array
      */
-    protected function _convertXmlOptionsToArray($_xmlOptions)
+    protected function _convertXmlOptionsToArray($_xmlOptions, $_accountId = null)
     {
         $result = array();
         $optionsXml = new SimpleXMLElement($_xmlOptions);
 
         if ($optionsXml->special) {
-           $result = $this->_getSpecialOptions($optionsXml->special);
+           $result = $this->_getSpecialOptions($optionsXml->special, $_accountId);
         } else {
             foreach ($optionsXml->option as $option) {
                 $result[] = array((string)$option->value, (string)$option->label);
@@ -722,6 +739,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                     . ' Create admin pref: ' . $prefData['name'] . ' = ' . $prefData['value']);
                 $newPref = $this->getApplicationPreferenceDefaults($prefData['name']);
                 $newPref->value = $prefData['value'];
+                $newPref->account_id = 0;
+                $newPref->account_type = Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE;
                 $newPref->type = ($prefData['type'] == Tinebase_Model_Preference::TYPE_FORCED) ? $prefData['type'] : Tinebase_Model_Preference::TYPE_ADMIN;
                 unset($newPref->id);
                 $this->create($newPref);
@@ -739,6 +758,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 $this->delete($preference->getId());
             } else {
                 $preference->value = $_data[$preference->getId()]['value'];
+                $preference->account_id = 0;
+                $preference->account_type = Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE;
                 $preference->type = ($_data[$preference->getId()]['type'] == Tinebase_Model_Preference::TYPE_FORCED) ? $_data[$preference->getId()]['type'] : Tinebase_Model_Preference::TYPE_ADMIN;
                 $this->update($preference);
             }
@@ -803,7 +824,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @param string $_preferenceName
      * @param Tinebase_Record_RecordSet $_preferences
      */
-    public function _getDefaultPreference($_preferenceName, $_preferences = NULL)
+    public function _getDefaultPreference($_preferenceName, $_preferences = NULL, $_accountId = 0)
     {
         if ($_preferences !== NULL) {
             $defaults = $_preferences->filter('type', Tinebase_Model_Preference::TYPE_ADMIN);
@@ -811,7 +832,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             $defaults = $this->search(new Tinebase_Model_PreferenceFilter(array(array(
                 'field'     => 'type',
                 'operator'  => 'equals',
-                'value'     => Tinebase_Model_Preference::TYPE_ADMIN
+                'value'     => Tinebase_Model_Preference::TYPE_ADMIN,
             ), array(
                 'field'     => 'name',
                 'operator'  => 'equals',
@@ -829,8 +850,13 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         
         if (count($defaults) > 0) {
             $defaultPref = $defaults->getFirstRecord();
+            // "Personal default" is only usable for configuring anyone,
+            // user should always get personal container info
+            if ($defaultPref->value === 'Personal default' && $_accountId) {
+                $defaultPref = $this->getApplicationPreferenceDefaults($_preferenceName, $_accountId);
+            }
         } else {
-            $defaultPref = $this->getApplicationPreferenceDefaults($_preferenceName);
+            $defaultPref = $this->getApplicationPreferenceDefaults($_preferenceName, $_accountId);
         }
         
         return $defaultPref;
@@ -878,7 +904,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @param  string $_value
      * @return array
      */
-    protected function _getSpecialOptions($_value)
+    protected function _getSpecialOptions($_value, $_accountId = null)
     {
         $result = array();
 
@@ -896,11 +922,11 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 break;
 
             case self::DEFAULTCONTAINER_OPTIONS:
-                $result = $this->_getDefaultContainerOptions();
+                $result = $this->_getDefaultContainerOptions($this->_application, $_accountId);
                 break;
 
             case self::DEFAULTPERSISTENTFILTER:
-                $result = Tinebase_PersistentFilter::getPreferenceValues($this->_application);
+                $result = Tinebase_PersistentFilter::getPreferenceValues($this->_application, $_accountId);
                 break;
                     
             default:
@@ -916,19 +942,27 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @param string $_appName
      * @return array
      */
-    protected function _getDefaultContainerOptions($_appName = NULL)
+    protected function _getDefaultContainerOptions($_appName = NULL, $_accountId = null)
     {
         $result = array();
         $appName = ($_appName !== NULL) ? $_appName : $this->_application;
         $model = strpos($appName, '_Model_') === false ?
             Tinebase_Core::getApplicationInstance($appName)->getDefaultModel() : $appName;
-        
-        $myContainers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $model, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
-        $sharedContainers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $model, [Tinebase_Model_Grants::GRANT_ADD, Tinebase_Model_Grants::GRANT_READ], false, true);
 
-        foreach ($myContainers as $container) {
-            $result[] = array($container->getId(), $container->name);
+        $user = $_accountId ? Tinebase_User::getInstance()->getUserById($_accountId) : Tinebase_Core::getUser();
+        $myContainers = Tinebase_Container::getInstance()->getPersonalContainer($user, $model, $user, Tinebase_Model_Grants::GRANT_ADD);
+        $sharedContainers = Tinebase_Container::getInstance()->getSharedContainer($user, $model, [Tinebase_Model_Grants::GRANT_ADD, Tinebase_Model_Grants::GRANT_READ], false, true);
+        
+        if ($_accountId === 0) {
+            // when configuring container for all users, we need a fake option
+            $value = Tinebase_Translation::getTranslation('Tinebase')->_('Personal default');
+            $result[] = array('Personal default', $value);
+        } else {
+            foreach ($myContainers as $container) {
+                $result[] = array($container->getId(), $container->name);
+            }
         }
+
         foreach($sharedContainers as $container) {
             $result[] = array($container->getId(), $container->name);
         }
@@ -948,14 +982,21 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $appName = ($_appName !== NULL) ? $_appName : $this->_application;
         $model = strpos($appName, '_Model_') === false ?
             Tinebase_Core::getApplicationInstance($appName)->getDefaultModel() : $appName;
-        
-        $accountId = ($_accountId) ? $_accountId : Tinebase_Core::getUser()->getId();
+
+        $accountId = $_accountId ?: Tinebase_Core::getUser()->getId();
         $containers = Tinebase_Container::getInstance()->getPersonalContainer($accountId, $model, $accountId, 0, true);
-        
+        $_preference->account_type = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
+        $_preference->account_id = $accountId;
         $_preference->value  = $containers->sort('creation_time')->getFirstRecord()->getId();
         $_preference->options = '<?xml version="1.0" encoding="UTF-8"?>
             <options>
                 <special>' . $_optionName . '</special>
             </options>';
+        
+        if ($_accountId === 0) {
+            $_preference->account_id = 0;
+            $_preference->value  = 'Personal default';
+            $_preference->account_type = Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE;
+        }
     }
 }

@@ -124,7 +124,33 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
                 break;
             case self::DEFAULTALARM_MINUTESBEFORE:
                 $preference->value      = 15;
-                $preference->options    = '';
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <option>
+                            <label>5</label>
+                            <value>5</value>
+                        </option>
+                        <option>
+                            <label>10</label>
+                            <value>10</value>
+                        </option>
+                        <option>
+                            <label>15</label>
+                            <value>15</value>
+                        </option>
+                        <option>
+                            <label>20</label>
+                            <value>20</value>
+                        </option>
+                        <option>
+                            <label>30</label>
+                            <value>30</value>
+                        </option>
+                        <option>
+                            <label>60</label>
+                            <value>60</value>
+                        </option>
+                    </options>';
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');

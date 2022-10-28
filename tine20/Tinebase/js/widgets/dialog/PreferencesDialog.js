@@ -95,7 +95,8 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         this.initActions();
         this.initButtons();
         this.items = this.getItems();
-        
+        this.currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
+    
         Tine.widgets.dialog.Preferences.superclass.initComponent.call(this);
     },
     
@@ -121,14 +122,18 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             iconCls: 'action_cancel'
         });
 
-        this.action_switchAdminMode = new Ext.Action({
+        this.action_switchAdminMode = new Ext.Button(new Ext.Action({
             text: i18n._('Admin Mode'),
-            minWidth: 70,
+            minWidth: 100,
             scope: this,
-            handler: this.onSwitchAdminMode,
+            handler: () => {
+                this.adminMode = !this.adminMode;
+                this.showPrefsForApp();
+            },
             iconCls: 'action_adminMode',
-            enableToggle: true
-        });
+            enableToggle: true,
+            hidden: !Tine.Tinebase.appMgr.isEnabled('Admin'),
+        }));
     },
     
     /**
@@ -139,10 +144,47 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         this.buttons = [];
         
         this.buttons.push(this.action_cancel, this.action_saveAndClose);
-
-        this.tbar = new Ext.Toolbar({
-            items: [ this.action_switchAdminMode ]
+        
+        this.selectedUserAcoountId = '0';
+        
+        const allUserContact = new Tine.Addressbook.Model.Contact({
+            account_id: '0',
+            n_fileas: '0 - ' + i18n._('All Users'),
+            jpegphoto: 'images/icon-set/icon_group_full.svg',
         });
+        this.allUserContact = Tine.Tinebase.data.Record.setFromJson(allUserContact.data, Tine.Addressbook.Model.Contact);
+        
+        this.userAccountPicker = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+            userOnly: true,
+            useAccountRecord: true,
+            fieldLabel: i18n._('User'),
+            hidden: !(this.adminMode && Tine.Tinebase.common.hasRight('manage_accounts', 'Admin')),
+            name: 'user_id',
+            allowBlank: false,
+            resizable: true,
+            value:  this.allUserContact.data,
+            listeners: {
+                scope: this,
+                select: this.onSearchUserPreference,
+            }
+        });
+        
+        this.userAccountPicker.store.on('load', function(store) {
+                store.insert(0, this.allUserContact);
+        } , this);
+        
+        this.tbar = new Ext.Toolbar({
+            items: [ 
+                this.action_switchAdminMode,
+                { xtype: 'tbspacer', width: 10 },
+                this.userAccountPicker
+            ]
+        });
+    },
+    
+    onSearchUserPreference: async function(combo, record) {
+        this.selectedUserAcoountId = record.get?.('account_id');
+        this.showPrefsForApp();
     },
     
     /**
@@ -160,7 +202,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             width: 200,
             border: false,
             frame: false,
-            initialNodeId: this.initialCardName
+            initialNodeId: this.initialCardName ?? 'Tinebase',
         })
         return [{
             xtype: 'panel',
@@ -237,45 +279,39 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     /**
      * apply changes handler
      */
-    onApplyChanges: function(closeWindow) {
-        
-        if (! this.isValid()) {
+    onApplyChanges: async function (closeWindow) {
+        if (!this.isValid()) {
             Ext.MessageBox.alert(i18n._('Errors'), i18n._('You need to correct the red marked fields before config could be saved'));
             return;
         }
-        
+    
         this.loadMask.show();
         
         // get values from card panels
         const [data, clientneedsreload] = this.getValuesFromPanels();
-        
-        // save preference data
-        Ext.Ajax.request({
-            scope: this,
-            params: {
-                method: 'Tinebase.savePreferences',
-                data: data,
-                adminMode: (this.adminMode) ? 1 : 0
-            },
-            success: function(response) {
-                this.loadMask.hide();
-                
-                // update registry
-                this.updateRegistry(Ext.util.JSON.decode(response.responseText).results);
-
-                if (closeWindow) {
-                    this.purgeListeners();
-                    this.window.close();
-                }
-
-                if(clientneedsreload) {
-                    Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.common.reload();
-                }
-            },
-            failure: function (response) {
-                Ext.MessageBox.alert(i18n._('Errors'), i18n._('Saving of preferences failed.'));
+        try {
+            const result = this.adminMode
+                ? await Tine.Admin.savePreferences(data, this.selectedUserAcoountId)
+                : await Tine.Tinebase.savePreferences(data, this.currentAccountId);
+            
+            this.loadMask.hide();
+            // update registry
+            if (this.selectedUserAcoountId === '0' || this.selectedUserAcoountId === this.currentAccountId) {
+                this.updateRegistry(result.results);
             }
-        });
+        
+            if (closeWindow) {
+                this.purgeListeners();
+                this.window.close();
+            }
+
+            if (clientneedsreload) {
+                await Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.common.reload();
+            }
+        } catch (e) {
+            Ext.MessageBox.alert(i18n._('Errors'), i18n._('Saving of preferences failed.'));
+        }
+        
     },
     
     /**
@@ -284,10 +320,10 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * @return {Boolean}
      */
     isValid: function() {
-        var panel = {};
-        var panelsToSave = (this.adminMode) ? this.adminPrefPanels : this.prefPanels;
+        let panel = {};
+        const panelsToSave = this.getPreferencePanel();
 
-        for (panelName in panelsToSave) {
+        for (let panelName in panelsToSave) {
             panel = panelsToSave[panelName];
             if (panel && typeof panel.isValid === 'function' && ! panel.isValid()) {
                 return false;
@@ -297,34 +333,46 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         return true;
     },
     
+    getPreferencePanel: function() {
+        return this.adminMode && this.selectedUserAcoountId === '0' ? this.adminPrefPanels : this.prefPanels;
+    },
+    
     /**
      * get values from card panels
      * 
      * @return {Object} with form data
      */
     getValuesFromPanels: function() {
-        var panel, data = {}, clientneedsreload = false;
-        var panelsToSave = (this.adminMode) ? this.adminPrefPanels : this.prefPanels;
-
-        for (panelName in panelsToSave) {
+        let panel;
+        let data = {};
+        let clientneedsreload = false;
+        const panelsToSave = this.getPreferencePanel();
+        
+        for (let panelName in panelsToSave) {
             if (panelsToSave.hasOwnProperty(panelName)) {
                 panel = panelsToSave[panelName];
                 if (panel !== null) {
                     data[panel.appName] = {};
-                    for (var j=0; j < panel.items.length; j++) {
-                        var item = panel.items.items[j];
+                    for (let j=0; j < panel.items.length; j++) {
+                        const item = panel.items.items[j];
                         if (item && item.name) {
-                            if (this.adminMode) {
+                            if (this.adminMode && this.selectedUserAcoountId === '0' && panel.appName !== 'Tinebase.UserProfile') {
                                 // filter personal_only (disabled) items
                                 if (! item.disabled) {
                                     data[panel.appName][item.prefId] = {value: item.getValue(), name: item.name};
-                                    data[panel.appName][item.prefId].type = (Ext.getCmp(item.name + '_writable').getValue() == 1) ? 'default' : 'forced';
+                                    if (Ext.getCmp(item.name + '_writable')) {
+                                        data[panel.appName][item.prefId].type = (Ext.getCmp(item.name + '_writable').getValue() === '1') ? 'default' : 'forced';
+                                        data[panel.appName][item.prefId].locked = Ext.getCmp(item.name + '_writable').getValue() === '0' ? 1 : 0;
+                                    } else {
+                                        console.error(item);
+                                    }
                                 }
                             } else {
                                 data[panel.appName][item.name] = {value: item.getValue()};
-                                if(!clientneedsreload && (item.startValue !== item.getValue()) && item.startValue && _.get(item, 'pref.data.uiconfig.clientneedsreload')) {
-                                    clientneedsreload = true;
-                                }
+                            }
+    
+                            if(!this.adminMode && !clientneedsreload && (item.startValue !== item.getValue()) && item.startValue && _.get(item, 'pref.data.uiconfig.clientneedsreload')) {
+                                clientneedsreload = true;
                             }
                         }
                     }
@@ -341,18 +389,19 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      * @param {Object} data
      */
     updateRegistry: function(data) {
-        for (application in data) {
+        let appPrefs;
+        for (let application in data) {
             if (data.hasOwnProperty(application)) {
                 appPrefs = data[application];
-                var registryValues = Tine[application].registry.get('preferences');
-                var changed = false;
-                for (var i=0; i < appPrefs.length; i++) {
-                    if (registryValues.get(appPrefs[i].name) != appPrefs[i].value) {
+                const registryValues = Tine[application].registry.get('preferences');
+                let changed = false;
+                for (var i = 0; i < appPrefs.length; i++) {
+                    if (registryValues.get(appPrefs[i].name) !== appPrefs[i].value) {
                         registryValues.replace(appPrefs[i].name, appPrefs[i].value);
                         changed = true;
                     }
                 }
-                
+            
                 if (changed) {
                     Tine[application].registry.replace('preferences', registryValues);
                 }
@@ -361,28 +410,35 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     },
     
     /**
-     * onSwitchAdminMode
+     * onUpdateAdminMode
      * 
+     * enable/disable apps according to admin right for applications
      * @private
-     * 
-     * @todo enable/disable apps according to admin right for applications
+     *
      */
-    onSwitchAdminMode: function(button, event) {
-        this.adminMode = (!this.adminMode);
+    onUpdateAdminModeForApp: function(appName) {
+        const hasAppAdminRight = appName === 'Tinebase.UserProfile' 
+            ? Tine.Tinebase.common.hasRight('manage_accounts', 'Admin') 
+            : Tine.Tinebase.common.hasRight('admin', appName);
         
-        if (this.adminMode) {
+        this.action_switchAdminMode.setDisabled(!hasAppAdminRight);
+        
+        if (!hasAppAdminRight) {
+            this.adminMode = false;
+            if (this.action_switchAdminMode.pressed) {
+                this.action_switchAdminMode.toggle();
+            }
+        }
+
+        this.userAccountPicker.setVisible(this.adminMode && hasAppAdminRight);
+        
+        if (this.adminMode && this.selectedUserAcoountId === '0') {
             this.prefsCardPanel.addClass('prefpanel_adminMode');
         } else {
             this.prefsCardPanel.removeClass('prefpanel_adminMode');
         }
         
-        // activate panel in card panel
-        var selectedNode = this.treePanel.getSelectionModel().getSelectedNode();
-        if (selectedNode) {
-            this.showPrefsForApp(this.treePanel.getSelectionModel().getSelectedNode().id);
-        }
-        
-        this.treePanel.checkGrants(this.adminMode);
+        this.treePanel.checkGrants(this.adminMode, this.selectedUserAcoountId);
     },
 
     /**
@@ -394,11 +450,20 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      */
     initPrefStore: function(appName) {
         this.loadMask.show();
+        const accountId = this.adminMode ? this.selectedUserAcoountId : this.currentAccountId;
         
         // set filter to get only default/forced values if in admin mode
-        var filter = (this.adminMode) ? [{field: 'account', operator: 'equals', value: {accountId: 0, accountType: 'anyone'}}] : '';
+        const filter = this.adminMode && accountId === '0' ? [{
+            field: 'account',
+            operator: 'equals',
+            value: {accountId: 0, accountType: 'anyone'}
+        }] : [{
+            field: 'account',
+            operator: 'equals',
+            value: {accountId: accountId, accountType: 'user'}
+        }];
         
-        var store = new Ext.data.JsonStore({
+        const store = new Ext.data.JsonStore({
             fields: Tine.Tinebase.Model.Preference,
             baseParams: {
                 method: 'Tinebase.searchPreferencesForApplication',
@@ -420,28 +485,31 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
 
     /**
      * called after a new set of preference Records has been loaded
-     * 
+     *
      * @param  {Ext.data.Store} this.store
-     * @param  {Array}          loaded records
-     * @param  {Array}          load options
+     * @param store
+     * @param records
+     * @param options
      */
     onStoreLoad: function(store, records, options) {
-        var appName = store.baseParams.applicationName;
-        
-        var card = new Tine.widgets.dialog.PreferencesPanel({
+        const appName = store.baseParams.applicationName;
+        store.removeAll();
+        store.add(records);
+        const card = new Tine.widgets.dialog.PreferencesPanel({
             prefStore: store,
             appName: appName,
-            adminMode: this.adminMode
+            adminMode: this.adminMode && this.selectedUserAcoountId === '0',
         });
-        
-        card.on('change', function(appName) {
+    
+        card.on('click', function(appName) {
             // mark card as changed in tree
-            var node = this.treePanel.getNodeById(appName);
+            const node = this.treePanel.getNodeById(appName);
             node.setText(node.text + '*');
+            this.showPrefsForApp(node.id);
         }, this);
         
         // add to panel registry
-        if (this.adminMode) {
+        if (this.adminMode && this.selectedUserAcoountId === '0') {
             this.adminPrefPanels[appName] = card;
         } else {
             this.prefPanels[appName] = card;
@@ -467,38 +535,50 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     },
     
     /**
-     * showPrefsForApp 
+     * showPrefsForApp
      * - check stores (create new store if not exists)
      * - activate pref panel for app
-     * 
-     * @param {String} appName
+     *
      */
-    showPrefsForApp: function(appName) {
-        
-        // TODO: invent panel hooking approach here
-        if (appName === 'Tinebase.UserProfile') {
-            
-            if (! this.prefPanels[appName]) {
-                this.prefPanels[appName] = new Tine.Tinebase.UserProfilePanel({
-                    appName: appName
-                });
-                this.activateCard(this.prefPanels[appName], false);
-            } 
+    showPrefsForApp: function() {
+        const selectedNode = this.treePanel.getSelectionModel().getSelectedNode();
+        if (!selectedNode?.id) {
+            return;
         }
-            
-        var panel = (this.adminMode) ? this.adminPrefPanels[appName] : this.prefPanels[appName];
+        
+        const node = this.treePanel.getNodeById(selectedNode.id);
+        if (!node.isSelected()) {
+            node.select();
+        }
 
-        if (!this.adminMode) {
-            // check grant for pref and enable/disable button
-            this.action_switchAdminMode.setDisabled(!Tine.Tinebase.common.hasRight('admin', appName));
-        }
+        const appName = selectedNode.id;
+        const accountId = this.adminMode ? this.selectedUserAcoountId : this.currentAccountId;
         
-        // check stores/panels
-        if (!panel) {
-            // add new card + store
-            this.initPrefStore(appName);
+        this.onUpdateAdminModeForApp(appName);
+        // TODO: invent panel hooking approach here
+        const isPanelExist = !!this.prefPanels[appName];
+        
+        if (appName === 'Tinebase.UserProfile') {
+            if (this.adminMode && accountId === '0') {
+                return;
+            }
+            if (!isPanelExist) {
+                this.prefPanels[appName] = new Tine.Tinebase.UserProfilePanel({
+                    appName: appName,
+                    accountId: accountId,
+                });
+            } else {
+                this.prefPanels[appName].updateUserProfile(accountId);
+            }
         } else {
-            this.activateCard(panel, true);
+            // check stores/panels
+            this.initPrefStore(appName);
+        }
+    
+        const panel = this.getPreferencePanel();
+        
+        if (panel[appName]) {
+            this.activateCard(panel[appName], isPanelExist);
         }
     }
 });

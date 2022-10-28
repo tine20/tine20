@@ -219,10 +219,12 @@ class Tinebase_UserProfile
         if (!Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::MANAGE_OWN_PROFILE)) {
             throw new Tinebase_Exception_AccessDenied('No rights to manage own profile');
         }
-        
-        if (Tinebase_Core::getUser()->getId() != $_userId) {
-            // We might itroduce a MANAGE_OTHER_PROFILE ?
-            throw new Tinebase_Exception_AccessDenied('given profile does not belong to current user');
+
+        // only admins are allowed to update app pref defaults/forced prefs
+        $useAdminRight = Tinebase_Acl_Roles::getInstance()->hasRight('Tinebase', Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights_Abstract::ADMIN);
+
+        if (Tinebase_Core::getUser()->getId() != $_userId && !$useAdminRight) {
+            throw new Tinebase_Exception_AccessDenied('given profile does not belong to current user, current user has no admin rights to manage other users profile');
         }
     }
     
@@ -309,4 +311,3 @@ class Tinebase_UserProfile
         $this->_updateableFields = $config['updateableFields'];
     }
 }
-    

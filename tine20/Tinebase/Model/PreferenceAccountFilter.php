@@ -109,4 +109,17 @@ class Tinebase_Model_PreferenceAccountFilter extends Tinebase_Model_Filter_Abstr
         
         return $result;
     }
+
+    /**
+     * gets value
+     *
+     * @return  mixed
+     */
+    public function getValue()
+    {
+        return [
+            'accountId' => $this->_accountId,
+            'accountType' => $this->_accountType,
+        ];
+    }
 }

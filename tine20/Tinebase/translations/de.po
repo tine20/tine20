@@ -1510,6 +1510,9 @@ msgstr "Bild"
 msgid "default"
 msgstr "Standard"
 
+msgid "Personal default"
+msgstr "Persönliche Standard"
+
 #: views/deactivationNotification.php:11
 msgid "Your user account has been deactivated"
 msgstr "Ihr Benutzerkonto würde deaktiviert"
@@ -3220,6 +3223,12 @@ msgstr "Passwort"
 msgid "Generate password"
 msgstr "Passwort generieren"
 
+msgid "All Users"
+msgstr "Alle Benutzer"
+
+msgid "All Settings"
+msgstr "Alle Einstellungen"
+
 #: js/widgets/dialog/PreferencesTreePanel.js:67
 msgid "General Preferences"
 msgstr "Generelle Einstellungen"
@@ -3227,6 +3236,10 @@ msgstr "Generelle Einstellungen"
 #: js/widgets/dialog/PreferencesTreePanel.js:87
 msgid "My Profile"
 msgstr "Mein Profil"
+
+#: js/widgets/dialog/PreferencesTreePanel.js:67
+msgid "Application Settings"
+msgstr "Anwendungs-Einstellungen"
 
 #: js/widgets/dialog/SimpleImportDialog.js:134
 #: js/widgets/dialog/ImportDialog.js:252

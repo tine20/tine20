@@ -36,6 +36,7 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
 
     // NOTE: minWidth gets not evaluated by ext - it's just a hint for consumers!
     minWidth: 200,
+    allowDelete: true,
 
     /**
      * config spec for additionalFilters - passed to PickerGridPanel
@@ -65,7 +66,8 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
             height: this.layerHeight - 40 || 'auto',
             onStoreChange: Ext.emptyFn,
             store: this.store,
-            additionalFilterSpec: this.additionalFilterSpec
+            additionalFilterSpec: this.additionalFilterSpec,
+            allowDelete: this.allowDelete,
         });
 
         return [this.pickerGrid];

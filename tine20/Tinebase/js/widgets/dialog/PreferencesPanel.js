@@ -77,7 +77,6 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initComponent: function() {
-        
         this.addEvents(
             /**
              * @event change
@@ -94,13 +93,13 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
             this.items = [];
             this.prefStore.each(function(pref) {
                 // check if options available -> use combobox or textfield
-                var fieldDef = {
+                const fieldDef = {
                     fieldLabel: pref.get('label'),
                     name: pref.get('name'),
                     value: pref.get('value'),
                     listeners: {
                         scope: this,
-                        change: function(field, newValue, oldValue) {
+                        change: function (field, newValue, oldValue) {
                             // fire change event
                             this.fireEvent('change', this.appName);
                         }
@@ -110,75 +109,37 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                     pref
                 };
                 
-                var options = pref.get('options');
+                const options = pref.get('options');
                 // NOTE: some prefs have no default and only one option (e.g. std email account)
-                if (options.length > 1 || (options.length == 1 && options[0][0] !== '_default_')) {
-                    if (pref.get('uiconfig') && pref.get('uiconfig').xtype) {
-                        // TODO support admin mode / currently this is personal_only
-                        Ext.apply(fieldDef, {
-                            xtype: pref.get('uiconfig').xtype,
-                            recordClass: Tine[pref.get('uiconfig').appName].Model[pref.get('uiconfig').model],
-                            value: pref.get('value') === '_default_' ? [] : pref.get('value'),
-                        });
-                    } else {
-                        Ext.apply(fieldDef, {
-                            xtype: (this.adminMode ? 'lockCombo' : 'combo'),
-                            store: pref.get('options'),
-                            mode: 'local',
-                            forceSelection: true,
-                            allowBlank: false,
-                            triggerAction: 'all'
-                        });
-                    }
+                if (pref.get('uiconfig') && pref.get('uiconfig').xtype) {
+                    // TODO support admin mode / currently this is personal_only
+                    Ext.apply(fieldDef, {
+                        xtype: pref.get('uiconfig').xtype,
+                        recordClass: Tine[pref.get('uiconfig').appName].Model[pref.get('uiconfig').model],
+                        value: pref.get('value') === '_default_' ? [] : pref.get('value'),});
                 } else {
                     Ext.apply(fieldDef, {
-                        xtype: (this.adminMode ? 'lockTextfield' : 'textfield'),
-                        defaultValue: (options[0] && options[0][1]) ? options[0][1] : '',
-                        isValid: function() {
-                            // crude hack to guess type (prefs need DTD)
-                            var type = this.defaultValue.match(/\(([0-9]*)\)$/) ? 'int' : 'string',
-                                value = this.getValue();
-                            
-                            // default is always valid
-                            if (value == '_default_') {
-                                return true;
-                            }
-                            
-                            if (type == 'int') {
-                                return !! String(value).match(/^\d+$/);
-                            }
-                            
-                            return true;
-                        },
-                        setValue: function(v) {
-                            v = v == '_default_' ? this.defaultValue : v;
-                            Ext.form.TextField.prototype.setValue.call(this, v);
-                        },
-                        getValue: function() {
-                            var value = Ext.form.TextField.prototype.getValue.call(this);
-                            return value == this.defaultValue ? '_default_' : value;
-                        },
-                        postBlur: function() {
-                            var value = this.getValue();
-                            if (value === '') {
-                                this.setValue('_default_');
-                            }
-                        }
+                        xtype: (this.adminMode ? 'lockCombo' : 'combo'),
+                        store: pref.get('options'),
+                        mode: 'local',
+                        forceSelection: true,
+                        allowBlank: false,
+                        triggerAction: 'all'
                     });
                 }
                 
                 if (this.adminMode) {
                     // set lock (value forced => hiddenFieldData = '0')
-                    fieldDef.hiddenFieldData = (pref.get('type') == 'forced') ? '0' : '1';
+                    fieldDef.hiddenFieldData = (pref.get('type') === 'forced') ? '0' : '1';
                     fieldDef.hiddenFieldId = pref.get('name') + '_writable';
                     // disable personal only fields (not quite sure why we get a string here in personal_only field)
-                    fieldDef.disabled = (pref.get('personal_only') === '1' || pref.get('personal_only') === true);
+                    fieldDef.disabled = (pref.get('personal_only') === '1' || pref.get('personal_only') === true) && pref.get('value') === '_default_';
                 } else {
-                    fieldDef.disabled = (pref.get('type') == 'forced' || pref.get('locked') == true);
+                    fieldDef.disabled = (pref.get('type') === 'forced' || pref.get('locked') === true);
                 }
                 
                 try {
-                    var fieldObj = Ext.ComponentMgr.create(fieldDef);
+                    const fieldObj = Ext.ComponentMgr.create(fieldDef);
                     this.items.push(fieldObj);
 
                     // ugh a bit ugly

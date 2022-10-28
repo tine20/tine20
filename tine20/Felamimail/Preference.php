@@ -256,19 +256,32 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
      * @param string $_value
      * @return array
      */
-    protected function _getSpecialOptions($_value)
+    protected function _getSpecialOptions($_value, $_accountId = null)
     {
         $result = array();
         switch($_value) {
             case self::DEFAULTACCOUNT:
                 // get all user accounts
-                $accounts = Felamimail_Controller_Account::getInstance()->search();
+                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                    ['field' => 'user_id', 'operator' => 'equals', 'value' => $_accountId],
+                ]);
+
+                $hasRight = Tinebase_Acl_Roles::getInstance()->hasRight(
+                    $this->_application,
+                    Tinebase_Core::getUser()->getId(),
+                    Tinebase_Acl_Rights::ADMIN
+                );
+                if ($hasRight) {
+                    $accounts = Admin_Controller_EmailAccount::getInstance()->search($filter);
+                } else {
+                    $accounts = Felamimail_Controller_Account::getInstance()->search($filter);
+                }
                 foreach ($accounts as $account) {
                     $result[] = array($account->getId(), $account->name);
                 }
                 break;
             default:
-                $result = parent::_getSpecialOptions($_value);
+                $result = parent::_getSpecialOptions($_value, $_accountId);
         }
         
         return $result;
