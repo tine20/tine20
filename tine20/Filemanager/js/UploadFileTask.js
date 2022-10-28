@@ -6,10 +6,11 @@ export default class UploadFileTask {
         // Should return true or false value (boolean) that end of the all process
         // If process rejected, current task will be removed from task pool in worker.
         return new Promise(async (resolve, reject) => {
-            const upload = await Tine.Tinebase.uploadManager.getUpload(args.uploadId, args.fileObject);
-            
-            const updateTask = async function (args) {
-                if (Tine.Tinebase.uploadManager.getBatchUploadAction(args.batchID) === 'stop') {
+            const uploadManager = Tine.Tinebase.uploadManager;
+            const upload = await uploadManager.getUpload(args.uploadId, args.fileObject);
+
+            const updateTask = async function (args, saveToStorage = true) {
+                if (uploadManager.getBatchUploadAction(args.batchID) === 'stop') {
                     if (! upload.isPaused()) {
                         upload.setPaused(true);
                         return;
@@ -17,15 +18,15 @@ export default class UploadFileTask {
                 }
                 
                 try {
-                    const task = await Tine.Tinebase.uploadManager.updateTaskByArgs(args);
-    
+                    const task = await uploadManager.updateTaskByArgs(args, saveToStorage);
+                    
                     window.postal.publish({
                         channel: "recordchange",
                         topic: 'Filemanager.Node.update',
                         data: task?.args?.nodeData ?? args.nodeData
                     });
                 } catch (e) {
-                    await Tine.Tinebase.uploadManager.unregisterUpload(args.uploadId);
+                    await uploadManager.unregisterUpload(args.uploadId);
                     reject('update task to storage failed');
                 }
             };
@@ -35,9 +36,10 @@ export default class UploadFileTask {
             };
     
             if (!upload) {
-                args.nodeData.status = 'failed';
+                args.nodeData.status = uploadManager.status.FAILURE;
+                args.nodeData.reason = 'upload is not found!';
                 await updateTask(args);
-                reject('upload is not found!');
+                reject(args.nodeData.reason);
             } else {
                 //todo : paused and resume feature might be implemented in the future , but we stop and cancel upload task for now
                 upload.on('uploadpaused', async () => {
@@ -58,7 +60,8 @@ export default class UploadFileTask {
                         });
                     }
         
-                    args.nodeData.status = 'cancelled';
+                    args.nodeData.status = uploadManager.status.CANCELLED;
+                    args.nodeData.reason = 'upload paused';
                     await updateTask(args);
         
                     resolve(true);
@@ -68,24 +71,25 @@ export default class UploadFileTask {
                     args.nodeData.status = fileRecord.get('status');
                     args.nodeData.progress = fileRecord.get('progress');
                     args.nodeData.contenttype = getResolvedContentType(fileRecord.get('type'), fileRecord.get('progress'));
-                    await updateTask(args);
+                    await updateTask(args, false);
                 });
     
                 upload.on('uploadcomplete', async (upload, fileRecord) => {
                     args.nodeData.contenttype = getResolvedContentType(fileRecord.get('type'), fileRecord.get('progress'));
                     args.nodeData.progress = fileRecord.get('progress');
-                    await updateTask(args);
+                    await updateTask(args, false);
                     //need to update grid with existing node id
                     args.nodeData = await Tine.Filemanager.createNode(args.uploadId, fileRecord.get('type'), fileRecord.get('id'), true);
                     args.nodeData.progress = 100;
-                    args.nodeData.status = 'complete';
+                    args.nodeData.status = uploadManager.status.COMPLETE;
                     await updateTask(args);
         
                     resolve(true);
                 });
     
                 upload.on('uploadfailure', async (upload, fileRecord) => {
-                    args.nodeData.status = 'failed';
+                    args.nodeData.status = uploadManager.status.FAILURE;
+                    args.nodeData.reason = 'upload failed';
                     await updateTask(args);
         
                     reject('upload failed');
@@ -94,12 +98,13 @@ export default class UploadFileTask {
                 try {
                     const type = getResolvedContentType(args.nodeData.type, -1);
                     args.nodeData = await Tine.Filemanager.createNode(args.uploadId, type, [], false);
-                    args.nodeData.status = 'uploading';
+                    args.nodeData.status = uploadManager.status.UPLOADING;
                     args.nodeData.size = args?.fileSize;
                     await updateTask(args);
                 } catch (e) {
                     if (e.data.code === 403) {
-                        args.nodeData.status = 'failed';
+                        args.nodeData.status = uploadManager.status.FAILURE;
+                        args.nodeData.reason = e.message;
                         await updateTask(args);
             
                         resolve(true);
@@ -110,7 +115,8 @@ export default class UploadFileTask {
                         const existingNode = _.get(e, 'data.existingnodesinfo[0]');
                         if (! existingNode.contenttype.includes('vnd.adobe.partial-upload')  && args.overwrite === false) {
                             const button = await new Promise((resolve) => {
-                                const action = Tine.Tinebase.uploadManager.getBatchUploadAction(args.batchID);
+                                const action = uploadManager.getBatchUploadAction(args.batchID);
+                                
                                 if (action !== '') {
                                     resolve(action);
                                 } else {
@@ -127,8 +133,9 @@ export default class UploadFileTask {
                                 }
                             });
                 
-                            if (button === 'stop' || button === 'skip') {
-                                args.nodeData.status = 'cancelled';
+                            if (button === uploadManager.action.STOP || button === uploadManager.action.SKIP) {
+                                args.nodeData.status = uploadManager.status.CANCELLED;
+                                args.nodeData.reason = `user ${button}`;
                                 await updateTask(args);
                     
                                 return resolve(true);
@@ -137,12 +144,12 @@ export default class UploadFileTask {
             
                         args.nodeData = await Tine.Filemanager.getNode(existingNode.id);
                         args.nodeData.contenttype = getResolvedContentType(args.nodeData.contenttype, 0);
-                        args.nodeData.status = 'uploading';
+                        args.nodeData.status = uploadManager.status.UPLOADING;
                         args.overwrite = true;
                     }
         
                     if (e.message === 'Node not found') {
-                        const type = getResolvedContentType(args.nodeData.type, 0);
+                        const type = getResolvedContentType(args.nodeData.type, -1);
                         args.nodeData = await Tine.Filemanager.createNode(args.uploadId, type, [], _.get(args, 'overwrite', false));
                     }
                 }
