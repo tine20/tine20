@@ -431,7 +431,11 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         }
         
         if (! folderStore.queriesPending || folderStore.queriesPending.length == 0) {
-            folderStore.asyncQuery('parent_path', parentPath, this.checkMails.createDelegate(this, []), [], this, folderStore);
+            folderStore.asyncQuery('parent_path', parentPath, (subfolder) => {
+                if (subfolder.getCount()) {
+                    this.checkMails();
+                }
+            }, [], this, folderStore);
         } else {
             this.checkMailsDelayedTask.delay(0);
         }
