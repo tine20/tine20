@@ -101,6 +101,9 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' updated group ' . $_eventObject->group->name);
                 Tinebase_ActionQueue::getInstance()->queueAction('Calendar.onUpdateGroup', $_eventObject->group->getId());
                 break;
+            case 'Addressbook_Event_DeleteList':
+                $this->_deleteEventAttenders($_eventObject);
+                break;
             case 'Admin_Event_AddGroupMember':
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' add groupmember ' . (string) $_eventObject->userId . ' to group ' . (string) $_eventObject->groupId);
                 Tinebase_ActionQueue::getInstance()->queueAction('Calendar.onUpdateGroup', $_eventObject->groupId);
@@ -145,6 +148,9 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
         } else if ($_eventObject instanceof Calendar_Event_DeleteResource) {
             $attenderId = $_eventObject->resource->getId();
             $type = Calendar_Model_Attender::USERTYPE_RESOURCE;
+        }  else if ($_eventObject instanceof Addressbook_Event_DeleteList) {
+            $attenderId = $_eventObject->list->getId();
+            $type = Calendar_Model_Attender::USERTYPE_GROUP;
         }
 
         $filter = new Calendar_Model_EventFilter(array(array(
@@ -173,7 +179,8 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
                 if ($attendeeUserId === $attenderId &&
                     ($attendee->user_type === Calendar_Model_Attender::USERTYPE_USER ||
                         $attendee->user_type === Calendar_Model_Attender::USERTYPE_GROUPMEMBER ||
-                        $attendee->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE
+                        $attendee->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE ||
+                        $attendee->user_type === Calendar_Model_Attender::USERTYPE_GROUP
                     )) {
                     $toRemove[] = $key;
                 }

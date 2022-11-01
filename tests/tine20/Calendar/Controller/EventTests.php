@@ -2714,4 +2714,34 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event = $result->getFirstRecord();
         static::assertEmpty($event->summary);
     }
+
+    public function testHandleRemoveGroup()
+    {
+        $group = Admin_Controller_Group::getInstance()->create(new Tinebase_Model_Group([
+            'name'          => 'tine20phpunitgroup' . Tinebase_Record_Abstract::generateUID(6),
+            'description'   => 'unittest group',
+            'members'       => [],
+        ]));
+
+        $event = $this->_getEvent();
+        $now = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
+        $event->dtstart = $now;
+        $event->dtend = $now->addHour(1);
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+        array(
+            'user_id'   => $group->list_id,
+            'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
+            'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+        )));
+        $event = $this->_controller->create($event);
+
+        $this->assertEquals(1, count($event->attendee->_listOfRecords));
+
+        Admin_Controller_Group::getInstance()->delete([$group->getID()]);
+
+        $event = $this->_controller->get($event->getId());
+
+        $this->assertEquals(0, count($event->attendee->_listOfRecords));
+
+    }
 }

@@ -383,15 +383,19 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
                 $listIds = array();
 
+                $listBackend = new Addressbook_Backend_List();
                 foreach ($_groupIds as $groupId) {
                     $group = $this->get($groupId);
                     if (!empty($group->list_id)) {
+                        /* @var $list Addressbook_Model_List */
+                        $list = $listBackend->get($group->list_id);
+                        Addressbook_Controller_List::getInstance()->fireDeleteEvent($list);
                         $listIds[] = $group->list_id;
                     }
                 }
 
                 if (!empty($listIds)) {
-                    $listBackend = new Addressbook_Backend_List();
+
                     $listBackend->softDelete($listIds);
                 }
             }
