@@ -684,7 +684,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 150,
             sortable: true,
             dataIndex: 'to',
-            hidden: true
+            hidden: true,
+            renderer: Tine.Tinebase.common.emailRenderer,
         },{
             id: 'sent',
             header: this.app.i18n._("Sent"),
@@ -808,7 +809,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 return (result) ? result : record.get('name');
             }
         }
-
+        
         result += '/';
         if (folder) {
             result += folder.get('globalname');

@@ -94,6 +94,19 @@ Tine.Tinebase.common = {
     },
     
     /**
+     * Returns emails from string or recipient token
+     * @param emails
+     */
+    emailRenderer: function (emails) {
+        if (Array.isArray(emails)) {
+            emails = emails.map((email) => {
+                return email?.email ?? email;
+            })
+        }
+        return emails;
+    },
+    
+    /**
      * Returns localised date and time string
      * 
      * @param {mixed} $_iso8601
