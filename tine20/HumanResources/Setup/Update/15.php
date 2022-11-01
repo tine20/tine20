@@ -354,13 +354,13 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
     public function update016()
     {
         foreach ($this->getDb()->query('SELECT id, start_date, end_date from ' . SQL_TABLE_PREFIX . 'humanresources_contract')->fetchAll(Zend_Db::FETCH_NUM) as $row) {
-            $start = new Tinebase_DateTime($row[1]);
+            $start = new Tinebase_DateTime($row[1], 'UTC');
             $start->setTimezone('Europe/Berlin');
             $start = $start->format('Y-m-d 00:00:00');
-            if (null === $row[2]) {
+            if (!$row[2]) {
                 $end = null;
             } else {
-                $end = new Tinebase_DateTime($row[2]);
+                $end = new Tinebase_DateTime($row[2], 'UTC');
                 $end->setTimezone('Europe/Berlin');
                 $end = $end->format('Y-m-d 00:00:00');
             }
