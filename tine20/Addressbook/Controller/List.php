@@ -685,7 +685,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     {
         $lists = $this->getMultiple($_ids);
         foreach ($lists as $list) {
-            if (! $this->_disabledEvents && ! $this->_fireDeleteEvent($list)) {
+            if (! $this->_disabledEvents && ! $this->fireDeleteEvent($list)) {
                 $key = array_search($list->getId(), $_ids);
                 unset($_ids[$key]);
                 continue;
@@ -697,7 +697,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         return $_ids;
     }
 
-    protected function _fireDeleteEvent(Addressbook_Model_List $list): bool
+    public function fireDeleteEvent(Addressbook_Model_List $list): bool
     {
         $event = new Addressbook_Event_DeleteList();
         $event->list = $list;
