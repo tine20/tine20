@@ -896,6 +896,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     }
                 })
             }
+        } else {
+            skipUpdate = false;
         }
         
         if (skipUpdate) return;
