@@ -415,7 +415,7 @@ class Tinebase_Tags
                 'last_modified_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
             ), $this->_db->quoteInto($this->_db->quoteIdentifier('id').'= ?', $tagId));
 
-            $tags = $this->getTagsById($tagId);
+            $tags = $this->getTagsById($tagId, null, true);
             return $tags[0];
         } else {
             throw new Tinebase_Exception_AccessDenied('Your are not allowed to update this tag.');
