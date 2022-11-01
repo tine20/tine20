@@ -40,6 +40,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_configuredModels = [
         HumanResources_Model_BLDailyWTReport_BreakTimeConfig::MODEL_NAME_PART,
         HumanResources_Model_BLDailyWTReport_Config::MODEL_NAME_PART,
+        HumanResources_Model_BLDailyWTReport_ConvertTsPtWtToTimeSlot::MODEL_NAME_PART,
         HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::MODEL_NAME_PART,
         'Contract',
         'CostCenter',
