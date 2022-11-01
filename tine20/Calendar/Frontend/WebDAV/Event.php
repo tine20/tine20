@@ -368,14 +368,20 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     /**
      * Returns the VCard-formatted object 
      * 
-     * @return stream
+     * @return resource
+     * @throws Sabre\DAV\Exception\PreconditionFailed
      */
     public function get() 
     {
+        try {
+            $event = $this->_getVEvent();
+        } catch (Tinebase_Exception_Record_Validation $terv) {
+            throw new Sabre\DAV\Exception\PreconditionFailed($terv->getMessage());
+        }
         $s = fopen('php://temp','r+');
-        fwrite($s, $this->_getVEvent());
+        fwrite($s, $event);
         rewind($s);
-        
+
         return $s;
     }
     
