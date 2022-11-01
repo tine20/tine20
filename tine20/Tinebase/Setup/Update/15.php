@@ -538,9 +538,13 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
                     if ($col) {
                         try {
                             $col = (new Tinebase_DateTime($col, 'UTC'))->setTimezone('CET')->toString();
-                        } catch (Exception $e) {}
+                        } catch (Exception $e) {
+                            Tinebase_Exception::log($e);
+                            $col = new Zend_Db_Expr('NULL');
+                        }
                     } else {
-                        $col = null;
+                        $col = new Zend_Db_Expr('NULL');
+
                     }
                     $q = $db->quoteInto($q, $col, null, 1);
                 }
