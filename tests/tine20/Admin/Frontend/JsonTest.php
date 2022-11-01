@@ -518,7 +518,8 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         }
 
         $this->assertTrue(isset($defaultString));
-        $this->assertStringContainsString('default (Personal default)', $defaultString);
+        $t = Tinebase_Translation::getTranslation();
+        $this->assertStringContainsString($t->_('default') . ' (' . $t->_('Personal default') . ')', $defaultString);
     }
     
     /**
