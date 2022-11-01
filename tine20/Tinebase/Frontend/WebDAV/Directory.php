@@ -256,6 +256,9 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         } catch (Tinebase_Exception_InvalidArgument $teia) {
             // directory not empty ...
             throw new Sabre\DAV\Exception\Forbidden($teia->getMessage());
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // directory not found ...
+            throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
         }
     }
     
