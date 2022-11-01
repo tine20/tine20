@@ -444,9 +444,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             $columns['humanresources_costcenter'] = [
                 'start_date',
             ];
-            $columns['humanresources_wt_dailyreport'] = [
+            /* we don't need this one, we just truncate the time value
+             *$columns['humanresources_wt_dailyreport'] = [
                 'date',
-            ];
+            ];*/
             $columns['humanresources_employee'] = [
                 'bday',
                 'employment_begin',
@@ -534,9 +535,13 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
                 $q = $query;
                 for ($i = 1; $i < count($row); ++$i) {
                     $col = $row[$i];
-                    try {
-                        $col = (new Tinebase_DateTime($col, 'UTC'))->setTimezone('CET')->toString();
-                    } catch (Exception $e) {}
+                    if ($col) {
+                        try {
+                            $col = (new Tinebase_DateTime($col, 'UTC'))->setTimezone('CET')->toString();
+                        } catch (Exception $e) {}
+                    } else {
+                        $col = null;
+                    }
                     $q = $db->quoteInto($q, $col, null, 1);
                 }
                 $db->query($db->quoteInto($q, $row[0], null, 1));
