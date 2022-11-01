@@ -530,7 +530,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
                 continue;
             }
             $query .= ' WHERE id = ?';
-            $select .=  'id FROM ' . SQL_TABLE_PREFIX . $table;
+            $select .=  ' FROM ' . SQL_TABLE_PREFIX . $table;
             foreach ($db->query($select)->fetchAll(Zend_Db::FETCH_NUM) as $row) {
                 $q = $query;
                 for ($i = 1; $i < count($row); ++$i) {
