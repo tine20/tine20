@@ -399,6 +399,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
     protected function _getBillableTimesheetsFilter(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL)
     {
         $endDate = clone $date;
+        $endDate->hasTime(true);
         $endDate->setDate($endDate->format('Y'), $endDate->format('n'), 1);
         $endDate->setTime(0,0,0);
         $endDate->subSecond(1);

@@ -774,7 +774,7 @@ class Tinebase_DateTime extends DateTime
      */
     public static function now()
     {
-        return new Tinebase_DateTime();
+        return new Tinebase_DateTime('now', 'UTC');
     }
 
     /**

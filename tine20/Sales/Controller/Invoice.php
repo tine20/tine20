@@ -156,8 +156,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         Sales_Controller_Contract::getInstance()->setHandleDependentRecords(FALSE);
         Sales_Controller_ProductAggregate::getInstance()->resolveCustomfields(FALSE);
         
-        $contracts->setTimezone(Tinebase_Core::getUserTimezone());
-        
         foreach ($contracts as $contract) {
             
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
@@ -319,10 +317,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 array('field' => 'contract_id', 'operator' => 'equals', 'value' => $this->_currentBillingContract->getId())
         ));
         
-        $productAggregates = Sales_Controller_ProductAggregate::getInstance()->search($filter);
-        $productAggregates->setTimezone(Tinebase_Core::getUserTimezone());
-        
-        return $productAggregates;
+        return Sales_Controller_ProductAggregate::getInstance()->search($filter);
     }
     
     /**
@@ -710,12 +705,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' found contract ' . $this->_currentBillingContract->getId() . ' for: ' . $id);
         }
 
-        $invoice->setTimezone(Tinebase_Core::getUserTimezone());
-        $this->_currentBillingContract->setTimezone(Tinebase_Core::getUserTimezone());
-        // date seems not to have a tz, so after the clone, the tz is UTC!! we need to reset it
         $this->_currentMonthToBill = clone $invoice->date;
-        $this->_currentMonthToBill->setTimezone(Tinebase_Core::getUserTimezone());
-
 
         //find billableAccountables that need to be checked for update
         $productAggregates = $this->_findProductAggregates();
@@ -793,7 +783,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 )),
             ));
             $positions = $ipc->search($f);
-            $positions->setTimezone(Tinebase_Core::getUserTimezone());
 
             $relations = null;
 
@@ -865,7 +854,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             }
 
             if ($updated) {
-                $dt = Tinebase_DateTime::now()->setTimezone('UTC')->toString();
+                $dt = Tinebase_DateTime::now()->toString();
                 $this->_backend->updateMultiple([$invoice->getId()], [
                     'creation_time' => $dt,
                     'last_modified_time' => $dt,
@@ -907,7 +896,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 continue;
             }
 
-            $invoice->setTimezone(Tinebase_Core::getUserTimezone());
             $oldInvoices[] = $invoice;
             $filter = new Sales_Model_InvoicePositionFilter(array());
             $filter->addFilter(new Tinebase_Model_Filter_Text(
@@ -935,12 +923,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         $contract = Sales_Controller_Contract::getInstance()->get($contract->getId());
 
         $this->_currentBillingContract = $contract;
-        $this->_currentBillingContract->setTimezone(Tinebase_Core::getUserTimezone());
 
         // the newest invoice!
         $date = clone $oldInvoices[0]->date;
-        // date seems not to have a tz, so after the clone, the tz is UTC!! we need to reset it
-        $date->setTimezone(Tinebase_Core::getUserTimezone());
 
 
         $this->_createAutoInvoicesForContract($this->_currentBillingContract, $date);
@@ -1034,7 +1019,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         $this->_currentBillingDate = clone $currentDate;
         $this->_currentBillingDate->setDate($this->_currentBillingDate->format('Y'),
             $this->_currentBillingDate->format('m'), 1);
-        $this->_currentBillingDate->setTime(0,0,0);
+        $this->_currentBillingDate->hasTime(false);
         
         // check all prerequisites needed for billing of the contract
         if (! $this->_validateContract($contract)) {
@@ -1066,7 +1051,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 }
                 $tmp = clone $productAggregate->last_autobill;
                 $tmp->setDate($tmp->format('Y'), $tmp->format('m'), 1);
-                $tmp->setTime(0,0,0);
+                $tmp->hasTime(false);
                 if ( null == $this->_currentMonthToBill || $tmp->isLater($this->_currentMonthToBill) ) {
                     $this->_currentMonthToBill = $tmp;
                 }
@@ -1084,7 +1069,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             $newestInvoice = null;
             foreach ($invoiceRelations as $invoiceRelation) {
                 if ($invoiceRelation->related_record) {
-                    $invoiceRelation->related_record->setTimezone(Tinebase_Core::getUserTimezone());
                     if (null == $newestInvoiceTime || $invoiceRelation->related_record->creation_time->isLater($newestInvoiceTime)) {
                         $newestInvoiceTime = $invoiceRelation->related_record->creation_time;
                         $newestInvoice = $invoiceRelation->related_record;
@@ -1106,9 +1090,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             $this->_currentMonthToBill = clone $contract->start_date;
             $_addMonth = false;
         }
-        $this->_currentMonthToBill->setTimezone(Tinebase_Core::getUserTimezone());
         $this->_currentMonthToBill->setDate($this->_currentMonthToBill->format('Y'), $this->_currentMonthToBill->format('m'), 1);
-        $this->_currentMonthToBill->setTime(0,0,0);
+        $this->_currentMonthToBill->hasTime(false);
         if ($_addMonth) {
             $this->_currentMonthToBill->addMonth(1);
         }
@@ -1207,9 +1190,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     $firstBill = (! $productAggregate->last_autobill);
                     
                     $lab = $productAggregate->last_autobill ? clone $productAggregate->last_autobill : ($productAggregate->start_date ? clone $productAggregate->start_date : clone $this->_currentBillingContract->start_date);
-                    $lab->setTimezone(Tinebase_Core::getUserTimezone());
                     $lab->setDate($lab->format('Y'), $lab->format('m'), 1);
-                    $lab->setTime(0,0,0);
+                    $lab->hasTime(false);
                     
                     if (! $firstBill) {
                         $lab->addMonth($productAggregate->interval);
@@ -1228,7 +1210,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     }
                     
                     $productAggregate->last_autobill = $lab;
-                    $productAggregate->setTimezone('UTC');
                     
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating last_autobill of "' . $productAggregate->getId() . '": ' . $lab->__toString());
@@ -1237,10 +1218,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     Sales_Controller_ProductAggregate::getInstance()->update($productAggregate);
 
                     $productAggregate->runConvertToRecord();
-                    $productAggregate->setTimezone(Tinebase_Core::getUserTimezone());
 
                     // update the invoice to set creation time after all the last_modified_time of the updates above here
-                    $this->_backend->updateMultiple([$invoice->getId()], ['creation_time' => Tinebase_DateTime::now()->setTimezone('UTC')->toString()]);
+                    $this->_backend->updateMultiple([$invoice->getId()], ['creation_time' => Tinebase_DateTime::now()->toString()]);
                 }
                 
                 $doSleep = true;
@@ -1483,7 +1463,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     protected function _inspectDelete(array $_ids)
     {
         $records = $this->_backend->getMultiple($_ids);
-        $records->setTimezone(Tinebase_Core::getUserTimezone());
         
         $invoicePositionController = Sales_Controller_InvoicePosition::getInstance();
         $contractController = Sales_Controller_Contract::getInstance();
@@ -1512,13 +1491,11 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 
                 if ($contractRelation) {
                     $contract = $contractRelation->related_record;
-                    $contract->setTimezone(Tinebase_Core::getUserTimezone());
                     
                     // get all invoices related to this contract. throw exception if a follwing invoice has been found
                     $invoiceRelations = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Contract', 'Sql', $contract->getId(), NULL, array(), TRUE, array('Sales_Model_Invoice'));
                     foreach ($invoiceRelations as $invoiceRelation) {
                         if ($invoiceRelation->related_record) {
-                            $invoiceRelation->related_record->setTimezone(Tinebase_Core::getUserTimezone());
                             if ($record->getId() !== $invoiceRelation->related_record->getId() && $record->creation_time < $invoiceRelation->related_record->creation_time) {
                                 throw new Sales_Exception_DeletePreviousInvoice();
                             }
@@ -1626,23 +1603,17 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                             $productAggregate->last_autobill->subMonth($productAggregate->interval);
                         } else {
                             
-                            $productAggregate->last_autobill = new Tinebase_DateTime($undoProductAggregates[$productAggregate->id] . '-01 00:00:00', Tinebase_Core::getUserTimezone());
+                            $productAggregate->last_autobill = new Tinebase_DateTime($undoProductAggregates[$productAggregate->id] . '-01 00:00:00', 'UTC');
                             if ($productAggregate->billing_point == 'begin') {
                                 $productAggregate->last_autobill->subMonth($productAggregate->interval);
                             }
                             if ( $productAggregate->start_date && $productAggregate->last_autobill < $productAggregate->start_date) {
-                                $tmp = clone $productAggregate->start_date;
-                                $tmp->setTimezone(Tinebase_Core::getUserTimezone());
-                                $tmp->setDate($tmp->format('Y'), $tmp->format('m'), 1);
-                                $tmp->setTime(0,0,0);
-                                if ($productAggregate->last_autobill < $tmp || ($productAggregate->billing_point == 'end' && $productAggregate->last_autobill == $tmp)) {
+                                if ($productAggregate->last_autobill < $productAggregate->start_date || ($productAggregate->billing_point == 'end' && $productAggregate->last_autobill == $productAggregate->start_date)) {
                                     $productAggregate->last_autobill = NULL;
                                 }
                             }
                         }
-                        $productAggregate->setTimezone('UTC');
                         $paController->update($productAggregate);
-                        $productAggregate->setTimezone(Tinebase_Core::getUserTimezone());
                     }
                 }
             }
