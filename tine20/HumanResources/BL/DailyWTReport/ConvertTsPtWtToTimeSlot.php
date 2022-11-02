@@ -43,7 +43,7 @@ class HumanResources_BL_DailyWTReport_ConvertTsPtWtToTimeSlot implements Tinebas
             return;
         }
 
-        $tss = $this->_timeSheets->filter('$timeaccount_id', HumanResources_Controller_WorkingTimeScheme::getInstance()
+        $tss = $this->_timeSheets->filter('timeaccount_id', HumanResources_Controller_WorkingTimeScheme::getInstance()
             ->getWorkingTimeAccount($_data->result->employee_id)->getId());
         if (!$tss->count()) {
             $tss = $this->_timeSheets;
