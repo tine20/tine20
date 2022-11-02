@@ -110,15 +110,17 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
      * 
      * @var array 
      */
-    protected $_config = array(
-        'prefix'            => 'smtp_',
-        'userTable'         => 'users',
-        'destinationTable'  => 'destinations',
-        'emailScheme'       => 'ssha256',
-        'domain'            => null,
-        'alloweddomains'    => array(),
-        'adapter'           => Tinebase_Core::PDO_MYSQL
-    );
+    protected $_config = [
+        'prefix' => 'smtp_',
+        'userTable' => 'users',
+        'destinationTable' => 'destinations',
+        'emailScheme' => 'ssha256',
+        'domain' => null,
+        'alloweddomains' => [],
+        'adapter' => Tinebase_Core::PDO_MYSQL,
+        // use this for adding only one default destination (email address -> mailserver username)
+        'onlyemaildestination' => false,
+    ];
     
     /**
      * user properties mapping
@@ -367,21 +369,15 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         ));
 
         // create username -> username alias if email and username are different
-        if ((! isset($this->_config['onlyemaildestination']) || ! $this->_config['onlyemaildestination'])
-            && $_smtpSettings[$this->_propertyMapping['emailUsername']] != $_smtpSettings[$this->_propertyMapping['emailAddress']]
+        if (! $this->_config['onlyemaildestination']
+            && $_smtpSettings[$this->_propertyMapping['emailUsername']]
+                != $_smtpSettings[$this->_propertyMapping['emailAddress']]
         ) {
-            // FIXME not working yet ...
-            // only do this if we don't have emailUsername already in the sources
-//            $sources = isset($_smtpSettings['source']) ? array_filter($_smtpSettings, function ($source) use ($username) {
-//                return (is_array($source) && isset($source['email']) && $source['email'] === $username || $source === $username);
-//            }) : [];
-//            if (count($sources) === 0) {
-                $this->_addDestination(array(
-                    'userid' => $_smtpSettings[$this->_propertyMapping['emailUserId']],   // userID
-                    'source' => $username,
-                    'destination' => $username,
-                ));
-//            }
+            $this->_addDestination(array(
+                'userid' => $_smtpSettings[$this->_propertyMapping['emailUserId']],   // userID
+                'source' => $username,
+                'destination' => $username,
+            ));
         }
     }
 
