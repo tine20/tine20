@@ -1,94 +1,96 @@
 
-TINE 2.0 RELEASENOTES
+TINE RELEASENOTES
 =====================
                     
-  Release:     Lu (2021.11)
-  Last change: 2021-10-25
+  Release:     Pino (2022.11)
+  Last change: 2022-11-02
 
 # GENERAL CHANGES (Administrative)
 
-## Single-Sign-On Support
+## PHP 8.1 Support (experimental)
 
-Tine can now act as SSO Identity Provider with support of the following protcols:
-- openID
-- openIDConnect
-- SAML 2.0
+- might still throw some deprecation notices
 
-If Tine is configured accordingly, users of other apps can be authenticated by logging in on a central instance (Tine
- as Identity Provider).
+Support for PHP 8.1 has been added.
 
-## MFA
+## Check Password Policy on Login
 
-Added support for H|TOTP and Yubico MFA. A new MFA UI has been added to the user edit dialog.
+## No Linux Distro Packages any more
 
-## Sentry
+Use Docker Image or Tarball/ZIP Package.
 
-Update to current Sentry PHP SDK 3.3.2 with improved logging and more information in issues.
+## Add Broadcasthub for updating the client
 
-## PHP 8.0 Support
-
-Support PHP < 7.4 has been dropped.
-
-## Monitoring E-Mail Integration
-
-Added monitoring checks for IMAP/SMTP/Sieve integration.
-
-# GENERAL CHANGES (User Interface)
-
-## Rebranding
-
-Tine 2.0 -> Tine
+... when other users change records / other people editing the same file in Filemanager
 
 # Admin
 
-## Adminisitration of E-Mail-Accounts
+## Change Preferences of Other Users
 
-- Sieve settings for all (system) accounts
-- Improved shared accounts management
+## E-Mail: allow to set Aliases/Forwards/Sieve
+
+... for all system mail accounts in the account admin panel
+
+## MFA Self-Service
+
+Users now can manage their MFA devices by themselves
 
 # Adressbook
 
-## Improve group memberships and roles management
+## new filter options
 
-- Only have one grid for members and roles
-- Allow to define maximum members in a role
+- country
+- email (does not contain...)
 
-## Added language field to contacts
+## allow to edit contacts in picker combos
+
+## new avatar renderer
 
 # Calendar
 
-## Add secondary colors for events (by attender status, tags, ...)
+## Location contact record field added
 
-## Add ressource colors
+# E-Mail
 
-# Felamimail
+## Open Attachments in OnlyOffice
 
-## "Mark as SPAM"-Features
+## New "File As/In" Functions
 
-- Configurable via BL-Pipelines
+- file in other IMAP folders
+- file directly when sending message
 
-## Import eml into Felamimail via UI
+## Allow Message Tagging (with standard tine tags)
 
-## ActiveSync: support for FolderCreate command added
-
-## Improve E-Mail-Editor
-
-- Added strike-through formatting
-- Added code-block formatting
-- Standard font configurable per user
-
-## Keyboard-Shortcuts (similar to Thunderbird)
-
-## Test-Button for checking IMAP/SMTP settings
+## Preview of Mail Attachments
 
 # Filemanager
 
-## Upload Folder
+## Previews of Sound and Video Files
+
+## Display of all Users editing documents via OO
+
+## Improved Uploadmanager (C?)
+
+# Timetracker
+
+## Add Attendance Clock/Recorder for starting/pausing/stopping working/project time
+
+## Access to Human Resources/Working Time Reports and Free Time Planning
+
+# Human Resources
+
+## New Vacation, Employee, Division + Working Time features
+
+## Free Time Grid Panel
+
+# Sales
+
+## New Offers, PaperSlip, Invoices, Delivery, Positions, Transitions, ...
 
 # ActiveSync / WebDAV
 
-## Support for OpenSync on Android
+## Support Folder-Move via ActiveSync
 
-## Support EMClient 7
+# Projects
 
-- emClient 8 might still be unsupported: https://github.com/tine20/tine20/issues/7202
+## Added Tasks and more fields to the model
