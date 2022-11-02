@@ -147,8 +147,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $contract = Sales_Controller_Contract::getInstance()->get($id);
         
-        $date = new Tinebase_DateTime($date);
-        $date->setTimezone(Tinebase_Core::getUserTimezone());
+        $date = new Tinebase_DateTime($date, 'UTC');
     
         return Sales_Controller_Invoice::getInstance()->createAutoInvoices($date, $contract);
     }
@@ -443,7 +442,6 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $contract = Sales_Controller_Contract::getInstance()->get($relation->related_id);
         
         $date = clone $invoice->creation_time;
-        $date->setTimezone(Tinebase_Core::getUserTimezone());
         
         Sales_Controller_Invoice::getInstance()->delete(array($id));
         
@@ -462,7 +460,6 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $contract = Sales_Controller_Contract::getInstance()->get($relation->related_id);
     
         $date = clone $invoice->creation_time;
-        $date->setTimezone(Tinebase_Core::getUserTimezone());
     
         Sales_Controller_Invoice::getInstance()->delete(array($id));
     
