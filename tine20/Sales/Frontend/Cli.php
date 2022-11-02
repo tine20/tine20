@@ -98,10 +98,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         try {
 
                             $date = new Tinebase_DateTime();
-                            // use usertimezone
-                            $date->setTimezone(Tinebase_Core::getUserTimezone());
-                            // if a date is given, set hour to 3
-                            $date->setDate($split[0], $split[1], $split[2])->setTime(3, 0, 0);
+                            $date->setDate($split[0], $split[1], $split[2])->hasTime(false);
                         } catch (Exception $e) {
                             Tinebase_Exception::log($e);
                         }
@@ -113,8 +110,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
 
             if (!$date) {
-                $date = Tinebase_DateTime::now();
-                $date->setTimezone(Tinebase_Core::getUserTimezone());
+                $date = Tinebase_DateTime::today();
             }
 
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {

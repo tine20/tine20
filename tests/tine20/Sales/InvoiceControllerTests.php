@@ -586,9 +586,9 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->sharedTimesheet = $this->_timesheetController->update($oldTimesheet);
 
         $result = $this->_invoiceController->checkForContractOrInvoiceUpdates();
-        $this->assertArrayHasKey(1, $result);
+        $this->assertArrayHasKey(0, $result);
 
-        $this->_checkInvoiceUpdateExistingTimeaccount($result[1], 5);
+        $this->_checkInvoiceUpdateExistingTimeaccount($result[0], 5);
     }
 
     protected function _checkInvoiceUpdateWithNewTimeaccount($invoiceId)
