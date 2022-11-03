@@ -380,24 +380,36 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         // create two users: one with email in primary and one with email in secondary domain
         $user1 = $this->testAddUser();
         $this->objects['users'][] = $user1;
-        $user2 = TestCase::getTestUser([
-            'accountLoginName'      => 'phpunitssecond',
-            'accountEmailAddress'   => 'phpunitpostfix@' . $smtpConf->secondarydomains,
-        ]);
-        $user2->smtpUser = new Tinebase_Model_EmailUser(array(
-            'emailAddress'     => $user2->accountEmailAddress,
-            'emailForwardOnly' => false,
-            'emailForwards'    => array(),
-            'emailAliases'     => array(),
-        ));
-        $user2 = $this->_backend->addUser($user2);
-        $this->objects['users'][] = $user2;
+        $user2 = $this->_addUserToSecondaryDomain();
 
         $this->assertTrue($user2 instanceof Tinebase_Model_FullUser);
         $this->assertTrue(isset($user2->smtpUser), 'no smtpUser data found in ' . print_r($user2->toArray(),
                 TRUE));
 
-        // check dovecot users
+        $this->_checkDovecotUsers($user1, $user2);
+    }
+
+    protected function _addUserToSecondaryDomain()
+    {
+        $smtpConf = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
+        $user = TestCase::getTestUser([
+            'accountLoginName'      => 'phpunitssecond',
+            'accountEmailAddress'   => 'phpunitpostfix@' . $smtpConf->secondarydomains,
+        ]);
+        $user->smtpUser = new Tinebase_Model_EmailUser(array(
+            'emailAddress'     => $user->accountEmailAddress,
+            'emailForwardOnly' => false,
+            'emailForwards'    => array(),
+            'emailAliases'     => array(),
+        ));
+        $user = $this->_backend->addUser($user);
+        $this->objects['users'][] = $user;
+
+        return $user;
+    }
+
+    protected function _checkDovecotUsers($user1, $user2)
+    {
         $imapConf = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP,
             new Tinebase_Config_Struct())->toArray();
         if (!isset($imapConf['backend']) || !('Imap_' . ucfirst($imapConf['backend']) == Tinebase_EmailUser::IMAP_DOVECOT) || $imapConf['active'] != true) {
@@ -412,5 +424,15 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user2);
         $rawDovecotUser2 = $dovecot->getRawUserById($emailUser);
         self::assertEquals($user2->accountEmailAddress, $rawDovecotUser2['loginname']);
+    }
+
+    public function testSecondaryDomainAliases()
+    {
+        $user = $this->_addUserToSecondaryDomain();
+        $destinations = $this->_getDestinations($user);
+        self::assertCount(2, $destinations,
+            'exactly two destinations expected: ' . print_r($destinations, true));
+
+        // TODO add test with 'onlyemaildestination' => true (should have only one destination)
     }
 }
