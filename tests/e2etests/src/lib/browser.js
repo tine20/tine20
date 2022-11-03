@@ -131,7 +131,7 @@ module.exports = {
         args = ['--lang=de-DE,de'];
 
         if(process.env.TEST_DOCKER === 'true') {
-            args.push('--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu');
+            args.push('--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage');
         }
 
 	try {
