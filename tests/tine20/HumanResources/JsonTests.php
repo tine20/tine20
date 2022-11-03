@@ -345,7 +345,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         Tinebase_Core::setUser($this->_originalTestUser);
         Tinebase_Container::getInstance()->addGrants($division['container_id'], Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
             $this->_personas['jsmith']->getId(), [
-                HumanResources_Model_DivisionGrants::UPDATE_TIME_DATA,
+                HumanResources_Model_DivisionGrants::READ_TIME_DATA,
                 HumanResources_Model_DivisionGrants::READ_OWN_DATA,
             ], true);
 
@@ -364,6 +364,34 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $accountInstance->createMissingAccounts((int) $date->format('Y'));
         $division = $this->_json->getDivision($savedEmployee['division_id']);
 
+        Tinebase_Core::setUser($this->_personas['pwulf']);
+        $this->_json->calculateAllDailyWTReports();
+        $this->assertSame(false, HumanResources_Controller_DailyWTReport::getInstance()->iterationResult);
+
+        Tinebase_Core::setUser($this->_originalTestUser);
+        Tinebase_Container::getInstance()->addGrants($division['container_id'], Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            $this->_personas['pwulf']->getId(), [
+                HumanResources_Model_DivisionGrants::READ_BASIC_EMPLOYEE_DATA,
+                HumanResources_Model_DivisionGrants::READ_TIME_DATA,
+            ], true);
+
+        Tinebase_Core::setUser($this->_personas['pwulf']);
+        $this->_json->calculateAllDailyWTReports();
+        $this->assertIsArray(HumanResources_Controller_DailyWTReport::getInstance()->iterationResult);
+        $this->assertSame(1, HumanResources_Controller_DailyWTReport::getInstance()->iterationResult['totalcount']);
+    }
+
+    public function testCalculateAllDailyWTReportsOwnGrant()
+    {
+        $date = new Tinebase_DateTime();
+        $date->subMonth(1);
+
+        $costCenter1 = $this->_getCostCenter($date);
+        $savedEmployee = $this->_saveEmployee($costCenter1, $date->getClone(), 'jsmith');
+        $accountInstance = HumanResources_Controller_Account::getInstance();
+        $accountInstance->createMissingAccounts((int) $date->format('Y'));
+        $division = $this->_json->getDivision($savedEmployee['division_id']);
+
         Tinebase_Core::setUser($this->_personas['jsmith']);
         $this->_json->calculateAllDailyWTReports();
         $this->assertSame(false, HumanResources_Controller_DailyWTReport::getInstance()->iterationResult);
@@ -371,7 +399,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         Tinebase_Core::setUser($this->_originalTestUser);
         Tinebase_Container::getInstance()->addGrants($division['container_id'], Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
             $this->_personas['jsmith']->getId(), [
-                HumanResources_Model_DivisionGrants::UPDATE_TIME_DATA,
                 HumanResources_Model_DivisionGrants::READ_OWN_DATA,
             ], true);
 

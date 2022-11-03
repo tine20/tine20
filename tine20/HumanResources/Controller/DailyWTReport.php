@@ -142,7 +142,9 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             return true;
         }
 
-        Tinebase_Core::acquireMultiServerLock(__METHOD__);
+        if (false === Tinebase_Core::acquireMultiServerLock(__METHOD__)) {
+            return true;
+        }
 
         try {
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
@@ -151,14 +153,24 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             $containerFilter = new Tinebase_Model_Filter_DelegatedAcl('division_id', null, null, [
                 'modelName' => HumanResources_Model_Employee::class
             ]);
-            $containerFilter->setRequiredGrants([HumanResources_Model_DivisionGrants::UPDATE_TIME_DATA]);
+            $containerFilter->setRequiredGrants([HumanResources_Model_DivisionGrants::READ_TIME_DATA]);
             $filter->addFilter($containerFilter);
             $oFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, []);
             $oFilter->addFilterGroup($filter);
+            $ids = array_merge(
+                HumanResources_Controller_Employee::getInstance()->search($oFilter, null, false, true),
+                HumanResources_Controller_Employee::getInstance()->search(
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
+                        ['field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()]
+                    ]), null, false, true)
+            );
+
             $iterator = new Tinebase_Record_Iterator(array(
                 'iteratable' => $this,
                 'controller' => HumanResources_Controller_Employee::getInstance(),
-                'filter' => $oFilter,
+                'filter' => Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
+                    ['field' => 'id', 'operator' => 'in', 'value' => $ids]
+                ]),
                 'function' => 'calculateReportsForEmployees',
             ));
             $this->iterationResult = $iterator->iterate($force);
@@ -207,9 +219,21 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         bool $force = false
     ) {
         if (HumanResources_Controller_Employee::getInstance()->doContainerACLChecks()) {
-            HumanResources_Controller_Employee::getInstance()->checkGrant($employee,
-                HumanResources_Model_DivisionGrants::UPDATE_TIME_DATA);
+            if ($employee->getIdFromProperty('account_id') !== Tinebase_Core::getUser()->getId() ||
+                    !HumanResources_Controller_Employee::getInstance()->checkGrant($employee,
+                        HumanResources_Model_DivisionGrants::READ_OWN_DATA, false)) {
+                HumanResources_Controller_Employee::getInstance()->checkGrant($employee,
+                    HumanResources_Model_DivisionGrants::READ_TIME_DATA);
+            }
         }
+
+        $lockId = __METHOD__ . $employee->getId();
+        if (false === Tinebase_Core::acquireMultiServerLock($lockId)) {
+            return [];
+        }
+        $multiServerLockRAII = new Tinebase_RAII(function() use($lockId) {
+            Tinebase_Core::releaseMultiServerLock($lockId);
+        });
 
         // we should never run in FE context, so we reset the RC and use RAII to restate it
         $oldRC = $this->_requestContext;
@@ -420,6 +444,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
 
         // to satifisfy unused variable check
         unset($rcRaii);
+        unset($multiServerLockRAII);
 
         return $this->_reportResult;
     }
