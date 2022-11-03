@@ -1301,11 +1301,17 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     public function deleteAllUsers()
     {
         // need to fetch FullUser because otherwise we would get only enabled accounts :/
-        $users = $this->getUsers(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
+        $users = $this->getUsers(null, null, 'ASC', null, null,
+            Tinebase_Model_FullUser::class);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($users) .' users');
-        foreach ( $users as $user ) {
-            $this->deleteUser($user);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Deleting ' . count($users) .' users');
+        foreach ($users as $user ) {
+            try {
+                $this->deleteUser($user);
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
         }
     }
 
