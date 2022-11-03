@@ -98,6 +98,9 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
         } elseif ($_data->freeTimes) {
             /** @var HumanResources_Model_FreeTime $freeTime */
             foreach ($_data->freeTimes as $freeTime) {
+                if (!is_object($freeTime->type)) {
+                    continue;
+                }
                 $strategy = $freeTime->type->workingTimeCalculationStrategy;
                 if (!$strategy instanceof HumanResources_Model_WTCalcStrategy) {
                     $strategy = new HumanResources_Model_WTCalcStrategy();
