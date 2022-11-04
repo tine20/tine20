@@ -362,6 +362,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                     $dailyTransaction->commit();
                     continue;
                 }
+                $blPipe->recycle();
                 
                 $blPipeData = new HumanResources_BL_DailyWTReport_Data();
                 $blPipeData->workingTimeModel = $contract->working_time_scheme;
@@ -390,7 +391,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                     $blPipeData->convertTimeSheetsToTimeSlots($timeSheets[$dateStr]);
                 }
 
-                $blPipe->execute($blPipeData);
+                $blPipe->execute($blPipeData, false);
 
                 if (null === $oldReport) {
                     $this->create($blPipeData->result);

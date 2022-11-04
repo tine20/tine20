@@ -4,7 +4,7 @@
  *
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -14,6 +14,13 @@
 class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCase
 {
     protected $_ts;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        HumanResources_Controller_DailyWTReport::destroyInstance();
+    }
 
     public function testCorrectionFilter()
     {
@@ -133,6 +140,37 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         $this->assertArrayHasKey(0, $reportMonthlyDeleted['results']);
         $this->assertArrayHasKey('employee_id', $reportMonthlyDeleted['results'][0]);
         $this->assertArrayHasKey('id', $reportMonthlyDeleted['results'][0]['employee_id']);
+    }
+
+    public function testConvertTsPtWtToTimeSlot()
+    {
+        $this->_createBasicData();
+
+        $wts = $this->employee->contracts->getFirstRecord()->working_time_scheme;
+
+        $wts = HumanResources_Controller_WorkingTimeScheme::getInstance()->get($wts);
+        $wts->blpipe = new Tinebase_Record_RecordSet(HumanResources_Model_BLDailyWTReport_Config::class, [
+            [
+                HumanResources_Model_BLDailyWTReport_Config::FLDS_CLASSNAME => HumanResources_Model_BLDailyWTReport_ConvertTsPtWtToTimeSlot::class,
+                HumanResources_Model_BLDailyWTReport_Config::FLDS_CONFIG_RECORD => [],
+            ],
+        ]);
+        HumanResources_Controller_WorkingTimeScheme::getInstance()->update($wts);
+
+        $this->_createTimesheets();
+
+        // create report
+        $start = new Tinebase_DateTime('2018-08-01 00:00:00');
+        $end = new Tinebase_DateTime('2018-08-31 23:59:59');
+        HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee($this->employee, $start, $end);
+
+        $result = $this->_getReportsForEmployee($this->employee);
+        /** @var HumanResources_Model_DailyWTReport $report */
+        $report = $result->find('date', '2018-08-08 00:00:00');
+        self::assertEquals(2 * 3600, $report->working_time_actual);
+
+        $report = $result->find('date', '2018-08-02 00:00:00');
+        self::assertEquals(6 * 3600, $report->working_time_actual);
     }
 
     public function testUpdateDailyReport()

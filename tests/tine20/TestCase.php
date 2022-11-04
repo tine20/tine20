@@ -4,7 +4,7 @@
  * 
  * @package     Tests
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -120,6 +120,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
+        Tinebase_Record_Expander_DataRequest::clearCache();
+
         foreach ($this->_customfieldIdsToDelete as $cfd) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfd);
         }

@@ -60,15 +60,20 @@ class Tinebase_BL_Pipe implements Tinebase_BL_PipeContext
         }
     }
 
-    public function execute(Tinebase_BL_DataInterface $_data)
+    public function execute(Tinebase_BL_DataInterface $_data, bool $recycle = true)
     {
-        $this->_init();
+        if (empty($this->_pipe) || $recycle) $this->_init();
 
         /** @var Tinebase_BL_ElementInterface $element */
         foreach ($this->_pipe as $key => $element) {
             $this->_currentExecutionOffset = $key;
             $element->execute($this, $_data);
         }
+    }
+
+    public function recycle(): void
+    {
+        $this->_pipe = [];
     }
 
     protected function _init()
@@ -103,6 +108,7 @@ class Tinebase_BL_Pipe implements Tinebase_BL_PipeContext
      */
     public function getLastElementOfClassBefore($_class, $_before)
     {
+        if (empty($this->_pipe)) $this->_init();
         while (--$_before >= 0) {
             if ($this->_pipe[$_before] instanceof $_class) {
                 return $this->_pipe[$_before];
