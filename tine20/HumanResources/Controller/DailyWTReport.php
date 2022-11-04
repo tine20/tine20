@@ -242,6 +242,12 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         $rcRaii = new Tinebase_RAII(function() use ($oldRC, $that) {
             $that->_requestContext = $oldRC;
         });
+        $oldAcl = $this->doContainerACLChecks(false);
+        $oldMonthAcl = HumanResources_Controller_MonthlyWTReport::getInstance()->doContainerACLChecks(false);
+        $aclRaii = new Tinebase_RAII(function() use($oldAcl, $oldMonthAcl) {
+            HumanResources_Controller_DailyWTReport::getInstance()->doContainerACLChecks($oldAcl);
+            HumanResources_Controller_MonthlyWTReport::getInstance()->doContainerACLChecks($oldMonthAcl);
+        });
 
         // init some member vars
         $this->_monthlyWTR = [];
@@ -445,6 +451,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         // to satifisfy unused variable check
         unset($rcRaii);
         unset($multiServerLockRAII);
+        unset($aclRaii);
 
         return $this->_reportResult;
     }
