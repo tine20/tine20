@@ -36,6 +36,8 @@ class DFCom_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update001()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        
         DFCom_Config::getInstance()->set(DFCom_Config::DEFAULT_DEVICE_LISTS, [
             'DFCom_device_list_employee',
             'DFCom_device_list_absenceReasons',
