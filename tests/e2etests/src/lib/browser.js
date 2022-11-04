@@ -183,6 +183,9 @@ module.exports = {
         await expect(page).toClick('button', {text: 'Anmelden'});
         try {
             await page.waitForSelector('.x-tab-strip-closable.x-tab-with-icon.tine-mainscreen-apptabspanel-menu-tabel', {timeout: 0});
+            await page.waitForSelector('.x-window-header-text', {text: 'Multi Faktor Authentifikation'});
+            const mfaDialog = await this.getEditDialog('OK');
+            await expect(mfaDialog).toClick('button', {text: "Abbrechen"});
         } catch (e) {
             console.log('login failed!');
             console.log(app);
