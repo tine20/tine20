@@ -45,6 +45,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const MFA = 'mfa';
 
     /**
+     * encourage MFA at login
+     *
+     * @var string
+     */
+    const MFA_ENCOURAGE = 'mfa_encourage';
+
+    /**
      * authentication backend config
      *
      * @var string
@@ -986,7 +993,20 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => true, // this will be cleaned in getClientRegistryConfig()! // TODO make this as a hook or something
             'setBySetupModule'      => false,
             'setByAdminModule'      => false,
-            'default'               => [],
+            'default'               => [
+                'records' => [[
+                    'area_name'         => 'login',
+                    'areas'             => ['Tinebase_login'],
+                    'mfas'              => ['Authenticator App', 'FIDO2'],
+                    'validity'          => 'session',
+                ], [
+                    'area_name'         => 'area lock 1',
+                    'areas'             => [/*'Sales', 'HumanResources',*/ 'Tinebase_datasafe'],
+                    'mfas'              => ['Authenticator App', 'FIDO2'],
+                    'validity'          => 'presence',
+                    'lifetime'          => 15,
+                ]]
+            ],
         ),
         self::MFA => array(
             //_('MFA')
@@ -998,8 +1018,47 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => false,
             'setBySetupModule'      => false,
             'setByAdminModule'      => false,
-            'default'               => [],
+            'default'               => [
+                'records' => [[
+                    'id'                    => 'Authenticator App',
+                    'allow_self_service'    => true,
+                    'provider_config_class' => 'Tinebase_Model_MFA_TOTPConfig',
+                    'provider_config'       => [
+
+                    ],
+                    'provider_class'        => 'Tinebase_Auth_MFA_HTOTPAdapter',
+                    'user_config_class'     => 'Tinebase_Model_MFA_TOTPUserConfig'
+                ], [
+                    'id'                    => 'FIDO2',
+                    'allow_self_service'    => true,
+                    'provider_config_class' => 'Tinebase_Model_MFA_WebAuthnConfig',
+                    'provider_config'       => [
+                        'authenticator_attachment' => 'cross-platform', // may be null, platform, cross-platform
+                        'user_verification_requirement' => 'required', // may be required, preferred, discouraged
+                        'resident_key_requirement' => null, // may be null, required, preferred, discouraged
+                    ],
+                    'provider_class'        => 'Tinebase_Auth_MFA_WebAuthnAdapter',
+                    'user_config_class'     => 'Tinebase_Model_MFA_WebAuthnUserConfig'
+                ]]
+            ],
         ),
+
+        /**
+         * encourage MFA at login
+         */
+        self::MFA_ENCOURAGE => [
+            //_('Encourage MFA at login')
+            'label'                 => 'Encourage MFA at login',
+            //_('Encourage user at login to configure a mfa device')
+            'description'           => 'Encourage user at login to configure a mfa device',
+            'type'                  => 'bool',
+            // we need this to disable any convert actions in the GUI
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => false,
+            'default'               => true,
+        ],
+
         /**
          * for example: array('en', 'de')
          */
@@ -2019,10 +2078,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'label'                 => 'Browser password manager can be used',
             'description'           => 'Browser password manager can be used',
             'type'                  => 'bool',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-            'default'               => TRUE
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => true,
+            'default'               => true
         ),
         self::PASSWORD_SUPPORT_NTLMV2 => array(
             //_('Support NTLM V2 authentication')
