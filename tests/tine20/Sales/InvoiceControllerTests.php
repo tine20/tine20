@@ -479,11 +479,11 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $contract4 = $this->_contractRecords->getByIndex(3);
         $contract4->products->find('interval', 3)->interval = 4;
         $contract4->title = $contract4->getTitle() . ' changed';
-        sleep(1);
         // don't update relations
         unset($contract4->relations);
-        $this->_contractController->update($contract4);
+
         sleep(1);
+        $this->_contractController->update($contract4);
 
         $this->sharedTimesheet->id = NULL;
         $this->_timesheetController->create($this->sharedTimesheet);

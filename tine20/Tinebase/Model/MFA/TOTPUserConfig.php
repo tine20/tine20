@@ -25,6 +25,7 @@ class Tinebase_Model_MFA_TOTPUserConfig extends Tinebase_Auth_MFA_AbstractUserCo
     public const FLD_ACCOUNT_ID = 'account_id';
     public const FLD_CC_ID = 'cc_id';
     public const FLD_SECRET = 'secret';
+    public const FLD_USED = 'used';
 
     protected $_secret;
 
@@ -55,6 +56,10 @@ class Tinebase_Model_MFA_TOTPUserConfig extends Tinebase_Auth_MFA_AbstractUserCo
             ],
             self::FLD_CC_ID                     => [
                 self::TYPE                          => self::TYPE_STRING,
+                self::DISABLED                      => true,
+            ],
+            self::FLD_USED                      => [
+                self::TYPE                          => self::TYPE_JSON,
                 self::DISABLED                      => true,
             ],
         ]

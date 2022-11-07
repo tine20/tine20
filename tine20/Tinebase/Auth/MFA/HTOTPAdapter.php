@@ -77,10 +77,34 @@ class Tinebase_Auth_MFA_HTOTPAdapter implements Tinebase_Auth_MFA_AdapterInterfa
         } else {
             $otp = TOTP::create($cc->password);
 
+            if (!is_array($htOTPCfg->{Tinebase_Model_MFA_TOTPUserConfig::FLD_USED})) {
+                $htOTPCfg->{Tinebase_Model_MFA_TOTPUserConfig::FLD_USED} = [];
+            }
             try {
-                $result = $otp->verify($_data); // TODO TBD with or without time window?, time(), 120);
+                $result = !in_array($_data, $htOTPCfg->{Tinebase_Model_MFA_TOTPUserConfig::FLD_USED}) &&
+                    $otp->verify($_data, null, 1);
             } catch (RuntimeException $re) {
                 $result = false;
+            }
+            if ($result) {
+                return Tinebase_Auth_MFA::getInstance($_userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
+                    ->persistUserConfig($htOTPCfg->{Tinebase_Model_MFA_HOTPUserConfig::FLD_ACCOUNT_ID},
+                        function(Tinebase_Model_FullUser $user) use($_data, $_userCfg) {
+                            if (!($cfg = $user->mfa_configs->getById($_userCfg->getId()))) {
+                                return false;
+                            }
+                            if (!is_array($cfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}
+                                    ->{Tinebase_Model_MFA_TOTPUserConfig::FLD_USED})) {
+                                $cfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}
+                                    ->{Tinebase_Model_MFA_TOTPUserConfig::FLD_USED} = [];
+                            }
+                            $used = $cfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}
+                                ->{Tinebase_Model_MFA_TOTPUserConfig::FLD_USED};
+                            $used[] = $_data;
+                            $cfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}
+                                ->{Tinebase_Model_MFA_TOTPUserConfig::FLD_USED} = array_slice(array_unique($used), -10);
+                            return true;
+                        });
             }
             return $result;
         }
