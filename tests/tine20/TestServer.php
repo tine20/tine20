@@ -81,6 +81,8 @@ class TestServer
         Tinebase_Core::set('frameworkInitialized', true);
 
         Tinebase_Core::set(Tinebase_Core::CONTAINER, Tinebase_Core::getPreCompiledContainer());
+
+        Tinebase_Config::getInstance()->set(Tinebase_Config::AREA_LOCKS, []);
     }
 
     /**

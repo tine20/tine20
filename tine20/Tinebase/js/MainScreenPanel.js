@@ -182,7 +182,7 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
         }
 
         // don't bother user with two dialogs at one login
-        else if (Tine.Tinebase.registry.get('encourage_mfa')) {
+        else if (Tine.Tinebase.registry.get('encourage_mfa') && Tine.Tinebase.configManager.get('mfa_encourage')) {
             Ext.MessageBox.show({
                 title: i18n._('Multi Factor Authentication'),
                 msg: `

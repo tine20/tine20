@@ -196,6 +196,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { header: this.app.i18n._('OpenID'), id: 'openid', dataIndex: 'openid', width: 200},
             { header: this.app.i18n._('Last login at'), id: 'accountLastLogin', dataIndex: 'accountLastLogin', hidden: this.isLdapBackend, width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer},
             { header: this.app.i18n._('Last login from'), id: 'accountLastLoginfrom', hidden: this.isLdapBackend, dataIndex: 'accountLastLoginfrom'},
+            { header: this.app.i18n._('MFA Configured'), id: 'mfa_configs', dataIndex: 'mfa_configs', width: 100, renderer: this.mfaRenderer.createDelegate(this), hidden: false},
             { header: this.app.i18n._('Password Must Change'), id: 'password_must_change', dataIndex: 'password_must_change', width: 200, renderer: Tine.Tinebase.common.booleanRenderer, hidden: false},
             { header: this.app.i18n._('Password changed'), id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: false},
             { header: this.app.i18n._('Expires'), id: 'accountExpires', dataIndex: 'accountExpires', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: false}
@@ -287,31 +288,22 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     statusRenderer: function (_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
-        var gridValue;
-        
-        switch(_value) {
-            case 'blocked':
-                gridValue = "<img src='images/icon-set/icon_action_minus.svg' width='16' height='16'/>";
-                break;
+        const statusMap = {
+            blocked: 'images/icon-set/icon_action_minus.svg',
+            enabled: 'images/icon-set/icon_ok.svg',
+            disabled: 'images/icon-set/icon_stop.svg',
+            expired: 'images/icon-set/icon_time.svg'
+        };
 
-            case 'enabled':
-                gridValue = "<img src='images/icon-set/icon_ok.svg' width='16' height='16'/>";
-                break;
+        return statusMap[_value] ? `<img class='tine-keyfield-icon' src='${statusMap[_value]}' width='16' height='16'/>` : Ext.htmlEncode(_value);
+    },
 
-            case 'disabled':
-                gridValue = "<img src='images/icon-set/icon_stop.svg' width='16' height='16'/>";
-                break;
+    mfaRenderer: function (_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
+        const hasMFA = _.isArray(_value) && _value.length;
+        const icon = this.statusRenderer(hasMFA ? 'enabled' : 'disabled');
+        const text = hasMFA ? _.map(_value , 'mfa_config_id').join(', ') : '';
+        return `<span>${icon} ${text}</span>`;
 
-            case 'expired':
-                gridValue = "<img src='images/icon-set/icon_time.svg' width='16' height='16'/>";
-                break;
-
-            default:
-                gridValue = _value;
-                break;
-        }
-        
-        return gridValue;
     },
 
     emailQuotaRenderer: function(_value) {
