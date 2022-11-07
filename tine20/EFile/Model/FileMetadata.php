@@ -112,7 +112,6 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
             
             self::FLD_DURATION_START => [
                 self::TYPE => self::TYPE_DATE,
-                self::DEFAULT_VAL => 'CURRENT_DATE', // TODO <- use constant?
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL => 'Duration Start', // _('Duration Start')
             ],

@@ -178,8 +178,6 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
                 'type'       => 'datetime',
                 'nullable'   => true,
-                // TODO add current date es default
-                // 'default'    => 'CURRENT_DATE',
             ),
             'removed_date' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
