@@ -73,17 +73,18 @@ class Tinebase_Auth_MFATest extends TestCase
         $this->assertFalse($mfa->validate('shaaaaaaaaaalala', $this->_originalTestUser->mfa_configs->getFirstRecord()),
             'validate didn\'t fail as expected');
 
-        // we do have a race here, time() gets called first, until it reaches the time() way inside that $mfa->validate
-        // we may have flipped a second. If that second is the boundary of the window, we fail. This may only happen
-        // once realistically, so second call will succeed then, unless we have major cpu starve and extremly bad luck
-        $this->assertTrue($mfa->validate($totp->at(time()), $this->_originalTestUser->mfa_configs->getFirstRecord())
-            || $mfa->validate($totp->at(time()), $this->_originalTestUser->mfa_configs->getFirstRecord()),
+
+        $this->assertTrue($mfa->validate(($secret = $totp->at(time())), $this->_originalTestUser->mfa_configs->getFirstRecord()),
                 'validate didn\'t succeed');
 
-        $this->assertFalse($mfa->validate($totp->at(time()-120), $this->_originalTestUser->mfa_configs->getFirstRecord()),
+        $this->_originalTestUser = Tinebase_User::getInstance()->getFullUserById($this->_originalTestUser->getId());
+        $this->assertFalse($mfa->validate($secret, $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'replay didn\'t fail');
+
+        $this->assertFalse($mfa->validate($totp->at(time()-240), $this->_originalTestUser->mfa_configs->getFirstRecord()),
             'validate didn\'t fail as expected on out of time range');
 
-        $this->assertFalse($mfa->validate($totp->at(time()+120), $this->_originalTestUser->mfa_configs->getFirstRecord()),
+        $this->assertFalse($mfa->validate($totp->at(time()+240), $this->_originalTestUser->mfa_configs->getFirstRecord()),
             'validate didn\'t fail as expected on out of time range');
     }
 
