@@ -6,7 +6,7 @@
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,11 +18,11 @@
 class DFCom_Setup_Uninitialize extends Setup_Uninitialize
 {
     /**
-     * uninitialize customfields
-     *
-     * @param Tinebase_Model_Application $_applications
-     * @param array | null $_options
+     * @param Tinebase_Model_Application $_application
+     * @param ?array $_options
      * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
     protected function _uninitializeCustomFields(Tinebase_Model_Application $_application, $_options = null)
     {
