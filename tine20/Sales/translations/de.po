@@ -138,6 +138,9 @@ msgstr "Auftragsbestätigungen hinzufügen, bearbeiten und löschen."
 msgid "Manage Offers"
 msgstr "Angebote Verwalten"
 
+msgid "Send by E-Mail"
+msgstr "Als E-Mail senden"
+
 #: Acl/Rights.php:217
 msgid "Add, edit and delete offers."
 msgstr "Angebote hinzufügen, bearbeiten und löschen."
