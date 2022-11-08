@@ -628,8 +628,9 @@ class Crm_JsonTest extends Crm_AbstractTest
         $leadArray = $this->_getLead()->toArray();
         $leadArray['start'] = null;
         $newLead = $this->_getUit()->saveLead($leadArray);
-        
-        $this->assertStringContainsString(Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('Y-m-d'),
+
+        $now = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone());
+        $this->assertStringContainsString($now->format('Y-m-d'),
             $newLead['start'], 'start should be set to now if missing');
     }
     

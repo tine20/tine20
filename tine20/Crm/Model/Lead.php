@@ -236,7 +236,7 @@ class Crm_Model_Lead extends Tinebase_Record_NewAbstract
         if (empty($_data['start'])) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                 . ' Sanitize empty start date. This should not happen as the client needs to validate the property.');
-            $_data['start'] = Tinebase_DateTime::now()->toString();
+            $_data['start'] = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->toString();
         }
         
         // TODO should be removed as we already have generic relation handling
