@@ -696,16 +696,14 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
      */
     public function testSearchMessageEmptyPath()
     {
-        $sentMessage = $this->_sendMessage();
+        $this->_sendMessage();
 
         $filter = array(
             array('field' => 'path', 'operator' => 'equals', 'value' => ''),
         );
         $result = $this->_json->searchMessages($filter, '');
 
-        $this->assertEquals(0, $result['totalcount']);
         $accountFilterFound = FALSE;
-
         foreach ($result['filter'] as $filter) {
             if ($filter['field'] === 'account_id' && empty($filter['value'])) {
                 $accountFilterFound = TRUE;
@@ -713,6 +711,32 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
             }
         }
         $this->assertTrue($accountFilterFound);
+    }
+
+    /**
+     * try search for a message with only query filter -> should switch to /allinboxes path filter
+     */
+    public function testSearchMessageEmptyQueryFilter()
+    {
+        $filter = array (
+            1 =>
+                array (
+                    'field' => 'query',
+                    'operator' => 'contains',
+                    'value' => '',
+                    'id' => 'quickFilter',
+                ),
+        );
+        $result = $this->_json->searchMessages($filter, '');
+
+        $allinboxesFilterFound = false;
+        foreach ($result['filter'] as $filter) {
+            if (isset($filter['field']) && $filter['field'] === 'path' && $filter['value'] === '/allinboxes') {
+                $allinboxesFilterFound = true;
+                break;
+            }
+        }
+        $this->assertTrue($allinboxesFilterFound, print_r($result['filter'], true));
     }
 
     /**
