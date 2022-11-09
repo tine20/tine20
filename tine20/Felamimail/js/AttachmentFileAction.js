@@ -12,7 +12,7 @@
 Tine.Tinebase.appMgr.isInitialised('Felamimail').then(async () => {
 
     const app = Tine.Tinebase.appMgr.get('Felamimail');
-    Ext.ux.ItemRegistry.registerItem('Tine-Filemanager-QuicklookPanel', getFileAttachmentAction(async (locations, action) => {
+    Ext.ux.ItemRegistry.registerItem('Tine-Filemanager-QuicklookPanel', getFileAttachmentAction(async (locations, action, attachments) => {
         const record = _.get(action, 'ownerCt.ownerCt.selection[0]', _.get(action, 'selection[0]'));
 
         if (locations === 'download') {
@@ -54,17 +54,20 @@ const getFileAttachmentAction = (fileFn, config) => {
             text: app.i18n._('File (in Filemanager) ...'),
             hidden: !Tine.Tinebase.common.hasRight('run', 'Filemanager'),
             handler: (action, e) => {
+                // details panel vs. messageDisplayDialog
+                const attachments = config.attachments || action.selection;
+
                 // we don't set constrain here because user should be able to select both folder and file as target
                 const filePickerDialog = new Tine.Filemanager.FilePickerDialog({
                     mode: 'target',
                     singleSelect: true,
                     requiredGrants: ['addGrant'],
-                    files: config.attachments,
+                    files: attachments
                 });
 
                 filePickerDialog.on('selected', async (nodes) => {
-                    if (config.attachments.length === 1) {
-                        config.attachments[0].filename = filePickerDialog.filePicker.fileName;
+                    if (attachments.length === 1) {
+                        attachments[0].filename = filePickerDialog.filePicker.fileName;
                     }
                     
                     const type = _.get(nodes, '[0].type');
@@ -82,7 +85,8 @@ const getFileAttachmentAction = (fileFn, config) => {
                         model: 'Filemanager_Model_Node',
                         fm_path: path,
                         record_id: recordId,
-                    }], action, config.attachments);
+                        file_name: attachments.length === 1 ? filePickerDialog.filePicker.fileName : null
+                    }], action, attachments);
 
                     const msg = app.formatMessage('{attachmentCount, plural, one {Attachment was saved} other {# Attachments where saved}}',
                         {attachmentCount});

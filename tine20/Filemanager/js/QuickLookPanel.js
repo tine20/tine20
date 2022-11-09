@@ -103,6 +103,10 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
         this.fbar = ['->', this.action_close];
 
         Ext.getBody().on('keydown', function (e) {
+            if (e.getTarget('input')) {
+                return;
+            }
+            
             switch (e.getKey()) {
                 case e.SPACE:
                 case e.ESC:
