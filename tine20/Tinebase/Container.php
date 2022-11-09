@@ -1138,8 +1138,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         $this->addGrantsSql($select, $accountId, $grant);
         
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
-        
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
 
         $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -1329,8 +1327,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         $this->addGrantsSql($select, $accountId, $_grants);
 
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
-
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
 
         $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -1470,8 +1466,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $select = $this->_getAclSelectByContainerId($containerId)
             ->group(array('container_acl.container_id', 'container_acl.account_type', 'container_acl.account_id'));
         
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
-        
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
 
         $grantsData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -1545,8 +1539,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             ->group('container_acl.account_grant');
 
         $this->addGrantsSql($select, $accountId, '*');
-
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
 
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
 
@@ -1653,8 +1645,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $select->reset(Zend_Db_Select::WHERE);
         $select->where(join(' ', $where));
         $select->columns(['containerid' => 'id'], 'container');
-
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);

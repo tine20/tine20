@@ -98,8 +98,6 @@ class Tinebase_Tags
             $_paging->appendPaginationSql($select);
         }
         
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
-        
         $tags = new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $this->_db->fetchAssoc($select));
         
         return $tags;
@@ -123,8 +121,6 @@ class Tinebase_Tags
             
             $select = $this->_getSelect($recordIds, $app->getId());
             Tinebase_Model_TagRight::applyAclSql($select);
-            
-            Tinebase_Backend_Sql_Abstract::traitGroup($select);
             
             $tags = $this->_db->fetchAll($select);
             $tagData = $this->_getDistinctTagsAndComputeOccurrence($tags);
@@ -239,8 +235,6 @@ class Tinebase_Tags
             if ($_ignoreAcl !== true) {
                 Tinebase_Model_TagRight::applyAclSql($select, $_right);
             }
-
-            Tinebase_Backend_Sql_Abstract::traitGroup($select);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
@@ -277,8 +271,6 @@ class Tinebase_Tags
         if ($_ignoreAcl !== true) {
             Tinebase_Model_TagRight::applyAclSql($select, $_right);
         }
-
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
@@ -502,8 +494,6 @@ class Tinebase_Tags
             $select = $this->_getSelect($recordId, Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId());
             Tinebase_Model_TagRight::applyAclSql($select, $_right, $this->_db->quoteIdentifier('tagging.tag_id'));
             
-            Tinebase_Backend_Sql_Abstract::traitGroup($select);
-            
             foreach ($this->_db->fetchAssoc($select) as $tagArray){
                 $tags->addRecord(new Tinebase_Model_Tag($tagArray, true));
             }
@@ -541,8 +531,6 @@ class Tinebase_Tags
 
         $select = $this->_getSelect($recordIds, $appId);
         Tinebase_Model_TagRight::applyAclSql($select, $_right, $this->_db->quoteIdentifier('tagging.tag_id'));
-
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
 
         $queryResult = $this->_db->fetchAll($select);
 
@@ -713,8 +701,6 @@ class Tinebase_Tags
             ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'record_id')
             ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $appId)
             ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId);
-
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
         foreach ($this->_db->fetchAssoc($select) as $tagArray) {
             $alreadyAttachedIds[] = $tagArray['record_id'];
@@ -828,8 +814,6 @@ class Tinebase_Tags
             ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $appId)
             ->where($this->_db->quoteIdentifier('tag_id') . ' = ? ', $tagId)
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('record_id').' IN (?)', $recordIds));
-
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
         foreach ($this->_db->fetchAssoc($select) as $tagArray){
             $attachedIds[] = $tagArray['record_id'];
@@ -974,8 +958,6 @@ class Tinebase_Tags
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('tag_id') . ' = ?', $_tagId))
             ->group(array('tag_id', 'account_type', 'account_id'));
         
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
-        
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
@@ -1047,8 +1029,6 @@ class Tinebase_Tags
             ->from(array('tags_context' => SQL_TABLE_PREFIX . 'tags_context'), array('application_id' => $this->_dbCommand->getAggregate('application_id')))
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('tag_id') . ' = ?', $_tagId))
             ->group('tag_id');
-        
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
         $apps = $this->_db->fetchOne($select);
 
