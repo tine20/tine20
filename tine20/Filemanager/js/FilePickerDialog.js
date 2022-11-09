@@ -128,6 +128,7 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             });
 
             this.filePicker.on('nodeSelected', this.onNodesSelected.createDelegate(this));
+            this.filePicker.on('forceNodeSelected', this.onForceNodesSelected.createDelegate(this));
             this.filePicker.on('invalidNodeSelected', this.onInvalidNodesSelected.createDelegate(this));
         }
 
@@ -141,6 +142,10 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     onNodesSelected: function (nodes) {
         this.nodes = nodes;
         this.buttonApply.setDisabled(false);
+    },
+    onForceNodesSelected: function (nodes) {
+        this.onNodesSelected(nodes);
+        this.onButtonApply();
     },
 
     afterRender: function () {
