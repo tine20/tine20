@@ -89,6 +89,74 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
         static::assertSame('blub', (string)$response->getBody());
     }
 
+    public function testUpdateStatus2OutdatedRevision()
+    {
+        if (!Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
+            static::markTestSkipped('modlog not active');
+        }
+
+        $editorCfg = $this->_jsonTest->testGetEditorConfigForNodeId(false);
+
+        file_put_contents('tine20:///Tinebase/folders/shared/ootest/test.txt', 'blurb');
+
+        $token = @end(explode('/', $editorCfg['document']['url']));
+        $accessToken = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(OnlyOfficeIntegrator_Model_AccessToken::class, [
+                ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_TOKEN, 'operator' => 'equals', 'value' => $token],
+            ]), new Tinebase_Model_Pagination(['limit' => 1]))->getFirstRecord();
+        static::assertNotNull($accessToken);
+
+        file_put_contents('tine20:///Tinebase/folders/shared/testUpdated.txt', 'blubblub');
+        file_put_contents('tine20:///Tinebase/folders/shared/changes', 'shalala');
+
+        $fh = fopen('php://memory', 'rw');
+        fwrite($fh, json_encode($reqBody = [
+            'status' => 2,
+            'key' => $editorCfg['document']['key'],
+            'url' => 'tine20:///Tinebase/folders/shared/testUpdated.txt',
+            'changesurl' => 'tine20:///Tinebase/folders/shared/changes',
+            'history' => [
+                'meAboutHistory'    => 'what a story! ten thousands of years of epic madness and no end to it!',
+                'changes'           => 'changes, the only constant in time',
+                'serverVersion'     => '42',
+            ],
+        ]));
+        rewind($fh);
+
+        Tinebase_Core::getContainer()->set(RequestInterface::class, (new \Zend\Diactoros\ServerRequest())
+            ->withHeader('Authorization', 'Bearer ' . JWT::encode(['payload' => $reqBody],
+                    OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256'))
+            ->withBody(new \Zend\Diactoros\Stream($fh)));
+
+        $response = $this->_uit->updateStatus($token);
+
+        static::assertInstanceOf(\Zend\Diactoros\Response::class, $response);
+        static::assertSame(['error' => 0], json_decode((string)$response->getBody(), true));
+
+        $updatedAccessToken = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(OnlyOfficeIntegrator_Model_AccessToken::class, [
+                ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_TOKEN, 'operator' => 'equals', 'value' => $token],
+                ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_INVALIDATED, 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
+            ]), new Tinebase_Model_Pagination(['limit' => 1]))->getFirstRecord();
+        static::assertNotNull($updatedAccessToken);
+        static::assertSame(1, (int)$updatedAccessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION},
+            'revision not set to one');
+        static::assertSame('blurb', file_get_contents('tine20://' .
+            Tinebase_FileSystem::getInstance()->getPathOfNode($accessToken
+                ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID}, true)));
+        static::assertSame('blubblub', file_get_contents('tine20://' .
+            Tinebase_FileSystem::getInstance()->getPathOfNode($updatedAccessToken
+                ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID}, true)));
+
+        $fe = new OnlyOfficeIntegrator_Frontend_Json();
+        $history = $fe->getHistory($updatedAccessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY});
+        static::assertArrayHasKey('currentVersion', $history);
+        static::assertSame($updatedAccessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION},
+            $history['currentVersion']);
+        static::assertArrayHasKey('history', $history);
+        static::assertCount(1, $history['history']);
+    }
+
     public function testUpdateStatus2Attachment()
     {
         if (!Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
@@ -561,8 +629,9 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
 
         static::assertInstanceOf(\Zend\Diactoros\Response::class, $response);
         static::assertSame(['error' => 0], json_decode((string)$response->getBody(), true));
-        static::assertFalse(Tinebase_FileSystem::getInstance()->fileExists('/Tinebase/folders/shared/ootest/test.txt'));
-        static::assertSame('blubblub', file_get_contents('tine20:///Tinebase/folders/shared/ootest/test.conflict.txt'));
+        static::assertTrue(Tinebase_FileSystem::getInstance()->fileExists('/Tinebase/folders/shared/ootest/test.txt'));
+        static::assertSame('blubblub', file_get_contents('tine20:///Tinebase/folders/shared/ootest/test-' .
+            Tinebase_Translation::getTranslation(OnlyOfficeIntegrator_Config::APP_NAME)->_('conflict') . '.txt'));
         static::assertNull(OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(OnlyOfficeIntegrator_Model_AccessToken::class, [
                 ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_TOKEN, 'operator' => 'equals', 'value' => $token],
