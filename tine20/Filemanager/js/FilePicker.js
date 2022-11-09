@@ -72,7 +72,14 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
     initComponent: function () {
         this.allowMultiple = this.hasOwnProperty('singleSelect') ? ! this.singleSelect : this.allowMultiple;
         this.requiredGrants = this.requiredGrants ? this.requiredGrants : (this.mode === 'source' ? ['readGrant'] : ['editGrant']);
-        
+
+        if (_.get(this.files, '[0].data')) {
+            this.files = _.map(this.files, 'data');
+        }
+        _.each(this.files, (file) => {
+            file.filename = file.filename || file.name;
+        });
+
         if (!this.fileName && this.files.length === 1) {
             this.fileName = this.files[0]?.filename;
         }
