@@ -301,8 +301,11 @@ class OnlyOfficeIntegrator_Controller_AccessToken extends Tinebase_Controller_Re
 
         if ($updatedRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} != OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION &&
                 Tinebase_BroadcastHub::getInstance()->isActive()) {
-            $node = Tinebase_FileSystem::getInstance()->get($updatedRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID});
-            Tinebase_BroadcastHub::getInstance()->pushAfterCommit('update', get_class($node), $node->getId(), $node->getContainerId());
+            try {
+                $node = Tinebase_FileSystem::getInstance()->get($updatedRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID});
+                Tinebase_BroadcastHub::getInstance()->pushAfterCommit('update', get_class($node), $node->getId(), $node->getContainerId());
+            // file might have been deleted -> ignore tenf
+            } catch (Tinebase_Exception_NotFound $tenf) {}
         }
     }
 }
