@@ -828,7 +828,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * @param boolean $_getAll
      * @param boolean $_recursive
      * 
-     * @return Tinebase_Model_Filter_Abstract|array
+     * @return Tinebase_Model_Filter_Abstract|array|null
      */
     public function getFilter($_field, $_getAll = FALSE, $_recursive = FALSE)
     {
