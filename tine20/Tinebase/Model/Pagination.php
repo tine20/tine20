@@ -71,6 +71,8 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                                         'default'       => 'ASC'        ),
         'model'                => array('allowEmpty'    => true,
                                         'default'       => NULL         ),
+        'group'                => array('allowEmpty'    => true,
+                                        'default'       => NULL         ),
     );
 
     protected static $context = [];
@@ -146,6 +148,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
 
         $this->appendLimit($_select);
         $this->appendSort($_select);
+        $this->appendGroup($_select);
     }
 
     /**
@@ -368,6 +371,15 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 $field = $relatedTableName . '.value';
             }
         }
+    }
+
+    public function appendGroup(Zend_Db_Select $_select): void
+    {
+        if (empty($this->group) || !empty($_select->getPart(Zend_Db_Select::GROUP))) {
+            return;
+        }
+
+        $_select->group($this->group);
     }
 
     /**

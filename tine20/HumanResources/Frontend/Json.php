@@ -698,13 +698,34 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     public function getAttendanceRecorderDeviceStates()
     {
-        return $this->_search([
+        $openRecords = $this->_search([
                 ['field' => HumanResources_Model_AttendanceRecord::FLD_ACCOUNT_ID, 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()],
                 ['field' => HumanResources_Model_AttendanceRecord::FLD_STATUS,  'operator' => 'equals', 'value' => HumanResources_Model_AttendanceRecord::STATUS_OPEN],
             ], [
                 'sort' => HumanResources_Model_AttendanceRecord::FLD_SEQUENCE,
                 'dir' => 'ASC'
             ], HumanResources_Controller_AttendanceRecord::getInstance(), HumanResources_Model_AttendanceRecord::class);
+
+        $lastRecordPerDevice = $this->_search([
+            ['field' => HumanResources_Model_AttendanceRecord::FLD_ACCOUNT_ID, 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()],
+        ], [
+            'sort' => HumanResources_Model_AttendanceRecord::FLD_SEQUENCE,
+            'dir' => 'DESC',
+            'group' => HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID,
+        ], HumanResources_Controller_AttendanceRecord::getInstance(), HumanResources_Model_AttendanceRecord::class);
+
+        foreach ($lastRecordPerDevice['results'] as $lastRecord) {
+            foreach ($openRecords['results'] as $openRecord) {
+                if ($openRecord[HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID] ===
+                        $lastRecord[HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID]) {
+                    continue 2;
+                }
+            }
+            $openRecords['results'][] = $lastRecord;
+        }
+        $openRecords['totalcount'] = count($openRecords['results']);
+
+        return $openRecords;
     }
 
     public function wtInfo()

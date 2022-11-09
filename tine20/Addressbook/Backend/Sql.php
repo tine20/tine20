@@ -95,8 +95,6 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             ->where($this->_db->quoteIdentifier('accounts.id') . ' = ?', $_userId)
             ->limit(1);
         
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
-        
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
         $stmt->closeCursor();

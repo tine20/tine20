@@ -249,7 +249,6 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $this->_addFilter($select, $clonedFilters);
         
         $select->group($this->_tableName . '.' . 'id');
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
 
         $_pagination->appendPaginationSql($select, $getDeleted);
         
