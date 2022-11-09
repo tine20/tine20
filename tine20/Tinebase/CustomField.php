@@ -909,8 +909,6 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             ->where($db->quoteInto($db->quoteIdentifier('customfield_id') . ' = ?', $cfId))
             ->group(array('customfield_id', 'account_type', 'account_id'));
 
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
-
         $stmt = $db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 

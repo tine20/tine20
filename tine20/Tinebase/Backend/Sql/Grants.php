@@ -66,8 +66,6 @@ class Tinebase_Backend_Sql_Grants extends Tinebase_Backend_Sql
         $select = $this->_getAclSelectByRecordIds($recordIds)
             ->group(array($this->_recordColumn, 'account_type', 'account_id'));
         
-        Tinebase_Backend_Sql_Abstract::traitGroup($select);
-        
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' ' . $select);
         
