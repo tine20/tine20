@@ -575,6 +575,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         $oldName = null;
         $newName = '';
         $tempFile = null;
+        $node = null;
         try {
             if ((int)$accessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} ===
                     (int)OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION) {
@@ -595,6 +596,14 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
                         ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID}, true);
 
                 $trgtEnding = ltrim(substr($trgtPath, $pos = strrpos($trgtPath, '.')), '.');
+                if (!$saveConflict) {
+                    $node = Tinebase_FileSystem::getInstance()->get($accessToken
+                        ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID});
+                    if ((int)$accessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} !==
+                            (int)$node->revision) {
+                        $saveConflict = true;
+                    }
+                }
                 if ($trgtEnding !== $srcEnding || $saveConflict) {
                     if (false === $pos) {
                         $trgtStart = $trgtPath;
@@ -602,23 +611,32 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
                         $trgtStart = substr($trgtPath, 0, $pos);
                     }
 
-                    $tmpPath = $trgtStart . '.' . ($saveConflict ? 'conflict.' : '') . $srcEnding;
+                    if ($saveConflict) {
+                        $trgtStart .= '-' . Tinebase_Translation::getTranslation(OnlyOfficeIntegrator_Config::APP_NAME)
+                            ->_('conflict');
+                    }
+
+                    $tmpPath = $trgtStart . '.' . $srcEnding;
                     $i = 1;
                     while (file_exists($tmpPath)) {
-                        $tmpPath = $trgtStart . ' (' . $i . ').' . ($saveConflict ? 'conflict.' : '') . $srcEnding;
+                        $tmpPath = $trgtStart . ' (' . $i . ').' . $srcEnding;
                         if (++$i > 100) {
                             throw new Tinebase_Exception_Backend('there are already 100 copies of this file');
                         }
                     }
                     $trgtPath = $tmpPath;
-                    $node = Tinebase_FileSystem::getInstance()->get($accessToken
-                        ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID});
-                    $oldName = $node->name;
-                    $array = explode('/', $trgtPath);
-                    $newName = $node->name = @end($array);
-                    /** do not use the return of this call! revision will be increased later! */
-                    Tinebase_FileSystem::getInstance()->update($node);
-                    Tinebase_FileSystem::getInstance()->clearStatCache();
+                    if (!$saveConflict) {
+                        if (!$node) {
+                            $node = Tinebase_FileSystem::getInstance()->get($accessToken
+                                ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID});
+                        }
+                        $oldName = $node->name;
+                        $array = explode('/', $trgtPath);
+                        $newName = $node->name = @end($array);
+                        /** do not use the return of this call! revision will be increased later! */
+                        Tinebase_FileSystem::getInstance()->update($node);
+                        Tinebase_FileSystem::getInstance()->clearStatCache();
+                    }
                 }
             }
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -649,6 +667,10 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         if ((int)$accessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} !==
                 (int)OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION) {
 
+            if ($saveConflict) {
+                $node = Tinebase_FileSystem::getInstance()->stat(substr($trgtPath, 8));
+                $allTokens->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID} = $node->getId();
+            }
             $notes = Tinebase_Notes::getInstance()->searchNotes(new Tinebase_Model_NoteFilter([
                 [
                     'field' => 'record_id',
