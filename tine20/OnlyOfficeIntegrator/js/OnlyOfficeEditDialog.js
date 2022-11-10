@@ -9,7 +9,7 @@
 import waitFor from "util/waitFor.es6";
 const { retryAllRejectedPromises } = require('promises-to-retry');
 
-Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Component, {
+Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
 
     /**
      * @cfg {String} JSON encoded node record
@@ -26,22 +26,36 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Component, {
      */
     windowNamePrefix: 'OnlyOfficeEditWindow_',
     border: false,
-    style: 'height: 100%',
+    // style: 'height: 100%',
+    // layout: 'fit',
 
     initComponent: function () {
         this.app = Tine.Tinebase.appMgr.get('OnlyOfficeIntegrator');
-        this.autoEl = {
+
+        this.html = {
             tag: 'div',
-            cn:{tag: 'div', id: Ext.id(), cls: 'tine-viewport-waitcycle'}
+            style: 'height: 100%',
+            cls: 'ooi-document-edit-dialog dark-reverse',
+            cn:{tag: 'div', id: Ext.id(),  cls: 'tine-viewport-waitcycle'}
         };
 
         this.onlyOfficeUrl = Tine.Tinebase.configManager.get('onlyOfficePublicUrl', 'OnlyOfficeIntegrator');
 
         this.initRecord(this.recordData);
 
+        this.tbar = new Ext.Toolbar({
+            items: this.tbarItems || [],
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key:   'OnlyOfficeIntegrator-DocumentEditDialog-Toolbar'
+            }],
+            listeners: {afterrender: (tb) => {tb[tb.items.getCount() ? 'show' : 'hide']()}}
+        });
+
         this.apiIsInjected = this.injectAPI();
 
         this.window.on('beforeclose', this.onBeforeCloseWindow, this);
+        this.on('afterrender', this.onAfterRender, this);
 
         const tokenKeepAliveInterval = Tine.Tinebase.configManager.get('tokenLiveTime', 'OnlyOfficeIntegrator') * 800;
         window.setInterval(_.bind(this.tokenKeepAlive, this), tokenKeepAliveInterval);
@@ -71,7 +85,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Component, {
         }, 5000);
     },
 
-    afterRender: async function() {
+    onAfterRender: async function() {
         const [config] = await Promise.all([this.getSignedConfig(), this.apiIsInjected]);
 
         this.window.onlyOfficeDocumentKey = _.get(config, 'document.key');
@@ -117,7 +131,8 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Component, {
             });
         }
 
-        this.docEditor = new DocsAPI.DocEditor(this.autoEl.cn.id, config);
+        await waitFor(() => {return this.el.child('.tine-viewport-waitcycle')});
+        this.docEditor = new DocsAPI.DocEditor(this.el.child('.tine-viewport-waitcycle').id, config);
 
         Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.superclass.afterRender.call(this);
     },
@@ -349,11 +364,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Component, {
         retryAllRejectedPromises([_.partial(Tine.OnlyOfficeIntegrator.tokenKeepAlive, keys)], {
             maxAttempts: 5, delay: 1200
         });
-    },
-    
-    // fake container
-    setSize: Ext.emptyFn,
-    doLayout: Ext.emptyFn
+    }
 });
 
 Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow = function(config) {

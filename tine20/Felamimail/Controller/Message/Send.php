@@ -1076,14 +1076,12 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             throw new Tinebase_Exception_InvalidArgument('Node ID missing');
         }
         $node = $nodeController->get($attachment['id']);
-
-        if (!Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_DOWNLOAD)) {
-            return null;
+        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath(Tinebase_FileSystem::getInstance()->getPathOfNode($node, true));
+        if (!$pathRecord->isRecordPath()) { // aka record attachment
+            if (!Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_DOWNLOAD)) {
+                return null;
+            }
         }
-
-        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath(
-            Filemanager_Controller_Node::getInstance()->addBasePath($node->path)
-        );
 
         if ($node) {
             $content = fopen($pathRecord->streamwrapperpath, 'r');
