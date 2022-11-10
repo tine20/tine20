@@ -5,6 +5,12 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+// @see https://github.com/ericmorand/twing/issues/332
+// #if process.env.NODE_ENV !== 'unittest'
+import getTwingEnv from "twingEnv";
+// #endif
+
 Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
     Tine.Tinebase.ApplicationStarter.isInitialised()]).then(() => {
     const app = Tine.Tinebase.appMgr.get('Sales')
@@ -20,7 +26,9 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 action.baseAction.setDisabled(!enabled) // WTF?
             },
             async handler(cmp) {
-                let record = this.initialConfig.selections[0]
+                let record = this.initialConfig.selections[0];
+                let paperSlip; // @see contentPanelConstructorInterceptor
+
                 const editDialog = cmp.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog})
                 const maskMsg = app.formatMessage('Creating {type} Paper Slip', { type: recordClass.getRecordName() })
 
@@ -52,7 +60,63 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         });
                     }
                     mask.hide()
-                }
+                };
+
+                const getMailAction = async (win, record) => {
+                    const recipientData = _.get(record, 'data.recipient_id.data', _.get(record, 'data.recipient_id'));
+                    paperSlip.attachment_type = 'attachment';
+
+                    return new Ext.Button({
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top',
+                        text: app.formatMessage('Send by E-Mail'),
+                        iconCls: `action_composeEmail`,
+                        disabled: !recipientData.email,
+                        handler: () => {
+                            const mailDefaults = win.Tine.Felamimail.Model.Message.getDefaultData();
+                            const emailBoilerplate = _.find(record.get('boilerplates'), (bp) => { return bp.name === 'Email'});
+                            let body = '';
+                            if (emailBoilerplate) {
+                                this.twingEnv = getTwingEnv();
+                                const loader = this.twingEnv.getLoader();
+                                loader.setTemplate(`${record.id}-email`, emailBoilerplate.boilerplate);
+                                body = this.twingEnv.render(`${record.id}-email`, record.data);
+                                if (mailDefaults.content_type === 'text/html') {
+                                    body = Ext.util.Format.nl2br(body);
+                                }
+                            }
+
+                            const mailRecord = new win.Tine.Felamimail.Model.Message(Object.assign(mailDefaults, {
+                                subject: `${record.constructor.getRecordName()} ${record.get('document_number')}: ${record.get('document_title')}`,
+                                // @TODO have a boilerplate here
+                                body: body + win.Tine.Felamimail.getSignature(),
+                                to: [`${recipientData.name} <${recipientData.email}>`],
+                                attachments: [paperSlip]
+                            }), 0);
+                            win.Tine.Felamimail.MessageEditDialog.openWindow({
+                                record: mailRecord,
+                                // listeners: {
+                                //     update: (mail) => {
+                                //         const docType = editDialog.record.constructor.getMeta('recordName');
+                                //         const currentStatus = editDialog.record.get(editDialog.statusFieldName);
+                                //         let changeStatusTo = null;
+                                //
+                                //         if (docType === 'Invoice' && currentStatus === 'STATUS_BOOKED') {
+                                //             changeStatusTo = 'SHIPPED';
+                                //         } else if (docType === 'Offer' && currentStatus === 'DRAFT') {
+                                //             // don't change status - might still be a draft!
+                                //         }
+                                //
+                                //         editDialog.getForm().findField(editDialog.statusFieldName).set(changeStatusTo);
+                                //
+                                //         debugger
+                                //     }
+                                // }
+                            });
+                        },
+                    });
+                };
 
                 if (Tine.OnlyOfficeIntegrator) {
                     Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({
@@ -67,12 +131,12 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             await createPaperSlip(mask)
                             const attachments = record.get('attachments')
                             const mdates = _.map(attachments, (attachment) => {return _.compact([attachment.last_modified_time, attachment.creation_time]).sort().pop()})
-                            const attachment = attachments[mdates.indexOf([...mdates].sort().pop())]
+                            paperSlip = attachments[mdates.indexOf([...mdates].sort().pop())]
                             Object.assign(config, {
-                                recordData: attachment,
-                                id: attachment.id
-                            })
-                            // @TODO: inject mailTo action
+                                recordData: paperSlip,
+                                id: paperSlip.id,
+                                tbarItems: [await getMailAction(win, record)]
+                            });
                         }
                     })
                 } else {

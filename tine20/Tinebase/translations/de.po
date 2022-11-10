@@ -1264,6 +1264,9 @@ msgstr "Format"
 msgid "Filename"
 msgstr "Dateiname"
 
+msgid "Send by E-Mail"
+msgstr "Als E-Mail senden"
+
 #: Model/ImportExportDefinition.php:223
 msgid "Filter"
 msgstr "Filter"

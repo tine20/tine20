@@ -13,6 +13,11 @@ Alle Preise verstehen sich zzgl. der gesetzlich gültigen Mehrwertsteuer.
 
 Mit freundlichen Grüßen
 Ihr tine Team",STANDARD,de
+Sales_Model_Document_Offer,Email,"Sehr geehrte Damen und Herren,
+
+bitte finden sie im Anhang unser Angebot {{ document_number }}{% if document_title %} ""{{ document_title }}""{% endif %}{% if date %} vom {{ date|date('d.m.Y') }}{% endif %}.
+
+Mit freundlichen Grüßen",STANDARD,de
 Sales_Model_Document_Order,Pretext,"Sehr geehrte Damen und Herren,
 
 wir danken Ihnen für Ihre Bestellung und bestätigen Ihnen gern Ihren Auftrag wie folgt:",STANDARD,de
@@ -24,9 +29,19 @@ Alle Preise verstehen sich zzgl. der gesetzlich gültigen Mehrwertsteuer.
 
 Mit freundlichen Grüßen
 Ihr tine Team",STANDARD,de
+Sales_Model_Document_Order,Email,"Sehr geehrte Damen und Herren,
+
+bitte finden sie im Anhang unsere Auftragsbestätigung {{ document_number }}{% if document_title %} ""{{ document_title }}""{% endif %}{% if date %} vom {{ date|date('d.m.Y') }}{% endif %}.
+
+Mit freundlichen Grüßen",STANDARD,de
 Sales_Model_Document_Delivery,Pretext,"Sehr geehrte Damen und Heren,
 
 wir bedanken uns für die vertrauensvolle Zusammenarbeit und liefern Ihnen vereinbarungsgemäß folgende Waren:",STANDARD,de
+Sales_Model_Document_Delivery,Email,"Sehr geehrte Damen und Herren,
+
+bitte finden sie im Anhang unseren Lieferschein {{ document_number }}{% if document_title %} ""{{ document_title }}""{% endif %}{% if date %} vom {{ date|date('d.m.Y') }}{% endif %}.
+
+Mit freundlichen Grüßen",STANDARD,de
 Sales_Model_Document_Delivery,Posttext,"Bitte bestätigen Sie den Erhalt der Ware mit Datum und Unterschrift:
 
 
@@ -46,6 +61,11 @@ Sales_Model_Document_Invoice,Posttext,"Wir danken Ihnen für Ihr Vertrauen und d
 
 Mit freundlichen Grüßen
 Ihr tine Team",STANDARD,de
+Sales_Model_Document_Invoice,Email,"Sehr geehrte Damen und Herren,
+
+bitte finden sie im Anhang unsere Rechnung {{ document_number }}{% if document_title %} ""{{ document_title }}""{% endif %}{% if date %} vom {{ date|date('d.m.Y') }}{% endif %}.
+
+Mit freundlichen Grüßen",STANDARD,de
 Sales_Model_Document_Invoice,Pretext REVERSAL,"Sehr geerhte Damen und Herren,
 
 gemäß unserer Absprache/Vereinbarung schreiben wir Ihnen folgenden Betrag gut:",STANDARD,de
@@ -66,9 +86,12 @@ Our valid general terms and conditions (GTC) apply.
 All prices are exclusive of the legally valid value added tax.
 
 With kind regards
-Your tine Team
+Your tine Team",STANDARD,en
+Sales_Model_Document_Offer,Email,"Dear Sir or Madam,
 
-Translated with www.DeepL.com/Translator (free version)",STANDARD,en
+please find attached our offer {{ document_number }}{% if document_title %} ""{{ document_title }}""{% endif %}{% if date %} from {{ date|date('d.m.Y') }}{% endif %}.
+
+Yours sincerely",STANDARD,en
 Sales_Model_Document_Order,Pretext,"Dear Sir or Madam,
 
 thank you for your order and we are pleased to confirm your order as follows:",STANDARD,en
@@ -80,6 +103,11 @@ All prices are exclusive of the legally valid value added tax.
 
 With kind regards
 Your tine Team",STANDARD,en
+Sales_Model_Document_Order,Email,"Dear Sir or Madam,
+
+please find attached our order confirmation {{ document_number }}{% if document_title %} ""{{ document_title }}""{% endif %}{% if date %} from {{ date|date('d.m.Y') }}{% endif %}.
+
+Yours sincerely",STANDARD,en
 Sales_Model_Document_Delivery,Pretext,"Dear Sir or Madam,
 
 we thank you for the trustful cooperation and deliver the following goods as agreed:",STANDARD,en
@@ -88,6 +116,11 @@ Sales_Model_Document_Delivery,Posttext,"Please confirm receipt of the goods with
 
 Thank you
 Your tine team",STANDARD,en
+Sales_Model_Document_Delivery,Email,"Dear Sir or Madam,
+
+please find attached our delivery bill {{ document_number }}{% if document_title %} ""{{ document_title }}""{% endif %}{% if date %} from {{ date|date('d.m.Y') }}{% endif %}.
+
+Yours sincerely",STANDARD,en
 Sales_Model_Document_Delivery,Pretext PACKAGING_LIST,"Dear Employee/Service Provider,
 
 we kindly ask you to check and assemble the following goods for shipment:",STANDARD,en
@@ -102,6 +135,11 @@ Sales_Model_Document_Invoice,Posttext,"We thank you for your trust and the good 
 
 With kind regards
 Your tine Team",STANDARD,en
+Sales_Model_Document_Invoice,Email,"Dear Sir or Madam,
+
+please find attached our invoice {{ document_number }}{% if document_title %} ""{{ document_title }}""{% endif %}{% if date %} from {{ date|date('d.m.Y') }}{% endif %}.
+
+Yours sincerely",STANDARD,en
 Sales_Model_Document_Invoice,Pretext REVERSAL,"Dear Sir or Madam,
 
 according to our arrangement/agreement we will credit you the following amount:",STANDARD,en

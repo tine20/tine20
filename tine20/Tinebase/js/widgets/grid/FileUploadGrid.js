@@ -292,6 +292,19 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             hidden: !Tine.Tinebase.configManager.get('downloadsAllowed')
         });
 
+        this.action_email = new Ext.Action({
+            requiredGrant: 'readGrant',
+            allowMultiple: true,
+            actionType: 'download',
+            text: i18n._('Send by E-Mail'),
+            handler: this.onSendByEmail,
+            iconCls: 'action_composeEmail',
+            scope: this,
+            disabled: true,
+            hidden: !Tine.Tinebase.configManager.get('downloadsAllowed') ||
+                !Tine.Tinebase.common.hasRight('run', 'Felamimail')
+        });
+
         let contextActions = [];
         if (Tine.Tinebase.common.hasRight('run', 'Filemanager')) {
             this.action_rename = Tine.Filemanager.nodeActionsMgr.get('rename', {
@@ -328,11 +341,15 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
         contextActions = contextActions.concat([
             this.action_download,
+            this.action_email,
             '-',
             this.action_remove,
             this.action_pause,
             this.action_resume
         ]);
+
+        contextActions = contextActions.concat(this.additionalContextActions || []);
+
         this.contextMenu = new Ext.menu.Menu({
             plugins: [{
                 ptype: 'ux.itemregistry',
@@ -440,6 +457,14 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         } else {
             this.downloadNode(recordId, fileRow.id)
         }
+    },
+
+    onSendByEmail: function (button, event) {
+        const selectedRows = this.getSelectionModel().getSelections();
+        const attachments = selectedRows.map((record) => { return Object.assign({... record.data}, {attachment_type: 'attachment'}) });
+        Tine.Felamimail.MessageEditDialog.openWindow({
+            record: new Tine.Felamimail.Model.Message(Object.assign(Tine.Felamimail.Model.Message.getDefaultData(), { attachments }))
+        });
     },
 
     /**
