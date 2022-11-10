@@ -7,6 +7,8 @@
  */
 Ext.ns('Tine.HumanResources');
 
+import './convertTsPtWtToTimeSlotExplainer'
+
 /**
  * @namespace   Tine.HumanResources
  * @class       Tine.HumanResources.ContractEditDialog
