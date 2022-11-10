@@ -904,8 +904,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @param mixed $user
      * @param mixed $newUserProperties
      * @param string $method (inspectAddUser|inspectUpdateUser|inspectGetUserByProperty|inspectDeleteUser)
+     * @throws Zend_Db_Adapter_Exception
      */
-    protected function _inspectEmailPluginCRUD($plugin, $user, $newUserProperties, $method)
+    protected function _inspectEmailPluginCRUD($plugin, $user, $newUserProperties, string $method)
     {
         if ($method === 'inspectAddUser' && empty($user->accountEmailAddress)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
@@ -936,7 +937,22 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $params = [$pluginUser];
             $updatePluginUser = null;
         }
-        call_user_func_array([$plugin, $method], $params);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Calling ' . get_class($plugin) . '::' . $method);
+
+        try {
+            call_user_func_array([$plugin, $method], $params);
+        } catch (Zend_Db_Adapter_Exception $zdae) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                __METHOD__ . '::' . __LINE__ . ' ' . $zdae
+            );
+            if ($method === 'inspectGetUserByProperty') {
+                return;
+            } else {
+                throw $zdae;
+            }
+        }
 
         // return email user properties to $user
         // TODO do this always?
