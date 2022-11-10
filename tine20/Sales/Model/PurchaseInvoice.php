@@ -91,6 +91,9 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
             'date' => array(
                 'type'  => 'date',
                 'label' => 'Date of invoice',   // _('Date of invoice')
+                self::UI_CONFIG => [
+                    'format' => ['medium'],
+                ],
             ),
             'due_in' => array(
                 'title' => 'Due in',            // _('Due in')
@@ -100,12 +103,18 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                 'shy' => TRUE,
             ),
             'due_at' => array(
-                    'type'  => 'date',
-                    'label' => 'Due at',            // _('Due at')
+                'type'  => 'date',
+                'label' => 'Due at',            // _('Due at')
+                self::UI_CONFIG => [
+                    'format' => ['medium'],
+                ],
             ),
             'payed_at' => array(
                 'type'  => 'date',
                 'label' => 'Payed at',          // _('Payed at')
+                self::UI_CONFIG => [
+                    'format' => ['medium'],
+                ],
             ),
             'payment_method' => array(
                 'label'   => 'Payment Method', //_('Payment Method')

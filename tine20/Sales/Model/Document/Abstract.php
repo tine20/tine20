@@ -197,6 +197,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Document Date', //_('Document Date')
                 self::TYPE                          => self::TYPE_DATE,
                 self::NULLABLE                      => true,
+                self::UI_CONFIG => [
+                    'format' => ['medium'],
+                ],
             ],
             self::FLD_CUSTOMER_REFERENCE        => [
                 self::LABEL                         => 'Customer Reference', //_('Customer Reference')

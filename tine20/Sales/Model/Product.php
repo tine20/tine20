@@ -287,7 +287,10 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                ]
+                ],
+                self::UI_CONFIG => [
+                    'format' => ['Date' => ['medium']],
+                ],
             ],
             self::FLD_LIFESPAN_END => [
                 self::TYPE => self::TYPE_DATETIME,
@@ -295,7 +298,10 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                ]
+                ],
+                self::UI_CONFIG => [
+                    'format' => ['Date' => ['medium']],
+                ],
             ],
             self::FLD_COSTCENTER => [
                 self::LABEL => 'Costcenter', // _('Costcenter')
