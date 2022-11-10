@@ -299,6 +299,9 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                     HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
+                self::UI_CONFIG => [
+                    'format' => ['medium'],
+                ],
             ),
             'employment_end' => array(
                 'label' => 'Employment end', //_('Employment end')
@@ -315,6 +318,9 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                     HumanResources_Model_DivisionGrants::READ_OWN_DATA,
+                ],
+                self::UI_CONFIG => [
+                    'format' => ['medium'],
                 ],
             ),
             'supervisor_id' => array(
