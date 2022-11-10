@@ -128,15 +128,24 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
             ),
             'date' => array(
                 'type' => 'date',
-                'label'      => 'Date',    // _('Date')
+                'label' => 'Date',    // _('Date')
+                'uiconfig'  => [
+                    'format' => ['medium'],
+                ],
             ),
             'start_date' => array(
                 'type' => 'date',
                 'label'      => 'Interval Begins',    // _('Interval Begins')
+                'uiconfig'  => [
+                    'format' => ['medium'],
+                ],
             ),
             'end_date' => array(
                 'type' => 'date',
                 'label'      => 'Interval Ends',    // _('Interval Ends')
+                'uiconfig'  => [
+                    'format' => ['medium'],
+                ],
             ),
             'credit_term' => array(
                 'title' => 'Credit Term', // _('Credit Term')

@@ -181,11 +181,18 @@ Tine.widgets.grid.RendererManager = function() {
                         'keyFieldConfigName', fieldDefinition.name));
                     break;
                 case 'datetime_separated_date':
-                case 'date':
-                    renderer = Tine.Tinebase.common.dateRenderer;
+                case 'date': {
+                        const format = _.get(field, 'fieldDefinition.uiconfig.format', ['wkday', 'medium']);
+                        renderer = _.bind(Tine.Tinebase.common.dateRenderer, {format});
+                    }
                     break;
-                case 'datetime':
-                    renderer = Tine.Tinebase.common.dateTimeRenderer;
+                case 'datetime': {
+                        const format = _.get(field, 'fieldDefinition.uiconfig.format', {
+                            Date: ['wkday', 'medium'],
+                            Time: ['medium']
+                        });
+                        renderer = _.bind(Tine.Tinebase.common.dateTimeRenderer, {format});
+                    }
                     break;
                 case 'time':
                     renderer = Tine.Tinebase.common.timeRenderer;

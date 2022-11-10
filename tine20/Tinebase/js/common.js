@@ -120,8 +120,8 @@ Tine.Tinebase.common = {
 
         const dateObj = $_iso8601 instanceof Date ? $_iso8601 : Date.parseDate($_iso8601, Date.patterns.ISO8601Long);
 
-        const dayPrefix = dateObj ? (dateObj.format('l').substr(0,2) + ' ') : '';
-        return dayPrefix + Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium'));
+        return Tine.Tinebase.common.dateRenderer.call(this, $_iso8601) + ' '
+            + Tine.Tinebase.common.timeRenderer.call(this, $_iso8601);
     },
 
     /**
@@ -132,14 +132,18 @@ Tine.Tinebase.common = {
      * @return {String} localised date
      */
     dateRenderer: function (date, metadata) {
+        const format = this.format ? (this.format?.Date || this.format) : ['wkday', 'medium'];
+
         if (_.isObject(metadata)) {
             metadata.css = (metadata.css || '') + ' tine-gird-cell-date';
         }
 
         const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
 
-        const dayPrefix = dateObj ? (dateObj.format('l').substr(0,2) + ' ') : '';
-        return dayPrefix + Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', 'medium'));
+        return dateObj ? _.map(format, (key) => {
+            return key === 'wkday' ? dateObj.format('l').substr(0,2) :
+                Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', key));
+            }).join(' ') : '';
     },
     
     /**
@@ -196,13 +200,17 @@ Tine.Tinebase.common = {
      * @return {String} localised time
      */
     timeRenderer: function (date, metadata) {
+        const format = this.format ? (this.format?.Time || this.format) : ['medium'];
+
         if (metadata) {
             metadata.css = 'tine-gird-cell-time';
         }
 
         var dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
-        
-        return Ext.util.Format.date(dateObj, Locale.getTranslationData('Time', 'medium'));
+
+        return dateObj ? _.map(format, (key) => {
+            return Ext.util.Format.date(dateObj, Locale.getTranslationData('Time', key));
+        }).join(' ') : '';
     },
     
     /**

@@ -148,11 +148,17 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             ),
             'start_date' => array(
                 'type' => 'date',
-                'label'      => 'Start Date',    // _('Start Date')
+                'label' => 'Start Date',    // _('Start Date')
+                self::UI_CONFIG => [
+                    'format' => ['medium'],
+                ],
             ),
             'end_date' => array(
                 'type' => 'date',
-                'label'      => 'End Date',    // _('End Date')
+                'label' => 'End Date',    // _('End Date')
+                self::UI_CONFIG => [
+                    'format' => ['medium'],
+                ],
             ),
             'customer' => array(
                 'type' => 'virtual',
