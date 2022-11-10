@@ -285,7 +285,10 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
         this.autoRefreshTask.delay(this.autoRefreshInterval * 1000);
         const { results: deviceRecords } = await Tine.HumanResources.getAttendanceRecorderDeviceStates();
 
-        const wtDeviceRecord = _.findLast(deviceRecords, { [FLD_DEVICE_ID]: { id: SYSTEM_WORKING_TIME_ID } });
+        const wtDeviceRecord = _.findLast(deviceRecords, {
+            [FLD_STATUS]: STATUS_OPEN,
+            [FLD_DEVICE_ID]: { id: SYSTEM_WORKING_TIME_ID }
+        });
         this.wtType = _.get(wtDeviceRecord, FLD_TYPE, TYPE_CLOCK_OUT); // NOTE: wt device is allowMultiStart === 0
         this.freeTimeType = _.get(wtDeviceRecord, FLD_FREETIMETYPE_ID);
         const wtAllowPause = !!+_.get(wtDeviceRecord, `device_id.${FLD_ALLOW_PAUSE}`, '0');
@@ -294,8 +297,26 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
         this.actionClockPause.setDisabled(!wtAllowPause || this.wtType !== TYPE_CLOCK_IN);
         this.actionClockOut.setDisabled(this.wtType === TYPE_CLOCK_OUT);
 
+        // find out if we are absence
+        if (this.wtType === TYPE_CLOCK_OUT) {
+            const lastWTDeviceRecord = _.findLast(deviceRecords, {
+                [FLD_STATUS]: STATUS_CLOSED,
+                [FLD_DEVICE_ID]: { id: SYSTEM_WORKING_TIME_ID }
+            });
+            if (lastWTDeviceRecord) {
+                // @TODO if appropriate, disploy freetimetype
+                // NOTE: lot's of problems here:
+                //   * can't clock out from absence
+                //   * planed absences (e.g. vacation/sicknes) are not represended by attendenceRecorder
+                //   * ...
+            }
+        }
+
         // NOTE: pt device is allowMultiStart === 1
-        const ptDeviceRecords = _.filter(deviceRecords, { [FLD_DEVICE_ID]: { id: SYSTEM_PROJECT_TIME_ID } });
+        const ptDeviceRecords = _.filter(deviceRecords, {
+            [FLD_STATUS]: STATUS_OPEN,
+            [FLD_DEVICE_ID]: { id: SYSTEM_PROJECT_TIME_ID }
+        });
         const missingTimeAccounts = _.difference(_.compact(_.uniq(_.map(ptDeviceRecords, `xprops.${META_DATA}.Timetracker_Model_Timeaccount`))), this.menu.timeAccountPickerGrid.store.data.keys)
         if (missingTimeAccounts.length) {
             const { results: timeAccounts } = await Tine.Timetracker.searchTimeaccounts([{field: 'id', operator: 'in', value: missingTimeAccounts}]);
