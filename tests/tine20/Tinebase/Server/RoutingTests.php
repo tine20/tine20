@@ -124,4 +124,32 @@ class Tinebase_Server_RoutingTests extends TestCase
         self::assertNotEmpty($content);
         self::assertEquals('{"status":"pass","problems":[]}', $content);
     }
+
+    /**
+     * @group ServerTests
+     */
+    public function testMetric()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::METRICS_API_KEY, 'testmetrics123');
+        
+        $jsonResponse = Tinebase_Controller::getInstance()->getStatusMetrics('testmetrics123');
+        $status = Tinebase_Helper::jsonDecode($jsonResponse->getBody()->getContents());
+
+        $userId = Tinebase_Core::getUser()->getId();
+        $adminJson = new Admin_Frontend_Json();
+        $user = $adminJson->getUser($userId);
+
+        $imapBackend = Tinebase_EmailUser::getInstance();
+        $imapUsageQuota = $imapBackend->getTotalUsageQuota();
+        
+        $data = [
+            'activeUsers' => 1,
+            'fileStorage' => $user['effectiveAndLocalQuota']['effectiveUsage'],
+            'emailStorage' => $imapUsageQuota['mailQuota'] * 1024 * 1024,
+            'quotas' => Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->toArray(),
+        ];
+        
+        self::assertNotEmpty($status);
+        self::assertEquals($data, $status, print_r($user));
+    }
 }
