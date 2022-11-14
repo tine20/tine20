@@ -935,10 +935,9 @@ span:hover.tinebase-download-link {
 }
 
 .action_upload_uploading {
-    animation-name: uploading-animation;
-    animation-duration: 1500ms;
-    animation-iteration-count: infinite;
+    background-image:url(../../images/icon-set/icon_filemanager_uploading_animate.svg) !important;
 }
+
 .action_upload_idle {
     background-image:url(../../images/icon-set/icon_filemanager_reiter.svg) !important;
 }
@@ -1275,34 +1274,6 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     }
     to {
         transform: rotate(360deg);
-    }
-}
-
-/* loading animations */
-@keyframes uploading-animation {
-    0% {
-        background-image:url(../../images/icon-set/icon_filemanager_uploading_0.svg);
-    }
-    10% {
-        background-image:url(../../images/icon-set/icon_filemanager_uploading_1.svg);
-    }
-    20% {
-        background-image:url(../../images/icon-set/icon_filemanager_uploading_2.svg);
-    }
-    30% {
-        background-image:url(../../images/icon-set/icon_filemanager_uploading_3.svg);
-    }
-    40% {
-        background-image:url(../../images/icon-set/icon_filemanager_uploading_4.svg);
-    }
-    50% {
-        background-image:url(../../images/icon-set/icon_filemanager_uploading_5.svg);
-    }
-    60% {
-        background-image:url(../../images/icon-set/icon_filemanager_uploading_6.svg);
-    }
-    100% {
-        background-image:url(../../images/icon-set/icon_filemanager_uploading_6.svg);
     }
 }
 
