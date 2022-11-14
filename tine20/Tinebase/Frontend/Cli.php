@@ -1705,7 +1705,25 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo 'Failcount: ' . $result['failcount'] . "\n";
         return 0;
     }
-    
+
+    /**
+     * recursive undelete of file nodes - needs parent id param (only works if file objects still exist)
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return int
+     */
+    public function undeleteFileNodes(Zend_Console_Getopt $_opts): int
+    {
+        $parentIds = $_opts->getRemainingArgs();
+        $treeNodeBackend = new Tinebase_Tree_Node();
+
+        foreach ($parentIds as $parentId) {
+            $treeNodeBackend->recursiveUndelete($parentId);
+        }
+
+        return 0;
+    }
+
     /**
      * creates demo data for all applications
      * accepts same arguments as Tinebase_Frontend_Cli_Abstract::createDemoData

@@ -801,4 +801,29 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
 
         return $result;
     }
+
+    /**
+     * switches all sub-nodes of given parentId to is_deleted=0
+     *
+     * @param string $parentId
+     * @return void
+     * @throws Zend_Db_Adapter_Exception
+     */
+    public function recursiveUndelete(string $parentId)
+    {
+        $select = parent::_getSelect('id', true);
+        $select->where('parent_id = ?', $parentId);
+        $ids = $this->_db->fetchAll($select);
+        if (! empty($ids)) {
+            $where = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $ids),
+            );
+            $this->_db->update($this->_tablePrefix . $this->_tableName, [
+                'is_deleted' => 0
+            ], $where);
+            foreach ($ids as $id) {
+                $this->recursiveUndelete($id);
+            }
+        }
+    }
 }
