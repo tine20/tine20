@@ -320,6 +320,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      * @todo improve handling
      * @return void
      * @throws Sabre\DAV\Exception\NotFound
+     * @throws Sabre\DAV\Exception\PreconditionFailed
      */
     public function delete() 
     {
@@ -335,6 +336,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             $event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
         } catch (Tinebase_Exception_NotFound $tenf) {
             throw new Sabre\DAV\Exception\NotFound("Event not found");
+        } catch (Tinebase_Exception_UnexpectedValue $teuv) {
+            throw new Sabre\DAV\Exception\PreconditionFailed($teuv->getMessage());
         }
         
         // disallow event cleanup in the past
