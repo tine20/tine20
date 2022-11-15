@@ -37,9 +37,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var array
      */
     protected $_configuredModels = [
-        Admin_Model_OVpnApiRealm::MODEL_NAME_PART,
-        Admin_Model_OVpnApi_AuthConfig::MODEL_NAME_PART,
-        Admin_Model_OVpnApiAccount::MODEL_NAME_PART,
         Admin_Model_SchedulerTask::MODEL_NAME_PART,
         Admin_Model_SchedulerTask_Import::MODEL_NAME_PART,
     ];

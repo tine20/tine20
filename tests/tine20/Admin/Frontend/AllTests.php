@@ -4,7 +4,7 @@
  *
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -26,7 +26,6 @@ class Admin_Frontend_AllTests
         $suite->addTestSuite(Admin_Frontend_JsonTest::class);
         $suite->addTestSuite(Admin_Frontend_Json_EmailAccountTest::class);
         $suite->addTestSuite(Admin_Frontend_Json_UserTest::class);
-        $suite->addTestSuite(Admin_Frontend_Json_OVpnApiTest::class);
         $suite->addTestSuite(Admin_Frontend_Json_QuotaTest::class);
         return $suite;
     }

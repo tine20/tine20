@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -24,6 +24,11 @@ class Tinebase_Auth_MFA_YubicoOTPAdapter implements Tinebase_Auth_MFA_AdapterInt
     public function __construct(Tinebase_Record_Interface $_config, string $id)
     {
         $this->_mfaId = $id;
+    }
+
+    public function getClientPasswordLength(): ?int
+    {
+        return 48;
     }
 
     public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg): bool

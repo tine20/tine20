@@ -128,10 +128,6 @@
           "path": "js/"
         },
         {
-          "text": "OVpnApiConfig.js",
-          "path": "js/"
-        },
-        {
           "text": "SchedulerPanel.js",
           "path": "js/"
         }

@@ -4,17 +4,23 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
 use OTPHP\TOTP;
 use OTPHP\HOTP;
 use ParagonIE\ConstantTime\Base32;
+use Psr\Http\Message\RequestInterface;
 
 class Tinebase_Auth_MFATest extends TestCase
 {
     protected $unsetSharedCredentialKey = false;
+
+    /**
+     * @var RequestInterface
+     */
+    protected $_oldRequest = null;
 
     protected function setUp(): void
     {
@@ -26,10 +32,13 @@ class Tinebase_Auth_MFATest extends TestCase
             Tinebase_Config::getInstance()->{Tinebase_Auth_CredentialCache_Adapter_Shared::CONFIG_KEY} = Tinebase_Record_Abstract::generateUID();
             $this->unsetSharedCredentialKey = true;
         }
+
+        $this->_oldRequest = Tinebase_Core::getContainer()->get(RequestInterface::class);
     }
 
     protected function tearDown(): void
     {
+        Tinebase_Core::getContainer()->set(RequestInterface::class, $this->_oldRequest);
         if ($this->unsetSharedCredentialKey) {
             Tinebase_Config::getInstance()->delete(Tinebase_Auth_CredentialCache_Adapter_Shared::CONFIG_KEY);
         }
@@ -37,6 +46,78 @@ class Tinebase_Auth_MFATest extends TestCase
         
         Tinebase_Auth_MFA::destroyInstances();
         Tinebase_AreaLock::destroyInstance();
+    }
+
+    protected function prepTOTP()
+    {
+        $secret = Base32::encodeUpperUnpadded(random_bytes(64));
+
+        $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(
+            Tinebase_Model_MFA_UserConfig::class, [[
+            Tinebase_Model_MFA_UserConfig::FLD_ID => 'TOTPunittest',
+            Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'unittest',
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS =>
+                Tinebase_Model_MFA_TOTPUserConfig::class,
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG =>
+                new Tinebase_Model_MFA_TOTPUserConfig([
+                    Tinebase_Model_MFA_TOTPUserConfig::FLD_SECRET => $secret,
+                ]),
+        ]]);
+
+        $this->_createAreaLockConfig([
+            Tinebase_Model_AreaLockConfig::FLD_MFAS => ['unittest'],
+        ], [
+            Tinebase_Model_MFA_Config::FLD_ID => 'unittest',
+            Tinebase_Model_MFA_Config::FLD_USER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_TOTPUserConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_TOTPConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS =>
+                Tinebase_Auth_MFA_HTOTPAdapter::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG => []
+        ]);
+
+        $this->_originalTestUser = Tinebase_User::getInstance()->updateUser($this->_originalTestUser);
+        return TOTP::create($secret);
+    }
+
+    public function testAuthPAMvalidateTOTP()
+    {
+        $totp = $this->prepTOTP();
+        $pass = $totp->now();
+        $credentials = TestServer::getInstance()->getTestCredentials();
+
+        Tinebase_Core::getContainer()->set(RequestInterface::class,
+            (new \Laminas\Diactoros\ServerRequest([], [], 'http://unittest/shalala?blub=bla'))
+                ->withBody((new \Laminas\Diactoros\StreamFactory())->createStream(json_encode([
+                    'user' => $this->_originalTestUser->accountLoginName,
+                    'pass' => $credentials['password'] . $pass,
+                ]))));
+
+        $response = Tinebase_Controller::getInstance()->publicPostAuthPAMvalidate();
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertNotFalse($body = json_decode($response->getBody()->getContents(), true));
+        $this->assertArrayHasKey('login-success', $body);
+        $this->assertSame(true, $body['login-success']);
+    }
+
+    public function testAuthPAMvalidateTOTPFail()
+    {
+        $this->prepTOTP();
+        $credentials = TestServer::getInstance()->getTestCredentials();
+
+        Tinebase_Core::getContainer()->set(RequestInterface::class,
+            (new \Laminas\Diactoros\ServerRequest([], [], 'http://unittest/shalala?blub=bla'))
+                ->withBody((new \Laminas\Diactoros\StreamFactory())->createStream(json_encode([
+                    'user' => $this->_originalTestUser->accountLoginName,
+                    'pass' => $credentials['password'] . '123123',
+                ]))));
+
+        $response = Tinebase_Controller::getInstance()->publicPostAuthPAMvalidate();
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertNotFalse($body = json_decode($response->getBody()->getContents(), true));
+        $this->assertArrayHasKey('login-success', $body);
+        $this->assertSame(false, $body['login-success']);
     }
 
     public function testTOTP()
