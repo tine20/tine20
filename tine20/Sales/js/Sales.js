@@ -38,10 +38,14 @@ Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
         {modelName: 'Contract', requiredRight: 'manage_contracts', singularContainerMode: true, genericCtxActions: ['grants']},
         {modelName: 'Customer', requiredRight: 'manage_customers', singularContainerMode: true},
         {modelName: 'Supplier', requiredRight: 'manage_suppliers', singularContainerMode: true},
-        {modelName: 'Invoice', requiredRight: 'manage_invoices', singularContainerMode: true},
         {modelName: 'PurchaseInvoice', requiredRight: 'manage_purchase_invoices', singularContainerMode: true},
-        {modelName: 'Offer', requiredRight: 'manage_offers', singularContainerMode: true},
-        {modelName: 'OrderConfirmation', requiredRight: 'manage_orderconfirmations', singularContainerMode: true},
+
+        // deprecated documents
+        // TODO add migration to new documents
+        // {modelName: 'Invoice', requiredRight: 'manage_invoices', singularContainerMode: true},
+        // {modelName: 'Offer', requiredRight: 'manage_offers', singularContainerMode: true},
+        // {modelName: 'OrderConfirmation', requiredRight: 'manage_orderconfirmations', singularContainerMode: true},
+
         // new documents
         {modelName: 'Document_Offer', requiredRight: 'manage_offers', singularContainerMode: true},
         {modelName: 'Document_Order', requiredRight: 'manage_orderconfirmations', singularContainerMode: true},
