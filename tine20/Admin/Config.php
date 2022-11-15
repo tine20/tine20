@@ -109,7 +109,25 @@ class Admin_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
             self::SETBYSETUPMODULE      => false,
-            self::DEFAULT_STR           => null,
+            self::DEFAULT_STR => [
+                'accesslog',
+                'logentries',
+                'accounts',
+                'groups',
+                'applications',
+                'sharedtags',
+                'roles',
+                'containers',
+                'customfields',
+                'importexportdefinitions',
+                'serverinfo',
+                'emailaccounts',
+                'devices',
+                'scheduler',
+                // disabled by default
+//                'computers',
+//                'ovpnapiconfig',
+            ],
         ],
         self::QUOTA_ALLOW_TOTALINMB_MANAGEMNET => [
             //_('Allow total quota in MB management')
