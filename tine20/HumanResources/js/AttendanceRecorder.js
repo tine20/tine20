@@ -290,7 +290,6 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
             [FLD_DEVICE_ID]: { id: SYSTEM_WORKING_TIME_ID }
         });
         this.wtType = _.get(wtDeviceRecord, FLD_TYPE, TYPE_CLOCK_OUT); // NOTE: wt device is allowMultiStart === 0
-        this.freeTimeType = _.get(wtDeviceRecord, FLD_FREETIMETYPE_ID);
         const wtAllowPause = !!+_.get(wtDeviceRecord, `device_id.${FLD_ALLOW_PAUSE}`, '0');
 
         this.actionClockIn.setDisabled(this.wtType === TYPE_CLOCK_IN);
@@ -303,8 +302,9 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
                 [FLD_STATUS]: STATUS_CLOSED,
                 [FLD_DEVICE_ID]: { id: SYSTEM_WORKING_TIME_ID }
             });
-            if (lastWTDeviceRecord) {
-                // @TODO if appropriate, disploy freetimetype
+            if (lastWTDeviceRecord?.freetimetype_id) {
+                this.wtType = TYPE_CLOCK_PAUSED;
+                this.freeTimeType = lastWTDeviceRecord.freetimetype_id;
                 // NOTE: lot's of problems here:
                 //   * can't clock out from absence
                 //   * planed absences (e.g. vacation/sicknes) are not represended by attendenceRecorder
