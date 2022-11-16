@@ -27,6 +27,11 @@ class Tinebase_Auth_MFA_HTOTPAdapter implements Tinebase_Auth_MFA_AdapterInterfa
         $this->_mfaId = $id;
     }
 
+    public function getClientPasswordLength(): ?int
+    {
+        return 6;
+    }
+
     public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg): bool
     {
         return true;
