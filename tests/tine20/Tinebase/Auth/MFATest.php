@@ -83,6 +83,10 @@ class Tinebase_Auth_MFATest extends TestCase
 
     public function testAuthPAMvalidateTOTP()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
+            $this->markTestSkipped('LDAP backend enabled');
+        }
+
         $totp = $this->prepTOTP();
         $pass = $totp->now();
         $credentials = TestServer::getInstance()->getTestCredentials();
@@ -103,6 +107,10 @@ class Tinebase_Auth_MFATest extends TestCase
 
     public function testAuthPAMvalidateTOTPFail()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
+            $this->markTestSkipped('LDAP backend enabled');
+        }
+        
         $this->prepTOTP();
         $credentials = TestServer::getInstance()->getTestCredentials();
 
