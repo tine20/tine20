@@ -1612,19 +1612,29 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     /**
      * get grants for containers assigned to given account of multiple records
      *
-     * @param   Tinebase_Record_RecordSet   $_records records to get the grants for
-     * @param   string|Tinebase_Model_User  $_accountId the account to get the grants for
-     * @param   string                      $_containerProperty container property
-     * @param   string                      $_grantModel
-     * @throws  Tinebase_Exception_NotFound
-     * @return  array of containers|void
+     * @param Tinebase_Record_RecordSet $_records
+     * @param string|Tinebase_Model_User $_accountId
+     * @param string $_containerProperty
+     * @return array
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Db_Select_Exception
+     * @throws Zend_Db_Statement_Exception
      */
-    public function getContainerGrantsOfRecords(Tinebase_Record_RecordSet $_records, $_accountId, $_containerProperty = 'container_id')
+    public function getContainerGrantsOfRecords(Tinebase_Record_RecordSet $_records, $_accountId, string $_containerProperty = 'container_id'): array
     {
         $containerIds = array();
         foreach ($_records as $record) {
             if (isset($record[$_containerProperty])) {
-                $containerId = Tinebase_Model_Container::convertContainerId($record[$_containerProperty]);
+                try {
+                    $containerId = Tinebase_Model_Container::convertContainerId($record[$_containerProperty]);
+                } catch (Tinebase_Exception_InvalidArgument $teia) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $teia->getMessage()
+                        . ' ' . print_r($record->toArray(), true)
+                    );
+                    continue;
+                }
                 if (!isset($containerIds[$containerId])) {
                     $containerIds[$containerId] = $containerId;
                 }
@@ -1632,7 +1642,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         }
 
         if (empty($containerIds)) {
-            return array();
+            return [];
         }
 
         return $this->getContainerWithGrants($containerIds, $_accountId);
@@ -1736,8 +1746,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting grants for container id ' . $containerId . ' ...');
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_grants->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Setting grants for container id ' . $containerId . ' ...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($_grants->toArray(), TRUE));
         
         try {
 
