@@ -85,12 +85,14 @@ class Tinebase_User_PasswordPolicy
             return;
         }
 
+        // we don't count underscores as word chars but as special chars (therefore we can't use \w and \W)
+        // TODO make word char / special char regexes configurable?
         $policy = array(
             Tinebase_Config::PASSWORD_POLICY_ONLYASCII              => '/[^\x00-\x7F]/',
             Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH             => null,
-            Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS         => '/[\W]*/',
+            Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS         => '/[^a-z]*/i',
             Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS    => '/[^A-Z]*/',
-            Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS      => '/[\w]*/',
+            Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS      => '/[a-z0-9äüöß]*/i',
             Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS            => '/[^0-9]*/',
             Tinebase_Config::PASSWORD_POLICY_FORBID_USERNAME        => $user->accountLoginName,
         );
