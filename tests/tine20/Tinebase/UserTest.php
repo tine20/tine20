@@ -177,6 +177,7 @@ class Tinebase_UserTest extends TestCase
         
         $this->_assertPolicy('nOve!ry1leverPw2ä', 'Only ASCII | Minimum password length | Minimum uppercase chars | Minimum special chars | Minimum numbers');
         $this->_assertPolicy('', 'Minimum password length');
+        $this->_assertPolicy('__________abc__________', "- Minimum uppercase chars in password: 3\n- Minimum numbers in password: 3");
     }
     
     /**
