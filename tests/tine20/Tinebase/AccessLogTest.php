@@ -46,7 +46,7 @@ class Tinebase_AccessLogTest extends TestCase
             'sessionid'  => Tinebase_Record_Abstract::generateUID(),
         ), true);
         $this->_uit->setSessionId($accessLog);
-        $this->_uit->create($accessLog);
+        Tinebase_Core::set(Tinebase_Core::USERACCESSLOG, $this->_uit->create($accessLog));
 
         $now = Tinebase_DateTime::now();
         $accessLog = $this->_uit->setLogout();
