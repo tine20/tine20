@@ -527,8 +527,8 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
 [client]
 host = {$config->host}
 port = {$port}
-user = {$config->username}
-password = {$config->password}
+user = '{$config->username}'
+password = '{$config->password}'
 EOT;
 
         // check mysqldump version
