@@ -193,7 +193,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
     {
         if (self::$_instance === NULL) {
             $backendType = self::getConfiguredBackend();
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' accounts backend: ' . $backendType);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ .' accounts backend: ' . $backendType);
             
             self::$_instance = self::factory($backendType);
         }

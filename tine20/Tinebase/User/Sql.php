@@ -330,7 +330,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             throw new Tinebase_Exception_InvalidArgument("invalid property $_property requested");
         }
         
-        switch($_property) {
+        switch ($_property) {
             case 'accountId':
                 $value = Tinebase_Model_User::convertUserIdToInt($_value);
                 break;
