@@ -225,6 +225,9 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
             $select->where($w);
         }
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' user select: ' . $select);
+
         // Perform query - retrieve user from database
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
