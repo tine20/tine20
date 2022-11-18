@@ -45,7 +45,7 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 [fields.unfold_type, fields.default_sorting, fields.default_grouping],
                 [fields.lifespan_start, fields.lifespan_end],
                 [fields.is_active, fields.is_salesproduct],
-                [fields.accountable, fields.costcenter]
+                [_.assign(fields.accountable, {columnWidth: 1/3}), _.assign(fields.costcenter, {columnWidth: 1/3}), _.assign(fields.costbearer, {columnWidth: 1/3})]
             ]
         }];
     }
