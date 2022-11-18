@@ -1,3 +1,37 @@
+# -*- coding: utf-8 -*-
+#
+# tine-groupware
+#
+# @license      http://www.gnu.org/licenses/agpl.html AGPL Version 3
+# @author       Reinhard Vicinus <r.vicinus@metaways.de>
+# @copyright    Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+# @version      0.1
+
+__doc__ = """python-pam binding for tine-groupware
+
+Installation:
+=============
+place this file in:
+    /usr/local/tine_pam.py
+
+add a new pam config file:
+    /etc/pam.d/common-tine:
+
+with this contents:
+    auth       sufficient   pam_python.so /usr/local/tine_pam.py url=https://my.tine.url
+    account    sufficient   pam_permit.so
+
+Parameters:
+===========
+
+Parameters to the module are:
+
+ :param url: tine-groupware base url
+ :parm api: optional, defaults to /authPAM/validate
+ :param required-group: optional, group name the user is required to be member of for auth to succeed
+
+"""
+
 def _parse_args(argv):
   config = { 'api': '/authPAM/validate' }
   for arg in argv:
