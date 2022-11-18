@@ -10,7 +10,7 @@ def _parse_args(argv):
 #    config[key] = value
   return config
 
-def _authenticate_tine(data, config):
+def _authenticate_tine(data, config, syslog):
   import requests
 
   h = { 'user-agent': 'Tine-PAM/0.1', }
@@ -18,24 +18,29 @@ def _authenticate_tine(data, config):
   return r.json()
 
 def _authenticate(pamh, config, syslog):
+  if pamh.authtok is None:
+    message = pamh.Message(pamh.PAM_PROMPT_ECHO_OFF, "otp: ")
+    response = pamh.conversation(message)
+    pamh.authtok = response.resp
+
   data = {
-    'username': pamh.get_user(None),
-    'password': pamh.authtok,
+    'user': pamh.get_user(None),
+    'pass': pamh.authtok,
   }
   if config.get('required-group'):
     data['required-group'] = config.get('required-group')
 
-  response = _authenticate_tine(data, config)
+  response = _authenticate_tine(data, config, syslog)
   if response.get('login-success', False):
     r = pamh.PAM_SUCCESS
-    syslog.syslog(syslog.LOG_DEBUG, '%s: user %s login success' % (__name__, data['username']))
+    syslog.syslog(syslog.LOG_DEBUG, '%s: user %s login success' % (__name__, data['user']))
   else:
     r = pamh.PAM_AUTH_ERR
     error = response.get('error', False)
     if error:
-      syslog.syslog(syslog.LOG_ERR, '%s: user %s login error %s' % (__name__, data['username'], error.get('message', 'unknown error')))
+      syslog.syslog(syslog.LOG_ERR, '%s: user %s login error %s' % (__name__, data['user'], error.get('message', 'unknown error')))
     else:
-      syslog.syslog(syslog.LOG_DEBUG, '%s: user %s login failed' % (__name__, data['username']))
+      syslog.syslog(syslog.LOG_DEBUG, '%s: user %s login failed' % (__name__, data['user']))
 
   return r
 
@@ -44,7 +49,6 @@ def pam_sm_authenticate(pamh, flags, argv):
   import traceback
 
   config = _parse_args(argv)
-  debug = config.get("debug")
   syslog.openlog(facility=syslog.LOG_AUTH)
 
   try:
