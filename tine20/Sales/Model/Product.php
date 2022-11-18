@@ -21,6 +21,7 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
     public const FLD_ACCOUNTABLE = 'accountable';
     public const FLD_CATEGORY = 'category';
     public const FLD_COSTCENTER = 'costcenter';
+    public const FLD_COSTBEARER = 'costbearer';
     public const FLD_DESCRIPTION = 'description';
     public const FLD_DEFAULT_GROUPING = 'default_grouping';
     public const FLD_DEFAULT_SORTING = 'default_sorting';
@@ -110,6 +111,14 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                     self::FIELD_NAME            => self::FLD_COSTCENTER,
                     self::JOIN_COLUMNS          => [[
                         self::NAME                  => self::FLD_COSTCENTER,
+                        self::REFERENCED_COLUMN_NAME=> 'id',
+                    ]],
+                ],
+                self::FLD_COSTBEARER        => [
+                    self::TARGET_ENTITY         => Tinebase_Model_CostUnit::class,
+                    self::FIELD_NAME            => self::FLD_COSTBEARER,
+                    self::JOIN_COLUMNS          => [[
+                        self::NAME                  => self::FLD_COSTBEARER,
                         self::REFERENCED_COLUMN_NAME=> 'id',
                     ]],
                 ],
@@ -311,6 +320,16 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME            => Tinebase_Model_CostCenter::MODEL_NAME_PART,
                 ],
                 self::NULLABLE => true,
+            ],
+            self::FLD_COSTBEARER => [
+                self::LABEL                         => 'Cost Bearer', // _('Cost Bearer')
+                self::TYPE                          => self::TYPE_RECORD,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME                    => Tinebase_Model_CostUnit::MODEL_NAME_PART,
+                ],
+                self::NULLABLE                      => true,
+                self::SHY                           => true,
             ],
 
         ]
