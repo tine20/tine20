@@ -1293,5 +1293,8 @@ msgstr "E-Mail-Verteiler Mitglieder"
 msgid "Group Member"
 msgstr "Gruppenmitglied"
 
+msgid "You do not have the required private grant to view history."
+msgstr "Sie verfügen nicht über das benötigte Privat-Recht um die Historie anzuzeigen."
+
 msgid "E-Mail (all)"
 msgstr "E-Mail (alle)"
