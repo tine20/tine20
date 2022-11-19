@@ -51,9 +51,13 @@ class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_In
      * @param resource $handle
      * @return Tinebase_FileSystem_AVScan_Result
      */
-    public function scan($handle)
+    public function scan($handle): Tinebase_FileSystem_AVScan_Result
     {
         $e = null;
+        $result = [
+            'status' => null,
+            'reason' => null,
+        ];
         try {
             $this->_connect();
 
@@ -68,8 +72,15 @@ class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_In
         } catch (\Socket\Raw\Exception $e) {
         } catch (\Xenolope\Quahog\Exception\ConnectionException $e) {}
 
-        if (null !== $e) {
-            Tinebase_Exception::log($e);
+        if ($e instanceof Exception) {
+            if (preg_match('/timeout/i', $e->getMessage())) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                        ' ' . $e->getMessage());
+                }
+            } else {
+                Tinebase_Exception::log($e);
+            }
             $this->_socket = null;
             $result = [
                 'status' => Tinebase_FileSystem_AVScan_Result::RESULT_ERROR,

@@ -101,7 +101,7 @@ trait Calendar_Export_GenericTrait
                         $newEvent->dtend = clone $newEvent->dtstart;
                         $newEvent->dtend->setTime(23, 59, 59);
 
-                        if ($newEvent->dtend->isLater($this->_from) && $newEvent->dtstart->isEarlier($this->_until)) {
+                        if ($this->_from && $newEvent->dtend->isLater($this->_from) && $newEvent->dtstart->isEarlier($this->_until)) {
                             $newEvents->addRecord($newEvent);
                             $this->_multiDayWholDayEvents[$newEvent->getId()] = array(
                                 'dtstart' => $orgDtStart,

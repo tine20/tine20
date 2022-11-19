@@ -709,9 +709,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $backend = HumanResources_Controller_AttendanceRecord::getInstance()->getBackend();
         $db = Tinebase_Core::getDb();
         $tableName = $db->quoteIdentifier($backend->getTablePrefix() . $backend->getTableName());
-        $ids = $db->query('SELECT `id` FROM ' . $tableName . ' AS a JOIN (SELECT device_id, MAX(`sequence`) as `sequence` FROM ' . $tableName .
-            ') AS b ON a.device_id = b.device_id AND a.sequence = b.sequence AND a.account_id = ' .
-            $db->quoteInto('?', Tinebase_Core::getUser()->getId()))->fetchAll(Zend_Db::FETCH_COLUMN);
+        $ids = $db->query('SELECT a.`id` FROM ' . $tableName . ' AS a JOIN (SELECT device_id, MAX(`sequence`) as `sequence` FROM ' . $tableName .
+            ' WHERE account_id = ' . $db->quoteInto('?', Tinebase_Core::getUser()->getId()) .
+            ' GROUP BY device_id) AS b ON a.device_id = b.device_id AND a.sequence = b.sequence'
+            )->fetchAll(Zend_Db::FETCH_COLUMN);
         $lastRecordPerDevice = $this->_search([
             ['field' => 'id', 'operator' => 'in', 'value' => $ids],
         ], null, HumanResources_Controller_AttendanceRecord::getInstance(), HumanResources_Model_AttendanceRecord::class);

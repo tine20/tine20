@@ -28,6 +28,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     const SYNC_API_ACTIVESYNC = 'ActiveSync';
     const SYNC_API_DAV = 'DAV';
 
+    public const PAM_VALIDATE_REQUEST_TYPE = 'PAMvalidate';
+
     /**
      * holds the instance of the singleton
      *
@@ -877,7 +879,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             }
         }
 
-        if ($accessLog->clienttype !== Tinebase_Frontend_Json::REQUEST_TYPE ||
+        if (($accessLog->clienttype !== Tinebase_Frontend_Json::REQUEST_TYPE && $accessLog->clienttype !== self::PAM_VALIDATE_REQUEST_TYPE) ||
                 ! $areaLock->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN) ||
                 ! $areaLock->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN)
         ) {
@@ -1080,6 +1082,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Controller::class, 'healthCheck', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
+
+            $routeCollector->post('/authPAM/validate', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicPostAuthPAMvalidate', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
         });
 
         $r->addGroup('/Tinebase', function (\FastRoute\RouteCollector $routeCollector) {
@@ -1111,6 +1118,105 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
         });
+    }
+
+
+    public function publicPostAuthPAMvalidate(): \Psr\Http\Message\ResponseInterface
+    {
+        try {
+            /** @var \Psr\Http\Message\ServerRequestInterface $request */
+            $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+
+            if (!($body = json_decode($request->getBody()->getContents(), true)) || !isset($body['user']) ||
+                    !isset($body['pass'])) {
+                return $this->_publicPostAuthPAMvalidateReturnError('bad request, json body needs to have user and pass');
+            }
+
+            try {
+                $user = Tinebase_User::getInstance()->getFullUserByLoginName($body['user']);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                return $this->_publicPostAuthPAMvalidateReturnStatus(false);
+            }
+            if (isset($body['required-group'])) {
+                try {
+                    $group = Tinebase_Group::getInstance()->getGroupByName($body['required-group']);
+                } catch (Tinebase_Exception_Record_NotDefined $tenf) {
+                    return $this->_publicPostAuthPAMvalidateReturnError('required group does not exist');
+                }
+                if (!in_array($group->getId(), Tinebase_Group::getInstance()->getGroupMemberships($user))) {
+                    return $this->_publicPostAuthPAMvalidateReturnStatus(false);
+                }
+            }
+
+            $areaLock = Tinebase_AreaLock::getInstance();
+            $userConfigIntersection = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
+            /** @var Tinebase_Model_AreaLockConfig $areaConfig */
+            foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN) as $areaConfig) {
+                $userConfigIntersection->mergeById($areaConfig->getUserMFAIntersection($user));
+            }
+            $userConfigIntersection = $userConfigIntersection->filter(function (Tinebase_Model_MFA_UserConfig $uConf) {
+                return null !== Tinebase_Auth_MFA::getInstance($uConf->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
+                        ->getAdapter()->getClientPasswordLength();
+            });
+
+            if (0 === $userConfigIntersection->count()) {
+                return $this->_publicPostAuthPAMvalidateReturnStatus(false);
+            }
+
+            /** @var Tinebase_Model_MFA_UserConfig $uConf */
+            foreach ($userConfigIntersection as $uConf) {
+                $mfaLength = Tinebase_Auth_MFA::getInstance($uConf->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
+                    ->getAdapter()->getClientPasswordLength();
+                if (strlen($body['pass']) <= $mfaLength) {
+                    continue;
+                }
+                if (Tinebase_Auth::getInstance()->authenticate($body['user'], substr($body['pass'], 0, 0 - $mfaLength))
+                        ->getCode() !== Tinebase_Auth::SUCCESS) {
+                    continue;
+                }
+
+                $this->setRequestContext([
+                    'MFAPassword' => substr($body['pass'], 0 - $mfaLength),
+                    'MFAId' => $uConf->getId(),
+                ]);
+
+                try {
+                    if ($this->login($body['user'], substr($body['pass'], 0, 0 - $mfaLength), Tinebase_Core::getRequest(), self::PAM_VALIDATE_REQUEST_TYPE)) {
+                        return $this->_publicPostAuthPAMvalidateReturnStatus(true);
+                    }
+                } catch (Tinebase_Exception_AreaUnlockFailed $teauf) {
+                    $this->_publicPostAuthPAMvalidateReturnStatus(false);
+                }
+            }
+
+            return $this->_publicPostAuthPAMvalidateReturnStatus(false);
+        } catch (Tinebase_Exception_MaintenanceMode $temm) {
+            return $this->_publicPostAuthPAMvalidateReturnError('maintenance mode is on');
+        } catch (Exception $e) {
+            return $this->_publicPostAuthPAMvalidateReturnError('internal server error');
+        }
+    }
+
+    protected function _publicPostAuthPAMvalidateReturnStatus(bool $value): \Laminas\Diactoros\Response
+    {
+        return (new \Laminas\Diactoros\Response('php://memory', 200))
+            ->withAddedHeader('Content-Type', 'application/json')
+            ->withBody(
+                (new \Laminas\Diactoros\StreamFactory())->createStream(
+                    json_encode(['login-success' => $value])
+                )
+            );
+    }
+
+    protected function _publicPostAuthPAMvalidateReturnError(string $msg): \Laminas\Diactoros\Response
+    {
+        return (new \Laminas\Diactoros\Response('php://memory', 200))
+            ->withAddedHeader('Content-Type', 'application/json')
+            ->withBody(
+                (new \Laminas\Diactoros\StreamFactory())->createStream(
+                    json_encode(['error' => ['message' => $msg]])
+                )
+            );
     }
 
     /**

@@ -15,12 +15,17 @@ class Admin_Setup_Update_15 extends Setup_Update_Abstract
 {
     const RELEASE015_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE015_UPDATE001 = __CLASS__ . '::update001';
+    const RELEASE015_UPDATE002 = __CLASS__ . '::update002';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
             self::RELEASE015_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],
+            self::RELEASE015_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -38,11 +43,13 @@ class Admin_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update001()
     {
-        Setup_SchemaTool::updateSchema([
-            Admin_Model_OVpnApiRealm::class,
-            Admin_Model_OVpnApiAccount::class,
-        ]);
-
         $this->addApplicationUpdate('Admin', '15.1', self::RELEASE015_UPDATE001);
+    }
+
+    public function update002()
+    {
+        $this->dropTable('admin_ovpnapiaccount', Admin_Config::APP_NAME);
+        $this->dropTable('admin_ovpnapirealm', Admin_Config::APP_NAME);
+        $this->addApplicationUpdate('Admin', '15.2', self::RELEASE015_UPDATE002);
     }
 }

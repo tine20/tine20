@@ -24,7 +24,7 @@ class SSO_Facade_SAML_Container extends \SAML2\Compat\AbstractContainer
 
     public function generateId(): string
     {
-        return uniqid('', true);
+        return uniqid('a', true);
     }
 
     public function debugMessage($message, string $type): void

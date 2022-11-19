@@ -626,12 +626,12 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         $configFilename = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_appName .
             DIRECTORY_SEPARATOR . 'config.inc.php';
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Looking for defaults config.inc.php at ' . $configFilename);
         if (file_exists($configFilename)) {
             /** @noinspection PhpIncludeInspection */
             $configData = include($configFilename);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::'
                 . __LINE__ . ' Found default config.inc.php for app ' . $this->_appName);
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::'
                 . __LINE__ . ' ' . print_r($configData, true));
@@ -1010,8 +1010,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             $features = Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, $cacheId);
         } catch (Tinebase_Exception_NotFound $tenf) {
             $features = $this->get(self::ENABLED_FEATURES);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Features config of app ' . $this->_appName . ': '
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ . ' Features config of app ' . $this->_appName . ': '
                 . print_r($features->toArray(), true));
             Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __METHOD__, $cacheId, $features);
         }
