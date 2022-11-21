@@ -130,6 +130,12 @@ disabledDates: ["^03"]
             'select'
         );
 
+        const format = [].concat(this.format ? (this.format?.Date || this.format) : ['medium']);
+        _.pull(format, 'wkday');
+        this.format = format.map((v) => {
+            return Locale.getTranslationData('Date', v) || v;
+        }).join(' ');
+
         if(Ext.isString(this.minValue)){
             this.minValue = this.parseDate(this.minValue);
         }

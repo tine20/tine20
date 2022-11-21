@@ -928,6 +928,13 @@ dt = Date.parseDate("2006-02-29 03:20:01", "Y-m-d H:i:s", true); // returns null
 Ext.apply(Date.prototype, {
     // private
     dateFormat : function(format) {
+        const fmt = format ? (format?.Date || format) : ['wkday', 'medium'];
+        if (_.isArray(fmt)) {
+            format = fmt.map((v) => {
+                return Locale.getTranslationData('Date', v) || v;
+            }).join(' ');
+        }
+
         if (Date.formatFunctions[format] == null) {
             Date.createFormat(format);
         }

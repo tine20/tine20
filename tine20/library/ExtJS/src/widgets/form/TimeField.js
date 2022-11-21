@@ -84,6 +84,11 @@ Ext.form.TimeField = Ext.extend(Ext.form.ComboBox, {
 
     // private
     initComponent : function(){
+        const format = this.format ? (this.format?.Time || this.format) : ['medium'];
+        this.format = [].concat(format).map((v) => {
+            return Locale.getTranslationData('Date', v) || v;
+        }).join(' ');
+
         if(Ext.isDefined(this.minValue)){
             this.setMinValue(this.minValue, true);
         }
