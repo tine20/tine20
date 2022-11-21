@@ -243,7 +243,8 @@ describe('Contacts', () => {
 
         test('add Tag', async () => {
             let arrowtrigger = await popupWindow.$$('.x-form-arrow-trigger');
-            await arrowtrigger[9].click();
+            // TODO we should not make this dependent on the number of arrow triggers
+            await arrowtrigger[10].click();
             await expect(popupWindow).toMatchElement('.x-widget-tag-tagitem-text', {text: 'Elbphilharmonie'});
             await popupWindow.screenshot({path: 'screenshots/Adressbuch/15_adressbuch_tag_hinzu.png'});
             let btn_text = await popupWindow.$$('.x-btn-text');
