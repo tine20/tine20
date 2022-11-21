@@ -6,7 +6,7 @@
  * @subpackage  Filesystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2013-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -18,6 +18,8 @@
  */
 class Tinebase_FileSystem_RecordAttachments
 {
+    use Tinebase_Controller_SingletonTrait;
+
     /**
      * filesystem controller
      * 
@@ -26,32 +28,11 @@ class Tinebase_FileSystem_RecordAttachments
     protected $_fsController = NULL;
     
     /**
-     * holds the instance of the singleton
-     *
-     * @var Tinebase_FileSystem_RecordAttachments
-     */
-    private static $_instance = NULL;
-    
-    /**
      * the constructor
      */
     protected function __construct()
     {
         $this->_fsController  = Tinebase_FileSystem::getInstance();
-    }
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Tinebase_FileSystem_RecordAttachments
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_FileSystem_RecordAttachments();
-        }
-        
-        return self::$_instance;
     }
     
     /**
