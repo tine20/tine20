@@ -847,7 +847,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                     app: this.appName,
                     record_id: this.record.id,
-                    record_model: this.modelName
+                    record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             }),
                 this.rulesGridPanel,
                 this.vacationPanel,

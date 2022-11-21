@@ -69,7 +69,11 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
      * other config options
      */
     title: null,
-    layout: 'fit',
+    layout: 'vbox',
+    layoutConfig: {
+        align: 'stretch',
+        pack: 'start'
+    },
     canonicalName: 'HistoryGrid',
     border: false,
     
@@ -248,6 +252,13 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initComponent: function () {
+        const recordClass = Tine.Tinebase.data.RecordMgr.get(this.record_model);
+
+        this.plugins = this.plugins || [];
+        this.plugins.push({
+            ptype: 'ux.itemregistry',
+            key:   [recordClass.getMeta('appName'), recordClass.getMeta('modelName'), 'EditDialog-ActivitiesPanel'].join('-')
+        });
 
         // get translations
         this.translation = new Locale.Gettext();
@@ -294,6 +305,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
                                                 
         this.items = [        
             new Ext.Panel({
+                flex: 1,
                 layout: 'border',
                 border: false,
                 items: [{

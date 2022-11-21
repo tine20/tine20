@@ -742,3 +742,22 @@ Tine.Addressbook.ContactEditDialog.openWindow = function (config) {
     });
     return window;
 };
+
+
+Ext.ux.ItemRegistry.registerItem('Addressbook-Contact-EditDialog-ActivitiesPanel', {
+    height: 30,
+    readOnly: true,
+    hidden: true,
+    xtype: 'textarea',
+    listeners: {
+        afterrender: function() {
+            const editDialog = this.findParentBy(function (c) {
+                return c instanceof Tine.widgets.dialog.EditDialog
+            });
+            const grants = _.get(editDialog.getForm().findField('container_id'), 'selectedRecord.data.account_grants', {});
+            const hasRequiredGrant = grants.adminGrant || grants.privateGrant;
+            this[!hasRequiredGrant ? 'show': 'hide']();
+            this.setValue(editDialog.app.i18n._('You do not have the required private grant to view history.'))
+        }
+    }
+}, -10);
