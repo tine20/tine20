@@ -252,7 +252,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initComponent: function () {
-        const recordClass = Tine.Tinebase.data.RecordMgr.get(this.record_model);
+        const recordClass = Tine.Tinebase.data.RecordMgr.get(this.app, this.record_model);
 
         this.plugins = this.plugins || [];
         this.plugins.push({
