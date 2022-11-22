@@ -123,7 +123,6 @@ class Admin_Config extends Tinebase_Config_Abstract
                 'scheduler',
                 // disabled by default
 //                'computers',
-//                'ovpnapiconfig',
             ],
         ],
         self::QUOTA_ALLOW_TOTALINMB_MANAGEMNET => [
