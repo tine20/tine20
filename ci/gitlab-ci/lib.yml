@@ -414,8 +414,12 @@
           ./ci/dockerimage/make.sh -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar" -c "${CACHE_IMAGE}" -c "${MAJOR_CACHE_IMAGE}" packages
       
           # add current.map
-          echo "currentPackage ${RELEASE}/tine20-allinone_${RELEASE}.tar.bz2" >> current.map
-          tar -rf "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar" current.map
+          if ! echo "$version" | grep "nightly"; then
+              echo "currentPackage ${RELEASE}/tine20-allinone_${RELEASE}.tar.bz2" >> current.map
+              tar -rf "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar" current.map
+          else
+              echo "nightly, do not set curren.map"
+          fi
       }
       
       packaging_extract_all_package_tar() {
@@ -447,11 +451,37 @@
       
       packaging_gitlab_set_current_link() {
           version=$1
+          customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
       
           curl \
               --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
               -XPUT --data "${version}" \
               "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/current"
+      }
+      
+      packaging_gitlab_set_ci_id_link() {
+          version=$1
+          customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
+      
+          if ! curl \
+              --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
+              -XPUT --data "${version}" \
+              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/${CI_PIPELINE_ID}"
+          then
+              return 1
+          fi
+      }
+      
+      packaging_gitlab_get_version_for_pipeline_id() {
+          customer=$1
+      
+          if ! curl \
+              --fail \
+              --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
+              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/${CI_PIPELINE_ID}"
+          then
+              return 1
+          fi
       }
       
       packaging_push_package_to_github() {
@@ -470,6 +500,24 @@
           echo "$release"
       
           github_release_add_asset "$release_json" "$asset_name" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/${release}/tine20-allinone_${release}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
+      }
+      
+      packaging_push_to_vpackages() {
+          customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
+          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+          release=$(echo "${version}" | sed sI-I~Ig)
+      
+          echo "publishing ${release} (${version}) for ${customer} from ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+      
+          if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "sudo -u www-data curl ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar -o /tmp/${release}-source-${customer}.tar"; then
+              echo "Failed to download packages to vpackages"
+              return 1
+          fi
+      
+          if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "sudo -u www-data /srv/packages.tine20.com/www/scripts/importTine20Repo.sh /tmp/${release}-source-${customer}.tar; sudo -u www-data rm -f /tmp/${release}-source-${customer}.tar"; then
+              echo "Failed to import package to repo"
+              return 1
+          fi
       }
       
       packaging() {
@@ -505,12 +553,18 @@
                   return 1
               fi
       
-              echo "setting current link"
               if ! echo "$version" | grep "nightly"; then
+                  echo "setting current link"
                   if ! packaging_gitlab_set_current_link $version; then
                       echo "Failed to set current link."
                       return 1
                   fi
+              fi
+      
+              echo "setting ci pipeline id link"
+              if ! packaging_gitlab_set_ci_id_link $version; then
+                  echo "Failed to set ci pipeline id link."
+                  return 1
               fi
           fi
       
