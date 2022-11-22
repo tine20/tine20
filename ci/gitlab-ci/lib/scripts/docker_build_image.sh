@@ -7,8 +7,8 @@ docker_build_image() {
     if [[ "$DOCKER_IMAGE_CACHE" == "false" ]] || ! docker_registry_image_exists ${target} ${hash}; then
         echo "building image ...";
 
-        local LAYER_CACHE_IMAGE="${REGISTRY}/${TARGET}:$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)-${PHP_VERSION}"
-        local MAJOR_LAYER_CACHE_IMAGE="${REGISTRY}/${TARGET}:$(echo ${MAJOR_COMMIT_REF_NAME} | sed sI/I-Ig)-${PHP_VERSION}"
+        local LAYER_CACHE_IMAGE="${REGISTRY}/${TARGET}:$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX}"
+        local MAJOR_LAYER_CACHE_IMAGE="${REGISTRY}/${TARGET}:$(echo ${MAJOR_COMMIT_REF_NAME} | sed sI/I-Ig)-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX}"
 
         cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
 

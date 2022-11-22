@@ -13,18 +13,18 @@ if [ "${REUSE}" = "false" ]; then
 fi
 
 echo "reusing image ..."
-if curl -s -f --user $REGISTRY_USER:$REGISTRY_PASSWORD -H "accept: application/vnd.docker.distribution.manifest.v2+json" "https://${REGISTRY}/v2/${TARGET}/manifests/${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}" > /dev/null; then
+if curl -s -f --user $REGISTRY_USER:$REGISTRY_PASSWORD -H "accept: application/vnd.docker.distribution.manifest.v2+json" "https://${REGISTRY}/v2/${TARGET}/manifests/${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX}" > /dev/null; then
     echo "using branch image ..."
 
-    ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/rename_remote_image.sh $REGISTRY_USER $REGISTRY_PASSWORD $REGISTRY ${TARGET} ${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION} ${TARGET}-commit ${IMAGE_TAG}
-    exit 0
+
+    exit 0    ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/rename_remote_image.sh $REGISTRY_USER $REGISTRY_PASSWORD $REGISTRY ${TARGET} ${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX} ${TARGET}-commit ${IMAGE_TAG}
 fi
 echo "can not reuse branch image, trying major branch image ..."
 
-if curl -s -f --user $REGISTRY_USER:$REGISTRY_PASSWORD -H "accept: application/vnd.docker.distribution.manifest.v2+json" "https://${REGISTRY}/v2/${TARGET}/manifests/${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}" > /dev/null; then
+if curl -s -f --user $REGISTRY_USER:$REGISTRY_PASSWORD -H "accept: application/vnd.docker.distribution.manifest.v2+json" "https://${REGISTRY}/v2/${TARGET}/manifests/${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX}" > /dev/null; then
     echo "using major branch image ..."
     
-    ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/rename_remote_image.sh $REGISTRY_USER $REGISTRY_PASSWORD $REGISTRY ${TARGET} ${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION} ${TARGET}-commit ${IMAGE_TAG}
+    ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/rename_remote_image.sh $REGISTRY_USER $REGISTRY_PASSWORD $REGISTRY ${TARGET} ${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX} ${TARGET}-commit ${IMAGE_TAG}
     exit 0
 fi
 echo "can not reuse major branch image. building image ..."

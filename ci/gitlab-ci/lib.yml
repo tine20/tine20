@@ -15,8 +15,8 @@
           if [[ "$DOCKER_IMAGE_CACHE" == "false" ]] || ! docker_registry_image_exists ${target} ${hash}; then
               echo "building image ...";
       
-              local LAYER_CACHE_IMAGE="${REGISTRY}/${TARGET}:$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)-${PHP_VERSION}"
-              local MAJOR_LAYER_CACHE_IMAGE="${REGISTRY}/${TARGET}:$(echo ${MAJOR_COMMIT_REF_NAME} | sed sI/I-Ig)-${PHP_VERSION}"
+              local LAYER_CACHE_IMAGE="${REGISTRY}/${TARGET}:$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX}"
+              local MAJOR_LAYER_CACHE_IMAGE="${REGISTRY}/${TARGET}:$(echo ${MAJOR_COMMIT_REF_NAME} | sed sI/I-Ig)-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX}"
       
               cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
       
@@ -118,7 +118,7 @@
           cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
           local fh=$(file_hashes ci/dockerimage/base.Dockerfile ci/dockerimage/confd/ ci/dockerimage/scripts/ ci/dockerimage/supervisor.d/ etc/nginx etc/tine20/config.inc.php.tmpl);
               
-          echo $fh $TINE20ROOT $PHP_VERSION | sha256sum | head -c 32;
+          echo $fh $TINE20ROOT $PHP_VERSION $IMAGE_TAG_PLATFORM_POSTFIX | sha256sum | head -c 32;
       }
       
       _dependency_image_hash() {
@@ -154,7 +154,7 @@
           target=$1;
           hash=$2;
       
-          docker_registry_rename_remote $REGISTRY_USER $REGISTRY_PASSWORD $REGISTRY $target $hash $target $(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-$PHP_VERSION;
+          docker_registry_rename_remote $REGISTRY_USER $REGISTRY_PASSWORD $REGISTRY $target $hash $target $(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX};
       }
 
       # lib/scripts/docker_registry.sh
@@ -389,8 +389,8 @@
           CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
           MAJOR_COMMIT_REF_NAME_ESCAPED=$(echo ${MAJOR_COMMIT_REF_NAME} | sed sI/I-Ig)
       
-          CACHE_IMAGE="${REGISTRY}/packages:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}"
-          MAJOR_CACHE_IMAGE="${REGISTRY}/packages:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}"
+          CACHE_IMAGE="${REGISTRY}/packages:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX}"
+          MAJOR_CACHE_IMAGE="${REGISTRY}/packages:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX}"
       
           if echo "$CI_COMMIT_TAG" | grep '/'; then
               echo "Error: CI_COMMIT_TAG must not contain a /"
