@@ -1,7 +1,7 @@
 # ============ stage: build1-2 ===========================
 # This stage builds all docker images
 #
-# The images are named according to $REGISTRY/$NAME-commit:$CI_PIPELINE_ID-$PHP_VERSION.
+# The images are named according to $REGISTRY/$NAME-commit:$CI_PIPELINE_ID-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX}.
 #
 # Gitlab currently dose not support needs in the same stage.
 # Therefore we need multiple build stages.
@@ -133,6 +133,72 @@ docker_build_source:
     # run for any merge request or schedule
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_PIPELINE_SOURCE == "schedule"
+docker_build_source_arm64:
+  services:
+    - name: ${UTIL_REGISTRY}/docker:20.10.21-dind-r1
+      alias: docker
+  image: ${UTIL_REGISTRY}/docker:20.10.21-r1
+  extends: docker_build_source
+  tags:
+    - arm64
+  variables:
+    IMAGE_TAG_PLATFORM_POSTFIX: -arm64
+    IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}-arm64
+    KUBERNETES_CPU_REQUEST: 200m
+    KUBERNETES_CPU_LIMIT: 200m
+    KUBERNETES_MEMORY_REQUEST: 1Gi
+    KUBERNETES_MEMORY_LIMIT: 1Gi
+    KUBERNETES_HELPER_CPU_REQUEST: 100m
+    KUBERNETES_HELPER_CPU_LIMIT: 100m
+    KUBERNETES_HELPER_MEMORY_REQUEST: 200Mi
+    KUBERNETES_HELPER_MEMORY_LIMIT: 2Gi
+    KUBERNETES_SERVICE_CPU_REQUEST: 1500m
+    KUBERNETES_SERVICE_CPU_LIMIT: 3
+    KUBERNETES_SERVICE_MEMORY_REQUEST: 3Gi
+    KUBERNETES_SERVICE_MEMORY_LIMIT: 6Gi
+  rules:
+    - if: $DOCKER_BUILD_SOURCE_ARM64 == "false"
+      when: never
+    - if: $DOCKER_BUILD_SOURCE_ARM64 == "true"
+      variables:
+        REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-source-arm64/
+      variables:
+        REUSE_IMAGES: "false"
+    #from docker_build_built_arm64:
+    - if: $DOCKER_BUILD_BUILT_ARM64 == "true"
+      variables:
+        REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-built-arm64/
+      variables:
+        REUSE_IMAGES: "false"
+    #from deploy-built-image-to-gitlab-arm64:
+    - if: $DEPLOY_BUILT_IMAGE_TO_GITLAB_ARM64 == "true"
+      variables:
+        REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-built-image-to-gitlab-arm64/
+      variables:
+        REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_BUILD_IMAGE_TO_GITLAB_ARM64_SCHEDULE == "true"
+      variables:
+        REUSE_IMAGES: "false"
+    #from docker_build_dev_arm64:
+    - if: $DOCKER_BUILD_DEV_ARM64 == "true"
+      variables:
+        REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-dev-arm64/
+      variables:
+        REUSE_IMAGES: "false"
+    #from deploy-dev-image-to-gitlab-arm64:
+    - if: $DEPLOY_DEV_IMAGE_TO_GITLAB_ARM64 == "true"
+      variables:
+        REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab-arm64/
+      variables:
+        REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_DEV_IMAGE_TO_GITLAB_ARM64_SCHEDULE == "true"
+      variables:
+        REUSE_IMAGES: "false"
 
 docker_build_built:
   extends: .abstract_jobs.docker
@@ -180,6 +246,26 @@ docker_build_built:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-customer-image-to-registry/
   timeout: 120m
   interruptible: true
+docker_build_built_arm64:
+  services:
+    - name: ${UTIL_REGISTRY}/docker:20.10.21-dind-r1
+      alias: docker
+  image: ${UTIL_REGISTRY}/docker:20.10.21-r1
+  extends: docker_build_built
+  variables:
+    IMAGE_TAG_PLATFORM_POSTFIX: -arm64
+    IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}-arm64
+  tags:
+    - arm64
+  rules:
+    - if: $DOCKER_BUILD_BUILT_ARM64 == "false"
+      when: never
+    - if: $DOCKER_BUILD_BUILT_ARM64 == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-built-arm64/
+    #from deploy-built-image-to-gitlab-arm:
+    - if: $DEPLOY_BUILT_IMAGE_TO_GITLAB_ARM64 == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-built-image-to-gitlab-arm64/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_BUILD_IMAGE_TO_GITLAB_ARM64_SCHEDULE == "true"
 
 docker_build_dev:
   extends: .abstract_jobs.docker
@@ -199,6 +285,26 @@ docker_build_dev:
     - if: $DEPLOY_IMAGES_TO_DOCKERHUB == "true"
   timeout: 60m
   interruptible: true
+docker_build_dev_arm64:
+  services:
+    - name: ${UTIL_REGISTRY}/docker:20.10.21-dind-r1
+      alias: docker
+  image: ${UTIL_REGISTRY}/docker:20.10.21-r1
+  extends: docker_build_dev
+  variables:
+    IMAGE_TAG_PLATFORM_POSTFIX: -arm64
+    IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}-arm64
+  tags:
+    - arm64
+  rules:
+    - if: $DOCKER_BUILD_DEV_ARM64 == "false"
+      when: never
+    - if: $DOCKER_BUILD_DEV_ARM64 == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-dev-arm64/
+    #from deploy-dev-image-to-gitlab-arm64:
+    - if: $DEPLOY_DEV_IMAGE_TO_GITLAB_ARM64 == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab-arm64/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_DEV_IMAGE_TO_GITLAB_ARM64_SCHEDULE == "true"
 
 docker_build_packages:
   extends: .abstract_jobs.docker
