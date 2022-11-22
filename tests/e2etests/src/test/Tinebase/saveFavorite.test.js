@@ -8,6 +8,8 @@ beforeAll(async () => {
 });
 
 describe('Mainpage', () => {
+    const favorite = 'test favorite ' + Math.round(Math.random() * 10000000);
+    const favoriteShared = 'test favorite shared ' + Math.round(Math.random() * 10000000);
 
     test('save favorite', async () => {
         try {
@@ -18,7 +20,7 @@ describe('Mainpage', () => {
         await page.waitForSelector('.t-app-addressbook .action_saveFilter');
         await expect(page).toClick('.t-app-addressbook .action_saveFilter');
         await page.waitForSelector('.x-window.x-resizable-pinned');
-        await page.type('.x-form-text.x-form-field.x-form-invalid', 'favorite');
+        await page.type('.x-form-text.x-form-field.x-form-invalid', favorite);
         await page.waitForSelector('.x-panel.x-wdgt-pickergrid.x-grid-panel.x-masked-relative.x-masked');
         await expect(page).toClick('.x-btn-image.action_saveAndClose');
         await page.waitForTimeout(2000); //wait for save the favorite
@@ -33,7 +35,7 @@ describe('Mainpage', () => {
         await page.waitForSelector('.t-app-addressbook .action_saveFilter');
         await expect(page).toClick('.t-app-addressbook .action_saveFilter');
         await page.waitForSelector('.x-window.x-resizable-pinned');
-        await page.type('.x-form-text.x-form-field.x-form-invalid', 'shared favorite');
+        await page.type('.x-form-text.x-form-field.x-form-invalid', favoriteShared);
         await page.click('.x-form-checkbox.x-form-field');
         await page.waitForFunction(() => !document.querySelector('.x-panel.x-wdgt-pickergrid.x-grid-panel.x-masked-relative.x-masked'));
         await expect(page).toClick('.x-btn-image.action_saveAndClose');
@@ -48,7 +50,7 @@ describe('Mainpage', () => {
             console.log('favoritePanel also collapsed');
         }
         await page.waitForTimeout(2000);
-        await expect(page).toClick('span', {text: 'favorite', button:'right'});
+        await expect(page).toClick('span', {text: favorite, button:'right'});
         await expect(page).toClick('.x-menu-item-icon.action_edit', {visible: true});
         await page.waitForSelector('.x-window.x-resizable-pinned');
         await page.screenshot({path: 'screenshots/openFavorite1.png'});
@@ -65,7 +67,7 @@ describe('Mainpage', () => {
             console.log('favoritePanel also collapsed');
         }
         await page.waitForTimeout(2000);
-        await expect(page).toClick('span', {text: 'shared favorite', button:'right'});
+        await expect(page).toClick('span', {text: favoriteShared, button:'right'});
         await expect(page).toClick('.x-menu-item-icon.action_edit', {visible: true});
         await page.waitForSelector('.x-window.x-resizable-pinned');
         await page.waitForFunction(() => !document.querySelector('.x-panel.x-wdgt-pickergrid.x-grid-panel.x-masked-relative.x-masked'));
