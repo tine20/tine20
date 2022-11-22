@@ -9,10 +9,10 @@ deploy-built-image-to-gitlab:
   script:
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_gitlab.sh built
   rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-built-image-to-gitlab/
     - if: $DEPLOY_BUILT_IMAGE_TO_GITLAB == "false"
       when: never
     - if: $DEPLOY_BUILT_IMAGE_TO_GITLAB == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-built-image-to-gitlab/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_BUILD_IMAGE_TO_GITLAB_SCHEDULE != "false"
   timeout: 20m
   interruptible: false
@@ -43,10 +43,10 @@ deploy-dev-image-to-gitlab:
   script:
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_gitlab.sh dev
   rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab/
     - if: $DEPLOY_DEV_IMAGE_TO_GITLAB == "false"
       when: never
     - if: $DEPLOY_DEV_IMAGE_TO_GITLAB == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_DEV_IMAGE_TO_GITLAB_SCHEDULE != "false"
   timeout: 20m
   interruptible: false
@@ -114,9 +114,9 @@ deploy-customer-image-to-registry:
     - docker login --username $CUSTOMER_IMAGE_REGISTRY_USERNAME --password $CUSTOMER_IMAGE_REGISTRY_PASSWORD $CUSTOMER_IMAGE_REGISTRY_REPO
     - docker_registry_release_image built $CUSTOMER_IMAGE_REGISTRY_REPO
   rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-customer-image-to-registry/
     - if: $DEPLOY_CUSTOMER_IMAGE_TO_REGISTRY != "true"
       when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-customer-image-to-registry/
     - if: $CI_COMMIT_TAG
   timeout: 20m
   interruptible: false
@@ -141,3 +141,22 @@ release-to-gitlab:
     - when: never
   timeout: 20m
   interruptible: true
+
+push-to-vpackages:
+  extends: .abstract_jobs.docker
+  stage: deploy
+  before_script:
+    - apk add openssh
+    - eval $(ssh-agent -s)
+    - echo "$VPACKAGES_DEPLOY_KEY" | tr -d '\r' | ssh-add -
+  script:
+    - !reference [.lib, script]
+    - packaging_push_to_vpackages
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /push-to-vpackages/
+      when: manual
+    - if: $PUSH_TO_VPACKAGES != "true"
+      when: never
+    - if: $CI_COMMIT_TAG
+  timeout: 20m
+  interruptible: false
