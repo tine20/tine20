@@ -248,6 +248,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                         columnWidth: 0.36,
                         fieldLabel: this.app.i18n._('Job Title'),
                         name: 'title',
+                        xtype: 'tine.widget.field.AutoCompleteField',
+                        recordClass: this.recordClass,
                         maxLength: 64
                     }, {
                         width: 110,
