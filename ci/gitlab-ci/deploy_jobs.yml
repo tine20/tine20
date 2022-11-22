@@ -16,11 +16,28 @@ deploy-built-image-to-gitlab:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_BUILD_IMAGE_TO_GITLAB_SCHEDULE != "false"
   timeout: 20m
   interruptible: false
+deploy-built-image-to-gitlab-arm64:
+  services:
+    - name: ${UTIL_REGISTRY}/docker:20.10.21-dind-r1
+      alias: docker
+  image: ${UTIL_REGISTRY}/docker:20.10.21-r1
+  extends: deploy-built-image-to-gitlab
+  variables:
+    IMAGE_TAG_PLATFORM_POSTFIX: -arm64
+    IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}-arm64
+  tags:
+    - arm64
+  rules:
+    - if: $DEPLOY_BUILT_IMAGE_TO_GITLAB_ARM64 == "false"
+      when: never
+    - if: $DEPLOY_BUILT_IMAGE_TO_GITLAB_ARM64 == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-built-image-to-gitlab-arm64/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_BUILD_IMAGE_TO_GITLAB_ARM64_SCHEDULE == "true"
 
 # pushes dev-commit as dev to our gitlab registry.
 # They can be accessed essayer.
 # They are pushed on every change of a major branch.
-deploy-dev-image-to-gitlab":
+deploy-dev-image-to-gitlab:
   extends: .abstract_jobs.docker
   stage: deploy
   script:
@@ -33,6 +50,23 @@ deploy-dev-image-to-gitlab":
     - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_DEV_IMAGE_TO_GITLAB_SCHEDULE != "false"
   timeout: 20m
   interruptible: false
+deploy-dev-image-to-gitlab-arm64:
+  services:
+    - name: ${UTIL_REGISTRY}/docker:20.10.21-dind-r1
+      alias: docker
+  image: ${UTIL_REGISTRY}/docker:20.10.21-r1
+  extends: deploy-dev-image-to-gitlab
+  variables:
+    IMAGE_TAG_PLATFORM_POSTFIX: -arm64
+    IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}-arm64
+  tags:
+    - arm64
+  rules:
+    - if: $DEPLOY_DEV_IMAGE_TO_GITLAB_ARM64 == "false"
+      when: never
+    - if: $DEPLOY_DEV_IMAGE_TO_GITLAB_ARM64 == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab-arm64/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_DEV_IMAGE_TO_GITLAB_ARM64_SCHEDULE == "true"
 
 # pushing built-commit as tine20/tine20 to dockerhub.
 # The tag is also overwritten and set to $DOCKERHUB_TAG

@@ -53,7 +53,7 @@ _base_image_hash() {
     cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
     local fh=$(file_hashes ci/dockerimage/base.Dockerfile ci/dockerimage/confd/ ci/dockerimage/scripts/ ci/dockerimage/supervisor.d/ etc/nginx etc/tine20/config.inc.php.tmpl);
         
-    echo $fh $TINE20ROOT $PHP_VERSION | sha256sum | head -c 32;
+    echo $fh $TINE20ROOT $PHP_VERSION $IMAGE_TAG_PLATFORM_POSTFIX | sha256sum | head -c 32;
 }
 
 _dependency_image_hash() {
