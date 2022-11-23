@@ -109,7 +109,6 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
                     self::IS_DEPENDENT => true,
                 ]
             ],
-            
             self::FLD_DURATION_START => [
                 self::TYPE => self::TYPE_DATE,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -198,8 +197,6 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
                     'group' => 'Final Decree' // _('Final Decree');
                 ],
             ],
-            
-            
             self::FLD_IS_DISPOSED => [
                 self::TYPE => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL => 0,

@@ -782,9 +782,9 @@ class Tinebase_DateTime extends DateTime
      *
      * @return Tinebase_DateTime
      */
-    public static function today()
+    public static function today(string $tz = 'UTC'): self
     {
-        $date = static::now();
+        $date = new Tinebase_DateTime('now', $tz);
         $date->hasTime(false);
         return $date;
     }
