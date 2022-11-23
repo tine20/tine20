@@ -209,4 +209,36 @@ sieveFile
         ));
         Tinebase_Record_PersistentObserver::getInstance()->addObserver($deleteNodeObserver);
     }
+
+    /**
+     * init record observers
+     */
+    protected function _initializeSchedules()
+    {
+        self::addPruneAttachmentCacheSchedule();
+    }
+
+    public static function addPruneAttachmentCacheSchedule()
+    {
+        $scheduler = Tinebase_Scheduler::getInstance();
+        if ($scheduler->hasTask('FelamimailPruneAttachmentCache')) {
+            return;
+        }
+
+        $task = new Tinebase_Model_SchedulerTask([
+            'name'          => 'FelamimailPruneAttachmentCache',
+            'config'        => new Tinebase_Scheduler_Task([
+                'cron'      => Tinebase_Scheduler_Task::TASK_TYPE_HOURLY,
+                'callables' => [[
+                    Tinebase_Scheduler_Task::CONTROLLER    => Felamimail_Controller_AttachmentCache::class,
+                    Tinebase_Scheduler_Task::METHOD_NAME   => 'checkTTL',
+                ]]
+            ]),
+            'next_run'      => new Tinebase_DateTime('2001-01-01 01:01:01')
+        ]);
+        $scheduler->create($task);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Saved task FelamimailPruneAttachmentCache in scheduler.');
+    }
 }

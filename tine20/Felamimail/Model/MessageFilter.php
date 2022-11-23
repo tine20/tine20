@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        replace 'custom' filters with normal filter classes
  * @todo        should implement acl filter
@@ -46,9 +46,10 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         'subject'       => array('filter' => 'Tinebase_Model_Filter_Text'),
         'from_email'    => array('filter' => 'Tinebase_Model_Filter_Text'),
         'from_name'     => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'received'      => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'received'      => array('filter' => Tinebase_Model_Filter_DateTime::class),
         'messageuid'    => array('filter' => 'Tinebase_Model_Filter_Int'),
         'size'          => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'has_attachment'=> ['filter' => Tinebase_Model_Filter_Bool::class],
     // custom filters
         'path'          => array('custom' => true),
         'to'            => array('custom' => true, 'requiredCols' => array('to' => 'felamimail_cache_message_to.*')),

@@ -39,6 +39,41 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
         $this->_doContainerACLChecks = false;
     }
 
+    public function checkTTL(): bool
+    {
+        $this->deleteByFilter(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Felamimail_Model_AttachmentCache::class, [
+                ['field' => Felamimail_Model_AttachmentCache::FLD_TTL, 'operator' => 'before', 'value' => Tinebase_DateTime::now()],
+        ]));
+
+        return true;
+    }
+
+    public function delete($_ids)
+    {
+        $raii = null;
+        // we want the attachment to be hard deleted!
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
+            $fsConf = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
+            $fsConf->unsetParent();
+            $fsConf->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = false;
+            Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $fsConf);
+            $raii = new Tinebase_RAII(function() {
+                Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
+                    ->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
+                Tinebase_FileSystem_RecordAttachments::destroyInstance();
+                Tinebase_FileSystem::getInstance()->resetBackends();
+            });
+            Tinebase_FileSystem_RecordAttachments::destroyInstance();
+            Tinebase_FileSystem::getInstance()->resetBackends();
+        }
+        try {
+            return parent::delete($_ids);
+        } finally {
+            unset($raii);
+        }
+    }
+
     public function get($_id, $_containerId = null, $_getRelatedData = true, $_getDeleted = false, $_aclProtect = true)
     {
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
@@ -54,6 +89,11 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
                     throw new Tinebase_Exception_NotFound('hash out of sync, deleted cache, recreating...');
                 }
             }
+            $record->{Felamimail_Model_AttachmentCache::FLD_TTL} = Tinebase_DateTime::now()->addSecond(
+                Felamimail_Config::getInstance()->{Felamimail_Config::ATTACHMENT_CACHE_TTL}
+            );
+            $this->getBackend()->update($record);
+
             return $record;
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
@@ -75,6 +115,10 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         $ctrl = Felamimail_Controller_Message::getInstance();
+
+        $_record->{Felamimail_Model_AttachmentCache::FLD_TTL} = Tinebase_DateTime::now()->addSecond(
+            Felamimail_Config::getInstance()->{Felamimail_Config::ATTACHMENT_CACHE_TTL}
+        );
 
         if ($_record->isFSNode()) {
             $_record->{Felamimail_Model_AttachmentCache::FLD_HASH} = $this->getSourceRecord($_record)->hash;
@@ -158,5 +202,35 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
             $ctrl = Felamimail_Controller_Message::getInstance();
         }
         return $ctrl->get($_record->{Felamimail_Model_AttachmentCache::FLD_SOURCE_ID}, null, false);
+    }
+
+    public function fillAttachementCache(array $accountIds, ?int $seconds = null): void
+    {
+                                            // 4 weeks
+        if (null === $seconds || $seconds > 4 * 7 * 24 * 3600) {
+            $seconds = 2 * 7 * 24 * 3600; // 2 weeks
+        }
+        $old = Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->doSynchronousPreviewCreation(true);
+        try {
+            foreach(Felamimail_Controller_Account::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                    ['field' => 'id', 'operator' => 'in', 'value' => $accountIds],
+                ]
+            ), null, false, true) as $accountId) {
+                $msgCtrl = Felamimail_Controller_Cache_Message::getInstance();
+                /** @var Felamimail_Model_Message $msg */
+                foreach ($msgCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
+                    ['field' => 'received', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->subSecond($seconds)],
+                    ['field' => 'account_id', 'operator' => 'equals', 'value' => $accountId],
+                    ['field' => 'has_attachment', 'operator' => 'equals', 'value' => true],
+                ]), new Tinebase_Model_Pagination(['sort' => 'received', 'dir' => 'DESC']), false, true) as $msgId) {
+                    foreach ($msgCtrl->getAttachments($msgId) as $attachment) {
+                        $this->get(Felamimail_Model_Message::class . ':' . $msgId . ':' . $attachment['partId']);
+                    }
+                }
+            }
+        } finally {
+            Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->doSynchronousPreviewCreation($old);
+        }
     }
 }

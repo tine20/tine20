@@ -26,6 +26,7 @@ class Felamimail_Model_AttachmentCache extends Tinebase_Record_NewAbstract
     const FLD_PART_ID = 'part_id';
     const FLD_SOURCE_ID = 'source_id';
     const FLD_SOURCE_MODEL = 'source_model';
+    const FLD_TTL = 'ttl';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -33,7 +34,7 @@ class Felamimail_Model_AttachmentCache extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                       => 1,
+        self::VERSION                       => 2,
         self::MODLOG_ACTIVE                 => false,
         self::HAS_ATTACHMENTS               => true,
         self::SINGULAR_CONTAINER_MODE       => true,
@@ -50,6 +51,10 @@ class Felamimail_Model_AttachmentCache extends Tinebase_Record_NewAbstract
             self::FLD_HASH                      => [
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_TTL                       => [
+                self::TYPE                          => self::TYPE_DATETIME,
                 self::NULLABLE                      => true,
             ],
             self::FLD_PART_ID                   => [
