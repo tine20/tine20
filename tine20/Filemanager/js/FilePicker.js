@@ -215,17 +215,14 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         const fileName = field.getValue();
         
         const basePath = _.get(this.treePanel.getSelectedContainer(), 'path');
-        if (! basePath) {
-            // NOTE: race-condition - there might be no selected container!
-            return _.delay(() => { this.checkState() }, 250);
-        }
-        
+
         const node = {
             id: 'newFile',
             type: 'file',
             name: fileName,
             path: `${basePath}${fileName}`
         };
+        this.selection = [node];
 
         if(basePath && this.checkConstraint([node])) {
             if (this.selection[0] && this.selection[0].type === 'file') {
@@ -293,6 +290,16 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             // fixme: NodeTreePanel fetches grid via app registry
             onSelectionChange: this.onTreeSelectionChange.createDelegate(this),
         });
+    
+        let interval = null;
+        interval = window.setInterval(() => {
+            const sm = this.treePanel.getSelectionModel();
+            const selectedNode = sm.getSelectedNode();
+            if (_.get(selectedNode, 'attributes.path') === this.initialPath) {
+                window.clearInterval(interval);
+                this.checkState();
+            }
+        }, 100)
         
         return this.treePanel;
     },
@@ -417,7 +424,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             return _.indexOf(allowedExts, ext) >= 0;
         }
 
-        if (_.isRegExp(this.constraint)) {
+        if (_.isRegExp(this.constraint && node.get('type') === 'file')) {
             return node.get('path').match(this.constraint);
         }
         
@@ -428,6 +435,8 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         if (_.isFunction(this.constraint)) {
             return this.constraint(node)
         }
+        
+        return true;
     },
 
     /**
