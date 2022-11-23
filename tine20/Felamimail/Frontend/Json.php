@@ -147,6 +147,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = Felamimail_Controller_Cache_Folder::getInstance()->update($accountId, $folderName, TRUE);
         return $this->_multipleRecordsToJson($result);
     }
+
+    public function fillAttachementCache(array $accountIds, ?int $seconds = null): array
+    {
+        Felamimail_Controller_AttachmentCache::getInstance()->fillAttachementCache($accountIds, $seconds);
+        return ['success' => true];
+    }
     
     /**
      * get folder status

@@ -415,6 +415,42 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
             . print_r($status->toArray(), true));
     }
 
+    public function testSinglePartPdfMail()
+    {
+        $message = $this->_emailTestClass->messageTestHelper('multipart_attachments.eml');
+        $message->attachments = Felamimail_Controller_Cache_Message::getInstance()->getAttachments($message);
+        $this->assertSame(0, Felamimail_Controller_AttachmentCache::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_AttachmentCache::class, [
+                ['field' => 'id', 'operator' => 'equals', 'value' => Felamimail_Model_Message::class . ':' . $message->getId() . ':' . $message->attachments[0]['partId']]
+            ]))->count());
+
+        Felamimail_Controller_AttachmentCache::getInstance()->fillAttachementCache([$this->_account->getId()]);
+        $aCaches = Felamimail_Controller_AttachmentCache::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_AttachmentCache::class, [
+                ['field' => 'id', 'operator' => 'equals', 'value' => Felamimail_Model_Message::class . ':' . $message->getId() . ':' . $message->attachments[0]['partId']]
+            ]));
+        $this->assertSame(1, $aCaches->count());
+
+        $aCache = $aCaches->getFirstRecord();
+        Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($aCache);
+        $path = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($aCache) . '/';
+        Tinebase_FileSystem::getInstance()->stat($path . $aCache->attachments->getFirstRecord()->name);
+
+        $aCache->{Felamimail_Model_AttachmentCache::FLD_TTL} = Tinebase_DateTime::now()->subDay(1);
+        Felamimail_Controller_AttachmentCache::getInstance()->getBackend()->update($aCache);
+        Felamimail_Controller_AttachmentCache::getInstance()->checkTTL();
+
+        $this->assertSame(0, Felamimail_Controller_AttachmentCache::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_AttachmentCache::class, [
+                ['field' => 'id', 'operator' => 'equals', 'value' => Felamimail_Model_Message::class . ':' . $message->getId() . ':' . $message->attachments[0]['partId']]
+            ]))->count());
+
+        try {
+            Tinebase_FileSystem::getInstance()->stat($path . $aCache->attachments->getFirstRecord()->name, null, true);
+            $this->fail('attachement not hard deleted, only soft!');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+    }
+
     public function testAddMessageToCache()
     {
         $message = new Felamimail_Model_Message([

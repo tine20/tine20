@@ -185,6 +185,7 @@ class Felamimail_Config extends Tinebase_Config_Abstract
 
     const SIEVE_MAILINGLIST_REJECT_REASON = 'sieveMailingListRejectReason';
 
+    const ATTACHMENT_CACHE_TTL = 'attachmentCacheTTL';
     /**
      * keyFieldConfig vor mail account types
      */
@@ -287,6 +288,17 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE      => true,
             self::DEFAULT_STR           => false,
         ),
+        self::ATTACHMENT_CACHE_TTL => [
+            //_('Attachment cache TTL in seconds')
+            self::LABEL                 => 'Attachment cache TTL in seconds',
+            //_('Attachment cache TTL in seconds')
+            self::DESCRIPTION           => 'Attachment cache TTL in seconds',
+            self::TYPE                  => self::TYPE_INT,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+            self::DEFAULT_STR           => 2 * 7 * 24 * 3600, // 2 weeks
+        ],
         self::ENABLED_FEATURES => [
             //_('Enabled Features')
             self::LABEL                 => 'Enabled Features',

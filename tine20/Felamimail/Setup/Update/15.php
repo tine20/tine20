@@ -17,6 +17,7 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE015_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE015_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE015_UPDATE004 = __CLASS__ . '::update004';
     
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -37,6 +38,10 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE015_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
     ];
@@ -124,5 +129,26 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
         $db->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'preferences WHERE name = "autoAttachNote"');
 
         $this->addApplicationUpdate('Felamimail', '15.3', self::RELEASE015_UPDATE003);
+    }
+
+    public function update004()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            Felamimail_Model_AttachmentCache::class,
+        ]);
+
+        if ($this->getTableVersion(Felamimail_Model_AttachmentCache::TABLE_NAME) < 2) {
+            $this->setTableVersion(Felamimail_Model_AttachmentCache::TABLE_NAME, 2);
+        }
+
+        $this->getDb()->update(SQL_TABLE_PREFIX . Felamimail_Model_AttachmentCache::TABLE_NAME, [
+            Felamimail_Model_AttachmentCache::FLD_TTL => Tinebase_DateTime::now()->addWeek(2)->toString()
+        ]);
+
+        Felamimail_Setup_Initialize::addPruneAttachmentCacheSchedule();
+
+        $this->addApplicationUpdate('Felamimail', '15.4', self::RELEASE015_UPDATE004);
     }
 }
