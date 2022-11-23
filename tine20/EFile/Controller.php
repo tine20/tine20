@@ -146,7 +146,7 @@ class EFile_Controller extends Tinebase_Controller_Event
                 $str = $contact->n_fileas;
             }
             $metaData = new EFile_Model_FileMetadata([
-                EFile_Model_FileMetadata::FLD_DURATION_START        => Tinebase_DateTime::now(),
+                EFile_Model_FileMetadata::FLD_DURATION_START        => Tinebase_DateTime::today(Tinebase_Core::getUserTimezone()),
                 EFile_Model_FileMetadata::FLD_COMMISSIONED_OFFICE   => $str,
                 EFile_Model_FileMetadata::FLD_NODE_ID               => $_newRecord->getId(),
             ]);
