@@ -576,6 +576,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         $newName = '';
         $tempFile = null;
         $node = null;
+        $dataSafeRAII = null;
         try {
             if ((int)$accessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} ===
                     (int)OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION) {
@@ -592,6 +593,13 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
                     $tempFile->name = $tempFile->name . '.' . $srcEnding;
                 }
             } else {
+                if (Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)) {
+                    Tinebase_AreaLock::getInstance()->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE);
+                    $dataSafeRAII = new Tinebase_RAII(function() {
+                        Tinebase_AreaLock::getInstance()->lock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE);
+                    });
+                }
+
                 $trgtPath = 'tine20://' . Tinebase_FileSystem::getInstance()->getPathOfNode($accessToken
                         ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID}, true);
 
@@ -663,6 +671,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         }
         // just for unused variable check
         unset($closeSrcStreamRaii);
+        unset($dataSafeRAII);
 
         if ((int)$accessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} !==
                 (int)OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION) {
