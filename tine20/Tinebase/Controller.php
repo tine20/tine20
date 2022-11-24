@@ -1421,16 +1421,31 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             ->withAddedHeader('Content-Type', $mime);
     }
 
-    public function getLogo($type='b', $size='135x50')
+    /**
+     * @param string $type
+     * @param string $size
+     * @return \Laminas\Diactoros\Response|\Psr\Http\Message\MessageInterface
+     * @throws FileNotFoundException
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Zend_Cache_Exception
+     */
+    public function getLogo($type = 'b', $size = '135x50')
     {
         $mime = 'image/png';
 
         if (! in_array($type, ['b', 'i'])) {
-            throw new Tinebase_Exception_UnexpectedValue('invalid type');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Unknown type: ' . $type
+                . ' Using default "b"');
+            $type = 'b';
         }
-        
+
+        // TODO why do we have this param if only one size is supported? :)
         if (! in_array($size, ['135x50'])) {
-            throw new Tinebase_Exception_UnexpectedValue('invalid size format');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Unknown size: ' . $type
+                    . ' Using default "135x50"');
+            $size = '135x50';
         }
 
         $cacheId = sha1(self::class . 'getLogo' . $type . $size . $mime);
