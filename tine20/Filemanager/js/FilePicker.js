@@ -213,14 +213,17 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
     checkState: function() {
         const field = this.fileNameField;
         const fileName = field.getValue();
+        const basePathNodeRecord = this.treePanel.getSelectedContainer();
+        const basePath = basePathNodeRecord?.path;
         
-        const basePath = _.get(this.treePanel.getSelectedContainer(), 'path');
+        if (!this.allowCreateNewFile) return;
 
         const node = {
             id: 'newFile',
             type: 'file',
             name: fileName,
-            path: `${basePath}${fileName}`
+            path: `${basePath}${fileName}`,
+            recordId: basePathNodeRecord?.id
         };
         this.selection = [node];
 
@@ -257,6 +260,20 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         _.each(nodes, (node) => {
             this.selection.push(node.data || node);
         });
+        
+        if (this.selection?.[0]?.path) {
+            this.targetPath = this.selection[0].path;
+    
+            let interval = null;
+            interval = window.setInterval(() => {
+                const sm = this.treePanel.getSelectionModel();
+                const selectedNode = sm.getSelectedNode();
+                if (_.get(selectedNode, 'attributes.path') === this.targetPath) {
+                    window.clearInterval(interval);
+                    this.checkState();
+                }
+            }, 100)
+        }
 
         if (this.mode === 'target' && this.selection.length) {
             if (this.selection[0].type === 'file') {
@@ -269,6 +286,11 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
     },
     
     onNodeDblClick: function() {
+        const gridPanel = this.getGridPanel();
+        const selectionModel = gridPanel.getGrid().getSelectionModel();
+        const record = selectionModel.getSelections();
+        this.updateSelection(record);
+        
         if (this.validSelection && this.selection[0].type !== 'folder') {
             this.fireEvent('forceNodeSelected', this.selection);
             return false;

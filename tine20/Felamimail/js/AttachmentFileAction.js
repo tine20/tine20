@@ -62,7 +62,8 @@ const getFileAttachmentAction = (fileFn, config) => {
                     mode: 'target',
                     singleSelect: true,
                     requiredGrants: ['addGrant'],
-                    files: attachments
+                    files: attachments,
+                    initialPath: Tine.Tinebase.container.getMyFileNodePath() + '/',
                 });
 
                 filePickerDialog.on('selected', async (nodes) => {
@@ -77,7 +78,7 @@ const getFileAttachmentAction = (fileFn, config) => {
                     //attachment data only accept folder node as location
                     if (type === 'file') {
                         path = Tine.Filemanager.Model.Node.dirname(path);
-                        recordId = _.get(nodes[0], 'parent_id');
+                        recordId = _.get(nodes[0], 'recordId');
                     }
 
                     const attachmentCount = await fileFn([{
