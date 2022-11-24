@@ -263,8 +263,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
          }
          
          // if we are not already in user timezone we are in deep shit, add assertation rather instead or something
-         $nextBill->setTimeZone(Tinebase_Core::getUserTimezone());
-         $nextBill->setTime(0,0,0);
+         $nextBill->hasTime(false);
          
          return $date->isLaterOrEquals($nextBill);
      }
