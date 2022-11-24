@@ -1030,7 +1030,7 @@ Tine.Felamimail.getSignature = function(account, signature) {
 
         if (signature && signature.id !== 'none') {
             // NOTE: signature is always in html, nl2br here would cause duplicate linebreaks!
-            signatureText = '<br><br><span class="felamimail-body-signature">-- <br>' + _.get(signature, 'data.signature', '') + '</span>';
+            signatureText = '<br><br><span class="felamimail-body-signature">-- <br>' + _.get(signature, 'data.signature', '') + '<br></span>';
         }
     }
 
