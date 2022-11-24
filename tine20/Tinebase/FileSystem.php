@@ -4206,7 +4206,7 @@ class Tinebase_FileSystem implements
     public function avScan()
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' starting... ');
+            __METHOD__ . '::' . __LINE__ . ' Starting... ');
 
         if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF ===
                 Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
@@ -4222,9 +4222,6 @@ class Tinebase_FileSystem implements
             Tinebase_Core::releaseMultiServerLock($lockId);
         });
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' updating... ');
-
         $avScanner = Tinebase_FileSystem_AVScan_Factory::getScanner();
         $result = true;
 
@@ -4233,17 +4230,32 @@ class Tinebase_FileSystem implements
             return false;
         }
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Starting AVSCan with basedir ' . $this->_basePath);
+
         while (false !== ($hashDir = readdir($baseDir))) {
-            if (strlen($hashDir) !== 3 || !is_dir($this->_basePath . '/' . $hashDir)) continue;
-            if (!($fileDir = opendir($this->_basePath . '/' . $hashDir))) {
+            $hashDirPath = $this->_basePath . DIRECTORY_SEPARATOR . $hashDir;
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Scanning ' . $hashDirPath . ' ...');
+
+            if (strlen($hashDir) !== 3 || !is_dir($hashDirPath)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Skipping, no dir or length != 3');
+                continue;
+            }
+            if (!($fileDir = opendir($hashDirPath))) {
                 Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('can not open filedir: ' .
-                    $this->_basePath . '/' . $hashDir));
+                    $hashDirPath));
                 $result = false;
                 continue;
             }
             while (false !== ($file = readdir($fileDir))) {
-                $path = $this->_basePath . '/' . $hashDir . '/' . $file;
-                if (!is_file($path)) continue;
+                $path = $hashDirPath . DIRECTORY_SEPARATOR . $file;
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Scanning file ' . $path . ' ...');
+                if (!is_file($path)) {
+                    continue;
+                }
 
                 if (false === ($fileSize = filesize($path))) {
                     Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('failed to get hash file size: ' .
@@ -4253,6 +4265,8 @@ class Tinebase_FileSystem implements
                 }
                 if ($fileSize > Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
                         ->{Tinebase_Config::FILESYSTEM_AVSCAN_MAXFSIZE} || 0 === $fileSize) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Skipping, file too big or 0 size');
                     continue;
                 }
 
@@ -4262,6 +4276,8 @@ class Tinebase_FileSystem implements
                     $lastScan = $this->_fileObjectBackend->getLastAvScanTimeForHash($hashDir . $file);
                     if (!$lastScan || Tinebase_DateTime::now()->subHour(12)
                             ->isEarlier(new Tinebase_DateTime($lastScan))) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Skipping, last scan less than 12 hours old');
                         continue;
                     }
 
