@@ -88,6 +88,7 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
      * Renames the node
      * 
      * @throws Sabre\DAV\Exception\Forbidden
+     * @throws Sabre\DAV\Exception\NotFound
      * @param string $name The new name
      * @return void
      */
@@ -102,8 +103,12 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
         }
 
-        if (!($result = Tinebase_FileSystem::getInstance()->rename($this->_path, $dirname . '/' . $name))) {
-            throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
+        try {
+            if (!($result = Tinebase_FileSystem::getInstance()->rename($this->_path, $dirname . '/' . $name))) {
+                throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
         }
         $this->_node = $result;
         $this->_path = $result->path;
