@@ -101,6 +101,8 @@ class Felamimail_Import_Imap extends Tinebase_Import_Abstract
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
+     *
+     * @todo think about re-using the account?
      */
     protected function _initAccount()
     {
@@ -210,7 +212,9 @@ class Felamimail_Import_Imap extends Tinebase_Import_Abstract
                 Zend_Mail_Storage::FLAG_FLAGGED,
             ]);
 
-        // remove no longer needed import account
+        // remove no longer needed import account (hard delete!)
+        $purgeSetting = Felamimail_Controller_Account::getInstance()->purgeRecords(true);
         Felamimail_Controller_Account::getInstance()->delete([$this->_account->getId()]);
+        Felamimail_Controller_Account::getInstance()->purgeRecords($purgeSetting);
     }
 }
