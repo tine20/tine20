@@ -1475,12 +1475,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     replaceSignature: function(account, bodyContent, oldSignature, newSignature) {
         // remove style first
-        bodyContent = bodyContent.replace(/<span class="felamimail-body-signature" .*">/, '<span class="felamimail-body-signature">');
-        
+        newSignature = newSignature.substring(4);
+        bodyContent = bodyContent.replace(/<span class="felamimail-body-signature".*>--(.*)<br><\s*\/\s*span>/
+            , newSignature);
+    
         // we only replace the content inside <span>.*</span> , in case user delete the default new lines
-        oldSignature = oldSignature.replace(/^<br><br>/, '');
-        newSignature = newSignature.replace(/^<br><br>/, '');
-        bodyContent = bodyContent.replace(oldSignature, newSignature);
         
         // remove generated extra newlines when user change the signature
         if (newSignature === '') {
