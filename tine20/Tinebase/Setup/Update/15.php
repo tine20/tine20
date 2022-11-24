@@ -599,38 +599,42 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             if ($this->getTableVersion('sales_contracts') < 11) {
                 $this->setTableVersion('sales_contracts', 11);
             }
-            $query = $this->_backend->addAlterCol('', 'sales_sales_invoices', new Setup_Backend_Schema_Field_Xml('
+            if ($this->_backend->tableExists('sales_sales_invoices')) {
+                $query = $this->_backend->addAlterCol('', 'sales_sales_invoices', new Setup_Backend_Schema_Field_Xml('
                 <field>
                     <name>start_date</name>
                     <type>date</type>
                 </field>'));
-            $this->getDb()->query($this->_backend->addAlterCol($query, 'sales_sales_invoices', new Setup_Backend_Schema_Field_Xml('
+                $this->getDb()->query($this->_backend->addAlterCol($query, 'sales_sales_invoices', new Setup_Backend_Schema_Field_Xml('
                 <field>
                     <name>end_date</name>
                     <type>date</type>
                 </field>')));
-            if ($this->getTableVersion('sales_sales_invoices') < 8) {
-                $this->setTableVersion('sales_sales_invoices', 8);
+                if ($this->getTableVersion('sales_sales_invoices') < 8) {
+                    $this->setTableVersion('sales_sales_invoices', 8);
+                }
             }
-            $query = $this->_backend->addAlterCol('', 'sales_product_agg', new Setup_Backend_Schema_Field_Xml('
+            if ($this->_backend->tableExists('sales_product_agg')) {
+                $query = $this->_backend->addAlterCol('', 'sales_product_agg', new Setup_Backend_Schema_Field_Xml('
                 <field>
                     <name>start_date</name>
                     <type>date</type>
                 </field>'));
-            $this->getDb()->query($this->_backend->addAlterCol($query, 'sales_product_agg', new Setup_Backend_Schema_Field_Xml('
+                $this->getDb()->query($this->_backend->addAlterCol($query, 'sales_product_agg', new Setup_Backend_Schema_Field_Xml('
                 <field>
                     <name>end_date</name>
                     <type>date</type>
                 </field>')));
-            $this->getDb()->query($this->_backend->addAlterCol($query, 'sales_product_agg', new Setup_Backend_Schema_Field_Xml('
+                $this->getDb()->query($this->_backend->addAlterCol($query, 'sales_product_agg', new Setup_Backend_Schema_Field_Xml('
                 <field>
                     <name>last_autobill</name>
                     <type>date</type>
                     <notnull>false</notnull>
                     <default>null</default>
                 </field>')));
-            if ($this->getTableVersion('sales_product_agg') < 6) {
-                $this->setTableVersion('sales_product_agg', 6);
+                if ($this->getTableVersion('sales_product_agg') < 6) {
+                    $this->setTableVersion('sales_product_agg', 6);
+                }
             }
             $query = $this->_backend->addAlterCol('', 'sales_purchase_invoices', new Setup_Backend_Schema_Field_Xml('
                 <field>
