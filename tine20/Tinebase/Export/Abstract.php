@@ -1751,7 +1751,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         switch ($this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_TYPE}) {
             case Tinebase_Model_Tree_FileLocation::TYPE_FM_NODE:
                 $fmCtrl = Filemanager_Controller_Node::getInstance();
-                $trgtPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($fmCtrl->addBasePath($this->_fileLocation
+                $trgtPath = Tinebase_Model_Tree_Node_Path::createFromPath($fmCtrl->addBasePath($this->_fileLocation
                     ->{Tinebase_Model_Tree_FileLocation::FLD_FM_PATH}));
                 $fs = Tinebase_FileSystem::getInstance();
                 $fs->checkPathACL($trgtPath, 'add', false);
