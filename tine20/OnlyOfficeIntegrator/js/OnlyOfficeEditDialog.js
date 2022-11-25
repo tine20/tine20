@@ -24,6 +24,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
     /**
      * @private
      */
+    dataSafeEnabled: false,
     windowNamePrefix: 'OnlyOfficeEditWindow_',
     border: false,
     // style: 'height: 100%',
@@ -31,6 +32,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
 
     initComponent: function () {
         this.app = Tine.Tinebase.appMgr.get('OnlyOfficeIntegrator');
+        this.postalSubscriptions = [];
 
         this.html = {
             tag: 'div',
@@ -61,7 +63,51 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
         window.setInterval(_.bind(this.tokenKeepAlive, this), tokenKeepAliveInterval);
 
         this.initialConfig.__OOIGetRecord = () => { return this.record };
+
+        this.dataSafeEnabled = !!Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName).length;
+        if (this.dataSafeEnabled && this.record.get('pin_protected_node')) {
+            _.each(Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName), (areaLock) => {
+                this.postalSubscriptions.push(postal.subscribe({
+                    channel: "areaLocks",
+                    topic: areaLock + '.ttl',
+                    callback: this.onDataSafeTTL.createDelegate(this)
+                }));
+            });
+        }
+
         Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.superclass.initComponent.call(this);
+    },
+
+    onDataSafeTTL: function(data, e) {
+        if (data.ttl < 60 && !this.absenceDialog) {
+            let countdown = Math.ceil(data.ttl);
+            const timer = window.setInterval(() => {
+                this.absenceDialog = Ext.MessageBox.show({
+                    title: this.app.i18n._('Absence detected'),
+                    msg: String.format(this.app.i18n._('It looks like you are not currently editing the document. Therefore, to protect the contents, it will be closed automatically in {0} seconds.'), countdown),
+                    buttons: Ext.Msg.CANCEL,
+                    icon: Ext.MessageBox.INFO,
+                    fn: () => {
+                        this.absenceDialog = null;
+                        window.clearTimeout(timer);
+                    }
+                });
+                if (!countdown) {
+                    window.clearTimeout(timer);
+                    this.docEditor.destroyEditor();
+                    Ext.MessageBox.show({
+                        title: this.app.i18n._('Absence detected'),
+                        msg: this.app.i18n._('It looked like you where not editing the document any longer. Therefore, to protect the contents, it was be closed automatically.'),
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.MessageBox.INFO,
+                        fn: () => {
+                            this.window.close();
+                        }
+                    });
+                }
+                countdown = --countdown;
+            }, 1000);
+        }
     },
 
     initRecord: function (recordData) {
@@ -364,6 +410,11 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
         retryAllRejectedPromises([_.partial(Tine.OnlyOfficeIntegrator.tokenKeepAlive, keys)], {
             maxAttempts: 5, delay: 1200
         });
+    },
+
+    onDestroy: function() {
+        _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
+        return this.supr().onDestroy.call(this);
     }
 });
 

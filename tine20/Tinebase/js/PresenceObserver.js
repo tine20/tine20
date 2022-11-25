@@ -19,11 +19,12 @@ Ext.ns('Tine', 'Tine.Tinebase');
  */
 Tine.Tinebase.PresenceObserver = function(config) {
     Ext.apply(this, config);
-
+    this.instance = ++Tine.Tinebase.PresenceObserver.instance;
     this.checkTask = new Ext.util.DelayedTask(this.checkPresence, this);
     this.startChecking();
 };
 
+Tine.Tinebase.PresenceObserver.instance = 0;
 Tine.Tinebase.PresenceObserver.prototype = {
     /**
      * @cfg {integer} maxAbsenceTime in minutes
@@ -56,14 +57,15 @@ Tine.Tinebase.PresenceObserver.prototype = {
     checkTask: null,
 
     startChecking: function() {
-        var now = new Date(),
-            firstCheck = now.add(Date.MINUTE, this.maxAbsenceTime);
+        const now = new Date();
+        let nextCheck = this.maxAbsenceTime * 60000;
+        nextCheck = nextCheck > 60000 ? nextCheck - 60000 : nextCheck; // always check one minute before end
 
         this.state = 'presence';
         this.setLastPresence(now);
 
-        Tine.log.debug('Tine.Tinebase.PresenceObserver.startChecking register fist presence check for ' + firstCheck);
-        this.checkTask.delay(this.maxAbsenceTime * 60000);
+        Tine.log.debug(this.instance + ' Tine.Tinebase.PresenceObserver.startChecking register fist presence check for ' +  now.add(Date.MILLI, nextCheck));
+        this.checkTask.delay(nextCheck);
     },
 
     stopChecking: function() {
@@ -74,13 +76,14 @@ Tine.Tinebase.PresenceObserver.prototype = {
         var now = new Date(),
             nowTS = now.getTime(),
             lastPresence = this.getLastPresence(),
+            ttl = (this.maxAbsenceTime * 60000 - (nowTS - lastPresence))/1000,
             state = lastPresence + this.maxAbsenceTime * 60000 <= nowTS ? 'absence' : 'presence';
 
-        Tine.log.debug('Tine.Tinebase.PresenceObserver.checkPresence checking presece now ' + now);
-        Tine.log.debug('Tine.Tinebase.PresenceObserver.checkPresence state: "' + state + '" as last presence detected at ' + new Date(lastPresence));
+        Tine.log.debug(this.instance + ' Tine.Tinebase.PresenceObserver.checkPresence checking presence now ' + now);
+        Tine.log.debug(this.instance + ' Tine.Tinebase.PresenceObserver.checkPresence state: "' + state + '" (ttl='+ttl+'s) as last presence detected at ' + new Date(lastPresence));
 
         if (state == 'absence') {
-            Tine.log.info('Tine.Tinebase.PresenceObserver.checkPresence no presence detected for ' + this.maxAbsenceTime + ' minutes');
+            Tine.log.info(this.instance + ' Tine.Tinebase.PresenceObserver.checkPresence no presence detected for ' + this.maxAbsenceTime + ' minutes');
             if (this.state == 'presence') {
                 this.state = 'absence';
                 this.absenceCallback.call(this.scope, new Date(lastPresence), this);
@@ -89,11 +92,13 @@ Tine.Tinebase.PresenceObserver.prototype = {
             this.checkTask.delay(this.presenceCheckInterval * 1000);
 
         } else {
-            var nextCheck = this.maxAbsenceTime * 60000 - (nowTS - lastPresence);
-            Tine.log.debug('Tine.Tinebase.PresenceObserver.checkPresence next presence check at ' + now.add(Date.MILLI, nextCheck));
+            let nextCheck = this.maxAbsenceTime * 60000 - (nowTS - lastPresence);
+            nextCheck = nextCheck > 60000 ? nextCheck - 60000 : nextCheck; // always check one minute before end
+
+            Tine.log.debug(this.instance + ' Tine.Tinebase.PresenceObserver.checkPresence next presence check at ' + now.add(Date.MILLI, nextCheck));
             this.state = 'presence';
             this.checkTask.delay(nextCheck);
-            this.presenceCallback.call(this.scope, new Date(lastPresence), this);
+            this.presenceCallback.call(this.scope, new Date(lastPresence), this, ttl);
         }
     },
 
