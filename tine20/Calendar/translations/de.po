@@ -1127,6 +1127,9 @@ msgstr "Teilnehmerstatus"
 msgid "GENDER_Attendee Status"
 msgstr "male"
 
+msgid "GENDER_Event"
+msgstr "male"
+
 #: js/Model.js:394 js/Model.js:404
 msgid "Attendee Role"
 msgstr "Teilnehmer Rolle"
