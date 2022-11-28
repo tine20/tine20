@@ -34,6 +34,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE018 = __CLASS__ . '::update018';
     const RELEASE015_UPDATE019 = __CLASS__ . '::update019';
     const RELEASE015_UPDATE020 = __CLASS__ . '::update020';
+    const RELEASE015_UPDATE021 = __CLASS__ . '::update021';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -103,6 +104,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE020          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update020',
+            ],
+            self::RELEASE015_UPDATE021          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update021',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -653,5 +658,17 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
         Setup_SchemaTool::updateSchema(array_unique($classes));
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.20', self::RELEASE015_UPDATE020);
+    }
+
+    public function update021()
+    {
+        if(!Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY}) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Auto generated CREDENTIAL_CACHE_SHARED_KEY was saved to db. For enhanced security'
+                . ' you should move it to a config file to not be part of a db dump.');
+            Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY} = Tinebase_Record_Abstract::generateUID();
+        }
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.21', self::RELEASE015_UPDATE021);
     }
 }

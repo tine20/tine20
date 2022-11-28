@@ -127,7 +127,7 @@ class Setup_Initialize
     }
     
     /**
-     * create inital rights
+     * create initial rights
      * 
      * @param Tinebase_Model_Application $_application
      * @return void
