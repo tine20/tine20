@@ -579,7 +579,7 @@ class OnlyOfficeIntegrator_JsonTests extends TestCase
         OnlyOfficeIntegrator_Controller::getInstance()->setCmdServiceClientAdapter($httpTestClient);
 
         static::expectException(Tinebase_Exception_Backend::class);
-        static::expectExceptionMessage('onlyoffice command service did not responde with status code 200');
+        static::expectExceptionMessage('onlyoffice command service did not respond with status code 200');
         $this->_uit->saveAs($key, 'copy', '/shared/ootest/test.txt');
     }
 
