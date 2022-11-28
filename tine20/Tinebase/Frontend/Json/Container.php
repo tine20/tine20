@@ -138,20 +138,16 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
     
     /**
      * sets color of a container
-     * 
+     *
      * @param  int      $containerId
      * @param  string   $color
      * @return array    updated container
-     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_AccessDenied
      */
-    public function setContainerColor($containerId, $color)
+    public function setContainerColor($containerId, $color): array
     {
-        try {
-            $container = Tinebase_Container::getInstance()->setContainerColor($containerId, $color);
-        } catch (Tinebase_Exception $e) {
-            throw new Tinebase_Exception('Container not found or permission to set containername denied!');
-        }
-        
+        $container = Tinebase_Container::getInstance()->setContainerColor($containerId, $color);
+
         $result = $container->toArray();
         $result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(),
             $container)->toArray();
@@ -165,9 +161,9 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
      * @param   int     $containerId
      * @return  array
      */
-    public function getContainerGrants($containerId) 
+    public function getContainerGrants($containerId): array
     {
-        $container = Tinebase_Container::getInstance()->getContainerById($containerId);
+        Tinebase_Container::getInstance()->getContainerById($containerId);
 
         $result = array(
             'results'     => array(),
