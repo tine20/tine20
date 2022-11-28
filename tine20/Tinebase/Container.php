@@ -1387,11 +1387,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         if (! $this->hasGrant(Tinebase_Core::getUser(), $container, Tinebase_Model_Grants::GRANT_ADMIN)) {
             throw new Tinebase_Exception_AccessDenied('Permission to set color of container denied.');
         }
-        
+
         if (! preg_match('/^#[0-9a-fA-F]{6}$/', $_color)) {
             throw new Tinebase_Exception_UnexpectedValue('color is not valid');
         }
-        
+
         $container->color = $_color;
         
         return $this->update($container, 'update');
