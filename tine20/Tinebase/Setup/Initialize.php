@@ -77,7 +77,8 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
             if (empty($_options[$key])) unset($_options[$key]);
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Saving config options (accounts/authentication/email/...)');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Saving config options (accounts/authentication/email/...)');
 
         // this is a dangerous TRACE as there might be passwords in here!
         //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_options, TRUE));
@@ -86,6 +87,13 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         $defaultGroupNames = $this->_parseDefaultGroupNameOptions($_options);
         $defaults['accounts'][Tinebase_User::getConfiguredBackend()] = array_merge($defaults['accounts'][Tinebase_User::getConfiguredBackend()], $defaultGroupNames);
 
+        if (!Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY}) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Auto generated CREDENTIAL_CACHE_SHARED_KEY was saved to db. For enhanced security'
+                . ' you should move it to a config file to not be part of a db dump.');
+            Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY} = Tinebase_Record_Abstract::generateUID();
+        }
+        
         $emailConfigKeys = Setup_Controller::getInstance()->getEmailConfigKeys();
         $configsToSet = array_merge($emailConfigKeys, array('authentication', 'accounts', 'redirectSettings', 'acceptedTermsVersion'));
 
