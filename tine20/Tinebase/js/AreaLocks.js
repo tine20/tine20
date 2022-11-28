@@ -98,6 +98,11 @@ class AreaLocks extends Ext.util.Observable {
     )
 
     Object.assign(this, config)
+
+    const configs = _.get(Tine.Tinebase.configManager.get('areaLocks', 'Tinebase'), 'records', []);
+    configs.forEach((config) => {
+      this.assertTimerRunning(config.area_name);
+    })
   }
 
   async getProvider (areaName, optionOverrides) {
@@ -241,18 +246,23 @@ class AreaLocks extends Ext.util.Observable {
         this.presenceObservers[areaName] = new Tine.Tinebase.PresenceObserver({
           maxAbsenceTime: conf.lifetime,
           absenceCallback: _.bind(this.lock, this, areaName),
-          presenceCallback: (lastPresenceDate, po) => {
+          presenceCallback: (lastPresenceDate, po, ttl) => {
             const lockState = this.getLockState(areaName)
-            expires = new Date(lastPresenceDate.getTime() + conf.lifetime * 60000).format(Date.patterns.ISO8601Long)
+            const expires = new Date(lastPresenceDate.getTime() + conf.lifetime * 60000).format(Date.patterns.ISO8601Long)
             if (expires !== lockState.expires) {
               this.setLockState(areaName, _.assign(lockState, {expires: expires}))
             }
+            postal.publish({
+              channel: 'areaLocks',
+              topic: [areaName, 'ttl'].join('.'),
+              data: {expires, ttl}
+            })
           }
         })
       } else {
         this.presenceObservers[areaName].startChecking()
+        expires = new Date(this.presenceObservers[areaName].getLastPresence() + conf.lifetime * 60000).format(Date.patterns.ISO8601Long)
       }
-      expires = new Date(this.presenceObservers[areaName].getLastPresence() + conf.lifetime * 60000).format(Date.patterns.ISO8601Long)
     } else if (validity === 'lifetime') {
       if (!this.timer[areaName]) {
         const timeout = Math.min(Date.parseDate(lockState.expires, Date.patterns.ISO8601Long).getTime() - new Date().getTime(), conf.lifetime * 60000)
