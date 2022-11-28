@@ -422,18 +422,17 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
             })
             this.composeMailAction.setDisabled(!hasEmailAddress);
         }
-
-        if (!action.text && action.initialConfig?.selectionModel) {
+        
+        if (action?.initialConfig?.text) {
             const isComposeItem = _.find(['To', 'CC', 'BCC', 'Mass Mailing'], (name) => {
                 return action.initialConfig.text === this.app.i18n._(name);
             });
     
             if (isComposeItem) {
-                const isFilterSelect = action.initialConfig.selectionModel.isFilterSelect;
+                const isFilterSelect = action.initialConfig?.selectionModel?.isFilterSelect;
                 action.setDisabled(isFilterSelect ? action.initialConfig.text !== this.app.i18n._('Mass Mailing') : false);
             }
         }
-
         
         if (this.subjectField && records.length > 0) {
             this.subject = records[0].get(this.subjectField);
