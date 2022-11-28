@@ -660,7 +660,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 enableToggle: true
             });
 
-            this.postalSubscriptions = [];
+            this.postalSubscriptions = this.postalSubscriptions || [];
             _.each(Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName), (areaLock) => {
                 this.postalSubscriptions.push(postal.subscribe({
                     channel: "areaLocks",
@@ -782,7 +782,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         })
     },
 
-    applyDataSafeState: function() {
+    applyDataSafeState: function(data, e) {
         var me = this;
 
         const isLocked = !! Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName, true).length;

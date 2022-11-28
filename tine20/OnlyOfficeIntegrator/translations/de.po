@@ -141,6 +141,15 @@ msgstr "Diese Revision ist veraltet, bitte öffnen sie die neuste Version"
 msgid "Saving Document ..."
 msgstr "Dokument wird gespeichert …"
 
+msgid "Absence detected"
+msgstr "Abwesenheit erkannt"
+
+msgid "It looks like you are not currently editing the document. Therefore, to protect the contents, it will be closed automatically in {0} seconds."
+msgstr "Es sieht so aus als würden sie das Dokument derzeit nicht bearbeiten. Um die Inhalte zu schützen wird es daher in {0} Sekunden automatisch geschlossen."
+
+msgid "It looked like you where not editing the document any longer. Therefore, to protect the contents, it was be closed automatically."
+msgstr "Es sah so aus als hätten sie das Dokument nicht mehr bearbeitet. Um die Inhalte zu schützen wurde es daher automatisch geschlossen."
+
 #: js/Application.js:21
 msgid "Only Office Integrator"
 msgstr "Only Office Integrator"

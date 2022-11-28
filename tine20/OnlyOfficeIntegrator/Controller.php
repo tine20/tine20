@@ -596,8 +596,8 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
                 if (Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)) {
                     Tinebase_AreaLock::getInstance()->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE);
                     $dataSafeRAII = new Tinebase_RAII(function() {
-                        if (Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)) {
-                            Tinebase_AreaLock::getInstance()->lock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE);
+                        foreach (Tinebase_AreaLock::getInstance()->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_DATASAFE) as $config) {
+                            Tinebase_AreaLock::getInstance()->lock($config->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME});
                         }
                     });
                 }
