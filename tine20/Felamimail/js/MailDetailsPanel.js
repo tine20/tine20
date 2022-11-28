@@ -323,7 +323,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
      * @param {} e
      * @private
      */
-    onClick: function(e) {
+    onClick: async function(e) {
         var selectors = [
             'span[class^=tinebase-download-link]',
             'a[class=tinebase-email-link]',
@@ -358,7 +358,15 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
 
                 // remove part id if set (that is the case in message/rfc822 attachments)
                 const messageId = (this.record.id.match(/_/)) ? this.record.id.split('_')[0] : this.record.id;
+    
+                let attachmentCache = null;
+                if (attachments.length === 1) {
+                    try {
+                        attachmentCache = await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', this.record.get('messageId'), this.record.get('partId')].join(':'), true);
+                    } catch (e) {}
+                }
 
+    
                 const menu = Ext.create({
                     xtype: 'menu',
                     plugins: [{
@@ -381,11 +389,12 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                             iconCls: 'action_preview',
                             hidden: !attachments.length || !Tine.Tinebase.appMgr.isEnabled('Filemanager')
                                 || (_.get(attachments, '[0]content-type') === 'message/rfc822' && attachments.length === 1),
+                            disabled: !attachmentCache,
                             handler: () => {
                                 Tine.Filemanager.QuickLookPanel.openWindow({
                                     record: this.record,
                                     initialApp: this.app,
-                                    handleAttachments: this.quicklookHandleAttachments,
+                                    handleAttachments: this.quicklookHandleAttachments(attachmentCache),
                                     initialAttachmentIdx: +idx
                                 });
                             }
@@ -476,7 +485,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         }
     },
 
-    quicklookHandleAttachments: async function() {
+    quicklookHandleAttachments: async function(attachmentCache = null) {
         this.cardPanel.layout.setActiveItem(0); // wait cycle
         if (this.record.constructor.hasField('attachments')) {
             // new mail -> fetch body with fmail attachments
@@ -493,7 +502,9 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
 
         if (this.record.constructor !== Tine.Tinebase.Model.Tree_Node) {
             // convert fmail attachment to attachmentCache attachment
-            const attachmentCache = await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', this.record.get('messageId'), this.record.get('partId')].join(':'), true);
+            if (!attachmentCache) {
+                attachmentCache = await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', this.record.get('messageId'), this.record.get('partId')].join(':'), true);
+            }
             this.record = this.attachments[this.attachments.indexOf(this.record)] = new Tine.Tinebase.Model.Tree_Node(attachmentCache.attachments[0]);
         }
     },
