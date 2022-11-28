@@ -65,6 +65,13 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
      * @staticvar string
      */
     const SYSTEM_NOTE_AVSCAN = 'avscan';
+
+    /**
+     * system note type: revealPassword
+     *
+     * @staticvar string
+     */
+    const SYSTEM_NOTE_REVEAL_PASSWORD = 'revealPassword';
     
     /**
      * key in $_validators/$_properties array for the filed which 
