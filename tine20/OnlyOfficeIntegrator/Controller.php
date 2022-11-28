@@ -811,7 +811,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         if (200 !== $response->getStatus()) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $response->getStatus() . ' ' .
                 $response->getMessage() . PHP_EOL . $response->getBody());
-            throw new Tinebase_Exception_Backend('onlyoffice command service did not responde with status code 200');
+            throw new Tinebase_Exception_Backend('onlyoffice command service did not respond with status code 200');
         }
         if (!is_array($body = json_decode($response->getBody(), true)) || !isset($body['error'])) {
             throw new Tinebase_Exception_Backend('onlyoffice command service response body not well formed: ' .
@@ -857,7 +857,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         if (200 !== $response->getStatus()) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $response->getStatus() . ' ' .
                 $response->getMessage() . PHP_EOL . $response->getBody());
-            throw new Tinebase_Exception_Backend('onlyoffice command service did not responde with status code 200');
+            throw new Tinebase_Exception_Backend('onlyoffice command service did not respond with status code 200');
         }
         if (!is_array($body = json_decode($response->getBody(), true)) || !isset($body['error'])) {
             throw new Tinebase_Exception_Backend('onlyoffice command service response body not well formed: ' .
@@ -904,7 +904,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         if (200 !== $response->getStatus()) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $response->getStatus() . ' ' .
                 $response->getMessage() . PHP_EOL . $response->getBody());
-            throw new Tinebase_Exception_Backend('onlyoffice conversion service did not responde with status code 200');
+            throw new Tinebase_Exception_Backend('onlyoffice conversion service did not respond with status code 200');
         }
         if (!is_array($body = json_decode($response->getBody(), true))) {
             throw new Tinebase_Exception_Backend('onlyoffice conversion service response body not well formed: ' .
@@ -939,7 +939,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         if (200 !== $response->getStatus()) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $response->getStatus() . ' ' .
                 $response->getMessage() . PHP_EOL . $response->getBody());
-            throw new Tinebase_Exception_Backend('onlyoffice command service did not responde with status code 200');
+            throw new Tinebase_Exception_Backend('onlyoffice command service did not respond with status code 200');
         }
         if (!is_array($body = json_decode($response->getBody(), true)) || !isset($body['error'])) {
             throw new Tinebase_Exception_Backend('onlyoffice command service response body not well formed: ' .
