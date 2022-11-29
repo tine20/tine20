@@ -2794,8 +2794,8 @@ class Setup_Controller
         $config = Setup_Core::getConfig();
 
         if (isset($options['db']) && $options['db']) {
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Starting DB restore');
             $this->_backend->restore($options['backupDir']);
-
             Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Restore of DB successful');
         }
 
@@ -2806,9 +2806,8 @@ class Setup_Controller
             if (! file_exists($filesBackupFile)) {
                 throw new Setup_Exception("$filesBackupFile not found");
             }
-
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Starting files restore');
             `cd $filesDir; tar xf $filesBackupFile`;
-
             Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Restore of files successful');
         }
 
