@@ -391,10 +391,11 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
     public function tine20FlagEnabled($message = null)
     {
         if (Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_TINE20_FLAG)) {
-            if ($message && isset($message['header']['user-agent'])) {
-                $userAgentHeader = $message['header']['user-agent'];
+            if ($message && isset($message['headers']['user-agent'])) {
+                $userAgentHeader = $message['headers']['user-agent'];
+                $title = Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_TITLE};
                 foreach((array) $userAgentHeader as $userAgent) {
-                    if (strpos($userAgent, "Tine 2.0") !== false) {
+                    if (strpos($userAgent, $title) !== false && strpos($userAgent, "tine") !== false) {
                         return true;
                     }
                 }
