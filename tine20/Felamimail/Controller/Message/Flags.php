@@ -245,7 +245,8 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
             $translate = Tinebase_Translation::getTranslation('Felamimail');
             
             foreach (self::$_allowedFlags as $flag) {
-                $result[] = array('id'        => $flag,      'name'      => $translate->_(substr($flag, 1)));
+                $flagName = str_replace('\\', '', $flag);
+                $result[] = array('id'        => $flag,      'name'      => $translate->_($flagName));
             }
             
             return $result;
