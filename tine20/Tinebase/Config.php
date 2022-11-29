@@ -1056,7 +1056,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => true,
             'setByAdminModule'      => true,
             'setBySetupModule'      => false,
-            'default'               => true,
+            // TODO add a checkbox/preference for users to allow to hide the dlg and switch to true again
+            'default'               => false,
         ],
 
         /**
