@@ -574,8 +574,6 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     */
     public function importMembers($tempFileId, $courseId)
     {
-        $transaction = Tinebase_RAII::getTransactionManagerRAII();
-
         $this->checkRight(Courses_Acl_Rights::ADD_NEW_USER);
         
         $tempFile = Tinebase_TempFile::getInstance()->getTempFile($tempFileId);
@@ -626,9 +624,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         }
         copy($tmpFile, 'tine20://' . $attachmentPath);
 
-        $transaction->release();
         unset($tmpFileRAII);
-
         return $result;
     }
     
