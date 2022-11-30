@@ -1605,6 +1605,20 @@ msgid_plural "Vacation corrections"
 msgstr[0] "Urlaubs-Korrektur"
 msgstr[1] "Urlaubs-Korrekturen"
 
+msgid "%d days"
+msgstr "%d Tage"
+
+msgid "+%s (credit)"
+msgstr "+%s (Guthaben)"
+
+msgid "%s (dept)"
+msgstr "%s (Fehlzeit)"
+
+msgid "Time balance:"
+msgstr "Zeitsaldo:"
+
+msgid "Remaining vacation:"
+msgstr "Resturlaub:"
 
 #~ msgid "The grant to create free times and working time reports change requests and see basic employee, contract and account data for all employees in this division."
 #~ msgstr "Die Berechtigung Änderungsanträge auf Arbeitszeitberichte und Abwesenheiten für alle Mitarbeiter dieser Abteilung zu erstellen."

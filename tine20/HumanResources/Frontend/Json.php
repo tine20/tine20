@@ -743,20 +743,23 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $monthlyWTReportController->assertPublicUsage(),
         ];
 
+        $translation = Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME);
         try {
             $employee = $employeeController->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
                 ['field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()],
             ]))->getFirstRecord();
 
             $allRemainingVacationsDays = $freeTimeController->getRemainingVacationDays($employee);
-            $remainingVacations = "{$allRemainingVacationsDays} Tage";
+            $remainingVacations = sprintf($translation->_('%d days'), $allRemainingVacationsDays);
 
             $monthlyWTR = $monthlyWTReportController->getByEmployeeMonth($employee);
             $balanceTS = $monthlyWTR ?
                 $monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_WORKING_TIME_BALANCE} : 0;
-            $balanceTime = (string)round($balanceTS / 3600) . ':' .
+            $balanceTime = ($balanceTS > 0 ? floor($balanceTS / 3600) : ceil($balanceTS / 3600)) . ':' .
                 str_pad((string)abs($balanceTS / 60) % 60, 2, "0", STR_PAD_LEFT);
-            $balance = ($balanceTS >= 0 ? "+{$balanceTime} (haben)" : "{$balanceTime} (soll)");
+            $balance = $balanceTS >= 0 ?
+                sprintf($translation->_('+%s (credit)'), $balanceTime) :
+                sprintf($translation->_('%s (dept)'), $balanceTime);
 
         } finally {
             foreach(array_reverse($releaseACLUsageCallbacks) as $releaseACLUsageCallback) {
@@ -765,7 +768,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         }
 
-        return "Zeitsaldo: {$balance}\n Resturlaub: {$remainingVacations}";
+        return $translation->_('Time balance:') . ' ' . $balance . "\n" .
+            $translation->_('Remaining vacation:') . ' ' . $remainingVacations;
     }
 
     /**
