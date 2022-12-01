@@ -4071,6 +4071,9 @@ msgstr ""
 msgid "{mfaDevice.device_name} secret"
 msgstr "{mfaDevice.device_name} Geheimnis"
 
+msgid "Click here to add note"
+msgstr "Zum Hinzufügen einer Notiz hier klicken"
+
 msgid ""
 "This area is locked. To unlock it you need to provide your token from your "
 "device: {mfaDevice.device_name}"

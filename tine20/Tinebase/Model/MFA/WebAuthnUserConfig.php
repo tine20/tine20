@@ -43,6 +43,7 @@ class Tinebase_Model_MFA_WebAuthnUserConfig extends Tinebase_Auth_MFA_AbstractUs
             ],
             self::FLD_WEBAUTHN_ID               => [
                 self::TYPE                          => self::TYPE_STRING,
+                self::DISABLED                      => true,
             ],
         ]
     ];
