@@ -155,7 +155,7 @@ class GDPR_Setup_Initialize extends Setup_Initialize
         }
 
         $dP = GDPR_Controller_DataProvenance::getInstance()->create(new GDPR_Model_DataProvenance([
-            'name'          => 'Tine2.0',
+            'name'          => 'tine',
         ]));
 
         GDPR_Config::getInstance()->set(GDPR_Config::DEFAULT_ADB_CONTACT_DATA_PROVENANCE, $dP->getId());
