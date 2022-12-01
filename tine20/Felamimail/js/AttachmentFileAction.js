@@ -6,6 +6,8 @@
  * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import RecordEditFieldTriggerPlugin from "../../Tinebase/js/widgets/form/RecordEditFieldTriggerPlugin";
+
 /**
  * quicklook panel file action for attachments
  */
@@ -133,7 +135,10 @@ const getFileAttachmentAction = (fileFn, config) => {
                                         },
                                         items: Tine.widgets.form.RecordPickerManager.get(model.getMeta('appName'), model.getMeta('modelName'), {
                                             fieldLabel: model.getRecordName(),
-                                            name: 'attachRecord'
+                                            name: 'attachRecord',
+                                            plugins: [new RecordEditFieldTriggerPlugin({
+                                                editDialogMode: 'remote'
+                                            })]
                                         })
                                     })
                                 });
