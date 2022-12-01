@@ -15,7 +15,7 @@ class WTRCorrectionEditDialog extends Tine.widgets.dialog.EditDialog {
         
         const employee = this.getForm().findField('employee_id').selectedRecord;
         const isNewRecord = !this.record.get('creation_time');
-        const grants = _.get(employee, 'data.division_id.account_grants', {});
+        const grants = _.get(employee, 'data.division_id.account_grants', _.get(employee, 'data.account_grants', {}));
         const isOwn = Tine.Tinebase.registry.get('currentAccount').accountId === _.get(employee, 'data.account_id.accountId');
         const processStatusPicker = this.getForm().findField('status');
         const processStatus = processStatusPicker.getValue();
