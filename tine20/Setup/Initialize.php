@@ -222,7 +222,14 @@ class Setup_Initialize
                 if ($customfield['type'] == 'record') {
                     $cfc['definition']['recordConfig'] = $customfield['recordConfig'];
                 } elseif ($customfield['type'] == 'keyField') {
-                    $cfc['definition']['keyFieldConfig'] = $customfield['recordConfig'];
+                    if (isset($customfield['recordConfig'])) {
+                        $keyfieldConf = $customfield['recordConfig'];
+                    } else if (isset($customfield['keyFieldConfig'])) {
+                        $keyfieldConf = $customfield['keyFieldConfig'];
+                    } else {
+                        throw new Tinebase_Exception_InvalidArgument('keyFieldConfig missing from cf definition');
+                    }
+                    $cfc['definition']['keyFieldConfig'] = $keyfieldConf;
                 }
 
                 $cf = new Tinebase_Model_CustomField_Config($cfc);
