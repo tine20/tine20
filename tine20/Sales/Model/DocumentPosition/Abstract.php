@@ -95,7 +95,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
     //      - keine: inclusiveprodukt bekommt keine eigene belegposition (z.B. nur teil des positionstextes des Hauptproduktes, keine variable/zusatz anzahl in folge belegen (z.B. lieferung/rechnung) möglich)
     //      - gemeinsam: wenn mehrere hauptprodukte das referenzierte inclusive produkt beinhalten, entsteht im Beleg nur eine variable/zusatz position
     //      - eigene: wenn mehrere hauptprodukte das referenzierte inclusive produkt beinhalten, entsteht im Beleg je eine variable/zusatz position pro Hauptprodukt
-    //     NOTE: in produkt ENUM, in position id zur position
+    //     NOTE: in produkt ENUM, in position id zur position (entsteht beim zufügen des produktes in den Beleg automatisch)
     // - accountable (wie bisher)
 
     // in beschreibung des produktes. können variblen verwendet werden um auf die subprodukte zuzugreifen

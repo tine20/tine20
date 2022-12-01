@@ -52,7 +52,18 @@ class UserConfigPanel extends Tine.Tinebase.BL.BLConfigPanel {
             };
         }));
     }
-    
+
+    customizeColumns(columns) {
+        super.customizeColumns(columns);
+        const noteColumn = _.find(columns, {dataIndex: 'note'});
+        noteColumn.renderer = _.wrap(noteColumn.renderer, (wrapped, v, meta, r) => {
+            const text = wrapped(v, r, meta);
+            if (! text) {
+                meta.css = 'x-form-empty-field';
+            }
+            return text || i18n._('Click here to add note');
+        })
+    }
 }
 
 /**
