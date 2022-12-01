@@ -4251,11 +4251,11 @@ class Tinebase_FileSystem implements
             }
             while (false !== ($file = readdir($fileDir))) {
                 $path = $hashDirPath . DIRECTORY_SEPARATOR . $file;
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Scanning file ' . $path . ' ...');
                 if (!is_file($path)) {
                     continue;
                 }
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Scanning file ' . $path . ' ...');
 
                 if (false === ($fileSize = filesize($path))) {
                     Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('failed to get hash file size: ' .
@@ -4274,7 +4274,7 @@ class Tinebase_FileSystem implements
                 $scanResult = null;
                 try {
                     $lastScan = $this->_fileObjectBackend->getLastAvScanTimeForHash($hashDir . $file);
-                    if (!$lastScan || Tinebase_DateTime::now()->subHour(12)
+                    if ($lastScan && Tinebase_DateTime::now()->subHour(12)
                             ->isEarlier(new Tinebase_DateTime($lastScan))) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                             . ' Skipping, last scan less than 12 hours old');
