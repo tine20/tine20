@@ -560,7 +560,9 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                 items: Tine.widgets.form.RecordPickerManager.get(model.getMeta('appName'), model.getMeta('modelName'), {
                     fieldLabel: model.getRecordName(),
                     name: 'attachRecord',
-                    plugins: [new RecordEditFieldTriggerPlugin({})]
+                    plugins: [new RecordEditFieldTriggerPlugin({
+                        editDialogMode: 'remote'
+                    })]
                 })
             })
         });
