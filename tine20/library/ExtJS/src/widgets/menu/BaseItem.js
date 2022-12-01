@@ -80,7 +80,9 @@ Ext.menu.BaseItem = Ext.extend(Ext.Component, {
 	    );
 	    if(this.handler){
 	        this.on("click", this.handler, this.scope);
-	    }
+	    } else if (this.menu) {
+            this.hideOnClick = false;
+        }
     },
 
     // private
