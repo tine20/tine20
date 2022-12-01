@@ -1200,7 +1200,7 @@ viewConfig: {
             i = cols.pop();
             c = cm.getColumnAt(i);
             width = Math.max(this.grid.minColumnWidth, Math.floor(w + w*frac));
-            width = aec<0 && !omitColumn>=0 && c.initialConfig.width && iw<=aw ? Math.max(c.initialConfig.width, width) : width;
+            width = aec<0 && omitColumn<0 && c.initialConfig.width && iw<=aw ? Math.max(c.initialConfig.width, width) : width;
             cm.setColumnWidth(i, width, true);
         }
 
@@ -1209,7 +1209,7 @@ viewConfig: {
             cm.setColumnWidth(aec, cm.getColumnWidth(aec)+aw-tw);
         } else if (tw > aw){
             var adjustCol = ac != vc ? omitColumn : extraCol;
-             cm.setColumnWidth(adjustCol, Math.max(1, cm.getColumnWidth(adjustCol)- (tw-aw)), true);
+             cm.setColumnWidth(adjustCol, Math.max(this.grid.minColumnWidth, cm.getColumnWidth(adjustCol)- (tw-aw)), true);
         }
 
         if(preventRefresh !== true){
