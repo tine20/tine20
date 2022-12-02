@@ -396,6 +396,11 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
             await this.mainQueueChannel.clearByTag('added');
         }
         
+        //fetch file blob from local storage in private mode might return errors , we should always store blob in memory instead
+        tasks.forEach((task) => {
+            this.fileObjects[task.args?.uploadId] = task.args?.fileObject ?? null;
+        });
+    
         await this.mainQueueChannel.addBatch(tasks);
         await this.addTaskToWorkerChannel();
     },
@@ -765,7 +770,6 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
             if (existFolderTask) {
                 promises.push(this.mainChannel.storage.update(existFolderTask._id, defaultData));
             } else {
-                this.fileObjects[uploadId] = task.args?.fileObject ?? null;
                 _.assign(task, defaultData);
                 tasksToQueue.push(task);
             }
