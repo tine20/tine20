@@ -1045,7 +1045,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if(!nodeRecord) {
             nodeRecord = new Tine.Filemanager.Model.Node(targetNode);
         }
-
+        //todo: support file handle
         let files = fileSelector.getFileList();
 
         const folderList = _.uniq(_.map(files, (fo) => {
