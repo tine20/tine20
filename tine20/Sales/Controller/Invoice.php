@@ -1205,7 +1205,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     while ($this->_currentMonthToBill->isLater($lab)) {
                         $lab->addMonth($productAggregate->interval);
                     }
-                    if ($lab->isLater($this->_currentMonthToBill)) {
+                    if ($lab->isLater($productAggregate->billing_point == 'end' ? $this->_currentMonthToBill->getClone()->addMonth($productAggregate->interval) : $this->_currentMonthToBill)) {
                         $lab->subMonth($productAggregate->interval);
                     }
                     
