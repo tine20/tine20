@@ -103,7 +103,9 @@ class Tinebase_FileSystem_Previews
     protected function _getBasePath()
     {
         if (null === $this->_basePath) {
-            $this->_basePath = $this->_fsController->getApplicationBasePath(Tinebase_Application::getInstance()->getApplicationByName('Tinebase'), Tinebase_FileSystem::FOLDER_TYPE_PREVIEWS);
+            $this->_basePath = $this->_fsController->getApplicationBasePath(
+                Tinebase_Application::getInstance()->getApplicationByName('Tinebase'),
+                Tinebase_FileSystem::FOLDER_TYPE_PREVIEWS);
             if (!$this->_fsController->fileExists($this->_basePath)) {
                 $this->_basePathNode = $this->_fsController->mkdir($this->_basePath);
             }

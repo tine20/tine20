@@ -1293,7 +1293,10 @@ class Tinebase_FileSystem implements
         $fileName = basename($_path);
         $node = null;
         $handle = null;
-        $fileType = isset($this->_streamOptionsForNextOperation[self::STREAM_OPTION_CREATE_PREVIEW]) && true === $this->_streamOptionsForNextOperation[self::STREAM_OPTION_CREATE_PREVIEW] ? Tinebase_Model_Tree_FileObject::TYPE_PREVIEW : Tinebase_Model_Tree_FileObject::TYPE_FILE;
+        $fileType = isset($this->_streamOptionsForNextOperation[self::STREAM_OPTION_CREATE_PREVIEW])
+            && true === $this->_streamOptionsForNextOperation[self::STREAM_OPTION_CREATE_PREVIEW]
+                ? Tinebase_Model_Tree_FileObject::TYPE_PREVIEW
+                : Tinebase_Model_Tree_FileObject::TYPE_FILE;
 
         $rollBack = true;
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
