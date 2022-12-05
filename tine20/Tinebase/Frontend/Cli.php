@@ -1641,6 +1641,46 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * nagios monitoring for tine preview service integration
+     *
+     * @return integer
+     *
+     * TODO also display on status page
+     * TODO use tine logic to test docservice?
+     * TODO catch output
+     */
+    public function monitoringCheckPreviewService()
+    {
+        $result = 0;
+        if (! Tinebase_FileSystem::getInstance()->isPreviewActive()) {
+            $message = 'PREVIEWSERVICE INACTIVE';
+        } else {
+            $script = 'PREV_URL=' .  Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} .'
+echo "This is a ASCII text, used to test the document-preview-service." > /tmp/test.txt
+res=$(curl -F config="{\"test\": {\"firstPage\":true,\"filetype\":\"jpg\",\"x\":100,\"y\":100,\"color\":false}}" -F "file=@/tmp/test.txt" $PREV_URL)
+sha=$(echo $res | sha256sum)
+if [ "$sha" != "0458d8bc6966fd1894986545478c69d0295eefdbc3115cc56ffb7fcc5667e778  -" ]; then
+  echo "FAILED"
+  exit 1
+fi';
+            ob_start();
+            $result = system($script);
+            $output = ob_get_flush();
+            $message = 'PREVIEWSERVICE OK';
+            if ($result === 'FAILED') {
+                $message = 'PREVIEWSERVICE FAIL: ' . $output;
+                $result = 2;
+            } else {
+                $result = 0;
+            }
+
+            $this->_logMonitoringResult($result, $message);
+        }
+        echo $message . "\n";
+        return $result;
+    }
+
+    /**
      * undo changes to records defined by certain criteria (user, date, fields, ...)
      * 
      * example: $ php tine20.php --username pschuele --method Tinebase.undo -d 
