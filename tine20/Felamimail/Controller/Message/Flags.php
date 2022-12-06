@@ -238,7 +238,7 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
      * 
      * @todo add gettext for flags
      */
-    public function getSupportedFlags($_translated = TRUE)
+    public function getSupportedFlags(bool $_translated = true): array
     {
         if ($_translated) {
             $result = array();

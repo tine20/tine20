@@ -17,21 +17,21 @@
  */
 class Felamimail_Convert_Message_Json extends Tinebase_Convert_Json
 {
-   /**
-    * parent converts Tinebase_Record_RecordSet to external format
-    *
-    * @param Tinebase_Record_RecordSet  $_records
-    * @param Tinebase_Model_Filter_FilterGroup $_filter
-    * @param Tinebase_Model_Pagination $_pagination
-    * @return mixed
-    */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records = NULL, $_filter = NULL, $_pagination = NULL)
+    /**
+     * @param Tinebase_Record_RecordSet|NULL $_records
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
+     * @return array|array[]|mixed
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records = null, $_filter = null, $_pagination = null)
     {
         $this->_dehydrateFileLocations($_records);
         
         foreach ($_records as $record) {
-            $tags = Tinebase_Tags::getInstance()->getTagsById($record['flags']);
-            $record->tags = new Tinebase_Record_RecordSet(Tinebase_Model_Tag::class, $tags);
+            $flags = array_diff($record->flags, Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags(false));
+            $tags = Tinebase_Tags::getInstance()->getTagsById($flags);
+            $record->tags = $tags;
         }
         
         return parent::fromTine20RecordSet($_records, $_filter, $_pagination);
