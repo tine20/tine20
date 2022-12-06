@@ -231,6 +231,12 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      */    
     public function addCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_position = NULL)
     {
+        if ($this->columnExists($_declaration->name, $_tableName)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Column already exists: ' . $_tableName . '.' . $_declaration->name);
+            return;
+        }
+
         $this->execQueryVoid($this->addAddCol(null, $_tableName, $_declaration, $_position));
     }
 
