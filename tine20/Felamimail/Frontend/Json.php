@@ -214,7 +214,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $filter;
     }
 
-    protected function _handleEmptyMessageFilter($filter, $_filterModel, $_throwExceptionIfEmpty)
+    protected function _handleEmptyMessageFilter(Felamimail_Model_MessageFilter $filter, $_filterModel, $_throwExceptionIfEmpty)
     {
         $filtersToCheck = ['folder_id', 'path', 'flags', 'id'];
         $found = false;
@@ -233,7 +233,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         if (! $found) {
-            $queryFilter = $filter->getFilter('query');
+            $queryFilter = $filter->getFilter('query', false, true);
             if (! $queryFilter || $queryFilter->getValue() === '') {
                 // TODO use allinboxes or better the default account INBOX?
                 // add default filter if path and flags filter missing and query is empty

@@ -14,16 +14,16 @@
 abstract class Felamimail_TestCase extends TestCase
 {
     /**
-     * @var Felamimail_Frontend_Json
+     * @var ?Felamimail_Frontend_Json
      */
-    protected $_json = array();
+    protected ?Felamimail_Frontend_Json $_json = null;
 
     /**
      * message ids to delete
      *
      * @var array
      */
-    protected $_messageIds = array();
+    protected array $_messageIds = [];
 
     /**
      * @var Felamimail_Model_Account

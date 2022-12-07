@@ -718,25 +718,30 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
      */
     public function testSearchMessageEmptyQueryFilter()
     {
-        $filter = array (
-            1 =>
-                array (
-                    'field' => 'query',
-                    'operator' => 'contains',
-                    'value' => '',
-                    'id' => 'quickFilter',
-                ),
-        );
-        $result = $this->_json->searchMessages($filter, '');
+        foreach ([[
+            'query' => '',
+            'allinboxes' => true,
+        ],[
+            'query' => 'someemail@bla.com',
+            'allinboxes' => false,
+        ]] as $filterTest) {
+            $filter = [[
+                'field' => 'query',
+                'operator' => 'contains',
+                'value' => $filterTest['query'],
+                'id' => 'quickFilter',
+            ]];
+            $result = $this->_json->searchMessages($filter, '');
 
-        $allinboxesFilterFound = false;
-        foreach ($result['filter'] as $filter) {
-            if (isset($filter['field']) && $filter['field'] === 'path' && $filter['value'] === '/allinboxes') {
-                $allinboxesFilterFound = true;
-                break;
+            $allinboxesFilterFound = false;
+            foreach ($result['filter'] as $filter) {
+                if (isset($filter['field']) && $filter['field'] === 'path' && $filter['value'] === '/allinboxes') {
+                    $allinboxesFilterFound = true;
+                    break;
+                }
             }
+            $this->assertEquals($filterTest['allinboxes'], $allinboxesFilterFound, print_r($result['filter'], true));
         }
-        $this->assertTrue($allinboxesFilterFound, print_r($result['filter'], true));
     }
 
     /**
