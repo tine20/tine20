@@ -1051,10 +1051,16 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     protected function _findFilter($_field, $_getAll = FALSE, $_recursive= FALSE)
     {
-        $result = ($_getAll) ? array() : NULL;
+        $result = ($_getAll) ? [] : null;
         
         foreach ($this->_filterObjects as $object) {
-            if ($_recursive && $object instanceof Tinebase_Model_Filter_FilterGroup) {
+            if ($_field === 'query' && $object instanceof Tinebase_Model_Filter_Query) {
+                if ($_getAll) {
+                    $result[] = $object;
+                } else {
+                    return $object;
+                }
+            } else if ($_recursive && $object instanceof Tinebase_Model_Filter_FilterGroup) {
                 $filter = $object->getFilter($_field, $_getAll, $_recursive);
                 
                 if ($filter) {
