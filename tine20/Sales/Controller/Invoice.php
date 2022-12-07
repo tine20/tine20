@@ -1752,8 +1752,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         }
 
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Sales_Model_Invoice:: class,
-            ['field' => 'id', 'operator' => 'equals', 'value' => $invoice->getId()]
+            Sales_Model_Invoice::class,[
+                ['field' => 'id', 'operator' => 'equals', 'value' => $invoice->getId()]
+            ]
         );
 
         $definition = Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
