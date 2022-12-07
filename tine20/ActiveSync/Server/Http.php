@@ -33,6 +33,10 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
                 $authData = $this->_getAuthData($this->_request);
                 if (count($authData) === 2) {
                     list($loginName, $password) = $authData;
+                    // Autodiscover comes always by mail not by username, if feature is activated enable auth, too.
+                    if ( true === Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_AUTODISCOVER) ) {
+                        Tinebase_Config::getInstance()->set(Tinebase_Config::AUTHENTICATION_BY_EMAIL, true);
+                    }
                 } else {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' auth data: '
                         . print_r($authData, true));
