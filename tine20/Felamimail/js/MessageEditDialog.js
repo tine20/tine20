@@ -595,6 +595,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      *
      * @param {Tine.Felamimail.Model.Account} account
      * @param {String} format
+     * @param signature
      */
     getSignature: function (account, format, signature) {
         let signatureText = Tine.Felamimail.getSignature(account, signature);
@@ -1455,16 +1456,17 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      *
      * @param Tine.Felamimail.Model.Signature signature
      */
-    updateSignature: function(signature) {
-        let account = this.app.getAccountStore().getById(this.record.get('account_id'));
-        let format = this.record.get('content_type');
-
-        let oldSignature = this.getSignature(account, format, _.find(this.signatureCombo.store.data.items, (r) => {return _.get(r, 'data.name') === this.signatureCombo.getValue()})).substring(4);
-        let newSignature = this.getSignature(account, format, signature).substring(4);
+    updateSignature: function(signature, accountId = null) {
+        const oldAccount = this.app.getAccountStore().getById(this.record.get('account_id'));
+        const newAccount = accountId ? this.app.getAccountStore().getById(accountId) : oldAccount;
+        const format = this.record.get('content_type');
+    
+        const oldSignature = this.getSignature(oldAccount, format, _.find(this.signatureCombo.store.data.items, (r) => {return _.get(r, 'data.name') === this.signatureCombo.getValue()})).substring(4);
+        const newSignature = this.getSignature(newAccount, format, signature).substring(4);
 
         let bodyContent = this.bodyCards.layout.activeItem.getValue();
-        bodyContent = oldSignature ? this.replaceSignature(account, bodyContent, oldSignature, newSignature) 
-            : this.addSignature(account, format, newSignature, bodyContent);
+        bodyContent = oldSignature ? this.replaceSignature(newAccount, bodyContent, oldSignature, newSignature) 
+            : this.addSignature(newAccount, format, newSignature, bodyContent);
 
         this.bodyCards.layout.activeItem.setValue(bodyContent);
     },
@@ -1476,7 +1478,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     replaceSignature: function(account, bodyContent, oldSignature, newSignature) {
         // remove style first
         newSignature = newSignature.substring(4);
-        bodyContent = bodyContent.replace(/<span class="felamimail-body-signature".*>--(.*)<br><\s*\/\s*span>/
+        bodyContent = bodyContent.replace(/<span class="felamimail-body-signature".*>--([\S\s]*)<br><\s*\/\s*span>/
             , newSignature);
     
         // we only replace the content inside <span>.*</span> , in case user delete the default new lines
@@ -1505,11 +1507,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {} index
      */
     onFromSelect: function (combo, record, index) {
-
-        var newAccountId = record.get('original_id');
-
-        var newSignature = this.app.getDefaultSignature(newAccountId);
-        this.updateSignature(newSignature);
+        const newAccountId = record.get('original_id');
+        const newSignature = this.app.getDefaultSignature(newAccountId);
+        
+        this.updateSignature(newSignature, newAccountId);
 
         this.signatureCombo.setValue(_.get(newSignature, 'data.name', this.app.i18n._('None')));
 
