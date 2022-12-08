@@ -170,8 +170,10 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         // we dont know the type by default
         const {results: contacts} = await Tine.Addressbook.searchContactsByRecipientsToken([updatedContact]);
         
-        if (!latestEditContact.record_id) {
-            await this.updateRecipientsToken(this.lastEditedRecord, contacts);
+        if (contacts.length === 0) return;
+        
+        if (latestEditContact && !latestEditContact.record_id) {
+            await this.updateRecipientsToken(this.lastEditedRecord, contacts.filter((c) => c?.email_type === 'email'));
         } else {
             this.store.each(function (item) {
                 const addressData = item.get('address');
