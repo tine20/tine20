@@ -6,6 +6,12 @@ repo_get_customer_for_branch () {
         return
     fi
 
+    # TODO make this work for all branches 20XX.11
+    if [ "${branch}" == "2023.11" ]; then
+        echo tine20.com
+        return
+    fi
+
     if echo "${branch}" | grep -Eq '(pu/|feat/|change/)'; then
         return 1
     fi
