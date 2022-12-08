@@ -62,24 +62,10 @@ class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap implements Tinebase_Auth
     public function setIdentity($_identity)
     {
         if ($this->resolveIdentityFromEmailToLogin) {
-            // Throw Exception if filter does not work to change filter below
-            Tinebase_Model_Filter_FilterGroup::$beStrict = true;
-            try {
-                // Maybe Tinebase_User is not assembled finally during ldap auth (issue #7418)
-                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_FullUser::class, [
-                    ['field' => 'accountEmailAddress', 'operator' => 'equals', 'value' => $_identity]
-                ]);
-            }
-            catch (Tinebase_Exception_Record_DefinitionFailure $e) {
-                // If field 'accountEmailAddress' throws try 'email' instead
-                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_FullUser::class, [
-                    ['field' => 'email', 'operator' => 'equals', 'value' => $_identity]
-                ]);
-            }
-            catch (Exception $e) {
-                // suppress Exception handling in Tine log for this defined case
-            }
-            Tinebase_Model_Filter_FilterGroup::$beStrict = false;
+            // field 'accountEmailAddress' not available in FilterGroup
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_FullUser::class, [
+                ['field' => 'email', 'operator' => 'equals', 'value' => $_identity]
+            ]);
 
             if($user = Tinebase_User::getInstance()->search($filter)->getFirstRecord()) {
                 $_identity = $user->accountLoginName;
