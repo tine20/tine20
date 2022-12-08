@@ -3757,4 +3757,44 @@ HumanResources_CliTests.testSetContractsEndDate */
             }
         }
     }
+
+    /**
+     * renames records with duplicate (string) property
+     *
+     * @param string $duplicateProperty
+     * @return int
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function renameDuplicateRecords(string $duplicateProperty): int
+    {
+        // TODO we should introduce pagination to make sure we don't run into memory limit
+        // TODO allow to ignore acl
+        $records = $this->getAll();
+
+        $changedCount = 0;
+        while (null !== ($record = $records->getFirstRecord())) {
+            // first find all containers sorted by creation_time
+            $duplicate = $records->filter($duplicateProperty, $record->{$duplicateProperty});
+            $duplicate->sort('creation_time', 'ASC');
+
+            $records->removeRecord($duplicate->getFirstRecord());
+            $duplicate->removeFirst();
+            if ($duplicate->count() > 0) {
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Duplicates found: ' . $duplicate->getArrayOfIds());
+
+                $renameCounter = 1;
+                foreach ($duplicate as $dup) {
+                    $dup->{$duplicateProperty} .= '(' . ($renameCounter++) . ')';
+                    // skip validation/acl/inspection stuff here
+                    $this->getBackend()->update($dup);
+                }
+                $changedCount += $duplicate->count();
+                $records->removeRecords($duplicate);
+            }
+        }
+
+        return $changedCount;
+    }
 }
