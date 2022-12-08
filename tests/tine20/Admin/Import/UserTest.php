@@ -64,5 +64,17 @@ class Admin_Import_UserTest extends ImportTestCase
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('admin_user_import_csv');
         $result = $this->_doImport([], $definition);
         self::assertEquals(1, $result['totalcount'], print_r($result, true));
+        $this->_usernamesToDelete[] = current($this->_instance->getCreatedAccounts())->accountLoginName;
+    }
+
+    public function testImportUserWithCharset()
+    {
+        $this->_filename = __DIR__ . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'user_import_macCentralEurope.csv';
+        $this->_deleteImportFile = false;
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('admin_user_import_csv');
+        $definition->plugin_options = str_replace('</config>', '<encoding>MACCENTRALEUROPE</encoding></config>', $definition->plugin_options);
+        $result = $this->_doImport([], $definition);
+        self::assertEquals(1, $result['totalcount'], print_r($result, true));
+        $this->_usernamesToDelete[] = current($this->_instance->getCreatedAccounts())->accountLoginName;
     }
 }
