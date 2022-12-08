@@ -62,10 +62,11 @@ class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap implements Tinebase_Auth
     public function setIdentity($_identity)
     {
         if ($this->resolveIdentityFromEmailToLogin) {
-            if ($user = Tinebase_User::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                        Tinebase_Model_FullUser::class, [
-                        ['field' => 'accountEmailAddress', 'operator' => 'equals', 'value' => $_identity]
-                    ]))->getFirstRecord()) {
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_FullUser::class, [
+                ['field' => 'email', 'operator' => 'equals', 'value' => $_identity]
+            ]);
+
+            if ($user = Tinebase_User::getInstance()->search($filter)->getFirstRecord()) {
                 $_identity = $user->accountLoginName;
             }
         }
