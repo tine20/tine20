@@ -55,6 +55,7 @@ const getFileAttachmentAction = (fileFn, config) => {
         menu: [{
             text: app.i18n._('File (in Filemanager) ...'),
             hidden: !Tine.Tinebase.common.hasRight('run', 'Filemanager'),
+            disabled: config.record?.get('from_node'), // not implemented @see \Felamimail_Controller_Message_File::fileAttachments
             handler: (action, e) => {
                 // details panel vs. messageDisplayDialog
                 const attachments = config.attachments || action.selection;
@@ -100,6 +101,7 @@ const getFileAttachmentAction = (fileFn, config) => {
             }
         }, {
             text: app.i18n._('Attachment (of Record)'),
+            disabled: config.record?.get('from_node'), // not implemented @see \Felamimail_Controller_Message_File::fileAttachments
             listeners: {render: (cmp) => {
                 cmp.menu.add(_.reduce(Tine.Tinebase.data.RecordMgr.items, (menu, model) => {
                     if (model.hasField('attachments') && model.getMeta('appName') !== 'Felamimail') {
