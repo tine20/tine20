@@ -236,11 +236,12 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
 });
 
 Tine.Filemanager.QuickLookPanel.openWindow = function (config) {
+    const windowNamePrefix = config.windowNamePrefix ?? 'QuickLookPanel_'
     const id = config.recordId ?? config.record?.id ?? 0;
     return Tine.WindowFactory.getWindow({
         width: (screen.height * 0.8) / Math.sqrt(2), // DIN A4 and so on
         height: screen.height * 0.8,
-        name: Tine.Filemanager.QuickLookPanel.prototype.windowNamePrefix + id,
+        name: `${windowNamePrefix}${id}`,
         contentPanelConstructor: 'Tine.Filemanager.QuickLookPanel',
         contentPanelConstructorConfig: config,
         modal: false,
