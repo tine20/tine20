@@ -210,6 +210,11 @@ class DFCom_Model_Device extends Tinebase_Record_Abstract
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'label' => 'Control Commands', // _('Control Commands')
                 'nullable' => true,
+                self::UI_CONFIG => [
+                    'emptyText' => 'setService("192.168.178.78", 8000);
+beep(1);
+'
+                ],
             ],
         ]
     ];
