@@ -97,8 +97,8 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         // other errors are caught by datetime
                         try {
 
-                            $date = new Tinebase_DateTime();
-                            $date->setDate($split[0], $split[1], $split[2])->hasTime(false);
+                            $date = Tinebase_DateTime::today();
+                            $date->setDate($split[0], $split[1], $split[2]);
                         } catch (Exception $e) {
                             Tinebase_Exception::log($e);
                         }

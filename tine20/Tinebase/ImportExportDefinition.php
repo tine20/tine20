@@ -291,6 +291,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $definition->setId($existing->getId());
             $definition->is_deleted = $existing->is_deleted;
             $definition->container_id = $existing->container_id;
+            $definition->seq = $existing->seq++;
             $result = $this->update($definition, true, true);
             
         } catch (Tinebase_Exception_NotFound $tenf) {

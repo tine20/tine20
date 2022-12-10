@@ -317,7 +317,11 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
 
-        $this->_backend->dropForeignKey('notes', 'notes::note_type_id--note_types::id');
+        try {
+            $this->_backend->dropForeignKey('notes', 'notes::note_type_id--note_types::id');
+        } catch (Exception $e) {
+            // key might have already been dropped
+        }
         $this->_backend->dropTable('note_types');
 
         $db = Tinebase_Core::getDb();
