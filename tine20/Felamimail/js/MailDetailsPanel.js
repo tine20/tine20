@@ -483,6 +483,10 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
 
     quicklookHandleAttachments: async function(attachmentCache = null) {
         this.cardPanel.layout.setActiveItem(0); // wait cycle
+
+        // remove part id if set (that is the case in message/rfc822 attachments)
+        const messageId = (this.record.id.match(/_/)) ? this.record.id.split('_')[0] : this.record.id;
+
         if (!this.record.get('from_node') && this.record.constructor.hasField('attachments')) {
             // new mail -> fetch body with fmail attachments
             const body = await Tine.Felamimail.getMessage(this.record.id);
@@ -499,7 +503,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         if (!this.record.get('from_node')) {
             // convert fmail attachment to attachmentCache attachment
             if (!attachmentCache && this.record.get('messageId')) {
-                attachmentCache = await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', this.record.get('messageId'), this.record.get('partId')].join(':'), true);
+                attachmentCache = await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', messageId, this.record.get('partId')].join(':'), true);
             }
             this.record = this.attachments[this.attachments.indexOf(this.record)] = new Tine.Tinebase.Model.Tree_Node(attachmentCache.attachments[0]);
         } else {
