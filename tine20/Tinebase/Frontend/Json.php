@@ -1695,7 +1695,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $targetNode = $target->getNode();
         $fs = Tinebase_FileSystem::getInstance();
         $targetPath = $fs->getPathOfNode($targetNode, true);
-        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $targetNode->type) {
+        if (!empty($target->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME})) {
+            $targetPath .= '/' . $target->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME};
+        }
+        $isTargetAFile = Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $targetNode->type ||
+            !empty($target->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME});
+        if ($isTargetAFile) {
             if ($sources->count() > 1) {
                 throw new Tinebase_Exception_UnexpectedValue('can not copy multiple sources into one target file');
             }
@@ -1708,7 +1713,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         /** @var Tinebase_Model_Tree_FileLocation $source */
         foreach ($sources as $source) {
             $sourcePath = $fs->getPathOfNode($source->getNode(), true);
-            if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $targetNode->type) {
+            if ($isTargetAFile) {
                 if ($fs->fileExists($targetPath) && $forceOverwrite) {
                     $fs->unlink($targetPath);
                 }

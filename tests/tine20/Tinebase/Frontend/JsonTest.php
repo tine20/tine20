@@ -872,6 +872,32 @@ class Tinebase_Frontend_JsonTest extends TestCase
         return $record;
     }
 
+    public function testCopyNodesNewName()
+    {
+        $record = (new Tinebase_FileSystem_RecordAttachmentsTest())->testAddRecordAttachments(false);
+        $fs = Tinebase_FileSystem::getInstance();
+        $fs->mkdir('/Filemanager/folders/shared/unittest');
+
+        $result = $this->_instance->copyNodes([
+            (new Tinebase_Model_Tree_FileLocation([
+                Tinebase_Model_Tree_FileLocation::FLD_TYPE => Tinebase_Model_Tree_FileLocation::TYPE_ATTACHMENT,
+                Tinebase_Model_Tree_FileLocation::FLD_MODEL => get_class($record),
+                Tinebase_Model_Tree_FileLocation::FLD_RECORD_ID => $record->getId(),
+                Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME => $record->attachments->getFirstRecord()->name,
+            ]))->toArray(),
+        ], (new Tinebase_Model_Tree_FileLocation([
+            Tinebase_Model_Tree_FileLocation::FLD_TYPE => Tinebase_Model_Tree_FileLocation::TYPE_FM_NODE,
+            Tinebase_Model_Tree_FileLocation::FLD_NODE_ID => $fs->stat('/Filemanager/folders/shared/unittest')->getId(),
+            Tinebase_Model_Tree_FileLocation::FLD_FM_PATH => '/shared/unittest',
+            Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME => 'newName.file',
+        ]))->toArray());
+
+        $this->assertCount(1, $result, print_r($result, true));
+        $this->assertSame('newName.file', $result[0]['name']);
+
+        return $record;
+    }
+
     public function testCopyNodesForceOverwrite()
     {
         $record = $this->testCopyNodes();
