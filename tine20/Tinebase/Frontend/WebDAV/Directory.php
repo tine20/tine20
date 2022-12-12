@@ -215,6 +215,12 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $terv->getMessage());
                 throw new Sabre\DAV\Exception\Forbidden('Forbidden to create directory: ' . $path);
+            }  catch (Zend_Db_Statement_Exception $zdse) {
+                if (Tinebase_Exception::isDbDuplicate($zdse)) {
+                    throw new Sabre\DAV\Exception\Forbidden('Directory already exists: ' . $path);
+                } else {
+                    throw $zdse;
+                }
             }
         }
     }
