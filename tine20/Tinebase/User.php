@@ -687,12 +687,12 @@ class Tinebase_User implements Tinebase_Controller_Interface
             'accountHomeDirectory' => false, 
             'accountLoginShell' => false, 
             'visibility' => false, 
-            'accountStatus' => function($options) {
+            'accountStatus' => call_user_func(function() use ($options) {
                 if (isset($options['syncAccountStatus'])) {
                     return (bool) $options['syncAccountStatus'];
                 }
-                return null; 
-            }, 
+                return null;
+            }),
         ];
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
