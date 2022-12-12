@@ -175,7 +175,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             return;
         }
 
-        if (! isset($this->_options['encoding']) || $this->_options['encoding'] === 'auto' && extension_loaded('mbstring')) {
+        if (! isset($this->_options['encoding']) || $this->_options['encoding'] === 'auto') {
             require_once 'StreamFilter/ConvertMbstring.php';
             $filter = 'convert.mbstring';
         } else if (isset($this->_options['encoding']) && $this->_options['encoding'] !== $this->_options['encodingTo']) {
