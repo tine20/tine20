@@ -198,12 +198,11 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * decodes the filter string
-     *
      * @param string|array $_filter
      * @param string $_filterModel the class name of the filter model to use
      * @param boolean $_throwExceptionIfEmpty
-     * @return Tinebase_Model_Filter_FilterGroup
+     * @return Felamimail_Model_MessageFilter|Tinebase_Model_Filter_FilterGroup
+     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _decodeFilter($_filter, $_filterModel, $_throwExceptionIfEmpty = false)
     {
@@ -214,6 +213,13 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $filter;
     }
 
+    /**
+     * @param Felamimail_Model_MessageFilter $filter
+     * @param string $_filterModel
+     * @param boolean $_throwExceptionIfEmpty
+     * @return Felamimail_Model_MessageFilter|Tinebase_Model_Filter_FilterGroup
+     * @throws Tinebase_Exception_InvalidArgument
+     */
     protected function _handleEmptyMessageFilter(Felamimail_Model_MessageFilter $filter, $_filterModel, $_throwExceptionIfEmpty)
     {
         $filtersToCheck = ['folder_id', 'path', 'flags', 'id'];
@@ -224,7 +230,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 // filter could be empty - client sends some strange value here (path filter)
                 if (
                     (is_object($filterOfField) && ! empty($filterOfField->getValue()))
-                    || (isset($filterOfField['value']) && ! empty($filterOfField['value']) && $filterOfField['value'] !== [""]
+                    || (is_array($filterOfField) && isset($filterOfField['value']) && ! empty($filterOfField['value'])
+                        && $filterOfField['value'] !== [""]
                     )) {
                     $found = true;
                     break;
