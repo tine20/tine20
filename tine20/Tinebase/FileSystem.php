@@ -4298,11 +4298,7 @@ class Tinebase_FileSystem implements
                     if (Tinebase_FileSystem_AVScan_Result::RESULT_ERROR === $scanResult->result) {
                         $result = false;
                     } else {
-                        $this->_fileObjectBackend->updateRevisionByHash($hashDir . $file, [
-                            'lastavscan_time' => Tinebase_DateTime::now()->toString(),
-                            'is_quarantined' =>
-                                Tinebase_FileSystem_AVScan_Result::RESULT_FOUND === $scanResult->result ? 1 : 0,
-                        ]);
+                        $this->_updateAvScanOfFileHash($hashDir . $file, $scanResult->result);
                     }
                 } finally {
                     if ($fh) {
@@ -4318,6 +4314,33 @@ class Tinebase_FileSystem implements
         unset($raii);
 
         return $result;
+    }
+
+    /**
+     * add avscan note to tree nodes and update lastavscan_time & is_quarantined
+     *
+     * @param string $hash
+     * @param string $scanResult
+     * @return void
+     */
+    protected function _updateAvScanOfFileHash(string $hash, string $scanResult)
+    {
+        $this->_fileObjectBackend->updateRevisionByHash($hash, [
+            'lastavscan_time' => Tinebase_DateTime::now()->toString(),
+            'is_quarantined' =>
+                Tinebase_FileSystem_AVScan_Result::RESULT_FOUND === $scanResult ? 1 : 0,
+        ]);
+
+        foreach ($this->_fileObjectBackend->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_Tree_FileObject::class,
+            [[
+                'field' => 'hash',
+                'operator' => 'equals',
+                'value' => $hash
+            ]]
+            ))->getArrayOfIds() as $fileObjectId) {
+            $this->_fileObjectBackend->addNotesToTreeNodes($fileObjectId, Tinebase_Model_Note::SYSTEM_NOTE_AVSCAN);
+        }
     }
 
     /**
