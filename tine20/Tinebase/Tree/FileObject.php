@@ -416,24 +416,31 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                     }
                 }
             }
-            // add notes to tree_nodes!
-            foreach (Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->getObjectUsage($newRecord->getId()) as
-                    $node) {
-                
-                if (isset($diff->diff['lastavscan_time']) && ! empty($diff->diff['lastavscan_time'])) {
-                    $noteType = Tinebase_Model_Note::SYSTEM_NOTE_AVSCAN;
-                } else {
-                    $noteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED;
-                }
-                
-                Tinebase_Notes::getInstance()->addSystemNote($node, Tinebase_Core::getUser(),
-                    $noteType, $currentMods, 'Sql', 'Tinebase_Model_Tree_Node');
-            }
+            $this->addNotesToTreeNodes($newRecord->getId(),
+                isset($diff->diff['lastavscan_time']) && ! empty($diff->diff['lastavscan_time'])
+                    ? Tinebase_Model_Note::SYSTEM_NOTE_AVSCAN
+                    : Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED,
+                $currentMods
+            );
         }
 
         Tinebase_Model_Tree_FileObject::setReplicable($oldIsReplicable);
 
         return $newRecord;
+    }
+
+    public function addNotesToTreeNodes($fileObjectId, $noteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $mods = null)
+    {
+        foreach (Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->getObjectUsage($fileObjectId) as
+                 $node) {
+
+            Tinebase_Notes::getInstance()->addSystemNote($node,
+                Tinebase_Core::getUser(),
+                $noteType,
+                $mods,
+                'Sql',
+                'Tinebase_Model_Tree_Node');
+        }
     }
 
     /**
