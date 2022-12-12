@@ -369,15 +369,15 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
     /**
      * @param Felamimail_Model_Account $_record
-     * @throws Tinebase_Exception_UnexpectedValue
+     * @throws Tinebase_Exception_SystemGeneric
      */
-    protected function _createUserInternalEmailUserCheckPreconditions($_record)
+    protected function _createUserInternalEmailUserCheckPreconditions(Felamimail_Model_Account $_record)
     {
         $translation = Tinebase_Translation::getTranslation($this->_applicationName);
 
         if (!Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
             // this leads to major problems otherwise ...
-            throw new Tinebase_Exception_UnexpectedValue(
+            throw new Tinebase_Exception_SystemGeneric(
                 $translation->_('userInternal accounts are only allowed with Tinebase_Config::EMAIL_USER_ID_IN_XPROPS'));
         }
         if (!$_record->email) {
@@ -393,7 +393,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
         $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
         if ($user->accountEmailAddress === $_record->email) {
-            throw new Tinebase_Exception_UnexpectedValue(
+            throw new Tinebase_Exception_SystemGeneric(
                 $translation->_('Please choose a new email address for userInternal accounts'));
         }
     }
