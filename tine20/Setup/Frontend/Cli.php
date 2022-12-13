@@ -134,6 +134,8 @@ class Setup_Frontend_Cli
             $this->_restore($_opts);
         } elseif(isset($_opts->compare)) {
             $this->_compare($_opts);
+        } elseif(isset($_opts->mysql)) {
+            $this->_mysqlClient($_opts);
         } elseif(isset($_opts->setpassword)) {
             $this->_setPassword($_opts);
         } elseif(isset($_opts->pgsqlMigration)) {
@@ -1496,5 +1498,57 @@ class Setup_Frontend_Cli
         if (is_array($result)) {
             echo "Auth token created: " . print_r($result, true) . PHP_EOL;
         }
+    }
+
+    /**
+     * allows to call the mysql-client with the configured db params
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return int
+     *
+     * TODO add more platforms?
+     * TODO use .my.cnf file? needs to be deleted afterwards (like in backup/restore)
+     * TODO use better process control library? i.e. https://symfony.com/doc/current/components/process.html
+     */
+    protected function _mysqlClient(Zend_Console_Getopt $_opts)
+    {
+        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        if (! empty($options['platform'])) {
+            switch ($options['platform']) {
+                case 'docker': // maybe add "alpine"?
+                    // install mysql client if not available
+                    system('apk add mysql-client');
+            }
+        }
+
+        $dbConf = Tinebase_Core::getConfig()->database;
+        $command ='mysql -h ' . $dbConf->host . ' -p' . $dbConf->password . ' -u ' . $dbConf->username
+            . ' ' . $dbConf->dbname;
+        $descriptorspec = [
+            0 => array("pty"),
+            1 => array("pty"),
+            2 => array("pty")
+        ];
+        $process = proc_open($command, $descriptorspec, $pipes);
+
+        stream_set_blocking($pipes[1], 0);
+        stream_set_blocking($pipes[2], 0);
+        stream_set_blocking(STDIN,0);
+        do {
+            echo stream_get_contents($pipes[1]);
+            echo stream_get_contents($pipes[2]);
+            while ($in = fgets(STDIN)) {
+                fwrite($pipes[0], $in);
+                if ($in[0] === "\004") {
+                    // graceful exit (via EOT / CTRL-D)
+                    break 2;
+                }
+            }
+        } while(is_resource($process));
+
+        fclose($pipes[0]);
+        fclose($pipes[1]);
+        fclose($pipes[2]);
+        return proc_close($process);
     }
 }
