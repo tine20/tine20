@@ -77,6 +77,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'compare'                   => 'compare schemas with another database
                         Examples:
                            setup.php --compare -- otherdb=tine20other',
+                'mysql'                   => 'run mysql client
+                        Examples:
+                           setup.php --mysql -- platform=docker',
                 'setpassword'               => 'set system user password
                         Examples:
                            setup.php --setpassword -- username=myusername password=myrandompw',
@@ -126,6 +129,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->backup) &&
             empty($opts->restore) &&
             empty($opts->compare) &&
+            empty($opts->mysql) &&
             empty($opts->setpassword) &&
             empty($opts->getconfig) &&
             empty($opts->upgradeMysql564) &&
