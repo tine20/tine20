@@ -117,7 +117,7 @@
     "sinon": "^7.5.0",
     "style-loader": "^0.19.1",
     "terser-webpack-plugin": "^1.4.3",
-    "unminified-webpack-plugin": "github:tine20/unminified-webpack-plugin#pu/chunkloading-v4",
+    "unminified-webpack-plugin": "github:tine-groupware/unminified-webpack-plugin.git#eff4f1970dbf8251754eddc2b9ded647ba66f980",
     "url-loader": "^0.6.2",
     "vue-loader": "^15.9.2",
     "vue-simple-spinner": "^1.2.10",
