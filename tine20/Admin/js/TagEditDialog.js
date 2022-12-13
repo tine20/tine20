@@ -223,7 +223,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     fieldLabel: this.translation.gettext('Tag Name'), 
                     name: 'name',
                     allowBlank: false,
-                    maxLength: 40
+                    maxLength: 255
                 }, {
                     xtype: 'colorfield',
                     columnWidth: 0.2,
