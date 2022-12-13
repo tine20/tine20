@@ -1,9 +1,15 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
-const TerserPlugin = require('terser-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = merge(common, {
     devtool: 'eval',
+    plugins: [
+        new webpack.DefinePlugin({
+            BUILD_TYPE: "'DEVELOPMENT'"
+        })
+    ],
     devServer: {
         hot: true,
         inline: false,
