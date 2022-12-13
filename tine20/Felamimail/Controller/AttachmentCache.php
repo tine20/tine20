@@ -7,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -188,13 +188,23 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
      * @param string $_errorMessage
      * @param null $_oldRecord
      * @return bool
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
      */
     protected function _checkGrant($_record, $_action, $_throw = true, $_errorMessage = 'No Permission.', $_oldRecord = null)
     {
-        if ('update' === $_action) {
+        if (self::ACTION_UPDATE === $_action) {
             throw new Tinebase_Exception_AccessDenied(Felamimail_Model_AttachmentCache::class . ' may not be updated');
         }
-        $this->getSourceRecord($_record);
+        try {
+            $this->getSourceRecord($_record);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (self::ACTION_DELETE === $_action) {
+                // already removed - no problem
+            } else {
+                throw $tenf;
+            }
+        }
         return true;
     }
 
