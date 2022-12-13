@@ -165,7 +165,7 @@ const urlRenderer = function (url) {
     return '<a href=' + Tine.Tinebase.EncodingHelper.encode(url, 'href') + ' target="_blank">' + Tine.Tinebase.EncodingHelper.encode(url, 'shorttext') + '</a>';
 };
 
-Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'url', Tine.Addressbook.urlRenderer, 'displayPanel');
+Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'url', urlRenderer, 'displayPanel');
 
 const avatarRenderer = function(n_short, metadata, record) {
     const fullName = record ? record.get('n_fileas') : n_short;
