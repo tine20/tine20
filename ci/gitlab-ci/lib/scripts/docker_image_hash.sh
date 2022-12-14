@@ -72,7 +72,7 @@ _jsdependency_image_hash() {
 
 _test_dependency_image_hash() {
     cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
-    local fh=$(file_hashes ci/dockerimage/test-dependency.Dockerfile ci/dockerimage/supervisor.d/webpack.ini etc phpstan.neon phpstan-baseline.neon);
+    local fh=$(file_hashes ci/dockerimage/test-dependency.Dockerfile etc phpstan.neon phpstan-baseline.neon);
 
     echo $fh $TINE20ROOT $(_dependency_image_hash) | sha256sum | head -c 32;
 }

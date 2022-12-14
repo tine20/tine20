@@ -15,7 +15,6 @@ echo $0 copying ...
 #cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/php-fpm.ini /etc/supervisor.d/;
 #cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/tail.ini /etc/supervisor.d/;
 #cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/crond.ini /etc/supervisor.d/;
-cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/;
 #cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/scripts/* /usr/local/bin/;
 cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/phpstan.neon ${TINE20ROOT}/phpstan.neon;
 cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/phpstan-baseline.neon ${TINE20ROOT}/phpstan-baseline.neon;
