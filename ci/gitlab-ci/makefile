@@ -16,7 +16,7 @@ lib.yml: $(scripts_sources) $(entry_points_sources) makefile
 	printf "  entry_points:\n" >> lib.yml;
 	for f in $(entry_points_sources); do  \
 		printf "    $$(basename $$f .sh):\n" >> lib.yml; \
-		printf "      - bash\n" >> lib.yml; \
+		printf "      - $$(grep '^#!' $$f | cut -c3-)\n" >> lib.yml; \
 		printf "      - -c\n" >> lib.yml; \
 		printf "      - |\n" >> lib.yml; \
 		printf "        # $$f\n" >> lib.yml; \

@@ -261,29 +261,6 @@
     <target name="prepared-build-module" description="build single module">
         <echo msg="Building ${name}" />
 
-        <!-- ensure npm -->
-        <if>
-            <available file="${project.basedir}/${name}/js/package.json"/>
-            <then>
-                <echo message="Starting npm..." />
-                <exec command="npm install --no-optional" dir="${project.basedir}/${name}/js" passthru="true" />
-            </then>
-        </if>
-
-        <!-- do webpack build -->
-        <if>
-            <available file="${project.basedir}/${name}/js/webpack.prod.js"/>
-            <then>
-                <echo message="Starting webpack build..." />
-                <exec command="BUILD_DATE=${buildDate} BUILD_REVISION=${buildRevision} node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --progress --config webpack.prod.js --env.builddir ${builddir}/${name}/js" dir="${project.basedir}/${name}/js" passthru="true" />
-                <fail message="Build failed ... webpack-assets-FAT.json not found">
-                    <condition>
-                        <not><available file="${project.basedir}/${name}/js/webpack-assets-FAT.json"/></not>
-                    </condition>
-                </fail>
-            </then>
-        </if>
-
         <echo message="[Translations] Checking js dir ${project.basedir}/${name}/js ..." />
         <if>
             <available file="${project.basedir}/${name}/js" type="dir" property="has_jsdir"/>

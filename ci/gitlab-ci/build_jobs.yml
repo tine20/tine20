@@ -16,9 +16,9 @@ docker_build_source:
     - !reference [.lib, script]
     - git_repo_clone
     - docker_build_image base $(docker_image_hash base)
-    - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)";
+    - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)"
     - docker_build_image dependency $(docker_image_hash dependency)
-    - export DEPENDENCY_IMAGE="${REGISTRY}/dependency:$(docker_image_hash dependency)";
+    - export DEPENDENCY_IMAGE="${REGISTRY}/dependency:$(docker_image_hash dependency)"
     - |
       echo "${REUSE_IMAGES}"
       if [ "${REUSE_IMAGES}" == true ]; then
@@ -210,7 +210,11 @@ docker_build_built:
   stage: build2
   script:
     - !reference [.lib, script]
-    - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)";
+    - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)"
+    - export DEPENDENCY_IMAGE="${REGISTRY}/dependency:$(docker_image_hash dependency)"
+    - docker_build_image jsdependency $(docker_image_hash jsdependency)
+    - export JSDEPENDENCY_IMAGE="${REGISTRY}/jsdependency:$(docker_image_hash jsdependency)"
+    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh jsbuild
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh build
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh built
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh test-built
