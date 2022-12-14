@@ -42,7 +42,7 @@ function buildLangStats()
     echo "done"
 }
 
-function buildClient()
+function buildTranslations()
 {
     cd ${TINE20ROOT}/tine20/ && ls vendor/bin && vendor/bin/phing build
 }
@@ -54,7 +54,6 @@ function removeComposerDevDependencies() {
 function cleanup() {
     cleanupTinebase
     cleanupCss
-    cleanupJs
     cleanupFiles
 }
 
@@ -84,35 +83,14 @@ function cleanupJs() {
         if [ -d "${TINE20ROOT}/tine20/${FILE}/translations" ] || [ -d "${TINE20ROOT}/tine20/${FILE}/Setup" ]; then
             echo "+ ${FILE}"
             if [ -d "${TINE20ROOT}/tine20/${FILE}/js" ]; then
-                (cd ${TINE20ROOT}/tine20/$FILE/js;  rm -rf $(ls | grep -v "FAT" | grep -v "\-lang\-" | grep -v "empty\.js"  | grep -v "\.map" | grep -v "pollClient" | grep -v "Locale" | grep -v "ux" | grep -v "node_modules"))
-            fi
+                (cd ${TINE20ROOT}/tine20/$FILE/js;  rm -rf $(ls | grep -v "Locale" | grep -v "ux" | grep -v "pollClient"  | grep -v "plugin" | grep -v "empty\.js" ))
+            fi 
         fi
     done
 
     (cd ${TINE20ROOT}/tine20/Tinebase/js/ux/Printer; rm -rf $(ls | grep -v print.css))
     (cd ${TINE20ROOT}/tine20/Tinebase/js/ux/data; rm -rf $(ls | grep -v windowNameConnection))
     (cd ${TINE20ROOT}/tine20/Tinebase/js/ux;  rm -rf $(ls | grep -v Printer | grep -v data))
-}
-
-function cleanupJsWithAssetsJson()
-{
-    echo "cleanup js files in:"
-
-    for FILE in `ls "${TINE20ROOT}/tine20"`; do
-        # tine20 app needs translations OR Setup dir
-        if [ -d "${TINE20ROOT}/tine20/${FILE}/translations" ] || [ -d "${TINE20ROOT}/tine20/${FILE}/Setup" ]; then
-            echo "+ ${FILE}"
-            if [ -d "${TINE20ROOT}/tine20/${FILE}/js" ]; then
-                for JSFILE in `ls "${TINE20ROOT}/tine20/${FILE}/js/"`; do
-                    if [ "${FILE}/js/${JSFILE}" != "Tinebase/js/webpack-assets-FAT.json" ]; then
-                        if ! grep -q "\"${FILE}/js/${JSFILE}\"" "${TINE20ROOT}/tine20/Tinebase/js/webpack-assets-FAT.json"; then
-                            rm -rf "${TINE20ROOT}/tine20/${FILE}/js/${JSFILE}"
-                        fi
-                    fi
-                done
-            fi
-        fi
-    done
 }
 
 function cleanupFiles() {

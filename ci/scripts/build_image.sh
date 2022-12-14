@@ -13,6 +13,7 @@ MAJOR_CACHE_IMAGE="${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_
 # config via env
 export PHP_VERSION=${PHP_VERSION}
 export SOURCE_IMAGE="${REGISTRY}/source-commit:${IMAGE_TAG}"
+export JSBUILD_IMAGE="${REGISTRY}/jsbuild-commit:${IMAGE_TAG}"
 export BUILD_IMAGE="${REGISTRY}/build-commit:${IMAGE_TAG}"
 export BUILT_IMAGE="${REGISTRY}/build-commit:${IMAGE_TAG}"
 

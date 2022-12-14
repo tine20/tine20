@@ -19,7 +19,6 @@ FROM ${SOURCE_IMAGE} as source-copy
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM ${BUILT_IMAGE} as test-built
-ARG NPM_INSTALL_COMMAND="npm --no-optional install"
 ARG TINE20ROOT=/usr/share
 ARG ALPINE_PHP_PACKAGE=php7
 
@@ -40,7 +39,6 @@ RUN if [ "${ALPINE_PHP_PACKAGE}" == "php81" ]; then \
     else \
       apk add --no-cache composer; \
     fi
-RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/main/ npm=12.22.12-r0 nodejs=12.22.12-r0
 
 COPY etc /config
 
@@ -51,14 +49,9 @@ COPY --from=source-copy ${TINE20ROOT}/tine20/vendor ${TINE20ROOT}/tine20/vendor
 COPY --from=source-copy ${TINE20ROOT}/tine20/library/ExtJS/src/locale ${TINE20ROOT}/tine20/library/ExtJS/src/locale
 COPY --from=source-copy ${TINE20ROOT}/tine20/composer.json ${TINE20ROOT}/tine20/composer.json
 COPY --from=source-copy ${TINE20ROOT}/tine20/composer.lock ${TINE20ROOT}/tine20/composer.lock
-COPY --from=source-copy ${TINE20ROOT}/tine20/Tinebase/js/package.json ${TINE20ROOT}/tine20/Tinebase/js/package.json
-COPY --from=source-copy ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json
-COPY --from=source-copy ${TINE20ROOT}/tine20/Tinebase/js/node_modules ${TINE20ROOT}/tine20/Tinebase/js/node_modules
 COPY --from=source-copy ${TINE20ROOT}/tine20/Tinebase/js/Locale/static ${TINE20ROOT}/tine20/Tinebase/js/Locale/static
 
 RUN if [ "COMPOSER_LOCK_REWRITE" == "true" ]; then \
         php ${TINE20ROOT}/scripts/packaging/composer/composerLockRewrite.php ${TINE20ROOT}/tine20/composer.lock satis.default.svc.cluster.local; \
     fi
 RUN cd ${TINE20ROOT}/tine20 && composer install --no-ansi --no-progress --no-suggest
-
-RUN cd ${TINE20ROOT}/tine20/Tinebase/js && ${NPM_INSTALL_COMMAND}
