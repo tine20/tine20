@@ -1876,7 +1876,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Use of external Nominatim Geocoding service is allowed.',
             'type'                  => 'bool',
             'clientRegistryInclude' => true,
-            'setByAdminModule'      => false,
+            'setByAdminModule'      => true,
             'setBySetupModule'      => true,
             'default'               => false,
         ],
@@ -1898,7 +1898,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Nominatim Service URL',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => true,
-            'setByAdminModule'      => false,
+            'setByAdminModule'      => true,
             'setBySetupModule'      => true,
             'default'               => 'https://nominatim.openstreetmap.org/',
         ],self::MAP_SERVICE_URL => [

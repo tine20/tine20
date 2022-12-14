@@ -249,11 +249,10 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
 
         $data = null;
         if (null === $fileConfigArray && null === $dbConfigArray) {
-            if ($default !== null) {
+            $data = $this->_getDefault($name);
+            if ($data === null && $default !== null) {
                 return $default;
             }
-
-            $data = $this->_getDefault($name);
         } else {
 
             if (null === $fileConfigArray) {

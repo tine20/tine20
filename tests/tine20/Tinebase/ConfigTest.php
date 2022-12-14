@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -271,9 +271,21 @@ class Tinebase_ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testBoolConfig()
     {
+        $this->assertEquals(false,
+            Tinebase_Config::getInstance()->get(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true),
+            'default "true" should not overwrite "false" config default value'
+        );
+
         Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
 
         $this->assertEquals(true, Tinebase_Config::getInstance()->{Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME});
+
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, false);
+
+        $this->assertEquals(false,
+            Tinebase_Config::getInstance()->get(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true),
+            'default "true" should not overwrite "false" config value'
+        );
     }
 
     /**
