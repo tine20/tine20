@@ -18,7 +18,6 @@ RUN apk add --update --no-cache --simulate git build-base ${ALPINE_PHP_PACKAGE}-
 RUN if [ "${ALPINE_PHP_PACKAGE}" != "php81" ]; then \
       apk add --no-cache --simulate composer | sha256sum >> /cachehash; \
     fi
-RUN apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/main/ npm=12.22.12-r0  nodejs=12.22.12-r0 | sha256sum >> /cachehash
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM ${BASE_IMAGE} as dev
@@ -43,4 +42,3 @@ RUN if [ "${ALPINE_PHP_PACKAGE}" == "php81" ]; then \
     else \
       apk add --no-cache composer; \
     fi
-RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/main/ npm=12.22.12-r0  nodejs=12.22.12-r0
