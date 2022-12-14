@@ -151,10 +151,19 @@ php-unit-servertests-source:
     - if: $PHP_UNIT_ALL_TESTS_LDAP_SOURCE == "false"
       when: never
     - if: $PHP_UNIT_ALL_TESTS_LDAP_SOURCE== "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_LDAP_SOURCE_MERGE_REQUEST == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_LDAP_SOURCE_MERGE_REQUEST != "false"
       changes:
         paths:
-          - "**/*.php"
+          - "tests/tine20/Tinebase/UserTest.php"
+          - "tests/tine20/Tinebase/User/*.php"
+          - "tests/tine20/Tinebase/Group/*.php"
+          - "tests/tine20/Admin/Import/UserTest.php"
+          - "tests/tine20/Admin/Import/GroupTest.php"
+          - "tine20/Tinebase/User.php"
+          - "tine20/Tinebase/User/*.php"
+          - "tine20/Tinebase/User/LdapPlugin/*.php"
+          - "tine20/Tinebase/Group/*.php"
+          - "tine20/Tinebase/Group/LdapPlugin/*.php"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-ldap-source/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_LDAP_SOURCE_SCHEDULE != "false"
 phpunit-all-tests-ldap-source-sequential:
