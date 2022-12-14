@@ -1029,7 +1029,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             : array();
 
         // @todo do this for all apps at once (see import definitions)
-        $exportDefinitions = Tinebase_ImportExportDefinition::getInstance()->getExportDefinitionsForApplication($application);
+        try {
+            $exportDefinitions = Tinebase_ImportExportDefinition::getInstance()->getExportDefinitionsForApplication($application);
+        } catch (Tinebase_Exception_Backend $teb) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Do not add import/export definition registry data. Exception: ' . $teb);
+            $exportDefinitions = new Tinebase_Record_RecordSet(Tinebase_Model_ImportExportDefinition::class);
+        }
         $definitionConverter = new Tinebase_Convert_ImportExportDefinition_Json();
         $appRegistry['exportDefinitions'] = array(
             'results'               => $definitionConverter->fromTine20RecordSet($exportDefinitions),
