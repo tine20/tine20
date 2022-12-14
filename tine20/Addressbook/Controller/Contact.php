@@ -58,12 +58,11 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             array('n_given', 'n_family', 'org_name'),
             array('email'),
         ));
-
         
         // fields used for private and company address
         $this->_addressFields = array('locality', 'postalcode', 'street', 'countryname');
         
-        $this->_setGeoDataForContacts = Tinebase_Config::getInstance()->get(Tinebase_Config::USE_NOMINATIM_SERVICE, TRUE);
+        $this->_setGeoDataForContacts = Tinebase_Config::getInstance()->get(Tinebase_Config::USE_NOMINATIM_SERVICE);
         if (! $this->_setGeoDataForContacts) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Geolocation service disabled with config option.');
