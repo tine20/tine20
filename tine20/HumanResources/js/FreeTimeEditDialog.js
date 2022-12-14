@@ -348,6 +348,17 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     return Tine.HumanResources.getFeastAndFreeDays(employeeId, year, freeTimeId, accountId);
                 }
             })
+            .catch(()  => {
+                // all days are excludeDays if request failed (e.g. contract end)
+                const startDate = new Date(year, 0, 1);
+                return { results:  {
+                    excludeDates: _.times(startDate.isLeapYear() ? 366 : 365, (n) => {
+                        return {
+                            date: startDate.add(Date.DAY, n).format('Y-m-d H:i:s.000000')
+                        }
+                    })
+                }};
+            })
             .then((response) => {
                 const feastAndFreeDays = response.results;
                 Tine.HumanResources.Model.FreeTime.prepareFeastAndFreeDays(feastAndFreeDays);
