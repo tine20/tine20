@@ -66,8 +66,14 @@ phpstan-analysis:
       allow_failure: false
     - if: $PHPSTAN_ANALYSES == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHPSTAN_ANALYSES_MERGE_REQUEST != "false" && $PHPSTAN_ANALYSES_STRICT == "true"
+      changes:
+        paths:
+          - "**/*.php"
       allow_failure: false
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHPSTAN_ANALYSES_MERGE_REQUEST != "false"
+      changes:
+        paths:
+          - "**/*.php"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /phpstan-analysis/ && $PHPSTAN_ANALYSES_STRICT == "true"
       allow_failure: false
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /phpstan-analysis/
@@ -101,8 +107,14 @@ parallel-lint-analysis:
       allow_failure: false
     - if: $PARALLEL_LINT_ANALYSIS == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PARALLEL_LINT_ANALYSIS_MERGE_REQUEST != "false" && $PARALLEL_LINT_ANALYSIS_STRICT == "true"
+      changes:
+        paths:
+          - "**/*.php"
       allow_failure: false
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PARALLEL_LINT_ANALYSIS_MERGE_REQUEST != "false"
+      changes:
+        paths:
+          - "**/*.php"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /parallel-lint-analysis/ && $PARALLEL_LINT_ANALYSIS_STRICT == "true"
       allow_failure: false
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /parallel-lint-analysis/
