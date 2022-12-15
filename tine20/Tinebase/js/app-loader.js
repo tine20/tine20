@@ -60,12 +60,16 @@ module.exports = function() {
     runtime += 'var _ = window.lodash,\n';
     runtime += '     availableApps = ' + JSON.stringify(initialAppFileMap, null, 2) + ',\n';
     runtime += '     appResolves = {},\n';
+    runtime += '     appRejects = {},\n';
     runtime += '     appLoadedPromises = {};\n';
+    runtime += '     appLoadedStates = {};\n';
     runtime += '\n';
     runtime += '_.each(availableApps, function(index,key) {\n';
     runtime += '  var appName = key.replace(/\\/.*$/, "");\n';
-    runtime += '  appLoadedPromises[appName] = new Promise(function(resolve) {\n';
+    runtime += '  appLoadedStates[appName] = "pending";\n';
+    runtime += '  appLoadedPromises[appName] = new Promise(function(resolve, reject) {\n';
     runtime += '    appResolves[appName] = resolve;\n';
+    runtime += '    appRejects[appName] = reject;\n';
     runtime += '  });\n';
     runtime += '});\n';
     runtime += '\n';
@@ -84,7 +88,11 @@ module.exports = function() {
         runtime += '          /* webpackChunkName: "' + key + '" */\n';
         runtime += '          "' + index + '"\n';
         runtime += '        )}).then(function() {\n';
+        runtime += '          appLoadedStates[appName] = "fulfilled";\n';
         runtime += '          appResolves[appName]();\n';
+        runtime += '        }).catch(function() {\n';
+        runtime += '          appLoadedStates[appName] = "rejected";\n';
+        runtime += '          appRejects[appName]();\n';
         runtime += '        });\n';
         runtime += '      }\n\n';
     });
@@ -93,6 +101,7 @@ module.exports = function() {
     runtime += "    }, Promise.resolve());\n";
     runtime += "    return pms;\n";
     runtime += "  },\n";
+    runtime += "  appLoadedStates: appLoadedStates,\n";
     runtime += "  appLoadedPromises: appLoadedPromises\n";
     runtime += "}\n";
 

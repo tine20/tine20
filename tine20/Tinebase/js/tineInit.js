@@ -1095,6 +1095,10 @@ Tine.Tinebase.tineInit = {
         // load initial js of user enabled apps
         // @TODO: move directly after login (login should return requested parts of registry)
         return Tine.__appLoader.loadAllApps(Tine.Tinebase.registry.get('userApplications')).then(function() {
+            const rejectedApps = _.reduce(Tine.__appLoader.appLoadedStates, (a,state,app) => {return a.concat(state === 'rejected' ? app : [])}, []);
+            if (rejectedApps.length) {
+                alert('Your installation in broken. ' + rejectedApps.join(' and ') + ' could not be loaded, please contact your administrator!');
+            }
             Tine.Tinebase.tineInit.initCustomJS();
             Tine.__onAllAppsLoadedResolve();
         });
