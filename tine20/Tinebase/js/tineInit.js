@@ -43,12 +43,12 @@ Ext.namespace('Tine');
  * @type {Object}
  */
 Tine.clientVersion = {};
-Tine.clientVersion.buildType        = BUILD_TYPE;
-Tine.clientVersion.buildDate        = BUILD_DATE;
-Tine.clientVersion.buildRevision    = BUILD_REVISION;
-Tine.clientVersion.codeName         = CODE_NAME;
-Tine.clientVersion.packageString    = PACKAGE_STRING;
-Tine.clientVersion.releaseTime      = RELEASE_TIME;
+Tine.clientVersion.buildType        = 'none';
+Tine.clientVersion.buildDate        = 'none';
+Tine.clientVersion.buildRevision    = 'none';
+Tine.clientVersion.codeName         = 'none';
+Tine.clientVersion.packageString    = 'none';
+Tine.clientVersion.releaseTime      = 'none';
 
 Tine.__appLoader = require('./app-loader!app-loader.js');
 Tine.__onAllAppsLoaded = new Promise( (resolve) => {
