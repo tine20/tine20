@@ -1,4 +1,3 @@
-#!/bin/bash
 if test "${ARG_COPY_SOURCE}" == "true"; then
     echo "copy src to container ...";
     apk add rsync;
@@ -53,8 +52,4 @@ fi;
 
 echo "%%%% tine supervisord start" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
 touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_ready_$CI_JOB_ID;
-
-#debug -> remove line 19 from test-source
-rm /etc/supervisor.d/webpack.ini
-
 supervisord --nodaemon
