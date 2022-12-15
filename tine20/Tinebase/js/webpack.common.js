@@ -13,14 +13,6 @@ var assetsPluginInstance = new AssetsPlugin({
 var VueLoaderPlugin = require('vue-loader/lib/plugin');
 var ChunkNamePlugin = require('./webpack.ChunkNamePlugin');
 
-var definePlugin = new webpack.DefinePlugin({
-    BUILD_DATE:     JSON.stringify(process.env.BUILD_DATE),
-    BUILD_REVISION: JSON.stringify(process.env.BUILD_REVISION),
-    CODE_NAME:      JSON.stringify(process.env.CODE_NAME),
-    PACKAGE_STRING: JSON.stringify(process.env.PACKAGE_STRING),
-    RELEASE_TIME:   JSON.stringify(process.env.RELEASE_TIME)
-});
-
 var baseDir  = path.resolve(__dirname , '../../'),
     entryPoints = {};
 
@@ -70,7 +62,6 @@ module.exports = {
         libraryTarget: "umd"
     },
     plugins: [
-        definePlugin,
         assetsPluginInstance,
         new VueLoaderPlugin(),
         new ChunkNamePlugin()

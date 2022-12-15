@@ -87,7 +87,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                 this.action_logout
             ];
             
-            if (String(Tine.Tinebase.registry.get("version").buildType).match(/(DEVELOPMENT|DEBUG)/)) {
+            if (Tine.Tinebase.registry.get("version").buildType.match(/(DEVELOPMENT|DEBUG)/)) {
                 this.mainActions.splice(2, 0, '-', this.action_showDebugConsole);
             }
         }
