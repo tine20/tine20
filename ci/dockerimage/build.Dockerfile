@@ -15,9 +15,6 @@
 #   REVISION=local -
 
 ARG SOURCE_IMAGE=source
-ARG JSBUILD_IMAGE=jsbuild
-
-FROM ${JSBUILD_IMAGE} as jsbuild-copy
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM ${SOURCE_IMAGE} as build
@@ -32,9 +29,7 @@ COPY ci/dockerimage/build/cacert20150305.pem ${TINE20ROOT}/tine20/Tinebase/Licen
 
 RUN bash -c "source /build_script.sh && activateReleaseMode"
 RUN bash -c "source /build_script.sh && buildLangStats"
-RUN bash -c "source /build_script.sh && cleanupJs"
-COPY --from=jsbuild-copy /out/ ${TINE20ROOT}/
-RUN bash -c "source /build_script.sh && buildTranslations"
+RUN bash -c "source /build_script.sh && buildClient"
 RUN bash -c "source /build_script.sh && removeComposerDevDependencies"
 RUN bash -c "source /build_script.sh && cleanup"
 RUN bash -c "source /build_script.sh && moveCustomapps"

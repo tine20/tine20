@@ -58,21 +58,14 @@ _base_image_hash() {
 
 _dependency_image_hash() {
     cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
-    local fh=$(file_hashes ci/dockerimage/dependency.Dockerfile tine20/library tine20/composer.json tine20/composer.lock scripts/packaging/composer/composerLockRewrite.php);
+    local fh=$(file_hashes ci/dockerimage/dependency.Dockerfile tine20/library tine20/composer.json tine20/composer.lock tine20/Tinebase/js/package.json tine20/Tinebase/js/npm-shrinkwrap.json scripts/packaging/composer/composerLockRewrite.php);
 
     echo $fh $TINE20ROOT $(_base_image_hash) | sha256sum | head -c 32;
 }
 
-_jsdependency_image_hash() {
-    cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
-    local fh=$(file_hashes ci/dockerimage/jsdependency.Dockerfile tine20/Tinebase/js/package.json tine20/Tinebase/js/npm-shrinkwrap.json);
-
-    echo $fh $TINE20ROOT | sha256sum | head -c 32;
-}
-
 _test_dependency_image_hash() {
     cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
-    local fh=$(file_hashes ci/dockerimage/test-dependency.Dockerfile etc phpstan.neon phpstan-baseline.neon);
+    local fh=$(file_hashes ci/dockerimage/test-dependency.Dockerfile ci/dockerimage/supervisor.d/webpack.ini etc phpstan.neon phpstan-baseline.neon);
 
     echo $fh $TINE20ROOT $(_dependency_image_hash) | sha256sum | head -c 32;
 }
@@ -85,9 +78,6 @@ docker_image_hash() {
         dependency)
             _dependency_image_hash;
             ;;
-        jsdependency)
-            _jsdependency_image_hash;
-            ;;  
         test-dependency)
             _test_dependency_image_hash;
             ;;

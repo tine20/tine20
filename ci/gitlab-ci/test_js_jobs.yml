@@ -25,12 +25,6 @@
     - !reference [.lib-services, db_service]
     - !reference [.lib-services, redis_service]
     - !reference [.lib-services, mail_service]
-    - name: node:12.22-alpine
-      alias: webpack
-      entrypoint:
-        - /bin/sh
-        - -c
-        - 'apk add git; echo "wait for mount"; date; while [ ! -f /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_as_service.env ]; do echo "Waiting for tine20..."; sleep 1; done; sleep 10; echo "tine20 dir available";  npm --prefix ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20/Tinebase/js/ install; npm --prefix ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20/Tinebase/js/ start'
     - name: ${REGISTRY}/${ARG_IMAGE}-commit:${IMAGE_TAG}
       alias: tine
       entrypoint:
@@ -52,7 +46,12 @@
     - echo "%%%% ready to start with tests" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
   script:
     - env
-    - export TEST_URL=http://tine:10443;
+    - |
+      if [ "${TINE20_BUILDTYPE}" == "DEVELOPMENT" ]; then
+        export TEST_URL=http://tine:10443;
+      else
+        export TEST_URL=http://tine:80;
+      fi
     - while ! wget $TEST_URL; do sleep 1; done
     - echo TEST_URL=${TEST_URL}
     - export TEST_ENVIROMENT=""
