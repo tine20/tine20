@@ -813,6 +813,7 @@ var menu = new Ext.menu.Menu({
         }
         if(!this.enableKeyEvents){
             this.mon(this.el, 'keyup', this.onKeyUp, this);
+            this.mon(this.el, 'paste', this.onKeyUp, this);
         }
     },
 
