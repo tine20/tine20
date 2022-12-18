@@ -451,8 +451,12 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      */
     protected function _toTine20ModelParseBday(&$data, \Sabre\VObject\Property $property)
     {
+        $value = $property->getValue();
+        if (preg_match('/^([0-9]{4})([0-9]{2})([0-9]{2})$/', $value, $matches) == 1) {
+            $value = "$matches[1]-$matches[2]-$matches[3]";
+        }
         $tzone = new DateTimeZone(Tinebase_Core::getUserTimezone());
-        $data['bday'] = new Tinebase_DateTime($property->getValue(), $tzone);
+        $data['bday'] = new Tinebase_DateTime($value, $tzone);
         $data['bday']->setTimezone(new DateTimeZone('UTC'));
     }
     
