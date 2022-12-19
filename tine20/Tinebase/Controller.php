@@ -1087,6 +1087,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 self::class, 'publicPostAuthPAMvalidate', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
+
+            $routeCollector->get('/metrics', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Controller::class, 'getStatusMetrics', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
         });
 
         $r->addGroup('/Tinebase', function (\FastRoute\RouteCollector $routeCollector) {
@@ -1240,6 +1245,45 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $data = [
             'actionqueue' => Tinebase_ActionQueue::getStatus(),
         ];
+        $response = new \Laminas\Diactoros\Response\JsonResponse($data);
+        return $response;
+    }
+
+    /**
+     * @return \Laminas\Diactoros\Response
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function getStatusMetrics($apiKey = null)
+    {
+        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::METRICS_API_KEY)) {
+            return new \Laminas\Diactoros\Response\EmptyResponse();
+        }
+
+        if ($apiKey !== Tinebase_Config::getInstance()->get(Tinebase_Config::METRICS_API_KEY, false)) {
+            throw new Tinebase_Exception_AccessDenied('Not authorized. Invalid metrics API Key.');
+        }
+
+        $userId = Tinebase_Core::getUser()->getId();
+        $adminJson = new Admin_Frontend_Json();
+        $user = $adminJson->getuser($userId);
+
+        try {
+            $imapBackend = Tinebase_EmailUser::getInstance();
+            
+            if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
+                $imapUsageQuota = $imapBackend->getTotalUsageQuota();
+                $emailStorage = $imapUsageQuota['mailQuota'] * 1024 * 1024;
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+        }
+        
+        $data = [
+            'activeUsers' => Tinebase_User::getInstance()->getActiveUserCount(),
+            'fileStorage' => $user['effectiveAndLocalQuota']['effectiveUsage'] ?? null,
+            'emailStorage' => $emailStorage ?? null,
+            'quotas' => Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->toArray(),
+        ];
+        
         $response = new \Laminas\Diactoros\Response\JsonResponse($data);
         return $response;
     }
