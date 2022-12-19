@@ -1,0 +1,16 @@
+Return-Path: <name@example.com>
+Delivered-To: info@domain.de
+Received: from host.home.example.net ([unix socket])
+    by host.home.example.net (Cyrus v2.2.13-Debian-2.2.13-13ubuntu3) with LMTPA;
+    Fri, 16 Mar 2012 17:31:20 +0100
+Date: Wed, 3 Aug 2022 10:34:28 +0000 (GMT)
+From: <name@example.com>
+To: info@domain.de
+Message-ID: <1533738839.11179.1659522868125@pinnetremote>
+X-Tine20TestMessage: only_html_part.eml
+Subject: Local Gateway Notification
+MIME-Version: 1.0
+Content-Type: text/html; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+
+<b>Code:&nbsp;</b>10848255
