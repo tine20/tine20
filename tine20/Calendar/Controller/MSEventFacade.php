@@ -934,11 +934,17 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         if ($CUAttendee && !$isOrganizer) {
             $CUAttendee->transp = $_event->transp;
             $_event->transp = $_currentEvent->transp ? $_currentEvent->transp : $_event->transp;
+            if (empty($_event->transp)) {
+                // set default transparency if empty
+                $_event->transp = Calendar_Model_Event::TRANSP_OPAQUE;
+            }
         }
         
         // apply changes to original alarms
-        $_currentEvent->alarms  = $_currentEvent->alarms instanceof Tinebase_Record_RecordSet ? $_currentEvent->alarms : new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
-        $_event->alarms  = $_event->alarms instanceof Tinebase_Record_RecordSet ? $_event->alarms : new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        $_currentEvent->alarms  = $_currentEvent->alarms instanceof Tinebase_Record_RecordSet
+            ? $_currentEvent->alarms : new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        $_event->alarms  = $_event->alarms instanceof Tinebase_Record_RecordSet
+            ? $_event->alarms : new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
         
         foreach($_currentEvent->alarms as $currentAlarm) {
             if (Calendar_Model_Attender::isAlarmForAttendee($this->_calendarUser, $currentAlarm)) {
