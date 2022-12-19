@@ -89,9 +89,59 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
             if (isset($result['n_fn'])) {
                 $result['n_family'] = $result['n_fn'];
             }
-        } 
-        
+        }
+
+        $this->_addGDPRInformation($_data, $result);
+
         return $result;
+    }
+
+    /**
+     * adds gdpr information
+     *
+     * @param array $_data
+     * @param array $result
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_AreaLocked
+     * @throws Tinebase_Exception_Backend_Database
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     *
+     * TODO allow to define separator
+     */
+    protected function _addGDPRInformation(array $_data, array &$result)
+    {
+        if (! Tinebase_Application::getInstance()->isInstalled('GDPR', true)) {
+            return;
+        }
+
+        if (! empty($_data['gdpr_purpose'])) {
+            foreach (explode(';' ,$_data['gdpr_purpose']) as $purposeString) {
+                $purpose = GDPR_Controller_DataIntendedPurpose::getInstance()->getRecordByTitleProperty(
+                    trim($purposeString)
+                );
+                if ($purpose) {
+                    $agreeDate = $_data['gdpr_agree_date'] ?: Tinebase_DateTime::now();
+                    $result[GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME] = [
+                        new GDPR_Model_DataIntendedPurposeRecord([
+                            'intendedPurpose' => $purpose->getId(),
+                            'agreeDate' => $agreeDate,
+                        ], true)
+                    ];
+                }
+            }
+        }
+        if (! empty($_data['gdpr_provenance'])) {
+            foreach (explode(';' ,$_data['gdpr_provenance']) as $provenanceString) {
+                $provenance = GDPR_Controller_DataProvenance::getInstance()->getRecordByTitleProperty(
+                    trim($provenanceString)
+                );
+                if ($provenance) {
+                    $result[GDPR_Controller_DataProvenance::ADB_CONTACT_CUSTOM_FIELD_NAME] = $provenance->getId();
+                }
+            }
+        }
     }
 
     /**
