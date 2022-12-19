@@ -1977,7 +1977,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // touch base event of a recur series if an persistent exception changes
         if ($_record->recurid) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' touch base event of a persistent exception');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' touch base event of a persistent exception');
             $baseEvent = $this->getRecurBaseEvent($_record);
             $this->_touch($baseEvent, TRUE);
         }
@@ -1993,7 +1994,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         }
 
-        // baseevent with changed rrule -> validate exceptions
+        // base event with changed rrule -> validate exceptions
         if (empty($_record->recurid) && !empty($_record->rrule) && (string)$_record->rrule !== (string)$_oldRecord->rrule) {
             $this->_validateAndFixExdatesVsRrule($_record);
         }
@@ -2001,10 +2002,24 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         Calendar_Controller_Poll::getInstance()->inspectBeforeUpdateEvent($_record, $_oldRecord);
     }
 
-    protected function _updateGeoLocations(Calendar_Model_Event $_record)
+    /**
+     * @param Calendar_Model_Event $_record
+     * @return Calendar_Model_Event
+     */
+    protected function _updateGeoLocations(Calendar_Model_Event $_record): Calendar_Model_Event
     {
         if ($_record->location_record && is_string($_record->location_record)) {
-            $locationContact = Addressbook_Controller_Contact::getInstance()->get($_record->location_record);
+            try {
+                $locationContact = Addressbook_Controller_Contact::getInstance()->get($_record->location_record);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                return $_record;
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
+                return $_record;
+            }
 
             if ($locationContact->preferred_address == 0) {
                 $_record->adr_lon = $locationContact->adr_one_lon ?: null;
