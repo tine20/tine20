@@ -24,6 +24,17 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
      * @cfg {String} locationTypesEnabled list of enabled plugins
      */
     locationTypesEnabled: 'fm_node,local',
+    
+    /**
+     * @cfg {String} default location type
+     */
+    defaultLocationType: 'fm_node',
+    
+    /**
+     * @cfg {String} state suffix
+     * state suffix to customized selected path for different selection dialog
+     */
+    stateSuffix: 'default',
 
     /**
      * @cfg {Boolean} allowMultiple
@@ -109,14 +120,19 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
 
         this.window.setTitle(this.windowTitle);
         
-        this.stateId = 'widgets.file.SelectionDialog.defaultLocation';
+        this.stateId = `widgets.file.SelectionDialog.default-${this.mode}-${this.stateSuffix}-Location`;
+        const savedState = Ext.state.Manager.get(this.stateId);
+        
+        if (!savedState) {
+            this.saveState();
+        } else {
+            this.defaultLocationType = savedState?.defaultLocationType ?? this.defaultLocationType;
+            this.initialPath = savedState?.path ?? this.initialPath;
+        }
         
         Tine.Tinebase.widgets.file.SelectionDialog.superclass.initComponent.call(this);
-
-        this.defaultLocationType = _.indexOf(this.locationTypesEnabled, this.defaultLocationType) >= 0 ?
-            this.defaultLocationType : this.locationTypesEnabled[0];
     },
-
+    
     getEventData: function() {
         const fileList = this.activePlace.getFileList();
         
@@ -130,7 +146,14 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
         
         return this.allowMultiple ? fileList : _.get(fileList, '[0]');
     },
-
+    
+    applyState : function(state){
+        Tine.Tinebase.widgets.file.SelectionDialog.superclass.applyState.call(this, state);
+        
+        this.defaultLocationType = _.indexOf(this.locationTypesEnabled, this.defaultLocationType) >= 0 ?
+            this.defaultLocationType : this.locationTypesEnabled[0];
+    },
+    
     onButtonApply: async function() {
         if (await this.activePlace.validateSelection() === false) {
             return;
@@ -272,9 +295,11 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
     },
 
     getState: function () {
+        const selectedNode = this.activePlace?.pluginPanel?.treePanel?.getSelectionModel?.().getSelectedNode?.();
         return {
-            defaultLocationType: this.activePlace.locationType
-        };
+            defaultLocationType: this.activePlace?.locationType ?? this.defaultLocationType,
+            path: selectedNode?.attributes?.path ?? this.initialPath,
+        }
     },
 });
 
