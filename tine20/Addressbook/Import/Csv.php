@@ -117,29 +117,27 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
         }
 
         if (! empty($_data['gdpr_purpose'])) {
+            $purposes = [];
             foreach (explode(';' ,$_data['gdpr_purpose']) as $purposeString) {
                 $purpose = GDPR_Controller_DataIntendedPurpose::getInstance()->getRecordByTitleProperty(
                     trim($purposeString)
                 );
                 if ($purpose) {
                     $agreeDate = $_data['gdpr_agree_date'] ?: Tinebase_DateTime::now();
-                    $result[GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME] = [
-                        new GDPR_Model_DataIntendedPurposeRecord([
-                            'intendedPurpose' => $purpose->getId(),
-                            'agreeDate' => $agreeDate,
-                        ], true)
-                    ];
+                    $purposes[] = new GDPR_Model_DataIntendedPurposeRecord([
+                        'intendedPurpose' => $purpose->getId(),
+                        'agreeDate' => $agreeDate,
+                    ], true);
                 }
             }
+            $result[GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME] = $purposes;
         }
         if (! empty($_data['gdpr_provenance'])) {
-            foreach (explode(';' ,$_data['gdpr_provenance']) as $provenanceString) {
-                $provenance = GDPR_Controller_DataProvenance::getInstance()->getRecordByTitleProperty(
-                    trim($provenanceString)
-                );
-                if ($provenance) {
-                    $result[GDPR_Controller_DataProvenance::ADB_CONTACT_CUSTOM_FIELD_NAME] = $provenance->getId();
-                }
+            $provenance = GDPR_Controller_DataProvenance::getInstance()->getRecordByTitleProperty(
+                trim($_data['gdpr_provenance'])
+            );
+            if ($provenance) {
+                $result[GDPR_Controller_DataProvenance::ADB_CONTACT_CUSTOM_FIELD_NAME] = $provenance->getId();
             }
         }
     }
