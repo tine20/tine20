@@ -175,7 +175,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             'transp'      => [
                 self::TYPE          => self::TYPE_STRING,
                 self::LENGTH        => 40,
-                self::DEFAULT_VAL   => 'OPAQUE',
+                self::DEFAULT_VAL   => self::TRANSP_OPAQUE,
                 self::NULLABLE      => true,
                 self::VALIDATORS    => [
                     [Zend_Validate_InArray::class, [self::TRANSP_OPAQUE, self::TRANSP_TRANSP]],
