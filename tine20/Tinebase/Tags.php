@@ -1232,4 +1232,110 @@ class Tinebase_Tags
             $controller->doContainerACLChecks($containerChecks);
         }
     }
+
+    /**
+     * expects $tags with the following structure:
+     *
+     * $tags = [
+     *  [
+     *      'name' => 'Mitglied',
+     *      'description' => 'gehört zu einem Mitglied',
+     *      'color' => '#339966',
+     *      'config' => [
+     *          'appName' => 'APP'
+     *          'configkey' => APP::CONFIG, //string - if given, tag id is saved in this config
+     *       ],
+     *  ], [...]
+     * ]
+     *
+     * @param array $tags
+     * @param bool $randomizeColors
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @return Tinebase_Record_RecordSet
+     */
+    public function createSharedTags(array $tags, bool $randomizeColors = true): Tinebase_Record_RecordSet
+    {
+        $createdTags = new Tinebase_Record_RecordSet(Tinebase_Model_Tag::class);
+
+        foreach ($tags as $tag) {
+            if (is_scalar($tag)) {
+                $tag = [
+                    'name' => $tag,
+                    'description' => $tag,
+                ];
+            }
+
+            try {
+                Tinebase_Tags::getInstance()->getTagByName($tag['name']);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Tag already exists: ' . $tag['name']);
+                continue;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // go on ...
+            }
+
+            if (isset($tag['color'])) {
+                $color = $tag['color'];
+            } else {
+                $color = $randomizeColors ? '#' . Tinebase_Record_Abstract::generateUID(6) : '#339966';
+                // check for 'parent' tag
+                if (strpos($tag['name'], '/') !== false) {
+                    $path = explode('/', $tag['name']);
+                    try {
+                        $parent = Tinebase_Tags::getInstance()->getTagByName($path[0]);
+                        $color = $parent->color;
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                    }
+                }
+            }
+
+            $description  = substr((isset($tag['description']))
+                ? $tag['description']
+                : $tag['name'], 0, 50);
+            $sharedTag = new Tinebase_Model_Tag(array(
+                'type' => Tinebase_Model_Tag::TYPE_SHARED,
+                'name' => $tag['name'],
+                'description' => $description,
+                'color' => $color,
+                'system_tag' => $tag['system_tag'] ?? 0
+            ));
+
+            $savedSharedTag = $this->createTag($sharedTag);
+            $this->setContexts(array('any'), $savedSharedTag->getId());
+
+            $right = new Tinebase_Model_TagRight(array(
+                'tag_id' => $savedSharedTag->getId(),
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                'account_id' => 0,
+                'view_right' => true,
+                'use_right' => ! ($tag['system_tag'] ?? false),
+            ));
+            $this->setRights($right);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Created shared tag ' . $savedSharedTag->name);
+
+            if (isset($tag['config']) && isset($tag['config']['appName']) && isset($tag['config']['configkey'])) {
+                $appConfig = Tinebase_Config::getAppConfig($tag['config']['appName']);
+                if ($appConfig) {
+                    $appConfig->
+                    set(
+                        $tag['config']['configkey'],
+                        $savedSharedTag->getId()
+                    );
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' No config found for ' . $tag['config']['appName']);
+                }
+            }
+
+            $createdTags->addRecord($savedSharedTag);
+        }
+
+        return $createdTags;
+    }
 }
