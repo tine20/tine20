@@ -368,7 +368,7 @@ msgstr "Frau"
 #: js/ContactEditDialog.js:165 js/ContactGrid.js:218 js/Model.js:28
 #: js/Model.js:168
 msgid "Company"
-msgstr "Firma"
+msgstr "Firma / Organisation"
 
 #: Config.php:245
 msgid "Parsing rules for addresses"
