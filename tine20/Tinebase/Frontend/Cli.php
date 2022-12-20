@@ -2609,8 +2609,14 @@ fi';
             return 1;
         }
 
-
         $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
+
+        if (isset($args['apps'])) {
+            $apps = (array)$args['apps'];
+            $enabledApplications = $enabledApplications->filter(function(Tinebase_Model_Application $app) use($apps) {
+                return in_array($app->name, $apps);
+            });
+        }
 
         foreach ($enabledApplications as $application) {
             $app = Tinebase_Core::getApplicationInstance($application->name);
