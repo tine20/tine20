@@ -1680,16 +1680,77 @@ fi';
         return $result;
     }
 
+    public function undo(Zend_Console_Getopt $opts)
+    {
+        $this->_checkAdminRight();
+
+        $data = $this->_parseArgs($opts, array('iseqfrom', 'iseqto', 'accountid', 'models'));
+        $dryrun = (bool)$opts->d;
+        $overwrite = (bool)($data['overwrite'] ?? false);
+
+        $data['iseqfrom'] = intval($data['iseqfrom']);
+        $data['iseqto'] = intval($data['iseqto']);
+        if ($data['iseqto'] < $data['iseqfrom']) {
+            throw new Tinebase_Exception_UnexpectedValue('iseqto needs to be equal or greater than iseqfrom');
+        }
+        $data['accountid'] = explode(',', $data['accountid']);
+        $data['models'] = explode(',', $data['models']);
+        if (false !== ($key = array_search('fs', $data['models']))) {
+            unset($data['models'][$key]);
+            $data['models'][] = Tinebase_Model_Tree_Node::class;
+            $data['models'][] = Tinebase_Model_Tree_FileObject::class;
+        }
+
+        $filterData = [
+            ['field' => 'instance_seq', 'operator' => 'greater',    'value' => ($data['iseqfrom'] - 1)],
+            ['field' => 'instance_seq', 'operator' => 'less',       'value' => ($data['iseqto'] + 1)],
+        ];
+
+        if (['all'] !== $data['accountid']) {
+            $filterData[] = ['field' => 'modification_account', 'operator' => 'in', 'value' => $data['accountid']];
+        }
+        if (['all'] !== $data['models']) {
+            $filterData[] = ['field' => 'record_type', 'operator' => 'in', 'value' => $data['models']];
+        }
+
+        $filter = new Tinebase_Model_ModificationLogFilter($filterData);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->undo($filter, $overwrite, $dryrun);
+
+        if (! $dryrun) {
+            Setup_Controller::getInstance()->clearCache(false);
+            echo 'Reverted ' . $result['totalcount'] . " change(s)\n";
+        } else {
+            echo "Dry run\n";
+            echo 'Would revert ' . $result['totalcount'] . " change(s):\n";
+            foreach ($result['undoneModlogs'] as $modlog) {
+                if ($modlog->change_type === Tinebase_Timemachine_ModificationLog::CREATED) {
+                    echo 'id ' . $modlog->record_id . ' DELETE' . PHP_EOL;
+                } elseif ($modlog->change_type === Tinebase_Timemachine_ModificationLog::DELETED) {
+                    echo 'id ' . $modlog->record_id . ' UNDELETE' . PHP_EOL;
+                } else {
+                    $diff = new Tinebase_Record_Diff(json_decode($modlog->new_value));
+                    if (is_array($diff->diff)) {
+                        foreach ($diff->diff as $key => $val) {
+                            echo 'id ' . $modlog->record_id . ' [' . $key . ']: ' . $val . ' -> ' . $diff->oldData[$key] . PHP_EOL;
+                        }
+                    }
+                }
+            }
+        }
+        echo 'Failcount: ' . $result['failcount'] . "\n";
+        return 0;
+    }
+
     /**
      * undo changes to records defined by certain criteria (user, date, fields, ...)
      * 
-     * example: $ php tine20.php --username pschuele --method Tinebase.undo -d 
+     * example: $ php tine20.php --username pschuele --method Tinebase.undoDeprecated -d
      *   -- record_type=Addressbook_Model_Contact modification_time=2013-05-08 modification_account=3263
      * 
      * @param Zend_Console_Getopt $opts
      * @return integer
      */
-    public function undo(Zend_Console_Getopt $opts)
+    public function undoDeprecated(Zend_Console_Getopt $opts)
     {
         $this->_checkAdminRight();
         
