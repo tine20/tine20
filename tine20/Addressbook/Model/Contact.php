@@ -574,7 +574,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
-                self::LABEL                     => 'Company', // _('Company')
+                self::LABEL                     => 'Company / Organisation', // _('Company / Organisation')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::QUERY_FILTER              => true,
             ],
