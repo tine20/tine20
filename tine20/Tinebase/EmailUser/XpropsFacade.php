@@ -127,7 +127,7 @@ class Tinebase_EmailUser_XpropsFacade
                     __METHOD__ . '::' . __LINE__ . ' IMAP_USERID emtpy - using SMTP_USERID: ' . $userId);
             } else {
                 $userId = Tinebase_Record_Abstract::generateUID();
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                     __METHOD__ . '::' . __LINE__ . ' Created new user id: ' . $userId);
             }
         }
