@@ -205,17 +205,23 @@ Ext.ux.file.BrowsePlugin.prototype = {
         // easy cope with directories
         const fs = await require('html5-file-selector/src');
         const supportFileHandle = Tine.Tinebase.uploadManager.supportFileHandle;
-        const files = await fs.getDroppedOrSelectedFiles(e.browserEvent || e, supportFileHandle);
         
-        if (files) {
-            this.files = files;
-        } else {
-            if (e.dataTransfer) {
-                this.files = e.dataTransfer.files;
+        try {
+            const files = await fs.getDroppedOrSelectedFiles(e.browserEvent || e, supportFileHandle);
+            
+            if (files) {
+                this.files = files;
             } else {
-                this.files = e.target.files;
+                if (e.dataTransfer) {
+                    this.files = e.dataTransfer.files;
+                } else {
+                    this.files = e.target.files;
+                }
             }
+        } catch (e) {
+            console.error(e);
         }
+
         
         if (!_.isFunction(e.getTarget)) {
             // backwards compatibility
