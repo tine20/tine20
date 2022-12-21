@@ -755,7 +755,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     /**
      * sync grid with record
      * -> update store
-     * 
+     *
      * @param {Array} types
      * @param {Tine.Felamimail.Model.Message} record
      * @param {Boolean} setHeight
@@ -767,21 +767,22 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }
     
         record = record || this.record;
-    
-        _.each(types, (type) => {
-            const contacts = record.data[type];
-            _.each(contacts, (addressData) => {
-                this.store.add(new Ext.data.Record({type: type, 'address': addressData}));
-            })
+        
+        let contacts = [];
+        
+        types.forEach((type) => {
+            const data = record.data[type].map((addressData) => new Ext.data.Record({type: type, 'address': addressData}));
+            contacts = contacts.concat(data);
         });
-    
+        
+        this.store.add(contacts);
         this.store.sort('address');
     
         if (setHeight && setHeight === true) {
             this.setFixedHeight(true);
         }
-    
-        this.addEmptyRowAndDoLayout(true);
+        
+        this.addEmptyRowAndDoLayout(contacts.length === 0);
     },
 
     // save selected record for usage in onAfterEdit
@@ -973,7 +974,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      *
      * @param autoStartEdit
      */
-    addEmptyRowAndDoLayout: function(autoStartEdit = false) {
+    addEmptyRowAndDoLayout: function(autoStartEdit) {
         const record = this.activeEditor ? this.activeEditor.record : this.lastEditedRecord;
         const existingEmptyRecords = this.store.queryBy(function (record) {
             if (! record?.data?.address || record.data.address === '') {
