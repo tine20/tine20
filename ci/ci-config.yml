@@ -64,7 +64,7 @@ variables:
   # PHP_UNIT_ALL_TESTS_LDAP_BUILD_SCHEDULE: "false" # default is "true"
 
   PHPCS_ANALYSIS_STRICT: "true"
-  PARALLEL_LINT_ANALYSIS_STRICT: "false"
+  PARALLEL_LINT_ANALYSIS_STRICT: "true"
   PHPSTAN_ANALYSES_STRICT: "true"
   PHP_UNIT_ALL_TESTS_SOURCE_TYPE: "parallel" #parallel, sequential, matrix
   PHP_UNIT_TESTS_SOURCE_POSTFIXMULTIINSTANCE_TYPE: "parallel" #parallel, sequential
