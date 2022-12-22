@@ -373,12 +373,15 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * - pwlist=pws.csv -> creates csv file with the users and their new pws
      * - updateaccount=1 -> also updates user-accounts (for example to create user email accounts)
      *
-     * @param Zend_Console_Getopt $opts
-     * @return integer
-     *
      * @todo allow to define separator / mapping
+     *
+     * @param Zend_Console_Getopt $opts
+     * @return int
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
-    public function setPasswords(Zend_Console_Getopt $opts)
+    public function setPasswords(Zend_Console_Getopt $opts): int
     {
         $args = $this->_parseArgs($opts, array(), 'userlist_csv');
 
@@ -524,6 +527,74 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * set use pws from email backend (for example dovecot)
+     *
+     * usage: method=Admin.setPasswordsFromEmailBackend [-d]
+     *
+     * @param Zend_Console_Getopt $opts
+     * @return int
+     */
+    public function setPasswordsFromEmailBackend(Zend_Console_Getopt $opts): int
+    {
+        $systemAccountIds = $this->_getSystemMailaccountIds();
+        if (count($systemAccountIds) === 0) {
+            echo "No system accounts found\n";
+            return 0;
+        }
+
+        $emailUserBackend = Tinebase_EmailUser::getInstance();
+        if (! $emailUserBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
+            echo "PW copy only supported for Tinebase_EmailUser_Imap_Dovecot backend\n";
+            return 0;
+        }
+
+        if ($opts->d) {
+            echo "--DRY RUN-- ";
+        }
+        echo "Found " . count($systemAccountIds) . " system email accounts\n";
+        $accountsController = Admin_Controller_EmailAccount::getInstance();
+        $db = Tinebase_Core::getDb();
+        $updateCount = 0;
+        foreach ($systemAccountIds as $accountId) {
+            $account = $accountsController->get($accountId);
+            try {
+                $user = Tinebase_User::getInstance()->getFullUserById($account->user_id);
+
+                // copy pw from email backend
+                $systemEmailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user);
+                $userInBackend = $emailUserBackend->getRawUserById($systemEmailUser);
+                if ($opts->d) {
+                    echo "--DRY RUN-- copy pw of user " . $userInBackend['loginname'] . ": " . $userInBackend['password'] ."\n";
+                } else {
+                    $db->update(SQL_TABLE_PREFIX . 'accounts', [
+                        'password' => $userInBackend['password'],
+                    ], $db->quoteInto('id = ?', $account->user_id));
+                }
+                $updateCount++;
+
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // not found - ignore
+            }
+        }
+
+        if ($opts->d) {
+            echo "--DRY RUN-- ";
+        }
+        echo "Set password for " . $updateCount . " accounts\n";
+
+        return 0;
+    }
+
+    protected function _getSystemMailaccountIds()
+    {
+        $backend = Admin_Controller_EmailAccount::getInstance();
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+            ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_EmailUser_Model_Account::TYPE_SYSTEM]
+        ]);
+        return $backend->search($filter, null, false, true);
+    }
+
+    /**
      * enabled sieve_notification_move for all system accounts
      *
      * usage: method=Admin.enableAutoMoveNotificationsinSystemEmailAccounts [-d] -- [folder=Benachrichtigungen]
@@ -533,13 +604,8 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function enableAutoMoveNotificationsinSystemEmailAccounts(Zend_Console_Getopt $opts)
     {
-        $systemAccounts = Admin_Controller_EmailAccount::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Felamimail_Model_Account::class, [
-                ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SYSTEM]
-            ]
-        ));
-        if (count($systemAccounts) === 0) {
-            // nothing to do
+        $systemAccountIds = $this->_getSystemMailaccountIds();
+        if (count($systemAccountIds) === 0) {
             return 0;
         }
 
@@ -547,7 +613,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             echo "--DRY RUN--\n";
         }
 
-        echo "Found " . count($systemAccounts) . " system email accounts to check\n";
+        echo "Found " . count($systemAccountIds) . " system email accounts to check\n";
 
         $args = $this->_parseArgs($opts, array());
 
@@ -555,7 +621,8 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $translate = Tinebase_Translation::getTranslation('Felamimail');
         $folderName = isset($args['folder']) ? $args['folder'] : $translate->_('Notifications');
         $enabled = 0;
-        foreach ($systemAccounts as $account) {
+        foreach ($systemAccountIds as $accountId) {
+            $account = $accountsController->get($accountId);
             /* @var Felamimail_Model_Account $account */
             if ($account->sieve_notification_move !== Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_ACTIVE) {
                 if (! $opts->d) {
