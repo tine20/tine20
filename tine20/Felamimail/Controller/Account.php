@@ -406,7 +406,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     {
         $user = is_string($user) ? Tinebase_User::getInstance()->getFullUserById($user) : $user;
         $systemEmailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user);
-        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $emailUserBackend = Tinebase_EmailUser::getInstance();
 
         // make sure that system account exists before copy
         if (! $emailUserBackend->userExists($systemEmailUser)) {
