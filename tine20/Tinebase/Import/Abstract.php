@@ -924,26 +924,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 'name' => $name,
             );
             /** @var Tinebase_Model_Tag $tag */
-            $tag = $this->_createTag($tagData);
+            $tag = Tinebase_Tags::getInstance()->createSharedTags([$tagData])->getFirstRecord();
         }
         
         return $tag;
-    }
-
-    /**
-     * @param array $_tagData
-     * @return Tinebase_Record_Interface|NULL
-     * @throws Tinebase_Exception_AccessDenied
-     * @throws Tinebase_Exception_InvalidArgument
-     * @throws Tinebase_Exception_Record_DefinitionFailure
-     * @throws Tinebase_Exception_Record_NotAllowed
-     * @throws Tinebase_Exception_Record_Validation
-     *
-     * @todo only ignore acl for autotags that are present in import definition
-     */
-    protected function _createTag(array $_tagData): ?Tinebase_Record_Interface
-    {
-        return Tinebase_Tags::getInstance()->createSharedTags([$_tagData])->getFirstRecord();
     }
 
     /**

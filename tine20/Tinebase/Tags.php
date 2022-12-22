@@ -1259,6 +1259,9 @@ class Tinebase_Tags
      */
     public function createSharedTags(array $tags, bool $randomizeColors = true): Tinebase_Record_RecordSet
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Create shared tags: ' . print_r($tags, true));
+
         $createdTags = new Tinebase_Record_RecordSet(Tinebase_Model_Tag::class);
 
         foreach ($tags as $tag) {
@@ -1278,7 +1281,7 @@ class Tinebase_Tags
                 // go on ...
             }
 
-            if (isset($tag['color'])) {
+            if (isset($tag['color']) && ! empty($tag['color'])) {
                 $color = $tag['color'];
             } else {
                 $color = $randomizeColors ? '#' . Tinebase_Record_Abstract::generateUID(6) : '#339966';
@@ -1293,7 +1296,7 @@ class Tinebase_Tags
                 }
             }
 
-            $description  = substr((isset($tag['description']))
+            $description = substr((isset($tag['description']))
                 ? $tag['description']
                 : $tag['name'], 0, 50);
             $sharedTag = new Tinebase_Model_Tag(array(
@@ -1301,7 +1304,7 @@ class Tinebase_Tags
                 'name' => $tag['name'],
                 'description' => $description,
                 'color' => $color,
-                'system_tag' => $tag['system_tag'] ?? 0
+                'system_tag' => (int) ($tag['system_tag'] ?? 0),
             ));
 
             $savedSharedTag = $this->createTag($sharedTag);
