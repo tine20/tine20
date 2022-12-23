@@ -2085,3 +2085,9 @@ msgstr "Kopie von gesendeter mail auf dem Mailserver speichern"
 
 msgid "Folder of the source mail if it is not your INBOX."
 msgstr "Ordner der Ursprungsmail wenn diese nicht ihre INBOX ist."
+
+msgid "Reveal Password?"
+msgstr "Passwort anzeigen?"
+
+msgid "You are about to reveal the password. This action will be logged. Proceed?"
+msgstr "Sie sind im Begriff, das Passwort anzeigen. Diese Aktion wird protokolliert. Wollen sie fortfahren?"

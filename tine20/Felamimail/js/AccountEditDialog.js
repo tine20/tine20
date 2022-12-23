@@ -167,6 +167,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'password':
                     this.disablePasswordField(item);
                     break;
+                case 'revealpwd':
+                    item.setDisabled(false);
+                    break;
                 case 'user':
                     disabled = ! this.hasEditAccountRight || !(
                         !this.record.get('type')
@@ -343,7 +346,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             maxLength: 256,
             columnWidth: 1
         };
-
+        
         return {
             xtype: 'tabpanel',
             name: 'accountEditPanel',
@@ -510,9 +513,28 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }], [{
                     fieldLabel: this.app.i18n._('Password'),
                     name: 'password',
+                    record: this.record,
                     emptyText: 'password',
                     xtype: 'tw-passwordTriggerField',
                     clipboard: false,
+                    revealPasswordFn: async () => {
+                        return new Promise((fulfill, reject) => {
+                            if (this.record.id === 0) {
+                                return reject('none existing account');
+                            }
+                            
+                            Ext.Msg.confirm(this.app.i18n._('Reveal Password?'),
+                                this.app.i18n._('You are about to reveal the password. This action will be logged. Proceed?'),
+                                async (button) => {
+                                    if (button === 'yes') {
+                                        const result = await Tine.Admin.revealEmailAccountPassword(this.record.id);
+                                        fulfill(result['password']);
+                                    } else {
+                                        reject('canceled');
+                                    }
+                                });
+                        });
+                    },
                     listeners: {
                         scope: this,
                         keyup: (field)=> {
@@ -522,9 +544,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }
                         }
                     },
-                    checkState: function() {
-                        me.disablePasswordField(me.getForm().findField('password'));
-                    }
                 }], [
                 this.imapButton = new Ext.Button({
                     text: this.app.i18n._('Test IMAP Connection'),
