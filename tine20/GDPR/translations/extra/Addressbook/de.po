@@ -1,0 +1,30 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - GDPR\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2019-01-24 12:28+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 2.2.1\n"
+
+#: js/Addressbook/Model.js:13 js/Addressbook/Model.js:39
+msgid "GDPR Intended Purpose"
+msgstr "DSGVO Verwendungszweck"
+
+#: js/Addressbook/Model.js:17 js/Addressbook/Model.js:47
+msgid "GDPR Blacklisted"
+msgstr "DSGVO Sperrliste"
+
+#: js/Addressbook/Model.js:21
+msgid "GDPR Data Provenance"
+msgstr "DSGVO Datenherkunft"
+
+#: js/Addressbook/Model.js:25
+msgid "GDPR Data Editing Reason"
+msgstr "DSGVO Bearbeitungsgrund"
