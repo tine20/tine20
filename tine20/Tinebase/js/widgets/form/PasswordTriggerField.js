@@ -37,6 +37,9 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
     
     itemCls: 'tw-passwordTriggerField',
     enableKeyEvents: true,
+    
+    revealPasswordFn: null,
+    record: null,
 
     initComponent: function() {
         // NOTE: we need to have this in the instance - otherwise we'd overwrite the prototype
@@ -63,6 +66,9 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
             });
             
             this.getValue = () => {
+                if (this.revealedPassword && this.value === this.revealedPassword) {
+                    this.value = '';
+                }
                 return this.locked ? this.value || ''
                     : Tine.Tinebase.widgets.form.PasswordTriggerField.superclass.getValue.call(this);
             };
@@ -70,7 +76,7 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
             this.setValue = (value) => {
                 this.value = value;
                 this.afterIsRendered().then(() => {
-                    this.setRawValue(this.locked ? this.hiddenPasswordChr.repeat(this.value.length) : this.value);
+                    this.setRawValue(this.locked ? this.hiddenPasswordChr.repeat(this.record?.id ? 8 : this.value.length) : this.value);
                 });
             }
         }
@@ -133,12 +139,21 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
         }
     },
 
-    onTrigger1Click: function () {
+    onTrigger1Click: async function () {
         this.triggers[0][(this.locked ? 'remove' : 'add') + 'Class']('locked');
         
         if (this.allowBrowserPasswordManager) {
             this.el.dom.type = this.locked ? 'text' : 'password';
         } else {
+            if (this.revealPasswordFn && this.locked && this.revealedPassword !== this.value) {
+                try {
+                    this.value = await this.revealPasswordFn();
+                    this.revealedPassword = this.value;
+                } catch (e) {
+                    
+                }
+            }
+        
             this.value = this.locked ? this.value : this.getRawValue();
             this.setRawValue(this.locked ? this.value : this.hiddenPasswordChr.repeat(this.value.length));
         }

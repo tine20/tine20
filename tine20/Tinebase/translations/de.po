@@ -5294,6 +5294,9 @@ msgstr "Geändert"
 msgid "Avscan"
 msgstr "Avscan"
 
+msgid "Reveal Password"
+msgstr "Passwort anzeigen"
+
 msgid "Files are still uploading."
 msgstr "Es werden gerade Dateien hochgeladen."
 
