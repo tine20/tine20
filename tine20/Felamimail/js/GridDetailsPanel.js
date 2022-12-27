@@ -78,7 +78,8 @@ Ext.ns('Tine.Felamimail');
     getSingleRecordPanel: function() {
         if (! this.singleRecordPanel) {
             this.singleRecordPanel = new Tine.Felamimail.MailDetailsPanel({
-                hasTopToolbar: false
+                hasTopToolbar: false,
+                grid: this.grid
             });
         }
         return this.singleRecordPanel;
