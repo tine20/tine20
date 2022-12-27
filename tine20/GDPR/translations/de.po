@@ -147,5 +147,8 @@ msgstr "Verwendungszwecke in Stammdaten verwalten"
 msgid "View, create, delete or update data intended purposes in CoreData application"
 msgstr "Anzeigen, anlegen, löschen und bearbeiten von Verwendungszwecken in der Stammdaten Anwendung"
 
+msgid "Expiry Date"
+msgstr "Ablaufdatum"
+
 #~ msgid "GDPR Data provenance"
 #~ msgstr "DSGVO Datenherkunft"
