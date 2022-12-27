@@ -122,6 +122,8 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             $oldWts = $_oldRecord->{HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME} ?: null;
             $this->_inspectWorkingTimeScheme($_record, $oldWts);
         }
+
+        $this->_checkDateOverlap($_record);
     }
 
     
@@ -184,41 +186,6 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             $_record->feast_calendar_id = $_record->feast_calendar_id['id'];
         }
     }
-
-    /**
-     * inspect creation of one record (after create)
-     *
-     * @param   Tinebase_Record_Interface $_createdRecord
-     * @param   Tinebase_Record_Interface $_record
-     * @return  void
-     *
-     * @todo $_record->contracts should be a Tinebase_Record_RecordSet
-     */
-    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
-    {
-        if (! $_createdRecord->start_date) {
-            return;
-        }
-        // find contract before, set end_date one day before the new contracts' start_date, if needed
-        $filter = new HumanResources_Model_ContractFilter(array(
-            array('field' => 'start_date', 'operator' => 'before', 'value' => $_createdRecord->start_date)
-        ));
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'end_date' , 'operator' => 'isnull', 'value' => TRUE)));
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id' , 'operator' => 'not', 'value' => $_createdRecord->getId())));
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id' , 'operator' => 'equals', 'value' => $_createdRecord->employee_id)));
-        $contracts = $this->search($filter);
-        
-        if ($contracts->count() > 1) {
-            throw new Tinebase_Exception_Data('There are more than 1 contracts before the new one without an end_date. Please terminate them before!');
-        }
-        // if a contract was found, terminate it
-        if ($contracts->count()) {
-            $contract = $contracts->getFirstRecord();
-            $endDate = clone $_createdRecord->start_date;
-            $contract->end_date = $endDate->addSecond(1);
-            $this->update($contract);
-        }
-    }
     
     /**
      * inspect creation of one record (before create)
@@ -236,13 +203,18 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         }
         
         // if a contract before this exists without having an end_date, this is set here
-        $paging = new Tinebase_Model_Pagination(array('sort' => 'start_date', 'dir' => 'DESC', 'limit' => 1, 'start' => 0));
-        $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->employee_id)));
-        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $_record->start_date)));
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'end_date', 'operator' => 'isnull', 'value' => TRUE)));
-        
-        $lastRecord = $this->search($filter, $paging)->getFirstRecord();
+        $filter = new HumanResources_Model_ContractFilter([
+            ['field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->employee_id],
+            ['field' => 'start_date', 'operator' => 'before', 'value' => $_record->start_date],
+            ['field' => 'end_date', 'operator' => 'isnull', 'value' => true],
+        ]);
+
+        $contracts = $this->search($filter);
+        if ($contracts->count() > 1) {
+            // well we are actually preventing this thing from happening nowadays, but did not in the past .... :-/
+            throw new Tinebase_Exception_Record_Validation('There are more than 1 contracts before the new one without an end_date. Please terminate them before!');
+        }
+        $lastRecord = $contracts->getFirstRecord();
         
         // if there is a contract already
         if ($lastRecord) {
@@ -255,11 +227,48 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             // set start day of the new contract one day after the last contracts' end day, if no date is given
             if (empty($_record->start_date) && $lastRecord->end_date) {
                 $_record->start_date = $lastRecord->end_date->addDay(1);
+                $this->_checkDates($_record);
             }
         }
 
+        if (empty($_record->start_date)) {
+            throw new Tinebase_Exception_Record_Validation('Contract needs a start date');
+        }
+
+        $this->_checkDateOverlap($_record);
+
         if (!empty($_record->{HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME})) {
             $this->_inspectWorkingTimeScheme($_record);
+        }
+    }
+
+    protected function _checkDateOverlap(HumanResources_Model_Contract $_record)
+    {
+        $filter = new HumanResources_Model_ContractFilter(array_merge([
+            ['field' => 'id', 'operator' => 'not', 'value' => $_record->getId()],
+            ['field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->employee_id],
+            ['field' => 'end_date', 'operator' => 'after_or_equals', 'value' => $_record->start_date, 'options' => [Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL => true]],
+        ], empty($_record->end_date) ? [] : [
+            ['field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $_record->end_date],
+        ]));
+
+        $contracts = $this->search($filter);
+        if ($contracts->count() > 0) {
+            throw new Tinebase_Exception_Record_Validation('Contracts may not overlap');
+        }
+    }
+
+    protected function _inspectAfterDelete(Tinebase_Record_Interface $record)
+    {
+        parent::_inspectAfterDelete($record);
+
+        if (!empty($wtsId = $record->getIdFromProperty(HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME))) {
+            try {
+                $wts = HumanResources_Controller_WorkingTimeScheme::getInstance()->get($wtsId);
+                if (HumanResources_Model_WorkingTimeScheme::TYPES_INDIVIDUAL === $wts->{HumanResources_Model_WorkingTimeScheme::FLDS_TYPE}) {
+                    HumanResources_Controller_WorkingTimeScheme::getInstance()->delete($wts);
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {}
         }
     }
 
