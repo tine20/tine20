@@ -147,3 +147,6 @@ msgstr "Manage data intended purposes in CoreData"
 #: Acl/Rights.php:114
 msgid "View, create, delete or update data intended purposes in CoreData application"
 msgstr "View, create, delete or update data intended purposes in CoreData application"
+
+msgid "Contact gets deleted after this date automatically."
+msgstr "Contact gets deleted after this date automatically."

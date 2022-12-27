@@ -150,5 +150,8 @@ msgstr "Anzeigen, anlegen, löschen und bearbeiten von Verwendungszwecken in der
 msgid "Expiry Date"
 msgstr "Ablaufdatum"
 
+msgid "Contact gets deleted after this date automatically."
+msgstr "Kontakt wird nach dem Ablaufdatum automatisch gelöscht."
+
 #~ msgid "GDPR Data provenance"
 #~ msgstr "DSGVO Datenherkunft"

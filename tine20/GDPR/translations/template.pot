@@ -149,3 +149,6 @@ msgstr ""
 msgid ""
 "View, create, delete or update data intended purposes in CoreData application"
 msgstr ""
+
+msgid "Contact gets deleted after this date automatically."
+msgstr ""
