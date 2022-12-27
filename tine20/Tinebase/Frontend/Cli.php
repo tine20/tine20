@@ -1694,7 +1694,9 @@ fi';
             throw new Tinebase_Exception_UnexpectedValue('iseqto needs to be equal or greater than iseqfrom');
         }
         $data['accountid'] = explode(',', $data['accountid']);
-        $data['models'] = explode(',', $data['models']);
+        if (!is_array($data['models'])) {
+            $data['models'] = explode(',', $data['models']);
+        }
         if (false !== ($key = array_search('fs', $data['models']))) {
             unset($data['models'][$key]);
             $data['models'][] = Tinebase_Model_Tree_Node::class;
