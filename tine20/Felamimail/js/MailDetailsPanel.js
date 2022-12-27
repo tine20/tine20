@@ -390,6 +390,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                                     record: this.record,
                                     initialApp: this.app,
                                     handleAttachments: this.quicklookHandleAttachments,
+                                    sm: this.grid.getGrid().getSelectionModel(),
                                     initialAttachmentIdx: +idx
                                 });
                             }
@@ -484,8 +485,10 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
     quicklookHandleAttachments: async function(attachmentCache = null) {
         this.cardPanel.layout.setActiveItem(0); // wait cycle
 
+        if (this.record.isAttachmentCache) return; // key-nav
+
         // remove part id if set (that is the case in message/rfc822 attachments)
-        const messageId = (this.record.id.match(/_/)) ? this.record.id.split('_')[0] : this.record.id;
+        const messageId = this.record.get('messageId') || ((String(this.record.id).match(/_/)) ? this.record.id.split('_')[0] : this.record.id);
 
         if (!this.record.get('from_node') && this.record.constructor.hasField('attachments')) {
             // new mail -> fetch body with fmail attachments
@@ -506,6 +509,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 attachmentCache = await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', messageId, this.record.get('partId')].join(':'), true);
             }
             this.record = this.attachments[this.attachments.indexOf(this.record)] = new Tine.Tinebase.Model.Tree_Node(attachmentCache.attachments[0]);
+            this.record.isAttachmentCache = true;
         } else {
             // we don't have previews here. can we produce them in sync?
         }
