@@ -61,7 +61,7 @@ packaging_push_packages_to_gitlab() {
         curl \
         --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
         --upload-file "$f" \
-        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/$(echo "$f" | sed sI~I-Ig)"
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/$f"
     done
 }
 
@@ -121,7 +121,7 @@ packaging_push_package_to_github() {
 packaging_push_to_vpackages() {
     customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
     version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
-    release=$(echo "${version}" | sed sI-I~Ig)
+    release=$(echo ${version} | sed sI-I~Ig)
 
     echo "publishing ${release} (${version}) for ${customer} from ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
 
@@ -138,7 +138,7 @@ packaging_push_to_vpackages() {
 
 packaging() {
     version=${CI_COMMIT_TAG:-nightly-$(date '+%Y.%m.%d.%H.%M')}
-    release=$(echo "${version}" | sed sI-I~Ig)
+    release=${version}
 
     if ! repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME}; then
         echo "No packages are build for major_commit_ref: $MAJOR_COMMIT_REF_NAME for version: $version"
