@@ -125,6 +125,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                         this.checkMailsDelayedTask.delay(delayTime);
                     }
 
+                    _.delay(_.bind(this.fillAttachmentCache, this), 15000);
                     this.showActiveVacation();
                     this.registerProtocolHandler();
                     this.registerQuickLookPanel();
@@ -132,6 +133,26 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             }, this));
     },
 
+    // regularly fill attachmentCache
+    fillAttachmentCache: async function() {
+        const nowTs = new Date().getTime();
+        const lastRunTs = Ext.state.Manager.get('fmail-acache-lr', 0);
+        const seconds = lastRunTs ? Math.floor((nowTs - lastRunTs)/1000) : 24 * 3600
+
+        if (!this.fillAttachmentCacheRequest) {
+            try {
+                const accountIds = _.map(_.get(this.getAccountStore(), 'data.items'), 'data.id');
+                this.fillAttachmentCacheRequest = Tine.Felamimail.fillAttachmentCache(accountIds, seconds);
+                await this.fillAttachmentCacheRequest;
+                this.fillAttachmentCacheRequest = null;
+                Ext.state.Manager.set('fmail-acache-lr', nowTs);
+            } catch (e) {}
+        }
+
+        // run every 5 minutes
+        return _.delay(_.bind(this.fillAttachmentCache, this), 300000);
+    },
+    
     /**
      * show notification with active vacation information
      */

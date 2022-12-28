@@ -791,7 +791,8 @@ Tine.Felamimail.Model.Attachment = Tine.Tinebase.data.Record.create([
     { name: 'description' },
     { name: 'filename' },
     { name: 'partId' },
-    { name: 'size' }
+    { name: 'size' },
+    { name: 'cache' }
 ], {
     appName: 'Felamimail',
     modelName: 'Attachment',

@@ -214,6 +214,7 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
             if (this.sm.getSelected() !== this.record) {
                 this.record = this.sm.getSelected();
                 this.loadPreviewPanel();
+                _.defer(() => { this.doLayout() });
             }
         }
     },

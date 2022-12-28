@@ -424,7 +424,7 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
                 ['field' => 'id', 'operator' => 'equals', 'value' => Felamimail_Model_Message::class . ':' . $message->getId() . ':' . $message->attachments[0]['partId']]
             ]))->count());
 
-        Felamimail_Controller_AttachmentCache::getInstance()->fillAttachementCache([$this->_account->getId()]);
+        Felamimail_Controller_AttachmentCache::getInstance()->fillAttachmentCache([$this->_account->getId()]);
         $aCaches = Felamimail_Controller_AttachmentCache::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_AttachmentCache::class, [
                 ['field' => 'id', 'operator' => 'equals', 'value' => Felamimail_Model_Message::class . ':' . $message->getId() . ':' . $message->attachments[0]['partId']]
