@@ -348,13 +348,9 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         $this->assertEquals(1, $syncrotonEmail->body->truncated);
         $this->assertEquals(2000, strlen($syncrotonEmail->body->data));
     }
-    
-    /**
-     * testSendEmail
-     */
-    public function testSendEmail()
+
+    protected function _addSignature(string $signaturePosition = Felamimail_Model_Account::SIGNATURE_BELOW_QUOTE)
     {
-        // add account signature
         $account = TestServer::getInstance()->getTestEmailAccount();
         $account->signatures = new Tinebase_Record_RecordSet(Felamimail_Model_Signature::class, [[
             'signature' => 'my special signature',
@@ -363,7 +359,16 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
             'id' => Tinebase_Record_Abstract::generateUID(), // client also sends some random uuid
             'notes' => []
         ]]);
+        $account->signature_position = $signaturePosition;
         Felamimail_Controller_Account::getInstance()->update($account);
+    }
+
+    /**
+     * testSendEmail
+     */
+    public function testSendEmail()
+    {
+        $this->_addSignature();
 
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
         
@@ -575,11 +580,27 @@ cGU9J2F0dHJpYnV0aW9uJz4=&#13;
      */
     public function testSendMessageToMultipleRecipients()
     {
-        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
-
         $messageId = '<j5wxaho1t8ggvk5cef7kqc6i.1373048280847@email.android.com>';
+        $email = $this->_createSendMailPayload($messageId,
+            $this->_emailTestClass->getEmailAddress() . ', ' . $this->_emailTestClass->getEmailAddress(),
+            null,
+            'text/plain');
+        $stringToCheck = 'test';
 
-        $email = '<?xml version="1.0" encoding="utf-8"?>
+        $this->_sendMailTestHelper($email, $messageId, $stringToCheck, "Syncroton_Command_SendMail");
+    }
+
+    protected function _createSendMailPayload($messageId, $to = null, $content = null, $contentType = 'text/html')
+    {
+        if (! $to) {
+            $to = $this->_emailTestClass->getEmailAddress();
+        }
+
+        if (! $content) {
+            $content = 'dGVzdAo=&#13;';
+        }
+
+        return '<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
 <SendMail xmlns="uri:ComposeMail">
   <ClientId>SendMail-158383807994574</ClientId>
@@ -588,18 +609,14 @@ cGU9J2F0dHJpYnV0aW9uJz4=&#13;
 Subject: Fgh&#13;
 Message-ID: ' . htmlspecialchars($messageId) . '&#13;
 From: l.kneschke@metaways.de&#13;
-To: ' . $this->_emailTestClass->getEmailAddress() . ', ' . $this->_emailTestClass->getEmailAddress() . '&gt;&#13;
+To: ' . $to . '&gt;&#13;
 MIME-Version: 1.0&#13;
-Content-Type: text/plain; charset=utf-8&#13;
+Content-Type: ' . $contentType . '; charset=utf-8&#13;
 Content-Transfer-Encoding: base64&#13;
 &#13;
-dGVzdAo=&#13;
+' . $content . '
 </Mime>
 </SendMail>';
-
-        $stringToCheck = 'test';
-
-        $this->_sendMailTestHelper($email, $messageId, $stringToCheck, "Syncroton_Command_SendMail");
     }
 
     /**
@@ -672,8 +689,10 @@ dGVzdAo=&#13;
      * @see 0007512: SmartReply with HTML message fails
      * @see 0009390: linebreaks missing when replying or forwarding mail
      */
-    public function testReplyEmail()
+    public function testReplyEmailWithSignature()
     {
+        $this->_addSignature(Felamimail_Model_Account::SIGNATURE_ABOVE_QUOTE);
+
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
         $originalMessage = $this->_createTestMessage();
         
@@ -690,11 +709,51 @@ dGVzdAo=&#13;
         
         $this->assertEquals("Re: [gentoo-dev] `paludis --info' is not like `emerge --info'", $message->subject);
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
-        $this->assertStringContainsString('Sebastian
-The attached list notes all of the packages that were added or removed<br />from the tree, for the week ending 2009-04-12 23h59 UTC.<br />', $completeMessage->body,
+        $this->assertStringContainsString('The attached list notes all of the packages that were added or removed<br />from the tree, for the week ending 2009-04-12 23h59 UTC.<br />', $completeMessage->body,
             'reply body has not been appended correctly');
+
+        // check signature
+        self::assertStringContainsString('<br />−−<br />my special signature', $completeMessage->body, 'body: ' . $completeMessage->body);
     }
-    
+
+    public function testReplyEmailWithSignatureAndroidAbove()
+    {
+        $quoteHtml = '<div class="gmail_extra"><br><div class="gmail_quote">Am 27.12.2022 15:16 schrieb Philipp Schüle &lt;p.schuele@metaways.de&gt;:<br type="attribution"><blockquote class="quote">CITE</blockquote>';
+        $this->_checkSignatureQuote($quoteHtml, Syncroton_Model_Device::TYPE_IPHONE);
+    }
+
+    protected function _checkSignatureQuote($quoteHtml, $device = Syncroton_Model_Device::TYPE_ANDROID, $position = Felamimail_Model_Account::SIGNATURE_ABOVE_QUOTE)
+    {
+        $this->_addSignature($position);
+        $messageId = '<' . Tinebase_Record_Abstract::generateUID(30) . '@email.com>';
+        $content = str_replace("\n", "&#13;\n", base64_encode('
+        <div>MAILBODY</div>
+        ' . $quoteHtml . '
+        '));
+        $email = $this->_createSendMailPayload($messageId, null, $content);
+        if ($position === Felamimail_Model_Account::SIGNATURE_ABOVE_QUOTE) {
+            $stringToCheck = '<div>MAILBODY</div>
+        <br />−−<br />my special signature';
+        } else {
+            $stringToCheck = '>CITE</blockquote>
+        <br />−−<br />my special signature<br /><br />';
+        }
+
+        $this->_sendMailTestHelper($email, $messageId, $stringToCheck, "Syncroton_Command_SendMail", $device);
+    }
+
+    public function testReplyEmailWithSignatureAndroidBelow()
+    {
+        $quoteHtml = '<div class="gmail_extra"><br><div class="gmail_quote">Am 27.12.2022 15:16 schrieb Philipp Schüle &lt;p.schuele@metaways.de&gt;:<br type="attribution"><blockquote class="quote">CITE</blockquote>';
+        $this->_checkSignatureQuote($quoteHtml, Syncroton_Model_Device::TYPE_IPHONE, Felamimail_Model_Account::SIGNATURE_BELOW_QUOTE);
+    }
+
+    public function testReplyEmailWithSignatureIOSAbove()
+    {
+        $quoteHtml = '<div dir="ltr"><br>   <blockquote type="cite">CITE</blockquote>';
+        $this->_checkSignatureQuote($quoteHtml, Syncroton_Model_Device::TYPE_IPHONE);
+    }
+
     /**
      * testReplyEmailNexus
      * 
@@ -783,7 +842,11 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
      * @param string $device
      * @return Felamimail_Model_Message
      */
-    protected function _sendMailTestHelper($xml, $messageId, $stringToCheck, $command = "Syncroton_Command_SmartReply", $device = Syncroton_Model_Device::TYPE_ANDROID_40)
+    protected function _sendMailTestHelper($xml,
+                                           $messageId,
+                                           $stringToCheck,
+                                           $command = "Syncroton_Command_SmartReply",
+                                           $device = Syncroton_Model_Device::TYPE_ANDROID_40)
     {
         $doc = new DOMDocument();
         $doc->loadXML($xml);
@@ -799,7 +862,7 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
         
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
 
-        //echo $completeMessage->body;
+        // echo $completeMessage->body;
         $this->assertStringContainsString($stringToCheck, $completeMessage->body);
         return $completeMessage;
     }

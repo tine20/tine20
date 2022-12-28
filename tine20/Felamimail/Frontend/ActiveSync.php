@@ -314,7 +314,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             $replyBody = null;
         }
         
-        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody, $account->signature);
+        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody, $account->signature, $account->signature_position);
         
         Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent, $fmailMessage);
     }
@@ -375,7 +375,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . " Send Message with subject " . $subject . " (saveInSent: " . $saveInSent . ")");
 
-            $mail = Tinebase_Mail::createFromZMM($incomingMessage, null, $account->signature);
+            $mail = Tinebase_Mail::createFromZMM($incomingMessage, null, $account->signature, $account->signature_position);
         
             Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent);
         }

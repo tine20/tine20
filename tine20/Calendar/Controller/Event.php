@@ -1453,7 +1453,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             throw new Exception('recurid must be present to create exceptions!');
         }
         
-        // we do notifications ourself
+        // we do notifications ourselves
         $sendNotifications = $this->sendNotifications(FALSE);
         
         // EDIT for baseEvent is checked above, CREATE, DELETE for recur exceptions is implied with it
@@ -1783,8 +1783,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // compute remaining exdates
         $deletedInstanceDtStarts = array_diff(array_unique((array) $baseEvent->exdate), $exceptions->getOriginalDtStart());
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-            ' Faking ' . count($deletedInstanceDtStarts) . ' deleted exceptions');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' Faking ' . count($deletedInstanceDtStarts) . ' deleted exceptions');
 
         foreach((array) $deletedInstanceDtStarts as $deletedInstanceDtStart) {
             $fakeEvent = clone $baseEvent;
