@@ -553,18 +553,20 @@ class Tinebase_Mail extends Zend_Mail
             restore_error_handler();
             
         } catch (Tinebase_Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Decoding of " . $zmp->encoding . '/' . $encoding . ' encoded message failed: ' . $e->getMessage());
             
             // trying to fix decoding problems
             restore_error_handler();
             $zmp->resetStream();
             if (preg_match('/convert\.quoted-printable-decode/', $e->getMessage())) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Trying workaround for http://bugs.php.net/50363.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Trying workaround for http://bugs.php.net/50363.');
                 $body = quoted_printable_decode(stream_get_contents($zmp->getRawStream()));
                 $body = @iconv($charset, 'utf-8', $body);
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Try again with fallback encoding.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Try again with fallback encoding.');
                 $zmp->appendDecodeFilter(self::_getDecodeFilter());
                 set_error_handler('Tinebase_Mail::decodingErrorHandler', E_WARNING);
                 try {
@@ -572,7 +574,8 @@ class Tinebase_Mail extends Zend_Mail
                     restore_error_handler();
                 } catch (Tinebase_Exception $e) {
                     restore_error_handler();
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Fallback encoding failed. Trying base64_decode().');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . ' Fallback encoding failed. Trying base64_decode().');
                     $zmp->resetStream();
                     $decodedBody = base64_decode(stream_get_contents($zmp->getRawStream()));
                     $body = @iconv($charset, 'utf-8', $decodedBody);
@@ -646,7 +649,8 @@ class Tinebase_Mail extends Zend_Mail
             $filter = "convert.iconv.$_charset/utf-8";
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Appending decode filter: ' . $filter);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Appending decode filter: ' . $filter);
         
         return $filter;
     }
@@ -654,7 +658,7 @@ class Tinebase_Mail extends Zend_Mail
     /**
      * error exception handler for iconv decoding errors / only gets E_WARNINGs
      *
-     * NOTE: PHP < 5.3 don't throws exceptions for Catchable fatal errors per default,
+     * NOTE: PHP < 5.3 doesn't throw exceptions for Catchable fatal errors per default,
      * so we convert them into exceptions manually
      *
      * @param integer $severity
@@ -667,8 +671,9 @@ class Tinebase_Mail extends Zend_Mail
      */
     public static function decodingErrorHandler($severity, $errstr, $errfile, $errline)
     {
-        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
-        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
+
         throw new Tinebase_Exception($errstr);
     }
     
