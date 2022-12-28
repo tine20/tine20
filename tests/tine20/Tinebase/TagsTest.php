@@ -355,4 +355,18 @@ class Tinebase_TagsTest extends TestCase
         $updatedTag = Tinebase_Tags::getInstance()->update($sharedTag);
         $this->assertEquals('testUpdate', $updatedTag['name']);
     }
+
+    public function testSharedTagWithRoleRights()
+    {
+        $sharedTag = $this->_createSharedTag(['name' => 'test'], null, 'sclever');
+
+        $right = new Tinebase_Model_TagRight(array(
+            'tag_id'        => $sharedTag->getId(),
+            'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE,
+            'account_id'    => Tinebase_Role::getInstance()->getRoleByName('user role'),
+            'view_right'    => true,
+            'use_right'     => true,
+        ));
+        $this->_instance->setRights($right);
+    }
 }
