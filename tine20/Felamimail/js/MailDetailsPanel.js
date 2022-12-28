@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2017-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import waitFor from "../../Tinebase/js/util/waitFor.es6";
+
 Ext.ns('Tine.Felamimail');
 
 import getFileAttachmentAction from './AttachmentFileAction';
@@ -140,6 +142,16 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
             this.record = record;
             this.tpl.overwrite(this.messageRecordPanel.body, record.data);
             this.doLayout();
+            if (! record.get('from_node')) {
+                // prefill attachmentCache
+                _.forEach(record.get('attachments'), (attachment) => {
+                    if (! attachment.cache) {
+                        attachment.cache = Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', record.id, attachment.partId].join(':'), true).then(cache => {
+                            attachment.cache = new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]);;
+                        });
+                    }
+                })
+            }
 
         } else if (this.nodeRecord) {
             Tine.Felamimail.messageBackend.getMessageFromNode(this.nodeRecord, {
@@ -482,7 +494,8 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         }
     },
 
-    quicklookHandleAttachments: async function(attachmentCache = null) {
+    // NOTE: runs in the scope of QuickLookPanel
+    quicklookHandleAttachments: async function() {
         this.cardPanel.layout.setActiveItem(0); // wait cycle
 
         if (this.record.isAttachmentCache) return; // key-nav
@@ -491,24 +504,30 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         const messageId = this.record.get('messageId') || ((String(this.record.id).match(/_/)) ? this.record.id.split('_')[0] : this.record.id);
 
         if (!this.record.get('from_node') && this.record.constructor.hasField('attachments')) {
-            // new mail -> fetch body with fmail attachments
-            const body = await Tine.Felamimail.getMessage(this.record.id);
-            this.attachments = _.map(body.attachments, (attachmentData) => {
-                return Tine.Tinebase.data.Record.setFromJson(Object.assign(attachmentData, {
-                    id: `${this.record.id}:${attachmentData.partId}`,
+            await waitFor(() => { return this.record.bodyIsFetched()});
+            const attachments = this.record.get('attachments');
+            if (! attachments.length) {
+                // might happen with keyNav in preview panel
+                this.record = new Tine.Tinebase.Model.Tree_Node({ name: 'Email has no attachemtns', path: '' });
+                return;
+            }
+            this.attachments = _.map(attachments, (attachment) => {
+                return attachment.data ? attachment : Tine.Tinebase.data.Record.setFromJson(Object.assign(attachment, {
+                    id: `${this.record.id}:${attachment.partId}`,
                     messageId: this.record.id
                 }), Tine.Felamimail.Model.Attachment);
             });
-            this.record.set('attachments', body.attachments);
             this.record = this.attachments[_.isNumber(this.initialAttachmentIdx) ? this.initialAttachmentIdx : 0];
         }
 
         if (!this.record.get('from_node')) {
             // convert fmail attachment to attachmentCache attachment
-            if (!attachmentCache && this.record.get('messageId')) {
-                attachmentCache = await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', messageId, this.record.get('partId')].join(':'), true);
+            let cache = await this.record.get('cache')
+            if (!cache && this.record.get('messageId')) {
+                const attachmentCache = await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', messageId, this.record.get('partId')].join(':'), true);
+                cache = new Tine.Tinebase.Model.Tree_Node(attachmentCache.attachments[0]);
             }
-            this.record = this.attachments[this.attachments.indexOf(this.record)] = new Tine.Tinebase.Model.Tree_Node(attachmentCache.attachments[0]);
+            this.record = this.attachments[this.attachments.indexOf(this.record)] = cache;
             this.record.isAttachmentCache = true;
         } else {
             // we don't have previews here. can we produce them in sync?

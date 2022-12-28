@@ -148,9 +148,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_multipleRecordsToJson($result);
     }
 
-    public function fillAttachementCache(array $accountIds, ?int $seconds = null): array
+    public function fillAttachmentCache(array $accountIds, ?int $seconds = null): array
     {
-        Felamimail_Controller_AttachmentCache::getInstance()->fillAttachementCache($accountIds, $seconds);
+        Felamimail_Controller_AttachmentCache::getInstance()->fillAttachmentCache($accountIds, $seconds);
         return ['success' => true];
     }
     

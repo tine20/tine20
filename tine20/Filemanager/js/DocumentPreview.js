@@ -138,7 +138,9 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
                     xtype: 'panel',
                     frame: true,
                     border: true,
-                    afterRender: resolve
+                    // NOTE: some browsers do not load the img event though the img tag is rendered into the dom
+                    //       the deferred hide/show cycle fixes this issue
+                    afterRender: (c) => { _.defer(() => { c.hide(); c.show(); resolve() }) }
                 });
             });
 
