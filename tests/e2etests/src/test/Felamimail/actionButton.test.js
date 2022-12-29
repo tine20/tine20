@@ -28,13 +28,16 @@ beforeEach(async () => {
     await expect(popupWindow).toClick('button', {text: 'Senden'});
 
     await page.waitForTimeout(2000); //wait to close editDialog
-    await page.click('.t-app-felamimail .x-btn-image.x-tbar-loading');
-    try{
-        await expect(page).toMatchElement('.x-grid3-cell-inner.x-grid3-col-subject', {text: subject, timeout: 2000});
-    } catch(e){
+
+    for(let i = 0; i < 10; i++) {
         await page.click('.t-app-felamimail .x-btn-image.x-tbar-loading');
+        await page.waitForTimeout(500);
+        try{
+            await expect(page).toMatchElement('.x-grid3-cell-inner.x-grid3-col-subject', {text: subject, timeout: 2000});
+            break;
+        } catch(e){
+        }
     }
-    await expect(page).toMatchElement('.x-grid3-cell-inner.x-grid3-col-subject', {text: subject});
 })
 
 // skip... is to unstable
@@ -46,14 +49,15 @@ describe('test action button of felamimail (grid)', () => {
         await page.waitForSelector('a span',{text: "Mülleimer"});
         await expect(page).toClick('a span',{text: "Mülleimer"});
         await page.waitForTimeout(2000);
-        await page.click('.t-app-felamimail .x-btn-image.x-tbar-loading');
-        try{
-            await expect(page).toMatchElement('.x-grid3-cell-inner.x-grid3-col-subject', {text: subject, timeout: 2000});
-        } catch {
+        for(let i = 0; i < 10; i++) {
             await page.click('.t-app-felamimail .x-btn-image.x-tbar-loading');
+            await page.waitForTimeout(500);
+            try{
+                await expect(page).toMatchElement('.x-grid3-cell-inner.x-grid3-col-subject', {text: subject, timeout: 2000});
+                break;
+            } catch(e){
+            }
         }
-        await expect(page).toMatchElement('.x-grid3-cell-inner.x-grid3-col-subject', {text:  subject});
-
         await page.waitForSelector('a span',{text: "Posteingang"});
         await expect(page).toClick('a span',{text: "Posteingang"});
         await page.waitForTimeout(3000);
@@ -118,11 +122,14 @@ async function sendMail(subject, newWindowPromis, currentUser= false) {
     await expect(popupWindow).toClick('button', {text: 'Senden'});
 
     await page.waitForTimeout(2000); //wait to close editDialog
-    await page.click('.t-app-felamimail .x-btn-image.x-tbar-loading');
-    try{
-        await expect(page).toMatchElement('.x-grid3-cell-inner.x-grid3-col-subject', {text: subject, timeout: 2000});
-    } catch {
+
+    for(let i = 0; i < 10; i++) {
         await page.click('.t-app-felamimail .x-btn-image.x-tbar-loading');
+        await page.waitForTimeout(500);
+        try{
+            await expect(page).toMatchElement('.x-grid3-cell-inner.x-grid3-col-subject', {text: subject, timeout: 2000});
+            break;
+        } catch(e){
+        }
     }
-    await expect(page).toMatchElement('.x-grid3-cell-inner.x-grid3-col-subject', {text: subject});
 }
