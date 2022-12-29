@@ -262,8 +262,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . print_r($emailUser->toArray(), TRUE));
         
-        // modify/correct user name
-        // set emailUsername to Tine 2.0 account login name and append domain for login purposes if set
+        // modify/correct username
         if (empty($emailUser->emailUsername)) {
             $emailUser->emailUsername = $this->getEmailUserName($_user);
         }
