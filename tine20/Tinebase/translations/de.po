@@ -5092,6 +5092,15 @@ msgstr "FIDO2 WebAuthn Gerät wird konfiguriert ..."
 msgid "FIDO2 WebAuthn Device is configured."
 msgstr "FIDO2 WebAuthn Gerät ist konfiguriert."
 
+msgid "Unsupported Configuration"
+msgstr "Nicht unterstützte Konfiguration"
+
+msgid "This installation requires user verification for FIDO2 devices. Firefox for {OS} does not support user verification ({details}). You need to use a different browser to use FIDO2."
+msgstr "Diese Installation erfordert Nutzer-Verifikation für FIDO2 Geräte. Firefox für {OS} unterstützt Nutzer-Verifikation nicht ({details}). Benutzen sie einen anderen Browser um FIDO2 zu verwenden."
+
+msgid "see {url} for details"
+msgstr "für Details siehe {url}"
+
 msgid "FIDO2 WebAuthn registration failed. Try again?"
 msgstr ""
 "Registrieren des FIDO2 WebAuthn Gerätes fehlgeschlagen. Wollen sie es erneut "

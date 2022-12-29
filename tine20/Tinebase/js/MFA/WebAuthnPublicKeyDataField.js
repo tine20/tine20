@@ -19,6 +19,7 @@ const WebAuthnPublicKeyDataField = Ext.extend(Ext.form.FieldSet, {
         // chrome://settings/securityKeys
         this.settingsText = new Ext.form.TextField({
             fieldLabel: formatMessage("Please open the following URL in your Browser for more security key options"),
+            hidden: !Ext.isChrome,
             value: 'chrome://settings/securityKeys',
             anchor: '100%',
             readOnly: true,
@@ -67,6 +68,21 @@ const WebAuthnPublicKeyDataField = Ext.extend(Ext.form.FieldSet, {
         const accountId = this.editDialog.blConfigPanel.account.getId();
         const mfaId = this.editDialog.configWrapper.get('mfa_config_id');
         const publicKeyOptions = await Tine.Tinebase.getWebAuthnRegisterPublicKeyOptionsForMFA(mfaId, accountId);
+
+        if (Ext.isGecko && (Ext.isMac || Ext.isLinux) && _.get(publicKeyOptions, 'authenticatorSelection.userVerification') === 'required') {
+            // alert(window.formatMessage('This installation requires user verification for FIDO2 devices. Firefox does not support user verification. You need to use a different browser to use FIDO2.'));
+            const url = 'https://developers.yubico.com/WebAuthn/WebAuthn_Browser_Support/';
+            await Ext.MessageBox.show({
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.WARNING,
+                title: window.formatMessage('Unsupported Configuration'),
+                msg: window.formatMessage('This installation requires user verification for FIDO2 devices. Firefox for {OS} does not support user verification ({details}). You need to use a different browser to use FIDO2.', {
+                    details: window.formatMessage('see {url} for details', { url: `<a href="${url}" target="_blank">${url}</a>` }),
+                    OS: Ext.isMac ? 'macOS' : 'Linux'
+                }),
+            });
+            // NOTE: we don't return here - future versions of FF might support userVerification
+        }
 
         publicKeyOptions.challenge = rfc4648.base64url.parse(publicKeyOptions.challenge, { loose: true });
         publicKeyOptions.user.id = rfc4648.base64url.parse(publicKeyOptions.user.id, { loose: true });
