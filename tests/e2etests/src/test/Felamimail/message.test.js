@@ -4,7 +4,9 @@ require('dotenv').config();
 
 beforeAll(async () => {
     await lib.getBrowser('E-Mail');
-    await page.waitForSelector('div.x-tree-selected a span',{text: "Posteingang"});
+    await page.waitForSelector('a span',{text: "Posteingang"});
+    await expect(page).toClick('a span',{text: "Posteingang"});
+    await page.waitForTimeout(2000);
 });
 
 describe('message', () => {
@@ -47,14 +49,20 @@ describe('message', () => {
     let newMail;
     test('fetch messages', async () => {
         await page.waitForTimeout(2000); //wait to close editDialog
-        await page.click('.t-app-felamimail .x-btn-image.x-tbar-loading');
-        try{
-          await page.waitForSelector('.flag_unread',{timeout: 10000});
-        } catch(e){
-          await page.click('.t-app-felamimail .x-btn-image.x-tbar-loading');
-          await page.waitForSelector('.flag_unread',{timeout: 10000});
+
+        for(let i = 0; i < 10; i++) {
+            await page.click('.t-app-felamimail .x-btn-image.x-tbar-loading');
+            await page.waitForTimeout(500);
+            try{
+                await expect(page).toMatchElement('.x-grid3-cell-inner.x-grid3-col-subject', {text: 'message with attachment', timeout: 2000});
+                break;
+            } catch(e){
+            }
         }
+
+        await page.waitForTimeout(500);
         newMail = await expect(page).toMatchElement('.x-grid3-cell-inner.x-grid3-col-subject', {text: 'message with attachment'});
+        await page.waitForTimeout(500);
         await newMail.click();
     });
 
