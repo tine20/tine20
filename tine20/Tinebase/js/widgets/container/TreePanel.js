@@ -631,7 +631,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             this.onSelectionChange(sm, node);
         }
 
-        node.expand();
+        // NOTE: we don't expand here any longer - macos and win don't do it either
+        // node.expand();
     },
 
     /**

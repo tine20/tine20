@@ -171,28 +171,31 @@ describe('Contacts', () => {
             if (!(await expect(page).toMatchElement('#Addressbook_Contact_Tree span', {text: 'Meine Adressbücher'}))) {
                 await page.click('#Addressbook_Contact_Tree .x-tool.x-tool-toggle');
             }
-            await expect(page).toClick('#Addressbook_Contact_Tree span', {text: 'Alle Adressbücher'});
-            await expect(page).toClick('#Addressbook_Contact_Tree span', {text: 'Meine Adressbücher'});
-            await expect(page).toClick('#Addressbook_Contact_Tree span', {text: 'Gemeinsame Adressbücher'});
-            await page.waitForTimeout(1000) //musst wait load node tree
 
-            try {
-                await expect(page).toClick('#Addressbook_Contact_Tree span', {
-                text: process.env.TEST_USER +'s persönliches Adressbuch',
+            for (const el of await page.$$('#Addressbook_Contact_Tree li img.x-tree-elbow-plus')) {
+                await el.click()
+            }
+
+            await page.waitForSelector('#Addressbook_Contact_Tree span', {
+                text: process.env.TEST_USER + 's persönliches Adressbuch'
+            });
+            await page.waitForTimeout(1000); // tree animation time
+
+            await expect(page).toClick('#Addressbook_Contact_Tree span', {
+                text: process.env.TEST_USER + 's persönliches Adressbuch',
                 button: 'right'
             });
-            } catch (e) {
-                await expect(page).toClick('#Addressbook_Contact_Tree span', {
-                    text: process.env.TEST_USER +'s persönliches Adressbuch',
-                    button: 'right'
-                });
-            }
-            await page.waitForSelector('.x-menu-item-icon.action_managePermissions')
+            await page.waitForSelector('.x-menu-item-icon.action_managePermissions');
             await page.hover('.x-menu-item-icon.action_managePermissions');
             await page.screenshot({path: 'screenshots/StandardBedienhinweise/3_standardbedienhinweise_adresse_berechtigungen.png'});
         });
 
         test('premissons dialog', async () => {
+            // NOTE: in debug mode screenshot removes focus so menu closes
+            await expect(page).toClick('#Addressbook_Contact_Tree span', {
+                text: process.env.TEST_USER + 's persönliches Adressbuch',
+                button: 'right'
+            });
             await page.click('.x-menu-item-icon.action_managePermissions');
             await page.screenshot({path: 'screenshots/StandardBedienhinweise/4_standardbedienhinweise_adressbuch_berechtigungen_verwalten.png'});
             await page.keyboard.press('Escape');
