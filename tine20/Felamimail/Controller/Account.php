@@ -1039,8 +1039,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $diff = $_record->diff($_oldRecord)->diff;
         foreach ($diff as $key => $value) {
             if (! in_array($key, $allowedFields)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Setting old value in system account for key ' . $key);
                 $_record->$key = $_oldRecord->$key;
             }
         }
