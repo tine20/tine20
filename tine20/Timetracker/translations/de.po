@@ -382,8 +382,8 @@ msgid "Cleared in"
 msgstr "Abgerechnet in"
 
 #: Model/Timeaccount.php:232
-msgid "Billed"
-msgstr "Abgerechnet"
+msgid "Project time billed"
+msgstr "Projektzeit abgerechnet"
 
 #: Model/Timeaccount.php:247
 msgid "Booking deadline"
@@ -649,3 +649,12 @@ msgstr "Angenommen"
 
 msgid "Declined"
 msgstr "Abgelehnt"
+
+msgid "Select invoice"
+msgstr "Rechnung auswählen"
+
+msgid "Update Timesheets?"
+msgstr "Stundenzettel aktualisieren?"
+
+msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
+msgstr "Achtung: Es gibt Stundenzettel, die noch nicht abgerechnet worden sind. Wenn Sie fortfahren, werden sie auf abgerechnet gesetzt. Diese Aktion kann nicht rückgängig gemacht werden. Wollen Sie trotzdem fortfahren?"

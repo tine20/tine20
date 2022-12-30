@@ -47,11 +47,6 @@
             <type>int(11)</type>
         </column>
         <column>
-            <identifier>is_cleared_combined</identifier>
-            <header>Cleared</header>
-            <type>int(11)</type>
-        </column>
-        <column>
             <identifier>start_date</identifier>
             <header>Date</header>
             <type>date</type>
