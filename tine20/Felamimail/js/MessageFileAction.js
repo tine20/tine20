@@ -41,6 +41,7 @@ Tine.Felamimail.MessageFileAction = function(config) {
     }
     
     this.menu.on('beforeshow', this.showFileMenu, this);
+    this.menu.hideOnClick = false;
     this.selectionHandler = this.mode === 'fileInstant' ?
         this.fileMessage.createDelegate(this) :
         this.selectLocation.createDelegate(this);
@@ -163,6 +164,7 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
         } else {
             this.addStaticMenuItems();
         }
+        this.saveToAllRecipients = false;
 
         this.composeDialog.recipientGrid.store.on('add', this.syncRecipients, this);
         this.composeDialog.recipientGrid.store.on('update', this.syncRecipients, this);
@@ -194,6 +196,7 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                         fileTarget: fileTarget,
                         // iconCls: fileTarget.model.getIconCls(),
                         text: Ext.util.Format.htmlEncode(fileTarget.record_title),
+                        hideOnClick: false,
                         checkHandler: (item) => {
                             this.handleBtnSelectionEvent();
                         }
@@ -205,15 +208,32 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                 }
             }
         });
-
+        
         // remove all items no longer in recipient grid
-        _.each(this.menu.items.items, (item) => {
-            // check if in grid
-            if (_.get(item, 'itemId') && emailsInRecipientGrid.indexOf(item.itemId) === -1) {
-                // item no longer in grid
-                this.menu.remove(item);
-            }
+        const items = this.menu.items.items.filter((item) => {
+            return item?.isRecipientItem && item?.itemId && emailsInRecipientGrid.indexOf(item.itemId) === -1
+            || item?.itemId === 'selectAll';
         });
+        items.forEach((item) => {this.menu.remove(item);});
+        
+        if (emailsInRecipientGrid.length > 0) {
+            this.menu.insert(0, {
+                itemId: 'selectAll',
+                isRecipientItem: false,
+                xtype: 'menucheckitem',
+                checked: this.saveToAllRecipients,
+                text: this.app.i18n._('Save To All Recipients'),
+                hideOnClick: false,
+                checkHandler: (item) => {
+                    this.saveToAllRecipients = item.checked;
+                    _.each(this.menu.items.items, (item) => {
+                        if (item?.isRecipientItem) {
+                            item.setChecked(this.saveToAllRecipients);
+                        }
+                    });
+                }
+            });
+        }
     },
     
     handleBtnSelectionEvent: function () {
@@ -272,7 +292,8 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                         fileTarget: fileTarget,
                         iconCls: fileTarget.model.getIconCls(),
                         text: Ext.util.Format.htmlEncode(fileTarget.record_title),
-                        handler: this.selectionHandler
+                        handler: this.selectionHandler,
+                        hideOnClick: false,
                     });
                     suggestionIds.push(suggestionId);
                 }
@@ -315,7 +336,9 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
         }
         
         const model = Tine.Tinebase.data.RecordMgr.get(defaultFolder.appName, defaultFolder.modelName);
-        const defaultImapItem = new Ext.menu.Item();
+        const defaultImapItem = new Ext.menu.Item({
+            hideOnClick: false,
+        });
         const title = defaultFolder.isSystemFolder() ? this.app.i18n._(defaultFolder.get('globalname')) : defaultFolder.get('globalname');
     
         defaultImapItem.fileTarget = {
@@ -439,7 +462,7 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
         }
         
         return _.reduce(this?.menu?.items?.items, (selected, item) => {
-            if (item.checked) {
+            if (item.checked && item?.fileTarget) {
                 selected.push(this.itemToLocation(item));
             }
             return selected;
@@ -463,11 +486,16 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
 
     selectLocation: function(item, e) {
         item.setVisible(!item.isSuggestedItem);
-        item.selectItem = this.menu.insert(Math.max(0, this.menu.items.indexOf(item)), {
+        const firstRecipientIdx = _.findIndex(this.menu.items.items, (i) => {return i?.type && i.type === item.type;});
+        const firstFileLocationIdx = _.findIndex(this.menu.items.items, (i) => {return i?.type && ['attachment', 'folder', 'node'].includes(i.type)});
+        const firstImapLocationIdx = _.findIndex(this.menu.items.items, (i) => {return i?.type && i.type === item.type;});
+    
+        item.selectItem = this.menu.insert(Math.max(0, firstFileLocationIdx), {
             text: item.fileTarget ? Ext.util.Format.htmlEncode(item.fileTarget.record_title) : item.text,
             checked: true,
             instantItem: item,
             fileTarget: item.fileTarget,
+            hideOnClick: false,
             checkHandler: (item) => {
                 item.setVisible(!item.instantItem.isSuggestedItem);
                 item.instantItem.show();
@@ -492,7 +520,9 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
 
     onFilemanagerNodesSelected: function(item, e, nodes) {
         let nodeData = _.get(nodes[0], 'nodeRecord', nodes[0]);
-        const fakeItem = new Ext.menu.Item();
+        const fakeItem = new Ext.menu.Item({
+            hideOnClick: false,
+        });
 
         nodeData = _.get(nodeData, 'data', nodeData);
 
@@ -517,7 +547,9 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                     const model = Tine.Tinebase.data.RecordMgr.get('Felamimail', 'Folder');
                     const title = record.isSystemFolder() ? this.app.i18n._(record.get('globalname')) : record.get('globalname');
     
-                    const fakeItem = new Ext.menu.Item();
+                    const fakeItem = new Ext.menu.Item({
+                        hideOnClick: false,
+                    });
                     fakeItem.fileTarget = {
                         type: 'folder',
                         record_title: `${title} [IMAP]`,
