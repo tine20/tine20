@@ -182,15 +182,12 @@ Tine.widgets.grid.RendererManager = function() {
                     break;
                 case 'datetime_separated_date':
                 case 'date': {
-                        const format = _.get(field, 'fieldDefinition.uiconfig.format', ['wkday', 'medium']);
+                        const format = this.getDateFormat(field);
                         renderer = _.bind(Tine.Tinebase.common.dateRenderer, {format});
                     }
                     break;
                 case 'datetime': {
-                        const format = _.get(field, 'fieldDefinition.uiconfig.format', {
-                            Date: ['wkday', 'medium'],
-                            Time: ['medium']
-                        });
+                        const format = this.getDateTimeFormat(field);
                         renderer = _.bind(Tine.Tinebase.common.dateTimeRenderer, {format});
                     }
                     break;
@@ -380,6 +377,17 @@ Tine.widgets.grid.RendererManager = function() {
          */
         getKey: function(params) {
              return params.join('_');
+        },
+
+        getDateFormat: function(field) {
+            return _.get(field, 'fieldDefinition.uiconfig.format', ['wkday', 'medium']);
+        },
+
+        getDateTimeFormat(field) {
+            return _.get(field, 'fieldDefinition.uiconfig.format', {
+                Date: ['wkday', 'medium'],
+                Time: ['medium']
+            });
         }
     };
 }();
