@@ -57,6 +57,7 @@ Tine.widgets.grid.ColumnManager = function() {
             var _ = window.lodash,
                 column = {},
                 recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName),
+                field = recordClass ? recordClass.getField(fieldName) : null,
                 modelConfig = recordClass ? recordClass.getModelConfiguration() : null,
                 fieldDefinition = _.get(modelConfig, 'fields.' + fieldName , {}),
                 fieldType = fieldDefinition.type || 'string',
@@ -119,6 +120,18 @@ Tine.widgets.grid.ColumnManager = function() {
             if(_.indexOf(['data', 'datetime_separated_date', 'datetime_separated_time', 'datetime_separated_tz', 'money', 'integer', 'bool', 'boolean', 'float'], fieldDefinition.type) >= 0) {
                 config.align = 'right';
                 config.width = config.width || 90;
+            }
+
+            if(_.indexOf(['datetime'], fieldDefinition.type) >= 0) {
+                const format = Tine.widgets.grid.RendererManager.getDateTimeFormat(field)?.Date;
+                config.width = config.width || (110 + (_.indexOf(format, 'wkday')  >= 0 ? 15 : 0));
+                console.error(format)
+                console.error(config.width)
+            }
+
+            if(_.indexOf(['date', 'datetime_separated_date'], fieldDefinition.type) >= 0) {
+                const format = Tine.widgets.grid.RendererManager.getDateFormat(field);
+                config.width = config.width || (70 + (_.indexOf(format, 'wkday') >= 0 ? 15 : 0));
             }
 
             if(fieldDefinition.type == 'model') {
