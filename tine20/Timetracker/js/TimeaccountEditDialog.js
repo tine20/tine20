@@ -57,8 +57,14 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * NOTE: when this method gets called, all initalisation is done.
      */
     getFormItems: function() {
-        
-        var secondRow = [{
+        const fieldManager = _.bind(Tine.widgets.form.FieldManager.get,
+            Tine.widgets.form.FieldManager,
+            this.appName,
+            this.modelName,
+            _,
+            Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
+
+        const secondRow = [{
             fieldLabel: this.app.i18n._('Unit'),
             name: 'price_unit'
         }, {
@@ -90,39 +96,29 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             triggerAction: 'all',
             store: [[0, this.app.i18n._('closed')], [1, this.app.i18n._('open')]]
         }, [
-            Tine.widgets.form.FieldManager.get(
-                this.appName,
-                this.modelName,
-                'status',
-                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
-                {
-                    id: 'status',
-                    listeners: {
-                        scope: this,
-                        select: this.onBilledChange.createDelegate(this)
-                    } 
-
+            fieldManager('status', {
+                id: 'status',
+                listeners: {
+                    scope: this,
+                    select: this.onBilledChange.createDelegate(this)
                 }
-            )
+            })
         ]];
         
-        secondRow.push({
-            columnWidth: 1/3,
-            disabled: false,
-            fieldLabel: this.app.i18n._('Cleared In'),
-            name: 'billed_in'
-        });
+        secondRow.push(
+            fieldManager('billed_in', {
+                id: 'billed_in',
+                columnWidth: 1/3,
+                disabled: false,
+            })
+        );
         
         secondRow.push([
-            Tine.widgets.form.FieldManager.get(
-                this.appName,
-                this.modelName,
-                'deadline',
-                Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
-                {
-                    id: 'deadline',
-                }
-            )
+            fieldManager('deadline', {
+                id: 'deadline',
+                columnWidth: 1/3,
+                disabled: false,
+            })
         ]);
         
         secondRow.push({
@@ -143,7 +139,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             modelUnique: true
         });
 
-        var lastRow = [{
+        const lastRow = [{
             columnWidth: 1/3,
             editDialog: this,
             xtype: 'tinerelationpickercombo',
@@ -163,12 +159,21 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         }];
         
         if (this.useInvoice) {
-            lastRow.push(Tine.widgets.form.RecordPickerManager.get('Sales', 'Invoice', {
+            this.invoice = Tine.Tinebase.data.Record.setFromJson(this.record.get('invoice_id'), Tine.Sales.Model.Invoice);
+    
+            this.invoiceRecordPicker = Tine.widgets.form.RecordPickerManager.get('Sales', 'Invoice', {
                 columnWidth: 1/3,
                 disabled: true,
                 fieldLabel: this.app.i18n._('Invoice'),
-                name: 'invoice_id'
-            }));
+                name: 'invoice_id',
+                listeners: {
+                    scope: this,
+                    'select': (combo, invoiceRecord, index) => {
+                        this.record.set('invoice_id', invoiceRecord.get('id'));
+                    }
+                }
+            });
+            lastRow.push(this.invoiceRecordPicker);
         }
         return {
             xtype: 'tabpanel',
@@ -246,7 +251,51 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * is called is billed field changes
      */
     onBilledChange: function(combo, record, index) {
-        if (combo.getValue() == 'billed') {
+        if (combo.getValue() === 'billed') {
+            const dialog = new Tine.Tinebase.dialog.Dialog({
+                windowTitle: this.app.i18n._('Select invoice'),
+                items: [{
+                    layout: 'form',
+                    frame: true,
+                    width: '100%',
+                    items: [
+                        Tine.widgets.form.RecordPickerManager.get('Sales', 'Invoice', {
+                            fieldLabel: this.app.i18n._('Invoice'),
+                            name: 'invoice_id',
+                            value: this.invoice,
+                            listeners: {
+                                scope: this,
+                                'select': (combo, invoiceRecord, index) => {
+                                    this.record.set('invoice_id', invoiceRecord.get('id'));
+                                    this.invoiceRecordPicker.setValue(invoiceRecord);
+                                }
+                            }
+                        })
+                    ]
+                }],
+                openWindow: function (config) {
+                    if (this.window) {
+                        return this.window;
+                    }
+                    config = config || {};
+                    this.window = Tine.WindowFactory.getWindow(Ext.apply({
+                        title: this.windowTitle,
+                        closeAction: 'close',
+                        modal: true,
+                        width: 300,
+                        height: 100,
+                        layout: 'fit',
+                        items: [
+                            this
+                        ]
+                    }, config));
+            
+                    return this.window;
+                }
+            });
+            dialog.setTitle(this.app.i18n._('Select invoice'));
+            dialog.openWindow();
+
             if (! this.getForm().findField('cleared_at').getValue()) {
                 this.getForm().findField('cleared_at').setValue(new Date());
             }
@@ -258,5 +307,35 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         this.record.set('status', 'not yet billed');
         this.record.set('is_open', 1 );
+    },
+    
+    onApplyChanges: async function (closeWindow) {
+        let notAccountedTimesheets = [];
+        if (this.record.get('status') === 'billed') {
+            const filter = [
+                {field: 'timeaccount_id', operator: 'equals', value: this.record.get('id')},
+            ];
+            await Tine.Timetracker.searchTimesheets(filter)
+                .then((result) => {
+                    notAccountedTimesheets = _.filter(result.results, (timesheet) => {
+                        return timesheet?.is_cleared === '0' || !timesheet?.invoice_id;
+                    });
+                })
+        }                    
+        
+        if (notAccountedTimesheets.length > 0) {
+            Ext.MessageBox.confirm(
+                this.app.i18n._('Update Timesheets?'),
+                this.app.i18n._('Attention: There are timesheets that have not yet been accounted. ' +
+                    'If you continue, they will be set to accounted. ' +
+                    'This action cannot be undone. Continue anyway?'),
+                function (button) {
+                    if (button === 'yes') {
+                        Tine.Timetracker.TimeaccountEditDialog.superclass.onApplyChanges.call(this, closeWindow);
+                    }
+                }, this);
+        } else {
+            Tine.Timetracker.TimeaccountEditDialog.superclass.onApplyChanges.call(this, closeWindow);
+        }
     }
 });

@@ -112,11 +112,11 @@ class Tinebase_ModelConfigurationTest extends TestCase
         $cObj = $timesheet->getConfiguration();
 
         $filterModel = $cObj->getFilterModel();
-        self::assertTrue(isset($filterModel['_filterModel']['is_cleared_combined']));
+        self::assertTrue(isset($filterModel['_filterModel']['is_billable_combined']));
         $fields = $cObj->getFields();
-        self::assertTrue(isset($fields['is_cleared_combined']));
-        self::assertTrue(isset($fields['is_cleared_combined']['config']['label']));
-        self::assertTrue(isset($fields['is_cleared_combined']['filterDefinition']['options']));
+        self::assertTrue(isset($fields['is_billable_combined']));
+        self::assertTrue(isset($fields['is_billable_combined']['config']['label']));
+        self::assertTrue(isset($fields['is_billable_combined']['filterDefinition']['options']));
     }
 
     public function testRelationFilter()

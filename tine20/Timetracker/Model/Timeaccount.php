@@ -212,7 +212,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
             ),
             'billed_in'         => array(
-                'label'                 => "Cleared in", // _("Cleared in"),
+                'label'                 => "Project time cleared in", // _("Project time cleared in"),
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'copyOmit'              => true,
                 'nullable'              => true,
@@ -238,7 +238,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'nullable' => true,
                 'default' => self::STATUS_NOT_YET_BILLED,
                 'copyOmit'              => true,
-                'label' => 'Billed', // _('Billed')
+                'label' => 'Project time billed', // _('Project time billed')
                 'type' => 'keyfield',
                 'name' => 'status',
             ),
