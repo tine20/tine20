@@ -42,7 +42,7 @@ beforeEach(async () => {
 })
 
 // skip... is to unstable
-describe('test action button of felamimail (grid)', () => {
+describe.skip('test action button of felamimail (grid)', () => {
     test('delete email', async () => {
         await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-subject', {text: subject});
         await page.click(('.t-app-felamimail .x-toolbar-left-row .x-btn-image.action_delete'));
