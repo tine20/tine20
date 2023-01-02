@@ -517,11 +517,18 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * (bSuccess, oSelNode) where bSuccess is if the selection was successful and oSelNode is the selected node.
      */
     selectPath : function(path, attr, callback) {
-        this.expandPath(path, attr, function(bSuccess, oLastNode){
+        // NOTE: we don't expand here any longer - macos and win don't do it either
+        const parent = Tine.Filemanager.Model.Node.dirname(path);
+        this.expandPath(parent, attr, function(bSuccess, oLastNode){
             if (oLastNode) {
-                oLastNode.select();
+                const folderNode = _.find(oLastNode.childNodes, (cn) => {
+                    return [cn.id, cn.text].indexOf(Tine.Filemanager.Model.Node.basename(path)) >= 0;
+                });
+                if (folderNode) {
+                    folderNode.select();
+                }
                 if (Ext.isFunction(callback)) {
-                    callback.call(true, oLastNode);
+                    callback.call(true, folderNode);
                 }
             }
         }.createDelegate(this));
