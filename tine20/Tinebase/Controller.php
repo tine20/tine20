@@ -1088,7 +1088,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
 
-            $routeCollector->get('/metrics', (new Tinebase_Expressive_RouteHandler(
+            $routeCollector->get('/metrics[/{apiKey}]', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'getStatusMetrics', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
@@ -1233,6 +1233,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     public function getStatus($apiKey = null)
     {
         if (! Tinebase_Config::getInstance()->get(Tinebase_Config::STATUS_INFO) || ! Tinebase_Config::getInstance()->get(Tinebase_Config::STATUS_API_KEY)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No API key configured');
+
             return new \Laminas\Diactoros\Response\EmptyResponse();
         }
         
@@ -1256,6 +1259,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     public function getStatusMetrics($apiKey = null)
     {
         if (! Tinebase_Config::getInstance()->get(Tinebase_Config::METRICS_API_KEY)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No API key configured');
+
             return new \Laminas\Diactoros\Response\EmptyResponse();
         }
 
