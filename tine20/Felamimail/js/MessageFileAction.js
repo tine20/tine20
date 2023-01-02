@@ -70,6 +70,7 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
     suggestionsLoaded: false, 
     composeDialog: null,
     splitButton: null,
+    saveToAllRecipients: false,
     
     initSplitButton: function () {
         if (this.mode === 'fileInstant') {
@@ -164,7 +165,6 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
         } else {
             this.addStaticMenuItems();
         }
-        this.saveToAllRecipients = false;
 
         this.composeDialog.recipientGrid.store.on('add', this.syncRecipients, this);
         this.composeDialog.recipientGrid.store.on('update', this.syncRecipients, this);
@@ -198,6 +198,14 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                         text: Ext.util.Format.htmlEncode(fileTarget.record_title),
                         hideOnClick: false,
                         checkHandler: (item) => {
+                            // uncheck saveToAllRecipients if any recipient is unchecked
+                            if (!item.checked && this.saveToAllRecipients) {
+                                const selectAllItem = this.menu.items.items.find((item) => item?.itemId === 'selectAll');
+                                if (selectAllItem) {
+                                    this.saveToAllRecipients = false;
+                                    selectAllItem.setChecked(false);
+                                }
+                            }
                             this.handleBtnSelectionEvent();
                         }
                     });
@@ -221,16 +229,18 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                 itemId: 'selectAll',
                 isRecipientItem: false,
                 xtype: 'menucheckitem',
-                checked: this.saveToAllRecipients,
+                checked: false,
                 text: this.app.i18n._('Save To All Recipients'),
                 hideOnClick: false,
                 checkHandler: (item) => {
-                    this.saveToAllRecipients = item.checked;
-                    _.each(this.menu.items.items, (item) => {
-                        if (item?.isRecipientItem) {
-                            item.setChecked(this.saveToAllRecipients);
-                        }
-                    });
+                    if (item.checked !== this.saveToAllRecipients) {
+                        this.saveToAllRecipients = item.checked;
+                        _.each(this.menu.items.items, (item) => {
+                            if (item?.isRecipientItem) {
+                                item.setChecked(this.saveToAllRecipients);
+                            }
+                        });
+                    }
                 }
             });
         }
