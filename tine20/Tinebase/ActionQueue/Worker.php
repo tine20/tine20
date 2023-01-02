@@ -18,7 +18,6 @@
 class Tinebase_ActionQueue_Worker extends Console_Daemon
 {
     const EXECUTION_METHOD_DISPATCH = 'dispatch';
-    const EXECUTION_METHOD_EXEC_CLI = 'exec_cli';
 
     protected $_stopped = false;
 

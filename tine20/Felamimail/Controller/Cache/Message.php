@@ -1263,7 +1263,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Folder supports condstore, fetching flags since last mod seq ' . $folder->imap_lastmodseq);
-        //todo: do we want to execute this method again when t messagecount>500 + support_condstore=1 ?
         $flags = $imap->getChangedFlags($folder->imap_lastmodseq);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
