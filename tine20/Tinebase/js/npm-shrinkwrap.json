@@ -15774,8 +15774,8 @@
       "dev": true
     },
     "storage-based-queue": {
-      "version": "github:tine20/storage-based-queue#215c4b2de3780d3a7b05aeacbf281544823be8a7",
-      "from": "github:tine20/storage-based-queue#215c4b2de3780d3a7b05aeacbf281544823be8a7",
+      "version": "github:tine20/storage-based-queue#440ee7761e3acb1edf5467b59a201a45f23a6d61",
+      "from": "github:tine20/storage-based-queue#440ee7761e3acb1edf5467b59a201a45f23a6d61",
       "requires": {
         "@babel/runtime-corejs2": "^7.0.0",
         "braces": "^3.0.2",
