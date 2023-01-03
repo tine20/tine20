@@ -473,7 +473,9 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
 
             exec($cmd);
         } finally {
-            unlink($mycnf);
+            if (file_exists($mycnf)) {
+                unlink($mycnf);
+            }
         }
 
         if (! $option['novalidate']) {
