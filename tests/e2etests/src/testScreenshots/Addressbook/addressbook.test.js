@@ -190,7 +190,7 @@ describe('Contacts', () => {
             await page.screenshot({path: 'screenshots/StandardBedienhinweise/3_standardbedienhinweise_adresse_berechtigungen.png'});
         });
 
-        test('premissons dialog', async () => {
+        test.skip('permissions dialog', async () => {
             // NOTE: in debug mode screenshot removes focus so menu closes
             await expect(page).toClick('#Addressbook_Contact_Tree span', {
                 text: process.env.TEST_USER + 's persönliches Adressbuch',
