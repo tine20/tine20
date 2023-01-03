@@ -1070,6 +1070,9 @@ msgstr ""
 msgid "Skip Imap Quota Notfication"
 msgstr "IMAP Kontingents-Benachrichtigungen unterdrücken"
 
+msgid "Skip Upstream Updates"
+msgstr "Upstream-Aktualisierungen unterdrücken"
+
 #: Config.php:2582 Config.php:2584
 msgid "SSO client settings"
 msgstr ""
@@ -1206,7 +1209,7 @@ msgstr "Modell"
 
 #: Model/ImportExportDefinition.php:151
 msgid "Label"
-msgstr "Label"
+msgstr "Bezeichner"
 
 #: Model/ImportExportDefinition.php:156 Model/Role.php:64
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198

@@ -95,7 +95,7 @@ msgstr "E-Mail Konten"
 
 #: js/Admin.js:209
 msgid "Import Export Definitions"
-msgstr ""
+msgstr "Import/Export-Definitionen"
 
 #: js/Admin.js:280
 msgid "Admin"
