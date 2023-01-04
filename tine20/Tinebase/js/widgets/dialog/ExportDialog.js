@@ -165,6 +165,14 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
     },
 
+    onRecordLoad: function() {
+        Tine.widgets.dialog.ExportDialog.superclass.onRecordLoad.call(this);
+
+        const recordClass = Tine.Tinebase.data.RecordMgr.get(this.record.get('model'));
+        const recordsName = recordClass.getRecordsName();
+        this.window.setTitle(String.format(i18n.ngettext('Export {0}', 'Export {0}', 50), recordsName));
+    },
+
     onRecordUpdate: function() {
         if (this.definitionId) {
             this.formPanel.items.each((item) => {
@@ -260,6 +268,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 
                                 config.recordData =  _.get(response, 'file');
                                 mask.hide();
+                                this.window.close();
                             } catch (error) {
                                 Ext.ux.MessageBox.msg(i18n._('Failure'), i18n._('Export could not be created. Please try again later'));
                             }
@@ -277,10 +286,27 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     filePickerDialog.on('selected',  (nodes) => {
                         _.set(this.record, 'data.options.' +'target', {'type': 'fm_node', 'fm_path': nodes[0].path });
 
-                        Tine.widgets.exportAction.downloadExport(this.record).then((raw) => {
-                            Ext.ux.MessageBox.msg(i18n._('Success'), i18n._('Export created successfully.'));
-                        }).catch((error) => {
-                            Ext.ux.MessageBox.msg(i18n._('Failure'), i18n._('Export could not be created. Please try again later'));
+                        Tine.widgets.exportAction.downloadExport(this.record).then(async (raw) => {
+                            // NOTE: filename is missing in fm_path
+                            const fileLocation = _.get(JSON.parse(raw.responseText), 'file_location');
+                            const link = new Tine.Filemanager.Model.Node({path: fileLocation.fm_path}).getSystemLink();
+                            Ext.Msg.show({
+                                title: i18n._('Success'),
+                                msg: i18n._('Export created successfully.') + `<br /><br /><a href="${link}">${ Ext.util.Format.ellipsis(link, 50)}</a>`,
+                                icon: Ext.MessageBox.INFO,
+                                buttons: Ext.Msg.OK,
+                                scope: this.window,
+                                fn: this.window.close
+                            });
+                        }).catch(async (error) => {
+                            Ext.Msg.show({
+                                title: i18n._('Failure'),
+                                msg: i18n._('Export could not be created. Please try again later'),
+                                icon: Ext.MessageBox.ERROR,
+                                buttons: Ext.Msg.OK,
+                                scope: this.window,
+                                fn: this.window.close
+                            });
                         });
                     });
                     filePickerDialog.openWindow();
