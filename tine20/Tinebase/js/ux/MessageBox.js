@@ -21,6 +21,9 @@ Ext.ux.MessageBox = function(){
             var s = String.format.apply(String, [text]);
             var m = Ext.DomHelper.append(msgCt, {html:createBox(title, s)}, true);
             m.slideIn('t').pause(timeOut).ghost("t", {remove:true});
+            return new Promise(resolve => {
+                window.setTimeout(resolve, timeOut + 1000);
+            });
         }
     };
 }();

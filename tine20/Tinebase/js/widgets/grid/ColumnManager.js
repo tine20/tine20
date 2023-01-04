@@ -125,8 +125,6 @@ Tine.widgets.grid.ColumnManager = function() {
             if(_.indexOf(['datetime'], fieldDefinition.type) >= 0) {
                 const format = Tine.widgets.grid.RendererManager.getDateTimeFormat(field)?.Date;
                 config.width = config.width || (110 + (_.indexOf(format, 'wkday')  >= 0 ? 15 : 0));
-                console.error(format)
-                console.error(config.width)
             }
 
             if(_.indexOf(['date', 'datetime_separated_date'], fieldDefinition.type) >= 0) {
