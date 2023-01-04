@@ -50,7 +50,7 @@
     "rfc4648": "^1.5.0",
     "sass": "^1.26.10",
     "sass-loader": "^9.0.2",
-    "storage-based-queue": "github:tine20/storage-based-queue.git#215c4b2de3780d3a7b05aeacbf281544823be8a7",
+    "storage-based-queue": "github:tine20/storage-based-queue.git#440ee7761e3acb1edf5467b59a201a45f23a6d61",
     "store2": "^2.11.2",
     "svg-url-loader": "^2.3.3",
     "twing": "^2.3.7",
