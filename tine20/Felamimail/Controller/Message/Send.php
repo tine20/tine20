@@ -562,14 +562,19 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             return;
         }
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Set mail body (content type: ' . $_message->content_type . ')');
+
         if ($_message->content_type == Felamimail_Model_Message::CONTENT_TYPE_HTML) {
             $_mail->setBodyHtml(Felamimail_Message::addHtmlMarkup($_message->body));
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_mail->getBodyHtml(TRUE));
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ . ' ' . $_mail->getBodyHtml(TRUE));
         }
         
         $plainBodyText = $_message->getPlainTextBody();
         $_mail->setBodyText($plainBodyText);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_mail->getBodyText(TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' ' . $_mail->getBodyText(TRUE));
     }
     
     /**
@@ -587,7 +592,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         
         $email = ($_message !== NULL && ! empty($_message->from_email)) ? $_message->from_email : $_account->email;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set from for mail: ' . $email . ' / ' . $from);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Set from for mail: ' . $email . ' / ' . $from);
         
         $_mail->setFrom($email, $from);
     }
@@ -867,7 +873,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             }
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Adding attachment ' . $part->type);
+                . ' Adding attachment ' . $part->type  . ' (total size: ' . $totalSize . ')');
             
             $_mail->addAttachment($part);
         }
