@@ -1150,7 +1150,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * @param  null|string|Zend_Mail_Storage_Folder       $folder  folder for new message, else current folder is taken
      * @param  null|array                                 $flags   set flags for new message, else a default set is used
      * @throws Zend_Mail_Storage_Exception
-     * @return integer UID of appended message
+     * @return integer|bool UID of appended message
      */
     public function appendMessage($message, $folder = null, $flags = null)
     {
@@ -1168,7 +1168,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             // log message string for future examination
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage() . ' Broken message: ' . $message);
+                __METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage()
+                . ' Broken message: ' . mb_substr($message, 0, 2048));
         }
         if (! $result) {
             /**
