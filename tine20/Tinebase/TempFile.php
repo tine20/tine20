@@ -158,8 +158,8 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
             $avResult = Tinebase_FileSystem_AVScan_Factory::getScanner()->scan($fh = fopen($path, 'r'));
             fclose($fh);
             if ($avResult->result === Tinebase_FileSystem_AVScan_Result::RESULT_FOUND) {
-                unlink($path);
-                throw new Tinebase_Exception_Backend('av scan found: ' . $avResult->message);
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . 'av scan found: ' . $avResult->message);
             }
         }
 
@@ -252,12 +252,8 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
                 ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
             $avResult = Tinebase_FileSystem_AVScan_Factory::getScanner()->scan($fJoin);
             if ($avResult->result === Tinebase_FileSystem_AVScan_Result::RESULT_FOUND) {
-                fclose($fJoin);
-                unlink($path);
-                foreach ($_tempFiles as $tempFile) {
-                    $this->deleteTempFile($tempFile);
-                }
-                throw new Tinebase_Exception_Backend('av scan found: ' . $avResult->message);
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . 'av scan found: ' . $avResult->message);
             }
         }
         
