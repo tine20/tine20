@@ -328,7 +328,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 var operator = r.get('operator'),
                     foreignRecordClass = operator.foreignRecordClass;
                     
-                if (foreignRecordClass.getMeta('appName') == value.appName && foreignRecordClass.getMeta('modelName') == value.modelName) {
+                if (filter.foreignRecordDefinition.foreignRecordClass === operator.foreignRecordClass) {
                     filter.formFields.operator.setValue(operator);
                     filter.foreignRecordDefinition = operator;
                     return false;
