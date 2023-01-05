@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Ching-En, Cheng <c.cheng@metaways.de>
- * @copyright   Copyright (c) 2019-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -49,7 +49,8 @@ class Felamimail_Model_MessagePipeCopy implements Tinebase_BL_ElementInterface, 
 
             // put message as eml into local_directory (filename = MESSAGE-ID.eml)
             $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile($message);
-            $filename = isset($message->headers['message-id']) ? $message->headers['message-id'] : $message->message_id;
+            $filename = $message->headers['message-id'] ?? $message->message_id;
+            $filename = mb_substr($filename, 0, 128);
             $filename =  preg_replace("/[^\w\d@._-]|\.\./", "", $filename) . '.eml';
 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Copy file to temp path: '
@@ -57,8 +58,7 @@ class Felamimail_Model_MessagePipeCopy implements Tinebase_BL_ElementInterface, 
             
             copy($tempFile->path, $targetDir . DIRECTORY_SEPARATOR . $filename);
         } else {
-            $accountId = isset($this->_config['target']['accountid']) ?
-                $this->_config['target']['accountid'] :
+            $accountId = $this->_config['target']['accountid'] ??
                 Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
             $account = Felamimail_Controller_Account::getInstance()->get($accountId);
 
