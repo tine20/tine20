@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -211,9 +211,12 @@ trait Calendar_Export_GenericTrait
     }
 
     /**
-     * we dont want to change the order of $_records, they are sorted
+     * we don't want to change the order of $_records, they are sorted
      *
      * @param Tinebase_Record_RecordSet $_records
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_Record_NotAllowed
      */
     protected function _extendedCFResolving(Tinebase_Record_RecordSet $_records)
@@ -241,10 +244,12 @@ trait Calendar_Export_GenericTrait
         /** @var Calendar_Model_Event $event */
         foreach ($recurInstances as $event) {
             $cfs = [];
-            foreach ($resolveRecords->getById($event->base_event_id)->customfields as $name => $cfc) {
-                $cfs[$name] = clone $cfc;
+            if ($resolvedRecord = $resolveRecords->getById($event->base_event_id)) {
+                foreach ($resolvedRecord->customfields as $name => $cfc) {
+                    $cfs[$name] = clone $cfc;
+                }
+                $event->customfields = $cfs;
             }
-            $event->customfields = $cfs;
         }
     }
 }
