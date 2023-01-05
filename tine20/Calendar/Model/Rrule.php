@@ -785,24 +785,24 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 $yearlyrrule->interval = 12;
                 
                 $baseEvent = clone $_event;
-                $originatorsDtstart = clone $baseEvent->dtstart;
-                $originatorsDtstart->setTimezone($_event->originator_tz);
-                
-                // @TODO respect BYMONTH
-                if ($rrule->bymonth && $rrule->bymonth != $originatorsDtstart->format('n')) {
-                    // adopt
-                    $diff = (12 + $rrule->bymonth - $originatorsDtstart->format('n')) % 12;
-                    
-                    // NOTE: skipping must be done in organizer_tz
-                    $baseEvent->dtstart->setTimezone($_event->originator_tz);
-                    $baseEvent->dtend->setTimezone($_event->originator_tz);
-                    $baseEvent->dtstart->addMonth($diff);
-                    $baseEvent->dtend->addMonth($diff);
-                    $baseEvent->dtstart->setTimezone('UTC');
-                    $baseEvent->dtend->setTimezone('UTC');
-                    
+
+                if ($rrule->bymonth) {
+                    $baseEvent->setTimezone($_event->originator_tz);
+
+                    $rruleStart = $baseEvent->dtstart->getClone()
+                        ->setDate($baseEvent->dtstart->format('Y'), $rrule->bymonth, $rrule->bymonthday ?: $baseEvent->dtstart->format('j'));
+                    if ($rruleStart < $baseEvent->dtstart) {
+                        $rruleStart->addYear(1);
+                    }
+
+                    $eventLength = $_event->dtstart->diff($_event->dtend);
+                    $baseEvent->dtstart = $rruleStart;
+                    $baseEvent->dtend = $rruleStart->getClone()->add($eventLength);
+
+                    $baseEvent->setTimezone('UTC');
+
                     // check if base event (recur instance) needs to be added to the set
-                    if ($baseEvent->dtstart->isLater($_from) && $baseEvent->dtstart->isEarlier($_until)) {
+                    if ($baseEvent->dtstart->isLater($_event->dtstart) && $baseEvent->dtstart->isLater($_from) && $baseEvent->dtstart->isEarlier($_until)) {
                         if (! in_array($baseEvent->setRecurId($baseEvent->getId()), $exceptionRecurIds)) {
                             self::addRecurrence($baseEvent, $recurSet);
                         }
