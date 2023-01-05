@@ -25,29 +25,30 @@
  *  - despite RFC2445 we have an expicit isAllDayEvent property
  * 
  * @package Calendar
- * @property Tinebase_Record_RecordSet      alarms
- * @property Tinebase_DateTime              creation_time
- * @property string                         is_all_day_event
- * @property string                         originator_tz
- * @property string                         seq
- * @property string                         uid
- * @property string                         etag
- * @property string                         class
- * @property int                            container_id
- * @property string                         organizer
- * @property Tinebase_Record_RecordSet      attendee
- * @property Tinebase_DateTime              dtstart
- * @property Tinebase_DateTime              dtend
- * @property Calendar_Model_Rrule           rrule
- * @property Tinebase_DateTime              rrule_until
- * @property string                         transp
- * @property string                         status
- * @property string                         summary
- * @property string                         recurid
- * @property string                         poll_id
- * @property string                         description
- * @property string                         external_seq
- * @property Tinebase_Record_RecordSet      exdate
+ * @property Tinebase_Record_RecordSet      $alarms
+ * @property Tinebase_DateTime              $creation_time
+ * @property string                         $is_all_day_event
+ * @property string                         $originator_tz
+ * @property string                         $seq
+ * @property string                         $uid
+ * @property string                         $etag
+ * @property string                         $class
+ * @property int                            $container_id
+ * @property string                         $organizer
+ * @property Tinebase_Record_RecordSet      $attendee
+ * @property Tinebase_DateTime              $dtstart
+ * @property Tinebase_DateTime              $dtend
+ * @property Calendar_Model_Rrule           $rrule
+ * @property Tinebase_DateTime              $rrule_until
+ * @property string                         $transp
+ * @property string                         $status
+ * @property string                         $summary
+ * @property string                         $recurid
+ * @property string                         $poll_id
+ * @property string                         $description
+ * @property string                         $external_seq
+ * @property string                         $base_event_id
+ * @property Tinebase_Record_RecordSet      $exdate
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
 {
@@ -490,8 +491,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     /**
      * sets record related properties
      * 
-     * @param string _name of property
-     * @param mixed _value of property
+     * @param string $_name of property
+     * @param mixed $_value of property
      * @throws Tinebase_Exception_UnexpectedValue
      * @return void
      */
@@ -683,7 +684,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      *       and have no translations
      *       
      * @param string         $_field
-     * @param Zend_Translate $_translation
+     * @param Zend_Translate_Adapter $_translation
      * @return string
      */
     public static function getTranslatedFieldName($_field, $_translation)
@@ -940,12 +941,12 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         if (static::$_freebusyCleanUpVisibilty < Calendar_Config::FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE) {
             $oldAttendee->removeAll();
         } elseif (static::$_freebusyCleanUpVisibilty < Calendar_Config::FREEBUSY_INFO_ALLOW_ALL_ATTENDEE) {
-            /** @var Calendar_Model_Attender $attendee */
+            /** @var Calendar_Model_Attender $oldAttendee */
             $oldAttendee = $oldAttendee->filter('user_type', Calendar_Model_Attender::USERTYPE_RESOURCE);
         }
 
         $this->attendee = $oldAttendee;
-        return TRUE;
+        return true;
     }
     
     /**
