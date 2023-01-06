@@ -417,6 +417,8 @@ Ext.Button = Ext.extend(Ext.BoxComponent, {
                 this.tooltip = tooltip;
             }else{
                 this.btnEl.dom[this.tooltipType] = tooltip;
+                const iconEl = this.btnEl.next('.x-btn-image');
+                iconEl.dom.qtip = tooltip;
             }
         }else{
             this.tooltip = tooltip;

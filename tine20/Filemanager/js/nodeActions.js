@@ -102,7 +102,7 @@ Tine.Filemanager.nodeActionsMgr = new (Ext.extend(Tine.widgets.ActionManager, {
 Tine.Filemanager.nodeActions.actionUpdater = function(action, grants, records, isFilterSelect, filteredContainers) {
     // run default updater
     Tine.widgets.ActionUpdater.prototype.defaultUpdater(action, grants, records, isFilterSelect);
-
+    
     // check filtered node if nothing is selected
     action.initialConfig.filteredContainer = null;
     if (! _.get(records, 'length') && filteredContainers) {
@@ -116,7 +116,8 @@ Tine.Filemanager.nodeActions.actionUpdater = function(action, grants, records, i
     }
 
     let disabled = _.isFunction(action.isDisabled) ? action.isDisabled() : action.disabled;
-
+    //todo: if record is virtual , disable all actions except the delete action
+    
     // node specific checks (@TODO what about folders with quarantined contents?)
     disabled = window.lodash.reduce(records, function(disabled, record) {
         const isVirtual = _.isFunction(record.isVirtual) ? record.isVirtual() : false;
@@ -374,15 +375,20 @@ Tine.Filemanager.nodeActions.Delete = {
             handler: async function (button) {
                 if (nodes && button === 'yes') {
                     try {
+                        // when user delete virtual node , make sure delete the related tasks in localstorage
+                        await Tine.Tinebase.uploadManager.removeTasksByNode(nodes);
+                        
                         // announce delete before server delete to improve ux
-                        _.each(nodes, function(record) {
+                        nodes.forEach(record => {
                             window.postal.publish({
                                 channel: "recordchange",
                                 topic: 'Filemanager.Node.delete',
                                 data: record.data
                             });
                         });
-                        await Tine.Filemanager.deleteNodes(_.map(nodes, 'data.path'));
+                        
+                        const noneVirtualNodes = nodes.filter(n => n?.data?.status !== Tine.Tinebase.uploadManager.status.CANCELLED);
+                        await Tine.Filemanager.deleteNodes(noneVirtualNodes.map(n => n.data.path));
                     } catch (e) {
                         Tine.Tinebase.ExceptionHandler.handleRequestException(e.data);
                     }
