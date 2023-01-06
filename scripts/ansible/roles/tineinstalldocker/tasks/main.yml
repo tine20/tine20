@@ -16,6 +16,7 @@
 - name: Create and start services
   community.docker.docker_compose:
     project_name: tine
+    pull: true
     definition:
       version: '2'
       services:
