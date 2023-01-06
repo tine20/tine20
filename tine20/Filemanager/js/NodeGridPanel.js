@@ -125,13 +125,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Filemanager.NodeGridPanel.superclass.initComponent.call(this);
         this.getStore().on('load', this.onLoad.createDelegate(this));
         this.getGrid().on('beforeedit', this.onBeforeEdit, this);
-
+    
+    
         this.postalSubscriptions.push(postal.subscribe({
             channel: "recordchange",
             topic: 'Tinebase.Tree_Node.*',
             callback: this.onRecordChanges.createDelegate(this)
         }));
-
 
         // // cope with empty selections - dosn't work. It's confusing if e.g. the delte btn is enabled with no selections
         // this.selectionModel.on('selectionchange', function(sm) {
@@ -192,8 +192,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 });
             }
         }
-        // NOTE: grid doesn't update selections itself
-        this.actionUpdater.updateActions(this.grid.getSelectionModel(), this.getFilteredContainers());
     },
 
     /**
@@ -207,11 +205,14 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             return;
         }
 
+        let selectRecord = null;
+        const store = this.getStore();
+        
         if (record.status === 'failed' || record.status === 'cancelled') {
             this.bufferedLoadGridData({
                 removeStrategy: 'keepBuffered'
             });
-            
+    
             return;
         }
 
@@ -222,7 +223,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.log.debug(record, mode);
 
         if (record && Ext.isFunction(record.copy)) {
-            const store = this.getStore();
             let isSelected = false;
             
             if (this.isInCurrentGrid(record.get('path'))) {
@@ -233,16 +233,19 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     store.insert(idx, [record]);
                 } else {
                     store.add([record]);
+                    this.localSort();
                 }
             } else {
                 return;
             }
             
-            this.localSort();
-
             if (isSelected) {
-                this.getGrid().getSelectionModel().selectRow(store.indexOfId(record.id), true);
+                selectRecord = existingRecord;
             }
+        }
+        
+        if (selectRecord) {
+            this.getGrid().getSelectionModel().selectRow(store.indexOfId(selectRecord.id), true);
         }
     },
     
@@ -303,34 +306,49 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * - cross window : if yes , duplicated window should not proceed upload at all
      */
     monitorUploadTasks: async function () {
-        const failedUploads = await Tine.Tinebase.uploadManager.getFailedUploadTasks();
-        const fileHandleUploadTasks = _.filter(failedUploads, (task)=> {
-            const fileHandle = task.args.fileObject;
-            return typeof fileHandle.getFile === 'function' && task.handler === 'FilemanagerUploadFileTask';
+        const tasks = await Tine.Tinebase.uploadManager.getFailedUploadTasks();
+        
+        const fileUploadTasks = tasks.filter(t => t.handler === 'FilemanagerUploadFileTask');
+        if (fileUploadTasks.length === 0) return;
+        
+        const fileHandleUploadTasks = fileUploadTasks.filter(t => {
+            return t?.args?.fileObject && typeof t.args.fileObject.getFile === 'function';
         });
-
-        if (fileHandleUploadTasks.length > 0) {
-            const failedUploadPaths = _.join(_.map(fileHandleUploadTasks, (task) => {
-                return task.label + " <br />";
-            }), '');
-            
-            this.conflictConfirmWin = Tine.widgets.dialog.FileListDialog.openWindow({
-                modal: true,
-                allowCancel: false,
-                height: 180,
-                width: 500,
-                title: this.app.i18n._('Do you want to restart the failed uploads?'),
-                text: failedUploadPaths,
-                scope: this,
-                handler: async function (button) {
-                    if (button === 'yes') {
-                        await Tine.Tinebase.uploadManager.restartFailedUploads(fileHandleUploadTasks);
+        
+        const title = fileHandleUploadTasks.length === 0 
+            ? this.app.i18n._('You have unfinished uploads, Please check upload monitor and restart the failed uploads again.') 
+            : this.app.i18n._('Do you want to restart the failed uploads?');
+        
+        const paths = fileUploadTasks.map((t) => t.label).join( '<br>');
+        
+        this.conflictConfirmWin = Tine.widgets.dialog.FileListDialog.openWindow({
+            modal: true,
+            allowCancel: false,
+            height: 180,
+            width: 500,
+            title: title,
+            text: paths,
+            scope: this,
+            buttonOptions: fileHandleUploadTasks.length === 0 ? ['Ok'] : ['No', 'Yes'],
+            handler: async (button) => {
+                this.loadMask = this.loadMask ?? new Ext.LoadMask(this.getEl(), {msg: this.app.i18n._('Processing files...')});
+                this.loadMask.show.defer(100, this.loadMask);
+                
+                if (button === 'yes') {
+                    if (fileHandleUploadTasks.length === 0) {
+                        await Tine.Tinebase.uploadManager.removeFailedTasks(tasks);
                     } else {
-                        await Tine.Tinebase.uploadManager.resetUploadChannels();
+                        await Tine.Tinebase.uploadManager.restartFailedUploads(fileHandleUploadTasks);
                     }
                 }
-            });
-        }
+                if (button === 'no') {
+                    await Tine.Tinebase.uploadManager.removeFailedTasks(tasks);
+                }
+                
+                if (this.loadMask) this.loadMask.hide.defer(100, this.loadMask);
+            }
+        });
+        
     },
 
     /**
@@ -815,8 +833,15 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         
         const updatedRecord = _.get(arguments[0], 'json') ?? _.get(arguments[0], 'data');
-        if (_.get(updatedRecord,'status') === 'pending') {
-            className += ' x-type-data-pending'
+        const contentType = _.get(updatedRecord,'contenttype', '');
+        
+        if (contentType.includes('vnd.adobe.partial-upload') || _.get(updatedRecord,'type') === 'folder') {
+            if (_.get(updatedRecord,'status') === 'pending') {
+                className += ' x-type-data-pending'
+            }
+            if (_.get(updatedRecord,'status') === 'cancelled') {
+                className += ' x-type-data-failed'
+            }
         }
 
         return className;
@@ -1045,24 +1070,39 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if(!nodeRecord) {
             nodeRecord = new Tine.Filemanager.Model.Node(targetNode);
         }
-        //todo: support file handle
-        let files = fileSelector.getFileList();
 
-        const folderList = _.uniq(_.map(files, (fo) => {
-            return fo.fullPath.replace(/\/[^/]*$/, '');
-        }));
-        
-        if(folderList.includes('') && !Tine.Filemanager.nodeActionsMgr.checkConstraints('create', nodeRecord, [{type: 'file'}])) {
-            const app = Tine.Tinebase.appMgr.get('Filemanager');
-            Ext.MessageBox.alert(
+        try {
+            let files = fileSelector.getFileList();
+            
+            if (files.length === 0) return;
+            
+            const folderList = _.uniq(_.map(files, (fo) => {
+                return fo.fullPath.replace(/\/[^/]*$/, '');
+            }));
+    
+            if(folderList.includes('') && !Tine.Filemanager.nodeActionsMgr.checkConstraints('create', nodeRecord, [{type: 'file'}])) {
+                const app = Tine.Tinebase.appMgr.get('Filemanager');
+                Ext.MessageBox.alert(
                     i18n._('Upload Failed'),
                     app.i18n._('It is not permitted to store files in this folder!')
-            ).setIcon(Ext.MessageBox.ERROR);
-
-            return;
-        }
+                ).setIcon(Ext.MessageBox.ERROR);
         
-        await upload(this.targetFolderPath, files);
+                return;
+            }
+    
+            if (! this.loadMask) {
+                this.loadMask = new Ext.LoadMask(this.getEl(), {msg: String.format(this.app.i18n._('Processing files...'), files.length)});
+            }
+            this.loadMask.show.defer(100, this.loadMask);
+    
+            await upload(this.targetFolderPath, files);
+    
+            if (this.loadMask) {
+                this.loadMask.hide.defer(100, this.loadMask);
+            }
+        } catch (e) {
+            console.error(e);
+        }
     },
 
     /**

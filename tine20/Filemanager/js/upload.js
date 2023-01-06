@@ -21,22 +21,22 @@
 async function upload(targetFolderPath, files) {
     const batchID = Ext.id();
     files.forEach((file) => {file.batchID = batchID});
-    await createTasks(targetFolderPath, files);
+    await createTasks(targetFolderPath, files, batchID);
 }
 
 /**
  * create tasks for folder creation and file uploads
- * 
+ *
  * - the priority of folder creation is based on deep level
-
+ 
  * @param targetFolderPath
  * @param files
  * @returns {Promise<[]>}
  */
-async function createTasks(targetFolderPath, files) {
+async function createTasks(targetFolderPath, files, batchID) {
     // try to generate the id here which is used for grid update
     let tasks = [];
-
+    
     try {
         files = resolvePaths(targetFolderPath, files);
         const folders = getSortedFolders(files);
@@ -46,12 +46,12 @@ async function createTasks(targetFolderPath, files) {
         
         const existNodeList = response.results;
         tasks = _.concat(tasks, createFolderTasks(targetFolderPath, folders, existNodeList));
-    
+        
         _.each(folders, (folder) => {
             const filesToUpload = getFilesToUpload(files, folder);
             tasks = _.concat(tasks, createUploadFileTasks(targetFolderPath, filesToUpload, existNodeList));
         });
-
+        tasks.forEach((t) => {t.args.batchID = batchID;});
         await Tine.Tinebase.uploadManager.queueUploads(tasks);
     } catch (e) {
         const app = Tine.Tinebase.appMgr.get('Filemanager');
@@ -76,7 +76,7 @@ function createFolderTasks(targetFolderPath, folders, existNodeList) {
     
     _.each(folders, (folder)=> {
         const pathArray = _.compact(folder.split('/'));
-    
+        
         if (pathArray.length === 0) {
             return;
         }
@@ -90,7 +90,13 @@ function createFolderTasks(targetFolderPath, folders, existNodeList) {
             type: 'folder',
             status: 'pending',
             path: `${uploadId}`,
-            id: Tine.Tinebase.data.Record.generateUID()
+            id: Tine.Tinebase.data.Record.generateUID(),
+            account_grants: {
+                addGrant: false,
+                readGrant: false,
+                editGrant: false,
+                deleteGrant: true
+            },
         });
         
         if (!existNode) {
@@ -111,6 +117,7 @@ function createFolderTasks(targetFolderPath, folders, existNodeList) {
                 uploadId,
                 nodeData,
                 targetFolderPath,
+                existNode: existNode ? existNode : null,
             })
         };
         folderTasks.push(task);
@@ -136,26 +143,33 @@ function createUploadFileTasks(targetFolderPath, filesToUpload, existNodeList) {
         const uploadId = file.uploadId;
         const [existNode] = _.filter(existNodeList, {path: uploadId});
         const parentFolderPath = uploadId.replace(file.name, '');
-
+        
         const nodeData = existNode ?? Tine.Filemanager.Model.Node.getDefaultData({
             name: _.get(file, 'name'),
             type: 'file',
             path: `${uploadId}`,
-            id: Tine.Tinebase.data.Record.generateUID()
+            id: Tine.Tinebase.data.Record.generateUID(),
+            account_grants: {
+                addGrant: false,
+                readGrant: false,
+                editGrant: false,
+                deleteGrant: true
+            },
         });
-    
+        
         nodeData.last_upload_time = nodeData.creation_time;
         nodeData.status = 'pending';
         nodeData.size = _.get(file, 'size');
         nodeData.progress = -1;
         nodeData.contenttype = `vnd.adobe.partial-upload; final_type=${_.get(file, 'type')}; progress=${nodeData.progress}`;
         
-        // monitor UI needs every file node , grid panel will filter itself
-        window.postal.publish({
-            channel: "recordchange",
-            topic: 'Filemanager.Node.create',
-            data: nodeData
-        });
+        if (!existNode) {
+            window.postal.publish({
+                channel: "recordchange",
+                topic: 'Filemanager.Node.create',
+                data: nodeData
+            });
+        }
         
         const task = {
             handler: "FilemanagerUploadFileTask",
@@ -166,7 +180,7 @@ function createUploadFileTasks(targetFolderPath, filesToUpload, existNodeList) {
             args: _.assign({
                 batchID: file.batchID,
                 overwrite: false,
-                uploadId, 
+                uploadId,
                 fileObject,
                 nodeData,
                 fileSize: file.size,
@@ -174,7 +188,7 @@ function createUploadFileTasks(targetFolderPath, filesToUpload, existNodeList) {
                 targetFolderPath: parentFolderPath
             })
         };
-    
+        
         fileTasks.push(task);
     });
     
@@ -183,7 +197,7 @@ function createUploadFileTasks(targetFolderPath, filesToUpload, existNodeList) {
 
 /**
  * resolve uploadId for file
- * 
+ *
  * @param targetFolderPath
  * @param files
  */
@@ -196,8 +210,8 @@ function resolvePaths(targetFolderPath, files) {
 }
 
 /**
- * create sorted folders from files 
- * 
+ * create sorted folders from files
+ *
  * @param files
  */
 function getSortedFolders(files) {
@@ -205,7 +219,7 @@ function getSortedFolders(files) {
     let folders = _.uniq(_.map(files, (fo) => {
         return fo.fullPath.replace(/\/[^/]*$/, '');
     }));
-
+    
     // fill potential gaps in folder list as we don't have mkdir -p
     folders = _.each(folders, (folder) => {
         _.reduce(_.compact(folder.split('/')), (prefix, part) => {
@@ -214,14 +228,14 @@ function getSortedFolders(files) {
             return folder;
         }, '')
     }).sort();
-
+    
     // sort folder by deep level
     return _.sortBy(folders, (folder)=> {return _.split(folder, '/').length});
 }
 
 /**
  * get files to upload from specific folder path
- * 
+ *
  * @param files
  * @param folder
  */
@@ -254,7 +268,7 @@ function getFolderDependencyPaths(targetFolderPath, path) {
             depPaths.push(depBasePath);
         });
     }
-
+    
     return depPaths;
 }
 

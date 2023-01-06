@@ -30,21 +30,46 @@ Tine.Tinebase.UploadManagerStatusButton = Ext.extend(Ext.Button, {
      */
     status: 'idle',
 
-    initComponent: function() {
+    initComponent: async function () {
+        this.app = Tine.Tinebase.appMgr.get('Filemanager');
+        const allTasks = await Tine.Tinebase.uploadManager.getAllTasks();
+        const tasks = allTasks.filter(t => t.handler === 'FilemanagerUploadFileTask');
+    
+        this.update(tasks);
         Tine.Tinebase.UploadManagerStatusButton.superclass.initComponent.call(this);
     },
-
+    
     handler: function() {
         Ext.ux.file.UploadManagementDialog.openWindow();
     },
     
-    uploadActive() {
-        this.setIconClass('action_upload_uploading');
+    update(allTasks = null, uploading = false) {
+        if (!allTasks) return;
+        
+        const fileTasks = allTasks.filter(t => t.handler === 'FilemanagerUploadFileTask');
+        const total = fileTasks.length;
+        const complete = fileTasks.filter(t => t.status === 'complete').length;
+        const failed = fileTasks.filter(t => t.status === 'failed').length;
+        
+        const info = [
+            '<table>',
+                '<tr>',
+                    '<td>', this.app.i18n._('Total    Uploads') + ':', '</td>', '<td>', total, '</td>',
+                '</tr>',
+                '<tr>',
+                    '<td>', this.app.i18n._('Complete Uploads') + ':', '</td>', '<td>', complete, '</td>',
+                '</tr>',
+                '<tr>',
+                    '<td>', this.app.i18n._('Failed   Uploads') + ':', '</td>', '<td>', failed, '</td>',
+                '</tr>',
+            '</table>'
+        ];
+        
+        const iconClass = uploading ? 'action_upload_uploading' : failed > 0 ? 'action_upload_error' : 'action_upload_idle';
+        
+        this.setTooltip(info.join(''));
+        this.setIconClass(iconClass);
     },
-    
-    uploadIdle() {
-        this.setIconClass('action_upload_idle');
-    }
 });
 
 Ext.onReady(() => {

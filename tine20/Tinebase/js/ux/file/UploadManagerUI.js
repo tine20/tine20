@@ -28,6 +28,9 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     frame: false,
     uploadStore: null,
     buttonAlign: null,
+    windowWidth: 1200,
+    windowHeight: 450,
+    
     /**
      * Constructor.
      */
@@ -42,7 +45,7 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             topic: 'Filemanager.Node.*',
             callback: _.bind(this.onUploadRecordChange, this)
         }));
-        
+
         this.uploadStore = new Ext.data.ArrayStore({
             sortInfo: {field: 'last_upload_time', direction: 'ASC'},
             fields: [
@@ -81,12 +84,16 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
                         {text: this.app.i18n._('Cancel all unfinished uploads before'), name: 'delete'}
                     ]
                 }) : 'delete';
+    
+
+                this.loadMask = this.loadMask ?? new Ext.LoadMask(this.getEl(), {msg: i18n._('Removing files...')});
+                this.loadMask.show.defer(100, this.loadMask);
                 
                 switch (option) {
                     case 'empty':
                         // keep pending and uploading files
                         this.uploadStore.each((r) => {
-                            if (r.data.status === 'complete' || r.data.status === 'failed') {
+                            if (r.data.status === 'complete') {
                                 this.uploadStore.remove(r);
                             }
                         });
@@ -100,6 +107,10 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
                         this.progressBar.show();
                         this.progressBar.update(Tine.ux.file.ProgressRenderer(0, 0, /*use SoftQuota*/ false));
                         break;
+                }
+    
+                if (this.loadMask) {
+                    this.loadMask.hide.defer(100, this.loadMask);
                 }
             }
         };
@@ -151,6 +162,10 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
                 height: '16px',
             }
         });
+    
+        this.progressInfo = new Ext.form.Label({
+            text:'',
+        });
 
         this.items = [{
             layout: 'vbox',
@@ -159,6 +174,7 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             border: false,
             autoScroll: true,
             items: [
+                this.progressInfo,
                 this.byUserGrid,
             ]
         }];
@@ -200,21 +216,25 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     },
 
     async loadUploadData() {
-        const tasks = await Tine.Tinebase.uploadManager.getAllFileUploadTasks();
-
-        _.each(tasks, (task) => {
-            let recordData = task.args.nodeData;
-            recordData.id = Tine.Tinebase.data.Record.generateUID();
-            const record = Tine.Tinebase.data.Record.setFromJson(recordData,Tine.Filemanager.Model.Node);
-            
-            record.data.status = task.status;
-            record.data.last_upload_time = _.isString(recordData.last_upload_time) ? recordData.last_upload_time : recordData.last_upload_time.toJSON();
-            if (record.data.status === 'pending') {
-                this.uploadStore.insert(0, [record]);
-            } else {
-                this.uploadStore.addSorted(record);
-            }
-        });
+        const allTasks = await Tine.Tinebase.uploadManager.getAllTasks();
+        const tasks = allTasks.filter(t => t.handler === 'FilemanagerUploadFileTask');
+    
+        tasks.forEach((task) => {
+                let recordData = task.args.nodeData;
+                recordData.id = Tine.Tinebase.data.Record.generateUID();
+                const record = Tine.Tinebase.data.Record.setFromJson(recordData,Tine.Filemanager.Model.Node);
+                
+                record.data.status = task.status;
+                record.data.last_upload_time = _.isString(recordData.last_upload_time) 
+                    ? recordData.last_upload_time 
+                    : recordData.last_upload_time.toJSON();
+                
+                if (record.data.status === 'pending') {
+                    this.uploadStore.insert(0, [record]);
+                } else {
+                    this.uploadStore.addSorted(record);
+                }
+            });
 
         this.updateProgressBar();
     },
@@ -234,48 +254,51 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         if (!this.rendered) {
             return;
         }
-
-        let record = Tine.Tinebase.data.Record.setFromJson(recordData, Tine.Filemanager.Model.Node);
+    
+        const records = Ext.isArray(recordData) ? recordData : [recordData];
+        const store = this.uploadStore;
         
-        if (record && Ext.isFunction(record.copy)) {
-            if (record.data.type === 'folder') {
-                return;
-            }
-
-            record.data.status = recordData.status;
-            record.data.last_upload_time = recordData.last_upload_time;
-
-            const store = this.uploadStore;
-
-            if (e.topic.match(/\.create/)) {
-                store.insert(0, [record]);
-            }
-
-            if (e.topic.match(/\.update/)) {
-                const existRecord = this.getRecordByData(recordData);
-                
-                if (! existRecord?.id) {
+        _.each(records, (recordData) => {
+            let record = Tine.Tinebase.data.Record.setFromJson(recordData, Tine.Filemanager.Model.Node);
+    
+            if (record && Ext.isFunction(record.copy)) {
+                if (record.data.type === 'folder') {
                     return;
                 }
-                
-                record.data.id = existRecord.id;
-                record.id = existRecord.id;
-                const idx = store.indexOfId(existRecord.id);
-                store.removeAt(idx);
-
-                if (existRecord.data.status === 'pending' && record.data.status === 'uploading') {
+        
+                record.data.status = recordData.status;
+                record.data.last_upload_time = recordData.last_upload_time;
+        
+                if (e.topic.match(/\.create/)) {
                     store.insert(0, [record]);
-                } else if (record.data.status === 'failed' || record.data.status === 'complete') {
-                    store.add([record]);
-                } else {
-                    store.insert(idx, [record]);
+                }
+        
+                if (e.topic.match(/\.update/)) {
+                    const existRecord = this.getRecordByData(recordData);
+            
+                    if (!existRecord?.id) {
+                        return;
+                    }
+            
+                    record.data.id = existRecord.id;
+                    record.id = existRecord.id;
+                    const idx = store.indexOfId(existRecord.id);
+                    store.removeAt(idx);
+            
+                    if (existRecord.data.status === 'pending' && record.data.status === 'uploading') {
+                        store.insert(0, [record]);
+                    } else if (record.data.status === 'failed' || record.data.status === 'complete') {
+                        store.add([record]);
+                    } else {
+                        store.insert(idx, [record]);
+                    }
                 }
             }
-        }
-
-        if (record && e.topic.match(/\.delete/)) {
-            this.store.remove(record);
-        }
+    
+            if (record && e.topic.match(/\.delete/)) {
+                this.store.remove(record);
+            }
+        });
 
         this.updateProgressBar();
     },
@@ -310,8 +333,6 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
 Ext.ux.file.UploadManagementDialog.openWindow = function (config) {
     var id =  0;
     return Tine.WindowFactory.getWindow({
-        width: 400,
-        height: 300,
         name: Ext.ux.file.UploadManagementDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Ext.ux.file.UploadManagementDialog',
         contentPanelConstructorConfig: config,
