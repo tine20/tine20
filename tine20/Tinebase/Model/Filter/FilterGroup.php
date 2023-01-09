@@ -5,11 +5,13 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  * @todo        finish implementation of to/from json functions
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * Tinebase_Model_Filter_FilterGroup
@@ -102,16 +104,27 @@
 class Tinebase_Model_Filter_FilterGroup implements Iterator
 {
     /*************** config options for inheriting filter groups ***************/
-    
+
+    public const CONDITION = 'condition';
     /**
      * const for OR condition
      */
-    const CONDITION_OR = 'OR';
+    public const CONDITION_OR = 'OR';
     
     /**
      * const for AND condition
      */
-    const CONDITION_AND = 'AND';
+    public const CONDITION_AND = 'AND';
+
+    public const FILTERS = 'filters';
+    public const FOREIGN_RECORD = 'foreignRecord';
+
+    public const IGNORE_ACL = 'ignoreAcl';
+
+    public const LINK_TYPE = 'linkType';
+    public const LINK_TYPE_RELATION = 'relation';
+    public const LINK_TYPE_FOREIGN_ID = 'foreignId';
+    public const LINK_TYPE_DENORMALIZED = 'denormalized';
     
     /**
      * if this is set, the filtergroup will be created using the configurationObject for this model
@@ -210,7 +223,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         
         $this->_concatenationCondition = $_condition == self::CONDITION_OR ? self::CONDITION_OR : self::CONDITION_AND;
 
-        $this->_ignoreAcl = isset($this->_options['ignoreAcl']) ? (bool)$this->_options['ignoreAcl'] : false;
+        $this->_ignoreAcl = isset($this->_options[self::IGNORE_ACL]) ? (bool)$this->_options[self::IGNORE_ACL] : false;
         
         $this->setFromArray($_data);
     }
@@ -324,17 +337,17 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             }
             
             // if a condition is given, we create a new filtergroup from this class
-            if (isset($filterData['condition'])) {
+            if (isset($filterData[self::CONDITION])) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
                     . ' Adding FilterGroup: ' . static::class);
 
                 $selfClass = static::class;
-                $filtergroup = new $selfClass(array(), $filterData['condition'], $this->_options, $this);
+                $filtergroup = new $selfClass(array(), $filterData[self::CONDITION], $this->_options, $this);
                 if (static::class === 'Tinebase_Model_Filter_FilterGroup') {
                     // generic modelconfig filter group, need to set model
                     $filtergroup->setConfiguredModel($this->_configuredModel);
                 }
-                $filtergroup->setFromArray($filterData['filters']);
+                $filtergroup->setFromArray($filterData[self::FILTERS]);
                 if (isset($filterData['id'])) {
                     $filtergroup->setId($filterData['id']);
                 }
@@ -343,9 +356,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 }
                 
                 $this->addFilterGroup($filtergroup);
-            } else if (isset($filterData['field']) && $filterData['field'] == 'foreignRecord') {
+            } else if (isset($filterData[TMFA::FIELD]) && $filterData[TMFA::FIELD] === self::FOREIGN_RECORD) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
-                    . ' Adding ForeignRecordFilter of type: ' . $filterData['value']['linkType']);
+                    . ' Adding ForeignRecordFilter of type: ' . $filterData[TMFA::VALUE][self::LINK_TYPE]);
                 $this->_createForeignRecordFilterFromArray($filterData);
                 
             } else {
@@ -361,7 +374,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     protected function _createForeignRecordFilterFromArray($_filterData)
     {
-        if (! isset($_filterData['value']['filters'])) {
+        if (! isset($_filterData[TMFA::VALUE][self::FILTERS])) {
             if (self::$beStrict) {
                 throw new Tinebase_Exception_Record_DefinitionFailure('filter syntax problem ' . print_r($_filterData, true));
             }
@@ -374,35 +387,45 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
 
         $filterData = $_filterData;
 
-        $filterData['value'] = $_filterData['value']['filters'];
-        $filterData['options'] = array(
+        $filterData[TMFA::VALUE] = $_filterData[TMFA::VALUE][self::FILTERS];
+        $filterData[TMFA::OPTIONS] = array(
             'isGeneric'         => TRUE
         );
         
-        switch ($_filterData['value']['linkType']) {
-            case 'relation':
-                $modelName = $this->_getModelNameFromLinkInfo($_filterData['value'], 'modelName');
+        switch ($_filterData[TMFA::VALUE][self::LINK_TYPE]) {
+            case self::LINK_TYPE_DENORMALIZED:
+                $modelName = $this->_getModelNameFromLinkInfo($_filterData[TMFA::VALUE], 'modelName');
                 $model = new $this->_modelName();
-                $filterData['options']['related_model'] = $modelName;
-                $filterData['options']['idProperty'] = $model->getIdProperty();
-                if (isset($_filterData['options']) && isset($_filterData['options']['own_model'])) {
-                    $filterData['options']['own_model'] = $_filterData['options']['own_model'];
+                $filterData[TMFA::FIELD] = $_filterData[TMFA::VALUE]['property'];
+                $filterData[TMFA::OPTIONS][TMFA::FIELD] = $model->getIdProperty();
+                $filterData[TMFA::OPTIONS]['model'] = $modelName;
+                $filterData[TMFA::OPTIONS]['property'] = $_filterData[TMFA::VALUE]['property'];
+                $filter = new Tinebase_Model_Filter_DenormalizedRecord($filterData);
+                break;
+
+            case self::LINK_TYPE_RELATION:
+                $modelName = $this->_getModelNameFromLinkInfo($_filterData[TMFA::VALUE], 'modelName');
+                $model = new $this->_modelName();
+                $filterData[TMFA::OPTIONS]['related_model'] = $modelName;
+                $filterData[TMFA::OPTIONS]['idProperty'] = $model->getIdProperty();
+                if (isset($_filterData[TMFA::OPTIONS]) && isset($_filterData[TMFA::OPTIONS]['own_model'])) {
+                    $filterData[TMFA::OPTIONS]['own_model'] = $_filterData[TMFA::OPTIONS]['own_model'];
                 }
                 $filter = new Tinebase_Model_Filter_Relation($filterData);
                 break;
 
-            case 'foreignId':
-                $filterName = $this->_getModelNameFromLinkInfo($_filterData['value'], 'filterName');
-                if (isset($_filterData['value']['modelName'])) {
-                    $filterData['options']['modelName'] = $this->_getModelNameFromLinkInfo($_filterData['value'], 'modelName');;
+            case self::LINK_TYPE_FOREIGN_ID:
+                $filterName = $this->_getModelNameFromLinkInfo($_filterData[TMFA::VALUE], 'filterName');
+                if (isset($_filterData[TMFA::VALUE]['modelName'])) {
+                    $filterData[TMFA::OPTIONS]['modelName'] = $this->_getModelNameFromLinkInfo($_filterData[TMFA::VALUE], 'modelName');;
                 }
                 $filter = new $filterName($filterData);
                 
                 // @todo maybe it will be possible to add a generic/implicite foreign id filter 
                 // .... but we have to solve the problem of the foreign id field first
-//                if (! (isset($_filterData['value']['filterName']) || array_key_exists('filterName', $_filterData['value']))) {
-//                    $modelName = $this->_getModelNameFromLinkInfo($_filterData['value'], 'modelName');
-//                    $filter = new Tinebase_Model_Filter_ForeignId($_filterData['field'], $_filterData['operator'], $_filterData['value'], array(
+//                if (! (isset($_filterData[TMFA::VALUE]['filterName']) || array_key_exists('filterName', $_filterData[TMFA::VALUE]))) {
+//                    $modelName = $this->_getModelNameFromLinkInfo($_filterData[TMFA::VALUE], 'modelName');
+//                    $filter = new Tinebase_Model_Filter_ForeignId($_filterData[TMFA::FIELD], $_filterData[TMFA::OPERATOR], $_filterData[TMFA::VALUE], array(
 //                        'filtergroup'       => $modelName . 'Filter', 
 //                        'controller'        => str_replace('Model', 'Controller', $modelName),
 //                    ));
@@ -446,7 +469,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             throw new Tinebase_Exception_AccessDenied('No right to access application');
         }
         
-        $modelName = $appName . '_Model_' . str_replace('_', '', $_linkInfo[$_modelKey]);
+        $modelName = $appName . '_Model_' . $_linkInfo[$_modelKey];
         
         if (! class_exists($modelName)) {
             throw new Tinebase_Exception_InvalidArgument('Model does not exist');
@@ -462,13 +485,13 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     protected function _createStandardFilterFromArray($_filterData)
     {
-        $fieldModel = (isset($_filterData['field']) && isset($this->_filterModel[$_filterData['field']])) ? $this->_filterModel[$_filterData['field']] : '';
+        $fieldModel = (isset($_filterData[TMFA::FIELD]) && isset($this->_filterModel[$_filterData[TMFA::FIELD]])) ? $this->_filterModel[$_filterData[TMFA::FIELD]] : '';
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . '[' . static::class . '] Debug: ' . print_r($this->_filterModel, true));
         
         if (empty($fieldModel)) {
-            if (isset($_filterData['field']) && strpos($_filterData['field'], '#') === 0) {
+            if (isset($_filterData[TMFA::FIELD]) && strpos($_filterData[TMFA::FIELD], '#') === 0) {
                 $this->_addCustomFieldFilter($_filterData);
             } else {
                 if (self::$beStrict) {
@@ -477,7 +500,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . '[' . static::class . '] Skipping filter (no filter model defined) ' . print_r($_filterData, true));
             }
-        } elseif ((isset($fieldModel['filter']) || array_key_exists('filter', $fieldModel)) && (isset($_filterData['value']) || array_key_exists('value', $_filterData))) {
+        } elseif ((isset($fieldModel['filter']) || array_key_exists('filter', $fieldModel)) && (isset($_filterData[TMFA::VALUE]) || array_key_exists(TMFA::VALUE, $_filterData))) {
             // create a 'single' filter
             $filter = $this->createFilter($_filterData);
             if ($filter instanceof Tinebase_Model_Filter_Abstract) {
@@ -503,7 +526,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     protected function _addCustomFieldFilter($_filterData)
     {
-        $cfName = ltrim($_filterData['field'], '#');
+        $cfName = ltrim($_filterData[TMFA::FIELD], '#');
         $customFieldConfig = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
             $this->_applicationName,
             $cfName,
@@ -516,11 +539,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         }
 
         $customFieldFilterData = [
-            'field' => 'customfield',
-            'operator' => $_filterData['operator'],
-            'value' => [
+            TMFA::FIELD => 'customfield',
+            TMFA::OPERATOR => $_filterData[TMFA::OPERATOR],
+            TMFA::VALUE => [
                 'cfId' => $customFieldConfig->getId(),
-                'value' => $_filterData['value'],
+                TMFA::VALUE => $_filterData[TMFA::VALUE],
             ]
         ];
 
@@ -538,9 +561,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     public static function sanitizeFilterData($_field, $_value)
     {
         return array(
-            'field'     => $_field,
-            'operator'  => 'equals',
-            'value'     => $_value,
+            TMFA::FIELD     => $_field,
+            TMFA::OPERATOR  => 'equals',
+            TMFA::VALUE     => $_value,
         );
     }
     
@@ -615,34 +638,34 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 . ' Using deprecated function syntax. Please pass all filter data in one array (field: ' . $_fieldOrData . ')');
             
             $data = array(
-                'field'     => $_fieldOrData,
-                'operator'  => $_operator,
-                'value'     => $_value,
+                TMFA::FIELD     => $_fieldOrData,
+                TMFA::OPERATOR  => $_operator,
+                TMFA::VALUE     => $_value,
             );
         }
 
-        foreach (array('field', 'operator', 'value') as $requiredKey) {
+        foreach (array(TMFA::FIELD, TMFA::OPERATOR, TMFA::VALUE) as $requiredKey) {
             if (! (isset($data[$requiredKey]) || array_key_exists($requiredKey, $data))) {
                 throw new Tinebase_Exception_InvalidArgument('Filter object needs ' . $requiredKey);
             }
         }
         
-        if (empty($this->_filterModel[$data['field']])) {
-            throw new Tinebase_Exception_NotFound('no such field (' . $data['field'] . ') in this filter model');
+        if (empty($this->_filterModel[$data[TMFA::FIELD]])) {
+            throw new Tinebase_Exception_NotFound('no such field (' . $data[TMFA::FIELD] . ') in this filter model');
         }
         
-        $definition = $this->_filterModel[$data['field']];
+        $definition = $this->_filterModel[$data[TMFA::FIELD]];
             
         if (isset($definition['custom']) && $definition['custom']) {
             $this->_customData[] = array(
-                'field'     => $data['field'],
-                'operator'  => $data['operator'],
-                'value'     => $data['value']
+                TMFA::FIELD     => $data[TMFA::FIELD],
+                TMFA::OPERATOR  => $data[TMFA::OPERATOR],
+                TMFA::VALUE     => $data[TMFA::VALUE]
             );
             $filter = NULL;
         } else {
             $self = $this;
-            $data['options'] = array_merge($this->_options, isset($definition['options']) ? (array)$definition['options'] : array(), array('parentFilter' => $self));
+            $data[TMFA::OPTIONS] = array_merge($this->_options, isset($definition[TMFA::OPTIONS]) ? (array)$definition[TMFA::OPTIONS] : array(), array('parentFilter' => $self));
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Creating filter: ' . $definition['filter'] . ' with data: ' . print_r($data, TRUE));
 
@@ -657,16 +680,16 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 // NOTE: maybe this should be fixed in the client / this is just sanitizing here
                 // equals is also valid (for Tinebase_Model_Filter_ForeignId)
                 // TODO this needs to go away!
-                if (! in_array($data['operator'], [self::CONDITION_OR, self::CONDITION_AND, 'equals', 'in', 'not', 'notin', 'notDefinedBy:AND']) &&
-                        strpos($data['operator'], 'efinedBy') === false) {
+                if (! in_array($data[TMFA::OPERATOR], [self::CONDITION_OR, self::CONDITION_AND, 'equals', 'in', 'not', 'notin', 'notDefinedBy:AND']) &&
+                        strpos($data[TMFA::OPERATOR], 'efinedBy') === false) {
                     // add a sub-query filter
-                    $data['value'] = [
-                        ['field' => 'query', 'operator' => $data['operator'], 'value' => $data['value']]
+                    $data[TMFA::VALUE] = [
+                        [TMFA::FIELD => 'query', TMFA::OPERATOR => $data[TMFA::OPERATOR], TMFA::VALUE => $data[TMFA::VALUE]]
                     ];
-                    if (isset($definition['options']['addFilters'])) {
-                        $data['value'] = array_merge($data['value'], $definition['options']['addFilters']);
+                    if (isset($definition[TMFA::OPTIONS]['addFilters'])) {
+                        $data[TMFA::VALUE] = array_merge($data[TMFA::VALUE], $definition[TMFA::OPTIONS]['addFilters']);
                     }
-                    $data['operator'] = self::CONDITION_AND;
+                    $data[TMFA::OPERATOR] = self::CONDITION_AND;
                 }
             }
 
@@ -896,8 +919,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         foreach ($this->_filterObjects as $filter) {
             if ($filter instanceof Tinebase_Model_Filter_FilterGroup && ! $filter instanceof Tinebase_Model_Filter_Query) {
                 $result[] = array(
-                    'condition' => $filter->getCondition(),
-                    'filters'   => $filter->toArray($_valueToJson),
+                    self::CONDITION => $filter->getCondition(),
+                    self::FILTERS   => $filter->toArray($_valueToJson),
                     'id'        => $filter->getId(),
                     'label'     => $filter->getLabel(),
                 );
@@ -986,10 +1009,10 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 $field = $filter->getField();
                 if (   is_string($field) 
                     && (isset($this->_filterModel[$field]) || array_key_exists($field, $this->_filterModel)) 
-                    && (isset($this->_filterModel[$field]['options']) || array_key_exists('options', $this->_filterModel[$field])) 
-                    && (isset($this->_filterModel[$field]['options']['requiredCols']) || array_key_exists('requiredCols', $this->_filterModel[$field]['options']))
+                    && (isset($this->_filterModel[$field][TMFA::OPTIONS]) || array_key_exists(TMFA::OPTIONS, $this->_filterModel[$field]))
+                    && (isset($this->_filterModel[$field][TMFA::OPTIONS]['requiredCols']) || array_key_exists('requiredCols', $this->_filterModel[$field][TMFA::OPTIONS]))
                 ) {
-                    $result = array_merge($result, $this->_filterModel[$field]['options']['requiredCols']);
+                    $result = array_merge($result, $this->_filterModel[$field][TMFA::OPTIONS]['requiredCols']);
                 }
             } else if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {
                 $result = array_merge($result, $filter->getRequiredColumnsForSelect());
@@ -998,8 +1021,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         
         foreach ($this->_customData as $custom) {
             // check custom filter for requirements
-            if ((isset($this->_filterModel[$custom['field']]['requiredCols']) || array_key_exists('requiredCols', $this->_filterModel[$custom['field']]))) {
-                $result = array_merge($result, $this->_filterModel[$custom['field']]['requiredCols']);
+            if ((isset($this->_filterModel[$custom[TMFA::FIELD]]['requiredCols']) || array_key_exists('requiredCols', $this->_filterModel[$custom[TMFA::FIELD]]))) {
+                $result = array_merge($result, $this->_filterModel[$custom[TMFA::FIELD]]['requiredCols']);
             }
         }
 
@@ -1082,7 +1105,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         }
         
         foreach ($this->_customData as $customFilter) {
-            if ($customFilter['field'] == $_field) {
+            if ($customFilter[TMFA::FIELD] == $_field) {
                 if ($_getAll) {
                     $result[] = $customFilter;
                 } else {
@@ -1113,7 +1136,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         }
 
         foreach ($this->_customData as $key => $customFilter) {
-            if ($customFilter['field'] == $_field) {
+            if ($customFilter[TMFA::FIELD] == $_field) {
                 unset($this->_customData[$key]);
             }
         }
