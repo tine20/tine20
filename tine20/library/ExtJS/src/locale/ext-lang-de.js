@@ -254,6 +254,11 @@ if(Ext.form.HtmlEditor){
         text: 'Erstellt einen Hyperlink aus dem ausgewählten text.',
         cls: 'x-html-editor-tip'
       },
+      formatblockPre : {
+        title: 'Codeblock',
+        text: 'Vorformatierten Codeblock einfügen.',
+        cls: 'x-html-editor-tip'
+      },
       sourceedit : {
         title: 'Source bearbeiten',
         text: 'Zur Bearbeitung des Quelltextes wechseln.',
