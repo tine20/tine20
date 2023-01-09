@@ -1161,6 +1161,10 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (!this.record.id) {
             // accountFullName (cn im AD) + accountDisplayName(displayname im AD) + accountLoginName + accountEmailAddress
             for (const [fieldName, template] of Object.entries(Tine.Tinebase.configManager.get('accountTwig'))) {
+                if (fieldName === 'accountEmailAddress' && ! Tine.Tinebase.registry.get('primarydomain')) {
+                    // skip email without configured domain
+                    continue;
+                }
                 const field = this.getForm().findField(fieldName);
                 // suggest for unchanged fields only
                 if (field && (!field.suggestedValue || field.getValue() === field.suggestedValue)) {
