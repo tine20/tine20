@@ -205,7 +205,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             return;
         }
 
-        let selectRecord = null;
         const store = this.getStore();
         
         if (record.status === 'failed' || record.status === 'cancelled') {
@@ -221,14 +220,18 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         Tine.log.debug('Tine.Filemanager.NodeGridPanel::onUpdateRecord() -> record:');
         Tine.log.debug(record, mode);
+        
+        let isSelected = false;
+        this.selection = this.getGrid().getSelectionModel().getSelections()[0];
 
         if (record && Ext.isFunction(record.copy)) {
-            let isSelected = false;
-            
             if (this.isInCurrentGrid(record.get('path'))) {
                 if (existingRecord) {
                     const idx = store.indexOf(existingRecord);
                     isSelected = this.getGrid().getSelectionModel().isSelected(idx);
+                    if (isSelected) {
+                        this.selection = existingRecord;
+                    }
                     store.removeAt(idx);
                     store.insert(idx, [record]);
                 } else {
@@ -238,14 +241,10 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             } else {
                 return;
             }
-            
-            if (isSelected) {
-                selectRecord = existingRecord;
-            }
         }
-        
-        if (selectRecord) {
-            this.getGrid().getSelectionModel().selectRow(store.indexOfId(selectRecord.id), true);
+
+        if (this.selection?.data?.path) {
+            this.getGrid().getSelectionModel().selectRow(store.find('path', this.selection.data.path), true);
         }
     },
     
@@ -258,6 +257,10 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             _.get(store, 'sortInfo.direction', this.defaultSortInfo.direction)
         );
         store.remoteSort = this.storeRemoteSort;
+    
+        if (this.selection?.data?.path) {
+            this.getGrid().getSelectionModel().selectRow(store.find('path', this.selection.data.path), true);
+        }
     },
    
     /**
