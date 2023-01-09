@@ -1142,7 +1142,7 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
         },
         formatblockPre : {
             title: 'Code block',
-            text: 'Insert pre-formatted code block',
+            text: 'Insert pre-formatted code block.',
             cls: 'x-html-editor-tip'
         },
         sourceedit : {
