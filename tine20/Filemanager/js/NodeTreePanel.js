@@ -100,39 +100,51 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         return this.supr().onDestroy.call(this);
     },
     
-    onRecordChanges: function(data, e) {
+    onRecordChanges: function (data, e) {
         if (data.type === 'folder') {
             const path = data.path;
             const node = this.getNodeById(data.id) ?? this.getNodeByPath(path);
             const pathChange = node && node.attributes && node.attributes.nodeRecord.get('path') !== path;
-
+        
             if (node && e.topic.match(/\.delete/)) {
                 try {
                     node.cancelExpand();
                     node.remove(true);
-                } catch (e) {}
+                } catch (e) {
+                }
                 return;
             }
-            
+        
             if (node) {
                 node.setText(Ext.util.Format.htmlEncode(data.name));
                 // NOTE: qtip dosn't work, but implementing is not worth the effort...
                 node.qtip = Tine.Tinebase.common.doubleEncode(data.name);
                 Ext.apply(node.attributes, data);
                 node.attributes.nodeRecord = new this.recordClass(data);
-                
+            
                 if (node.attributes?.status !== 'pending') {
                     Ext.fly(node.ui?.elNode)?.removeClass('x-type-data-pending');
                 }
-    
+            
                 if (pathChange) {
-                    this.onSelectionChange.call(this, node);
-                }
+                    if (node?.parentNode) {
+                        const targetNode = this.getNodeByPath(Tine.Filemanager.Model.Node.dirname(path));
+                    
+                        if (targetNode && node.parentNode.id !== targetNode.id) {
+                            node.parentNode.reload();
+                            targetNode.reload();
+                        }
+                    }
                 
+                    if (node.isSelected()) {
+                        this.selectPath(path, data, {});
+                    }
+                }
+            
                 // in case of path change we need to reload the node (children) as well
                 // as the path of all children changed as well
-                if (node.hasChildNodes() && pathChange && ! node.loading) {
-                    if (! node.bufferedReload) {
+                if (node.hasChildNodes() && pathChange && !node.loading) {
+                    if (!node.bufferedReload) {
                         node.bufferedReload = Function.createBuffered(node.reload, 100, node);
                     }
                     node.bufferedReload();

@@ -326,7 +326,10 @@ new Ext.tree.TreePanel({
             for(var i = 0, len = o.length; i < len; i++){
                 var n = this.createNode(o[i]);
                 if(n){
-                    node.appendChild(n);
+                    const existChild = node.findChild('id', n.id);
+                    if (!existChild) {
+                        node.appendChild(n);
+                    }
                 }
             }
             node.endUpdate();
