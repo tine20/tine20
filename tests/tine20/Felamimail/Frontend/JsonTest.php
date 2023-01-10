@@ -201,6 +201,23 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     }
 
     /**
+     * test search accounts and deactive sieve script if end date expired
+     */
+    public function testSearchAccountsCheckSieveEndDate()
+    {
+        $vacationData = self::getVacationData($this->_account);
+        $vacationData['start_date'] = '2012-04-18';
+        $vacationData['end_date'] = '2012-04-20';
+        $this->_sieveTestHelper($vacationData);
+
+        // check if script was deactivated
+        $results = $this->_json->searchAccounts(array());
+        $vacation = Felamimail_Controller_Sieve::getInstance()->getVacation($results['results'][0]['id']);
+        $this->assertFalse((bool)$results['results'][0]['sieve_vacation_active']);
+        $this->assertFalse((bool)$vacation['enabled']);
+    }
+
+    /**
      * get system account
      *
      * @return array
