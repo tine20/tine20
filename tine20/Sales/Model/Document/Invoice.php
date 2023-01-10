@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -22,6 +22,8 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
 
     public const FLD_INVOICE_STATUS = 'invoice_status';
     public const FLD_DOCUMENT_PROFORMA_NUMBER = 'document_proforma_number';
+
+    public const FLD_IS_SHARED = 'is_shared';
 
     /**
      * invoice status
@@ -90,6 +92,12 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 ],
             ],
         ]);
+
+        $_definition[self::FIELDS][self::FLD_IS_SHARED] = [
+            self::TYPE                  => self::TYPE_BOOLEAN,
+            self::LABEL                 => 'Shared Document', //_('Shared Document')
+            self::DEFAULT_VAL           => false,
+        ];
     }
 
     /**
@@ -114,5 +122,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_INVOICE_DISCOUNT_TYPE}) {
             $this->_checkProductPrecursorPositionsComplete();
         }
+
+        $this->{self::FLD_IS_SHARED} = $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->count() > 1;
     }
 }
