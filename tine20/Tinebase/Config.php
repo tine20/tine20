@@ -905,6 +905,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     
 
     /**
+     * action log types
+     *
+     * @var string
+     */
+    const ACTION_LOG_TYPES = 'actionLogTypes';
+    
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -3269,6 +3277,23 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                         'icon' => 'images/icon-set/icon_preview.svg', 'icon_class' => 'notes_revealPasswordIcon', 'system' => true], // _('Reveal password')
                 ],
                 self::DEFAULT_STR           => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+            ],
+        ],
+        self::ACTION_LOG_TYPES => [
+            //_('Action log type')
+            self::LABEL              => 'Action log type',
+            self::DESCRIPTION        => 'Action log type',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                self::RECORDS => [
+                    ['id' => Tinebase_Model_ActionLog::TYPE_ADD_USER_CONFIRMATION,   'value' => 'Add User Confirmation', 'icon' => null, 'system' => true], //_('Add User Confirmation')
+                    ['id' => Tinebase_Model_ActionLog::TYPE_DELETION,                'value' => 'Deletion',              'icon' => null, 'system' => true], //_('Deletion')
+                    ['id' => Tinebase_Model_ActionLog::TYPE_EMAIL_NOTIFICATION,      'value' => 'Email Notification',    'icon' => null, 'system' => true], //_('Email Notification')
+                    ['id' => Tinebase_Model_ActionLog::TYPE_SUPPORT_REQUEST,         'value' => 'Support request',       'icon' => null, 'system' => true], //_('Support request')
+                ]
             ],
         ],
     );

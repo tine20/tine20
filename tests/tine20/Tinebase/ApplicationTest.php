@@ -443,6 +443,7 @@ class Tinebase_ApplicationTest extends TestCase
             ),
             'Tinebase' => array(
                 Tinebase_Model_AccessLog::class,
+                Tinebase_Model_ActionLog::class,
                 Tinebase_Model_Alarm::class,
                 Tinebase_Model_Application::class,
                 Tinebase_Model_AreaLockConfig::class,
