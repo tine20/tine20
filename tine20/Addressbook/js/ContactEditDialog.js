@@ -167,7 +167,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                             columnWidth: 0.65,
                             xtype: 'tine.widget.field.AutoCompleteField',
                             recordClass: this.recordClass,
-                            fieldLabel: this.app.i18n._('Company'),
+                            fieldLabel: this.app.i18n._('Company / Organisation'),
                             name: 'org_name',
                             maxLength: 255
                         }, {

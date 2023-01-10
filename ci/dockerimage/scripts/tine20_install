@@ -53,6 +53,11 @@ if [ -n "${TINE20_INSTALL_LANG}" ]; then
   cmd="$cmd lang='${TINE20_INSTALL_LANG}'"
 fi
 
+if [ -n "${TINE20_SKIP_APPS}" ]; then
+  cmd="$cmd skipApps='${TINE20_SKIP_APPS}'"
+fi
+
+
 echo $cmd
 
 su tine20 -c "$cmd"

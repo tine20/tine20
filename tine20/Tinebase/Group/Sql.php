@@ -841,7 +841,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $stmt->closeCursor();
         
         if (!$queryResult) {
-            throw new Tinebase_Exception_Record_NotDefined('Group not found.');
+            throw new Tinebase_Exception_Record_NotDefined('Group not found (' . $_property . ' = ' . $_value . ')');
         }
         
         $result = new Tinebase_Model_Group($queryResult, TRUE);

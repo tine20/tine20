@@ -50,12 +50,13 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
     deferredRender: false,
     buttonAlign: null,
     bufferResize: 500,
-    
+    buttonOptions: ['Yes', 'No'],
+
     initComponent: function() {
         // init buttons and tbar
         this.initButtons();
         
-        this.itemsName = this.id + '-fileList';
+        this.itemsName = this.id + '-fileListc';
         
         // get items for this dialog
         this.items = [{
@@ -88,25 +89,29 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
     initButtons: function () {
         this.fbar = ['->'];
         
-        var noBtn = {
-            xtype: 'button',
-            text: i18n._('No'),
-            minWidth: 70,
-            scope: this,
-            handler: this.onCancel,
-            iconCls: 'action_cancel'
-        };
-        
-        var yesBtn = {
-            xtype: 'button',
-            text: i18n._('Yes'),
-            minWidth: 70,
-            scope: this,
-            handler: this.onOk,
-            iconCls: 'action_applyChanges'
-        }; 
-        
-        this.fbar.push(noBtn, yesBtn);
+        if (this.buttonOptions.includes('No')) {
+            this.noBtn = {
+                xtype: 'button',
+                text: i18n._('No'),
+                minWidth: 70,
+                scope: this,
+                handler: this.onCancel,
+                iconCls: 'action_cancel',
+            };
+            this.fbar.push(this.noBtn);
+        }
+        const output = ['Yes', 'Ok'].filter((obj) => this.buttonOptions.indexOf(obj) !== -1);
+        if (output) {
+            this.yesBtn = {
+                xtype: 'button',
+                text: i18n._(output[0]),
+                minWidth: 70,
+                scope: this,
+                handler: this.onOk,
+                iconCls: 'action_applyChanges'
+            };
+            this.fbar.push(this.yesBtn);
+        }
     },
     
     onOk: function() {

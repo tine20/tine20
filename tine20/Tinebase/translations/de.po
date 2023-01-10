@@ -1070,6 +1070,9 @@ msgstr ""
 msgid "Skip Imap Quota Notfication"
 msgstr "IMAP Kontingents-Benachrichtigungen unterdrücken"
 
+msgid "Skip Upstream Updates"
+msgstr "Upstream-Aktualisierungen unterdrücken"
+
 #: Config.php:2582 Config.php:2584
 msgid "SSO client settings"
 msgstr ""
@@ -1206,7 +1209,7 @@ msgstr "Modell"
 
 #: Model/ImportExportDefinition.php:151
 msgid "Label"
-msgstr "Label"
+msgstr "Bezeichner"
 
 #: Model/ImportExportDefinition.php:156 Model/Role.php:64
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198
@@ -5092,6 +5095,15 @@ msgstr "FIDO2 WebAuthn Gerät wird konfiguriert ..."
 msgid "FIDO2 WebAuthn Device is configured."
 msgstr "FIDO2 WebAuthn Gerät ist konfiguriert."
 
+msgid "Unsupported Configuration"
+msgstr "Nicht unterstützte Konfiguration"
+
+msgid "This installation requires user verification for FIDO2 devices. Firefox for {OS} does not support user verification ({details}). You need to use a different browser to use FIDO2."
+msgstr "Diese Installation erfordert Nutzer-Verifikation für FIDO2 Geräte. Firefox für {OS} unterstützt Nutzer-Verifikation nicht ({details}). Benutzen sie einen anderen Browser um FIDO2 zu verwenden."
+
+msgid "see {url} for details"
+msgstr "für Details siehe {url}"
+
 msgid "FIDO2 WebAuthn registration failed. Try again?"
 msgstr ""
 "Registrieren des FIDO2 WebAuthn Gerätes fehlgeschlagen. Wollen sie es erneut "
@@ -5293,6 +5305,9 @@ msgstr "Geändert"
 
 msgid "Avscan"
 msgstr "Avscan"
+
+msgid "Reveal Password"
+msgstr "Passwort anzeigen"
 
 msgid "Files are still uploading."
 msgstr "Es werden gerade Dateien hochgeladen."

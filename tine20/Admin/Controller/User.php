@@ -656,4 +656,12 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $exception->setInfo($userData);
         throw $exception;
     }
+
+    /**
+     * @param array|string $_accountIds
+     */
+    protected function _handleUserDeleteConfirmation($_accountIds)
+    {
+        Tinebase_Controller_ActionLog::getInstance()->addActionLogUserDelete($_accountIds);
+    }
 }

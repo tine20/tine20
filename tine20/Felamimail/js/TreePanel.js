@@ -573,7 +573,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     onClick: function(node) {
         if (node.isExpandable() && !node.expanded) {
-            node.expand();
+            // NOTE: we don't expand here any longer - macos and win don't do it either
+            // node.expand();
         }
         
         if (node.id && node.id !== '/' && node.attributes.globalname !== '') {

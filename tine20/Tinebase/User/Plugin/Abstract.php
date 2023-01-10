@@ -64,10 +64,12 @@ abstract class Tinebase_User_Plugin_Abstract
             $emailUsername = $accountEmailAddress;
         } else if (isset($this->_config['instanceName']) && ! empty($this->_config['instanceName'])) {
             $emailUsername = $accountId . '@' . $this->_config['instanceName'];
-        } else if (isset($this->_config[$domainConfigKey]) && $this->_config[$domainConfigKey] !== null
-            && strpos($accountLoginName, '@') === false
-        ) {
-            $emailUsername = $this->_appendDomain($accountLoginName);
+        } else if (isset($this->_config[$domainConfigKey]) && $this->_config[$domainConfigKey] !== null) {
+            if (strpos($accountLoginName, '@') === false) {
+                $emailUsername = $this->_appendDomain($accountLoginName);
+            } else {
+                $emailUsername = $accountLoginName;
+            }
         } else if ($alternativeLoginName !== null) {
             $emailUsername = $alternativeLoginName;
         } else {

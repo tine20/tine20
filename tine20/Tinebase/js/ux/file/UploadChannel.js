@@ -17,25 +17,6 @@ class UploadChannel extends Channel {
     }
     
     /**
-     * add batch of Tasks
-     * NOTE: saves a copy of all Tasks in local storage to be used for progress computations (adds a cleanup tasks as last job)
-     * all tasks need to have a common progress interface: (bytesTotal / bytesUploaded fields)
-     * all tasks need to have common fields: appName, label (e.g. Filemanager /path/to/file)
-     */
-    async addBatch(tasks) {
-        const taskIDs = [];
-        // add task and save copy
-        await  _.reduce(tasks, (prev, task) => {
-            return prev.then(async () => {
-                const taskId = await this.add(task);
-                return taskIDs.push(taskId);
-            });
-        }, Promise.resolve());
-
-        return taskIDs;
-    }
-    
-    /**
      * get all direct child nodes of given path which are not yet processed
      * NOTE: have progress info on each returned node
      */

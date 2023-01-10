@@ -865,6 +865,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $config->set('Attr.EnableID', true);
         $config->set('Attr.ClassUseCDATA', true);
         $config->set('CSS.AllowTricky', true);
+        $config->set('Attr.ID.HTML5', TRUE);
+        $config->set('AutoFormat.Linkify', TRUE);
+        $config->set('Core.LexerImpl', 'DirectLex');
         */
         $config->set('Cache.SerializerPath', $path);
         $config->set('URI.AllowedSchemes', array(
@@ -1334,7 +1337,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
             if ($errorCondition) {
                 // something went wrong => recalculate counter
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                     ' folder counters dont match => refresh counters'
                 );
                 $updatedCounters = Felamimail_Controller_Cache_Folder::getInstance()->getCacheFolderCounter($folder);

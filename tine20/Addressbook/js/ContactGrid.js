@@ -226,7 +226,7 @@ Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
         { id: 'n_given', header: i18n._('First Name'), dataIndex: 'n_given', width: 80 },
         { id: 'n_fn', header: i18n._('Full Name'), dataIndex: 'n_fn', renderer: Tine.Addressbook.ContactGridPanel.displayNameRenderer },
         { id: 'n_fileas', header: i18n._('Display Name'), dataIndex: 'n_fileas', hidden: false, renderer: Tine.Addressbook.ContactGridPanel.displayNameRenderer},
-        { id: 'org_name', header: i18n._('Company'), dataIndex: 'org_name', width: 120, hidden: false },
+        { id: 'org_name', header: i18n._('Company / Organisation'), dataIndex: 'org_name', width: 120, hidden: false },
         { id: 'org_unit', header: i18n._('Unit'), dataIndex: 'org_unit'  },
         { id: 'title', header: i18n._('Job Title'), dataIndex: 'title' },
 //            { id: 'role', header: i18n._('Job Role'), dataIndex: 'role' },

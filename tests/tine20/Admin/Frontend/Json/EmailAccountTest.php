@@ -878,4 +878,22 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         self::assertEquals(4, $folders['totalcount'], 'should find 5 initial folders. got: '
             . print_r($folders, true));
     }
+
+    public function testRevealEmailAccountPassword()
+    {
+        $account = $this->testEmailAccountApiSharedAccount(false);
+        $fmailaccount = Felamimail_Controller_Account::getInstance()->get($account['id']);
+        $imapConfig = $fmailaccount->getImapConfig();
+        
+        $result = $this->_json->revealEmailAccountPassword($account);
+        self::assertEquals($result['password'], $imapConfig['password'], 'reveal password failed');
+        
+        $records = Tinebase_Notes::getInstance()->searchNotes(new Tinebase_Model_NoteFilter([
+            ['field' => 'record_id', 'operator' => 'equals', 'value' => $account->getId()],
+            ['field' => 'record_model', 'operator' => 'equals', 'value' => Felamimail_Model_Account::class],
+            ['field' => 'note_type_id', 'operator' => 'equals', 'value' => Tinebase_Model_Note::SYSTEM_NOTE_REVEAL_PASSWORD]
+        ]));
+        self::assertCount(1, $records, 'reveal password failed');
+
+    }
 }

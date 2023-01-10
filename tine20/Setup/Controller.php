@@ -2568,8 +2568,10 @@ class Setup_Controller
         clearstatcache();
         $cachesCleared[] = 'StatCache';
 
+        Tinebase_Config::getInstance()->clearCache();
+        $cachesCleared[] = 'ConfigCache';
+
         $this->clearCacheDir();
-        
         $cachesCleared[] = 'RoutesCache';
     
         if ($deactivateCache) {

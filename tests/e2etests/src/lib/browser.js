@@ -7,7 +7,29 @@ const mkdirp = require('mkdirp');
 const path = require('path');
 const uuid = require('uuid');
 
-module.exports = {
+const simpleConsole = require('console');
+const { blue, cyan, green, magenta, red, yellow } = require('colorette')
+const colors = {
+    LOG: text => text,
+    ERR: red,
+    WAR: yellow,
+    INF: cyan
+};
+const priorities = {
+        EME:    0,  // Emergency: system is unusable
+        ALE:    1,  // Alert: action must be taken immediately
+        CRI:     2,  // Critical: critical conditions
+        ERR:      3,  // Error: error conditions
+        WAR:     4,  // Warning: warning conditions
+        NOT:   5,  // Notice: normal but significant condition
+        INF:     6,  // Informational: informational messages
+        DEB:    7,   // Debug: debug messages
+        TRA:    8   // Debug: debug messages
+
+    };
+
+
+    module.exports = {
     download: async function (page, selector, option = {}) {
         const downloadPath = path.resolve(__dirname, 'download', uuid.v1());
         mkdirp(downloadPath);
@@ -45,6 +67,7 @@ module.exports = {
         let popupWindow = this.getNewWindow();
         await expect(win || page).toClick('.x-btn-text', {text: btnText});
         popupWindow = await popupWindow;
+        this.proxyConsole(popupWindow);
         try {
             await popupWindow.waitForSelector('.ext-el-mask', {timeout: 5000});
         } catch {}
@@ -153,6 +176,8 @@ module.exports = {
 	}
         page = await browser.newPage();
 
+        this.proxyConsole(page);
+
         await page.setExtraHTTPHeaders({
             'Accept-Language': 'de'
         });
@@ -183,9 +208,11 @@ module.exports = {
         await expect(page).toClick('button', {text: 'Anmelden'});
         try {
             await page.waitForSelector('.x-tab-strip-closable.x-tab-with-icon.tine-mainscreen-apptabspanel-menu-tabel', {timeout: 0});
-            await page.waitForSelector('.x-window-header-text', {text: 'Multi Faktor Authentifikation'});
-            const mfaDialog = await this.getEditDialog('OK');
-            await expect(mfaDialog).toClick('button', {text: "Abbrechen"});
+            if(!!+process.env.MFA) {
+                await page.waitForSelector('.x-window-header-text', {text: 'Multi Faktor Authentifikation'});
+                const mfaDialog = await this.getEditDialog('OK');
+                await expect(mfaDialog).toClick('button', {text: "Abbrechen"});
+            }
         } catch (e) {
             console.log('login failed!');
             console.log(app);
@@ -199,6 +226,35 @@ module.exports = {
         if (module) {
             await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: module});
         }
+    },
+
+    proxyConsole: async function(page) {
+
+        page
+            .on('console', message => {
+                const type = message.type().substr(0, 3).toUpperCase()
+                const messageText = message.text();
+                if(process.env.LOGLEVEL >= priorities[type] && !messageText.match('sockjs-node')) {
+                    const color = colors[type] || blue
+                    simpleConsole.log(color(`${type} ${messageText}`))
+                }
+            })
+            .on('pageerror', ({ message }) => {
+                    if(process.env.LOGLEVEL >= priorities['ERR'] && !message.match('sockjs-node')) {
+                        simpleConsole.log(red(message))
+                    }
+            })
+            .on('response', response => {
+                if(process.env.LOGLEVEL >= priorities['DEB']) {
+                    simpleConsole.log(green(`${response.status()} ${response.url()}`))
+                }
+            })
+            .on('requestfailed', request => {
+                const url = request.url();
+                    if(process.env.LOGLEVEL >= priorities['ERR'] && !url.match('sockjs-node')) {
+                        simpleConsole.log(magenta(`${request.failure().errorText} ${url}`))
+                    }
+            })
     },
     
     clickSlitButton: async function(page, text) {

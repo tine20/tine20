@@ -4,7 +4,7 @@
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * TODO         use Tine.widgets.grid.LinkGridPanel
  */
@@ -332,21 +332,21 @@ Tine.Crm.Contact.TypeComboBox = Ext.extend(Ext.form.ComboBox, {
     //private
     initComponent: function() {
         
-        var translation = new Locale.Gettext();
+        const translation = new Locale.Gettext();
         translation.textdomain('Crm');
         
         Tine.Crm.Contact.TypeComboBox.superclass.initComponent.call(this);
         // always set a default
-        if(!this.value) {
-            this.value = 'responsible';
+        if (!this.value) {
+            this.value = 'customer';
         }
             
         this.store = new Ext.data.SimpleStore({
             fields: ['label', 'relation_type'],
             data: [
-                    [translation._('Responsible'), 'responsible'],
                     [translation._('Customer'), 'customer'],
-                    [translation._('Partner'), 'partner']
+                    [translation._('Partner'), 'partner'],
+                    [translation._('Responsible'), 'responsible']
                 ]
         });
         

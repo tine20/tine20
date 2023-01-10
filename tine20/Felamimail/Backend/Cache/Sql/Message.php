@@ -282,16 +282,24 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
-     * delete all cached messages for one folder
-     *
-     * @param  mixed  $_folderId
+     * @param Felamimail_Model_Folder|string $_folderId
+     * @return void
+     * @throws Felamimail_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
     public function deleteByFolderId($_folderId)
     {
         $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
 
         $filter = $this->_getMessageFilterWithFolderId($_folderId);
-        $this->setMessageTags($filter, [], 'clear');
+        try {
+            $this->setMessageTags($filter, [], 'clear');
+        } catch (Felamimail_Exception_IMAPFolderNotFound $feifnf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__
+                . '::' . __LINE__ . ' Folder has already been removed - nothing more to do here');
+        }
         
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $folderId)

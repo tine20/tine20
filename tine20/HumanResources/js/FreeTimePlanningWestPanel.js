@@ -28,9 +28,6 @@ const colorLegend = Ext.extend(Ext.Panel, {
                 // allow dbclick to open
                 this.action_editInNewWindow = new Ext.Action({hidden: true});
 
-                // make sure grid is updated after group changed
-                this.onUpdateRecord = _.bind(this.onUpdateRecord, this, _, 'local');
-
                 Tine.HumanResources.FreeTimeTypeGridPanel.prototype.initComponent.call(this);
                 this.store.on('load', () => {
                     this.setHeight(this.grid.view.el.child('.x-grid3-body').getHeight() + this.grid.view.el.child('.x-grid3-header').getHeight());

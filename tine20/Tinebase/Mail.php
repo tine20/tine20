@@ -52,15 +52,20 @@ class Tinebase_Mail extends Zend_Mail
      * create Tinebase_Mail from Zend_Mail_Message
      * 
      * @param  Zend_Mail_Message  $_zmm
-     * @param  string             $_replyBody
+     * @param  ?string             $_replyBody
+     * @param  ?string             $_signature
+     * @param  string             $_signaturePosition
      * @return Tinebase_Mail
      */
-    public static function createFromZMM(Zend_Mail_Message $_zmm, $_replyBody = null, $_signature = null)
+    public static function createFromZMM(Zend_Mail_Message $_zmm,
+                                         ?string $_replyBody = null,
+                                         ?string $_signature = null,
+                                         string $_signaturePosition = Felamimail_Model_Account::SIGNATURE_BELOW_QUOTE)
     {
         if (empty($_signature)) {
            $content = $_zmm->getContent();
         } else {
-           $content = self::_getZMMContentWithSignature($_zmm, $_signature);
+           $content = self::_getZMMContentWithSignature($_zmm, $_signature, $_signaturePosition);
         }
         $contentStream = fopen("php://temp", 'r+');
         fputs($contentStream, $content);
@@ -103,9 +108,12 @@ class Tinebase_Mail extends Zend_Mail
      * 
      * @param  Zend_Mail_Message  $zmm
      * @param  string             $signature
+     * @param  string             $signaturePosition
      * @return string
      */
-    protected static function _getZMMContentWithSignature(Zend_Mail_Message $zmm, $signature)
+    protected static function _getZMMContentWithSignature(Zend_Mail_Message $zmm,
+                                                          string $signature,
+                                                          string $signaturePosition = Felamimail_Model_Account::SIGNATURE_BELOW_QUOTE)
     {
         if (stripos($zmm->contentType, 'multipart/') === 0) {
             // Multipart message
@@ -121,13 +129,13 @@ class Tinebase_Mail extends Zend_Mail
                 $zmp = $zmm->getPart($num);
                 $content .= "\r\n--" . $boundary . "\r\n";
                 $content .= $rawHeaders[$num-1] . "\r\n\r\n";
-                $content .= self::_getPartContentWithSignature($zmp, $signature);
+                $content .= self::_getPartContentWithSignature($zmp, $signature, $signaturePosition);
             }
             $content .= "\r\n--" . $boundary . "--\r\n";
             return $content;
         }
         else {
-            $content = self::_getPartContentWithSignature($zmm, $signature);
+            $content = self::_getPartContentWithSignature($zmm, $signature, $signaturePosition);
         }
         return $content;
     }
@@ -137,9 +145,12 @@ class Tinebase_Mail extends Zend_Mail
      * 
      * @param  Zend_Mail_Part  $zmp
      * @param  string          $signature
+     * @param  string $signaturePosition
      * @return string
      */
-    public static function _getPartContentWithSignature($zmp, $signature)
+    public static function _getPartContentWithSignature($zmp,
+                                                        $signature,
+                                                        string $signaturePosition = Felamimail_Model_Account::SIGNATURE_BELOW_QUOTE)
     {
         $contentType = $zmp->getHeaderField('content-type', 0);
         if (($contentType != 'text/html') && ($contentType != 'text/plain')) {
@@ -153,21 +164,69 @@ class Tinebase_Mail extends Zend_Mail
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Attaching signature to ' . $contentType . ' mime part');
         $content = $zmp->getContent();
+
         if ($zmp->contentTransferEncoding == Zend_Mime::ENCODING_BASE64) {
             $content = base64_decode($content);
         }
         else if ($zmp->contentTransferEncoding == Zend_Mime::ENCODING_QUOTEDPRINTABLE) {
             $content = quoted_printable_decode($content);
         }
+
+        $content = self::appendSignatureToMailBody($content, $contentType, $signature, $signaturePosition);
+
+        return Zend_Mime::encode($content, $zmp->contentTransferEncoding);
+    }
+
+    /**
+     * @param string $body
+     * @param string $contentType
+     * @param string $signature
+     * @param string $signaturePosition
+     * @return string
+     */
+    public static function appendSignatureToMailBody(string $body,
+                                                     string $contentType,
+                                                     string $signature,
+                                                     string $signaturePosition = Felamimail_Model_Account::SIGNATURE_BELOW_QUOTE
+    ): string
+    {
         if ($contentType == "text/html") {
-            $signature = "<br />&minus;&minus;<br />" . $signature;
+            $signature = "<br/>&minus;&minus;<br/>" . $signature . '<br/><br/>';
+
+            if ($signaturePosition === Felamimail_Model_Account::SIGNATURE_ABOVE_QUOTE) {
+                // try to find position of quote - append above
+
+                if (preg_match('/(<div class="gmail_extra">\s*<br>\s*<div class="gmail_quote")/i', $body, $matches)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Signature ABOVE: Found GMAIL quote');
+                    $body = str_replace($matches[1], $signature . $matches[1], $body);
+                } else if (preg_match('/(<div dir="ltr">\s*<br>\s*<blockquote type="cite")/i', $body, $matches)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Signature ABOVE: Found iOS quote');
+                    $body = str_replace($matches[1], $signature . $matches[1], $body);
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Signature ABOVE: No quote found');
+                    $body .= $signature;
+                }
+
+            } else if (preg_match('/(<\/body>[\s\r\n]*<\/html>)/i', $body, $matches)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . '  Signature BELOW: Appending signature to html body.');
+                $body = str_replace($matches[1], $signature . $matches[1], $body);
+
+            } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . '  Signature BELOW: Appending signature at end of message.');
+                $body .= $signature;
+            }
         }
         else {
             $signature = Felamimail_Message::convertFromHTMLToText($signature, "\n");
             $signature = "\n--\n" . $signature;
+            $body .= $signature ."\n\n";
         }
-        $content .= $signature;
-        return Zend_Mime::encode($content, $zmp->contentTransferEncoding);
+        return $body;
     }
 
     /**
@@ -494,18 +553,20 @@ class Tinebase_Mail extends Zend_Mail
             restore_error_handler();
             
         } catch (Tinebase_Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Decoding of " . $zmp->encoding . '/' . $encoding . ' encoded message failed: ' . $e->getMessage());
             
             // trying to fix decoding problems
             restore_error_handler();
             $zmp->resetStream();
             if (preg_match('/convert\.quoted-printable-decode/', $e->getMessage())) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Trying workaround for http://bugs.php.net/50363.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Trying workaround for http://bugs.php.net/50363.');
                 $body = quoted_printable_decode(stream_get_contents($zmp->getRawStream()));
                 $body = @iconv($charset, 'utf-8', $body);
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Try again with fallback encoding.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Try again with fallback encoding.');
                 $zmp->appendDecodeFilter(self::_getDecodeFilter());
                 set_error_handler('Tinebase_Mail::decodingErrorHandler', E_WARNING);
                 try {
@@ -513,7 +574,8 @@ class Tinebase_Mail extends Zend_Mail
                     restore_error_handler();
                 } catch (Tinebase_Exception $e) {
                     restore_error_handler();
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Fallback encoding failed. Trying base64_decode().');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . ' Fallback encoding failed. Trying base64_decode().');
                     $zmp->resetStream();
                     $decodedBody = base64_decode(stream_get_contents($zmp->getRawStream()));
                     $body = @iconv($charset, 'utf-8', $decodedBody);
@@ -587,7 +649,8 @@ class Tinebase_Mail extends Zend_Mail
             $filter = "convert.iconv.$_charset/utf-8";
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Appending decode filter: ' . $filter);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Appending decode filter: ' . $filter);
         
         return $filter;
     }
@@ -595,7 +658,7 @@ class Tinebase_Mail extends Zend_Mail
     /**
      * error exception handler for iconv decoding errors / only gets E_WARNINGs
      *
-     * NOTE: PHP < 5.3 don't throws exceptions for Catchable fatal errors per default,
+     * NOTE: PHP < 5.3 doesn't throw exceptions for Catchable fatal errors per default,
      * so we convert them into exceptions manually
      *
      * @param integer $severity
@@ -608,8 +671,9 @@ class Tinebase_Mail extends Zend_Mail
      */
     public static function decodingErrorHandler($severity, $errstr, $errfile, $errline)
     {
-        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
-        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
+
         throw new Tinebase_Exception($errstr);
     }
     

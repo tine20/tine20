@@ -26,7 +26,7 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'n_fn', label: 'Display Name', group: 'Name', omitDuplicateResolving: true }, //_('Display Name')
     {name: 'n_fileas', group: 'Name', omitDuplicateResolving: true, sortType: Ext.data.SortTypes.asUCString },
     {name: 'bday', label: 'Birthday', type: 'date', dateFormat: Date.patterns.ISO8601Long }, //_('Birthday')
-    {name: 'org_name', label: 'Company', group: 'Company' }, //_('Company')
+    {name: 'org_name', label: 'Company / Organisation', group: 'Company' }, //_('Company / Organisation')
     {name: 'org_unit', label: 'Unit', group: 'Company' }, //_('Unit')
     {name: 'salutation', label: 'Salutation', group: 'Name' }, //_('Salutation')
     {name: 'title', label: 'Job Title', group: 'Company' }, //_('Job Title')
@@ -166,7 +166,7 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
         {label: app.i18n._('Last Name'),                                                field: 'n_family'},
         {label: app.i18n._('Middle Name'),                                              field: 'n_middle'},
         {label: app.i18n._('Short Name'),                                               field: 'n_short'}, 
-        {label: app.i18n._('Company'),                                                  field: 'org_name'},
+        {label: app.i18n._('Company / Organisation'),                                                  field: 'org_name'},
         {label: app.i18n._('Unit'),                                                     field: 'org_unit'},
         {label: app.i18n._('Phone'),                                                    field: 'telephone',          operators: ['contains']},
         {label: app.i18n._('Job Title'),                                                field: 'title'},

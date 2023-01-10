@@ -23,8 +23,8 @@ describe('Mainpage', () => {
         await popupWindow.waitForTimeout(3000);
         await popupWindow.click('.x-window-bwrap .x-grid3-cell-inner.x-grid3-col-name',{clickCount:2});
         await popupWindow.waitForTimeout(3000);
-        await popupWindow.click('.x-window-bwrap .x-grid3-cell-inner.x-grid3-col-name');
-        await popupWindow.waitForTimeout(3000);
+        // await popupWindow.click('.x-window-bwrap .x-grid3-cell-inner.x-grid3-col-name');
+        // await popupWindow.waitForTimeout(3000);
         await expect(popupWindow).toClick('.x-window.x-window-plain.x-resizable-pinned button',{text: 'Ok'});
         await popupWindow.waitForTimeout(3000);
         await popupWindow.click('.x-grid3-cell-inner.x-grid3-col-related_record',{clickCount:2});

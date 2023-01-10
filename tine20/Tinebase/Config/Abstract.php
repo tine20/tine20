@@ -447,9 +447,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             }
             
             if (isset(self::$_configFileData['confdfolder'])) {
-                $tmpDir = Tinebase_Core::guessTempDir(self::$_configFileData);
-                $cachedConfigFile = $tmpDir . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
-
+                $cachedConfigFile = $this->_getCachedConfigFilename();
                 if (file_exists($cachedConfigFile)) {
                     try {
                         /** @noinspection PhpIncludeInspection */
@@ -464,7 +462,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 }
                 
                 if ($this->_doCreateCachedConfig($cachedConfigData)) {
-                    $this->_createCachedConfig($tmpDir);
+                    $this->_createCachedConfig();
                 } else {
                     self::$_configFileData = $cachedConfigData;
                 }
@@ -472,6 +470,20 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         }
         
         return self::$_configFileData;
+    }
+
+    public function clearCachedConfigFile()
+    {
+        $cachedConfigFile = $this->_getCachedConfigFilename();
+        if (file_exists($cachedConfigFile)) {
+            unlink($cachedConfigFile);
+        }
+    }
+
+    protected function _getCachedConfigFilename(): string
+    {
+        $tmpDir = Tinebase_Core::guessTempDir(self::$_configFileData);
+        return $tmpDir . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
     }
 
     /**
@@ -491,11 +503,10 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     
     /**
      * composes config files from conf.d and saves array to tmp file
-     *
-     * @param string $tmpDir
      */
-    protected function _createCachedConfig($tmpDir)
+    protected function _createCachedConfig()
     {
+        $tmpDir = Tinebase_Core::guessTempDir(self::$_configFileData);
         $confdFolder = self::$_configFileData['confdfolder'];
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -734,13 +745,15 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     
     /**
      * store a config record in database
-     * 
-     * @param   Tinebase_Model_Config $_config record to save
-     * @return  Tinebase_Model_Config
-     * 
+     *
      * @todo only allow to save records for this app ($this->_appName)
+     *
+     * @param Tinebase_Model_Config $_config
+     * @return Tinebase_Model_Config
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _saveConfig(Tinebase_Model_Config $_config)
+    protected function _saveConfig(Tinebase_Model_Config $_config): Tinebase_Model_Config
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Setting config ' . $_config->name);
@@ -748,21 +761,33 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             . ' ' . print_r($_config->value, true));
         
         $config = $this->_loadConfig($_config->name);
-        
+
+        $clearCache = true;
         if ($config) {
+            if ($config->value === $_config->value) {
+                $clearCache = false;
+            }
             $config->value = $_config->value;
             try {
                 $result = $this->_getBackend()->update($config);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // config might be deleted but cache has not been cleaned
-                $result = $this->_getBackend()->create($_config);
+                $this->clearCache([$_config->application_id], true);
+                try {
+                    $result = $this->_getBackend()->update($config);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $result = $this->_getBackend()->create($_config);
+                }
             }
         } else {
             $result = $this->_getBackend()->create($_config);
         }
-        
-        $this->clearCache(null, true);
-        
+
+        if ($clearCache) {
+            $this->clearCache([$_config->application_id], true);
+        }
+
+        /** @var $result Tinebase_Model_Config */
         return $result;
     }
 
@@ -803,10 +828,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
 
         Tinebase_Cache_PerRequest::getInstance()->reset('Tinebase_Config_Abstract');
 
-        $cachedConfigFile = Tinebase_Core::guessTempDir() . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
-        if (file_exists($cachedConfigFile)) {
-            unlink($cachedConfigFile);
-        }
+        $this->clearCachedConfigFile();
 
         // reset class caches last because they would be filled again by Tinebase_Core::guessTempDir()
         self::$_configFileData = null;

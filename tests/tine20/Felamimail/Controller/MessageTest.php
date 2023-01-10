@@ -2001,16 +2001,16 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         $filter = $this->_getFilter($_folder->getId());
 
         $tagData1 = array(
-            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
-            'name'  => 'tagMulti::test1',
+            'type' => Tinebase_Model_Tag::TYPE_SHARED,
+            'name' => 'tagMulti::test1',
             'description' => 'testMessageDetachTags',
             'color' => '#009B31',
         );
         $tag1 = Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tagData1);
 
         $tagData2 = array(
-            'type'  => Tinebase_Model_Tag::TYPE_PERSONAL,
-            'name'  => 'tagMulti::test2',
+            'type' => Tinebase_Model_Tag::TYPE_PERSONAL,
+            'name' => 'tagMulti::test2',
             'description' => 'testDetachTagToMultipleRecords2',
             'color' => '#ff9B31',
         );
@@ -2034,5 +2034,43 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         foreach ($result as $message) {
             $this->assertEquals(count($_cachedMessage->flags), count($message->flags), 'Tags should not be found not found in message ' . $message->subject);
         }
+    }
+    
+    /**
+     * test Confirm Subscription Link
+     *
+     */
+    public function testConfirmSubscription()
+    {
+        self::markTestSkipped('FIXME: htmlpurifier always remove conditional content');
+        //see https://github.com/ezyang/htmlpurifier/blob/master/library/HTMLPurifier/Lexer.php#L277
+        $cachedMessage = $this->messageTestHelper('subscription_notification.eml');
+        $message = $this->_getController()->getCompleteMessage($cachedMessage);
+        
+        $this->assertStringContainsString('https://link11.statuspage.io/subscriptions/confirm/ooaCpodSniBI0T4i', $message->body);
+    }
+
+    /**
+     * test mail with only html part
+     *
+     */
+    public function testOnlyHtmlPart()
+    {
+        $cachedMessage = $this->messageTestHelper('only_html_part.eml');
+        $message = $this->_getController()->getCompleteMessage($cachedMessage);
+
+        $this->assertStringContainsString('10848255', $message->body);
+    }
+
+    /**
+     * test mail with only html part
+     *
+     */
+    public function testJoinTeamsMeeting()
+    {
+        $cachedMessage = $this->messageTestHelper('join_teams_meeting.eml');
+        $message = $this->_getController()->getCompleteMessage($cachedMessage);
+
+        $this->assertStringContainsString('<a href="https://teams.live.com/meet/9477691496180" target="_blank">Click here to join the meeting</a>', $message->body);
     }
 }

@@ -121,6 +121,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      *
      * @param Tinebase_Record_Interface $_record
      * @return int index in set of inserted record or index of existing record
+     * @throws Tinebase_Exception_Record_NotAllowed
      */
     public function addRecord(Tinebase_Record_Interface $_record)
     {

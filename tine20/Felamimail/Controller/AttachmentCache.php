@@ -218,7 +218,7 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
         return $ctrl->get($_record->{Felamimail_Model_AttachmentCache::FLD_SOURCE_ID}, null, false);
     }
 
-    public function fillAttachementCache(array $accountIds, ?int $seconds = null): void
+    public function fillAttachmentCache(array $accountIds, ?int $seconds = null): void
     {
                                             // 4 weeks
         if (null === $seconds || $seconds > 4 * 7 * 24 * 3600) {

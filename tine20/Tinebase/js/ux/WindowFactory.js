@@ -198,6 +198,19 @@ Ext.ux.WindowFactory.prototype = {
             config.title = config.contentPanelConstructorConfig.title;
             delete config.contentPanelConstructorConfig.title;
         }
+    
+        // copy over window* props from prototype to config (e.g. windowHeight)
+        if(config.contentPanelConstructor) {
+            const proto = (_.isString(config.contentPanelConstructor) ? _.get(window, config.contentPanelConstructor) : config.contentPanelConstructor).prototype;
+            for (let prop in proto) {
+                if (proto.hasOwnProperty(prop)) {
+                    const configName = (prop.match(/^window([A-Z].+)/)?.[1] || '').toLowerCase();
+                    if (configName) {
+                        config[configName] = proto[prop];
+                    }
+                }
+            }
+        }
         
         switch (windowType) {
         case 'Browser' :

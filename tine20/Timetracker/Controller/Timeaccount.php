@@ -79,6 +79,20 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
     }
 
     /**
+     * inspect update of one record
+     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
+     * @return  void
+     */
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+        parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
+
+        $this->_resolveTimesheets($updatedRecord, $record, $currentRecord);
+    }
+
+    /**
      * inspects delete action
      *
      * @param array $_ids
@@ -282,5 +296,47 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
     public function deleteContainerContents(Tinebase_Model_Container $_container, $_ignoreAcl = FALSE, $_filter = null)
     {
         // don't do anything here - timeaccount "contents" aka timesheets are deleted in _deleteLinkedObjects()
+    }
+
+    /**
+     * resolve timesheets when timeaccount is cleared
+     *
+     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    private function _resolveTimesheets($updatedRecord, $record, $currentRecord)
+    {
+        $tsBackend = new Timetracker_Backend_Timesheet();
+        
+        if ($currentRecord['status'] !== $updatedRecord['status'] && $updatedRecord['status'] === Timetracker_Model_Timeaccount::STATUS_BILLED) {
+            $timesheets = $tsBackend->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                        ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $updatedRecord->getId()],
+                        ['condition' => 'OR', 
+                            'filters' => [
+                                [
+                                    'field'    => 'is_cleared',
+                                    'operator' => 'equals',
+                                    'value'    => false
+                                ], [
+                                    'field'    => 'invoice_id',
+                                    'operator' => 'equals',
+                                    'value'    => null
+                                ]
+                            ]
+                        ]
+                    ]
+                ));
+            
+            if (sizeof($timesheets) > 0) {
+                $tsBackend->updateMultiple($timesheets->getId(), array(
+                    'invoice_id'    => $updatedRecord['invoice_id'],
+                    'is_cleared'    => true,
+                ));
+            }
+        }
     }
 }

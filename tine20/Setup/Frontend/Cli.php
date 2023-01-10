@@ -212,6 +212,14 @@ class Setup_Frontend_Cli
             }
         }
 
+        if (isset($options['skipApps'])) {
+            if (!is_array($options['skipApps'])) {
+                $options['skipApps'] = explode(',', $options['skipApps']);
+            }
+            $skipApps = $options['skipApps'];
+            $applications = array_diff($applications, $skipApps);
+        }
+
         $this->_promptRemainingOptions($applications, $options);
         $appCount = $controller->installApplications($applications, $options);
         

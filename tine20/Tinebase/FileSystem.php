@@ -244,7 +244,7 @@ class Tinebase_FileSystem implements
         if ($_type !== null) {
             if (! in_array($_type, array(self::FOLDER_TYPE_SHARED, self::FOLDER_TYPE_PERSONAL,
                     self::FOLDER_TYPE_RECORDS, self::FOLDER_TYPE_PREVIEWS))) {
-                throw new Tinebase_Exception_UnexpectedValue('Type can only be shared or personal.');
+                throw new Tinebase_Exception_UnexpectedValue('Given type not supported: ' . $_type);
             }
             
             $result .= '/folders/' . $_type;

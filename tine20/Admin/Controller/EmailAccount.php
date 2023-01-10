@@ -115,9 +115,11 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         $this->_checkRight('get');
 
         $result = $this->_backend->search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
-        // we need to unset the accounts grants to make the admin grid actions work for all accounts
-        $result->account_grants = null;
-        $this->resolveAccountEmailUsers($result);
+        if (! $_onlyIds) {
+            // we need to unset the accounts grants to make the admin grid actions work for all accounts
+            $result->account_grants = null;
+            $this->resolveAccountEmailUsers($result);
+        }
 
         return $result;
     }

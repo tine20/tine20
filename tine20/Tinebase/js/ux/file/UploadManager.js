@@ -19,12 +19,37 @@ Ext.ux.file.UploadManager = function(config) {
         }
     }
     
-    this.taskLimit = 2000;
+    this.taskLimit = 1000;
     this.channelPrefix = '/Tine.Tinebase.uploads';
     this.uploads = {};
     this.fileObjects = [];
     this.completeTaskPaths = [];
     this.supportFileHandle = !Ext.isGecko && !Ext.isIE;
+    this.uploadingTasks = [];
+    
+    this.status = {
+        CANCELLED: 'cancelled',
+        COMPLETE: 'complete',
+        ERROR: 'error',
+        FAILURE: 'failed',
+        PENDING: 'pending',
+        UPLOADING: 'uploading',
+    }
+    
+    this.tag = {
+        ADDED: 'added',
+        ACTIVE: 'active',
+        CANCELLED: 'cancelled',
+        REMOVE: 'remove',
+        INACTIVE: 'inactive',
+        COMPLETE: 'complete',
+    }
+    
+    this.action = {
+        REPLACE: 'replace',
+        SKIP: 'skip',
+        STOP: 'stop',
+    }
     
     import(/* webpackChunkName: "Tinebase/js/UploadQueue" */ './UploadQueue')
         .then(({default: UploadQueue}) => {
@@ -116,10 +141,15 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
          *  store to apply to all status og every batch uploads
          */
         applyBatchAction: [],
-
+    
+        /**
+         *  store to apply to all status og every batch uploads
+         */
+        instances: [],
+    
+    
     async isRunning(instanceId) {
         const bc = new BroadcastChannel('Ext.ux.file.UploadManager');
-
         const isRunning = await Promise.race([
             new Promise (resolve => {
                 bc.onmessage = (event) => {
@@ -238,28 +268,30 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
      * check batch upload complete
      *
      * update icon in main menu, if uploads with same batch id are complete
-     */
+     */ 
     async checkBatchUploadComplete() {
-        let tasks = await this.mainChannel.getAllTasks();
-        const incompleteTasks = _.filter(tasks, (task) => {
-            return (task.status === 'uploading' || task.status === 'pending');
-        });
-        if (incompleteTasks.length === 0) {
-            const actions = Tine.Tinebase.MainScreen.getMainMenu().getActionByPos(55);
-            actions[0]?.uploadIdle();
-        }
+        const allTasks = await this.getAllTasks();
+        const actions = Tine.Tinebase.MainScreen.getMainMenu().getActionByPos(55);
+        const incompleteTasks = allTasks.filter(t => this.isInComplete(t.status));
+        actions[0]?.update(allTasks, incompleteTasks.length !== 0);
     },
-
+    
+    isInComplete(status) {
+        return [this.status.PENDING, this.status.UPLOADING].includes(status);
+    },
+    
+    /**
+     * restart failed uploads
+     *
+     */
     async restartFailedUploads(tasks) {
-        let failedFileUploadPromises = [];
+        const failedFileUploadTasks = [];
         const permissionPromises = [];
         const folderDepTasks = [];
         const folderEntryPermissions = [];
-
-        let allTasks = await this.mainChannel.getAllTasks();
-        tasks =  _.filter(allTasks, {status: 'failed'});
-        
-        _.each(tasks, (task) => {
+        const allTasks = await this.getAllTasks();
+    
+        tasks.forEach(task => {
             if (task.handler === 'FilemanagerCreateFolderTask') {
                 folderDepTasks.push(task);
             }
@@ -268,6 +300,7 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
                     const fileHandle = task.args.fileObject;
                     const folderDeps = task.folderDependencies;
                     const entry = folderDeps[0] ?? 'root';
+                    
                     if (!typeof fileHandle.queryPermission === 'function'
                         || !typeof fileHandle.getFile === 'function') 
                     {
@@ -278,22 +311,22 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
                         folderEntryPermissions[entry] = '';
                     }
                     // collect uniq folder deps task for upload task
-                    _.each(folderDeps, (dependency) => {
-                        const task = _.find(allTasks, {label: dependency});
-                        const existDepTask = _.find(folderDepTasks, {label: dependency});
+                    folderDeps.forEach(depPath => {
+                        const task = allTasks.find(t => t.label === depPath);
+                        const existDepTask = folderDepTasks.find(t => t.label === depPath);
                         if (!existDepTask && task) {
                             folderDepTasks.push(task);
                         }
                     });
                     // get granted entry permission
                     if (folderEntryPermissions[entry] === '') {
-                        let permission = await fileHandle.queryPermission();
+                        const permission = await fileHandle.queryPermission();
                         folderEntryPermissions[entry] = permission === 'granted' ? permission : await fileHandle.requestPermission({});
                     }
                     // get file after we got granted entry permission
                     if (folderEntryPermissions[entry] === 'granted') {
                         this.fileObjects[task.args.uploadId] = await fileHandle.getFile();
-                        failedFileUploadPromises = _.concat(failedFileUploadPromises, this.resetTasks([task], this.instanceId));
+                        failedFileUploadTasks.push(task);
                     }
         
                     resolve(folderEntryPermissions[entry]);
@@ -304,41 +337,28 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
         });
         
         await Promise.all(permissionPromises).then(async (result) => {
-            const resetTaskPromises = _.concat(failedFileUploadPromises, this.resetTasks(folderDepTasks, this.instanceId));
-            Promise.allSettled(resetTaskPromises).then(async (result) => {
-                await this.addTaskToWorkerChannel();
-            });
+            await this.resetTasks(folderDepTasks.concat(failedFileUploadTasks) , this.instanceId);
+            await this.addTaskToWorkerChannel();
         });
     },
     
     /**
-     * reset task with upload pending configs
+     * reset deprecated tasks with upload pending configs
      *
      * - force overwrite
-     */
-    resetTasks(tasks, instanceId) {
-        const promises = [];
-
-        _.each(tasks, (task) => {
-            promises.push(new Promise(async (resolve) => {
-                const isRunning = await this.isRunning(task.instanceId);
-                // dependency task might be completed or failed , we reuse it
-                if (!isRunning) {
-                    await this.stopWorkingChannels(task.instanceId);
-                    task.args.overwrite = true;
-                    task.args.nodeData.status = 'pending';
-                    await this.mainChannel.storage.update(task._id, {
-                        status: 'pending',
-                        tag: _.size(task.folderDependencies) > 0 ? 'inactive' : 'active',
-                        instanceId: instanceId,
-                        args: task.args
-                    });
-                }
-                resolve();
-            }));
+     */ 
+    async resetTasks(tasks, instanceId) {
+        await this.removeChannelsByTasks(tasks);
+    
+        tasks.forEach(t => {
+            t.args.overwrite = true;
+            t.args.nodeData.status = this.status.PENDING;
+            t.status = this.status.PENDING;
+            t.tag = t.folderDependencies.length > 0 ? this.tag.INACTIVE : this.tag.ACTIVE;
+            t.instanceId = instanceId;
         });
-
-        return promises;
+    
+        await this.mainChannel.storage.updateBatch(tasks);
     },
     
     /**
@@ -347,24 +367,31 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
      * - keep task up to date in storage
      * - args must have uploadId
      */
-    async updateTaskByArgs(args) {
+    async updateTaskByArgs(args, saveToStorage = true) {
         try {
-            const hasTask = !!(await this.mainChannel.has(args.taskId));
-
-            if (!hasTask) {
-                return null;
-            }
+            const idx = _.findIndex(this.uploadingTasks, {'_id' : args.taskId});
+            if (idx === -1) return null;
 
             args.nodeData.last_upload_time = new Date().toJSON();
-            let diff = {args: args};
+            const diff = {args: args};
             diff.status = diff.args.nodeData.status;
-            if (diff.status === 'complete') {
-               diff.tag = diff.status;
+            diff.reason = diff.args.nodeData.reason;
+            
+            if (diff.status === this.status.COMPLETE) {
+               diff.tag = this.tag.COMPLETE;
+            }
+    
+            if (this.getBatchUploadAction(args.batchID) === 'stop') {
+                diff.tag = this.tag.REMOVE;
+            }
+    
+            _.assign(this.uploadingTasks[idx], diff);
+            
+            if (saveToStorage) {
+                await this.mainChannel.storage.update(args.taskId, diff);
             }
 
-            await this.mainChannel.storage.update(args.taskId, diff);
-            const task = await this.mainChannel.get(args.taskId);
-            return task[0];
+            return this.uploadingTasks[idx];
         } catch (e) {
             return null;
         }
@@ -375,33 +402,18 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
      *
      */
     async queueUploads(/* any task type */ tasks) {
-        let allTasks = await this.mainChannel.getAllTasks();
+        const allTasks = await this.getAllTasks();
         
         if (allTasks.length + tasks.length > this.taskLimit) {
-            // we remove complete tasks from main channel automatically
-            const promises = [];
-            const completeTasks = _.filter(tasks, {tag: 'complete'});
-            _.each(_.union(_.map(completeTasks, 'instanceId')), (instanceId) => {
-                promises.push(new Promise(async (resolve) => {
-                    const isRunning = await this.isRunning(instanceId);
-                    if (!isRunning) {
-                        await this.stopWorkingChannels(instanceId);
-                    }
-                    resolve();
-                }));
-            });
-            
-            await Promise.allSettled(promises);
-            await this.mainChannel.clearByTag('complete');
-            await this.mainQueueChannel.clearByTag('added');
+            await this.removeChannelsByTasks(allTasks);
+            await this.mainChannel.clear();
         }
-        
-        //fetch file blob from local storage in private mode might return errors , we should always store blob in memory instead
+
         tasks.forEach((task) => {
             this.fileObjects[task.args?.uploadId] = task.args?.fileObject ?? null;
         });
     
-        await this.mainQueueChannel.addBatch(tasks);
+        await this.moveQueuedTasksToMainChannel(tasks);
         await this.addTaskToWorkerChannel();
     },
 
@@ -412,12 +424,13 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
      * so that user can switch and see the pending nodes while uploading
      */
     async getProcessingNodesByPath(path) {
-        let tasks = await this.mainChannel.getAllTasks();
-        tasks = _.filter(tasks, (task) => {
-            const parentPath = this.getParentPath(task.args.nodeData.path);
-            return path === `${parentPath}/` && task.args.nodeData.status !== 'complete';
-        });
-        return _.map(tasks, 'args.nodeData');
+        const allTasks = await this.getAllTasks();
+        return allTasks
+            .filter(t => {
+                const parentPath = this.getParentPath(t.args.nodeData.path);
+                return path === `${parentPath}/` && t.tag !== this.tag.REMOVE;
+            })
+            .map(t => t.args.nodeData);
     },
 
     /**
@@ -437,9 +450,7 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
      * @returns (Ext.ux.file.Upload} Upload object
      */ 
     async getUpload(uploadId, fileObject) {
-        if (!uploadId) {
-            return null;
-        }
+        if (!uploadId) return null;
         
         if (this.fileObjects[uploadId] && !this.uploads[uploadId]) {
             if (typeof this.fileObjects[uploadId].getFile === 'function') {
@@ -454,17 +465,15 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
         }
         return this.uploads[uploadId];
     },
-  
+    
     /**
-     * returns all file upload tasks in storage
+     * returns all tasks from main channel
      *
-     * @returns (Ext.ux.file.Upload} Upload object
      */
-    async getAllFileUploadTasks() {
-        let fileUploadTasks = await this.mainChannel.getAllTasks();
-        return _.filter(fileUploadTasks, {handler: 'FilemanagerUploadFileTask'});
+    async getAllTasks() {
+        return await this.mainChannel.storage.all();
     },
-
+    
     /**
      * remove upload from the upload manager
      *
@@ -473,6 +482,11 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
     unregisterUpload(uploadId) {
         if (this.uploads[uploadId]) {
             delete this.uploads[uploadId];
+        }
+    
+        const idx =  _.findIndex(this.uploadingTasks, {'label' : uploadId});
+        if (idx > -1) {
+            delete this.uploadingTasks[idx];
         }
     },
 
@@ -505,34 +519,30 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
         // so we use adding flag to deal with race condition
         if (this.adding === false) {
             this.adding = true;
-            
-            // get active tasks with curretn instanceId
-            await this.activateDependentTasks();
-            const allTasks = await this.mainChannel.getAllTasks();
-            let tasks = _.filter(allTasks, {tag: 'active', instanceId: this.instanceId, status: 'pending'});
-            const tasksToAdd = tasks.slice(0, this.maxChannels);
+            // get active tasks with current instanceId
+            const tasks = await this.activateDependentTasks();
+            const activeTasks = tasks.filter(t => {
+                return t.tag === this.tag.ACTIVE && t.instanceId === this.instanceId && t.status === this.status.PENDING;
+            });
+            const tasksToAdd = activeTasks.slice(0, this.maxChannels);
             
             // add tasks to worker channel
-            await _.reduce(tasksToAdd, (prev, task) => {
+            await tasksToAdd.reduce((prev, task) => {
                 return prev.then(async () => {
                     const emptyChannel = await this.getEmptyWorkingChannel();
                     if (!emptyChannel) {
                         return Promise.resolve();
                     }
                     task.args.taskId = task._id;
-                    await this.mainChannel.storage.update(task._id, {
-                        tag: emptyChannel.name(),
-                        status: task.status,
-                        args: task.args
-                    });
                     await emptyChannel.add(task);
-
-                    const actions = Tine.Tinebase.MainScreen.getMainMenu().getActionByPos(55);
-                    actions[0]?.uploadActive();
+                    
+                    task.tag = emptyChannel.name();
+                    this.uploadingTasks.push(task);
                     return Promise.resolve();
                 })
             }, Promise.resolve());
-    
+            
+            await this.mainChannel.storage.updateBatch(tasksToAdd);
             await this.checkBatchUploadComplete();
             this.adding = false;
         }
@@ -544,102 +554,168 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
      * set overwrite flog for the tasks that need to be overwritten
      */
     async overwriteBatchUploads(batchID) {
-        const promises = [];
-        let allTasks = await this.mainChannel.getAllTasks();
-        let tasks = _.filter(allTasks, (task) => {
-            return task.args.batchID === batchID;
-        });
-        
-        this.setBatchAction(batchID, 'replace');
-        
-        _.each(tasks, (task) => {
-            task.args.overwrite = true;
-            promises.push(this.mainChannel.storage.update(task._id, {args: task.args}));
-        })
-        
-        await Promise.allSettled(promises);
+        const allTasks = await this.getAllTasks();
+        const tasks = allTasks.filter(t => t.args.batchID === batchID);
+    
+        tasks.forEach(t => t.args.overwrite = true);
+        this.setBatchAction(batchID, this.action.REPLACE);
+
+        await this.mainChannel.storage.updateBatch(tasks);
     },
 
     /**
      * stop batch uploads
      *
      * in order to update batch uploads in display dialog , postal message should be called for each node
-     * TODO: do we have better solution ?
      */
     async stopBatchUploads(batchID) {
-        // update task status in storage and ui
-        const promises = [];
-        let allTasks = await this.mainChannel.getAllTasks();
-
-        this.setBatchAction(batchID, 'stop');
+        this.setBatchAction(batchID, this.action.STOP);
         await this.stopWorkingChannels(this.instanceId);
         
-        _.each(allTasks, (task) => {
-            if (task.args.batchID === batchID && task.args.nodeData.status !== 'complete') {
-                task.args.nodeData.status = 'cancelled';
-                promises.push(this.updateTaskByArgs(task.args));
+        const allTasks = await this.getAllTasks();
+        const tasks = allTasks.filter(t => t.args.batchID === batchID);
+        
+        tasks.forEach(t => {
+            if (this.isInComplete(t.args.nodeData.status)) {
+                t.status = this.status.CANCELLED;
+                t.args.nodeData.status = t.status;
             }
-        });
-    
-        await Promise.allSettled(promises).then(async () => {
-            await this.checkBatchUploadComplete();
-            this.adding = false;
-        });
+            t.tag = this.tag.REMOVE;
+        })
+        
+        await this.mainChannel.storage.updateBatch(tasks);
+        await this.checkBatchUploadComplete();
+        this.adding = false;
     },
     
     /**
      * remove complete tasks in storage
      */
     async removeCompleteTasks() {
-        const promises = [];
-        let allTasks = await this.mainChannel.getAllTasks();
-        
-        _.each(allTasks, (task) => {
-            const status = task.args.nodeData.status;
-            if (status === 'complete') {
-                promises.push(this.mainChannel.storage.delete(task._id));
-            }
-        });
-    
-        await Promise.allSettled(promises);
+        await this.mainChannel.clearByTag(this.tag.COMPLETE);
         this.adding = false;
+    },
+    
+    /**
+     * remove failed tasks first from server and local storage
+     */
+    async removeFailedTasks(tasks) {
+        // always delete uploading nodes
+        const uploadingTasks = tasks.filter(t => t.args.nodeData.status === this.status.UPLOADING);
+        await uploadingTasks.reduce((prev, t) => {
+            return prev.then(async () => {
+                await Tine.Filemanager.searchNodes([
+                    {field: 'path', operator: 'equals', value: t.args.targetFolderPath},
+                    {field: 'contenttype', operator: 'contains', value: 'vnd.adobe.partial-upload'},
+                ]).then(async (result) => {
+                    if (result?.totalcount === 0) return;
+                    await Tine.Filemanager.deleteNodes(result.results.map(n => n.path))
+                        .catch((e) => {
+                            throw new Ext.Error('remove empty node from server failed');
+                        });
+                    
+                }).catch((e) => {});
+                return Promise.resolve();
+            })
+        }, Promise.resolve())
+        
+        await this.resolveUploadsStatus(tasks);
+        await this.checkBatchUploadComplete();
+    },
+    
+    /**
+     * remove failed tasks first from server and local storage
+     */
+    async removeTasksByNode(nodes) {
+        const paths = nodes.map(n => n.data.path);
+        // complete folder tasks should be removed
+        // cancelled files and failed files should be removed
+        const allTasks = await this.getAllTasks();
+        const tasks = allTasks
+            .filter(t => {
+                const taskPaths = t.folderDependencies.concat(t.label);
+                return taskPaths.filter(path => paths.includes(path)).length > 0;
+            });
+        
+        tasks.forEach(t => t.tag = this.tag.REMOVE);
+        
+        await this.mainChannel.storage.updateBatch(tasks);
+        await this.removeChannelsByTasks(tasks);
+        await this.checkBatchUploadComplete();
+        return tasks;
     },
     
     /**
      * reset all upload channels
      *
      * reset all tasks in main channel and worker channels
+     * no tasks will be left in all channels
      */
-    async resetUploadChannels() {
-        let allTasks = await this.mainChannel.getAllTasks();
-        const promises = [];
+    async resetUploadChannels(clearStorage = true) {
+        const allTasks = await this.getAllTasks();
+        const batchIDs = [...new Set(allTasks.map(t => t.args.batchID))];
         
-        _.each(_.union(_.map(allTasks, 'args.batchID')), (batchID) => {
-            if (batchID) delete this.applyBatchAction[batchID];
-        })
-
-        _.each(_.union(_.map(allTasks, 'instanceId')), (instanceId) => {
-            promises.push(this.stopWorkingChannels(instanceId));
-        });
-    
-        await Promise.allSettled(promises);
-        await this.mainChannel.clear();
-        
-        _.each(allTasks, (task) => {
-            if (task.args.nodeData.status !== 'complete' && !Ext.isArray(task.args.nodeData.available_revisions)) {
-                task.args.nodeData.status = 'cancelled';
-    
-                window.postal.publish({
-                    channel: "recordchange",
-                    topic: 'Filemanager.Node.update',
-                    data: task.args.nodeData
-                });
-            }
-        });
+        batchIDs.forEach(batchID => { delete this.applyBatchAction[batchID]; });
+        await this.removeChannelsByTasks(allTasks, true);
+        //fixme: main ch should not be cleared before all deprecated instances
+        if (clearStorage) {
+            await this.mainChannel.clear();
+        }
         
         this.fileObjects = [];
         this.adding = false;
         await this.checkBatchUploadComplete();
+    },
+    
+    /**
+     * resolve task status of all uploads
+     *
+     */
+    async resolveUploadsStatus(tasks) {
+        const instances = await this.removeChannelsByTasks(tasks);
+        tasks = tasks.filter(t => {
+            return t.status !== this.status.COMPLETE && !instances[t.instanceId]
+        });
+    
+        tasks.forEach(task => {
+            const status = task.args.nodeData.status;
+            const taskUpdateError = status !== task.status;
+            const availableRevisions = task.args.nodeData.available_revisions;
+            
+            if (status === this.status.PENDING) {
+                task.status = this.status.CANCELLED;
+                task.reason = 'deprecated pending upload';
+                task.tag = this.tag.CANCELLED;
+            }
+            
+            if (status === this.status.UPLOADING) {
+                task.status = this.status.CANCELLED;
+                task.reason = 'upload incomplete';
+                task.tag = this.tag.CANCELLED;
+            }
+    
+            if (status === this.status.FAILURE) {
+                task.tag = this.tag.REMOVE;
+            }
+    
+            if (taskUpdateError) {
+                task.status = this.status.FAILURE;
+                task.reason = 'task update incomplete';
+                task.tag = this.tag.REMOVE;
+            }
+
+            task.args.nodeData.status = task.status;
+            task.args.nodeData.reason = task.reason;
+    
+            window.postal.publish({
+                channel: "recordchange",
+                topic: 'Filemanager.Node.update',
+                data: task.args.nodeData
+            });
+        });
+    
+        await this.mainChannel.storage.updateBatch(tasks);
+        return await this.getAllTasks();
     },
     
     /**
@@ -648,24 +724,46 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
      * switch inactive task to active once all the dependencies are resolved
      */
     async activateDependentTasks() {
-        let allTasks = await this.getAllTasks();
-        let tasks = _.filter(allTasks, {tag: 'inactive'});
-        const promises = [];
+        const allTasks = await this.getAllTasks();
+        const inactiveTasks = allTasks.filter(t => t.tag === this.tag.INACTIVE);
+        const activeTasks = allTasks.filter(t => t.tag === this.tag.ACTIVE);
         
-        _.each(tasks, (task) => {
-            // move tasks to activeChannel if the dependencies task are completed
+        // move tasks to activeChannel if the dependencies task are completed
+        inactiveTasks.forEach(task => {
             const lastDep = _.last(task.folderDependencies);
             const hasUnmetFolderDependencies = !!(lastDep && !this.completeTaskPaths.includes(lastDep));
             if (!hasUnmetFolderDependencies) {
-                promises.push(this.mainChannel.storage.update(task._id, {tag: 'active'}));
+                task.tag = this.tag.ACTIVE;
             }
         });
         
-        await Promise.allSettled(promises);
+        await this.mainChannel.storage.updateBatch(inactiveTasks);
+        return activeTasks.concat(inactiveTasks);
+    },
+    
+    /**
+     * resolve deprecated instances
+     *
+     * - check all instances running status
+     * - stop deprecated working channels
+     */
+    async removeChannelsByTasks(tasks, includeRunning = false) {
+        const instanceIds = [...new Set(tasks.map(t => t.instanceId))];
+        await instanceIds.reduce((prev, instanceId) => {
+            return prev.then(async () => {
+                this.instances[instanceId] = await this.isRunning(instanceId);
+                if (includeRunning || !this.instances[instanceId]) {
+                    await this.stopWorkingChannels(instanceId);
+                }
+                return Promise.resolve();
+            })
+        }, Promise.resolve());
+
+        return this.instances;
     },
 
     /**
-     * resolve failed upload tasks
+     * get failed file and folder upload tasks
      *
      * update status of all failed and unfinished tasks
      * only resolve failed tasks if instanceId s deprecated
@@ -673,45 +771,21 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
      * @returns {Promise<void>}
      */
     async getFailedUploadTasks() {
-        if (!this.supportFileHandle) {
-            await this.resetUploadChannels();
-            return [];
-        }
+        const allTasks = await this.getAllTasks();
+        await this.removeChannelsByTasks(allTasks);
+        this.mainChannel.clearByTag(this.tag.REMOVE);
         
-        const promises = [];
-        let tasks = await this.mainChannel.getAllTasks();
+        const failedStatus = [this.status.PENDING, this.status.UPLOADING, this.status.FAILURE];
+        const failedTasks = allTasks.filter(t => failedStatus.includes(t.status) && t.tag !== this.tag.REMOVE);
         
-        _.each(tasks, (task) => {
-            promises.push(new Promise(async (resolve) => {
-                const status = task.args.nodeData.status;
-                const isUploadFailed = status !== 'complete' && status !== 'cancelled';
-                const taskUpdateIncomplete = status !== task.status;
-                const isRunning = await this.isRunning(task.instanceId);
-                
-                if (!isRunning) {
-                    await this.stopWorkingChannels(task.instanceId);
-                    
-                    if (isUploadFailed || taskUpdateIncomplete) {
-                        await this.mainChannel.storage.update(task._id, {
-                            status: isUploadFailed ? 'failed' : status,
-                            tag: 'inactive',
-                        });
-                    }
-                }
-                resolve();
-            }));
-        });
+        await this.checkBatchUploadComplete();
         
-        await Promise.allSettled(promises);
-        tasks = await this.mainChannel.getAllTasks();
-        const fileHandleTasks = _.filter(tasks, {status: 'failed', handler: 'FilemanagerUploadFileTask'});
-        return fileHandleTasks;
+        return failedTasks;
     },
     
     /**
      * set batch action
      *
-     * actions : default , replace , stop
      */
     setBatchAction(batchID, action) {
         if (!batchID) return;
@@ -722,7 +796,6 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
     /**
      * get batch action
      *
-     * actions : default , replace , stop
      */
     getBatchUploadAction(batchID) {
         if (! this.applyBatchAction[batchID]) {
@@ -750,42 +823,51 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
         return '/';
     },
     
-    async getAllTasks() {
-        let currentInstanceQueueTasks = await this.mainQueueChannel.getAllTasks();
-        let allTasks = await this.mainChannel.getAllTasks();
-        const queueTasks = _.filter(currentInstanceQueueTasks, {tag: 'queue'});
+    /**
+     * move queued tasks to main channel
+     *
+     * @param tasks
+     */
+    async moveQueuedTasksToMainChannel(tasks) {
+        await this.mainQueueChannel.clearByTag(this.tag.ADDED);
+        await this.mainQueueChannel.addBatch(tasks);
+    
+        tasks.forEach(task => {
+            this.fileObjects[task.args?.uploadId] = task.args?.fileObject ?? null;
+        });
+        
+        const allTasks = await this.getAllTasks();
+        const queueTasks = await this.mainQueueChannel.storage.all();
         const tasksToQueue = [];
-        let promises = [];
+        const existFolderTasks = [];
         
         // reuse create folder task and add tasks from main queue channel to main channel
-        _.each(queueTasks, (task) => {
+        queueTasks.forEach(task => {
             const uploadId = task.args?.uploadId;
-            const existFolderTask = _.find(allTasks, {label: uploadId, handler: 'FilemanagerCreateFolderTask'});
+            const existFolderTask = allTasks.find(t => { 
+                return t.label === uploadId && t.handler ==='FilemanagerCreateFolderTask'
+            });
             const defaultData = {
-                status: 'pending',
-                tag: _.size(task.folderDependencies) > 0 ? 'inactive' : 'active',
+                status: this.status.PENDING,
+                tag: task.folderDependencies.length > 0 ? this.tag.INACTIVE : this.tag.ACTIVE,
                 instanceId: this.instanceId
             };
-        
+            
+            _.assign(task, defaultData);
+            
             if (existFolderTask) {
-                promises.push(this.mainChannel.storage.update(existFolderTask._id, defaultData));
+                _.assign(existFolderTask, defaultData);
+                existFolderTasks.push(existFolderTask);
             } else {
-                _.assign(task, defaultData);
                 tasksToQueue.push(task);
             }
         });
         
-        await Promise.allSettled(promises);
+        await this.mainChannel.storage.updateBatch(existFolderTasks);
         await this.mainChannel.addBatch(tasksToQueue);
-        
+    
+        queueTasks.forEach(t => t.tag = this.tag.ADDED);        
         // update main queue channel
-        promises = [];
-        _.each(queueTasks, (task) => {
-            promises.push(this.mainQueueChannel.storage.update(task._id, {tag: 'added'}));
-        });
-        
-        await Promise.allSettled(promises);
-        allTasks = await this.mainChannel.getAllTasks();
-        return allTasks;
+        await this.mainQueueChannel.storage.updateBatch(queueTasks);
     }
 });

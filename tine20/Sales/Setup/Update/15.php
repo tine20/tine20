@@ -282,12 +282,16 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
                         <notnull>false</notnull>
                     </field>'), 'remark');
             }
-            $this->getDb()->update(SQL_TABLE_PREFIX . 'sales_cost_centers', ['deleted_time' => '1970-01-01 00:00:00'], 'deleted_time IS NULL');
+            if ($this->_backend->columnExists('deleted_time', 'sales_cost_centers')) {
+                $this->getDb()->update(SQL_TABLE_PREFIX . 'sales_cost_centers', ['deleted_time' => '1970-01-01 00:00:00'], 'deleted_time IS NULL');
+            }
             $this->_backend->renameTable('sales_cost_centers', Tinebase_Model_CostCenter::TABLE_NAME);
         }
         Tinebase_Application::getInstance()->removeApplicationTable(
             Tinebase_Application::getInstance()->getApplicationByName(Sales_Config::APP_NAME), 'sales_cost_centers');
-
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_CostCenter::class,
+        ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.10', self::RELEASE015_UPDATE010);
     }
 

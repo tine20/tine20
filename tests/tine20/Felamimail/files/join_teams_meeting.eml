@@ -1,0 +1,172 @@
+Return-Path: <name@example.com>
+Delivered-To: info@domain.de
+Received: from host.home.example.net ([unix socket])
+    by host.home.example.net (Cyrus v2.2.13-Debian-2.2.13-13ubuntu3) with LMTPA;
+    Fri, 16 Mar 2012 17:31:20 +0100
+Received: from mx (unknown [33.22.11.2])
+   by host.home.example.net (Postfix) with ESMTP id 193CD10131
+   for <name@example.net>; Fri, 16 Mar 2012 17:31:20 +0100 (CET)
+From: <name@example.com>
+To: info@domain.de
+X-Tine20TestMessage: join_teams_meeting.eml
+Subject: Join Teams meeting in progress
+Thread-Topic: Join Teams meeting in progress
+Thread-Index: AdimQoclGM/PJUSTPEiHgQedjmIO0g==
+Date: Tue, 2 Aug 2022 07:36:08 +0000
+Message-ID:
+ <BY5PR07MB678623748946A802E2C46088859D9@BY5PR07MB6786.namprd07.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-exchange-calendar-series-instance-id:
+ BAAAAIIA4AB0xbcQGoLgCAAAAAD8TA2HQqbYAQAAAAAAAAAAEAAAALJi8tNfWcRGm1f5UkHuGuM=
+x-tmn: [JBjG7rhRcnn5B5QNZBPq/D/cJPCMe1Gr]
+x-ms-traffictypediagnostic:
+ BY5PR07MB6786:EE_MeetingMessage|BN7PR07MB4418:EE_MeetingMessage
+x-ms-office365-filtering-correlation-id: b349f68d-9ba4-4ee7-8ec5-08da7459aa4c
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ 3XoowNHemqwe+p8If0Kb4SfML4+dGNoP/4exLgYeYgHbLBD+onBWfh9PcNr57KvhyFw9cZMblZC3v0IfmAgVOBv/KLHg6bZvnBfVGU5evBGtB/GOnP9lEdin7Uv1xBlUMaxOv/bkcpnib3ohR5Mud+cdeiFTX1sDQ9Fngk7/sljqDf2lR+FydajnMm3/R8EeK8mEAaY6UTzXT272Gj9cDip3Drdkn78sb5FmxHis0JEXa0iZeAtU3qXPNXFwHToa3utTgy9mmiROmKx5TJ/Mn9H6/EqCxP2bCXsuik6L3Sv/TL9aJycVY5HsDGGqATPuDKAQExoFBXVnbLXdmgmQ+kGF1V1NbrcRF/+HojRY50KqYPM+ca8831RSVbhkg4MyN6KsNy23/34kHdRkMt0mEmjDJhiWi4CTuXjL9xNHM/O+vqmoo8zshDtpUGNK99ZtHq2LyC7F+VzB8EdLYbMhdAT0gkISpbbPn3cKU0tTPflZfpoxaK433r43Ju/2qLcO5Pr9hhTHrO8u4x6dUdNNwymOy13klOkmyDAKAjFsBijzruODZJujQw41de+QUhH/xrroT8PfmFOzbk6T5qzHGrSRtZEWojHT7KFINjiDri4IpT8AMjBq0v84SDQzGBR8
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?7mRalXSnQE+i+3v/sM5TG/nD3YWh9O1bYc9rlYHoHJvE0LWnr4cvupvE9W?=
+ =?iso-8859-1?Q?PTUUX/grkbzYCiNtMsHsy7qEX9j3dPmMweffo1JZw/kJBj4u1U2gdYi/Uw?=
+ =?iso-8859-1?Q?IUZ/S15U2YDnIrqKJ4IpbbRIQoaQxEn/KREkpZYUHu6rQXbStHGDgYYa5R?=
+ =?iso-8859-1?Q?SppbtLlzZvo9i5X1rm2H6LCP/n/V8HzuGVEjQ+W03JeyWpo9xkLsC/4szp?=
+ =?iso-8859-1?Q?+E4h1p8vkc7kXj50gUzVcG/xW1YEMXYbDWgpcQSlW6JRFw2s9i6yB9xfzK?=
+ =?iso-8859-1?Q?KsvtmiuMswJd5jyIDxYaPadj+XgUc4jYaheGav/EUt7Rcsi95s9YGtSWNL?=
+ =?iso-8859-1?Q?pV75e26xF/06hwxiovUC6MwESpC875vcrBz7F+830tBW8zvnyPC9EYGnvU?=
+ =?iso-8859-1?Q?38E671oAdWYvkqkB0x2bM7tm0jqtdAlGCjDawobqbfSso0xzl4YG+3k6vR?=
+ =?iso-8859-1?Q?RNIctizW1qoKKGGfU0dPpLM3aoPCDiVw94ewZrCBs8pk7RsKYOhi1jBYhm?=
+ =?iso-8859-1?Q?BH3j1M1T8CCpoHynfIbl1OKTXcXXb4Saj4Ut/rdb9dbz90Gyjo7QpNulN7?=
+ =?iso-8859-1?Q?wwOHVGctzWheYG4otPvTM9CIBR1n958KkNfCWQ4Fq+uYdpSigVxr8vOerj?=
+ =?iso-8859-1?Q?5WaAx9Qz6Vs7GkMdllpMGcqfciSG0W0cu2QLotBBpMFSLZ2su9J6JumL6S?=
+ =?iso-8859-1?Q?0FnMQ0NxwFwRQhPIHYcwqOdJVcgjyLnBYf2xdLEd/TsvzSpvhXxLNVM0nP?=
+ =?iso-8859-1?Q?kuXvhOWCW86u2gvrCJWrjBTz67a3+mXcJgRA6Em0Uf4M61HZiLNB4HmFp3?=
+ =?iso-8859-1?Q?Ik48Snl1f8cIr4QBngHZ5BvtJ9d1uk1kFBd4hhlwB9U595MDwxV0MP0qRG?=
+ =?iso-8859-1?Q?qXPZfh13vxQXwYdVNgHW8dVdUIOmv9cGem79rpv/x3RMaqgbMoCMaabg/O?=
+ =?iso-8859-1?Q?MPqxExdDV80LAST6I1MZgXtSX6IFMEhaV0u9yKc3hcDDSZhwaPg0m1M/RZ?=
+ =?iso-8859-1?Q?38SMb7g+LkOStXkitudxlgjpOLEaRbWOtC3ZEG9NhG93OvHBqfqB+sBfef?=
+ =?iso-8859-1?Q?2lBcufIyTJwwhJP8NcQDtyCvmP4yltPvjCpuh56e0jeK6jYR6wwC4u4pfq?=
+ =?iso-8859-1?Q?GummPvPp6r7SIprhfHJ4QMnHVsVoroof1mq5kJUjAp5Qys5PEIe3yFj3Mu?=
+ =?iso-8859-1?Q?OKIVH/6COhSqoXIEMSypRSCwj0B2PcDhFrZHxJlQGoVhnO4GDnXf0/Nweh?=
+ =?iso-8859-1?Q?5ChUlLhH41m8QPQC6KQVQBPSY34vMgON0jRU+tXIUpId4AVYmo8HLE+ONF?=
+ =?iso-8859-1?Q?GuCi?=
+Content-Type: multipart/alternative;
+	boundary="_000_BY5PR07MB678623748946A802E2C46088859D9BY5PR07MB6786namp_"
+MIME-Version: 1.0
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR07MB6786.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b349f68d-9ba4-4ee7-8ec5-08da7459aa4c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Aug 2022 07:36:08.3776
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR07MB4418
+Authentication-Results: vmail-smtp02.metaways.net;
+	dkim=pass header.d=outlook.com header.s=selector1 header.b=Om6GTgV1;
+	dmarc=pass (policy=none) header.from=outlook.com;
+	arc=pass ("microsoft.com:s=arcselector9901:i=1");
+	spf=pass (vmail-smtp02.metaways.net: domain of p.hartog@outlook.com designates 40.92.20.10 as permitted sender) smtp.mailfrom=p.hartog@outlook.com
+X-Spamd-Bar: -----
+X-Spam-Status: No, score=-5.49
+X-Rspamd-Queue-Id: 91DD61F686
+X-Rspamd-Server: vmail-smtp02
+X-Spamd-Result: default: False [-5.49 / 15.00];
+	BAYES_HAM(-9.57)[99.45%];
+	CONTENT_INCREASE_SCORE(4.00)[];
+	URI_COUNT_ODD(1.00)[3];
+	ARC_ALLOW(-1.00)[microsoft.com:s=arcselector9901:i=1];
+	MIME_BASE64_TEXT(0.10)[];
+	MX_GOOD(-0.01)[];
+	R_SPF_ALLOW(-0.01)[+ip4:40.92.0.0/15];
+	RCPT_COUNT_ONE(0.00)[1];
+	FREEMAIL_ENVFROM(0.00)[outlook.com];
+	R_DKIM_ALLOW(0.00)[outlook.com:s=selector1];
+	FROM_HAS_DN(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[40.92.20.10:from];
+	DWL_DNSWL_NONE(0.00)[outlook.com:dkim];
+	MIME_GOOD(0.00)[multipart/alternative,text/plain];
+	FREEMAIL_FROM(0.00)[outlook.com];
+	TO_DN_EQ_ADDR_ALL(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[outlook.com,none];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	ASN(0.00)[asn:8075, ipnet:40.80.0.0/12, country:US];
+	DKIM_TRACE(0.00)[outlook.com:+];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~,3:~];
+	RWL_MAILSPIKE_POSSIBLE(0.00)[40.92.20.10:from]
+
+--_000_BY5PR07MB678623748946A802E2C46088859D9BY5PR07MB6786namp_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+You're invited to join a Microsoft Teams meeting
+
+Join on your computer or mobile app
+Click here to join the meeting<https://teams.live.com/meet/9477691496180>
+
+--_000_BY5PR07MB678623748946A802E2C46088859D9BY5PR07MB6786namp_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+</head>
+<body>
+<b>You're invited to join a Microsoft Teams meeting</b><br>
+<br>
+Join on your computer or mobile app<br>
+<a href=3D"https://teams.live.com/meet/9477691496180">Click here to join th=
+e meeting</a>
+</body>
+</html>
+
+--_000_BY5PR07MB678623748946A802E2C46088859D9BY5PR07MB6786namp_
+Content-Type: text/calendar; charset="utf-8"; method=REQUEST
+Content-Transfer-Encoding: base64
+
+QkVHSU46VkNBTEVOREFSDQpNRVRIT0Q6UkVRVUVTVA0KUFJPRElEOk1pY3Jvc29mdCBFeGNoYW5n
+ZSBTZXJ2ZXIgMjAxMA0KVkVSU0lPTjoyLjANCkJFR0lOOlZUSU1FWk9ORQ0KVFpJRDpHcmVlbndp
+Y2ggU3RhbmRhcmQgVGltZQ0KQkVHSU46U1RBTkRBUkQNCkRUU1RBUlQ6MTYwMTAxMDFUMDAwMDAw
+DQpUWk9GRlNFVEZST006KzAwMDANClRaT0ZGU0VUVE86KzAwMDANCkVORDpTVEFOREFSRA0KQkVH
+SU46REFZTElHSFQNCkRUU1RBUlQ6MTYwMTAxMDFUMDAwMDAwDQpUWk9GRlNFVEZST006KzAwMDAN
+ClRaT0ZGU0VUVE86KzAwMDANCkVORDpEQVlMSUdIVA0KRU5EOlZUSU1FWk9ORQ0KQkVHSU46VkVW
+RU5UDQpPUkdBTklaRVI7Q049UGF1bCBIYXJ0b2c6bWFpbHRvOnAuaGFydG9nQG91dGxvb2suY29t
+DQpBVFRFTkRFRTtST0xFPVJFUS1QQVJUSUNJUEFOVDtQQVJUU1RBVD1ORUVEUy1BQ1RJT047UlNW
+UD1UUlVFO0NOPXAuaGFydG9nQG0NCiBldGF3YXlzLmRlOm1haWx0bzpwLmhhcnRvZ0BtZXRhd2F5
+cy5kZQ0KREVTQ1JJUFRJT047TEFOR1VBR0U9ZW4tVVM6WW91J3JlIGludml0ZWQgdG8gam9pbiBh
+IE1pY3Jvc29mdCBUZWFtcyBtZWV0aW5nDQogXG5cbkpvaW4gb24geW91ciBjb21wdXRlciBvciBt
+b2JpbGUgYXBwXG5DbGljayBoZXJlIHRvIGpvaW4gdGhlIG1lZXRpbmc8aHQNCiB0cHM6Ly90ZWFt
+cy5saXZlLmNvbS9tZWV0Lzk0Nzc2OTE0OTYxODA+XG4NClVJRDowNDAwMDAwMDgyMDBFMDAwNzRD
+NUI3MTAxQTgyRTAwODAwMDAwMDAwRkM0QzBEODc0MkE2RDgwMTAwMDAwMDAwMDAwMDAwMA0KIDAx
+MDAwMDAwMEIyNjJGMkQzNUY1OUM0NDY5QjU3Rjk1MjQxRUUxQUUzDQpTVU1NQVJZO0xBTkdVQUdF
+PWVuLVVTOkpvaW4gVGVhbXMgbWVldGluZyBpbiBwcm9ncmVzcw0KRFRTVEFSVDtUWklEPUdyZWVu
+d2ljaCBTdGFuZGFyZCBUaW1lOjIwMjIwODAyVDA4MDAwMA0KRFRFTkQ7VFpJRD1HcmVlbndpY2gg
+U3RhbmRhcmQgVGltZToyMDIyMDgwMlQwODMwMDANCkNMQVNTOlBVQkxJQw0KUFJJT1JJVFk6NQ0K
+RFRTVEFNUDoyMDIyMDgwMlQwNzM2MDdaDQpUUkFOU1A6T1BBUVVFDQpTVEFUVVM6Q09ORklSTUVE
+DQpTRVFVRU5DRTowDQpMT0NBVElPTjtMQU5HVUFHRT1lbi1VUzpNaWNyb3NvZnQgVGVhbXMNClgt
+TUlDUk9TT0ZULUNETy1BUFBULVNFUVVFTkNFOjANClgtTUlDUk9TT0ZULUNETy1PV05FUkFQUFRJ
+RDoyMTIwNzQ5NTY0DQpYLU1JQ1JPU09GVC1DRE8tQlVTWVNUQVRVUzpURU5UQVRJVkUNClgtTUlD
+Uk9TT0ZULUNETy1JTlRFTkRFRFNUQVRVUzpCVVNZDQpYLU1JQ1JPU09GVC1DRE8tQUxMREFZRVZF
+TlQ6RkFMU0UNClgtTUlDUk9TT0ZULUNETy1JTVBPUlRBTkNFOjENClgtTUlDUk9TT0ZULUNETy1J
+TlNUVFlQRTowDQpYLU1JQ1JPU09GVC1ET05PVEZPUldBUkRNRUVUSU5HOkZBTFNFDQpYLU1JQ1JP
+U09GVC1ESVNBTExPVy1DT1VOVEVSOkZBTFNFDQpYLU1JQ1JPU09GVC1MT0NBVElPTkRJU1BMQVlO
+QU1FOk1pY3Jvc29mdCBUZWFtcw0KWC1NSUNST1NPRlQtTE9DQVRJT05TT1VSQ0U6Tm9uZQ0KWC1N
+SUNST1NPRlQtTE9DQVRJT05TOlt7IkRpc3BsYXlOYW1lIjoiTWljcm9zb2Z0IFRlYW1zIlwsIkxv
+Y2F0aW9uQW5ub3RhdGlvDQogbiI6IiJcLCJMb2NhdGlvblVyaSI6IiJcLCJMb2NhdGlvblN0cmVl
+dCI6IiJcLCJMb2NhdGlvbkNpdHkiOiIiXCwiTG9jYXRpb24NCiBTdGF0ZSI6IiJcLCJMb2NhdGlv
+bkNvdW50cnkiOiIiXCwiTG9jYXRpb25Qb3N0YWxDb2RlIjoiIlwsIkxvY2F0aW9uRnVsbEFkZA0K
+IHJlc3MiOiIifV0NCkJFR0lOOlZBTEFSTQ0KREVTQ1JJUFRJT046UkVNSU5ERVINClRSSUdHRVI7
+UkVMQVRFRD1TVEFSVDotUFQxNU0NCkFDVElPTjpESVNQTEFZDQpFTkQ6VkFMQVJNDQpFTkQ6VkVW
+RU5UDQpFTkQ6VkNBTEVOREFSDQo=
+
+--_000_BY5PR07MB678623748946A802E2C46088859D9BY5PR07MB6786namp_--

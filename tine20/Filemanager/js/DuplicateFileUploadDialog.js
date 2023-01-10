@@ -50,7 +50,7 @@ Tine.Filemanager.DuplicateFileUploadDialog = Ext.extend(Ext.FormPanel, {
     /**
      * Constructor.
      */
-    initComponent: function () {
+    initComponent() {
         this.app = this.app || Tine.Tinebase.appMgr.get('Filemanager');
 
         this.questionText =  String.format(this.app.i18n._('File named {0} already exist in this location. Do you want to replace it with the current one?'), this.fileName);
@@ -97,14 +97,14 @@ Tine.Filemanager.DuplicateFileUploadDialog = Ext.extend(Ext.FormPanel, {
         Tine.Filemanager.DuplicateFileUploadDialog.superclass.initComponent.call(this);
     },
 
-    afterRender: function () {
+    afterRender() {
         Tine.Filemanager.DuplicateFileUploadDialog.superclass.afterRender.call(this);
     },
 
     /**
      * init buttons
      */
-    initButtons: function() {
+    initButtons() {
         this.fbar = [{
             xtype: 'checkbox',
             ctCls: 'checkbox-footbar',
@@ -144,9 +144,8 @@ Tine.Filemanager.DuplicateFileUploadDialog = Ext.extend(Ext.FormPanel, {
         }];
     },
     
-    handleApplyAll: async function (button) {
+    async handleApplyAll(button) {
         this.handler.call(this.scope, button);
-        this.window.close();
         
         if (this.applyToAll || button === 'stop') {
             _.each(Tine.Filemanager.DuplicateFileUploadDialog.openWindow.stack, (window) => {
@@ -162,7 +161,9 @@ Tine.Filemanager.DuplicateFileUploadDialog = Ext.extend(Ext.FormPanel, {
                 await Tine.Tinebase.uploadManager.overwriteBatchUploads(this.batchID);
             }
         }
-    }
+        
+        this.window.close();
+    },
 });
 
 /**
@@ -191,7 +192,7 @@ Tine.Filemanager.DuplicateFileUploadDialog.openWindow =  function (config) {
         modal: true
     });
 
-    this.window.on('close', function() {
+    this.window.on('beforeclose', function() {
         Tine.Filemanager.DuplicateFileUploadDialog.openWindow.current = null;
 
         if (Tine.Filemanager.DuplicateFileUploadDialog.openWindow.stack.length) {

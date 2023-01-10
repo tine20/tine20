@@ -849,3 +849,21 @@ msgstr "Öffentlichen Link kopieren"
 
 msgid "Do you want to restart the failed uploads?"
 msgstr "Möchten Sie die nicht erfolgreich Datei(en) erneut hochladen?"
+
+msgid "You have unfinished uploads, Please check upload monitor and restart the failed uploads again."
+msgstr "Sie haben fehlgeschlagen Uploads, Bitte überprüfen Sie den Uploads Fortschritt und starten Sie die fehlgeschlagenen Uploads erneut."
+
+msgid "Processing files..."
+msgstr "Dateien verarbeiten..."
+
+msgid "Removing files..."
+msgstr "Dateien löschen..."
+
+msgid "Total    Uploads"
+msgstr "Gesamte Uploads"
+
+msgid "Complete Uploads"
+msgstr "Komplette Uploads"
+
+msgid "Failed   Uploads"
+msgstr "Fehlgeschlagene Uploads"

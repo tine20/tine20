@@ -18,12 +18,17 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE015_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE015_UPDATE004 = __CLASS__ . '::update004';
+    const RELEASE015_UPDATE005 = __CLASS__ . '::update005';
     
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE015_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
+            ],
+            self::RELEASE015_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ]
         ],
         self::PRIO_NORMAL_APP_STRUCTURE=> [
@@ -150,5 +155,12 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
         Felamimail_Setup_Initialize::addPruneAttachmentCacheSchedule();
 
         $this->addApplicationUpdate('Felamimail', '15.4', self::RELEASE015_UPDATE004);
+    }
+    
+    public function update005()
+    {
+        Tinebase_Core::getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'felamimail_folder' . ' set imap_lastmodseq = 0 where imap_totalcount > 500 and supports_condstore = 1');
+        $this->addApplicationUpdate('Felamimail', '15.5', self::RELEASE015_UPDATE005);
+
     }
 }

@@ -1263,7 +1263,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Folder supports condstore, fetching flags since last mod seq ' . $folder->imap_lastmodseq);
-        
         $flags = $imap->getChangedFlags($folder->imap_lastmodseq);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -1272,28 +1271,18 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             . ' Flags: ' . print_r($flags, true));
         
         if (! empty($flags)) {
+            $filter = new Felamimail_Model_MessageFilter([
+                ['field' => 'account_id', 'operator' => 'equals', 'value' => $folder->account_id],
+                ['field' => 'folder_id',  'operator' => 'equals', 'value' => $folder->getId()],
+                ['field' => 'messageuid', 'operator' => 'in', 'value' => array_keys($flags)]
+            ]);
+            $pagination = new Tinebase_Model_Pagination(['limit' => $this->_flagSyncCountPerStep]);
             
-            if (count($flags) <= $this->_flagSyncCountPerStep) {
-                $filter = new Felamimail_Model_MessageFilter(array(
-                    array(
-                        'field' => 'account_id', 'operator' => 'equals', 'value' => $folder->account_id
-                    ),
-                    array(
-                        'field' => 'folder_id',  'operator' => 'equals', 'value' => $folder->getId()
-                    ),
-                    array(
-                        'field' => 'messageuid', 'operator' => 'in', 'value' => array_keys($flags)
-                    )
-                ));
-                $messages = $this->_backend->search($filter);
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' got ' . count($messages) . ' messages.');
-                
-                $this->_setFlagsOnCache($flags, $folder, $messages, false);
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                    ' Got too many changed flags. Maybe this is the initial load of the cache. Just updating last mod seq ...');
-            }
+            $messages = $this->_backend->search($filter, $pagination);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' got ' . count($messages) . ' messages.');
+            
+            $this->_setFlagsOnCache($flags, $folder, $messages, false);
             
             foreach ($flags as $flag) {
                 if ($folder->imap_lastmodseq < $flag['modseq']) {

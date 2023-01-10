@@ -148,9 +148,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_multipleRecordsToJson($result);
     }
 
-    public function fillAttachementCache(array $accountIds, ?int $seconds = null): array
+    public function fillAttachmentCache(array $accountIds, ?int $seconds = null): array
     {
-        Felamimail_Controller_AttachmentCache::getInstance()->fillAttachementCache($accountIds, $seconds);
+        Felamimail_Controller_AttachmentCache::getInstance()->fillAttachmentCache($accountIds, $seconds);
         return ['success' => true];
     }
     
@@ -589,43 +589,71 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /***************************** accounts funcs *******************************/
     
     /**
-     * search accounts
-     * 
      * @param array $filter
      * @param array $paging
      * @return array
+     * @throws Setup_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_Validation
      */
-    public function searchAccounts(array $filter, array $paging = [])
+    public function searchAccounts(array $filter, array $paging = []): array
     {
         $accounts = $this->_search($filter, '', Felamimail_Controller_Account::getInstance(), 'Felamimail_Model_AccountFilter');
-        // add signatures and remove ADB list type from result set
-        // TODO move this to a better place (default filter? separate api?)
-        foreach ($accounts['results'] as $idx => $account) {
-            if (in_array($account['type'], [
+        $accounts['results'] = $this->_initAccounts($accounts['results']);
+        $accounts['totalcount'] = count($accounts['results']);
+        return $accounts;
+    }
+
+    /**
+     * some account initialization
+     *
+     * TODO move this to a better place (default filter? separate api?)
+     *
+     * @param array $accounts
+     * @return array
+     * @throws Setup_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _initAccounts(array $accounts): array
+    {
+        foreach ($accounts as $idx => $account) {
+            if (! in_array($account['type'], [
                 Felamimail_Model_Account::TYPE_SHARED,
                 Felamimail_Model_Account::TYPE_USER,
                 Felamimail_Model_Account::TYPE_USER_INTERNAL,
                 Felamimail_Model_Account::TYPE_SYSTEM,
             ])) {
+                // remove ADB list type from result set
+                unset($accounts[$idx]);
+            } else {
+                // add signatures
                 $account = Felamimail_Controller_Account::getInstance()->get($account['id']);
+
                 Felamimail_Controller_Folder::getInstance()->reloadFolderCacheOnAccount($account);
+
+                // autoCreateMoveNotifications for system accounts
                 if ($account->type === Felamimail_Model_Account::TYPE_SYSTEM &&
                     Felamimail_Config::getInstance()->featureEnabled(
                         Felamimail_Config::FEATURE_ACCOUNT_MOVE_NOTIFICATIONS) &&
                     $account->sieve_notification_move === Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_AUTO
                 ) {
-                     Felamimail_Controller_Account::getInstance()->autoCreateMoveNotifications($account);
+                    Felamimail_Controller_Account::getInstance()->autoCreateMoveNotifications($account);
                 }
-                $accounts['results'][$idx] = $this->_recordToJson($account);
-            } else {
-                unset($accounts['results'][$idx]);
-                $accounts['totalcount']--;
+
+                // auto-deactivate sieve vacation notifications if over due date
+                $vacation = Felamimail_Controller_Sieve::getInstance()->getVacation($account['id']);
+                if ($vacation['end_date'] instanceof Tinebase_DateTime && Tinebase_DateTime::now()->compare($vacation['end_date']) === 1) {
+                    $vacation->enabled = false;
+                    Felamimail_Controller_Sieve::getInstance()->setSieveScript($account['id'], $vacation, null);
+                    $account = Felamimail_Controller_Account::getInstance()->get($account['id']);
+                }
+                
+                $accounts[$idx] = $this->_recordToJson($account);
             }
         }
         // Reorder the array (client does not like missing indices
-        $accounts['results'] = array_values($accounts['results']);
-
-        return $accounts;
+        return array_values($accounts);
     }
 
     /**

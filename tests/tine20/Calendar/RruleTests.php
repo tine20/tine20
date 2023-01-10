@@ -617,7 +617,32 @@ class Calendar_RruleTests extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, count($recurSet), 'leapyear only failed');
         $this->assertEquals('2012-02-29 08:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
     }
-    
+
+    public function testCalcYearlyByMonthDayStartDiff()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'Aussendung der Sternsinger',
+            'dtstart'       => '2022-12-26 16:00:00',
+            'dtend'         => '2022-12-26 17:00:00',
+            'rrule'         => 'FREQ=YEARLY;INTERVAL=1;BYMONTH=1;BYMONTHDAY=6',
+            'originator_tz' => 'Europe/Berlin',
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+
+        $from = new Tinebase_DateTime('2023-01-01 00:00:00');
+        $until = new Tinebase_DateTime('2023-01-31 23:59:59');
+        $until->setTimezone('Europe/Berlin');
+        $from->setTimezone('Europe/Berlin');
+
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($event, $exceptions, $from, $until);
+
+        $this->assertEquals(1, count($recurSet), 'yearly byMonthDay startDiff failed');
+        $this->assertEquals('2023-01-06 16:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
+    }
+
     public function testCalcYearlyByDay()
     {
         $event = new Calendar_Model_Event(array(
