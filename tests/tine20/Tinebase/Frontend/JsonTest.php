@@ -474,7 +474,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
      */
     public function testSearchPreferencesOfOtherUsersApp()
     {
-        self::markTestSkipped('FIXME fails with GithubTests');
+        $this->_skipWithoutEmailSystemAccountConfig();
 
         // add new default pref
         $pref = $this->_getPreferenceWithOptions();
