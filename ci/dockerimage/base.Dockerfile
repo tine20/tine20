@@ -61,10 +61,10 @@ ARG ALPINE_PHP_PACKAGE=php7
 ARG TINE20ROOT=/usr/share
 ENV TINE20ROOT=$TINE20ROOT
 
-#todo version vars | move tika to lib
+# todo version vars | move tika to lib
 RUN wget -O /usr/sbin/confd https://github.com/kelseyhightower/confd/releases/download/v0.16.0/confd-0.16.0-linux-amd64 \
     && chmod +x /usr/sbin/confd
-RUN wget -O /usr/local/bin/tika.jar http://packages.tine20.org/tika/tika-app-1.14.jar
+RUN wget -O /usr/local/bin/tika.jar https://packages.tine20.org/tika/tika-app-2.6.0.jar
 
 # todo check if copy or add craetes folder
 RUN mkdir /usr/local/lib/container
