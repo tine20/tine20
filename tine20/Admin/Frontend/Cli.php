@@ -365,7 +365,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * set passwords for given user accounts (csv with email addresses) - random pw is generated if not in csv
+     * set passwords for given user accounts (csv with email addresses or username) - random pw is generated if not in csv
      *
      * usage: method=Admin.setPasswords [-d] [-v] userlist.csv [-- pw=password sendmail=1 pwlist=pws.csv updateaccount=1]
      *
@@ -470,15 +470,19 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             if (empty($userdata[0])) {
                 continue;
             }
+            $username = $userdata[0];
 
-            // get user by email or @todo accountname
+            // get user by email or account name
             // @todo allow to define columns with username/email/...
             try {
-                $user = Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress', $userdata[0]);
-                $fullUser = Tinebase_User::getInstance()->getFullUserById($user);
+                $fullUser = Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress', $username, Tinebase_Model_FullUser::class);
             } catch (Tinebase_Exception_NotFound $tenf) {
-                echo $tenf->getMessage() . "\n";
-                continue;
+                try {
+                    $fullUser = Tinebase_User::getInstance()->getUserByProperty('accountLoginName', $username, Tinebase_Model_FullUser::class);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    echo 'user with accountEmailAddress/accountLoginName = ' . $username . " not found.\n";
+                    continue;
+                }
             }
 
             if (is_array($pw) && isset($pw[$fullUser->accountLoginName])) {
@@ -492,13 +496,13 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 if (! $opts->d) {
                     Admin_Controller_User::getInstance()->update($fullUser, $newPw, $newPw);
                 } else {
-                    echo "--DRYRUN-- updating user " . $userdata[0] . "\n";
+                    echo "--DRYRUN-- updating user " . $username . "\n";
                 }
             } else {
                 if (! $opts->d) {
-                    Tinebase_User::getInstance()->setPassword($user, $newPw);
+                    Tinebase_User::getInstance()->setPassword($fullUser, $newPw);
                 } else {
-                    echo "--DRYRUN-- setting pw for user " . $userdata[0] . "\n";
+                    echo "--DRYRUN-- setting pw for user " . $username . "\n";
                 }
             }
 
@@ -511,13 +515,12 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 if ($sendmail && ! empty($userdata[1])) {
                     echo "--DRYRUN-- sending mail to " . $userdata[1] . "\n";
                 } else {
-                    echo "no email for: " . $userdata[0] . ";" . $newPw . "\n";
+                    echo "no email for: " . $username . ";" . $newPw . "\n";
                 }
             }
 
             // @todo create csv export for this
             if ($opts->v) {
-                // echo $user->accountEmailAddress . ';' . $newPw . "\n";
                 $pwCsv .= $fullUser->accountLoginName . ';' . $newPw . "\n";
             }
         }
