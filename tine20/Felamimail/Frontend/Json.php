@@ -641,8 +641,14 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     Felamimail_Controller_Account::getInstance()->autoCreateMoveNotifications($account);
                 }
 
-                // TODO auto-deactivate sieve vacation notifications if over due date
-
+                // auto-deactivate sieve vacation notifications if over due date
+                $vacation = Felamimail_Controller_Sieve::getInstance()->getVacation($account['id']);
+                if ($vacation['end_date'] instanceof Tinebase_DateTime && Tinebase_DateTime::now()->compare($vacation['end_date']) === 1) {
+                    $vacation->enabled = false;
+                    Felamimail_Controller_Sieve::getInstance()->setSieveScript($account['id'], $vacation, null);
+                    $account = Felamimail_Controller_Account::getInstance()->get($account['id']);
+                }
+                
                 $accounts[$idx] = $this->_recordToJson($account);
             }
         }
