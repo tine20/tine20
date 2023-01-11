@@ -36,6 +36,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE020 = __CLASS__ . '::update020';
     const RELEASE015_UPDATE021 = __CLASS__ . '::update021';
     const RELEASE015_UPDATE022 = __CLASS__ . '::update022';
+    const RELEASE015_UPDATE023 = __CLASS__ . '::update023';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -109,6 +110,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE021          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update021',
+            ],
+            self::RELEASE015_UPDATE023          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update023',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -687,5 +692,15 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             Tinebase_Application::getInstance()->getApplicationByName('Tinebase'),
             'note_types');
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.22', self::RELEASE015_UPDATE022);
+    }
+
+    public function update023()
+    {
+        if ($this->_backend->tableExists(Tinebase_Model_ActionLog::TABLE_NAME)) {
+            Setup_SchemaTool::updateSchema([Tinebase_Model_ActionLog::class]);
+            Tinebase_Application::getInstance()->addApplicationTable('Tinebase',
+                Tinebase_Model_ActionLog::TABLE_NAME);
+        }
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.23', self::RELEASE015_UPDATE023);
     }
 }

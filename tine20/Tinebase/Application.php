@@ -518,7 +518,7 @@ class Tinebase_Application
      * @param int $_version of table
      * @return void
      */
-    public function addApplicationTable($_applicationId, $_name, $_version)
+    public function addApplicationTable($_applicationId, string $_name, int $_version = 1)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Add application table: ' . $_name);
