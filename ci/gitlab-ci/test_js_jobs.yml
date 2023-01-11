@@ -84,6 +84,8 @@
 js-e2e-tests-source:
   extends: .js-e2e-tests-source
   rules:
+    - if: $JS_E2E_TESTS_SOURCE_TYPE != "sequential"
+      when: never
     - if: $JS_E2E_TESTS_SOURCE_SAVE_SCREENSHOTS == "true"
       when: never
     - !reference [.js-e2e-tests-source, rules]
@@ -99,6 +101,26 @@ js-e2e-tests-source-save-screenshots:
       - ${CI_PROJECT_DIR}/tests/e2etests/screenshots/
     expire_in: 7 day
   rules:
+    - if: $JS_E2E_TESTS_SOURCE_TYPE != "sequential"
+      when: never
     - if: $JS_E2E_TESTS_SOURCE_SAVE_SCREENSHOTS != "true"
+      when: never
+    - !reference [.js-e2e-tests-source, rules]
+js-e2e-tests-source-php-version-matrix:
+  extends: .js-e2e-tests-source
+  variables:
+    IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}
+  needs:
+    - 'docker_build_source_matrix: [7.4]'
+    - 'docker_build_source_matrix: [8.0]'
+    - 'docker_build_source_matrix: [8.1]'
+  parallel:
+    matrix:
+      - PHP_VERSION:
+          - "7.4"
+          - "8.0"
+          - "8.1"
+  rules:
+    - if: $JS_E2E_TESTS_SOURCE_TYPE != "matrix"
       when: never
     - !reference [.js-e2e-tests-source, rules]
