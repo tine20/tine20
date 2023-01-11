@@ -1,7 +1,6 @@
 ARG BUILT_IMAGE=built
 
 FROM ${BUILT_IMAGE} as packaging
-ARG TINE20ROOT=/usr/share
 ARG TINE20PACKAGES=/root/packages
 ARG RELEASE=local
 ARG CODENAME=local

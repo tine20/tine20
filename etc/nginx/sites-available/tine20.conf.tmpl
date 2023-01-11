@@ -4,13 +4,15 @@ server {
     listen 80;
     listen [::]:80;
 
-    server_name {{getv "/server/name" "_"}};
+    server_name {{getv "/nginxv/server/name" "_"}};
+
+    root {{getv "/tine20root" "/usr/share"}}/tine20;
 
     error_log /dev/stderr;
-    access_log /dev/stdout {{getv "/log/format" "tine20"}};
+    access_log /dev/stdout {{getv "/nginxv/log/format" "tine20"}};
 
     set $PHP_ADMIN_VALUE "error_log = /var/log/nginx/php-error.log";
-    set $PHP_VALUE "include_path={{getv "/tine20/config/dir" "/etc/tine20"}}:/usr/share/tine20
+    set $PHP_VALUE "include_path={{getv "/nginxv/tine20/config/dir" "/etc/tine20"}}:/usr/share/tine20
                     max_execution_time = 1800
                     memory_limit = 400M
                     post_max_size = 2G";
