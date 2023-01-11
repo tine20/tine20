@@ -7,7 +7,6 @@
 # ARGS:
 #   BUILT_IMAGE=built
 #   SOURCE_IMAGE=source
-#   TINE20ROOT=/usr/share
 #   NPM_INSTALL_COMMAND="npm --no-optional install" - used set npm proxy in the ci
 
 ARG SOURCE_IMAGE=source

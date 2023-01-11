@@ -6,13 +6,11 @@
 #
 # ARGS:
 #   SOURCE_IMAGE=source
-#   TINE20ROOT=/usr/share
 
 ARG DEPENDENCY_IMAGE=dependency
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM ${DEPENDENCY_IMAGE} as test-dependency
-ARG TINE20ROOT=/usr/share
 
 RUN apk add mysql-client jq rsync
 

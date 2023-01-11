@@ -59,6 +59,7 @@ RUN apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alp
 FROM alpine:${ALPINE_BRANCH} as base
 ARG ALPINE_PHP_PACKAGE=php7
 ARG TINE20ROOT=/usr/share
+ENV TINE20ROOT=$TINE20ROOT
 
 #todo version vars | move tika to lib
 RUN wget -O /usr/sbin/confd https://github.com/kelseyhightower/confd/releases/download/v0.16.0/confd-0.16.0-linux-amd64 \
