@@ -504,6 +504,7 @@ class Setup_Frontend_Cli
         $result = Setup_Controller::getInstance()->updateApplications(null, [
             'strict' => isset($options['strict']) && $options['strict'],
             'skipQueueCheck' => isset($options['skipQueueCheck']) && $options['skipQueueCheck'],
+            'rerun' => isset($options['rerun']) ? explode(',', $options['rerun']) : []
         ]);
         echo "Updated " . $result['updated'] . " application(s).\n";
         if ($_opts->v && count($result['updates']) > 0) {
