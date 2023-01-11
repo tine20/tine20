@@ -13,7 +13,6 @@ RUN apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alp
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM ${BASE_IMAGE} as dependency
 ARG NPM_INSTALL_COMMAND="npm --no-optional install"
-ARG TINE20ROOT=/usr/share
 ARG ALPINE_PHP_PACKAGE=php7
 
 COPY --from=cache-invalidator /cachehash /usr/local/lib/container/

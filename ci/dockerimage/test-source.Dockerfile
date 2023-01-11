@@ -6,13 +6,11 @@
 #
 # ARGS:
 #   SOURCE_IMAGE=source
-#   TINE20ROOT=/usr/share
 
 ARG SOURCE_IMAGE=source
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM ${SOURCE_IMAGE} as test-source
-ARG TINE20ROOT=/usr/share
 
 RUN apk add mysql-client jq rsync coreutils
 
