@@ -15,6 +15,7 @@ describe('message', () => {
         popupWindow = await lib.getEditDialog('Verfassen');
         let currentUser = await lib.getCurrentUser(popupWindow);
         // add recipient
+        await popupWindow.waitForTimeout(2000);
         let inputFields = await popupWindow.$$('input');
         await inputFields[2].type(currentUser.accountEmailAddress);
         await popupWindow.waitForSelector('.search-item.x-combo-selected');
