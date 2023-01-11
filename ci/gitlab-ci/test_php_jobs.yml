@@ -5,8 +5,6 @@
   variables:
     ARG_IMAGE: test-source
     ARG_COPY_SOURCE: "true"
-  needs:
-    - docker_build_source
   stage: test
   timeout: 2h
   interruptible: true
@@ -28,6 +26,8 @@ php-unit-all-tests-source-sequential:
   variables:
     NODE_TOTAL: 1
     NODE_INDEX: 1
+  needs:
+    - docker_build_source
   rules:
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "sequential"
       when: never
@@ -36,6 +36,8 @@ php-unit-all-tests-source-parallel:
   extends: .php-unit-all-tests-source
   timeout: 45m
   parallel: 5
+  needs:
+    - docker_build_source
   rules:
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "parallel"
       when: never
@@ -45,21 +47,30 @@ php-unit-all-tests-source-matrix:
   variables:
     NODE_TOTAL: 1
     NODE_INDEX: 1
+    IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}
+  needs:
+    - docker_build_source
+    - 'docker_build_source_matrix: [7.4]'
+    - 'docker_build_source_matrix: [8.0]'
+    - 'docker_build_source_matrix: [8.1]'
   parallel:
     matrix:
-      - PROVIDER:
+      - DATABASE_IMAGE:
           - "mariadb:10.6"
           - "mariadb:10.5"
           - "mariadb:10.4"
           - "mariadb:10.3"
           - "mariadb:10.2"
-          - "mysql:8.0"
+          - "dockerregistry.metaways.net/tine20/tine20/mysql:8"
           - "mysql:5.7"
+      - PHP_VERSION:
+          - "7.4"
+          - "8.0"
+          - "8.1"
   rules:
-    - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "matrix"
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "matrix" && $JS_E2E_TESTS_SOURCE_TYPE != "matrix"
       when: never
     - !reference [.php-unit-all-tests-source, rules]
-
 
 .php-unit-all-tests-source-postfixmultiinstance:
   extends: .php-unit-all-tests-source

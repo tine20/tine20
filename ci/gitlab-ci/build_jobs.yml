@@ -7,7 +7,7 @@
 # Therefore we need multiple build stages.
 
 # docker build source or dependecy image
-docker_build_source:
+.docker_build_source:
   extends: .abstract_jobs.docker
   stage: build1
   variables:
@@ -138,12 +138,28 @@ docker_build_source:
     # run for any merge request or schedule
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_PIPELINE_SOURCE == "schedule"
+docker_build_source:
+  extends: .docker_build_source
+  rules:
+    - !reference [.docker_build_source, rules]
+docker_build_source_matrix:
+  extends: .docker_build_source
+  parallel:
+    matrix:
+      - PHP_VERSION:
+          - "7.4"
+          - "8.0"
+          - "8.1"
+  rules:
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "matrix"
+      when: never
+    - !reference [.docker_build_source, rules]
 docker_build_source_arm64:
   services:
     - name: ${UTIL_REGISTRY}/docker:20.10.21-dind-r1
       alias: docker
   image: ${UTIL_REGISTRY}/docker:20.10.21-r1
-  extends: docker_build_source
+  extends: .docker_build_source
   tags:
     - arm64
   variables:
