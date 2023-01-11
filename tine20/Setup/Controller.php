@@ -545,9 +545,14 @@ class Setup_Controller
     public function updateApplications(Tinebase_Record_RecordSet $_applications = null, array $options = [
         'strict' => false,
         'skipQueueCheck' => false,
+        'rerun' => [],
     ])
     {
         $this->clearCache();
+
+        if (! empty($options['rerun'])) {
+            $this->_removeUpdatesFromAppState($options['rerun']);
+        }
 
         $this->preUpdateHooks();
 
@@ -633,6 +638,26 @@ class Setup_Controller
         $this->clearCache();
         
         return $result;
+    }
+
+    protected function _removeUpdatesFromAppState(array $updates)
+    {
+        foreach ($updates as $update) {
+            // update string expected in this form: UserManual_Setup_Update_15::update001
+            if (preg_match('/([a-z0-9]+)_/i', $update, $matches)) {
+                $appName = $matches[1];
+                if (Tinebase_Application::getInstance()->isInstalled($appName)) {
+                    $app = Tinebase_Application::getInstance()->getApplicationByName($appName);
+                    $state = Tinebase_Helper::jsonDecode(Tinebase_Application::getInstance()->getApplicationState(
+                        $app, Tinebase_Application::STATE_UPDATES, true));
+                    if (isset($state[$update])) {
+                        unset($state[$update]);
+                        Tinebase_Application::getInstance()->setApplicationState(
+                            $app, Tinebase_Application::STATE_UPDATES, json_encode($state));
+                    }
+                }
+            }
+        }
     }
 
     public function updateAllImportExportDefinitions()
