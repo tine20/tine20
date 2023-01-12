@@ -811,9 +811,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function getGroupByName($_name)
     {
-        $result = $this->getGroupByPropertyFromSqlBackend('name', $_name);
-        
-        return $result;
+        return $this->getGroupByPropertyFromSqlBackend('name', $_name);
     }
     
     /**
