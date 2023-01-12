@@ -449,9 +449,7 @@ class Tinebase_Application
             ->where($this->_getDb()->quoteIdentifier('application_id') . ' = ?', $applicationId);
             
         $stmt = $this->_getDb()->query($select);
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
-        
-        return $rows;
+        return $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
     }
 
     /**
@@ -511,27 +509,33 @@ class Tinebase_Application
     }
     
     /**
-     * add table to tine registry
-     *
      * @param Tinebase_Model_Application|string $_applicationId
-     * @param string $_name of table
-     * @param int $_version of table
+     * @param string $_name
+     * @param int $_version
      * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Zend_Db_Adapter_Exception
      */
     public function addApplicationTable($_applicationId, string $_name, int $_version = 1)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Add application table: ' . $_name);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Add application table: ' . $_name);
 
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
-        
-        $applicationData = array(
-            'application_id' => $applicationId,
-            'name'           => $_name,
-            'version'        => $_version
-        );
-        
-        $this->_getDb()->insert(SQL_TABLE_PREFIX . 'application_tables', $applicationData);
+
+        $existingTables = Tinebase_Application::getInstance()->getApplicationTables($applicationId);
+
+        if (! in_array($_name, $existingTables)) {
+            $applicationData = array(
+                'application_id' => $applicationId,
+                'name' => $_name,
+                'version' => $_version
+            );
+            $this->_getDb()->insert(SQL_TABLE_PREFIX . 'application_tables', $applicationData);
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Application table already exists: ' . $_name);
+        }
     }
 
     /**
