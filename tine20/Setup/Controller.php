@@ -2760,7 +2760,7 @@ class Setup_Controller
      * @return array
      * @throws Setup_Exception_NotFound
      *
-     * TODO support <backupStructureOnly>true</backupStructureOnly> for MC models without a table defintion in setup.xml
+     * TODO support <backupStructureOnly>true</backupStructureOnly> for MC models without a table definition in setup.xml
      */
     public function getBackupStructureOnlyTables()
     {
@@ -2784,6 +2784,23 @@ class Setup_Controller
                 $tables[] = SQL_TABLE_PREFIX . $tableName[0];
             }
         }
+
+        return array_merge($tables, $this->_getNonXmlStructOnlyTables());
+    }
+
+    /**
+     * TODO move this info to MC models or application_tables
+     *
+     * @return array
+     */
+    protected function _getNonXmlStructOnlyTables(): array
+    {
+        $tables = [];
+        if ($this->isInstalled('Felamimail')) {
+            $tables[] = SQL_TABLE_PREFIX . 'felamimail_attachmentcache';
+        }
+
+        // TODO add UserManual content tables?
 
         return $tables;
     }
