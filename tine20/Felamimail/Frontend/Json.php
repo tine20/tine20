@@ -8,7 +8,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
@@ -627,33 +627,48 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 // remove ADB list type from result set
                 unset($accounts[$idx]);
             } else {
-                // add signatures
-                $account = Felamimail_Controller_Account::getInstance()->get($account['id']);
-
-                Felamimail_Controller_Folder::getInstance()->reloadFolderCacheOnAccount($account);
-
-                // autoCreateMoveNotifications for system accounts
-                if ($account->type === Felamimail_Model_Account::TYPE_SYSTEM &&
-                    Felamimail_Config::getInstance()->featureEnabled(
-                        Felamimail_Config::FEATURE_ACCOUNT_MOVE_NOTIFICATIONS) &&
-                    $account->sieve_notification_move === Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_AUTO
-                ) {
-                    Felamimail_Controller_Account::getInstance()->autoCreateMoveNotifications($account);
-                }
-
-                // auto-deactivate sieve vacation notifications if over due date
-                $vacation = Felamimail_Controller_Sieve::getInstance()->getVacation($account['id']);
-                if ($vacation['end_date'] instanceof Tinebase_DateTime && Tinebase_DateTime::now()->compare($vacation['end_date']) === 1) {
-                    $vacation->enabled = false;
-                    Felamimail_Controller_Sieve::getInstance()->setSieveScript($account['id'], $vacation, null);
+                try {
+                    // add signatures
                     $account = Felamimail_Controller_Account::getInstance()->get($account['id']);
+
+                    Felamimail_Controller_Folder::getInstance()->reloadFolderCacheOnAccount($account);
+                    $account = $this->_initSystemAccount($account);
+                    $accounts[$idx] = $this->_recordToJson($account);
+                } catch (Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                        __METHOD__ . '::' . __LINE__ . ' Init failed: ' . $e
+                    );
                 }
-                
-                $accounts[$idx] = $this->_recordToJson($account);
             }
         }
         // Reorder the array (client does not like missing indices
         return array_values($accounts);
+    }
+
+    protected function _initSystemAccount(Felamimail_Model_Account $account): Felamimail_Model_Account
+    {
+        if (! in_array($account->type, [Felamimail_Model_Account::TYPE_SYSTEM, Felamimail_Model_Account::TYPE_SHARED])) {
+            return $account;
+        }
+
+        if (Felamimail_Config::getInstance()->featureEnabled(
+                Felamimail_Config::FEATURE_ACCOUNT_MOVE_NOTIFICATIONS) &&
+            $account->sieve_notification_move === Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_AUTO
+        ) {
+            Felamimail_Controller_Account::getInstance()->autoCreateMoveNotifications($account);
+        }
+
+        // auto-deactivate sieve vacation notifications if over due date
+        if ($account->sieve_vacation_active) {
+            $vacation = Felamimail_Controller_Sieve::getInstance()->getVacation($account['id']);
+            if ($vacation['end_date'] instanceof Tinebase_DateTime && Tinebase_DateTime::now()->compare($vacation['end_date']) === 1) {
+                $vacation->enabled = false;
+                Felamimail_Controller_Sieve::getInstance()->setSieveScript($account['id'], $vacation, null);
+                $account = Felamimail_Controller_Account::getInstance()->get($account['id']);
+            }
+        }
+
+        return $account;
     }
 
     /**
@@ -984,7 +999,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $fieldsWithoutPw = $fields;
         unset($fieldsWithoutPw['password']);
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-            ' Trying connection with params: ' . print_r($fieldsWithoutPw, true)
+            __METHOD__ . '::' . __LINE__ . ' Trying connection with params: ' . print_r($fieldsWithoutPw, true)
         );
 
         try {
