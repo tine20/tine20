@@ -215,15 +215,15 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
         switch ($this->account_type) {
             case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
                 if (! in_array($user->getId(), Tinebase_Group::getInstance()->getGroupMembers($this->account_id))) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                        . ' Current user not member of group ' . $this->account_id);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                        __METHOD__ . '::' . __LINE__ . ' Current user not member of group ' . $this->account_id);
                     return false;
                 }
                 break;
             case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                 if ($user->getId() !== $this->account_id) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                        . ' Grant not available for current user (account_id of grant: ' . $this->account_id . ')');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                        __METHOD__ . '::' . __LINE__ . ' Grant not available for current user (account_id of grant: ' . $this->account_id . ')');
                     return false;
                 }
                 break;
@@ -459,7 +459,9 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      * @param ?Tinebase_Record_DiffContext $context
      * @return null|Tinebase_Record_RecordSetDiff
      */
-    public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne, Tinebase_Record_RecordSet $_recordSetTwo, ?Tinebase_Record_DiffContext $context = null)
+    public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne,
+                                         Tinebase_Record_RecordSet $_recordSetTwo,
+                                         ?Tinebase_Record_DiffContext $context = null)
     {
         $shallowCopyTwo = new Tinebase_Record_RecordSet(static::class);
         $removed = new Tinebase_Record_RecordSet(static::class);
@@ -535,9 +537,11 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
     }
 
     /**
+     * @param array $grants
      * @return array
+     * @throws Tinebase_Exception_AccessDenied
      */
-    public static function resolveGrantAccounts($grants)
+    public static function resolveGrantAccounts(array $grants): array
     {
         $accounts = [];
         switch ($grants['account_type']) {
