@@ -43,7 +43,6 @@ class OnlyOfficeIntegrator_Controller_AccessToken extends Tinebase_Controller_Re
         ]);
         $this->_handleDependentRecords = false; // its a tiny performance enhancement (at time of writing)
         $this->_doContainerACLChecks = false;
-        $this->_doRightChecks = false;
         //defaults to $this->_purgeRecords = true;
     }
 
