@@ -160,11 +160,15 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
         if (class_exists('HumanResources_Config') &&
-            Tinebase_Application::getInstance()->isInstalled(HumanResources_Config::APP_NAME)) {
+            Tinebase_Application::getInstance()->isInstalled(HumanResources_Config::APP_NAME))
+        {
             $this->_backend->renameTable('sales_divisions', 'humanresources_division');
             Tinebase_Application::getInstance()->removeApplicationTable(Sales_Config::APP_NAME, 'sales_divisions');
             Tinebase_Application::getInstance()->removeApplicationTable(HumanResources_Config::APP_NAME,
                 'humanresources_division');
+            Tinebase_Application::getInstance()->addApplicationTable('HumanResources',
+                HumanResources_Model_Division::TABLE_NAME);
+
         } else {
             $this->_backend->dropTable('sales_divisions', Sales_Config::APP_NAME);
         }
