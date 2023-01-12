@@ -606,7 +606,17 @@ class Setup_Controller
 
                             $class->$functionName();
 
-                            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                            if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
+                                try {
+                                    Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                                } catch (PDOException $pe) {
+                                    Tinebase_TransactionManager::getInstance()->resetTransactions();
+                                    Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $pe->getMessage());
+                                }
+                            } else if (Setup_Core::isLogLevel(Zend_Log::NOTICE)) {
+                                Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                                    . ' Update ' . $className . '::' . $functionName . ' already closed the transaction');
+                            }
 
                         } catch (Exception $e) {
                             try {
