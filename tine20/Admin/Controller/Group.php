@@ -6,9 +6,8 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * @todo        make it possible to change default groups
  * @todo        extend abstract record controller
  */
 
@@ -87,7 +86,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     public function searchCount($_filter)
     {
         //$this->checkRight('VIEW_ACCOUNTS');
-        
+
         $groups = Tinebase_Group::getInstance()->getGroups($_filter);
         $result = count($groups);
         
@@ -163,8 +162,9 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        // avoid forging group id, get's created in backend
+        // avoid forging group id, is created in backend
         unset($_group->id);
+        $groupController = Tinebase_Group::getInstance();
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
@@ -172,10 +172,18 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
                 $this->createOrUpdateList($_group);
             }
 
-            $group = Tinebase_Group::getInstance()->addGroup($_group);
+            try {
+                $groupController->getGroupByName($_group->name);
+                $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+                throw new Tinebase_Exception_SystemGeneric($translation->_('A group with this name already exists'));
+            } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                // no problem, go on creating the group
+            }
+
+            $group = $groupController->addGroup($_group);
 
             if (!empty($_group['members'])) {
-                Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_group['members']);
+                $groupController->setGroupMembers($group->getId(), $_group['members']);
             }
 
             $event = new Admin_Event_CreateGroup();
