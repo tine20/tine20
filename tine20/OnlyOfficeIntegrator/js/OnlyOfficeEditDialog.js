@@ -266,7 +266,8 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
                     this.isAttachment = !!String(this.record.get('path')).match(/^\/records\//);
                     this.isTempfile = false;
                     this.docEditor.destroyEditor();
-                    this.afterRender();
+                    this.el.child('.ooi-document-edit-dialog div').addClass('tine-viewport-waitcycle');
+                    this.onAfterRender();
             }}
         });
     },
