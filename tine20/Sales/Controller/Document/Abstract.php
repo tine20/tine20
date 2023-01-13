@@ -177,6 +177,62 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         }
     }
 
+    /**
+     * @param Sales_Model_Document_Abstract $_createdRecord
+     * @param Sales_Model_Document_Abstract $_record
+     * @return void
+     */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectAfterCreate($_createdRecord, $_record);
+
+        $this->_inspectAfterBookedTransition($_createdRecord);
+    }
+
+    /**
+     * @param Sales_Model_Document_Abstract $updatedRecord
+     * @param Sales_Model_Document_Abstract $record
+     * @param Sales_Model_Document_Abstract $currentRecord
+     * @return void
+     */
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+        parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
+
+        $this->_inspectAfterBookedTransition($updatedRecord, $currentRecord);
+    }
+
+    /**
+     * after a document transitioned from not booked to booked all precursor documents need to update their followup status
+     *
+     * @param Sales_Model_Document_Abstract $_record
+     * @param Sales_Model_Document_Abstract|null $_oldRecord
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _inspectAfterBookedTransition(Sales_Model_Document_Abstract $_record, ?Sales_Model_Document_Abstract $_oldRecord = null): void
+    {
+        if (($_oldRecord && $_oldRecord->isBooked()) || !$_record->isBooked()) {
+            // no transition from "not booked" to "booked" => nothing to do for us here
+            return;
+        }
+
+        (new Tinebase_Record_Expander($this->_modelName, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => [],
+                    ],
+                ],
+            ]
+        ]))->expand(new Tinebase_Record_RecordSet($this->_modelName, [$_record]));
+
+        /** @var Tinebase_Model_DynamicRecordWrapper $precursorDocument */
+        foreach ($_record->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} ?? [] as $precursorDocument) {
+            $precursorDocument->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD}->updateFollowupStatus();
+        }
+    }
+
     protected function _inspectDelete(array $_ids)
     {
         // do not deleted booked records

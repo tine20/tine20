@@ -116,6 +116,14 @@ class Sales_Config extends Tinebase_Config_Abstract
     const VARIABLE_POSITION_FLAG = 'subProductPositionFlag';
 
     /**
+     * followup status
+     */
+    public const DOCUMENT_FOLLOWUP_STATUS = 'followupStatus';
+    public const DOCUMENT_FOLLOWUP_STATUS_NONE = 'none';
+    public const DOCUMENT_FOLLOWUP_STATUS_PARTIALLY = 'partially';
+    public const DOCUMENT_FOLLOWUP_STATUS_COMPLETED = 'completed';
+
+    /**
      * reversal status
      */
     public const DOCUMENT_REVERSAL_STATUS = 'reversalStatus';
@@ -220,6 +228,40 @@ class Sales_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => 12
         ),
+        self::DOCUMENT_FOLLOWUP_STATUS => [
+            //_('Followup Status')
+            self::LABEL              => 'Followup Status',
+            //_('Possible Followup Status')
+            self::DESCRIPTION        => 'Possible Followup Status',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                self::RECORDS => [
+                    [
+                        'id' => self::DOCUMENT_FOLLOWUP_STATUS_NONE,
+                        //_('No followups booked')
+                        'value' => 'No followups booked',
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => self::DOCUMENT_FOLLOWUP_STATUS_PARTIALLY,
+                        //_('Followups partially booked')
+                        'value' => 'Followups partially booked',
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => self::DOCUMENT_FOLLOWUP_STATUS_COMPLETED,
+                        //_('Followups booked')
+                        'value' => 'Followups booked',
+                        'icon' => null,
+                        'system' => true,
+                    ],
+                ],
+                self::DEFAULT_STR => self::DOCUMENT_FOLLOWUP_STATUS_NONE,
+            ],
+        ],
         self::DOCUMENT_REVERSAL_STATUS => [
             //_('Reversal Status')
             self::LABEL              => 'Reversal Status',
@@ -347,7 +389,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                 ],
             ]
         ],
-
         self::DOCUMENT_ORDER_STATUS => [
             //_('Order Status')
             self::LABEL              => 'Order Status',
