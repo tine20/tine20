@@ -664,9 +664,16 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.htmlEditor.on('toggleFormat', this.onToggleFormat, this);
         this.initHtmlEditorDD();
-    
-        this.subjectField.focus(false, 100);
-        this.subjectField.selectText();
+
+        _.delay(() => {
+            if (this.recipientGrid.store.getCount()) {
+                if (!this.subjectField.getValue()) {
+                    this.subjectField.focus();
+                } else {
+                    this.htmlEditor.focus();
+                }
+            }
+        }, 250);
     },
 
 

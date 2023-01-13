@@ -72,6 +72,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     // needed for refresh after file messages
     listenMessageBus: true,
 
+
+    // NOTE: initial loading is done by tree selection
+    initialLoadAfterRender: false,
+    
     /**
      * @private grid cfg
      */
@@ -227,24 +231,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }
             }
         }
-    },
-    
-    /**
-     * skip initial till we know the INBOX id
-     */
-    initialLoad: function() {
-        var account = this.app.getActiveAccount(),
-            accountId = account ? account.id : null,
-            inbox = accountId ? this.app.getFolderStore().queryBy(function(record) {
-                return record.get('account_id') === accountId && record.get('localname').match(/^inbox$/i);
-            }, this).first() : null;
-            
-        if (! inbox) {
-            this.initialLoad.defer(100, this, arguments);
-            return;
-        }
-        
-        return Tine.Felamimail.GridPanel.superclass.initialLoad.apply(this, arguments);
     },
     
     /**
