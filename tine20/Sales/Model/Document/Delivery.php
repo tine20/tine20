@@ -103,9 +103,9 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
         unset($_definition[self::FIELDS][self::FLD_COST_BEARER_ID]);
     }
 
-    protected static $_statusField = self::FLD_DELIVERY_STATUS;
-    protected static $_statusConfigKey = Sales_Config::DOCUMENT_DELIVERY_STATUS;
-    protected static $_documentNumberPrefix = 'DN-'; // _('DN-')
+    protected static string $_statusField = self::FLD_DELIVERY_STATUS;
+    protected static string $_statusConfigKey = Sales_Config::DOCUMENT_DELIVERY_STATUS;
+    protected static string $_documentNumberPrefix = 'DN-'; // _('DN-')
 
     /**
      * holds the configuration object (must be declared in the concrete class)

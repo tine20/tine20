@@ -129,9 +129,9 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
      */
     protected static $_configurationObject = NULL;
 
-    protected static $_statusField = self::FLD_ORDER_STATUS;
-    protected static $_statusConfigKey = Sales_Config::DOCUMENT_ORDER_STATUS;
-    protected static $_documentNumberPrefix = 'OR-'; // _('OR-')
+    protected static string $_statusField = self::FLD_ORDER_STATUS;
+    protected static string $_statusConfigKey = Sales_Config::DOCUMENT_ORDER_STATUS;
+    protected static string $_documentNumberPrefix = 'OR-'; // _('OR-')
 
     public function transitionFrom(Sales_Model_Document_Transition $transition)
     {
