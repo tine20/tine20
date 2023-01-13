@@ -425,9 +425,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     initContent: function (message) {
         if (!this.record.get('body')) {
             const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
-            let format = message === undefined
-                    ? account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : 'text/html'
-                    : message.getBodyType();
+            // we follow the account compose_format when fetch msg failed
+            let format =  account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : 
+                    message.getBodyType();
 
             if (!this.msgBody) {
                 message = this.getMessageFromConfig();
@@ -436,7 +436,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         // format of the received message. this is the format to preserve
                         format = message.get('body_content_type');
                     }
-                    if (!message.bodyIsFetched() || format !== message.getBodyType()) {
+                    if (!message.bodyIsFetched()) {
                         // self callback when body needs to be (re) fetched
                         return this.recordProxy.fetchBody(message, format, {
                             success: this.initContent.createDelegate(this),
