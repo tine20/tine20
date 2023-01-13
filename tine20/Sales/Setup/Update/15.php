@@ -32,6 +32,7 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE016 = __CLASS__ . '::update016';
     const RELEASE015_UPDATE017 = __CLASS__ . '::update017';
     const RELEASE015_UPDATE018 = __CLASS__ . '::update018';
+    const RELEASE015_UPDATE019 = __CLASS__ . '::update019';
 
     static protected $_allUpdates = [
         // this needs to be executed before TB struct update! cause we move the table from sales to tb
@@ -105,6 +106,10 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE018          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update018',
+            ],
+            self::RELEASE015_UPDATE019          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update019',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -375,5 +380,14 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             Tinebase_Model_CostUnit::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.18', self::RELEASE015_UPDATE018);
+    }
+
+    public function update019()
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_Offer::class,
+            Sales_Model_Document_Order::class,
+        ]);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.19', self::RELEASE015_UPDATE019);
     }
 }
