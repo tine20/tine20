@@ -344,6 +344,7 @@ Tine.Filemanager.nodeActions.Delete = {
     app: 'Filemanager',
     requiredGrant: 'deleteGrant',
     allowMultiple: true,
+    allowQuarantined: true,
     text: 'Delete', // _('Delete')
     disabled: true,
     iconCls: 'action_delete',
@@ -457,6 +458,7 @@ Tine.Filemanager.nodeActions.Download = {
     app: 'Filemanager',
     requiredGrant: 'downloadGrant',
     allowMultiple: false,
+    allowQuarantined: false,
     actionType: 'download',
     text: 'Save locally', // _('Save locally')
     iconCls: 'action_filemanager_save_all',
@@ -469,15 +471,16 @@ Tine.Filemanager.nodeActions.Download = {
         Tine.Filemanager.downloadFile(this.initialConfig.selections[0]);
     },
     actionUpdater: function(action, grants, records, isFilterSelect) {
+        const isQuarantined = !action.initialConfig.allowQuarantined && records[0] && !!+records[0].get('is_quarantined');
         const enabled = !isFilterSelect
             && records && records.length === 1
-            && records[0].get('type') != 'folder'
+            && records[0].get('type') !== 'folder'
             && (
                 String(_.get(records, '[0].data.path', '')).match(/^\/records/)
                 || _.get(records, '[0].data.account_grants.downloadGrant', false)
             );
 
-        action.setDisabled(!enabled);
+        action.setDisabled(!enabled || isQuarantined);
     }
 };
 
