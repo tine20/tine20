@@ -9,6 +9,8 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
+use Tinebase_Model_Filter_Abstract as TMFA;
+
 /**
  * abstract Document Model
  *
@@ -372,15 +374,19 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         ]
     ];
 
-    protected static $_statusField = '';
-    protected static $_statusConfigKey = '';
-    protected static $_documentNumberPrefix = 'XX-';
+    protected static string $_statusField = '';
+    protected static string $_statusConfigKey = '';
+    protected static string $_documentNumberPrefix = '';
 
     /**
      * @param array $_definition
      */
     public static function inheritModelConfigHook(array &$_definition)
     {
+        if (!static::$_statusConfigKey || !static::$_statusField || !static::$_documentNumberPrefix) {
+            throw new Tinebase_Exception_Record_DefinitionFailure(static::class . ' needs to set its abstract statics');
+        }
+
         parent::inheritModelConfigHook($_definition);
 
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::BUCKETKEY] =
@@ -397,15 +403,25 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             ->{Sales_Model_Document_Status::FLD_BOOKED});
     }
 
+    protected function _getPositionClassName(string $class): string
+    {
+        static $positionClasses = [];
+        if (!isset($positionClasses[$class])) {
+            if (!preg_match('/^(Sales_Model_Document)(_.*)$/', $class, $m)) {
+                throw new Tinebase_Exception_Record_DefinitionFailure('unexpected class name ' . $class);
+            }
+            $positionClass = $m[1] . 'Position' . $m[2];
+            if (!class_exists($positionClass)) {
+                throw new Tinebase_Exception_Record_DefinitionFailure('position class name ' . $positionClass . ' doesn\'t exist');
+            }
+            $positionClasses[$class] = $positionClass;
+        }
+        return $positionClasses[$class];
+    }
+
     public function transitionFrom(Sales_Model_Document_Transition $transition)
     {
-        if (!preg_match('/^(Sales_Model_Document)(_.*)$/', static::class, $m)) {
-            throw new Tinebase_Exception_Record_DefinitionFailure('unexpected class name ' . static::class);
-        }
-        $positionClass = $m[1] . 'Position' . $m[2];
-        if (!class_exists($positionClass)) {
-            throw new Tinebase_Exception_Record_DefinitionFailure('position class name ' . $positionClass . ' doesn\'t exist');
-        }
+        $positionClass = $this->_getPositionClassName(static::class);
 
         $this->{self::FLD_PRECURSOR_DOCUMENTS} = new Tinebase_Record_RecordSet(Tinebase_Model_DynamicRecordWrapper::class, []);
         $this->{self::FLD_POSITIONS} = new Tinebase_Record_RecordSet($positionClass, []);
@@ -416,6 +432,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             if (!$record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}->isBooked()) {
                 throw new Tinebase_Exception_Record_Validation('source document is not booked');
             }
+
+            Tinebase_Record_Expander::expandRecord($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT});
 
             $addedPositions = 0;
             $isReversal = $isReversal || (bool)$record->{Sales_Model_Document_TransitionSource::FLD_IS_REVERSAL};
@@ -434,7 +452,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 foreach ($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
                              ->{Sales_Model_Document_Abstract::FLD_POSITIONS} as $position) {
 
-                    /** now this is important! we need to reference the same object here, so it gets dirty and we can update it if required */
+                    /** now this is important! we need to reference the same object here, so it gets dirty, and we can update it if required */
                     $position->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID} =
                         $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT};
 
@@ -540,7 +558,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         }
 
         $this->{static::$_statusField} = Sales_Config::getInstance()->{static::$_statusConfigKey}->default;
-        $this->{self::FLD_DOCUMENT_DATE} = Tinebase_DateTime::now();
+        $this->{self::FLD_DOCUMENT_DATE} = Tinebase_DateTime::today(Tinebase_Core::getUserTimezone());
 
         $this->calculatePrices();
     }

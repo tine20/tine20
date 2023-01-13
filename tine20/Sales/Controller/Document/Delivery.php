@@ -7,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -20,22 +20,6 @@
 class Sales_Controller_Document_Delivery extends Sales_Controller_Document_Abstract
 {
     use Tinebase_Controller_SingletonTrait;
-
-    protected $_documentStatusConfig = Sales_Config::DOCUMENT_DELIVERY_STATUS;
-    protected $_documentStatusTransitionConfig = Sales_Config::DOCUMENT_DELIVERY_STATUS_TRANSITIONS;
-    protected $_documentStatusField = Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS;
-    protected $_oldRecordBookWriteableFields = [
-        Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS,
-        Sales_Model_Document_Delivery::FLD_COST_CENTER_ID,
-        Sales_Model_Document_Delivery::FLD_COST_BEARER_ID,
-        Sales_Model_Document_Delivery::FLD_DESCRIPTION,
-        'tags', 'attachments', 'relations',
-    ];
-
-    protected $_bookRecordRequiredFields = [
-        Sales_Model_Document_Delivery::FLD_CUSTOMER_ID,
-        Sales_Model_Document_Delivery::FLD_RECIPIENT_ID,
-    ];
 
     /**
      * the constructor
@@ -53,6 +37,22 @@ class Sales_Controller_Document_Delivery extends Sales_Controller_Document_Abstr
         $this->_modelName = Sales_Model_Document_Delivery::class;
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
+
+        $this->_documentStatusConfig = Sales_Config::DOCUMENT_DELIVERY_STATUS;
+        $this->_documentStatusTransitionConfig = Sales_Config::DOCUMENT_DELIVERY_STATUS_TRANSITIONS;
+        $this->_documentStatusField = Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS;
+        $this->_oldRecordBookWriteableFields = [
+            Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS,
+            Sales_Model_Document_Delivery::FLD_COST_CENTER_ID,
+            Sales_Model_Document_Delivery::FLD_COST_BEARER_ID,
+            Sales_Model_Document_Delivery::FLD_DESCRIPTION,
+            'tags', 'attachments', 'relations',
+        ];
+        $this->_bookRecordRequiredFields = [
+            Sales_Model_Document_Delivery::FLD_CUSTOMER_ID,
+            Sales_Model_Document_Delivery::FLD_RECIPIENT_ID,
+        ];
+        parent::__construct();
     }
 
     /**
