@@ -2277,7 +2277,6 @@ class Tinebase_FileSystem implements
         }
         
         $hashFile = $hashDirectory . '/' . substr($hash, 3);
-        $avResult = new Tinebase_FileSystem_AVScan_Result(Tinebase_FileSystem_AVScan_Result::RESULT_ERROR, null);
         $fileCreated = false;
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
@@ -2294,25 +2293,12 @@ class Tinebase_FileSystem implements
             stream_copy_to_stream($handle, $hashHandle);
             fclose($hashHandle);
             $fileCreated = true;
-
-            // AV scan
-            if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF !== Tinebase_Config::getInstance()
-                    ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
-                if (false === ($fileSize = filesize($hashFile))) {
-                    throw new Tinebase_Exception_UnexpectedValue('failed to get hash file size');
-                }
-                if ($fileSize <= Tinebase_Config::getInstance()
-                        ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MAXFSIZE}) {
-                    if (!($hashHandle = fopen($hashFile, 'r'))) {
-                        throw new Tinebase_Exception_UnexpectedValue('failed to repoen hash file');
-                    }
-                    $avResult = Tinebase_FileSystem_AVScan_Factory::getScanner()->scan($hashHandle);
-                    fclose($hashHandle);
-                }
-            }
             break;
         }
 
+        // AV scan
+        $avResult = $this->avScanHashFile($hashFile);
+        
         $tries = 0;
         $currentFilesHash = null;
         $previousCurrentFilesHash = null;
@@ -2336,7 +2322,34 @@ class Tinebase_FileSystem implements
         
         return array($hash, $hashFile, $avResult);
     }
-    
+
+    /**
+     * get hash file AvScan result
+     *
+     */
+    public function avScanHashFile($hashFile)
+    {
+        $avResult = new Tinebase_FileSystem_AVScan_Result(Tinebase_FileSystem_AVScan_Result::RESULT_ERROR, null);
+        
+        if (file_exists($hashFile)) {
+            if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF !== Tinebase_Config::getInstance()
+                    ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
+                if (false === ($fileSize = filesize($hashFile))) {
+                    throw new Tinebase_Exception_UnexpectedValue('failed to get hash file size');
+                }
+                if ($fileSize <= Tinebase_Config::getInstance()
+                        ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MAXFSIZE}) {
+                    if (!($hashHandle = fopen($hashFile, 'r'))) {
+                        throw new Tinebase_Exception_UnexpectedValue('failed to repoen hash file');
+                    }
+                    $avResult = Tinebase_FileSystem_AVScan_Factory::getScanner()->scan($hashHandle);
+                    fclose($hashHandle);
+                }
+            }
+        }
+        return $avResult;
+    }
+
     /**
      * get tree node children
      * 

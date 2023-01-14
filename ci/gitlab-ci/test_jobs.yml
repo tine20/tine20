@@ -49,9 +49,7 @@ phpstan-analysis:
     - if test "${CI_PROJECT_NAME}" == "tine20"; then dir=tine20; else dir=tine20/vendor/$(cat ${CI_PROJECT_DIR}/composer.json | jq -r '.name')/lib; sed -i "/tine20\/vendor\*/d" $TINE20ROOT/phpstan.neon; fi
     - $TINE20ROOT/tine20/vendor/bin/phpstan --version
     - 'echo analysis target: $TINE20ROOT/$dir'
-    - php -d memory_limit=2G $TINE20ROOT/tine20/vendor/bin/phpstan analyse --autoload-file=$TINE20ROOT/tine20/vendor/autoload.php --error-format=gitlab --no-progress -vvv $TINE20ROOT/$dir | tee ${CI_PROJECT_DIR}/code-quality-report.json
-    # TODO remove that later
-    - php -d memory_limit=2G $TINE20ROOT/tine20/vendor/bin/phpstan analyse --autoload-file=$TINE20ROOT/tine20/vendor/autoload.php --no-progress -vvv $TINE20ROOT/$dir
+    - set -o pipefail; php -d memory_limit=2G $TINE20ROOT/tine20/vendor/bin/phpstan analyse --autoload-file=$TINE20ROOT/tine20/vendor/autoload.php --error-format=gitlab --no-progress -vvv $TINE20ROOT/$dir | tee ${CI_PROJECT_DIR}/code-quality-report.json
   artifacts:
     reports:
       codequality: ${CI_PROJECT_DIR}/code-quality-report.json

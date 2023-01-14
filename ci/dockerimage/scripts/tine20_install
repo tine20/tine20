@@ -3,7 +3,7 @@
 TINE20_APPLICATION_TO_INSTALL=${TINE20_APPLICATION_TO_INSTALL:-'ActiveSync,Calendar,Felamimail,CoreData,Filemanager,Sales,Timetracker,Tasks,Crm,HumanResources,Inventory,UserManual'}
 TINE20_CONFIG_PATH=${TINE20_CONFIG_PATH:-'/etc/tine20/config.inc.php'}
 
-cmd="php /usr/share/tine20/setup.php --install --config ${TINE20_CONFIG_PATH} ${TINE20_APPLICATION_TO_INSTALL} --"
+cmd="php ${TINE20ROOT}/tine20/setup.php --install --config ${TINE20_CONFIG_PATH} ${TINE20_APPLICATION_TO_INSTALL} --"
 
 if [ -n "${TINE20_LOGIN_USERNAME}" ]; then
   cmd="$cmd adminLoginName='${TINE20_LOGIN_USERNAME}'"

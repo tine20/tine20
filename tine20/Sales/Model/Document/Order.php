@@ -24,6 +24,8 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
     public const FLD_DELIVERY_RECIPIENT_ID = 'delivery_recipient_id';
 
     public const FLD_ORDER_STATUS = 'order_status';
+    public const FLD_FOLLOWUP_INVOICE_STATUS = 'followup_invoice_status';
+    public const FLD_FOLLOWUP_DELIVERY_STATUS = 'followup_delivery_status';
 
     /**
      * order status
@@ -43,7 +45,7 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
         $_definition[self::RECORD_NAME] = 'Order'; // gettext('GENDER_Order')
         $_definition[self::RECORDS_NAME] = 'Orders'; // ngettext('Order', 'Orders', n)
         
-        $_definition[self::VERSION] = 1;
+        $_definition[self::VERSION] = 2;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE] = [
             self::NAME                      => self::TABLE_NAME,
@@ -58,7 +60,22 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                 self::LENGTH => 255,
                 self::NULLABLE => true,
             ],
-            // @TODO invoice & delivery status -> virtual from following documents
+            self::FLD_FOLLOWUP_DELIVERY_STATUS  => [
+                self::LABEL                         => 'Followup Delivery Status', // _('Followup Delivery Status')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Sales_Config::DOCUMENT_FOLLOWUP_STATUS,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+            ],
+            self::FLD_FOLLOWUP_INVOICE_STATUS   => [
+                self::LABEL                         => 'Followup Invoice Status', // _('Followup Invoice Status')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Sales_Config::DOCUMENT_FOLLOWUP_STATUS,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+            ],
         ]);
 
         $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::CONFIG][self::FORCE_VALUES] = [
@@ -129,9 +146,17 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
      */
     protected static $_configurationObject = NULL;
 
-    protected static $_statusField = self::FLD_ORDER_STATUS;
-    protected static $_statusConfigKey = Sales_Config::DOCUMENT_ORDER_STATUS;
-    protected static $_documentNumberPrefix = 'OR-'; // _('OR-')
+    protected static string $_statusField = self::FLD_ORDER_STATUS;
+    protected static string $_statusConfigKey = Sales_Config::DOCUMENT_ORDER_STATUS;
+    protected static string $_documentNumberPrefix = 'OR-'; // _('OR-')
+    protected static array $_followupStatusFields = [
+        self::FLD_FOLLOWUP_DELIVERY_STATUS => [
+            self::MODEL_NAME => Sales_Model_Document_Delivery::class,
+        ],
+        self::FLD_FOLLOWUP_INVOICE_STATUS => [
+            self::MODEL_NAME => Sales_Model_Document_Invoice::class,
+        ],
+    ];
 
     public function transitionFrom(Sales_Model_Document_Transition $transition)
     {

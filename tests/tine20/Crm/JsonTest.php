@@ -666,7 +666,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         
         $this->saveLead();
         $filter = array(
-            array('field' => 'query',           'operator' => 'contains',       'value' => 'PHPUnit test product'),
+            array('field' => 'query', 'operator' => 'contains', 'value' => 'PHPUnit test'),
         );
         $searchLeads = $this->_getUit()->searchLeads($filter, '');
         $this->assertEquals(1, $searchLeads['totalcount']);

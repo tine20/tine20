@@ -44,7 +44,7 @@ describe('Mainpage', () => {
 
     test('edit favorite', async () => {
         try {
-            let favoritePanelCollapsed = await page.$x('//div[contains(@class, "ux-arrowcollapse ux-arrowcollapse-noborder x-tree x-panel-collapsed") and contains(., "Favoriten")]');
+            let favoritePanelCollapsed = await page.$x('//div[contains(@class, " ux-arrowcollapse ux-arrowcollapse-noborder x-tree x-panel-collapsed") and contains(., "Favoriten")]');
             await favoritePanelCollapsed[0].click();
         } catch (e) {
             console.log('favoritePanel also collapsed');
@@ -61,7 +61,7 @@ describe('Mainpage', () => {
 
     test('edit shared favorite', async () => {
         try {
-            let favoritePanelCollapsed = await page.$x('//div[contains(@class, "ux-arrowcollapse ux-arrowcollapse-noborder x-tree x-panel-collapsed") and contains(., "Favoriten")]');
+            let favoritePanelCollapsed = await page.$x('//div[contains(@class, " ux-arrowcollapse ux-arrowcollapse-noborder x-tree x-panel-collapsed") and contains(., "Favoriten")]');
             await favoritePanelCollapsed[0].click();
         } catch (e) {
             console.log('favoritePanel also collapsed');

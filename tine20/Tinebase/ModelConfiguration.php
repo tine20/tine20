@@ -1514,9 +1514,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         }
         
         // set some default filters
-        if (count($queryFilters)) {
-            $this->_getQueryFilter($queryFilters);
-        }
+        $this->_getQueryFilter($queryFilters);
         if (!isset($this->_filterModel[$this->_idProperty])) {
             $this->_filterModel[$this->_idProperty] = [
                 'filter'    => 'Tinebase_Model_Filter_Id',
@@ -1645,8 +1643,13 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      *
      * @see 0011494: activate advanced search for contracts (customers, ...)
      */
-    protected function _getQueryFilter($queryFilters)
+    protected function _getQueryFilter(array $queryFilters)
     {
+        if (! empty($this->_filterModel['query'])) {
+            // model has custom query filter ... skipping this
+            return;
+        }
+
         $relatedModels = array();
         foreach ($this->_filterModel as $name => $filter) {
             if ($filter['filter'] === 'Tinebase_Model_Filter_ExplicitRelatedRecord') {
@@ -1657,22 +1660,30 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             }
         }
 
-        $queryFilterData = array(
-            'label' => 'Quick Search',
-            'field' => 'query',
-            'filter' => 'Tinebase_Model_Filter_Query',
-            'useGlobalTranslation' => true,
-            'options' => array(
-                'fields' => array_unique($queryFilters),
-                'modelName' => $this->_getPhpClassName(),
-            )
-        );
-
-        if (count($relatedModels) > 0) {
-            $queryFilterData['options']['relatedModels'] = array_unique($relatedModels);
+        if (empty($queryFilters) && in_array($this->_titleProperty, array_keys($this->_fields))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__
+                . '::' . __LINE__ . ' Adding title prop as default query filter to ' . $this->_modelName);
+            $queryFilters[] = $this->_titleProperty;
         }
 
-        $this->_filterModel['query'] = $queryFilterData;
+        if (! empty($queryFilters)) {
+            $queryFilterData = array(
+                'label' => 'Quick Search',
+                'field' => 'query',
+                'filter' => 'Tinebase_Model_Filter_Query',
+                'useGlobalTranslation' => true,
+                'options' => array(
+                    'fields' => array_unique($queryFilters),
+                    'modelName' => $this->_getPhpClassName(),
+                )
+            );
+
+            if (count($relatedModels) > 0) {
+                $queryFilterData['options']['relatedModels'] = array_unique($relatedModels);
+            }
+
+            $this->_filterModel['query'] = $queryFilterData;
+        }
     }
 
     /**

@@ -9,7 +9,6 @@
 # ARGS:
 #   BASE_IMAGE=base
 #   BUILD_IMAGE=build
-#   TINE20ROOT=/usr/share
 
 ARG BASE_IMAGE=base
 ARG BUILD_IMAGE=build
@@ -19,7 +18,6 @@ FROM ${BUILD_IMAGE} as build-copy
 # COPY --from can not use build args
 
 FROM ${BASE_IMAGE} as built
-ARG TINE20ROOT=/usr/share
 
 COPY --from=build-copy ${TINE20ROOT}/tine20 ${TINE20ROOT}/tine20
 COPY ci/dockerimage/supervisor.d/worker.ini /etc/supervisor.d/worker.ini

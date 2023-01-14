@@ -9,6 +9,8 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
+use Tinebase_Model_Filter_Abstract as TMFA;
+
 /**
  * abstract Document Model
  *
@@ -372,15 +374,20 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         ]
     ];
 
-    protected static $_statusField = '';
-    protected static $_statusConfigKey = '';
-    protected static $_documentNumberPrefix = 'XX-';
+    protected static string $_statusField = '';
+    protected static string $_statusConfigKey = '';
+    protected static string $_documentNumberPrefix = '';
+    protected static array $_followupStatusFields = [];
 
     /**
      * @param array $_definition
      */
     public static function inheritModelConfigHook(array &$_definition)
     {
+        if (!static::$_statusConfigKey || !static::$_statusField || !static::$_documentNumberPrefix) {
+            throw new Tinebase_Exception_Record_DefinitionFailure(static::class . ' needs to set its abstract statics');
+        }
+
         parent::inheritModelConfigHook($_definition);
 
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::BUCKETKEY] =
@@ -397,15 +404,25 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             ->{Sales_Model_Document_Status::FLD_BOOKED});
     }
 
+    protected function _getPositionClassName(string $class): string
+    {
+        static $positionClasses = [];
+        if (!isset($positionClasses[$class])) {
+            if (!preg_match('/^(Sales_Model_Document)(_.*)$/', $class, $m)) {
+                throw new Tinebase_Exception_Record_DefinitionFailure('unexpected class name ' . $class);
+            }
+            $positionClass = $m[1] . 'Position' . $m[2];
+            if (!class_exists($positionClass)) {
+                throw new Tinebase_Exception_Record_DefinitionFailure('position class name ' . $positionClass . ' doesn\'t exist');
+            }
+            $positionClasses[$class] = $positionClass;
+        }
+        return $positionClasses[$class];
+    }
+
     public function transitionFrom(Sales_Model_Document_Transition $transition)
     {
-        if (!preg_match('/^(Sales_Model_Document)(_.*)$/', static::class, $m)) {
-            throw new Tinebase_Exception_Record_DefinitionFailure('unexpected class name ' . static::class);
-        }
-        $positionClass = $m[1] . 'Position' . $m[2];
-        if (!class_exists($positionClass)) {
-            throw new Tinebase_Exception_Record_DefinitionFailure('position class name ' . $positionClass . ' doesn\'t exist');
-        }
+        $positionClass = $this->_getPositionClassName(static::class);
 
         $this->{self::FLD_PRECURSOR_DOCUMENTS} = new Tinebase_Record_RecordSet(Tinebase_Model_DynamicRecordWrapper::class, []);
         $this->{self::FLD_POSITIONS} = new Tinebase_Record_RecordSet($positionClass, []);
@@ -416,6 +433,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             if (!$record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}->isBooked()) {
                 throw new Tinebase_Exception_Record_Validation('source document is not booked');
             }
+
+            Tinebase_Record_Expander::expandRecord($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT});
 
             $addedPositions = 0;
             $isReversal = $isReversal || (bool)$record->{Sales_Model_Document_TransitionSource::FLD_IS_REVERSAL};
@@ -434,7 +453,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 foreach ($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
                              ->{Sales_Model_Document_Abstract::FLD_POSITIONS} as $position) {
 
-                    /** now this is important! we need to reference the same object here, so it gets dirty and we can update it if required */
+                    /** now this is important! we need to reference the same object here, so it gets dirty, and we can update it if required */
                     $position->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID} =
                         $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT};
 
@@ -540,7 +559,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         }
 
         $this->{static::$_statusField} = Sales_Config::getInstance()->{static::$_statusConfigKey}->default;
-        $this->{self::FLD_DOCUMENT_DATE} = Tinebase_DateTime::now();
+        $this->{self::FLD_DOCUMENT_DATE} = Tinebase_DateTime::today(Tinebase_Core::getUserTimezone());
 
         $this->calculatePrices();
     }
@@ -653,5 +672,77 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         parent::_setFromJson($_data);
 
         unset($_data[self::FLD_PRECURSOR_DOCUMENTS]);
+    }
+
+    public function updateFollowupStatus(): void
+    {
+        if (empty(static::$_followupStatusFields)) {
+            return;
+        }
+
+        $positionClass = $this->_getPositionClassName(static::class);
+        /** @var Tinebase_Controller_Record_Abstract $positionCtrl */
+        $positionCtrl = Tinebase_Core::getApplicationInstance($positionClass);
+        $this->{self::FLD_POSITIONS} = $positionCtrl->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel($positionClass, [
+                [TMFA::FIELD => Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $this->getId()],
+            ])
+        );
+
+        $this->_isDirty = false;
+
+        /** @var string $statusField */
+        foreach (static::$_followupStatusFields as $statusField => $followupConfig) {
+            $status = Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED;
+            $foundProduct = false;
+            $followupPositionClass = $this->_getPositionClassName($followupConfig[self::MODEL_NAME]);
+            /** @var Tinebase_Controller_Record_Abstract $followupPositionCtrl */
+            $followupPositionCtrl = Tinebase_Core::getApplicationInstance($followupPositionClass);
+            /** @var Sales_Model_DocumentPosition_Abstract $position */
+            foreach ($this->{self::FLD_POSITIONS} as $position) {
+                if (!$position->isProduct()) {
+                    continue;
+                }
+                $foundProduct = true;
+                $quantity = null;
+                foreach ($followupPositionCtrl->search(
+                            Tinebase_Model_Filter_FilterGroup::getFilterForModel($followupPositionClass, [
+                                [TMFA::FIELD => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION, TMFA::OPERATOR => 'equals', TMFA::VALUE => $position->getId()],
+                                [TMFA::FIELD => Sales_Model_DocumentPosition_Abstract::FLD_IS_REVERSED, TMFA::OPERATOR => 'equals', TMFA::VALUE => false],
+                            ]), null, false, [Tinebase_Backend_Sql_Abstract::IDCOL, Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY]
+                        ) as $qty) {
+                    $quantity += (int)$qty;
+                }
+                if (null === $quantity) {
+                    if (Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED === $status) {
+                        $status = Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE;
+                    }
+                    continue;
+                }
+                if ($quantity < (int)$position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY}) {
+                    $status = Sales_Config::DOCUMENT_FOLLOWUP_STATUS_PARTIALLY;
+                    break;
+                }
+                if ($quantity === (int)$position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY} &&
+                        Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE === $status) {
+                    $status = Sales_Config::DOCUMENT_FOLLOWUP_STATUS_PARTIALLY;
+                    break;
+                }
+            }
+
+            if (!$foundProduct) {
+                $status = Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE;
+            }
+            if ($this->{$statusField} !== $status) {
+                $this->{$statusField} = $status;
+            }
+        }
+
+        if ($this->isDirty()) {
+            $this->{self::FLD_POSITIONS} = null;
+            /** @var Tinebase_Controller_Record_Abstract $ownCtrl */
+            $ownCtrl = Tinebase_Core::getApplicationInstance(static::class);
+            $ownCtrl->update($this);
+        }
     }
 }

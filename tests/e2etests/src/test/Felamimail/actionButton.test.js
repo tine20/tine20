@@ -13,6 +13,7 @@ beforeAll(async () => {
 beforeEach(async () => {
     let popupWindow = await lib.getEditDialog('Verfassen');
     let currentUser = await lib.getCurrentUser(popupWindow);
+    await popupWindow.waitForTimeout(2000);
     // add recipient
     let inputFields = await popupWindow.$$('input');
     await inputFields[2].type(currentUser.accountEmailAddress);
@@ -42,7 +43,7 @@ beforeEach(async () => {
 })
 
 // skip... is to unstable
-describe.skip('test action button of felamimail (grid)', () => {
+describe('test action button of felamimail (grid)', () => {
     test('delete email', async () => {
         await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-subject', {text: subject});
         await page.click(('.t-app-felamimail .x-toolbar-left-row .x-btn-image.action_delete'));
@@ -97,7 +98,7 @@ afterAll(async () => {
     browser.close();
 });
 
-async function sendMail(subject, newWindowPromis, currentUser= false) {
+async function sendMail(subject, newWindowPromis, user= false) {
     let popupWindow = await newWindowPromis;
     try {
         await popupWindow.waitForSelector('.ext-el-mask', {timeout: 5000});
@@ -105,8 +106,8 @@ async function sendMail(subject, newWindowPromis, currentUser= false) {
     await popupWindow.waitForFunction(() => !document.querySelector('.ext-el-mask'));
     await popupWindow.waitForTimeout(2000); //musst wait for input!
 
-    if(currentUser) {
-        currentUser = await lib.getCurrentUser(popupWindow);
+    if(user) {
+        let currentUser = await lib.getCurrentUser(popupWindow);
         // add recipient
         let inputFields = await popupWindow.$$('input');
         await inputFields[2].type(currentUser.accountEmailAddress);

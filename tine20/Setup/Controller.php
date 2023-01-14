@@ -545,9 +545,14 @@ class Setup_Controller
     public function updateApplications(Tinebase_Record_RecordSet $_applications = null, array $options = [
         'strict' => false,
         'skipQueueCheck' => false,
+        'rerun' => [],
     ])
     {
         $this->clearCache();
+
+        if (! empty($options['rerun'])) {
+            $this->_removeUpdatesFromAppState($options['rerun']);
+        }
 
         $this->preUpdateHooks();
 
@@ -601,7 +606,17 @@ class Setup_Controller
 
                             $class->$functionName();
 
-                            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                            if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
+                                try {
+                                    Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                                } catch (PDOException $pe) {
+                                    Tinebase_TransactionManager::getInstance()->resetTransactions();
+                                    Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $pe->getMessage());
+                                }
+                            } else if (Setup_Core::isLogLevel(Zend_Log::NOTICE)) {
+                                Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                                    . ' Update ' . $className . '::' . $functionName . ' already closed the transaction');
+                            }
 
                         } catch (Exception $e) {
                             try {
@@ -633,6 +648,26 @@ class Setup_Controller
         $this->clearCache();
         
         return $result;
+    }
+
+    protected function _removeUpdatesFromAppState(array $updates)
+    {
+        foreach ($updates as $update) {
+            // update string expected in this form: UserManual_Setup_Update_15::update001
+            if (preg_match('/([a-z0-9]+)_/i', $update, $matches)) {
+                $appName = $matches[1];
+                if (Tinebase_Application::getInstance()->isInstalled($appName)) {
+                    $app = Tinebase_Application::getInstance()->getApplicationByName($appName);
+                    $state = Tinebase_Helper::jsonDecode(Tinebase_Application::getInstance()->getApplicationState(
+                        $app, Tinebase_Application::STATE_UPDATES, true));
+                    if (isset($state[$update])) {
+                        unset($state[$update]);
+                        Tinebase_Application::getInstance()->setApplicationState(
+                            $app, Tinebase_Application::STATE_UPDATES, json_encode($state));
+                    }
+                }
+            }
+        }
     }
 
     public function updateAllImportExportDefinitions()
@@ -2725,7 +2760,7 @@ class Setup_Controller
      * @return array
      * @throws Setup_Exception_NotFound
      *
-     * TODO support <backupStructureOnly>true</backupStructureOnly> for MC models without a table defintion in setup.xml
+     * TODO support <backupStructureOnly>true</backupStructureOnly> for MC models without a table definition in setup.xml
      */
     public function getBackupStructureOnlyTables()
     {
@@ -2749,6 +2784,23 @@ class Setup_Controller
                 $tables[] = SQL_TABLE_PREFIX . $tableName[0];
             }
         }
+
+        return array_merge($tables, $this->_getNonXmlStructOnlyTables());
+    }
+
+    /**
+     * TODO move this info to MC models or application_tables
+     *
+     * @return array
+     */
+    protected function _getNonXmlStructOnlyTables(): array
+    {
+        $tables = [];
+        if ($this->isInstalled('Felamimail')) {
+            $tables[] = SQL_TABLE_PREFIX . 'felamimail_attachmentcache';
+        }
+
+        // TODO add UserManual content tables?
 
         return $tables;
     }

@@ -210,7 +210,7 @@ class Tinebase_TransactionManager
 
          } else if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
              Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                 . " Commiting deferred, as there are still $numOpenTransactions in the queue");
+                 . " Committing deferred, as there are still $numOpenTransactions in the queue");
          }
     }
     
@@ -240,11 +240,7 @@ class Tinebase_TransactionManager
 
             // avoid loop backs. The callback may trigger a new transaction + commit/rollback...
             $callbacks = $this->_onRollbackCallbacks;
-            $this->_onCommitCallbacks = array();
-            $this->_afterCommitCallbacks = array();
-            $this->_onRollbackCallbacks = array();
-            $this->_openTransactionables = array();
-            $this->_openTransactions = array();
+            $this->resetTransactions();
 
             foreach ($callbacks as $callable) {
                 call_user_func_array($callable[0], $callable[1]);
@@ -299,6 +295,15 @@ class Tinebase_TransactionManager
     public function hasOpenTransactions()
     {
         return count($this->_openTransactions) > 0;
+    }
+
+    public function resetTransactions()
+    {
+        $this->_onCommitCallbacks = [];
+        $this->_afterCommitCallbacks = [];
+        $this->_onRollbackCallbacks = [];
+        $this->_openTransactionables = [];
+        $this->_openTransactions = [];
     }
 
     /**

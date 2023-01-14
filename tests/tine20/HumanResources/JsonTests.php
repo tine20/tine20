@@ -1944,4 +1944,17 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         self::assertArrayHasKey('wage_type', $result);
         self::assertEquals(100, $result['wage_type']['wage_factor']);
     }
+
+    public function testSearchWageTypesWithQuery()
+    {
+        $filter = [[
+            'condition' => 'OR',
+            'filters' => [
+                [ 'field' => 'query', 'operator' => 'contains', 'value' => '' ]
+            ]
+        ]];
+        $result = $this->_json->searchWageTypes($filter, []);
+        self::assertIsArray($result);
+        self::assertGreaterThanOrEqual(0, $result['totalcount']);
+    }
 }

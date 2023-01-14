@@ -1295,11 +1295,13 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         // check if message is in drafts folder and recipients are present
         $message = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->drafts_folder);
         self::assertEquals($messageToSave['subject'], $message['subject']);
-        self::assertEquals($messageToSave['to'][0]['email'], $message['to'][0], 'recipient not found');
+        self::assertEquals($messageToSave['to'][0]['email'], $message['to'][0], 'recipient not found: '
+            . print_r($message, true));
         self::assertEquals('teststring@mail.test', $message['to'][1], 'recipient not found');
         self::assertEquals('teststring2@mail.test', $message['to'][2], 'recipient not found');
         self::assertEquals('teststring3@mail.test', $message['to'][3], 'recipient not found');
-        self::assertEquals(2, count($message['bcc']), 'bcc recipient not found: ' . print_r($message, TRUE));
+        self::assertEquals(2, count($message['bcc']), 'bcc recipient not found: '
+            . print_r($message, true));
         self::assertStringContainsString('bccaddress', $message['bcc'][0], 'bcc recipient not found');
     }
 

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -352,12 +352,14 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         $events = Calendar_Controller_Event::getInstance()->search($filter);
 
         foreach($events as $event) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Updating event {$event->id} location from '{$event->location}' to '{$newName}'");
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . " Updating event {$event->id} location from '{$event->location}' to '{$newName}'");
             $event->location = $newName;
             try {
                 Calendar_Controller_Event::getInstance()->update($event);
             } catch (Exception $e) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " could not update event {$event->id} location from '{$event->location}' to '{$newName}'" . $e);
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . " could not update event {$event->id} location from '{$event->location}' to '{$newName}'" . $e);
             }
         }
 
@@ -407,7 +409,8 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         }
 
         if (! $hasGrant) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No permissions to ' . $_action . ' in container ' . $_record->container_id);
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No permissions to '
+                . $_action . ' in container ' . $_record->container_id);
             if ($_throw) {
                 throw new Tinebase_Exception_AccessDenied($_errorMessage);
             }
@@ -451,19 +454,26 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
     /**
      * returns recipients for a resource notification
      *
-     *  users who are allowed to edit a resource, should receive a notification
+     *  users who are allowed to edit a resource should receive a notification
      *
-     * @param  Calendar_Model_Resource $_lead
-     * @return array          array of int|Addressbook_Model_Contact
+     * @param Calendar_Model_Resource $resource
+     * @return array array
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function getNotificationRecipients(Calendar_Model_Resource $resource)
+    public function getNotificationRecipients(Calendar_Model_Resource $resource): array
     {
         $recipients = array();
 
         $allGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($resource->container_id, true)->toArray();
         
         foreach ($allGrants as $grants) {
-            if ($grants['resourceNotificationGrant'] == true) {
+            if ($grants['resourceNotificationGrant']) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Converting grants to notification recipients: '
+                    . print_r($grants, true)
+                );
+
                 $recipients = array_merge($recipients, Tinebase_Model_Grants::resolveGrantAccounts($grants));
             }
         }
@@ -490,7 +500,6 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         } else {
             return $recipients;
         }
-        
     }
 
     /**

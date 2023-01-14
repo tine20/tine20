@@ -1,12 +1,12 @@
 [template]
-prefix = "/nginxv"
 src = "nginx-vhost.conf.tmpl"
 dest = "/etc/nginx/http.d/tine20.conf"
 owner = "root"
 mode = "0644"
 keys = [
-    "/server/name",
-    "/log/format",
-    "/client/max/body/size",
-    "/tine20/config/dir"
+    "/tine20root",
+    "/nginxv/server/name",
+    "/nginxv/log/format",
+    "/nginxv/client/max/body/size",
+    "/nginxv/tine20/config/dir"
 ]

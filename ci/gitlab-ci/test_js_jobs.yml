@@ -21,6 +21,7 @@
     TINE20_INSTALL_LANG: de
     ARG_COPY_SOURCE: "true"
     ARG_IMAGE: test-source
+    TINE20ROOT: ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
   services:
     - !reference [.lib-services, db_service]
     - !reference [.lib-services, redis_service]
@@ -32,18 +33,16 @@
   image:
     name: dockerregistry.metaways.net/tine20/tine20/puppeteer:1.0.4
   before_script:
-    - if test "${CI_PROJECT_NAME}" != "tine20"; then git clone -b $TINE20_BRANCH --single-branch --depth 1 $TINE20_REPO_URL ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20; fi
-    - printf "CUSTOM_APP_NAME=${CUSTOM_APP_NAME}\nCUSTOM_APP_VENDOR=${CUSTOM_APP_VENDOR}\nCUSTOM_APP_GIT_URL=${CUSTOM_APP_GIT_URL}\nCUSTOM_APP_VERSION=${CUSTOM_APP_VERSION}" > /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_as_service.env
-    - cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20
-    - if test "COMPOSER_LOCK_REWRITE" == "true"; then php ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/packaging/composer/composerLockRewrite.php ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20/composer.lock satis.default.svc.cluster.local; fi
-    - composer install --no-ansi --no-progress --no-suggest --no-scripts --ignore-platform-reqs
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/install_custom_app.sh
-    - cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tests/e2etests
-    - echo no cp -r /root/node_modules .
-    - npm install
-    - while [ ! -f /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_ready_$CI_JOB_ID ]; do sleep 1; done
-    - if [ -f /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/setup_failed_$CI_JOB_ID ]; then echo "tine setup failed"; exit 1; fi
-    - echo "%%%% ready to start with tests" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+    # clone tine repo if test is run for a custom app. the tine repo will in any case be under $TINE20ROOT
+    - if test "${CI_PROJECT_NAME}" != "tine20"; then git clone -b $TINE20_BRANCH --single-branch --depth 1 $TINE20_REPO_URL $TINE20ROOT; fi
+    - cd $TINE20ROOT; git submodule init; git submodule update
+    - touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_files_ready
+    # install e2e test dependencies
+    - npm --prefix $TINE20ROOT/tests/e2etests/ install
+    # wait for service to become ready
+    - echo -n 'wait for signal_tine_ready ...'; while [ ! -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_tine_ready ]; do sleep 1; done; echo ' done'
+    # todo wait for 
+    - if [ -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_demo_data_install_failed ]; then echo "demo data install failed"; exit 1; fi
   script:
     - env
     - |
@@ -55,12 +54,10 @@
     - while ! wget $TEST_URL; do sleep 1; done
     - echo TEST_URL=${TEST_URL}
     - export TEST_ENVIROMENT=""
-    - echo "%%%% tests ..." >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+    - cd $TINE20ROOT/tests/e2etests
     - npm test -- $JS_E2E_TEST_FILTER --reporters=default --reporters=jest-junit
-    - echo "%%%% tests ... done" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
   after_script:
     - cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tests/e2etests/junit.xml ${CI_PROJECT_DIR}/junit.xml
-    - cat ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog
   artifacts:
     when: always
     reports:
@@ -83,6 +80,8 @@
 js-e2e-tests-source:
   extends: .js-e2e-tests-source
   rules:
+    - if: $JS_E2E_TESTS_SOURCE_TYPE != "sequential"
+      when: never
     - if: $JS_E2E_TESTS_SOURCE_SAVE_SCREENSHOTS == "true"
       when: never
     - !reference [.js-e2e-tests-source, rules]
@@ -98,6 +97,26 @@ js-e2e-tests-source-save-screenshots:
       - ${CI_PROJECT_DIR}/tests/e2etests/screenshots/
     expire_in: 7 day
   rules:
+    - if: $JS_E2E_TESTS_SOURCE_TYPE != "sequential"
+      when: never
     - if: $JS_E2E_TESTS_SOURCE_SAVE_SCREENSHOTS != "true"
+      when: never
+    - !reference [.js-e2e-tests-source, rules]
+js-e2e-tests-source-php-version-matrix:
+  extends: .js-e2e-tests-source
+  variables:
+    IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}
+  needs:
+    - 'docker_build_source_matrix: [7.4]'
+    - 'docker_build_source_matrix: [8.0]'
+    - 'docker_build_source_matrix: [8.1]'
+  parallel:
+    matrix:
+      - PHP_VERSION:
+          - "7.4"
+          - "8.0"
+          - "8.1"
+  rules:
+    - if: $JS_E2E_TESTS_SOURCE_TYPE != "matrix"
       when: never
     - !reference [.js-e2e-tests-source, rules]
