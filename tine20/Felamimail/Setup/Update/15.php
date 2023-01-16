@@ -19,6 +19,7 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE015_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE015_UPDATE005 = __CLASS__ . '::update005';
+    const RELEASE015_UPDATE006 = __CLASS__ . '::update006';
     
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -29,7 +30,11 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE005          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update005',
-            ]
+            ],
+            self::RELEASE015_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
+            ],
         ],
         self::PRIO_NORMAL_APP_STRUCTURE=> [
             self::RELEASE015_UPDATE001          => [
@@ -162,5 +167,37 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
         Tinebase_Core::getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'felamimail_folder' . ' set imap_lastmodseq = 0 where imap_totalcount > 500 and supports_condstore = 1');
         $this->addApplicationUpdate('Felamimail', '15.5', self::RELEASE015_UPDATE005);
 
+    }
+
+    public function update006()
+    {
+        $stateRepo = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_State',
+            'tableName' => 'state',
+        ));
+
+        $states = $stateRepo->search(new Tinebase_Model_StateFilter(array(
+            array('field' => 'state_id', 'operator' => 'in', 'value' => [
+                "Felamimail-Message-GridPanel-Grid",
+                "Felamimail-Message-GridPanel-Grid-SendFolder",
+            ]),
+        )));
+
+        foreach ($states as $state) {
+            $decodedState = Tinebase_State::decode($state->data);
+            $spliceAt = 3;
+            $columns = $decodedState['columns'];
+            $column = end($columns);
+
+            if ($column['id'] == 'tags') {
+                array_splice($columns, $spliceAt, 0, [['id' => 'tags', 'width' => 25]]);
+                array_pop($columns);
+            }
+            $decodedState['columns'] = $columns;
+            $state->data = Tinebase_State::encode($decodedState);
+            $stateRepo->update($state);
+        }
+
+        $this->addApplicationUpdate('Felamimail', '15.6', self::RELEASE015_UPDATE006);
     }
 }
