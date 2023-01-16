@@ -1270,7 +1270,8 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
      */
     public function testSaveMessageWithMixedRecipients()
     {
-        $messageToSave = $this->_getMessageData();
+        $subject = 'test ' . Tinebase_Record_Abstract::generateUID(16);
+        $messageToSave = $this->_getMessageData('', $subject);
         $messageToSave['to'] = [
             [
                 "email" => Tinebase_Core::getUser()->accountEmailAddress,
