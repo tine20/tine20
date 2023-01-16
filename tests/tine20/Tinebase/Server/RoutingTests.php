@@ -130,26 +130,27 @@ class Tinebase_Server_RoutingTests extends TestCase
      */
     public function testMetric()
     {
-        Tinebase_Config::getInstance()->set(Tinebase_Config::METRICS_API_KEY, 'testmetrics123');
+        $apiKey = 'testmetrics123';
+        Tinebase_Config::getInstance()->set(Tinebase_Config::METRICS_API_KEY, $apiKey);
         
-        $jsonResponse = Tinebase_Controller::getInstance()->getStatusMetrics('testmetrics123');
-        $status = Tinebase_Helper::jsonDecode($jsonResponse->getBody()->getContents());
+        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
+            'GET /metrics/' . $apiKey . ' HTTP/1.1' . "\r\n"
+            . 'Host: localhost' . "\r\n"
+            . 'User-Agent: Tine 2.0 UNITTEST' . "\r\n"
+            . 'Accept: */*' . "\r\n"
+            . "\r\n"
+        ));
 
-        $userId = Tinebase_Core::getUser()->getId();
-        $adminJson = new Admin_Frontend_Json();
-        $user = $adminJson->getUser($userId);
+        $content = $this->_emitRequest($request);
+        $fileSystem = Tinebase_FileSystem::getInstance();
 
-        $imapBackend = Tinebase_EmailUser::getInstance();
-        $imapUsageQuota = $imapBackend->getTotalUsageQuota();
+        $rootPath = $fileSystem->getApplicationBasePath('Tinebase');
+        $fileSystemStorage = $fileSystem->getEffectiveAndLocalQuota($fileSystem->stat($rootPath));
+        $effectiveUsage = $fileSystemStorage['effectiveUsage'];
         
-        $data = [
-            'activeUsers' => 1,
-            'fileStorage' => $user['effectiveAndLocalQuota']['effectiveUsage'],
-            'emailStorage' => $imapUsageQuota['mailQuota'] * 1024 * 1024,
-            'quotas' => Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->toArray(),
-        ];
+        self::assertNotEmpty($content);
+        self::assertEquals('{"activeUsers":1,"fileStorage":' . $effectiveUsage . ',"emailStorage":12582912000,"quotas":{"showUI":true,"includeRevision":false,"totalInMB":0,"filesystemTotalInMB":0,"totalByUserInMB":0,"softQuota":90,"softQuotaNotificationRole":"soft quota notification","skipImapQuota":false,"quotaNotificationAddresses":[]}}', 
+            $content, print_r($content));
         
-        self::assertNotEmpty($status);
-        self::assertEquals($data, $status, print_r($user));
     }
 }
