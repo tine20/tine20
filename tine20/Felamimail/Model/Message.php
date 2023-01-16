@@ -895,9 +895,6 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
                     }
                 }
                 
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' ' . print_r($recipients, true));
-                
                 $recordData[$field] = array_unique($recipients, SORT_REGULAR);
             }
         }

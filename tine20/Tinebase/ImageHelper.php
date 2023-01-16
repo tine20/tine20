@@ -147,8 +147,6 @@ class Tinebase_ImageHelper
     {
         $params = array();
         $link = parse_url((string)$link, PHP_URL_QUERY);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $link);
         if (is_string($link)) {
             parse_str($link, $params);
         }

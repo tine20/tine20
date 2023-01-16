@@ -1123,7 +1123,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         }
         
         $imageParams = Tinebase_ImageHelper::parseImageLink($_data['jpegphoto']);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' image params:' . print_r($imageParams, true));
         if ($imageParams['isNewImage']) {
             try {
                 $_data['jpegphoto'] = Tinebase_ImageHelper::getImageData($imageParams);
