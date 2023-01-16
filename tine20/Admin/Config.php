@@ -122,6 +122,7 @@ class Admin_Config extends Tinebase_Config_Abstract
                 'devices',
                 'scheduler',
                 // disabled by default
+//                'quotamanagement',
 //                'computers',
             ],
         ],
