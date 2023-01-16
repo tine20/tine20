@@ -221,6 +221,12 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
 
         this.salesTaxField.setValue(_.isFinite(roundedPercent) && this.salesTaxField.getValue() !== null ? roundedPercent : null);
     },
+
+    onSelectSupplier: function(field, newValue) {
+        if (newValue.get('credit_term') > 0) {
+            this.dueInDaysField.setValue(newValue.get('credit_term'));
+        }
+    },
     
     /**
      * returns dialog
@@ -265,7 +271,8 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             allowDecimals: false,
             listeners: {
                 scope: this,
-                blur: this.onUpdateInDays.createDelegate(this)
+                blur: this.onUpdateInDays.createDelegate(this),
+                spin: this.onUpdateInDays.createDelegate(this),
             }
         });
         
@@ -420,7 +427,11 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                 modelUnique: true,
                                 ref: '../../../../../../../supplierPicker',
                                 //readOnly: true,
-                                name: 'supplier'
+                                name: 'supplier',
+                                listeners: {
+                                    scope: this,
+                                    select: this.onSelectSupplier
+                                }
                             }], [
                                 this.dateOfInvoiceField,
                                 this.dueInDaysField,
