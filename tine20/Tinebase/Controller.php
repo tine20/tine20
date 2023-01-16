@@ -1268,24 +1268,25 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if ($apiKey !== Tinebase_Config::getInstance()->get(Tinebase_Config::METRICS_API_KEY, false)) {
             throw new Tinebase_Exception_AccessDenied('Not authorized. Invalid metrics API Key.');
         }
-
-        $userId = Tinebase_Core::getUser()->getId();
-        $adminJson = new Admin_Frontend_Json();
-        $user = $adminJson->getuser($userId);
-
+        
         try {
+            $fileSystem = Tinebase_FileSystem::getInstance();
+            $rootPath = $fileSystem->getApplicationBasePath('Tinebase');
+            $fileSystemStorage = $fileSystem->getEffectiveAndLocalQuota($fileSystem->stat($rootPath));
+
             $imapBackend = Tinebase_EmailUser::getInstance();
             
             if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
                 $imapUsageQuota = $imapBackend->getTotalUsageQuota();
                 $emailStorage = $imapUsageQuota['mailQuota'] * 1024 * 1024;
             }
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
         }
         
         $data = [
             'activeUsers' => Tinebase_User::getInstance()->getActiveUserCount(),
-            'fileStorage' => $user['effectiveAndLocalQuota']['effectiveUsage'] ?? null,
+            'fileStorage' => $fileSystemStorage['effectiveUsage'] ?? null,
             'emailStorage' => $emailStorage ?? null,
             'quotas' => Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->toArray(),
         ];
