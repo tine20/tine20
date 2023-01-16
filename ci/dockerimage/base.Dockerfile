@@ -15,7 +15,7 @@ FROM alpine:${ALPINE_BRANCH} as cache-invalidator
 ARG ALPINE_PHP_PACKAGE=php7
 ARG CACHE_BUST=0
 
-RUN apk add --update --no-cache --simulate supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd | sha256sum >> /cachehash
+RUN apk add --update --no-cache --simulate supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd mysql-client | sha256sum >> /cachehash
 RUN apk add --no-cache --simulate \
                                   ${ALPINE_PHP_PACKAGE} \
                                   ${ALPINE_PHP_PACKAGE}-bcmath \
@@ -71,7 +71,7 @@ RUN mkdir /usr/local/lib/container
 
 COPY --from=cache-invalidator /cachehash /usr/local/lib/container/
 
-RUN apk add --update --no-cache supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd
+RUN apk add --update --no-cache supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd mysql-client
 RUN apk add --no-cache \
                                   ${ALPINE_PHP_PACKAGE} \
                                   ${ALPINE_PHP_PACKAGE}-bcmath \
