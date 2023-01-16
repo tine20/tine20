@@ -209,12 +209,14 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
 
         $lang = Sales_Config::getInstance()->{Sales_Config::LANGUAGES_AVAILABLE}->default;
         $db = $this->getDb();
-        $tableName = SQL_TABLE_PREFIX . Sales_Model_ProductLocalization::getConfiguration()->getTableName();
-        $schema = $db->describeTable($tableName);
+        $locTableName = SQL_TABLE_PREFIX . Sales_Model_ProductLocalization::getConfiguration()->getTableName();
+        $prodTableName = SQL_TABLE_PREFIX . Sales_Model_Product::TABLE_NAME;
+        $schema = $db->describeTable($prodTableName);
         if (array_key_exists('name', $schema)) {
-            foreach ($db->query('SELECT id, name, description, is_deleted FROM ' . SQL_TABLE_PREFIX .
-                Sales_Model_Product::TABLE_NAME)->fetchAll(Zend_Db::FETCH_NUM) as $row) {
-                $db->insert($tableName, [
+            foreach ($db->query('SELECT id, name, description, is_deleted FROM ' . $prodTableName)
+                        ->fetchAll(Zend_Db::FETCH_NUM) as $row)
+            {
+                $db->insert($locTableName, [
                     'id' => Tinebase_Record_Abstract::generateUID(),
                     Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
                     Tinebase_Record_PropertyLocalization::FLD_TYPE => 'name',
@@ -222,7 +224,7 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
                     Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang,
                     'is_deleted' => $row[3],
                 ]);
-                $db->insert($tableName, [
+                $db->insert($locTableName, [
                     'id' => Tinebase_Record_Abstract::generateUID(),
                     Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
                     Tinebase_Record_PropertyLocalization::FLD_TYPE => 'description',
