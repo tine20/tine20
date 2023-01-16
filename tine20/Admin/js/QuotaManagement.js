@@ -240,8 +240,7 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
             
             disabledNodes = disabledNodes.concat([
                 `${this.topNode}/${translateApp}`,
-                `${this.topNode}/${translateApp}/folders`,
-                `${this.topNode}/${translateApp}/folders/personal`
+                `${this.topNode}/${translateApp}/folders`
             ]);
             
             if (appName === 'Felamimail') {
