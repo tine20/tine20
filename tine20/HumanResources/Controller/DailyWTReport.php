@@ -273,6 +273,14 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         ]);
         $expander->expand($rs);
 
+        if ($startDate && $lastClearedReport = $this->_getLastClearedWTR()) {
+            $lastClearedReport = (new Tinebase_DateTime($lastClearedReport->{HumanResources_Model_MonthlyWTReport::FLDS_MONTH}
+                . '-01 00:00:00'))->addMonth(1);
+            if ($lastClearedReport->isLater($startDate)) {
+                $lastClearedReport->hasTime(false);
+                $startDate = $lastClearedReport;
+            }
+        }
         $this->_startDate = $startDate ?: $this->_getStartDate($force);
         $this->_endDate = $endDate ?: $this->_getEndDate();
         $this->_reportResult = [
@@ -518,6 +526,19 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             : null;
     }
 
+    protected function _getLastClearedWTR()
+    {
+        return HumanResources_Controller_MonthlyWTReport::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_MonthlyWTReport::class, [
+                ['field' => HumanResources_Model_MonthlyWTReport::FLDS_EMPLOYEE_ID, 'operator' => 'equals', 'value' => $this->_employee->getId()],
+                ['field' => HumanResources_Model_MonthlyWTReport::FLDS_IS_CLEARED, 'operator' => 'equals', 'value' => true]
+            ]), new Tinebase_Model_Pagination([
+            'sort'  => HumanResources_Model_MonthlyWTReport::FLDS_MONTH,
+            'dir'   => 'DESC',
+            'limit' => 1
+        ]))->getFirstRecord();
+    }
+
     /**
      * @param bool $force
      * @return Tinebase_DateTime
@@ -525,16 +546,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
     protected function _getStartDate($force)
     {
         $default = Tinebase_Model_Filter_Date::getFirstDayOf(Tinebase_Model_Filter_Date::MONTH_LAST);
-        $lastClearedReport = HumanResources_Controller_MonthlyWTReport::getInstance()->search(
-            Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_MonthlyWTReport::class, [
-                ['field' => HumanResources_Model_MonthlyWTReport::FLDS_EMPLOYEE_ID, 'operator' => 'equals', 'value' => $this->_employee->getId()],
-                ['field' => HumanResources_Model_MonthlyWTReport::FLDS_IS_CLEARED, 'operator' => 'equals', 'value' => true]
-            ]), new Tinebase_Model_Pagination([
-                'sort'  => HumanResources_Model_MonthlyWTReport::FLDS_MONTH,
-                'dir'   => 'DESC',
-                'limit' => 1
-            ]))->getFirstRecord();
-        if ($lastClearedReport) {
+        if ($lastClearedReport = $this->_getLastClearedWTR()) {
             $start_date = (new Tinebase_DateTime($lastClearedReport->{HumanResources_Model_MonthlyWTReport::FLDS_MONTH}
                 . '-01 00:00:00'))->addMonth(1);
         } elseif ($this->_employee->contracts instanceof Tinebase_Record_RecordSet && count($this->_employee->contracts) > 0) {
