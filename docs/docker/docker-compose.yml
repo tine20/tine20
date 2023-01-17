@@ -20,15 +20,16 @@ services:
       TINE20_CREDENTIALCACHESHAREDKEY: change_me
       TINE20_SETUPUSER_USERNAME: tine20setup
       TINE20_SETUPUSER_PASSWORD: tine20setup
-      TINE20_URL: http://localhost
+      ### the url of you tine installation (should be adjusted)
+      # TINE20_URL: http://localhost:4000
       ### install+update tine automatically
-      #TINE_INSTALL: "true"
+      # TINE_INSTALL: "true"
       ### needed for auto-install
-      #TINE20_ACCEPTED_TERMS_VERSION: 10000
-      #TINE20_LOGIN_USERNAME: admin
-      #TINE20_LOGIN_PASSWORD: change_me
+      # TINE20_ACCEPTED_TERMS_VERSION: 10000
+      # TINE20_LOGIN_USERNAME: admin
+      # TINE20_LOGIN_PASSWORD: change_me
       ### apps to install - if omitted, all available apps are installed
-      #TINE20_APPLICATION_TO_INSTALL: "Addressbook,Felamimail,Calendar,Filemanager"
+      # TINE20_APPLICATION_TO_INSTALL: "Addressbook,Felamimail,Calendar,Filemanager"
     volumes:
       - "tine20_files:/var/lib/tine20/files"
     networks:
@@ -96,8 +97,20 @@ services:
 #    ports:
 #      - "127.0.0.1:5000:80"
 
+#  clamav:
+#    image: tiredofit/clamav
+#    container_name: clamav
+#    environment:
+#      - ZABBIX_HOSTNAME=clamav
+#    # need to be created on the host
+#    volumes:
+#      - "clamav_files:/data"
+#    networks:
+#      - internal_network
+
 volumes:
   tine20_files:
+#  clamav_files:
 
 networks:
   external_network:

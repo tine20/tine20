@@ -43,7 +43,8 @@
             TINE20_CREDENTIALCACHESHAREDKEY: change_me
             TINE20_SETUPUSER_USERNAME: tine20setup
             TINE20_SETUPUSER_PASSWORD: tine20setup
-            TINE20_URL: "{{ tineinstalldocker_tine_url }}"
+            # TODO remove that?
+            # TINE20_URL: "{{ tineinstalldocker_tine_url }}"
             TINE20_INSTALL: "true"
             TINE20_ACCEPTED_TERMS_VERSION: 10000
             TINE20_LOGIN_USERNAME: admin
@@ -99,3 +100,5 @@
 #  check_mode: false
 
 ### TODO add ssl/traefik if configured
+
+### TODO more config via conf.d / env-file
