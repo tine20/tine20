@@ -83,17 +83,18 @@ class HumanResources_Controller_ContractTests extends HumanResources_TestCase
         ));
 
         $vacation = HumanResources_Controller_FreeTime::getInstance()->create($vacation);
+        $vacation->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS} =
+            HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED;
+        $vacation = HumanResources_Controller_FreeTime::getInstance()->update($vacation);
+        $this->assertSame(HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
+            $vacation->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS});
         
         $newCalendar = $this->_getFeastCalendar(true);
-
-        // LAST ASSERTION, do not add assertions after an expected Exception, they won't be executed
 
         $this->expectException('HumanResources_Exception_ContractNotEditable');
 
         $contract2->feast_calendar_id = $newCalendar->getId();
-        $contract2 = $contractController->update($contract2);
-
-        // no more assertions here!
+        $contractController->update($contract2);
     }
 
     /**
