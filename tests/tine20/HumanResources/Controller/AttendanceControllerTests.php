@@ -136,11 +136,17 @@ class HumanResources_Controller_AttendanceControllerTests extends HumanResources
         ]));
         $this->assertSame(1, $ts->count());
         $ts = $ts->getFirstRecord();
+        $ts->notes = Tinebase_Notes::getInstance()->getNotesOfRecord(Timetracker_Model_Timesheet::class, $ts->getId());
         $t = Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME);
         $localHour = (int)$dt->getClone()->setTimezone(Tinebase_Core::getUserTimezone())->format('H');
-        $this->assertSame(sprintf($t->_('Clock in: %1$s'), $localHour . ':03:10 ') . sprintf($t->_('Clock pause: %1$s'), $localHour . ':03:11 ') .
-        sprintf($t->_('Clock in: %1$s'), ($localHour + 1) . ':03:10 ') . sprintf($t->_('Clock pause: %1$s'), ($localHour + 1) . ':03:10 ') .
-        sprintf($t->_('Clock in: %1$s'), ($localHour + 1) . ':05:10 ') . sprintf($t->_('Clock out: %1$s'), ($localHour + 1) . ':15:10'), $ts->description);
+        $this->assertSame(6, $ts->notes->count());
+        $this->assertNotNull($ts->notes->find('note', sprintf($t->_('Clock in: %1$s'), $localHour . ':03:10')));
+        $this->assertNotNull($ts->notes->find('note', sprintf($t->_('Clock pause: %1$s'), $localHour . ':03:11')));
+        $this->assertNotNull($ts->notes->find('note', sprintf($t->_('Clock in: %1$s'), ($localHour + 1) . ':03:10')));
+        $this->assertNotNull($ts->notes->find('note', sprintf($t->_('Clock pause: %1$s'), ($localHour + 1). ':03:10')));
+        $this->assertNotNull($ts->notes->find('note', sprintf($t->_('Clock in: %1$s'), ($localHour + 1) . ':05:10')));
+        $this->assertNotNull($ts->notes->find('note', sprintf($t->_('Clock out: %1$s'), ($localHour + 1) . ':15:10')));
+        $this->assertSame($t->_('attendance recorder generated'), $ts->description);
         $this->assertSame(45, (int)$ts->duration);
     }
 }

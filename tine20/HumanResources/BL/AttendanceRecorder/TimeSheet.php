@@ -149,9 +149,18 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                                     }
 
                                     $absenceTS->end_time = $absenceClockIn->format('H:i:00');
-                                    $absenceTS->description = $absenceTS->description . ' ' .
-                                        sprintf(Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)->_('Clock in: %1$s'),
-                                            $absenceTS->end_time);
+                                    if (empty($absenceTS->notes) || is_array($absenceTS->notes)) {
+                                        $absenceTS->notes = new Tinebase_Record_RecordSet(Tinebase_Model_Note::class,
+                                            (array)$absenceTS->notes);
+                                    }
+                                    $absenceTS->notes->addRecord(new Tinebase_Model_Note([
+                                        'note' => sprintf(Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)->_('Clock in: %1$s'), $absenceTS->end_time),
+                                        'note_type_id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+                                    ]));
+                                    if (empty($absenceTS->description)) {
+                                        $absenceTS->description = Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)->_('attendance recorder generated');
+                                    }
+
                                     if ($absenceTS->getId()) {
                                         $absenceTS = Timetracker_Controller_Timesheet::getInstance()->update($absenceTS);
                                         $ids[$absenceTS->getId()] = $absenceTS->seq == 2 ? 2 : false;
@@ -224,6 +233,14 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
             $ts->need_for_clarification = true;
         }
 
+        if (empty($ts->description)) {
+            $ts->description = Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)->_('attendance recorder generated');
+        }
+        if (empty($ts->notes) || is_array($ts->notes)) {
+            $ts->notes = new Tinebase_Record_RecordSet(Tinebase_Model_Note::class,
+                (array)$ts->notes);
+        }
+
         if (HumanResources_Model_AttendanceRecord::TYPE_CLOCK_OUT === $record->{HumanResources_Model_AttendanceRecord::FLD_TYPE}) {
             if ($record->{HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID}) {
                 $fttId = $record->getIdFromProperty(HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID);
@@ -247,21 +264,33 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                         'end_time' => $startDate->format('H:i:00'),
                         'duration' => 0,
                         HumanResources_Model_FreeTimeType::TT_TS_SYSCF_ABSENCE_REASON => $fttId,
-                        'description' => sprintf($translate->_('Clock out: %1$s'), $startDate->format('H:i:s')),
+                        'description' => Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)->_('attendance recorder generated'),
+                        'notes' => new Tinebase_Record_RecordSet(Tinebase_Model_Note::class, [
+                            new Tinebase_Model_Note([
+                                'note' => sprintf(Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)->_('Clock in: %1$s'), $startDate->format('H:i:s')),
+                                'note_type_id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+                            ])]),
                     ], true));
                     $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['fttTS'] = $fttTS->getId();
                 }
                 $ts->{HumanResources_Model_FreeTimeType::TT_TS_SYSCF_CLOCK_OUT_REASON} = $fttId;
             }
-            $ts->description = $ts->description . ' ' . sprintf($translate->_('Clock out: %1$s'),
-                    $record->{HumanResources_Model_AttendanceRecord::FLD_TIMESTAMP}->format('H:i:s'));
+
+            $ts->notes->addRecord(new Tinebase_Model_Note([
+                'note' => sprintf($translate->_('Clock out: %1$s'),
+                    $record->{HumanResources_Model_AttendanceRecord::FLD_TIMESTAMP}->format('H:i:s')),
+                'note_type_id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+            ]));
 
             return false;
         }
 
         if (HumanResources_Model_AttendanceRecord::TYPE_CLOCK_IN === $record->{HumanResources_Model_AttendanceRecord::FLD_TYPE}) {
-            $ts->description = $ts->description . ' ' . sprintf($translate->_('Clock in: %1$s'),
-                    $record->{HumanResources_Model_AttendanceRecord::FLD_TIMESTAMP}->format('H:i:s'));
+            $ts->notes->addRecord(new Tinebase_Model_Note([
+                'note' => sprintf($translate->_('Clock in: %1$s'),
+                    $record->{HumanResources_Model_AttendanceRecord::FLD_TIMESTAMP}->format('H:i:s')),
+                'note_type_id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+            ]));
             if (HumanResources_Model_AttendanceRecord::TYPE_CLOCK_PAUSED !== $prevRecord->{HumanResources_Model_AttendanceRecord::FLD_TYPE}) {
                 //this shouldn't happen ...
                 $ts->need_for_clarification = true;
@@ -269,8 +298,11 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
 
         } else {
             // pause
-            $ts->description = $ts->description . ' ' . sprintf($translate->_('Clock pause: %1$s'),
-                    $record->{HumanResources_Model_AttendanceRecord::FLD_TIMESTAMP}->format('H:i:s'));
+            $ts->notes->addRecord(new Tinebase_Model_Note([
+                'note' => sprintf($translate->_('Clock pause: %1$s'),
+                    $record->{HumanResources_Model_AttendanceRecord::FLD_TIMESTAMP}->format('H:i:s')),
+                'note_type_id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+            ]));
             if (HumanResources_Model_AttendanceRecord::TYPE_CLOCK_IN !== $prevRecord->{HumanResources_Model_AttendanceRecord::FLD_TYPE}) {
                 //this shouldn't happen ...
                 $ts->need_for_clarification = true;
@@ -441,11 +473,18 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
             'start_time' => $date->format('H:i:00'),
             'end_time' => $date->format('H:i:00'),
             'duration' => 0,
+            'notes' => new Tinebase_Record_RecordSet(Tinebase_Model_Note::class),
+            'description' => Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)
+                ->_('attendance recorder generated'),
         ], true);
 
-        $ts->description = sprintf($translate->_($type ?
+        $note = sprintf($translate->_($type ?
             (HumanResources_Model_AttendanceRecord::TYPE_CLOCK_OUT === $type ? 'Clock out: %1$s' : 'Clock pause: %1$s')
-            : 'Clock in: %1$s'), $date->format('H:i:s'),);
+            : 'Clock in: %1$s'), $date->format('H:i:s'));
+        $ts->notes->addRecord(new Tinebase_Model_Note([
+            'note' => $note,
+            'note_type_id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+        ]));
         if ($record->{HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID}) {
             $ts->{HumanResources_Model_FreeTimeType::TT_TS_SYSCF_CLOCK_OUT_REASON} = $record->getIdFromProperty(HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID);
         }
