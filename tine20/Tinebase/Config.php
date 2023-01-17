@@ -3021,7 +3021,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'type'                  => 'object',
             'class'                 => 'Tinebase_Config_Struct',
             'clientRegistryInclude' => true,
-            'setByAdminModule'      => true,
+            'setByAdminModule'      => false,
             'setBySetupModule'      => false,
             'content'               => array(
                 self::QUOTA_SHOW_UI => array(
