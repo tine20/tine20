@@ -37,6 +37,13 @@ services:
       - internal_network
     ports:
       - "127.0.0.1:4000:80"
+    ### for traefik support (see https://doc.traefik.io/traefik/providers/docker/)
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.web.rule=Host(`MYDOMAIN.de`)"
+#      - "traefik.http.routers.web.entrypoints=websecure"
+#      - "traefik.http.routers.web.tls.certresolver=http01"
+#      - "traefik.http.services.web.loadbalancer.server.port=80"
 
   db:
     image: mariadb:10.6
@@ -47,9 +54,11 @@ services:
       MYSQL_DATABASE: &MYSQL_DATABASE tine
       MYSQL_USER: &MYSQL_USER tine
       MYSQL_PASSWORD: &MYSQL_PASSWORD tine
-    # use volume for persistent DB
+    ### use volume for persistent DB
 #    volumes:
 #      - "/var/lib/mysql:/var/lib/mysql"
+    ### OR
+#      - "tine20_db:/var/lib/mysql"
     networks:
       - internal_network
 
@@ -108,9 +117,33 @@ services:
 #    networks:
 #      - internal_network
 
+#  traefik:
+#    image: "traefik:v2.6"
+#    restart: always
+#    container_name: "traefik"
+#    command:
+#      - "--providers.docker=true"
+#      - "--providers.docker.exposedbydefault=false"
+#      - "--entrypoints.web.address=:80"
+#      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+#      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+#      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+#      - "--entrypoints.websecure.address=:443"
+#      - "--certificatesresolvers.http01.acme.httpchallenge=true"
+#      - "--certificatesresolvers.http01.acme.httpchallenge.entrypoint=web"
+#      - "--certificatesresolvers.http01.acme.storage=/letsencrypt/acme.json"
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#      - "8080:8080"
+#    volumes:
+#      - "./letsencrypt:/letsencrypt"
+#      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
 volumes:
   tine20_files:
 #  clamav_files:
+#  tine20_db:
 
 networks:
   external_network:
