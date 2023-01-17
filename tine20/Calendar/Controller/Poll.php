@@ -247,7 +247,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
         if ($poll instanceof Calendar_Model_Poll) {
             if ($event->rrule || $event->isRecurException()) {
                 // _('Polls for recurring events are not supported')
-                throw new Tinebase_Exception_SystemGeneric('Polls for recurring events are not supported');
+                throw new Tinebase_Exception_SystemGeneric('Polls for recurring events are not supported', 600, 'Calendar');
             }
             try {
                 $this->_inspectedPoll = $poll->getId();

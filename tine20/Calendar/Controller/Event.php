@@ -2299,7 +2299,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if (!$success) {
             // _('The new recurrence rule is unpredictable. Please choose a valid recurrence rule')
             throw new Tinebase_Exception_SystemGeneric(
-                'The new recurrence rule is unpredictable. Please choose a valid recurrence rule');
+                'The new recurrence rule is unpredictable. Please choose a valid recurrence rule', 600, 'Calendar');
         }
 
         return $changed;
