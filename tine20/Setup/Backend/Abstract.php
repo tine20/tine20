@@ -313,18 +313,22 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
             Tinebase_Application::getInstance()->removeApplicationTable($_applicationId, $_tableName);
         }
     }
-    
+
     /**
      * renames table in database
-     * 
+     *
      * @param string $_tableName
-     * @param string $_newName
+     * @param $_newTableName
+     * @param null $_newApplicationId
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function renameTable($_tableName, $_newName)
+    public function renameTable($_tableName, $_newTableName, $_newApplicationId = null)
     {
         $statement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName)
-            . ' RENAME TO ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_newName);
+            . ' RENAME TO ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_newTableName);
         $this->execQueryVoid($statement);
+        
+        Tinebase_Application::getInstance()->renameApplicationTable($_tableName, $_newTableName, $_newApplicationId);
     }
     
     /**
