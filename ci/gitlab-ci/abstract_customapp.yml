@@ -52,6 +52,21 @@ docker_build_source:
     AUTO_MERGE: "never"
     IMAGE_TAG: $CI_PROJECT_ID-$CI_PIPELINE_IID-$PHP_VERSION
     DOCKER_BUILD_SOURCE: "true"
+docker_build_source_matrix:
+  stage: build
+  parallel:
+    matrix:
+      - PHP_VERSION:
+          - "7.4"
+          - "8.0"
+          - "8.1"
+          - "8.2"
+  script:
+    - echo job is there for needs
+  rules:
+    - if: $NOT_TURE == "true"
+      when: on_success
+    - when: never
 
 docker_build_built:
   stage: build
