@@ -66,6 +66,9 @@ class DFCom_RecordHandler_TimeAccounting
         $assertACLUsageCallbacks = [
             $this->employeeController->assertPublicUsage(),
             $this->accountController->assertPublicUsage(),
+            $this->freeTimeController->assertPublicUsage(),
+            HumanResources_Controller_FreeDay::getInstance()->assertPublicUsage(),
+            HumanResources_Controller_Contract::getInstance()->assertPublicUsage(),
     //        $this->workingTimeSchemaController->assertPublicUsage(),
             $this->timeaccountController->assertPublicUsage(),
             $this->monthlyWTReportController->assertPublicUsage(),
