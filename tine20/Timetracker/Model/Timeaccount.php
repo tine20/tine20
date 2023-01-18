@@ -206,7 +206,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
             ),
             'is_billable'       => array(
-                // TODO why is this not visible / editable?
+                'label'                 => 'Project time billable', // _('Project time billable')
                 'type'                  => 'boolean',
                 'default'               => TRUE,
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
