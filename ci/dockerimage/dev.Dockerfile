@@ -14,7 +14,7 @@ FROM ${BASE_IMAGE} as cache-invalidator
 ARG ALPINE_PHP_PACKAGE=php7
 ARG CACHE_BUST=0
 
-RUN apk add --update --no-cache --simulate git composer build-base ${ALPINE_PHP_PACKAGE}-pecl-xdebug | sha256sum >> /cachehash
+RUN apk add --update --no-cache --simulate git composer build-base ${ALPINE_PHP_PACKAGE}-pecl-xdebug unzip | sha256sum >> /cachehash
 RUN apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/main/ npm=12.22.12-r0  nodejs=12.22.12-r0 | sha256sum >> /cachehash
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
@@ -23,5 +23,5 @@ ARG ALPINE_PHP_PACKAGE=php7
 
 COPY --from=cache-invalidator /cachehash /usr/local/lib/container/
 
-RUN apk add --update --no-cache git composer build-base ${ALPINE_PHP_PACKAGE}-pecl-xdebug
+RUN apk add --update --no-cache git composer build-base ${ALPINE_PHP_PACKAGE}-pecl-xdebug unzip
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/main/ npm=12.22.12-r0  nodejs=12.22.12-r0
