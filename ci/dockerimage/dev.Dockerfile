@@ -14,7 +14,7 @@ FROM ${BASE_IMAGE} as cache-invalidator
 ARG ALPINE_PHP_PACKAGE=php7
 ARG CACHE_BUST=0
 
-RUN apk add --update --no-cache --simulate git build-base ${ALPINE_PHP_PACKAGE}-pecl-xdebug | sha256sum >> /cachehash
+RUN apk add --update --no-cache --simulate git build-base ${ALPINE_PHP_PACKAGE}-pecl-xdebug unzip | sha256sum >> /cachehash
 RUN if [ "${ALPINE_PHP_PACKAGE}" != "php81" ]; then \
       apk add --no-cache --simulate composer | sha256sum >> /cachehash; \
     fi
@@ -26,7 +26,7 @@ ARG ALPINE_PHP_PACKAGE=php7
 
 COPY --from=cache-invalidator /cachehash /usr/local/lib/container/
 
-RUN apk add --update --no-cache git build-base ${ALPINE_PHP_PACKAGE}-pecl-xdebug
+RUN apk add --update --no-cache git build-base ${ALPINE_PHP_PACKAGE}-pecl-xdebug unzip
 RUN if [ "${ALPINE_PHP_PACKAGE}" == "php81" ]; then \
         EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"; \
         php -r "copy('https://getcomposer.org/installer', '/composer-setup.php');"; \

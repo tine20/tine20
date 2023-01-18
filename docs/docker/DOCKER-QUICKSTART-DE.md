@@ -161,6 +161,8 @@ Um von einer alten Installation mit lokaler tine auf das Docker-Setup zu migrier
     #[...]
 ```
 
+Bitte achtet auf die korrekte Angabe des TINE20_DATABASE_TABLEPREFIX -> sonst werden ggf. die Tabellen nicht gefunden.
+
 ## Custom-Konfiguration
 
 Wenn man möchte, kann man Custom-Configs (via conf.d) ebenfalls als eigenes Volume in den Container mounten:
