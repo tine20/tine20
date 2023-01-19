@@ -33,6 +33,7 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE017 = __CLASS__ . '::update017';
     const RELEASE015_UPDATE018 = __CLASS__ . '::update018';
     const RELEASE015_UPDATE019 = __CLASS__ . '::update019';
+    const RELEASE015_UPDATE020 = __CLASS__ . '::update020';
 
     static protected $_allUpdates = [
         // this needs to be executed before TB struct update! cause we move the table from sales to tb
@@ -125,6 +126,10 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update011',
             ],
+            self::RELEASE015_UPDATE020          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update020',
+            ],
         ],
     ];
 
@@ -207,31 +212,31 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             Sales_Model_ProductLocalization::class,
         ]);
 
-        $lang = Sales_Config::getInstance()->{Sales_Config::LANGUAGES_AVAILABLE}->default;
-        $db = $this->getDb();
-        $locTableName = SQL_TABLE_PREFIX . Sales_Model_ProductLocalization::getConfiguration()->getTableName();
         $prodTableName = SQL_TABLE_PREFIX . Sales_Model_Product::TABLE_NAME;
+        $db = $this->getDb();
         $schema = $db->describeTable($prodTableName);
         if (array_key_exists('name', $schema)) {
-            foreach ($db->query('SELECT id, name, description, is_deleted FROM ' . $prodTableName)
-                        ->fetchAll(Zend_Db::FETCH_NUM) as $row)
-            {
-                $db->insert($locTableName, [
-                    'id' => Tinebase_Record_Abstract::generateUID(),
-                    Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
-                    Tinebase_Record_PropertyLocalization::FLD_TYPE => 'name',
-                    Tinebase_Record_PropertyLocalization::FLD_TEXT => $row[1],
-                    Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang,
-                    'is_deleted' => $row[3],
-                ]);
-                $db->insert($locTableName, [
-                    'id' => Tinebase_Record_Abstract::generateUID(),
-                    Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
-                    Tinebase_Record_PropertyLocalization::FLD_TYPE => 'description',
-                    Tinebase_Record_PropertyLocalization::FLD_TEXT => $row[2],
-                    Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang,
-                    'is_deleted' => $row[3],
-                ]);
+            $locTableName = SQL_TABLE_PREFIX . Sales_Model_ProductLocalization::getConfiguration()->getTableName();
+            foreach (Sales_Config::getInstance()->{Sales_Config::LANGUAGES_AVAILABLE}->records as $lang) {
+                foreach ($db->query('SELECT id, name, description, is_deleted FROM ' . $prodTableName)
+                             ->fetchAll(Zend_Db::FETCH_NUM) as $row) {
+                    $db->insert($locTableName, [
+                        'id' => Tinebase_Record_Abstract::generateUID(),
+                        Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
+                        Tinebase_Record_PropertyLocalization::FLD_TYPE => 'name',
+                        Tinebase_Record_PropertyLocalization::FLD_TEXT => $row[1],
+                        Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang->id,
+                        'is_deleted' => $row[3],
+                    ]);
+                    $db->insert($locTableName, [
+                        'id' => Tinebase_Record_Abstract::generateUID(),
+                        Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
+                        Tinebase_Record_PropertyLocalization::FLD_TYPE => 'description',
+                        Tinebase_Record_PropertyLocalization::FLD_TEXT => $row[2],
+                        Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang->id,
+                        'is_deleted' => $row[3],
+                    ]);
+                }
             }
         }
 
@@ -391,5 +396,53 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             Sales_Model_Document_Order::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.19', self::RELEASE015_UPDATE019);
+    }
+
+    public function update020()
+    {
+        // fetch all offer ids, fetch offer, transform to Sales_Model_Document_Offer
+        $offerController = Sales_Controller_Offer::getInstance();
+        $docOfferController = Sales_Controller_Document_Offer::getInstance();
+        $customerController = Sales_Controller_Customer::getInstance();
+        $offerIds = $offerController->search(null, null, false, true);
+        foreach ($offerIds as $offerId) {
+            $offer = $offerController->get($offerId);
+            $customer = null;
+            $newRelations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class);
+            /** @var Tinebase_Model_Relation $relation */
+            foreach ($offer->relations as $relation) {
+                if (! $customer && $relation->related_model === Sales_Model_Customer::class) {
+                    // TODO only use those with $relation->type === 'OFFER' ?
+                    $customer = $customerController->get($relation->related_id);
+                } else {
+                    $relation->setId(null);
+                    $relation->own_id = null;
+                    $newRelations->addRecord($relation);
+                }
+            }
+            $description = $offer->description;
+            try {
+                $docOffer = new Sales_Model_Document_Offer([
+                    Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customer,
+                    Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_DRAFT,
+                    Sales_Model_Document_Offer::FLD_DESCRIPTION => $description,
+                    Sales_Model_Document_Offer::FLD_DOCUMENT_NUMBER => $offer->number,
+                    Sales_Model_Document_Offer::FLD_DOCUMENT_TITLE => $offer->title,
+                    Sales_Model_Document_Offer::FLD_RECIPIENT_ID => $customer->postal ?? null,
+                    'relations' => $newRelations,
+                ]);
+                try {
+                    $docOfferController->create($docOffer);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    // maybe duplicate number - remove number to create new one
+                    $docOffer->{Sales_Model_Document_Offer::FLD_DOCUMENT_NUMBER} = null;
+                    $docOfferController->create($docOffer);
+                }
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
+        }
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.20', self::RELEASE015_UPDATE020);
     }
 }
