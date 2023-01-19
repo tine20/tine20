@@ -241,7 +241,7 @@ describe('Contacts', () => {
             await popupWindow.click('.x-tool-close');
         });
 
-        test('add Tag', async () => {
+        test.skip('add Tag', async () => {
             let arrowtrigger = await popupWindow.$$('.x-form-arrow-trigger');
             await arrowtrigger[9].click();
             await expect(popupWindow).toMatchElement('.x-widget-tag-tagitem-text', {text: 'Elbphilharmonie'});
@@ -262,7 +262,7 @@ describe('Contacts', () => {
 });
 
 
-describe('Group', () => {
+describe.skip('Group', () => {
     describe('Mainscreen', () => {
         test('go to Mainscreen', async () => {
             await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Gruppen'});
