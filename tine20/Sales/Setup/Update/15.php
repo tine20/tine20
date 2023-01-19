@@ -212,31 +212,31 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             Sales_Model_ProductLocalization::class,
         ]);
 
-        $lang = Sales_Config::getInstance()->{Sales_Config::LANGUAGES_AVAILABLE}->default;
-        $db = $this->getDb();
-        $locTableName = SQL_TABLE_PREFIX . Sales_Model_ProductLocalization::getConfiguration()->getTableName();
         $prodTableName = SQL_TABLE_PREFIX . Sales_Model_Product::TABLE_NAME;
+        $db = $this->getDb();
         $schema = $db->describeTable($prodTableName);
         if (array_key_exists('name', $schema)) {
-            foreach ($db->query('SELECT id, name, description, is_deleted FROM ' . $prodTableName)
-                        ->fetchAll(Zend_Db::FETCH_NUM) as $row)
-            {
-                $db->insert($locTableName, [
-                    'id' => Tinebase_Record_Abstract::generateUID(),
-                    Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
-                    Tinebase_Record_PropertyLocalization::FLD_TYPE => 'name',
-                    Tinebase_Record_PropertyLocalization::FLD_TEXT => $row[1],
-                    Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang,
-                    'is_deleted' => $row[3],
-                ]);
-                $db->insert($locTableName, [
-                    'id' => Tinebase_Record_Abstract::generateUID(),
-                    Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
-                    Tinebase_Record_PropertyLocalization::FLD_TYPE => 'description',
-                    Tinebase_Record_PropertyLocalization::FLD_TEXT => $row[2],
-                    Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang,
-                    'is_deleted' => $row[3],
-                ]);
+            $locTableName = SQL_TABLE_PREFIX . Sales_Model_ProductLocalization::getConfiguration()->getTableName();
+            foreach (Sales_Config::getInstance()->{Sales_Config::LANGUAGES_AVAILABLE}->records as $lang) {
+                foreach ($db->query('SELECT id, name, description, is_deleted FROM ' . $prodTableName)
+                             ->fetchAll(Zend_Db::FETCH_NUM) as $row) {
+                    $db->insert($locTableName, [
+                        'id' => Tinebase_Record_Abstract::generateUID(),
+                        Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
+                        Tinebase_Record_PropertyLocalization::FLD_TYPE => 'name',
+                        Tinebase_Record_PropertyLocalization::FLD_TEXT => $row[1],
+                        Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang->id,
+                        'is_deleted' => $row[3],
+                    ]);
+                    $db->insert($locTableName, [
+                        'id' => Tinebase_Record_Abstract::generateUID(),
+                        Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
+                        Tinebase_Record_PropertyLocalization::FLD_TYPE => 'description',
+                        Tinebase_Record_PropertyLocalization::FLD_TEXT => $row[2],
+                        Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang->id,
+                        'is_deleted' => $row[3],
+                    ]);
+                }
             }
         }
 
