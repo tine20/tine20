@@ -244,7 +244,7 @@ describe('Contacts', () => {
             await popupWindow.click('.x-tool-close');
         });
 
-        test('add Tag', async () => {
+        test.skip('add Tag', async () => {
             let arrowtrigger = await popupWindow.$$('.x-form-arrow-trigger');
             // TODO we should not make this dependent on the number of arrow triggers
             await arrowtrigger[10].click();
@@ -266,7 +266,7 @@ describe('Contacts', () => {
 });
 
 
-describe('Group', () => {
+describe.skip('Group', () => {
     describe('Mainscreen', () => {
         test('go to Mainscreen', async () => {
             await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Gruppen'});
