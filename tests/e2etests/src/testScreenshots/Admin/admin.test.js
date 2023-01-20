@@ -116,7 +116,7 @@ describe('application', () => {
         await newPage.waitForTimeout(2000);
         await newPage.screenshot({path: 'screenshots/Administration/15_admin_crm_einstellungen.png'});
         let rows = await newPage.$$('.x-grid3-cell-inner.x-grid3-col-value');
-        await rows[3].click({clickCount: 2});
+        await rows[3].click({clickCount: 2, delay: 500});
         await newPage.waitForTimeout(2000);
         await newPage.screenshot({path: 'screenshots/Administration/16_admin_crm_lead_status.png'});
         await newPage.close();
