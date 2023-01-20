@@ -77,13 +77,14 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     
     initMessageBus: function() {
         this.postalSubscriptions = [];
-        _.each(Tine.Tinebase.areaLocks.getLocks(this.app.appName), (areaLock) => {
-            this.postalSubscriptions.push(postal.subscribe({
-                channel: "areaLocks",
-                topic: areaLock + '.*',
-                callback: this.onAreaLockChange.createDelegate(this)
-            }));
-        });
+        // NOTE: it should be enough to manage on contentType level?
+        // _.each(Tine.Tinebase.areaLocks.getLocks(this.app.appName), (areaLock) => {
+        //     this.postalSubscriptions.push(postal.subscribe({
+        //         channel: "areaLocks",
+        //         topic: areaLock + '.*',
+        //         callback: this.onAreaLockChange.createDelegate(this)
+        //     }));
+        // });
     },
 
     onAreaLockChange: function(data, e) {
@@ -213,12 +214,10 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     afterRender: function() {
         Tine.widgets.MainScreen.superclass.afterRender.call(this);
 
-        _.each(Tine.Tinebase.areaLocks.getLocks(this.app.appName), (areaLock) => {
-            Tine.Tinebase.areaLocks.setOptions(areaLock, {
-                maskEl: this.getEl()
-            });
-            Tine.Tinebase.areaLocks.unlock(areaLock);
-        });
+        // Tine.Tinebase.areaLocks.registerMaskEl(this.app.appName, this.getEl());
+        // _.each(Tine.Tinebase.areaLocks.getLocks(this.app.appName), (areaLock) => {
+        //     Tine.Tinebase.areaLocks.unlock(areaLock);
+        // });
         this.setActiveContentType(this.activeContentType);
     },
 
