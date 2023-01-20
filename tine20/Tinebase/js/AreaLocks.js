@@ -53,6 +53,7 @@ class AreaLocks extends Ext.util.Observable {
     this.providerInstances = {}
     this.presenceObservers = {}
     this.timers = {}
+    this.maskElCollection = []
     
     this.addEvents(
         /**
@@ -212,25 +213,45 @@ class AreaLocks extends Ext.util.Observable {
     })
     Tine.Tinebase.registry.set('areaLocks', lockStates)
   }
-  
-  async manageMask (areaName) {
-    const options = this.getOptions(areaName)
 
-    // @TODO: support array of maskEls?
-    if (options.maskEl) {
+  /**
+   *
+   * @param {String} selector
+   * @param {Ext.Element} maskEl
+   */
+  registerMaskEl (selector, maskEl, skipMsg) {
+    maskEl.skipMsg = skipMsg;
+    this.maskElCollection.push({ selector, maskEl });
+  }
+
+  async manageMask (areaName) {
+    const config = this.getConfig(areaName, {}) || {};
+    const maskEls = _.compact([this.getOptions(areaName)?.maskEl]) // legacy
+    _.forEach(config.areas, (areaSelector) => {
+      const selectorRe = new RegExp(`^${areaSelector}(\..*)*`)
+      this.maskElCollection.forEach((mer) => {
+        if (mer.selector.match(selectorRe) && mer.maskEl?.dom) {
+          maskEls.push(mer.maskEl);
+        }
+      })
+    });
+
+    if (maskEls.length) {
       const isLocked = await this.isLocked(areaName)
       if (isLocked) {
         const lockState = this.getLockState(areaName)
         if (lockState.isUnlocking) {
-          options.maskEl.mask(i18n._('Unlocking ...'), 'x-mask-loading')
+          maskEls.forEach((maskEl) => { if (!maskEl.skipMsg) { maskEl.mask(i18n._('Unlocking ...'), 'x-mask-loading') } })
         } else {
-          let mask = options.maskEl.mask(i18n._('Click here to unlock this area.'), 'tb-arealocks-msg')
-          mask.next().on('click', () => {
-            this.unlock(areaName)
+          maskEls.forEach((maskEl) => {
+            let mask = maskEl.mask(maskEl.skipMsg ? '' : i18n._('Click here to unlock this area.'), 'tb-arealocks-msg')
+            mask.next().on('click', () => {
+              this.unlock(areaName)
+            })
           })
         }
       } else {
-        options.maskEl.unmask()
+        maskEls.forEach((maskEl) => { maskEl.unmask() })
       }
     }
   }
@@ -261,7 +282,9 @@ class AreaLocks extends Ext.util.Observable {
         })
       } else {
         this.presenceObservers[areaName].startChecking()
-        expires = new Date(this.presenceObservers[areaName].getLastPresence() + conf.lifetime * 60000).format(Date.patterns.ISO8601Long)
+        if (expires >= new Date().format(Date.patterns.ISO8601Long)) {
+          expires = new Date(this.presenceObservers[areaName].getLastPresence() + conf.lifetime * 60000).format(Date.patterns.ISO8601Long)
+        }
       }
     } else if (validity === 'lifetime') {
       if (!this.timer[areaName]) {
@@ -327,7 +350,8 @@ class AreaLocks extends Ext.util.Observable {
       
       try {
         const provider = await this.getProvider(areaName, opts)
-        this.setLockState(areaName, _.assign(lockState, await provider.unlock(), {isUnlocking: false}))
+        const serverLockState = await provider.unlock()
+        this.setLockState(areaName, _.assign(lockState, serverLockState, {isUnlocking: false}))
         this.assertTimerRunning(areaName)
         this.manageMask(areaName)
 
@@ -404,12 +428,21 @@ class AreaLocks extends Ext.util.Observable {
    * @return {Array}
    */
   getLocks (areaSelectors, lockedOnly) {
-    areaSelectors = _.isArray(areaSelectors) ? areaSelectors : [areaSelectors]
+    areaSelectors = _.isArray(areaSelectors) ? areaSelectors : [areaSelectors];
+    // take parent selectors into account (e.g. Sales.Boilerplates is also matched by Sales)
+    areaSelectors = _.uniq(_.reduce(areaSelectors, (areaSelectors, areaSelector) => {
+      areaSelector.split('.').reduce((selector, part) => {
+        const areaSelector = _.compact([selector, part]).join('.');
+        areaSelectors.push(areaSelector);
+        return areaSelector;
+      }, '');
+      return areaSelectors;
+    }, []));
     const configs = _.get(Tine.Tinebase.configManager.get('areaLocks', 'Tinebase'), 'records', []);
     return _.compact(_.reduce(configs, (locks, conf, idx) => {
-      const areaName = _.get(conf, 'area_name')
-      const hasIntersection = _.intersection(_.get(conf, 'areas', []), areaSelectors).length
-      return _.concat(locks, (hasIntersection && (!lockedOnly || this.isLocked(areaName))) ? areaName : [])
+      const areaName = _.get(conf, 'area_name');
+      const hasIntersection = _.intersection(_.get(conf, 'areas', []), areaSelectors).length;
+      return _.concat(locks, (hasIntersection && (!lockedOnly || this.isLocked(areaName))) ? areaName : []);
     }, []))
   }
   
