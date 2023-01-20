@@ -45,23 +45,18 @@ class WebAuthn extends Abstract {
             }
 
             const unlockMethod = this.unlockMethod || Tine.Tinebase_AreaLock.unlock
-            await unlockMethod(this.areaName, this.mfaDevice.id, JSON.stringify(publicKeyData));
+            return unlockMethod(this.areaName, this.mfaDevice.id, JSON.stringify(publicKeyData));
         } catch (e) {
-            console.error(e);
-            Ext.MessageBox.show({
+            if (await Ext.MessageBox.show({
                 icon: Ext.MessageBox.WARNING,
                 buttons: Ext.MessageBox.OKCANCEL,
                 title: i18n._('Error'),
-                msg: i18n._("FIDO2 WebAuthn authentication failed. Try again?"),
-                fn: (btn) => {
-                    if (btn === 'ok') {
-                        Ext.MessageBox.hide();
-                        return this.unlock();
-                    } else {
-                        throw new Error('USERABORT');
-                    }
-                }
-            });
+                msg: i18n._("FIDO2 WebAuthn authentication failed. Try again?")
+            }) === 'ok') {
+                return this.unlock();
+            } else {
+                throw new Error('USERABORT');
+            }
         }
     }
 }

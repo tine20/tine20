@@ -477,9 +477,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.on('resize', this.onContentResize, this, {buffer: 100});
         }
 
-        if (this.listenMessageBus) {
-            this.initMessageBus();
-        }
+        this.areaLockSelector = this.recordClass.getPhpClassName().replace('_Model_', '.');
+        this.initMessageBus();
 
         Tine.widgets.grid.GridPanel.superclass.initComponent.call(this);
     },
@@ -491,11 +490,20 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     
     initMessageBus: function() {
         this.postalSubscriptions = [];
-        this.postalSubscriptions.push(postal.subscribe({
-            channel: "recordchange",
-            topic: [this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), '*'].join('.'),
-            callback: this.onRecordChanges.createDelegate(this)
-        }));
+        if (this.listenMessageBus) {
+            this.postalSubscriptions.push(postal.subscribe({
+                channel: "recordchange",
+                topic: [this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), '*'].join('.'),
+                callback: this.onRecordChanges.createDelegate(this)
+            }));
+        }
+        _.each(Tine.Tinebase.areaLocks.getLocks(this.areaLockSelector), (areaLock) => {
+            this.postalSubscriptions.push(postal.subscribe({
+                channel: "areaLocks",
+                topic: areaLock + '.*',
+                callback: this.onAreaLockChange.createDelegate(this)
+            }));
+        });
     },
     
     getRecordByData(data) {
@@ -526,6 +534,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
         // NOTE: grid doesn't update selections itself
         this.actionUpdater.updateActions(this.grid.getSelectionModel(), this.getFilteredContainers());
+    },
+
+    onAreaLockChange: function (data, e) {
+        const topic = e.topic;
+        const locked = !!Tine.Tinebase.areaLocks.getLocks(this.app.appName, true).length;
+
+        if (locked) {
+            this.store.removeAll();
+            // @TODO: quit bg refresh task?
+        } else {
+            this.store.reload();
+        }
     },
 
     /**
@@ -1718,6 +1738,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     afterRender: function() {
         Tine.widgets.grid.GridPanel.superclass.afterRender.apply(this, arguments);
+        Tine.Tinebase.areaLocks.registerMaskEl(this.areaLockSelector, this.getEl());
+        this.getActionToolbar().afterIsRendered().then(() => {
+            Tine.Tinebase.areaLocks.registerMaskEl(this.areaLockSelector, this.getActionToolbar().getEl(), true);
+        })
+        _.each(Tine.Tinebase.areaLocks.getLocks(this.areaLockSelector), (areaLock) => {
+            Tine.Tinebase.areaLocks.manageMask(areaLock);
+        });
         if (this.initialLoadAfterRender) {
             this.initialLoad();
         }
