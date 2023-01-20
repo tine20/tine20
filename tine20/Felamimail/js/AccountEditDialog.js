@@ -111,15 +111,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordUpdate: function(callback, scope) {
         Tine.Felamimail.AccountEditDialog.superclass.onRecordUpdate.apply(this, arguments);
-
-        if (this.asAdminModule) {
-            const hasRight = Tine.Tinebase.common.hasRight('manage_emailaccounts', 'Admin');
-            this.action_saveAndClose.setDisabled(!hasRight);
-        } else {
-            if (this.record.data?.type === 'shared') {
-                this.action_saveAndClose.setDisabled( !this.record.data?.account_grants?.editGrant);
-            }
-        }
+        const hasRight = this.checkAccountEditRight(this.record);
+        this.action_saveAndClose.setDisabled(!hasRight);
         
         this.record.set('grants', this.grantsGrid.getValue());
 
@@ -262,6 +255,17 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.vacationPanel.setDisabled(true);
                 this.rulesGridPanel.setDisabled(true);
             }
+        }
+    },
+    
+    checkAccountEditRight(account) {
+        if (this.asAdminModule) {
+            return Tine.Tinebase.common.hasRight('manage_emailaccounts', 'Admin');
+        } else {
+            if (account.data?.type === 'shared') {
+                return account.data?.account_grants?.editGrant;
+            }
+            return true;
         }
     },
 
