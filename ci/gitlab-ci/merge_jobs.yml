@@ -3,10 +3,9 @@
     GIT_STRATEGY: none
     MERGENONINTERACTIVE: "true" # "false" is also true! Runs not interactive if the variable exists.
     pushOptSkipCi: "true" # "false" is also true! Runs not interactive if the variable exists.
-  image: composer:2.4 #${UTIL_REGISTRY}/docker:19.03.1-r3 # dose not need docker. But the docker image should already exist on the runners. But it needs coreutils which is installed
+  image: dockerregistry.metaways.net/tine20/tine20/composer:2.4 #composer:2.4 #${UTIL_REGISTRY}/docker:19.03.1-r3 # dose not need docker. But the docker image should already exist on the runners. But it needs coreutils which is installed
   needs: []
   before_script:
-    - apk add gettext jq
     - !reference [.lib, script]
     - cp $DOCKER_GIT_CONFIG ~/.gitconfig
     - git_repo_clone
