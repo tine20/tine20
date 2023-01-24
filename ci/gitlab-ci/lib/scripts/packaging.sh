@@ -19,7 +19,7 @@ packaging_build_packages() {
     export DEPENDENCY_IMAGE="${REGISTRY}/dependency-commit:${IMAGE_TAG}"
     export SOURCE_IMAGE="${REGISTRY}/source-commit:${IMAGE_TAG}"
     export BUILD_IMAGE="${REGISTRY}/build-commit:${IMAGE_TAG}"
-    export BUILT_IMAGE="${REGISTRY}/build-commit:${IMAGE_TAG}"
+    export BUILT_IMAGE="${REGISTRY}/built-commit:${IMAGE_TAG}"
     export REVISION=0
     export CODENAME="${CODENAME}"
     export VERSION=$version
