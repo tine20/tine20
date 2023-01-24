@@ -98,6 +98,7 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
                 __LINE__ . ' creating cache for ' . $_id);
+            $transaction->release(); // avoid deadlocks -> release here, create has its own transaction handling
             $record = new Felamimail_Model_AttachmentCache(['id' => $_id]);
             if (empty($record->{Felamimail_Model_AttachmentCache::FLD_SOURCE_ID})) {
                 throw new Tinebase_Exception_NotFound('Could not find source record without ID');
