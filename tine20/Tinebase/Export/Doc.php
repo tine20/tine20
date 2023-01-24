@@ -132,7 +132,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         unlink($tempfile);
     }
 
-    public function save($filename)
+    public function save($filename = null)
     {
         $document = $this->getDocument();
         $tempfile = $document->save();

@@ -60,6 +60,11 @@ class Tinebase_Export_ErrorReport extends Tinebase_Export_Abstract
         return 'export_error_report.txt';
     }
 
+    public function save($target = null)
+    {
+        $this->write();
+    }
+
     /**
      * outputs exception message to client
      */
@@ -105,7 +110,7 @@ class Tinebase_Export_ErrorReport extends Tinebase_Export_Abstract
      * @param null|string $filename
      * @return Tinebase_Model_Tree_FileLocation
      */
-    public function getTargetFileLocation($filename = null)
+    public function getTargetFileLocation($filename = null): Tinebase_Model_Tree_FileLocation
     {
         if (! $filename) {
             $filename = Tinebase_TempFile::getTempPath();

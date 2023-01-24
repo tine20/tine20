@@ -211,7 +211,7 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
         }
     }
 
-    public function save(string $target): void
+    public function save($target = null)
     {
         if (!($fh = fopen($target, 'w'))) {
             throw new Tinebase_Exception_Backend('could not open target ' . $target);

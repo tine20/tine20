@@ -57,4 +57,9 @@ class Calendar_Export_VCalendarReport extends Tinebase_Export_Report_Abstract
             ]
         ];
     }
+
+    public function save($target = null)
+    {
+        $this->write();
+    }
 }

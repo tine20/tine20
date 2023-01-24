@@ -178,8 +178,8 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
         $this->_exportRecords();
         
         // create file
-        $result = $this->_openDocumentObject->getDocument();
-        return $result;
+        $this->_tmpFile = $this->_openDocumentObject->getDocument();
+        return $this->_tmpFile;
     }
     
     /**

@@ -122,7 +122,7 @@ trait Tinebase_Export_DocumentPdfTrait
         return $result;
     }
 
-    public function save($filename)
+    public function save($filename = null)
     {
         $this->write($filename);
         return $filename;
