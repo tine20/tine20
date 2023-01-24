@@ -7,7 +7,7 @@ beforeAll(async () => {
     await lib.getBrowser('Adressbuch', 'Kontakte');
 });
 
-describe.skip('Mainpage', () => {
+describe('Mainpage', () => {
 
     test('openEditDialog', async () => {
         let popupWindow = await lib.getEditDialog('Kontakt hinzufügen');
