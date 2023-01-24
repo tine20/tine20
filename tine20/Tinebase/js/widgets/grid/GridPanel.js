@@ -1739,9 +1739,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     afterRender: function() {
         Tine.widgets.grid.GridPanel.superclass.afterRender.apply(this, arguments);
         Tine.Tinebase.areaLocks.registerMaskEl(this.areaLockSelector, this.getEl());
-        this.getActionToolbar().afterIsRendered().then(() => {
-            Tine.Tinebase.areaLocks.registerMaskEl(this.areaLockSelector, this.getActionToolbar().getEl(), true);
-        })
+        if (this.actionToolbar) {
+            // NOTE: gird might have no action toolbar (not initialized, so we can't use this.getActionToolbar())
+            this.getActionToolbar().afterIsRendered().then(() => {
+                Tine.Tinebase.areaLocks.registerMaskEl(this.areaLockSelector, this.getActionToolbar().getEl(), true);
+            })
+        }
         _.each(Tine.Tinebase.areaLocks.getLocks(this.areaLockSelector), (areaLock) => {
             Tine.Tinebase.areaLocks.manageMask(areaLock);
         });
