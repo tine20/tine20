@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  RAII
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -63,7 +63,7 @@ class Tinebase_RAII
                 Tinebase_TransactionManager::getInstance()->rollBack();
             }
         }))->setReleaseFunc(function() use (&$transactionId) {
-            if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
+            if (null !== $transactionId && Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             }
             $transactionId = null;
