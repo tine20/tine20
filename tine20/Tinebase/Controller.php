@@ -1070,17 +1070,20 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $r->addGroup('', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->get('/favicon[/{size}[/{ext}]]', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'getFavicon', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
             ]))->toArray());
 
             $routeCollector->get('/logo[/{type}[/{size}]]', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'getLogo', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
             ]))->toArray());
 
             $routeCollector->get('/health', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'healthCheck', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
             ]))->toArray());
 
             $routeCollector->post('/authPAM/validate', (new Tinebase_Expressive_RouteHandler(
