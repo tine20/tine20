@@ -1252,10 +1252,15 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         $this->relations = null;
 
         $relations = Tinebase_Relations::getInstance();
-        $result = array(
-            'parents'  => $relations->getRelationsOfRecordByDegree($this, Tinebase_Model_Relation::DEGREE_PARENT, true)->asArray(),
-            'children' => $relations->getRelationsOfRecordByDegree($this, Tinebase_Model_Relation::DEGREE_CHILD, true)->asArray()
-        );
+        $filter = function(Tinebase_Model_Relation $relation): bool {
+            /** @var Tinebase_Record_Interface $model */
+            $model = $relation->related_model;
+            return $model::generatesPaths();
+        };
+        $result = [
+            'parents'  => $relations->getRelationsOfRecordByDegree($this, Tinebase_Model_Relation::DEGREE_PARENT, true)->filter($filter)->asArray(),
+            'children' => $relations->getRelationsOfRecordByDegree($this, Tinebase_Model_Relation::DEGREE_CHILD, true)->filter($filter)->asArray(),
+        ];
 
         $this->relations = $oldRelations;
         return $result;
