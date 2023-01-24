@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -22,6 +22,8 @@
  */
 class Tinebase_Model_Path extends Tinebase_Record_Abstract 
 {
+    public const TABLE_NAME = 'path';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -52,7 +54,7 @@ class Tinebase_Model_Path extends Tinebase_Record_Abstract
         'appName'           => 'Tinebase',
         'modelName'         => 'Path',
         'table'             => array(
-            'name'              => 'path',
+            'name'              => self::TABLE_NAME,
         ),
 
         'fields'            => [
