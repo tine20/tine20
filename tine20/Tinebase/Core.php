@@ -645,6 +645,7 @@ class Tinebase_Core
         $coreSession = Tinebase_Session::getSessionNamespace();
         
         if (isset($coreSession->currentAccount)) {
+            $coreSession->currentAccount = Tinebase_User::getInstance()->getFullUserById($coreSession->currentAccount);
             self::set(self::USER, $coreSession->currentAccount);
         }
         
