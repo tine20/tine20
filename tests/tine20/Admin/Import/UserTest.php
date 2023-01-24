@@ -62,7 +62,43 @@ class Admin_Import_UserTest extends ImportTestCase
         $this->_filename = __DIR__ . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'user_import_example.csv';
         $this->_deleteImportFile = false;
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('admin_user_import_csv');
-        $result = $this->_doImport([], $definition);
+        try {
+            $result = $this->_doImport([], $definition);
+        } finally {
+            try {
+                $this->_groupIdsToDelete[] = Tinebase_Group::getInstance()->getGroupByName('PRIMARYGROUP')->getId();
+            } catch (Tinebase_Exception_Record_NotDefined $e) {}
+            try {
+                $this->_groupIdsToDelete[] = Tinebase_Group::getInstance()->getGroupByName('GROUP1')->getId();
+            } catch (Tinebase_Exception_Record_NotDefined $e) {}
+            try {
+                $this->_groupIdsToDelete[] = Tinebase_Group::getInstance()->getGroupByName('GROUP2')->getId();
+            } catch (Tinebase_Exception_Record_NotDefined $e) {}
+        }
         self::assertEquals(1, $result['totalcount'], print_r($result, true));
+        $this->_usernamesToDelete[] = current($this->_instance->getCreatedAccounts())->accountLoginName;
+    }
+
+    public function testImportUserWithCharset()
+    {
+        $this->_filename = __DIR__ . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'user_import_macCentralEurope.csv';
+        $this->_deleteImportFile = false;
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('admin_user_import_csv');
+        $definition->plugin_options = str_replace('</config>', '<encoding>MACCENTRALEUROPE</encoding></config>', $definition->plugin_options);
+        try {
+            $result = $this->_doImport([], $definition);
+        } finally {
+            try {
+                $this->_groupIdsToDelete[] = Tinebase_Group::getInstance()->getGroupByName('PRIMARYGROUP')->getId();
+            } catch (Tinebase_Exception_Record_NotDefined $e) {}
+            try {
+                $this->_groupIdsToDelete[] = Tinebase_Group::getInstance()->getGroupByName('GROUP1')->getId();
+            } catch (Tinebase_Exception_Record_NotDefined $e) {}
+            try {
+                $this->_groupIdsToDelete[] = Tinebase_Group::getInstance()->getGroupByName('GROUP2')->getId();
+            } catch (Tinebase_Exception_Record_NotDefined $e) {}
+        }
+        self::assertEquals(1, $result['totalcount'], print_r($result, true));
+        $this->_usernamesToDelete[] = current($this->_instance->getCreatedAccounts())->accountLoginName;
     }
 }
