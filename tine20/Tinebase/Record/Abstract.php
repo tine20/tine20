@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -1683,8 +1683,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         $this->relations = null;
 
         $relations = Tinebase_Relations::getInstance();
-        $filter = function($relation) {
-            /** @var Tinebase_Model_Relation $relation */
+        $filter = function(Tinebase_Model_Relation $relation): bool {
             /** @var Tinebase_Record_Interface $model */
             $model = $relation->related_model;
             return $model::generatesPaths();
