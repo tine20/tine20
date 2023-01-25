@@ -469,6 +469,30 @@ class Tinebase_Application
         
         $this->_getDb()->delete(SQL_TABLE_PREFIX . 'application_tables', $where);
     }
+
+    /**
+     * rename table from application_tables table
+     *
+     * @param string $_tableName the table name
+     * @param $_newTableName
+     * @param null $_newApplicationId
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Zend_Db_Adapter_Exception
+     */
+    public function renameApplicationTable($_tableName, $_newTableName, $_newApplicationId = null)
+    {
+        $where = [
+            $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_tableName),
+        ];
+        $values['name'] = $_newTableName;
+        
+        if ($_newApplicationId !== NULL) {
+            $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_newApplicationId);
+            $values['application_id'] = $applicationId;
+        }
+        
+        $this->_getDb()->update(SQL_TABLE_PREFIX . 'application_tables', $values, $where);
+    }
     
     /**
      * reset class cache
