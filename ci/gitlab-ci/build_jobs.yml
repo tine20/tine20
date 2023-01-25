@@ -227,6 +227,7 @@ docker_build_built:
   script:
     - !reference [.lib, script]
     - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)";
+    - export DEPENDENCY_IMAGE="${REGISTRY}/dependency:$(docker_image_hash dependency)";
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh build
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh built
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh test-built
@@ -332,6 +333,8 @@ docker_build_dev_arm64:
 docker_build_packages:
   extends: .abstract_jobs.docker
   stage: build3
+  needs:
+    - docker_build_built
   script:
     - !reference [.lib, script]
     - packaging
