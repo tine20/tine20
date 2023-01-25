@@ -449,16 +449,6 @@
           done
       }
       
-      packaging_gitlab_set_current_link() {
-          version=$1
-          customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
-      
-          curl \
-              --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
-              -XPUT --data "${version}" \
-              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/current"
-      }
-      
       packaging_gitlab_set_ci_id_link() {
           version=$1
           customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
@@ -484,9 +474,32 @@
           fi
       }
       
+      packaging_gitlab_set_current_link() {
+          customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
+          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+      
+          if echo "$version" | grep "nightly"; then
+              echo "skip setting current link for nightly packages: $version"
+              return 0
+          fi
+      
+          curl \
+              --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
+              -XPUT --data "${version}" \
+              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/current"
+      
+          ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_matrix_message.sh $MATRIX_ROOM "🟢 Package for ${version} are ready."
+      }
+      
       packaging_push_package_to_github() {
-          version=$1
-          release=$2
+          if [ "$MAJOR_COMMIT_REF_NAME" != "main" ]; then
+              echo "skip pushing to github: $MAJOR_COMMIT_REF_NAME"
+              return 0
+          fi
+      
+          customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
+          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+          release=$(echo ${version} | sed sI-I~Ig)
       
           cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/
           asset_name="tine-$(date '+%Y.%m.%d')-$(git rev-parse --short HEAD)-nightly"
@@ -500,6 +513,8 @@
           echo "$release"
       
           github_release_add_asset "$release_json" "$asset_name" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/${release}/tine20-allinone_${release}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
+      
+          ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_matrix_message.sh $MATRIX_ROOM "🟢 Package for ${version} are released to github."
       }
       
       packaging_push_to_vpackages() {
@@ -540,35 +555,17 @@
               return 1
           fi
       
-          if [ "$MAJOR_COMMIT_REF_NAME" == "main" ]; then
-              echo "pushing packages to github ..."
-              if ! packaging_push_package_to_github $version $release; then
-                  echo "Failed to push to github."
-                  return 1
-              fi
-          else
-              echo "pushing packages to gitlab ..."
-              if ! packaging_push_packages_to_gitlab $version $release; then
-                  echo "Failed to push to gitlab."
-                  return 1
-              fi
-      
-              if ! echo "$version" | grep "nightly"; then
-                  echo "setting current link"
-                  if ! packaging_gitlab_set_current_link $version; then
-                      echo "Failed to set current link."
-                      return 1
-                  fi
-              fi
-      
-              echo "setting ci pipeline id link"
-              if ! packaging_gitlab_set_ci_id_link $version; then
-                  echo "Failed to set ci pipeline id link."
-                  return 1
-              fi
+          echo "pushing packages to gitlab ..."
+          if ! packaging_push_packages_to_gitlab $version $release; then
+              echo "Failed to push to gitlab."
+              return 1
           fi
       
-          ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_matrix_message.sh $MATRIX_ROOM "🟢 Package build for ${version} finished."
+          echo "setting ci pipeline id link"
+          if ! packaging_gitlab_set_ci_id_link $version; then
+              echo "Failed to set ci pipeline id link."
+              return 1
+          fi
       }
       
       
