@@ -1062,11 +1062,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         return true;
     }
 
+    /**
+     * @param \FastRoute\RouteCollector $r
+     * @return void|null
+     */
     public static function addFastRoutes(
         /** @noinspection PhpUnusedParameterInspection */
         \FastRoute\RouteCollector $r
     ) {
-
         $r->addGroup('', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->get('/favicon[/{size}[/{ext}]]', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'getFavicon', [
@@ -1093,14 +1096,16 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
             $routeCollector->get('/metrics[/{apiKey}]', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'getStatusMetrics', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
             ]))->toArray());
         });
 
         $r->addGroup('/Tinebase', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->get('/_status[/{apiKey}]', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'getStatus', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
             ]))->toArray());
 
             $routeCollector->addRoute(['GET', 'POST'], '/export/{definitionId}', (new Tinebase_Expressive_RouteHandler(
@@ -1110,24 +1115,26 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $r->addGroup('/autodiscover', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->post('/autodiscover.xml', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicApiMSAutodiscoverXml', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
             ]))->toArray());
         });
 
         $r->addGroup('/Autodiscover', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->post('/Autodiscover.xml', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicApiMSAutodiscoverXml', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
             ]))->toArray());
         });
         $r->addGroup('/.well-known', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->get('/webfinger', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Webfinger::class, 'handlePublicGet', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
             ]))->toArray());
         });
     }
-
 
     public function publicPostAuthPAMvalidate(): \Psr\Http\Message\ResponseInterface
     {
