@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -28,7 +28,7 @@ class Tinebase_Auth_MFA_YubicoOTPAdapter implements Tinebase_Auth_MFA_AdapterInt
 
     public function getClientPasswordLength(): ?int
     {
-        return 48;
+        return null;
     }
 
     public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg): bool
@@ -48,7 +48,7 @@ class Tinebase_Auth_MFA_YubicoOTPAdapter implements Tinebase_Auth_MFA_AdapterInt
         }
 
         $_data = strtolower($_data);
-        if (!preg_match("/^([cbdefghijklnrtuv]{0,16})([cbdefghijklnrtuv]{32})$/", $_data, $matches)) {
+        if (!preg_match("/^([cbdefghijklnrtuv]{1,16})([cbdefghijklnrtuv]{32})$/", $_data, $matches)) {
             return false;
         }
         $id = $matches[1];

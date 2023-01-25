@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -409,4 +409,6 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     public function setAccountGrants(Tinebase_Record_Interface $grants);
 
     public function isDirty();
+
+    public function byPassFilters(): bool;
 }

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Converter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -34,6 +34,7 @@ class Tinebase_Model_Converter_DynamicRecord implements Tinebase_Model_Converter
     }
 
     /**
+     * @param Tinebase_Record_Interface $record
      * @param $blob
      * @return mixed
      */
@@ -52,7 +53,7 @@ class Tinebase_Model_Converter_DynamicRecord implements Tinebase_Model_Converter
             $blob = json_decode($blob, true);
         }
         if (!empty($model) && is_array($blob) && strpos($model, '_Model_') && class_exists($model)) {
-            $newRecord = new $model($blob);
+            $newRecord = new $model($blob, $record->byPassFilters());
             $newRecord->runConvertToRecord();
             return $newRecord;
         }
