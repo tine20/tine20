@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Converter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -48,7 +48,7 @@ class Tinebase_Model_Converter_JsonRecordSet implements Tinebase_Model_Converter
                 return $blob;
             }
             $rs = new Tinebase_Record_RecordSet($record::getConfiguration()
-                ->recordsFields[$key][MCC::CONFIG][MCC::RECORD_CLASS_NAME], $blob);
+                ->recordsFields[$key][MCC::CONFIG][MCC::RECORD_CLASS_NAME], $blob, $record->byPassFilters());
             $rs->runConvertToRecord();
             return $rs;
         }

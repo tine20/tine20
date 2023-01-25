@@ -641,6 +641,11 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     {
         $this->isValid(true);
     }
+
+    public function byPassFilters(): bool
+    {
+        return $this->bypassFilters;
+    }
     
     /**
      * sets record related properties
@@ -709,6 +714,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         unset($this->_properties[$_name]);
         
         $this->_isValidated = false;
+        $this->_isDirty = true;
         
         if ($this->bypassFilters !== true) {
             $this->isValid(true);

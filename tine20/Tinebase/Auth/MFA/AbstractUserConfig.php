@@ -22,4 +22,9 @@ class Tinebase_Auth_MFA_AbstractUserConfig extends Tinebase_Record_NewAbstract
     {
         return [];
     }
+
+    public function getClientPasswordLength(): ?int
+    {
+        return null;
+    }
 }
