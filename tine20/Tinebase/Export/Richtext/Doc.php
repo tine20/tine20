@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -84,7 +84,7 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_AbstractDeprecated im
         unlink($tempfile);
     }
 
-    public function save($filename) {
+    public function save($filename = null) {
         $document = $this->getDocument();
         $tempfile = $document->save();
 

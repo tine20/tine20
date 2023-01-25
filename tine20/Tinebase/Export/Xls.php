@@ -171,7 +171,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
      * @param string $_target
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public function save($_target)
+    public function save($_target = null)
     {
         $this->write($_target);    
     }

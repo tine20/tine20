@@ -57,4 +57,9 @@ class Addressbook_Export_VCardReport extends Tinebase_Export_Report_Abstract
             ]
         ];
     }
+
+    public function save($target = null)
+    {
+        $this->write();
+    }
 }
