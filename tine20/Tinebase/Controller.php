@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -1169,10 +1169,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN) as $areaConfig) {
                 $userConfigIntersection->mergeById($areaConfig->getUserMFAIntersection($user));
             }
-            $userConfigIntersection = $userConfigIntersection->filter(function (Tinebase_Model_MFA_UserConfig $uConf) {
-                return null !== Tinebase_Auth_MFA::getInstance($uConf->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
-                        ->getAdapter()->getClientPasswordLength();
-            });
 
             if (0 === $userConfigIntersection->count()) {
                 return $this->_publicPostAuthPAMvalidateReturnStatus(false);
@@ -1180,8 +1176,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
             /** @var Tinebase_Model_MFA_UserConfig $uConf */
             foreach ($userConfigIntersection as $uConf) {
-                $mfaLength = Tinebase_Auth_MFA::getInstance($uConf->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
-                    ->getAdapter()->getClientPasswordLength();
+                if (null === ($mfaLength = Tinebase_Auth_MFA::getInstance(
+                        $uConf->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})->getAdapter()->getClientPasswordLength())) {
+                    if (null === ($mfaLength = $uConf->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->getClientPasswordLength())) {
+                        continue;
+                    }
+                }
                 if (strlen($body['pass']) <= $mfaLength) {
                     continue;
                 }

@@ -17,5 +17,6 @@
  */
 interface Tinebase_Auth_MFA_UserConfigInterface
 {
+    public function getClientPasswordLength(): ?int;
     public function toFEArray(): array;
 }

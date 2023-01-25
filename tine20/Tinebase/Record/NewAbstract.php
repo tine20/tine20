@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -533,6 +533,10 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         return $this->_data;
     }
 
+    public function byPassFilters(): bool
+    {
+        return $this->bypassFilters;
+    }
 
     /**
      * unsets record related properties
@@ -550,6 +554,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         unset($this->_data[$_name]);
 
         $this->_isValidated = false;
+        $this->_isDirty = true;
 
         if ($this->bypassFilters !== true) {
             $this->isValid(true);

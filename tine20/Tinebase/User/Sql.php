@@ -978,7 +978,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     {
         if ($_user->mfa_configs) {
             if (!$_user->mfa_configs->isValid()) {
-                throw new Tinebase_Exception_Backend('mfa configs are not valid: ' .
+                throw new Tinebase_Exception_Record_Validation('mfa configs are not valid: ' .
                     print_r($_user->mfa_configs->getValidationErrors(), true));
             }
             if ($oldUser && $oldUser->mfa_configs) {

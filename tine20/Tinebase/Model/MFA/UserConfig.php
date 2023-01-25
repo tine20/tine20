@@ -82,7 +82,7 @@ class Tinebase_Model_MFA_UserConfig extends Tinebase_Record_NewAbstract
                 ],
                 self::VALIDATORS            => [
                         Zend_Filter_Input::ALLOW_EMPTY => false,
-                        Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
+                        Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
             ],
             self::FLD_NOTE                      => [
@@ -131,7 +131,15 @@ class Tinebase_Model_MFA_UserConfig extends Tinebase_Record_NewAbstract
      */
     public function isValid($_throwExceptionOnInvalidData = false)
     {
-        return parent::isValid($_throwExceptionOnInvalidData) &&
-            (! $this->{self::FLD_CONFIG} instanceof Tinebase_Record_Interface || $this->{self::FLD_CONFIG}->isValid($_throwExceptionOnInvalidData));
+        while (parent::isValid($_throwExceptionOnInvalidData)) {
+            if ($this->{self::FLD_CONFIG} instanceof Tinebase_Record_Interface &&
+                    !$this->{self::FLD_CONFIG}->isValid($_throwExceptionOnInvalidData)) {
+                $this->_validationErrors = array_merge($this->_validationErrors ?? [],
+                    $this->{self::FLD_CONFIG}->getValidationErrors());
+                break;
+            }
+            return true;
+        }
+        return false;
     }
 }

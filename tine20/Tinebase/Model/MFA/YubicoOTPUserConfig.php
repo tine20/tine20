@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -49,6 +49,7 @@ class Tinebase_Model_MFA_YubicoOTPUserConfig extends Tinebase_Auth_MFA_AbstractU
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
+                    ['Regex', '/^[cbdefghijklnrtuv]{1,16}$/'],
                 ],
             ],
             self::FLD_PRIVAT_ID                 => [
@@ -147,5 +148,10 @@ class Tinebase_Model_MFA_YubicoOTPUserConfig extends Tinebase_Auth_MFA_AbstractU
                 $cc->setCacheAdapter($adapter);
             }
         }
+    }
+
+    public function getClientPasswordLength(): ?int
+    {
+        return 32 + strlen($this->{self::FLD_PUBLIC_ID});
     }
 }
