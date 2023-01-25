@@ -23,6 +23,7 @@ abstract class Tinebase_Export_VObject extends Tinebase_Export_Abstract
     protected $_exportFileHandle = null;
     protected $_exportFilenames = [];
     protected $_currentExportFilename = null;
+    protected $_tmpFile = null;
 
     protected function _writeToFile()
     {
@@ -110,6 +111,13 @@ abstract class Tinebase_Export_VObject extends Tinebase_Export_Abstract
         fwrite($this->_exportFileHandle, $component->serialize());
     }
 
+    public function save($target = null)
+    {
+        if ($target && $this->_tmpFile) {
+            stream_copy_to_stream(fopen($this->_tmpFile, 'r'), fopen($target, 'w'));
+        }
+    }
+
     /**
      * @param string filename
      *
@@ -121,8 +129,14 @@ abstract class Tinebase_Export_VObject extends Tinebase_Export_Abstract
     public function write($filename = null)
     {
         if ($filename) {
-            // TODO use fopen + fpassthru?
-            echo file_get_contents($filename);
+            if (is_resource($filename)) {
+                if ($this->_tmpFile) {
+                    stream_copy_to_stream(fopen($this->_tmpFile, 'r'), $filename);
+                }
+            } else {
+                // TODO use fopen + fpassthru?
+                echo file_get_contents($filename);
+            }
         } else if ($this->_document !== null) {
             echo (
                 is_object($this->_document) && method_exists($this->_document, 'serialize')
@@ -143,14 +157,14 @@ abstract class Tinebase_Export_VObject extends Tinebase_Export_Abstract
      */
     protected function _returnExportFilename()
     {
-        $result = $this->_writeToFile() && ! empty($this->_exportFilenames) ? $this->_exportFilenames : null;
+        $this->_tmpFile = $result = $this->_writeToFile() && ! empty($this->_exportFilenames) ? $this->_exportFilenames : null;
         if (! $result && $this->_config->returnFileLocation) {
             // create a tempfile and return that
-            $result = Tinebase_TempFile::getTempPath();
+            $this->_tmpFile = Tinebase_TempFile::getTempPath();
             $exportString = is_string($this->_document) ? $this->_document : $this->_document->serialize();
-            file_put_contents($result, $exportString);
+            file_put_contents($this->_tmpFile, $exportString);
         } else if (is_array($result) && count($result) === 1) {
-            $result = $this->_exportFilenames[0];
+            $this->_tmpFile = $this->_exportFilenames[0];
         }
 
         return $result;

@@ -6,7 +6,7 @@
  * @subpackage    Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -19,6 +19,10 @@
  */
 abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_IteratableInterface
 {
+    use Tinebase_Export_FileLocationTrait;
+
+    protected $_tmpFile = null;
+
     /**
      * default export definition name
      * 
@@ -52,7 +56,7 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
      *
      * @var Zend_Config_Xml
      */
-    protected $_config = array();
+    protected $_config = null;
     
     /**
      * fields with special treatment in addBody
@@ -173,6 +177,12 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
             } else {
                 $this->_sortInfo =  $_additionalOptions['sortInfo'];
             }
+        }
+        if (isset($this->_config->target)) {
+            if (is_string($this->_config->target)) {
+                $this->_config->target = json_decode( $this->_config->target, true);
+            }
+            $this->_fileLocation = new Tinebase_Model_Tree_FileLocation(is_array($this->_config->target) ? $this->_config->target : $this->_config->target->toArray());
         }
     }
     
@@ -714,41 +724,10 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
         return null;
     }
 
-    /**
-     * @return bool
-     *
-     * TODO remove code duplication with \Tinebase_Export_Abstract::isDownload
-     */
-    public function isDownload()
+    public function save($target = null)
     {
-        return !$this->_config->returnFileLocation;
-    }
-
-    /**
-     * @param null|string $filename
-     * @return Tinebase_Model_Tree_FileLocation
-     * @throws Tinebase_Exception_NotImplemented
-     *
-     * TODO remove code duplication with \Tinebase_Export_Abstract::getTargetFileLocation
-     */
-    public function getTargetFileLocation($filename = null)
-    {
-        if ($filename === null) {
-            if (method_exists($this, 'write')) {
-                ob_start();
-                $this->write();
-                $output = ob_get_clean();
-                $filename = Tinebase_TempFile::getTempPath();
-                file_put_contents($filename, $output);
-            } else {
-                throw new Tinebase_Exception_NotImplemented('Not implemented for this export');
-            }
+        if ($target && $this->_tmpFile) {
+            stream_copy_to_stream(fopen($this->_tmpFile, 'r'), fopen($target, 'w'));
         }
-
-        $tempFile = Tinebase_TempFile::getInstance()->createTempFile($filename, $this->getDownloadFilename());
-        return new Tinebase_Model_Tree_FileLocation([
-            Tinebase_Model_Tree_FileLocation::FLD_TYPE => Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD,
-            Tinebase_Model_Tree_FileLocation::FLD_TEMPFILE_ID => $tempFile->getId(),
-        ]);
     }
 }

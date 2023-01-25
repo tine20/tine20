@@ -201,7 +201,7 @@ class Tinebase_Server_HttpTests extends TestCase
         }
 
         $tmpfileContent = file_get_contents($tempfile->path);
-        $icsFilename =  str_replace([' ', DIRECTORY_SEPARATOR], '', $calendar->name . '.ics');
+        $icsFilename =  str_replace([' ', DIRECTORY_SEPARATOR], '', '0_' . $calendar->name . '.ics');
         $content = $this->_unzipContent($tmpfileContent, $icsFilename);
         self::assertStringContainsString('BEGIN:VCALENDAR', $content);
         self::assertStringContainsString('Get Down!', $content);

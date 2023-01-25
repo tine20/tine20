@@ -146,9 +146,9 @@ class Tinebase_Export_Csv extends Tinebase_Export_AbstractDeprecated implements 
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Generating new csv export of ' . $this->_modelName);
-        
-        $filename = $this->_getFilename();
-        $this->_filehandle = ($this->_toStdout) ? STDOUT : fopen($filename, 'w');
+
+        $this->_filehandle = ($this->_toStdout) ? STDOUT :
+            fopen($this->_tmpFile = $this->_getFilename(), 'w');
         
         $fields = $this->_getFields();
         $this->fputcsv($this->_filehandle, $fields);
@@ -159,7 +159,7 @@ class Tinebase_Export_Csv extends Tinebase_Export_AbstractDeprecated implements 
             fclose($this->_filehandle);
         }
         
-        return $filename;
+        return $this->_tmpFile;
     }
 
     /**
