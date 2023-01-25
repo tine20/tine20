@@ -967,10 +967,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
 
         $applications = Tinebase_Application::getInstance()->getApplications();
-        foreach($applications as $application) {
+        foreach ($applications as $application) {
             try {
                 $app = Tinebase_Core::getApplicationInstance($application, '', true);
             } catch (Tinebase_Exception_NotFound $tenf) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                continue;
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
                 continue;
             }
 
