@@ -25,6 +25,7 @@ COPY ci/dockerimage/build/build_script.sh /build_script.sh
 
 COPY ci/dockerimage/build/cacert20150305.pem ${TINE20ROOT}/tine20/Tinebase/License/cacert20150305.pem
 
+RUN rm -rf "${TINE20ROOT}/tine20/ExampleApplication"
 RUN bash -c "source /build_script.sh && activateReleaseMode"
 RUN bash -c "source /build_script.sh && buildLangStats"
 RUN bash -c "source /build_script.sh && buildClient"
