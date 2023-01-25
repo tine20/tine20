@@ -23,6 +23,7 @@
  */
 class Tinebase_Expressive_RouteHandler
 {
+    const IGNORE_MAINTENANCE_MODE = 'ignoreMaintenanceMode';
     const IS_PUBLIC = 'isPublic';
     const PUBLIC_USER_ROLES = 'publicUserRoles';
     const CLASS_NAME = 'class';
@@ -40,6 +41,7 @@ class Tinebase_Expressive_RouteHandler
      */
     protected $_vars = null;
 
+    protected $_ignoreMaintenanceMode = false;
     protected $_isPublic = false;
     protected $_publicUserRoles = null;
     protected $_publicUserRolesIds = null;
@@ -60,6 +62,9 @@ class Tinebase_Expressive_RouteHandler
      */
     public function __construct($class, $method, array $_options = [])
     {
+        if (isset($_options[self::IGNORE_MAINTENANCE_MODE])) {
+            $this->_ignoreMaintenanceMode = (bool) $_options[self::IGNORE_MAINTENANCE_MODE];
+        }
         if (isset($_options[self::IS_PUBLIC])) {
             $this->_isPublic = (bool) $_options[self::IS_PUBLIC];
             if (isset($_options[self::PUBLIC_USER_ROLES])) {
@@ -105,6 +110,9 @@ class Tinebase_Expressive_RouteHandler
                 $result[self::PUBLIC_USER_ROLES] = $this->_publicUserRoles;
             }
         }
+        if (false !== $this->_ignoreMaintenanceMode) {
+            $result[self::IGNORE_MAINTENANCE_MODE] = $this->_isPublic;
+        }
         if (!empty($this->_pipeInjectData)) {
             $result[self::PIPE_INJECT] = $this->_pipeInjectData;
         }
@@ -129,6 +137,11 @@ class Tinebase_Expressive_RouteHandler
     public function isPublic()
     {
         return $this->_isPublic;
+    }
+
+    public function ignoreMaintenanceMode(): bool
+    {
+        return $this->_ignoreMaintenanceMode;
     }
 
     /**

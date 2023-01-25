@@ -53,7 +53,8 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
             ]))->toArray());
             $routeCollector->post('/updateStatus/{token}', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'updateStatus', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
             ]))->toArray());
         });
     }
