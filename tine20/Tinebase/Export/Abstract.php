@@ -1126,14 +1126,14 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             };
             if (!empty($this->_expandCustomFields)) {
                 $validators = $_records->getFirstRecord()->getValidators();
+                $validatorsChanged = false;
                 foreach ($this->_expandCustomFields as $field => $label) {
                     if (!isset($validators[$field])) {
+                        $validatorsChanged = true;
                         $validators[$field] = [];
-                    } else {
-                        unset($this->_expandCustomFields[$field]);
                     }
                 }
-                if (empty($this->_expandCustomFields)) {
+                if (!$validatorsChanged) {
                     $validators = null;
                 }
             }
@@ -1174,10 +1174,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 $record->customfields = $cfs;
                 if (null !== $validators) {
                     $record->setValidators($validators);
-                    foreach ($this->_expandCustomFields as $field => $label) {
-                        if (isset($cfs[$field])) {
-                            $record->{$field} = $cfs[$field];
-                        }
+                }
+                foreach ($this->_expandCustomFields as $field => $label) {
+                    if (isset($cfs[$field])) {
+                        $record->{$field} = $cfs[$field];
                     }
                 }
             }
@@ -1441,10 +1441,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     }   
                 }
                 
-                $this->_fields = array_merge(
+                $this->_fields = array_unique(array_merge(
                     array_diff($this->_fields, array_merge(['customfields'], $systemFields)),
                     array_keys($this->_expandCustomFields)
-                );
+                ));
                 
                 foreach ($this->_fields as $field) {
                     if (isset($this->_expandCustomFields[$field])) {
