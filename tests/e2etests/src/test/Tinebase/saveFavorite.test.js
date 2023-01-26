@@ -5,6 +5,12 @@ require('dotenv').config();
 
 beforeAll(async () => {
     await lib.getBrowser('Adressbuch', 'Kontakte');
+    try {
+        let favoritePanelCollapsed = await page.$x('//div[contains(@class, " ux-arrowcollapse ux-arrowcollapse-noborder x-tree x-panel-collapsed") and contains(., "Favoriten")]');
+        await favoritePanelCollapsed[0].click();
+    } catch (e) {
+        console.log('favoritePanel also collapsed');
+    }
 });
 
 describe('Mainpage', () => {
@@ -20,7 +26,7 @@ describe('Mainpage', () => {
         await page.waitForSelector('.t-app-addressbook .action_saveFilter');
         await expect(page).toClick('.t-app-addressbook .action_saveFilter');
         await page.waitForSelector('.x-window.x-resizable-pinned');
-        await page.type('.x-form-text.x-form-field.x-form-invalid', favorite);
+        await expect(page).toFill('.x-form-text.x-form-field.x-form-invalid', favorite);
         await page.waitForSelector('.x-panel.x-wdgt-pickergrid.x-grid-panel.x-masked-relative.x-masked');
         await expect(page).toClick('.x-btn-image.action_saveAndClose');
         await page.waitForTimeout(2000); //wait for save the favorite
@@ -35,7 +41,7 @@ describe('Mainpage', () => {
         await page.waitForSelector('.t-app-addressbook .action_saveFilter');
         await expect(page).toClick('.t-app-addressbook .action_saveFilter');
         await page.waitForSelector('.x-window.x-resizable-pinned');
-        await page.type('.x-form-text.x-form-field.x-form-invalid', favoriteShared);
+        await expect(page).toFill('.x-form-text.x-form-field.x-form-invalid', favoriteShared);
         await page.click('.x-form-checkbox.x-form-field');
         await page.waitForFunction(() => !document.querySelector('.x-panel.x-wdgt-pickergrid.x-grid-panel.x-masked-relative.x-masked'));
         await expect(page).toClick('.x-btn-image.action_saveAndClose');
