@@ -86,23 +86,70 @@ class Tinebase_CustomFieldTest extends TestCase
 
         $cf = $this->_instance->addCustomField($cf);
         $c = Addressbook_Controller_Contact::getInstance();
+        $contactIds = [];
 
-        $record1 = $c->create(new Addressbook_Model_Contact(array('n_family' => 'Friendly', 'n_given' => 'Rupert')), false);
-        $record2 = $c->create(new Addressbook_Model_Contact(array('n_family' => 'Friendly', 'n_given' => 'Matt')), false);
-        $contactIds = array($record1->getId(), $record2->getId());
-        
-        $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'n_family', 'operator' => 'equals', 'value' => 'Friendly')
+        try {
+            $record1 = $c->create(new Addressbook_Model_Contact(array('n_family' => 'Friendly', 'n_given' => 'Rupert')), false);
+            $record2 = $c->create(new Addressbook_Model_Contact(array('n_family' => 'Friendly', 'n_given' => 'Matt')), false);
+            $contactIds = array($record1->getId(), $record2->getId());
+
+            $filter = new Addressbook_Model_ContactFilter(array(
+                array('field' => 'n_family', 'operator' => 'equals', 'value' => 'Friendly')
             ), 'AND');
 
-        $result = $c->updateMultiple($filter, array('#' . $cf->name => $contactIds[0]));
-        
-        $this->assertEquals(1, $result['totalcount']);
-        $this->assertEquals(1, $result['failcount']);
-        
-        // cleanup required because we do not have the tearDown() rollback here
-        $this->_instance->deleteCustomField($cf);
-        Addressbook_Controller_Contact::getInstance()->delete($contactIds);
+            $result = $c->updateMultiple($filter, array('#' . $cf->name => $contactIds[0]));
+
+            $this->assertEquals(1, $result['totalcount']);
+            $this->assertEquals(1, $result['failcount']);
+        } finally {
+            // cleanup required because we do not have the tearDown() rollback here
+            $this->_instance->deleteCustomField($cf);
+            if (!empty($contactIds)) {
+                Addressbook_Controller_Contact::getInstance()->delete($contactIds);
+            }
+        }
+    }
+
+    public function testCustomFieldRecordsResolving()
+    {
+        $cf1 = self::getCustomField([
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model' => 'Addressbook_Model_Contact',
+            'definition' => ['type' => 'recordList', 'recordListConfig' => ["value" => ["records" => "Tine.Addressbook.Model.Contact"]]]
+        ]);
+        $cf1 = $this->_instance->addCustomField($cf1);
+        $cf2 = self::getCustomField(array(
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model' => 'Addressbook_Model_Contact',
+        ));
+        $cf2 = $this->_instance->addCustomField($cf2);
+
+        $c = Addressbook_Controller_Contact::getInstance();
+        $record1 = $c->create(new Addressbook_Model_Contact(['n_family' => 'Rude', 'n_given' => 'Rupert']), false);
+        $record2 = $c->create(new Addressbook_Model_Contact([
+            'n_family' => 'Friendly',
+            'n_given' => 'Matt',
+            'customfields' => [
+                $cf1->name => [],
+                $cf2->name => 'foo',
+            ],
+        ]), false);
+
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'n_family', 'operator' => 'equals', 'value' => 'Friendly')
+        ), 'AND');
+
+        $jsonResult = (new Addressbook_Frontend_Json)->searchContacts($filter->toArray(), []);
+        $this->assertSame($jsonResult['results'][0]['n_given'], 'Matt');
+        $this->assertArrayNotHasKey($cf1->name, $jsonResult['results'][0]['customfields']);
+
+        $record2->xprops('customfields')[$cf1->name] = [$record1->getId()];
+        $c->update($record2);
+
+        $jsonResult = (new Addressbook_Frontend_Json)->searchContacts($filter->toArray(), []);
+        $this->assertSame($jsonResult['results'][0]['n_given'], 'Matt');
+        $this->assertIsArray($jsonResult['results'][0]['customfields'][$cf1->name]);
+        $this->assertSame($record1->getId(), $jsonResult['results'][0]['customfields'][$cf1->name][0]['id']);
     }
     
     /**

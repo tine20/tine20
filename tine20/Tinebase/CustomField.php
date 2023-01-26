@@ -508,7 +508,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                                 'value'             => $value
                             ));
                             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                                __METHOD__ . '::' . __LINE__ . ' Creating value for ' . $customField->name . ' -> ' . $value);
+                                __METHOD__ . '::' . __LINE__ . ' Creating value for ' . $customField->name . ' -> ' . print_r($value, true));
                             try {
                                 $this->_backendValue->create($cf);
                             } catch (Zend_Db_Statement_Exception $zdse) {
@@ -564,9 +564,12 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 }
 
                 // remove own record if in list
-                sort($values);
                 Tinebase_Helper::array_remove_by_value($_record->getId(), $values);
-                $value = json_encode($values);
+                if (empty($values)) {
+                    $value = null;
+                } else {
+                    $value = json_encode($values);
+                }
             }
         } else {
             $value = $_value;
