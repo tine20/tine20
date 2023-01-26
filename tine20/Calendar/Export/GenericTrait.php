@@ -113,9 +113,9 @@ trait Calendar_Export_GenericTrait
                         $dtstart->addDay(1);
                     }
 
-                    if (!$record->dtend->isLater($this->_from) || !$record->dtstart->isEarlier($this->_until)) {
+                    if ($this->_from && !$record->dtend->isLater($this->_from) || !$record->dtstart->isEarlier($this->_until)) {
                         $removeIds[] = $record->getId();
-                    } elseif(true === $isSplitted) {
+                    } elseif (true === $isSplitted) {
                         $this->_multiDayWholDayEvents[$record->getId()] = array(
                             'dtstart' => $orgDtStart,
                             'dtend'   => $orgDtEnd
