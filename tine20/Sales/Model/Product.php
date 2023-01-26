@@ -7,7 +7,7 @@
  * @subpackage  Product
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -246,7 +246,7 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                 self::LENGTH => 255,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                ]
+                ],
             ],
             self::FLD_SUBPRODUCTS => [
                 self::LABEL => 'Subproducts', // _('Subproducts')
@@ -256,6 +256,9 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME            => Sales_Model_SubProductMapping::MODEL_NAME_PART,
                     self::REF_ID_FIELD          => Sales_Model_SubProductMapping::FLD_PARENT_ID,
                     self::DEPENDENT_RECORDS     => true,
+                    self::PAGING                => [
+                        Tinebase_Model_Pagination::FLD_SORT => Sales_Model_SubProductMapping::FLD_SORTING,
+                    ],
                 ],
                 self::RECURSIVE_RESOLVING => true,
             ],

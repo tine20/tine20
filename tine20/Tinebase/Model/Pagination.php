@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -22,6 +22,12 @@
  */
 class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
 {
+    public const FLD_DIR = 'dir';
+    public const FLD_LIMIT = 'limit';
+    public const FLD_MODEL = 'model';
+    public const FLD_SORT = 'sort';
+    public const FLD_START = 'start';
+
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
