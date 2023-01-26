@@ -702,6 +702,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     public function update023()
     {
         if (! $this->_backend->tableExists(Tinebase_Model_ActionLog::TABLE_NAME)) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
             Setup_SchemaTool::updateSchema([Tinebase_Model_ActionLog::class]);
             Tinebase_Application::getInstance()->addApplicationTable('Tinebase',
                 Tinebase_Model_ActionLog::TABLE_NAME);
