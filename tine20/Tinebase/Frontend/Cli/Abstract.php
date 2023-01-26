@@ -524,7 +524,7 @@ class Tinebase_Frontend_Cli_Abstract
         
         if (! isset($args['filename'])) {
             $result = $importer->import();
-            $this->_echoImportResult($result);
+            $this->_echoImportResult($result, $_opts->v);
         } else {
             $result = array();
             // loop files in argv
@@ -544,20 +544,18 @@ class Tinebase_Frontend_Cli_Abstract
                     } else {
                         echo $e->getMessage() . "\n";
                     }
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
                     continue;
                 }
 
-                $this->_echoImportResult($result[$filename]);
+                $this->_echoImportResult($result[$filename], $_opts->v);
 
                 // import (check if dry run)
                 if ($_opts->d && $_opts->v) {
                     print_r($result[$filename]['results']->toArray());
-
-                    if ($result[$filename]['failcount'] > 0) {
-                        print_r($result[$filename]['exceptions']->toArray());
-                    }
                 }
             }
         }
@@ -569,8 +567,9 @@ class Tinebase_Frontend_Cli_Abstract
      * echos import result
      *
      * @param array $result
+     * @param bool $verbose
      */
-    protected function _echoImportResult($result)
+    protected function _echoImportResult($result, $verbose = false)
     {
         // TODO use a loop here
         if (isset($result['totalcount']) && ! empty($result['totalcount'])) {
@@ -578,6 +577,9 @@ class Tinebase_Frontend_Cli_Abstract
         }
         if (isset($result['failcount']) && ! empty($result['failcount'])) {
             echo "Import failed for " . $result['failcount'] . " records.\n";
+            if ($verbose) {
+                print_r($result['exceptions']->toArray());
+            }
         }
         if (isset($result['duplicatecount']) && ! empty($result['duplicatecount'])) {
             echo "Found " . $result['duplicatecount'] . " duplicates.\n";
