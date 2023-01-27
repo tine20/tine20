@@ -154,11 +154,17 @@ class HumanResources_Controller_AttendanceRecorder implements Tinebase_Controlle
         if ($config->getDevice()->{HumanResources_Model_AttendanceRecorderDevice::FLD_ALLOW_MULTI_START} &&
                 isset($config->getMetaData()[HumanResources_Model_AttendanceRecord::CLOCK_OUT_OTHERS]) &&
                 $config->getMetaData()[HumanResources_Model_AttendanceRecord::CLOCK_OUT_OTHERS]) {
-            $openRecords = $this->getOpenRecords($config->getAccount()->getId(), $config->getDevice()->getId());
+            $openRecords = $this->getOpenRecords($config->getAccount()->getId(), $config->getDevice()->getId())
+                ->filter(function(HumanResources_Model_AttendanceRecord $val) use($config) {
+                    static $refIds = [];
+                    if (isset($refIds[$val->{HumanResources_Model_AttendanceRecord::FLD_REFID}]) || $config->getRefId()
+                            === $val->{HumanResources_Model_AttendanceRecord::FLD_REFID}) {
+                        return false;
+                    }
+                    $refIds[$val->{HumanResources_Model_AttendanceRecord::FLD_REFID}] = true;
+                    return true;
+                });
             foreach ($openRecords as $openRecord) {
-                if ($openRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID} === $config->getRefId()) {
-                    continue;
-                }
                 $subConfig = clone $config;
                 $subConfig->setRefId($openRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID});
                 $subConfig->setStatus(HumanResources_Model_AttendanceRecord::STATUS_CLOSED);
