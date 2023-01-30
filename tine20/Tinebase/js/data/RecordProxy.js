@@ -319,7 +319,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         };
 
         // increase timeout as this can take a long time (2 mins)
-        options.timeout = this.deleteTimeout;
+        options.timeout = this.deleteTimeout * records.length;
 
         return this.doXHTTPRequest(options);
     },
