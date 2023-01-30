@@ -196,18 +196,21 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
             const definition = this.definitionsStore.getById(this.definitionId);
             const options =  _.get(definition, 'data.plugin_options_json', {});
+            const currentOptions = _.get(this.record, 'data.options', {});
+
             const locationOptions = [
                 {text: i18n._('Download'), name: 'download'},
                 {text: i18n._('Filemanager'), name: 'filesystem'}
             ];
-            
-            let location = 'download';
+
+            // @fixme: what about other locations? are they supported? how to compute option here?
+            let location = !currentOptions.target ? 'download' : 'filesystem';
 
             if (Tine.OnlyOfficeIntegrator && allowOpen(`export.${definition.data.format}`)) {
                 locationOptions.push({text: i18n._('Open'), name: 'open'});
             }
             
-            if (options && !options.target) {
+            if (options && !options.target && !currentOptions.target) {
                 location = await Tine.widgets.dialog.MultiOptionsDialog.getOption({
                     title: window.i18n._('Choose Export Location'),
                     questionText: window.i18n._('How would you like to save your export?'),
@@ -276,16 +279,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     });
                     break;
                 case 'filesystem':
-                    const filePickerDialog = new Tine.Filemanager.FilePickerDialog({
-                        constraint: 'folder',
-                        mode: 'target',
-                        singleSelect: true,
-                        requiredGrants: ['addGrant']
-                    });
-
-                    filePickerDialog.on('selected',  (nodes) => {
-                        _.set(this.record, 'data.options.' +'target', {'type': 'fm_node', 'fm_path': nodes[0].path });
-
+                    const exportFn = () => {
                         Tine.widgets.exportAction.downloadExport(this.record).then(async (raw) => {
                             // NOTE: filename is missing in fm_path
                             const fileLocation = _.get(JSON.parse(raw.responseText), 'file_location');
@@ -308,8 +302,30 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 fn: this.window.close
                             });
                         });
-                    });
-                    filePickerDialog.openWindow();
+                    };
+
+                    if (! currentOptions.target) {
+                        const filePickerDialog = new Tine.Filemanager.FilePickerDialog({
+                            constraint: 'folder',
+                            mode: 'target',
+                            singleSelect: true,
+                            requiredGrants: ['addGrant']
+                        });
+
+                        filePickerDialog.on('selected', (nodes) => {
+                            _.set(this.record, 'data.options.target', {
+                                'type': 'fm_node',
+                                'fm_path': nodes[0].path
+                            });
+
+                            exportFn();
+                        });
+                        filePickerDialog.openWindow();
+                    } else {
+                        // circular structure
+                        _.set(this.record, 'data.options.target.node_id', null);
+                        exportFn();
+                    }
                     break;
             }
         } else {
