@@ -169,7 +169,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     isInCurrentGrid(path) {
         const CurrentNodePath = _.get(_.get(this.getFilteredContainers(), '0'), 'path');
-        return `${this.getParentPath(path)}/` === CurrentNodePath;
+        return Tine.Filemanager.Model.Node.dirname(path) === CurrentNodePath;
     },
 
     /**
@@ -589,7 +589,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
             plugins.push(this.quickSearchFilterToolbarPlugin);
         }
-
+        
         return new Tine.widgets.grid.FilterToolbar(Ext.apply(config, {
             app: this.app,
             recordClass: this.recordClass,
@@ -784,7 +784,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onLoadParentFolder: function(button, event) {
         let currentFolderNode = _.get(this.getFilteredContainers(),'0');
-        this.expandFolder(this.getParentPath(_.get(currentFolderNode, 'path')));
+        this.expandFolder(Tine.Filemanager.Model.Node.dirname((_.get(currentFolderNode, 'path'))));
     },
 
     onDataSafeToggle: function(button, e) {
@@ -804,25 +804,67 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     applyDataSafeState: function(data, e) {
-        var me = this;
-
         const isLocked = !! Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName, true).length;
         // if state change -> reload
-        if (me.action_dataSafe.items.length && isLocked == me.action_dataSafe.items[0].pressed) {
+        if (this.action_dataSafe.items.length && isLocked === this.action_dataSafe.items[0].pressed) {
             _.defer(() => {
-                me.loadGridData({
+                this.redirectToParent = true;
+                this.loadGridData({
+                    removeStrategy: 'keepBuffered',
                     preserveCursor:     false,
                     preserveSelection:  false,
-                    preserveScroller:   false
-                }
-            )});
+                    preserveScroller:   false,
+                    autoRefresh: true,
+                });
+            });
         }
 
         var cls = isLocked ? 'removeClass' : 'addClass';
-        me.action_dataSafe.each(function(btn) {btn[cls]('x-type-data-safe')});
-        me.action_dataSafe.each(function(btn) {btn.toggle(!isLocked)});
-        me.action_dataSafe.setText(isLocked ? me.app.i18n._('Open Data Safe') : me.app.i18n._('Close Data Safe'));
-        me.action_dataSafe.setIconClass(isLocked ? 'action_filemanager_data_safe_locked' : 'action_filemanager_data_safe_unlocked')
+        this.action_dataSafe.each(function(btn) {btn[cls]('x-type-data-safe')});
+        this.action_dataSafe.each(function(btn) {btn.toggle(!isLocked)});
+        this.action_dataSafe.setText(isLocked ? this.app.i18n._('Open Data Safe') : this.app.i18n._('Close Data Safe'));
+        this.action_dataSafe.setIconClass(isLocked ? 'action_filemanager_data_safe_locked' : 'action_filemanager_data_safe_unlocked')
+    },
+    
+    /**
+     * on store load exception
+     *
+     * @param {Tine.Tinebase.data.RecordProxy} proxy
+     * @param {String} type
+     * @param {Object} error
+     * @param {Object} options
+     */
+    onStoreLoadException: function(proxy, type, error, options) {
+        if (error.code === 404) {
+            const pathFilter = options.params.filter.find((f) => f.field === 'path');
+            if (pathFilter) {
+                if (!this.redirectToParent) {
+                    Ext.MessageBox.show({
+                        title:  i18n._hidden('Not Found'),
+                        msg:  i18n._hidden('Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view.'),
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.MessageBox.ERROR,
+                        fn: (btn) => {
+                            this.redirectToParent = true;
+                            this.loadParentNodeByFilter(pathFilter);
+                        }
+                    });
+                } else {
+                    this.loadParentNodeByFilter(pathFilter);
+                }
+                return;
+            }
+        }
+        Tine.Filemanager.NodeGridPanel.superclass.onStoreLoadException.apply(this, arguments);
+    },
+    
+    loadParentNodeByFilter(pathFilter) {
+        pathFilter.value = Tine.Filemanager.Model.Node.dirname(pathFilter.value);
+        // note: the exception process needs to be completed before load parent node
+        _.defer(()=> {
+            this.filterToolbar.setValue([pathFilter]);
+            this.filterToolbar.onFilterChange();
+        });
     },
 
     /**
@@ -1121,6 +1163,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         const pathFilter = _.get(_.find(filterData, {field: 'path'}), 'value');
         this.latestFilter = _.isArray(pathFilter) ? pathFilter[0] : pathFilter;
         this.localSort();
+        this.redirectToParent = false;
 
         const quota = _.get(store, 'reader.jsonData.quota', false);
             
@@ -1148,23 +1191,4 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         const value = this.latestFilter ?? pathFilter;
         return value ? [value] : null;
     },
-    
-    /**
-     * get parent path 
-     *
-     * @param path
-     * @returns {string|*}
-     */
-    getParentPath: function (path) {
-        if (String(path).match(/\/.*\/.+/)) {
-            let pathParts = path.split('/');
-            pathParts.pop();
-            // handle folder path that end with '/' 
-            if (path.endsWith('/')) {
-                pathParts.pop();
-            }
-            return pathParts.join('/');
-        }
-        return '/';
-    }
 });
