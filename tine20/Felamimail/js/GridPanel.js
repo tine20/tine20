@@ -1499,7 +1499,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.sentFolderSelected = false;
         }
         
-        this.resolveFilterInParams(options.params, this.sentFolderSelected);
+        this.updateDefaultfilter(options.params, this.sentFolderSelected);
         this.changeGridState(stateId);
     },
 
@@ -1531,38 +1531,25 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     /**
+     * TODO: make quick filter search "to" in be , and remove all the filter switch in fe
      * add custom filter before or after store load
-     * 
+     *
      * @param params
-     * @param sentFolderSelected
+     * @param isSentFolder
      *
      */
-    resolveFilterInParams: function (params, sentFolderSelected) {
+    updateDefaultfilter: function (params, isSentFolder) {
         let targetFilters = params?.filter?.[0].filters?.[0].filters;
+        if (!targetFilters) return;
+
+        const defaultFilterField = isSentFolder ? 'to' : 'query';
+        const existingDefaultFilter =  _.find(targetFilters, {field: defaultFilterField});
         
-        if (!targetFilters) {
-            return;
+        if (!existingDefaultFilter) {
+            targetFilters.push({ field: defaultFilterField, operator: 'contains', value: ''});
         }
-        
-        const from = sentFolderSelected ? 'query' : 'to';
-        const to = sentFolderSelected ? 'to' : 'query';
-        const searchField = sentFolderSelected ? 'to' : 'query';
-        const searchFilter =  _.find(targetFilters, {field: searchField});
-        // remove exist from filter 
-        const oldFilter = targetFilters ? _.remove(targetFilters, {field: from}) : [];
-        const toFilter = {
-            field: to,
-            operator: 'contains',
-            value: oldFilter[0]?.value ?? ''
-        };
-        // concat or add target filter if not exist
-        if (!searchFilter) {
-            if (oldFilter.length > 0) {
-                targetFilters.concat(toFilter);
-            } else {
-                targetFilters.push(toFilter);
-            }
-        }
+
+        params.filter[0].filters[0].filters = targetFilters;
     },
 
     /**
@@ -1641,7 +1628,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             folder.commit();
             this.app.checkMailsDelayedTask.delay(1000);
         }
-        this.resolveFilterInParams(options.params, this.sentFolderSelected);
+        this.updateDefaultfilter(options.params, this.sentFolderSelected);
         this.updateQuotaBar();
     },
     
