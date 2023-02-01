@@ -59,6 +59,102 @@ class HumanResources_Controller_AttendanceControllerTests extends HumanResources
             ->getIdFromProperty(HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID));
     }
 
+    public function testMultiDayClocking()
+    {
+        $ta = Timetracker_Controller_Timeaccount::getInstance()->create(new Timetracker_Model_Timeaccount([
+            'title' => 'unittest',
+        ]));
+        /** @var HumanResources_Model_AttendanceRecorderDevice $ptDevice */
+        $ptDevice = HumanResources_Controller_AttendanceRecorderDevice::getInstance()
+            ->get(HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID);
+
+        $dt = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->setTime(15, 3, 10, 0);
+        $result = HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($ptDevice)
+            ->setAccount($this->_personas['sclever'])
+            ->setMetaData([Timetracker_Model_Timeaccount::class => $ta->getId()])
+            ->setTimeStamp($dt->getClone()->setTimezone('UTC'))
+        );
+        /** @var HumanResources_Model_AttendanceRecord $aRecord */
+        $aRecord = $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_INS}
+            ->find(HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID, $ptDevice->getId());
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockPause((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($ptDevice)
+            ->setAccount($this->_personas['sclever'])
+            ->setMetaData([Timetracker_Model_Timeaccount::class => $ta->getId()])
+            ->setTimeStamp($dt->getClone()->addHour(33)->setTimezone('UTC'))
+            ->setRefId($aRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID})
+        );
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($ptDevice)
+            ->setAccount($this->_personas['sclever'])
+            ->setMetaData([Timetracker_Model_Timeaccount::class => $ta->getId()])
+            ->setTimeStamp($dt->getClone()->addHour(34)->setTimezone('UTC'))
+            ->setRefId($aRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID})
+        );
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockPause((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($ptDevice)
+            ->setAccount($this->_personas['sclever'])
+            ->setMetaData([Timetracker_Model_Timeaccount::class => $ta->getId()])
+            ->setTimeStamp($dt->getClone()->addHour(35)->setTimezone('UTC'))
+            ->setRefId($aRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID})
+        );
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($ptDevice)
+            ->setAccount($this->_personas['sclever'])
+            ->setMetaData([Timetracker_Model_Timeaccount::class => $ta->getId()])
+            ->setTimeStamp($dt->getClone()->addHour(35 + 48)->setTimezone('UTC'))
+            ->setRefId($aRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID})
+        );
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($ptDevice)
+            ->setAccount($this->_personas['sclever'])
+            ->setMetaData([Timetracker_Model_Timeaccount::class => $ta->getId()])
+            ->setTimeStamp($dt->getClone()->addHour(35 + 48)->addMinute(17)->setTimezone('UTC'))
+            ->setRefId($aRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID})
+        );
+
+        HumanResources_Controller_AttendanceRecorder::runBLPipes();
+
+        $tsRs = Timetracker_Controller_Timesheet::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Timetracker_Model_Timesheet::class, [
+            ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $ta->getId()],
+        ]), new Tinebase_Model_Pagination(['sort' => 'start_date']));
+
+        $this->assertSame(4, $tsRs->count());
+
+        $tsRs->removeRecord($ts = $tsRs->getFirstRecord());
+        $this->assertSame($ts->start_date->format('Y-m-d'), $dt->format('Y-m-d'));
+        $this->assertSame($ts->start_time, '15:03:00');
+        $this->assertSame($ts->end_time, '00:00:00');
+        $this->assertSame(9 * 60 - 3, (int)$ts->duration);
+
+        $tsRs->removeRecord($ts = $tsRs->getFirstRecord());
+        $this->assertSame($ts->start_date->format('Y-m-d'), $dt->getClone()->addDay(1)->format('Y-m-d'));
+        $this->assertSame($ts->start_time, '00:00:00');
+        $this->assertSame($ts->end_time, '00:00:00');
+        $this->assertSame(24 * 60, (int)$ts->duration);
+
+        $tsRs->removeRecord($ts = $tsRs->getFirstRecord());
+        $this->assertSame($ts->start_date->format('Y-m-d'), $dt->getClone()->addDay(2)->format('Y-m-d'));
+        $this->assertNull($ts->start_time);
+        $this->assertNull($ts->end_time);
+        $this->assertSame(63, (int)$ts->duration);
+
+        $tsRs->removeRecord($ts = $tsRs->getFirstRecord());
+        $this->assertSame($ts->start_date->format('Y-m-d'), $dt->getClone()->addDay(4)->format('Y-m-d'));
+        $this->assertSame($ts->start_time, '02:03:00');
+        $this->assertSame($ts->end_time, '02:20:00');
+        $this->assertSame(17, (int)$ts->duration);
+
+        $this->assertSame(0, $tsRs->count());
+    }
+
     public function testRounding()
     {
         /** @var HumanResources_Model_AttendanceRecorderDevice $ptDevice */

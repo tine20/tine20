@@ -291,6 +291,15 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     {
         return array_keys($this->_idMap);
     }
+
+    public function getIdPropertyMap(string $property): array
+    {
+        $result = [];
+        foreach ($this->_idMap as $id => $index) {
+            $result[$id] = $this->_listOfRecords[$index]->{$property};
+        }
+        return $result;
+    }
     
     /**
      * returns array of ids
@@ -593,8 +602,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * Finds the first matching record in this store by a specific property/value.
      *
-     * @param string $_field
-     * @param string $_value
+     * @param string|closure $_field
+     * @param string|null $_value
      * @return Tinebase_Record_Interface
      */
     public function find($_field, $_value, $_valueIsRegExp = FALSE)
@@ -606,8 +615,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * filter recordset and return matching records
      *
-     * @param string|function $_field
-     * @param string $_value
+     * @param string|closure $_field
+     * @param string|null $_value
      * @param boolean $_valueIsRegExp
      * @return array
      */
