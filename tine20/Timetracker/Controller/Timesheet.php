@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,6 +17,8 @@
  */
 class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstract
 {
+    use Tinebase_Controller_SingletonTrait;
+
     /**
      * should deadline be checked
      * 
@@ -46,12 +48,12 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    protected function __construct() {
         
         // config
-        $this->_applicationName = 'Timetracker';
+        $this->_applicationName = Timetracker_Config::APP_NAME;
         $this->_backend = new Timetracker_Backend_Timesheet();
-        $this->_modelName = 'Timetracker_Model_Timesheet';
+        $this->_modelName = Timetracker_Model_Timesheet::class;
         $this->_resolveCustomFields = TRUE;
         
         // disable container ACL checks as we don't init the 'Shared Timesheets' grants in the setup
@@ -59,14 +61,6 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         
         // use modlog and don't completely delete records
         $this->_purgeRecords = FALSE;
-    }
-    
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone()
-    {
     }
     
     /**
@@ -79,31 +73,13 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         'billed_in'   => array('default' => '', 'requiredGrant' => Tinebase_Model_Grants::GRANT_ADMIN),
         'is_cleared'  => array('default' => 0,  'requiredGrant' => Tinebase_Model_Grants::GRANT_ADMIN),
     );
-    
-    /**
-     * holds the instance of the singleton
-     *
-     * @var Timetracker_Controller_Timesheet
-     */
-    private static $_instance = NULL;
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Timetracker_Controller_Timesheet
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new self();
-        }
-        
-        return self::$_instance;
-    }
 
+    /**
+     * @deprecated use destroyInstance
+     */
     public static function unsetInstance()
     {
-        self::$_instance = null;
+        self::destroyInstance();
     }
 
     /****************************** functions ************************/
@@ -181,26 +157,29 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         if (isset($start) && isset($end)){
             $start = new DateTime($start_date . ' ' . $start);
             $end = new DateTime($start_date . ' ' . $end);
-            
-            if ($end < $start) {
-                $end = $end->modify('+1 days');
+
+            if ('00:00:00' === $_record->end_time || '00:00' === $_record->end_time || $end < $start) {
+                $end->modify('+1 days');
             }
 
             $dtDiff = $end->diff($start);
-            $_record->duration = $duration = $dtDiff->h * 60 + $dtDiff->i;
+            $_record->duration = $duration = ($dtDiff->d * 24 + $dtDiff->h) * 60 + $dtDiff->i;
         } else if (isset($duration) && isset($start)){
             // If duration and start is set calculate the end
             $start = new DateTime($start_date . ' ' . $start);
             
             $end = $start->modify('+' . $duration . ' minutes');
-            $_record->end_time = $end->format('H:i');
+            $_record->end_time = $end->format('H:i:00');
 
         } else if (isset($duration) && isset($end)){
             // If start is not set but duration and end calculate start instead
             $end = new DateTime($start_date . ' ' . $end);
+            if ('00:00:00' === $_record->end_time || '00:00' === $_record->end_time) {
+                $end->modify('+1 days');
+            }
 
             $start = $end->modify('-' . $duration . ' minutes');
-            $_record->start_time = $start->format('H:i');
+            $_record->start_time = $start->format('H:i:00');
         }
 
         $_record->accounting_time = $duration = intval($duration);
