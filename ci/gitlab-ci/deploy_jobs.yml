@@ -199,7 +199,6 @@ trigger-release:
     - !reference [.lib, script]
     - release_tag
   rules:
-  rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /trigger-release/
     - if: $TRIGGER_RELEASE == "false"
       when: never
