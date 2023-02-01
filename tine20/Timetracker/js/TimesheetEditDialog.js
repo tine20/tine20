@@ -267,32 +267,69 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     onDurationChange: function() {
         this.calculateAccountingTime();
         // adopt endtime if starttime is set
-        const startTime = +this.getForm().findField('start_time').getValue();
+        const startTime = this.getForm().findField('start_time').getValue();
         if (startTime) {
             const endTimeField = this.getForm().findField('end_time');
-            endTimeField.setValue(
-                new Date(startTime + this.getForm().findField('duration').getValue()*60000).format(endTimeField.format)
-            );
+            let endTime = new Date(+startTime + this.getForm().findField('duration').getValue()*60000);
+            if (endTime.getDayOfYear() > startTime.getDayOfYear() && endTime.format('H:i:s') !== '00:00:00') {
+
+                endTime = endTime.clearTime();
+
+                if (!this.endTimeChangeMsg) {
+                    this.endTimeChangeMsg = Ext.Msg.show({
+                        title: i18n._('End Time Change'),
+                        msg: i18n._('End time was shortened as timesheet must not overlap day'),
+                        buttons: Ext.MessageBox.OK,
+                        icon: Ext.MessageBox.WARNING,
+                        fn: () => {
+                            this.endTimeChangeMsg = null;
+                        }
+                    });
+                }
+            }
+            endTimeField.setValue(endTime.format(endTimeField.format));
         }
     },
     
     onStartTimeChange: function() {
         // adopt end_time if duration is set
-        const duration = +this.getForm().findField('duration').getValue()*60000;
-        const startTime = +this.getForm().findField('start_time').getValue();
+        let duration = +this.getForm().findField('duration').getValue()*60000;
+        const startTime = this.getForm().findField('start_time').getValue();
         if (duration && startTime) {
             const endTimeField = this.getForm().findField('end_time');
-            endTimeField.setValue(
-                new Date(startTime + duration).format(endTimeField.format)
-            );
+            let endTime = new Date(+startTime + duration);
+            if (endTime.getDayOfYear() > startTime.getDayOfYear() && endTime.format('H:i:s') !== '00:00:00') {
+
+                endTime = endTime.clearTime();
+                duration = (+endTime - +startTime) / 60000;
+                this.getForm().findField('duration').setValue(duration);
+
+                if (!this.durationChangeMsg) {
+                    this.durationChangeMsg = Ext.Msg.show({
+                        title: i18n._('Duration Change'),
+                        msg: i18n._('Duration was shortened as timesheet must not overlap day'),
+                        buttons: Ext.MessageBox.OK,
+                        icon: Ext.MessageBox.WARNING,
+                        fn: () => {
+                            this.durationChangeMsg = null;
+                        }
+                    });
+                }
+            }
+            endTimeField.setValue(endTime.format(endTimeField.format));
         }
     },
     
     onEndTimeChange: function() {
         // adopt duration if starttime is set
-        const startTime = +this.getForm().findField('start_time').getValue();
-        const endTime = +this.getForm().findField('end_time').getValue();
+        const startTime = this.getForm().findField('start_time').getValue();
+        const endTimeField = this.getForm().findField('end_time');
+        let endTime = this.getForm().findField('end_time').getValue();
         if (startTime && endTime) {
+            if (endTime.format('H:i:s') === '00:00:00') {
+                // 00:00:00 means end of day
+                endTime = endTime.add(Date.DAY, 1);
+            }
             const duration = (endTime - startTime)/60000;
             this.getForm().findField('duration').setValue(duration);
             this.calculateAccountingTime();
@@ -333,6 +370,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      */
     getFormItems: function() {
         var _ = window.lodash,
+            me = this,
             fieldManager = _.bind(
                 Tine.widgets.form.FieldManager.get, 
                 Tine.widgets.form.FieldManager, 
@@ -416,7 +454,17 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     scope: this,
                                     blur: this.onEndTimeChange,
                                     select: this.onEndTimeChange,
-                                }
+                                },
+                                validateValue : function(preventMark) {
+                                    let isValid = this.supr().validateValue();
+                                    const duration = this.findParentBy((c) => {return c.getForm }).getForm().findField('duration').getValue();
+                                    if (duration < 0) {
+                                        this.markInvalid(me.app.i18n._('End must not before start.'));
+                                        return false;
+                                    }
+                                    return isValid;
+                                },
+
                             }),
                         ], [
                             fieldManager('description', {
