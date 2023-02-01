@@ -163,6 +163,10 @@
     background-image:url(../../images/icon-set/icon_stop_2.svg) !important;
 }
 
+.attendance-recorder  .x-grid3-cell-inner.x-grid3-col-number {
+    white-space: break-spaces;
+}
+
 .x-menu.x-menu-floating.x-layer.attendance-recorder {
     background-image: none;
 }

@@ -155,13 +155,19 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
                         Object.assign(new Ext.Button(this.actionClockIn), defaults),
                         Object.assign(new Ext.Button(this.actionClockPause), defaults),
                         Object.assign(new Ext.Button(this.actionClockOut), defaults)
-                    ]
+                    ],
+                    listeners: {
+                        resize: (tb, w) => { tb.items.each((b) => {b.setWidth(w/3)}) }
+                    }
                 }),new Ext.Toolbar({
                     items: [
                         Object.assign(new Ext.Button(this.actionESC), defaults),
                         Object.assign(new Ext.Button(this.actionProjectTime), defaults),
                         Object.assign(new Ext.Button(this.actionInfo), defaults)
-                    ]
+                    ],
+                    listeners: {
+                        resize: (tb, w) => { tb.items.each((b) => {b.setWidth(w/3)}) }
+                    }
                 }), new Tine.widgets.grid.PickerGridPanel({
                     border: false,
                     title: this.app.i18n._('Project Time'),
@@ -243,7 +249,17 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
         }, this);
         this.menu.on('render', () => {
             this.menu.mon(this.menu.el, { 'click': this.onMenuClick, scope: this });
+
+            this.resizer = new Ext.Resizable(this.menu.el,  {
+                pinned:true, handles:'se'
+            });
+            this.mon(this.resizer, 'resize', function(r, w, h){
+                this.menu.items.get(0).doLayout();
+                this.saveState();
+            }, this);
         })
+
+
 
         this.autoRefreshTask = new Ext.util.DelayedTask(this.applyDeviceStates, this);
         this.autoRefreshTask.delay(2000);
@@ -262,6 +278,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
         if (this.menu.timeAccountPickerGrid) {
             state.timeaccounts = _.map(this.menu.timeAccountPickerGrid.getValue(), 'id');
         }
+        state.menuSize = this.menu.getSize();
         return state;
     },
 
@@ -278,6 +295,9 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
                 });
                 this.menu.timeAccountPickerGrid.store.resumeEvents();
             });
+        }
+        if (_.get(state, 'menuSize') ) {
+            this.menu.setSize(_.get(state, 'menuSize'));
         }
     },
 
