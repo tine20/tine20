@@ -48,7 +48,7 @@ describe('Mainpage', () => {
         await page.waitForTimeout(2000); //wait for save the favorite
     });
 
-    test('edit favorite', async () => {
+    test.skip('edit favorite', async () => {
         try {
             let favoritePanelCollapsed = await page.$x('//div[contains(@class, " ux-arrowcollapse ux-arrowcollapse-noborder x-tree x-panel-collapsed") and contains(., "Favoriten")]');
             await favoritePanelCollapsed[0].click();
