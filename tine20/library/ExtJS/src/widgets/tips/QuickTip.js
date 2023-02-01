@@ -110,6 +110,12 @@ Ext.QuickTip = Ext.extend(Ext.ToolTip, {
             cfg = this.tagConfig;
             ttp = t.qtip || Ext.fly(t).getAttribute(cfg.attribute, cfg.namespace);
         }
+        if (! ttp) {
+            t = e.getTarget('.x-grid3-cell-inner')
+            if (t && t.offsetWidth < t.scrollWidth) {
+                ttp = t.innerHTML;
+            }
+        }
         return ttp;
     },
 
