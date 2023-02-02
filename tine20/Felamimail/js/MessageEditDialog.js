@@ -295,8 +295,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         tooltip: this.app.i18n._('Click to search for and add recipients from the Addressbook.')
                     }),
                     this.action_saveAsDraft,
-                    this.button_fileMessage,
                     this.action_saveAsTemplate,
+                    this.button_fileMessage,
                     this.button_toggleReadingConfirmation,
                     this.button_toggleEncrypt,
                     this.button_massMailing
