@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>15.24</version>
+    <version>15.25</version>
     <order>0</order>
     <minimumRequiredVersion>12.28</minimumRequiredVersion>
     <tables>
@@ -2437,7 +2437,7 @@
         </table>
         <table>
             <name>importexport_definition</name>
-            <version>15</version>
+            <version>16</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2499,7 +2499,7 @@
                 <field>
                     <name>filename</name>
                     <type>text</type>
-                    <length>40</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>icon_class</name>
