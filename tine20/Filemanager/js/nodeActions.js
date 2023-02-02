@@ -233,6 +233,9 @@ Tine.Filemanager.nodeActions.CreateFolder = {
  * show native file select, upload files, create nodes
  * a single directory node with create grant has to be selected
  * for this action to be active
+ * 
+ * - allow open node edit dialog with only readGrant,
+ * - most panels are readonly if user has no editGrant
  */
 // Tine.Filemanager.nodeActions.UploadFiles = {};
 
@@ -254,7 +257,17 @@ Tine.Filemanager.nodeActions.Edit = {
             Tine.Filemanager.NodeEditDialog.openWindow({record: selectedNode});
         }
     },
-    actionUpdater: Tine.Filemanager.nodeActions.actionUpdater
+    actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
+        const record = records[0];
+        const disabledNodeIds = ['myUser', 'shared', 'otherUsers'];
+    
+        if (!record) return;
+        if (disabledNodeIds.includes(record.id)) {
+            action.setDisabled(true);
+        } else {
+            action.setDisabled(!record.data?.account_grants?.readGrant);
+        }
+    },
 };
 
 /**
