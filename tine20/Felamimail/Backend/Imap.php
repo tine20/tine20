@@ -219,18 +219,19 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $result = $this->_protocol->getFolderStatus($this->_currentFolder);
         return $result;
     }
-    
+
     /**
      * create a new folder
      *
      * This method also creates parent folders if necessary. Some mail storages may restrict, which folder
      * may be used as parent or which chars may be used in the folder name
      *
-     * @param  string                          $name         global name of folder, local name if $parentFolder is set
-     * @param  string|Zend_Mail_Storage_Folder $parentFolder parent folder for new folder, else root folder is parent
-     * @param  string                          
+     * @param string $name global name of folder, local name if $parentFolder is set
+     * @param string|Zend_Mail_Storage_Folder $parentFolder parent folder for new folder, else root folder is parent
+     * @param string $_delimiter
      * @return null
      * @throws Zend_Mail_Storage_Exception
+     * @throws Zend_Mail_Protocol_Exception
      */
     public function createFolder($name, $parentFolder = null, $_delimiter = '/')
     {
@@ -248,6 +249,10 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
              */
             require_once 'Zend/Mail/Storage/Exception.php';
             throw new Zend_Mail_Storage_Exception('cannot create folder ' . $folder);
+        }
+        
+        if (!$this->_protocol->subscribe($folder)) {
+            throw new Zend_Mail_Storage_Exception('cannot subscribe folder ' . $folder);
         }
     }
     
