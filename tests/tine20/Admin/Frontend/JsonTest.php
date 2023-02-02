@@ -1346,4 +1346,41 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
 
         static::assertTrue($diff->isEmpty(), 'acl changed where they shouldn\'t: ' . print_r($diff->toArray(), true));
     }
+
+    public function testImportExportDefinitionSearch()
+    {
+        $filter = [
+            0 =>
+                [
+                    'condition' => 'OR',
+                    'filters' =>
+                       [
+                            0 =>
+                                [
+                                    'condition' => 'AND',
+                                    'filters' =>
+                                        [
+                                            0 =>
+                                                [
+                                                    'field' => 'id',
+                                                    'operator' => 'contains',
+                                                    'value' => 'test',
+                                                    'id' => 'ext-record-619',
+                                                ],
+                                        ],
+                                    'id' => 'ext-comp-1813',
+                                    'label' => 'ImportExportDefinitionen',
+                                ],
+                        ],
+                    'id' => 'FilterPanel',
+                ],
+            1 =>
+                [
+                    'field' => 'query',
+                    'operator' => 'contains',
+                    'value' => '',
+                    'id' => 'quickFilter',
+                ]];
+        $this->_json->searchImportExportDefinitions($filter, []);
+    }
 }

@@ -29,6 +29,10 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
         'notin',
         'isnull',
         'notnull',
+        'contains',
+        'notcontains',
+        'startswith',
+        'endswith',
     );
     
     /**
@@ -41,6 +45,10 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
         'notin'      => array('sqlop' => ' NOT IN (?)'),
         'isnull'     => array('sqlop' => ' IS NULL'),
         'notnull'    => array('sqlop' => ' IS NOT NULL'),
+        'contains'          => array('sqlop' => ' LIKE (?) ESCAPE "|"',     'wildcards' => '%?%'),
+        'notcontains'       => array('sqlop' => ' NOT LIKE (?) ESCAPE "|"', 'wildcards' => '%?%'),
+        'startswith'        => array('sqlop' => ' LIKE (?) ESCAPE "|"',     'wildcards' => '?%' ),
+        'endswith'          => array('sqlop' => ' LIKE (?) ESCAPE "|"',     'wildcards' => '%?' ),
     );
     
     /**
