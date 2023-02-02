@@ -38,6 +38,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE022 = __CLASS__ . '::update022';
     const RELEASE015_UPDATE023 = __CLASS__ . '::update023';
     const RELEASE015_UPDATE024 = __CLASS__ . '::update024';
+    const RELEASE015_UPDATE025 = __CLASS__ . '::update025';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -115,6 +116,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE023          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update023',
+            ],
+            self::RELEASE015_UPDATE025          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update025',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -717,5 +722,20 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
 
         Tinebase_Controller::getInstance()->rebuildPaths();
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.24', self::RELEASE015_UPDATE024);
+    }
+
+    public function update025()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        if ($this->getTableVersion('importexport_definition') < 16) {
+            $this->_backend->alterCol('importexport_definition', new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>filename</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>'));
+            $this->setTableVersion('importexport_definition', 16);
+        }
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.25', self::RELEASE015_UPDATE025);
     }
 }
