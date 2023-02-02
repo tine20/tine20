@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>15.20</version>
+    <version>15.21</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -324,7 +324,7 @@
         </table>
         <table>
             <name>sales_suppliers</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -359,6 +359,12 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>credit_term</name>
+                    <type>integer</type>
+                    <notnull>false</notnull>
+                    <length>10</length>
                 </field>
                 <field>
                     <name>cpintern_id</name>
