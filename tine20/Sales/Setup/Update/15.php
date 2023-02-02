@@ -34,6 +34,7 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE018 = __CLASS__ . '::update018';
     const RELEASE015_UPDATE019 = __CLASS__ . '::update019';
     const RELEASE015_UPDATE020 = __CLASS__ . '::update020';
+    const RELEASE015_UPDATE021 = __CLASS__ . '::update021';
 
     static protected $_allUpdates = [
         // this needs to be executed before TB struct update! cause we move the table from sales to tb
@@ -111,6 +112,10 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE019          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update019',
+            ],
+            self::RELEASE015_UPDATE021          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update021',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -444,5 +449,24 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.20', self::RELEASE015_UPDATE020);
+    }
+
+    public function update021()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        if (!$this->_backend->columnExists('credit_term', 'sales_suppliers')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>credit_term</name>
+                    <type>integer</type>
+                    <notnull>false</notnull>
+                    <length>10</length>
+                </field>');
+            $this->_backend->addCol('sales_suppliers', $declaration);
+            if ($this->getTableVersion('sales_suppliers') < 3) {
+                $this->setTableVersion('sales_suppliers', 3);
+            }
+        }
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.21', self::RELEASE015_UPDATE021);
     }
 }
