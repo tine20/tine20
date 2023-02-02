@@ -124,13 +124,18 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
     }
 
     /**
-     * sets value
-     *
      * @param mixed $_value
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function setValue($_value)
     {
         if ($this->_operator !== 'within' && $this->_operator !== 'inweek' && $_value) {
+            if (is_array($_value)) {
+                throw new Tinebase_Exception_InvalidArgument('Operator ' . $this->_operator
+                    . ' does not support array value');
+            }
+
             if (preg_match('/^(day|week|month|year)/', $_value, $matches)) {
                 if ($matches[1] === 'day') {
                     $date = $this->_getDate();
