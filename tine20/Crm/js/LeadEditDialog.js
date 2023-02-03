@@ -7,7 +7,9 @@
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
- 
+
+import {getLocalizedLangPicker} from "../../Tinebase/js/widgets/form/LocalizedLangPicker";
+
 Ext.namespace('Tine.Crm');
 
 /**
@@ -77,6 +79,18 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             enableToggle: true,
             pressed: !!+this.record.get('mute'),
         }))];
+        this.localizedLangPicker = getLocalizedLangPicker(Tine.Sales.Model.Product);
+        if (this.localizedLangPicker) {
+            this.tbarItems = this.tbarItems || [];
+            if (this.tbarItems.indexOf('->') <= 0) {
+                this.tbarItems.push('->');
+            }
+            this.tbarItems.push(this.localizedLangPicker);
+        }
+        this.localizedLangPicker.on('change', (picker, lang) => {
+            this.productsGrid.store.localizedLang = lang
+            this.productsGrid.getView().refresh()
+        })
         Tine.Crm.LeadEditDialog.superclass.initComponent.call(this);
         this.on('recordUpdate', this.onAfterRecordUpdate, this);
     },
