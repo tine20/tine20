@@ -22,8 +22,9 @@ describe('Contacts', () => {
             let importDialog ;
             await expect(page).toMatchElement('.x-btn-text', {text: 'Kontakte importieren'});
             await page.waitForTimeout(100); // wait for btn to get active
+            importDialog = lib.getNewWindow();
             await expect(page).toClick('.x-btn-text', {text: 'Kontakte importieren'});
-            importDialog = await lib.getNewWindow();
+            importDialog = await importDialog;
 
             await importDialog.waitForXPath('//button');
             await lib.uploadFile(importDialog, 'src/testScreenshots/Addressbook/test.csv');
@@ -42,9 +43,9 @@ describe('Contacts', () => {
             await page.waitForTimeout(500);
             await expect(page).toMatchElement('.x-btn-text', {text: 'Kontakte importieren'});
             await page.waitForTimeout(100); // wait for btn to get active
+            importDialog = lib.getNewWindow();
             await expect(page).toClick('.x-btn-text', {text: 'Kontakte importieren'});
-            importDialog = await lib.getNewWindow();
-
+            importDialog = await importDialog;
             await importDialog.waitForXPath('//button');
             await lib.uploadFile(importDialog, 'src/testScreenshots/Addressbook/test.csv');
             await expect(importDialog).toMatchElement('button', {text: new RegExp('test.csv.*')})
@@ -60,9 +61,9 @@ describe('Contacts', () => {
             await page.waitForTimeout(500);
             await expect(page).toMatchElement('.x-btn-text', {text: 'Kontakte importieren'});
             await page.waitForTimeout(100); // wait for btn to get active
+            importDialog = lib.getNewWindow();
             await expect(page).toClick('.x-btn-text', {text: 'Kontakte importieren'});
-            importDialog = await lib.getNewWindow();
-
+            importDialog = await importDialog;
             await importDialog.waitForXPath('//button');
             await lib.uploadFile(importDialog, 'src/testScreenshots/Addressbook/test_fail.csv');
             await expect(importDialog).toMatchElement('button', {text: new RegExp('test_fail.csv.*')})
@@ -78,15 +79,15 @@ describe('Contacts', () => {
             let popupWindow;
 
             test('open editDialog', async () => {
-                await expect(page).toClick('.x-grid3-row-first', {clickCount: 2});
-                popupWindow = await lib.getNewWindow();
-                await popupWindow.waitFor('.x-tab-edge');
+                await expect(page).toClick('.x-grid3-row-first');
+                popupWindow = await lib.getEditDialog('Kontakt bearbeiten');
+                await popupWindow.waitForSelector('.x-tab-edge');
             });
 
             test('show map', async () => {
                 try {
                     await expect(popupWindow).toClick('span', {text: 'Karte'});
-                    await popupWindow.waitFor(10000); // wait to load map
+                    await popupWindow.waitForTimeout(10000); // wait to load map
                     await popupWindow.screenshot({path: 'screenshots/1_adressverwaltung/12_adressbuch_kontakt_karte.png'});
                 } catch (e) {
                     await console.log('Map musst enabled');
@@ -111,7 +112,7 @@ describe('Contacts', () => {
 
             test('relations', async () => {
                 await expect(popupWindow).toClick('span', {text: new RegExp("Verknüpfungen.*")});
-                await popupWindow.waitFor(3000);
+                await popupWindow.waitForTimeout(3000);
                 await popupWindow.screenshot({path: 'screenshots/2_allgemeines/23_allgemein_hr_mitarbeiter_verknuepfungen.png'});
                 let test = await popupWindow.waitForSelector('.x-panel.x-wdgt-pickergrid.x-grid-panel');
 
@@ -157,9 +158,9 @@ describe('Contacts', () => {
         });
 
         test('send mail', async () => {
-            let popupWindow;
+            let popupWindow = lib.getNewWindow();
             await felamimailIcon.click();
-            popupWindow = await lib.getNewWindow();
+            popupWindow = await popupWindow
             await popupWindow.waitForFunction(() => !document.querySelector('.ext-el-mask'));
             await popupWindow.screenshot({path: 'screenshots/Adressbuch/20_adressbuch_email_als_notiz.png'});
             await popupWindow.close();
