@@ -81,7 +81,7 @@ describe('Contacts', () => {
             test('open editDialog', async () => {
                 await expect(page).toClick('.x-grid3-row-first');
                 popupWindow = await lib.getEditDialog('Kontakt bearbeiten');
-                await popupWindow.waitForSelector('.x-tab-edge');
+                await popupWindow.waitForSelector('.x-tab-strip.x-tab-strip-top',{timeout: 5000});
             });
 
             test('show map', async () => {
