@@ -692,7 +692,17 @@ class Tinebase_Relations
         }
         
         try {
+            /** @var Tinebase_Record_Interface $relatedModel */
+            $relatedModel = $_relation->related_model;
+            $relatedId = $_relation->getIdFromProperty('related_id');
             $result = $this->_backend->addRelation($_relation);
+            if ($relatedModel::touchOnRelated($result)) {
+                /** @var Tinebase_Controller_Record_Abstract $ctrl */
+                $ctrl = Tinebase_Core::getApplicationInstance($relatedModel, '', true);
+                $raii = new Tinebase_RAII($ctrl->assertPublicUsage());
+                $ctrl->update($ctrl->get($relatedId));
+                unset($raii);
+            }
         } catch(Zend_Db_Statement_Exception $zse) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not add relation: ' . $zse->getMessage());
             $result = NULL;
