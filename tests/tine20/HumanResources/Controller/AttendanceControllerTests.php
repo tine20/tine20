@@ -59,6 +59,205 @@ class HumanResources_Controller_AttendanceControllerTests extends HumanResources
             ->getIdFromProperty(HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID));
     }
 
+    public function testClockOutOfSequenceTsUpdated()
+    {
+        $taId = HumanResources_Controller_WorkingTimeScheme::getInstance()->getWorkingTimeAccount(null)->getId();
+        $ts = Timetracker_Controller_Timesheet::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                    ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $taId],
+                ]
+            ));
+        $this->assertSame(0, $ts->count());
+        $device = HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get(HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID);
+        $dt = Tinebase_DateTime::now()->setTime(12, 0);
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($device)
+            ->setTimeStamp($dt)
+        );
+
+        HumanResources_Controller_AttendanceRecorder::runBLPipes();
+        $ts = Timetracker_Controller_Timesheet::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                    ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $taId],
+                ]
+            ));
+        $this->assertSame(1, $ts->count());
+        $ts = $ts->getFirstRecord();
+        $this->assertSame(0, (int)$ts->duration);
+
+        $ts->description = $ts->description . ' unittest';
+        $ts = Timetracker_Controller_Timesheet::getInstance()->update($ts);
+        $this->assertFalse((bool)$ts->need_for_clarification);
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($device)
+            ->setTimeStamp($dt->getClone()->addHour(2))
+        );
+
+        HumanResources_Controller_AttendanceRecorder::runBLPipes();
+        $tsUpdated = Timetracker_Controller_Timesheet::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                    ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $taId],
+                ]
+            ));
+        $this->assertSame(1, $tsUpdated->count());
+        $tsUpdated = $tsUpdated->getFirstRecord();
+        $this->assertSame(120, (int)$tsUpdated->duration);
+        $this->assertSame($ts->getId(), $tsUpdated->getId());
+        $this->assertSame($ts->description, $tsUpdated->description);
+        $this->assertFalse((bool)$tsUpdated->need_for_clarification);
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($device)
+            ->setTimeStamp($dt->getClone()->addHour(1))
+        );
+
+        HumanResources_Controller_AttendanceRecorder::runBLPipes();
+        $tsOutOfOrder = Timetracker_Controller_Timesheet::getInstance()->get($ts->getId());
+        $this->assertTrue((bool)$tsOutOfOrder->need_for_clarification);
+        $this->assertSame($ts->description, $tsOutOfOrder->description);
+
+        $result = Timetracker_Controller_Timesheet::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                    ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $taId],
+                ]
+            ));
+
+        $this->assertSame(3, $result->count());
+        $result->removeById($ts->getId());
+        $this->assertSame(1, $result->filter('need_for_clarification', true)->count());
+        $this->assertSame(1, $result->filter('need_for_clarification', false)->count());
+        $ts = $result->filter('need_for_clarification', false)->getFirstRecord();
+        $this->assertSame(60, (int)$ts->duration);
+        $ts = $result->filter('need_for_clarification', true)->getFirstRecord();
+        $this->assertSame(0, (int)$ts->duration);
+    }
+
+    public function testClockInOutOfSequenceTsUpdated()
+    {
+        $taId = HumanResources_Controller_WorkingTimeScheme::getInstance()->getWorkingTimeAccount(null)->getId();
+        $ts = Timetracker_Controller_Timesheet::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                    ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $taId],
+                ]
+            ));
+        $this->assertSame(0, $ts->count());
+        $device = HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get(HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID);
+        $dt = Tinebase_DateTime::now()->setTime(12, 0);
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($device)
+            ->setTimeStamp($dt)
+        );
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($device)
+            ->setTimeStamp($dt->getClone()->addHour(2))
+        );
+
+        HumanResources_Controller_AttendanceRecorder::runBLPipes();
+        $ts = Timetracker_Controller_Timesheet::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                    ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $taId],
+                ]
+            ));
+        $this->assertSame(1, $ts->count());
+        $ts = $ts->getFirstRecord();
+        $this->assertSame(120, (int)$ts->duration);
+
+        $ts->description = $ts->description . ' unittest';
+        $ts = Timetracker_Controller_Timesheet::getInstance()->update($ts);
+        $this->assertFalse((bool)$ts->need_for_clarification);
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($device)
+            ->setTimeStamp($dt->getClone()->addHour(1))
+        );
+
+        HumanResources_Controller_AttendanceRecorder::runBLPipes();
+        $ts = Timetracker_Controller_Timesheet::getInstance()->get($ts->getId());
+        $this->assertTrue((bool)$ts->need_for_clarification);
+        $this->assertStringContainsString(' unittest', $ts->description);
+
+        $result = Timetracker_Controller_Timesheet::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                    ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $taId],
+                ]
+            ));
+
+        $this->assertSame(3, $result->count());
+        $result->removeById($ts->getId());
+        $this->assertSame(1, $result->filter('need_for_clarification', true)->count());
+        $this->assertSame(1, $result->filter('need_for_clarification', false)->count());
+        $ts = $result->filter('need_for_clarification', false)->getFirstRecord();
+        $this->assertSame(60, (int)$ts->duration);
+        $ts = $result->filter('need_for_clarification', true)->getFirstRecord();
+        $this->assertSame(0, (int)$ts->duration);
+    }
+
+    public function testClockInOutOfSequence()
+    {
+        $taId = HumanResources_Controller_WorkingTimeScheme::getInstance()->getWorkingTimeAccount(null)->getId();
+        $ts = Timetracker_Controller_Timesheet::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                    ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $taId],
+                ]
+            ));
+        $this->assertSame(0, $ts->count());
+        $ta = Timetracker_Controller_Timeaccount::getInstance()->create(new Timetracker_Model_Timeaccount([
+            'title' => 'unittest',
+        ]));
+        $ptDevice = HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get(HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID);
+        $device = HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get(HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID);
+        $dt = Tinebase_DateTime::now()->setTime(12, 0);
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($ptDevice)
+            ->setMetaData([Timetracker_Model_Timeaccount::class => $ta->getId()])
+            ->setTimeStamp($dt)
+        );
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($device)
+            ->setTimeStamp($dt->getClone()->addHour(1))
+        );
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($device)
+            ->setAccount($this->_personas['sclever'])
+            ->setMetaData([Timetracker_Model_Timeaccount::class => $ta->getId()])
+            ->setTimeStamp($dt)
+        );
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($device)
+            ->setAccount($this->_personas['sclever'])
+            ->setMetaData([Timetracker_Model_Timeaccount::class => $ta->getId()])
+            ->setTimeStamp($dt->getClone()->addHour(1))
+        );
+
+        HumanResources_Controller_AttendanceRecorder::runBLPipes();
+        $ts = Timetracker_Controller_Timesheet::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                    ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $taId],
+                ]
+            ));
+        $this->assertSame(1, $ts->count());
+        $this->assertEquals(60, (int)$ts->getFirstRecord()->duration);
+
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn((new HumanResources_Config_AttendanceRecorder())
+            ->setDevice($device)
+            ->setTimeStamp($dt->getClone()->subHour(1))
+        );
+
+        HumanResources_Controller_AttendanceRecorder::runBLPipes();
+        $newTs = Timetracker_Controller_Timesheet::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                    ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $taId],
+                ]
+            ));
+        $this->assertSame(1, $newTs->count());
+        $this->assertNotSame($ts->getFirstRecord()->getId(), $newTs->getFirstRecord()->getId());
+        $this->assertSame(120, (int)$newTs->getFirstRecord()->duration);
+    }
+
     public function testMultiDayClocking()
     {
         $ta = Timetracker_Controller_Timeaccount::getInstance()->create(new Timetracker_Model_Timeaccount([
