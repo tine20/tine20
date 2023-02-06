@@ -134,6 +134,7 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 header: this.app.i18n._("Product"),
                 id: 'name',
                 dataIndex: 'name',
+                renderer: Tine.widgets.grid.RendererManager.get('Sales','Product','name'),
                 width: 150
             }, {
                 header: this.app.i18n._("Description"),
@@ -213,37 +214,39 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }]
         });
 
+        this.ProductPickerCombo = new Tine.Crm.ProductPickerCombo({
+            anchor: '90%',
+            emptyText: this.app.i18n._('Search for Products to add ...'),
+            productsStore: this.store,
+            blurOnSelect: true,
+            recordClass: Tine.Sales.Model.Product,
+            getValue: function() {
+                return this.selectedRecord ? this.selectedRecord.data : null;
+            },
+            onSelect: function(record){
+                // check if already in?
+                if (! this.productsStore.getById(record.id)) {
+                    var newRecord = new Ext.data.Record({
+                        salesprice: record.data.salesprice,
+                        remark_price: record.data.salesprice,
+                        remark_quantity: 1,
+                        name: record.data.name,
+                        relation_type: 'product',
+                        related_id: record.id,
+                        id: record.id
+                    }, record.id);
+                    this.productsStore.insert(0, newRecord);
+                }
+
+                this.collapse();
+                this.clearValue();
+            }
+        })
+
         this.tbar = new Ext.Panel({
             layout: 'fit',
             items: [
-                new Tine.Crm.ProductPickerCombo({
-                    anchor: '90%',
-                    emptyText: this.app.i18n._('Search for Products to add ...'),
-                    productsStore: this.store,
-                    blurOnSelect: true,
-                    recordClass: Tine.Sales.Model.Product,
-                    getValue: function() {
-                        return this.selectedRecord ? this.selectedRecord.data : null;
-                    },
-                    onSelect: function(record){
-                        // check if already in?
-                        if (! this.productsStore.getById(record.id)) {
-                            var newRecord = new Ext.data.Record({
-                                salesprice: record.data.salesprice,
-                                remark_price: record.data.salesprice,
-                                remark_quantity: 1,
-                                name: record.getTitle(),
-                                relation_type: 'product',
-                                related_id: record.id,
-                                id: record.id
-                            }, record.id);
-                            this.productsStore.insert(0, newRecord);
-                        }
-                        
-                        this.collapse();
-                        this.clearValue();
-                    }
-                })
+                this.ProductPickerCombo
             ]
         });
     }    

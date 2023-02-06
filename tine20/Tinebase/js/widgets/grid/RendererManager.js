@@ -88,6 +88,9 @@ Tine.widgets.grid.RendererManager = function() {
                     field = recordClass ? recordClass.getField(fieldName) : null,
                     fieldDefinition = Object.assign({}, field, _.get(field, 'fieldDefinition', {}), _.get(field, 'fieldDefinition.conifg', {}), _.get(field, 'fieldDefinition.uiconfig', {})),
                     fieldType = _.get(fieldDefinition, 'fieldDefinition.type', _.get(fieldDefinition, 'type', 'auto'));
+                if (_.get(fieldDefinition, 'config.specialType') === 'localizedString') {
+                    fieldType = 'localizedString';
+                }
             }
             switch (fieldType) {
                 case 'record':
