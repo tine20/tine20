@@ -83,9 +83,10 @@ class Setup_Frontend_Cli
             Setup_Core::set(Setup_Core::USER, Tinebase_User::SYSTEM_USER_SETUP);
         }
 
-        $lang = $_opts->lang ? $_opts->lang : getenv('LANGUAGE');
-        
+        $lang = $_opts->lang ?: getenv('LANGUAGE');
         if ($lang) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Setting locale to ' . $lang);
             Tinebase_Core::setLocale($lang);
         }
 
