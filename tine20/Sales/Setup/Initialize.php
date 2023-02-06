@@ -157,7 +157,7 @@ class Sales_Setup_Initialize extends Setup_Initialize
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
                 'name' => "All Suppliers",        // _('All Suppliers')
-                'description' => "All supllier records", // _('All supllier records')
+                'description' => "All supplier records", // _('All supplier records')
                 'filters' => array(),
             ))
         ));
