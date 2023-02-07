@@ -166,12 +166,11 @@ trait Calendar_Export_GenericTrait
      */
     protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
     {
-        parent::_resolveRecords($_records);
-
-        if ('Calendar_Model_Event' !== $_records->getRecordClassName()/* ||
-                'Calendar_Export_Ods' !== static::class*/) {
+        if (Calendar_Model_Event::class !== $_records->getRecordClassName()) {
             return;
         }
+
+        parent::_resolveRecords($_records);
 
         if ($attendees = $_records->attendee) {
             if (Addressbook_Model_Contact::$doResolveAttenderCleanUp) {
