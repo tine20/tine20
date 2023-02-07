@@ -1103,11 +1103,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 $userBackend->setPassword($replicationUser, $password);
             }
 
-            // create the anonymous user
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating new anonymous user.');
-
-            static::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS,
-                $groupsBackend->getDefaultAnonymousGroup());
+            static::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS);
         }
 
         $oldAcl = $addressBookController->doContainerACLChecks(false);
@@ -1128,7 +1124,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
         $adminGroup = $groupsBackend->getDefaultAdminGroup();
         $userGroup  = $groupsBackend->getDefaultGroup();
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial admin user (login: ' . $adminLoginName . ' / email: ' . $adminEmailAddress . ')');
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Creating initial admin user (login: ' . $adminLoginName . ' / email: ' . $adminEmailAddress . ')');
 
         $user = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => $adminLoginName,
@@ -1181,20 +1178,28 @@ class Tinebase_User implements Tinebase_Controller_Interface
      *
      * @param string $accountLoginName
      * @param Tinebase_Model_Group|null $defaultGroup
-     * @return Tinebase_Model_FullUser|null
+     * @return Tinebase_Model_FullUser|Tinebase_Model_User|null
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
      */
-    static public function createSystemUser($accountLoginName, Tinebase_Model_Group $defaultGroup = null)
+    static public function createSystemUser(string $accountLoginName, Tinebase_Model_Group $defaultGroup = null): ?Tinebase_Model_User
     {
         $userBackend = Tinebase_User::getInstance();
-        $groupsBackend = Tinebase_Group::getInstance();
 
         try {
             $systemUser = $userBackend->getFullUserByLoginName($accountLoginName);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                ' Use existing system user ' . $accountLoginName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Use existing system user ' . $accountLoginName);
             return $systemUser;
         } catch (Tinebase_Exception_NotFound $tenf) {
             // continue
+        }
+
+        $groupsBackend = Tinebase_Group::getInstance();
+
+        if (! $defaultGroup && $accountLoginName === Tinebase_User::SYSTEM_USER_ANONYMOUS) {
+            $defaultGroup = $groupsBackend->getDefaultAnonymousGroup();
         }
 
         // disable modlog stuff
@@ -1220,8 +1225,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
             'accountExpires' => NULL,
         ));
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-            ' Creating new system user ' . print_r($systemUser->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Creating new system user ' . $accountLoginName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($systemUser->toArray(), true));
 
         try {
             $systemUser = $userBackend->addUser($systemUser);

@@ -511,8 +511,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
     {
         $currentUser = Tinebase_Core::getUser();
         if (! $currentUser) {
-            Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()
-                ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS));
+            $this->_setAnonymousUser();
         }
 
         $oldvalues = [
@@ -525,7 +524,6 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             'cceSendNotifications'  => Calendar_Controller_Event::getInstance()->sendNotifications(false),
             'currentUser'           => $currentUser,
         ];
-
 
         return function() use ($oldvalues) {
             $this->doContainerACLChecks($oldvalues['containerACLChecks']);
