@@ -353,7 +353,7 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
                 $pathParts = array_reverse(explode('/', trim($path->path, '/')));
                 $newPath = '';
                 $i = 0;
-                while($i < $pathDept) {
+                while ($i < $pathDept && isset($pathParts[$i])) {
                     $newPath = '/' . $pathParts[$i++] . $newPath;
                 }
 
