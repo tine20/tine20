@@ -100,6 +100,9 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             title = String.format(this.app.i18n._('Sieve Filter Rules for {0}'), accountName);
         this.window.setTitle(title);
         
+        const hasRight = Tine.Felamimail.AccountEditDialog.prototype.checkAccountEditRight(this.account);
+        this.action_saveAndClose.setDisabled(!hasRight);
+        
         this.hideLoadMask();
     },
         

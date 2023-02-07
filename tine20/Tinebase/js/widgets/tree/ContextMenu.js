@@ -33,11 +33,13 @@ Tine.widgets.tree.ContextMenu = {
     getMenu: function(config, plugins) {
         
         this.config = config;
+        this.actionMgr = this.actionMgr ?? this.config?.actionMgr;
                 
         /****************** create ITEMS array ****************/
               
         this.action_add = new Ext.Action({
             text: String.format(i18n._('Add {0}'), this.config.nodeName),
+            itemId: 'add',
             iconCls: 'action_add',
             handler: this.addNode,
             requiredGrant: 'addGrant',
@@ -47,6 +49,7 @@ Tine.widgets.tree.ContextMenu = {
         this.action_rename = new Ext.Action({
             text: String.format(i18n._('Rename {0}'), this.config.nodeName),
             iconCls: 'action_rename',
+            itemId: 'rename',
             handler: this.renameNode,
             scope: this.config,
             requiredGrant: 'editGrant',
@@ -56,6 +59,7 @@ Tine.widgets.tree.ContextMenu = {
         this.action_delete = new Ext.Action({
             text: String.format(i18n.ngettext('Delete {0}', 'Delete {0}', 1), this.config.nodeName),
             iconCls: 'action_delete',
+            itemId: 'delete',
             handler: this.deleteNode,
             scope: this.config,
             requiredGrant: 'deleteGrant',
@@ -144,12 +148,16 @@ Tine.widgets.tree.ContextMenu = {
 
         for (var i=0; i < config.actions.length; i++) {
             action = config.actions[i];
-
+            
             if (Ext.isString(action)) {
                 method = 'action_' + action;
                 if (this.actionMgr && this.actionMgr.has(action)) {
                     items.push(this.actionMgr.get(action));
                 } else if (this[method]) {
+                    if (this.actionMgr?.getInitialConfig?.()) {
+                        const initialConfig = this.actionMgr.getInitialConfig();
+                        Ext.apply(this[method].initialConfig, initialConfig);
+                    }
                     items.push(this[method]);
                 } else {
                     Tine.log.warn('Tine.widgets.tree.ContextMenu.getMenu: action "' + action + '" is not definded');

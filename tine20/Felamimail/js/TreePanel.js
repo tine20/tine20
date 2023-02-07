@@ -9,6 +9,7 @@
  */
  
 Ext.namespace('Tine.Felamimail');
+require('./nodeActions');
 
 /**
  * @namespace   Tine.Felamimail
@@ -160,6 +161,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         
         // add account nodes
         this.initAccounts();
+
         
         // init drop zone
         this.dropConfig = {
@@ -186,9 +188,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         // init selection model (multiselect)
         this.selModel = new Ext.tree.MultiSelectionModel({});
         
-        // init context menu TODO use Ext.apply
-        var initCtxMenu = Tine.Felamimail.setTreeContextMenus.createDelegate(this);
-        initCtxMenu();
+        // init context menu
+        this.initContextMenu();
         
         // add listeners
         this.on('beforestatesave',this.saveStateIf, this);
@@ -298,6 +299,38 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         this.accountStore.on('add', function(store, records) {_.map(records, _.bind(this.addAccount, this)); }, this);
         this.accountStore.on('update', this.onAccountUpdate, this);
         this.accountStore.on('remove', this.deleteAccount, this);
+    },
+    
+    /**
+     * initiates tree context menus
+     *
+     * @private
+     */
+    initContextMenu: function() {
+        this.accountMenu = Tine.widgets.tree.ContextMenu.getMenu({
+            app: 'Felamimail',
+            actionMgr: Tine.Felamimail.nodeActionsMgr,
+            nodeName: this.app.i18n.n_('Account', 'Accounts', 1),
+            scope: this,
+            backend: 'Felamimail',
+            backendModel: 'Account',
+            actions: Tine.Felamimail.nodeActions.accountActions,
+        });
+    
+        this.folderMenu = Tine.widgets.tree.ContextMenu.getMenu({
+            app: 'Felamimail',
+            actionMgr: Tine.Felamimail.nodeActionsMgr,
+            nodeName: this.app.i18n.n_('Folder', 'Folders', 1),
+            scope: this,
+            backend: 'Felamimail',
+            backendModel: 'Folder',
+            actions: Tine.Felamimail.nodeActions.folderActions,
+        });
+        
+        this.actionUpdater = new Tine.widgets.ActionUpdater({
+            recordClass: Tine.Felamimail.Model.Account,
+            actions: _.concat(this.accountMenu.items.items, this.folderMenu.items.items),
+        });
     },
     
     /**
@@ -603,58 +636,17 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @private
      */
     onContextMenu: function(node, event) {
-        this.ctxNode = node;
-
         event.stopEvent();
-
-        var folder = this.app.getFolderStore().getById(node.id),
-            account = folder ? this.accountStore.getById(folder.get('account_id')) :
-                               this.accountStore.getById(node.id);
+        Tine.log.debug(node);
+    
+        // legacy for reload action
+        this.ctxNode = node;
         
-        if (! folder) {
-            if (account.get('ns_personal') !== 'default') {
-                // disable some account actions if needed
-                this.contextMenuAccount.items.each(function(item) {
-                    // TODO don't rely on iconCls here!
-                    switch (item.iconCls) {
-                        case 'action_add':
-                            // check account personal namespace -> disable 'add folder' if namespace is other than root
-                            item.setDisabled(account.get('ns_personal') != '');
-                            break;
-                        case 'action_email_replyAll':
-                        case 'action_email_forward':
-                            // disable filter rules/vacation if no sieve hostname is set
-                            item.setDisabled(account.get('sieve_hostname') == null || account.get('sieve_hostname') == '');
-                            break;
-                        case 'action_approve_migration':
-                            item.setDisabled(
-                                account.get('migration_approved') == 1
-                                || account.get('type') === 'user'
-                                || account.get('type') === 'shared'
-                            );
-                            break;
-                        case 'action_delete':
-                            item.setDisabled(
-                                account.get('type') === 'system'
-                                || account.get('type') === 'shared'
-                            );
-                            break;
-                    }
-                });
-                
-                this.contextMenuAccount.showAt(event.getXY());
-            }
-        } else {
-            if (folder.get('globalname') === account.get('trash_folder') || folder.get('localname').match(/^junk$/i)) {
-                this.contextMenuTrash.showAt(event.getXY());
-            } else if (! folder.get('is_selectable')){
-                this.unselectableFolder.showAt(event.getXY());
-            } else if (folder.get('system_folder')) {
-                this.contextMenuSystemFolder.showAt(event.getXY());
-            } else {
-                this.contextMenuUserFolder.showAt(event.getXY());
-            }
-        }
+        const folder = this.app.getFolderStore().getById(node.attributes.id);
+        this.ctxMenu = !folder ? this.accountMenu : this.folderMenu;
+        this.actionUpdater.updateActions([node]);
+        
+        this.ctxMenu.showAt(event.getXY());
     },
     
     /**

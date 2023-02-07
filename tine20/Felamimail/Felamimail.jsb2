@@ -59,10 +59,6 @@
           "path": "js/sieve/"
         },
         {
-          "text": "TreeContextMenu.js",
-          "path": "js/"
-        },
-        {
           "text": "TreeLoader.js",
           "path": "js/"
         },

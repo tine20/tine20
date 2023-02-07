@@ -76,7 +76,9 @@ Tine.Felamimail.sieve.VacationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
      */
     onRecordLoad: async function () {
         await this.afterIsRendered();
-
+        const hasRight = Tine.Felamimail.AccountEditDialog.prototype.checkAccountEditRight(this.account);
+        this.action_saveAndClose.setDisabled(!hasRight);
+        
         // mime type is always multipart/alternative
         this.record.set('mime', 'multipart/alternative');
         if (this.account && this.account.get('signature')) {
@@ -130,7 +132,7 @@ Tine.Felamimail.sieve.VacationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
      */
     onRecordUpdate: async function () {
         Tine.Felamimail.sieve.VacationEditDialog.superclass.onRecordUpdate.call(this);
-
+        
         let contactIds = [];
         Ext.each(['contact_id1', 'contact_id2'], function (field) {
             if (this.getForm().findField(field) && this.getForm().findField(field).getValue() !== '') {
