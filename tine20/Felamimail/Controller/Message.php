@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 
@@ -1094,41 +1094,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     continue;
                 }
 
-                $expanded = array();
-
-                // if a winmail.dat exists, try to expand it
-                if (preg_match('/^winmail[.]*\.dat/i', $filename) && (
-                    Tinebase_Core::systemCommandExists('tnef') || Tinebase_Core::systemCommandExists('ytnef')
-                )) {
-
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' Got winmail.dat attachment (contentType=' . $part['contentType'] . '). Trying to extract files ...');
-
-                    if (preg_match('/^application\/.{0,4}ms-tnef$/', $part['contentType'])
-                        || $part['contentType'] === 'text/plain'
-                        || $part['contentType'] === 'application/octet-stream'
-                    ) {
-                        $expanded = $this->_expandWinMailDat($_messageId, $part['partId']);
-
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . ' Extracted ' . count($expanded) . ' files from ' . $filename);
-
-                        if (!empty($expanded)) {
-                            $attachments = array_merge($attachments, $expanded);
-                        } else if ($_skipEmptyAttachments) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                                . ' Skipping empty winmail.dat attachment.');
-                            continue;
-                        }
-                    } else {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . ' Unsupported winmail.dat content-type. Skipping ...');
-                    }
-                }
+                $winmailHandled = $this->_handleWinmailDat($message, $filename, $part, $attachments, $_skipEmptyAttachments);
 
                 // if it's not a winmail.dat, or the winmail.dat couldn't be expanded
                 // properly because it has richtext embedded, return attachment as it is
-                if (empty($expanded) && isset($part['contentType']) && isset($part['partId'])) {
+                if (! $winmailHandled && isset($part['contentType']) && isset($part['partId'])) {
 
                     $attachmentData = array(
                         'content-type' => $part['contentType'],
@@ -1150,17 +1120,75 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $attachments;
     }
 
+    protected function _handleWinmailDat(Felamimail_Model_Message $message,
+                                         string $filename,
+                                         array $part,
+                                         array &$attachments,
+                                         bool $_skipEmptyAttachments = false): bool
+    {
+        // if a winmail.dat exists, try to expand it
+        if (! preg_match('/^winmail[.]*\.dat/i', $filename) || ! (
+                Tinebase_Core::systemCommandExists('tnef') || Tinebase_Core::systemCommandExists('ytnef')
+            )) {
+
+            return false;
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Got winmail.dat attachment (contentType=' . $part['contentType'] . '). Trying to extract files ...');
+
+        if (preg_match('/^application\/.{0,4}ms-tnef$/', $part['contentType'])
+            || $part['contentType'] === 'text/plain'
+            || $part['contentType'] === 'application/octet-stream'
+        ) {
+            try {
+                $expanded = $this->_expandWinMailDat($message, $part['partId']);
+            } catch (Tinebase_Exception_InvalidArgument $teia) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $teia->getMessage());
+                return false;
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Extracted ' . count($expanded) . ' files from '
+                . $filename);
+
+            if (!empty($expanded)) {
+                $attachments = array_merge($attachments, $expanded);
+                return true;
+            } else if ($_skipEmptyAttachments) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Skipping empty winmail.dat attachment.');
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Unsupported winmail.dat content-type. Skipping ...');
+        }
+
+        return false;
+    }
+
     /**
      * extracts contents from the ugly .dat format
      *
-     * @param string $messageId
-     * @param string $partId
+     * @param Felamimail_Model_Message $message
+     * @param string|null $partId
      * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Zend_Mime_Exception
      */
-    protected function _expandWinMailDat($messageId, $partId)
+    protected function _expandWinMailDat(Felamimail_Model_Message $message, ?string $partId)
     {
-        $files = $this->extractWinMailDat($messageId['id'], $partId);
-        $path = Tinebase_Core::getTempDir() . '/winmail/' . $messageId['id'] . '/';
+        if (! $message->getId()) {
+            throw new Tinebase_Exception_InvalidArgument('Message id missing - could not extract winmail.dat');
+        }
+
+        $files = $this->extractWinMailDat($message->getId(), $partId);
+        $path = Tinebase_Core::getTempDir() . '/winmail/' . $message->getId() . '/';
 
         $attachmentData = array();
 
@@ -1183,12 +1211,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * @param string $partId
      * @param string $messageId
-     *
+     * @param string|null $partId
      * @return array
+     * @throws Tinebase_Exception_NotFound
+     * @throws Zend_Mime_Exception
      */
-    public function extractWinMailDat($messageId, $partId = NULL)
+    public function extractWinMailDat(string $messageId, ?string $partId = null): array
     {
         $path = Tinebase_Core::getTempDir() . '/winmail/';
 
