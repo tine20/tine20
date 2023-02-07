@@ -60,6 +60,7 @@ docker_registry_login () {
 docker_registry_release_image() {
     name="$1"
     desitination="$2"
+    latest="$3"
 
     from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
 
@@ -67,6 +68,10 @@ docker_registry_release_image() {
         echo "pushing nightly"
         docker_registry_push "${from}" "${desitination}:dev-$(git describe --tags)"
         return
+    fi
+
+    if [ "$latest" == "true" ]; then
+        docker_registry_push "${from}" "${desitination}:latest"
     fi
 
     docker_registry_push "${from}" "${desitination}:${CI_COMMIT_TAG}"
