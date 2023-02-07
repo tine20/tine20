@@ -253,12 +253,17 @@ abstract class Tinebase_Controller_Record_Abstract
         return $this->_backend;
     }
 
+    protected function _setAnonymousUser()
+    {
+        $user = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS);
+        Tinebase_Core::setUser($user);
+    }
+
     public function assertPublicUsage()
     {
         $currentUser = Tinebase_Core::getUser();
-        if (!$currentUser) {
-            Tinebase_Core::setUser(Tinebase_User::getInstance()
-                ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS));
+        if (! $currentUser) {
+            $this->_setAnonymousUser();
         }
 
         $oldvalues = [
