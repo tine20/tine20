@@ -2420,6 +2420,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     public function checkAccountAcl($account)
     {
+        if (! $this->doContainerACLChecks()) {
+            return;
+        }
         if (! $account instanceof Felamimail_Model_Account) {
             $account = Felamimail_Controller_Account::getInstance()->get($account);
         }
