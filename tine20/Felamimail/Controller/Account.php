@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -1715,8 +1715,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * @param Felamimail_Model_Account $_account
      * @param string $_systemFolder
      * @return Felamimail_Model_Folder|null
+     * @throws Felamimail_Exception_IMAPServiceUnavailable
+     * @throws Tinebase_Exception_SystemGeneric
      */
-    protected function _createSystemFolder(Felamimail_Model_Account $_account, $_systemFolder)
+    protected function _createSystemFolder(Felamimail_Model_Account $_account, string $_systemFolder): ?Felamimail_Model_Folder
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . ' Folder not found: ' . $_systemFolder . '. Trying to add it.');
@@ -1724,16 +1726,20 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $splitFolderName = Felamimail_Model_Folder::extractLocalnameAndParent($_systemFolder, $_account->delimiter);
 
         try {
-            $result = Felamimail_Controller_Folder::getInstance()->create($_account, $splitFolderName['localname'], $splitFolderName['parent']);
-        } catch (Felamimail_Exception_IMAPServiceUnavailable $feisu) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
-                . $feisu->getMessage());
-            // try again with INBOX as parent because some IMAP servers can not handle namespaces correctly
-            $result = Felamimail_Controller_Folder::getInstance()->create($_account, $splitFolderName['localname'], 'INBOX');
+            try {
+                $result = Felamimail_Controller_Folder::getInstance()->create($_account, $splitFolderName['localname'],
+                    $splitFolderName['parent']);
+            } catch (Felamimail_Exception_IMAPServiceUnavailable $feisu) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $feisu->getMessage());
+                // try again with INBOX as parent because some IMAP servers can not handle namespaces correctly
+                $result = Felamimail_Controller_Folder::getInstance()->create($_account, $splitFolderName['localname'],
+                    'INBOX');
+            }
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
             // folder already there ...
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
-                . $tesg->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $tesg->getMessage());
             $result = null;
         }
 
