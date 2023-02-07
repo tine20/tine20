@@ -34,7 +34,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     private function __construct() 
     {
         $this->_applicationName       = 'Admin';
-        $this->_modelName             = 'Felamimail_Model_Account';
+        $this->_modelName             = Felamimail_Model_Account::class;
         $this->_purgeRecords          = false;
 
         // we need to avoid that anybody else gets this instance ... as it has acl turned off!
