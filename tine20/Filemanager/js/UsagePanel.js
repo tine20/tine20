@@ -45,12 +45,14 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
             ];
 
         this.hasOwnQuotaCheckbox = new Ext.form.Checkbox({
+            requiredGrant: this.requiredGrant,
             hidden: !showQuotaUi,
             disabled: true,
             boxLabel: this.app.i18n._('This folder has own quota'),
             listeners: {scope: this, check: this.onOwnQuotaCheck}
         });
         this.quotaField = Ext.ComponentMgr.create({
+            requiredGrant: this.requiredGrant,
             hidden: !showQuotaUi,
             fieldLabel: this.app.i18n.gettext('Quota'),
             emptyText: this.app.i18n.gettext('No quota set (examples: 10 GB, 900 MB)'),
