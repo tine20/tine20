@@ -112,7 +112,7 @@ deploy-customer-image-to-registry:
   script:
     - !reference [.lib, script]
     - docker login --username $CUSTOMER_IMAGE_REGISTRY_USERNAME --password $CUSTOMER_IMAGE_REGISTRY_PASSWORD $CUSTOMER_IMAGE_REGISTRY_REPO
-    - docker_registry_release_image built $CUSTOMER_IMAGE_REGISTRY_REPO
+    - docker_registry_release_image built "$CUSTOMER_IMAGE_REGISTRY_REPO" "$DEPLOY_CUSTOMER_IMAGE_TO_REGISTRY_SET_LATEST"
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-customer-image-to-registry/
     - if: $DEPLOY_CUSTOMER_IMAGE_TO_REGISTRY != "true"
