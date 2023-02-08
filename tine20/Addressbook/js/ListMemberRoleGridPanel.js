@@ -52,9 +52,14 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
 
         this.initColumns();
 
-        this.store = new Ext.data.Store({
+        this.store = new Ext.data.SimpleStore({
             autoSave: false,
-            fields:  Tine.Addressbook.Model.Contact
+            sortInfo: {field: 'n_fileas', direction: 'ASC'},
+            fields:  [
+                {name: 'n_fileas'},
+                {name: 'memberroles', sortType: this.listMemberRoleRenderer},
+                {name: 'email'},
+            ],
         });
 
         this.addListener("beforeedit", this.onBeforeEdit, this);
@@ -122,6 +127,7 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
         this.editors = [];
         var visibleColumns = ["n_fileas", "email", "memberroles"];
         Ext.each(this.columns, function(value, idx) {
+            this.columns[idx].sortable = true;
             if (visibleColumns.indexOf(this.columns[idx].id) === -1) {
                 this.columns[idx].hidden = true;
             } else {
@@ -164,9 +170,10 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
      * @constructor
      */
     listMemberRoleRenderer: function(value) {
+        //sort?
         return _.map(value, (memberrole) => {
             return Ext.util.Format.htmlEncode(_.get(memberrole, 'list_role_id.name', window.i18n._hidden('unknown')));
-        }).join(', ') || '';
+        }).sort().join(', ') || '';
     },
 
     preferredEmailRenderer : function(value,metadata,record) {
