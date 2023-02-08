@@ -405,49 +405,7 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update020()
     {
-        // fetch all offer ids, fetch offer, transform to Sales_Model_Document_Offer
-        $offerController = Sales_Controller_Offer::getInstance();
-        $docOfferController = Sales_Controller_Document_Offer::getInstance();
-        $customerController = Sales_Controller_Customer::getInstance();
-        $offerIds = $offerController->search(null, null, false, true);
-        foreach ($offerIds as $offerId) {
-            $offer = $offerController->get($offerId);
-            $customer = null;
-            $newRelations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class);
-            /** @var Tinebase_Model_Relation $relation */
-            foreach ($offer->relations as $relation) {
-                if (! $customer && $relation->related_model === Sales_Model_Customer::class) {
-                    // TODO only use those with $relation->type === 'OFFER' ?
-                    $customer = $customerController->get($relation->related_id);
-                } else {
-                    $relation->setId(null);
-                    $relation->own_id = null;
-                    $newRelations->addRecord($relation);
-                }
-            }
-            $description = $offer->description;
-            try {
-                $docOffer = new Sales_Model_Document_Offer([
-                    Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customer,
-                    Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_DRAFT,
-                    Sales_Model_Document_Offer::FLD_DESCRIPTION => $description,
-                    Sales_Model_Document_Offer::FLD_DOCUMENT_NUMBER => $offer->number,
-                    Sales_Model_Document_Offer::FLD_DOCUMENT_TITLE => $offer->title,
-                    Sales_Model_Document_Offer::FLD_RECIPIENT_ID => $customer->postal ?? null,
-                    'relations' => $newRelations,
-                ]);
-                try {
-                    $docOfferController->create($docOffer);
-                } catch (Zend_Db_Statement_Exception $zdse) {
-                    // maybe duplicate number - remove number to create new one
-                    $docOffer->{Sales_Model_Document_Offer::FLD_DOCUMENT_NUMBER} = null;
-                    $docOfferController->create($docOffer);
-                }
-            } catch (Exception $e) {
-                Tinebase_Exception::log($e);
-            }
-        }
-
+        // moved to \Sales_Frontend_Cli::migrateOffersToDocuments
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.20', self::RELEASE015_UPDATE020);
     }
 

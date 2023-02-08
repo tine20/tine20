@@ -403,4 +403,82 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $this->_createImportDemoDataFromSet('Sales.yml');
     }
+
+    /**
+     * supports -d (dry-run)
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function migrateOffersToDocuments(Zend_Console_Getopt $_opts)
+    {
+        // fetch all offer ids, fetch offer, transform to Sales_Model_Document_Offer
+        $offerController = Sales_Controller_Offer::getInstance();
+        $docOfferController = Sales_Controller_Document_Offer::getInstance();
+        $customerController = Sales_Controller_Customer::getInstance();
+        $offerIds = $offerController->search(null, null, false, true);
+        $def = Sales_Model_Document_Offer::getConfiguration()->getFields()[Sales_Model_Document_Offer::FLD_DOCUMENT_NUMBER];
+        /** @var Tinebase_Numberable_String $numberable */
+        $numberable = Tinebase_Numberable::getNumberable(Sales_Model_Document_Offer::class,
+            Sales_Model_Document_Offer::FLD_DOCUMENT_NUMBER, $def);
+        foreach ($offerIds as $offerId) {
+            $offer = $offerController->get($offerId);
+            $customer = null;
+            $newRelations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class);
+            /** @var Tinebase_Model_Relation $relation */
+            foreach ($offer->relations as $relation) {
+                if (! $customer && $relation->related_model === Sales_Model_Customer::class) {
+                    // TODO only use those with $relation->type === 'OFFER' ?
+                    $customer = $customerController->get($relation->related_id);
+                } else {
+                    // TODO add other relations?
+//                    $relation->setId(null);
+//                    $relation->own_id = null;
+//                    $newRelations->addRecord($relation);
+                }
+            }
+            $description = $offer->description;
+
+            // fix prefix
+            if (strpos($offer->number, $numberable->getPrefix()) == false) {
+                $offer->number = preg_replace('/[a-z\-]+/i', $numberable->getPrefix(), $offer->number);
+            }
+
+            // TODO add tags
+            // TODO add attachments
+
+            try {
+                $docOffer = new Sales_Model_Document_Offer([
+                    Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customer,
+                    Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_DRAFT,
+                    Sales_Model_Document_Offer::FLD_DESCRIPTION => $description,
+                    Sales_Model_Document_Offer::FLD_DOCUMENT_NUMBER => $offer->number,
+                    Sales_Model_Document_Offer::FLD_DOCUMENT_TITLE => $offer->title,
+                    Sales_Model_Document_Offer::FLD_RECIPIENT_ID => $customer->postal ?? null,
+                    'relations' => $newRelations,
+                ]);
+                if (! $_opts->d) {
+                    try {
+                        echo "Creating new doc offer: " . $docOffer->{Sales_Model_Document_Offer::FLD_DOCUMENT_NUMBER} . "...\n";
+                        $docOfferController->create($docOffer);
+                    } catch (Zend_Db_Statement_Exception $zdse) {
+                        // maybe duplicate number - SKIP
+                        echo "Skipping duplicate!\n";
+                        // TODO allow to configure to reset numbers?
+//                        $docOffer->{Sales_Model_Document_Offer::FLD_DOCUMENT_NUMBER} = null;
+//                        $docOfferController->create($docOffer);
+                    }
+                } else {
+                    echo "-- DRY-RUN --\n";
+                    echo "Creating new doc offer:\n";
+                    print_r($docOffer->toArray());
+                }
+            } catch (Exception $e) {
+                echo "Doc offer creation failed: " . $e->getMessage() . "\n";
+                // Tinebase_Exception::log($e);
+            }
+        }
+    }
 }
