@@ -104,7 +104,7 @@ class Tinebase_Numberable_String extends Tinebase_Numberable
         if (($len = strlen($this->_prefix)) > 0)
         {
             if (strpos($_value, $this->_prefix) !== 0) {
-                throw new Tinebase_Exception_UnexpectedValue('prefix missing');
+                throw new Tinebase_Exception_UnexpectedValue('prefix missing: "' . $this->_prefix . '"');
             }
             $_value = substr($_value, $len);
         }
@@ -125,10 +125,15 @@ class Tinebase_Numberable_String extends Tinebase_Numberable
         }
 
         $intValue = intval($_value);
-        if ($_value !== ''.$intValue) {
+        if ($_value !== '' . $intValue) {
             throw new Tinebase_Exception_UnexpectedValue('improper format: wrong prefix or non digit found where none should be "' . $value . '"');
         }
 
         return $intValue;
+    }
+
+    public function getPrefix()
+    {
+        return $this->_prefix;
     }
 }
