@@ -1138,6 +1138,18 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
             ]))->toArray());
         });
+
+        $r->addGroup('/ocs/v2.php/cloud', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->get('/user', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_OwncloudAPI::class, 'getUser', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+            ]))->toArray());
+
+            $routeCollector->get('/capabilities', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_OwncloudAPI::class, 'getCapabilities', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+            ]))->toArray());
+        });
     }
 
     public function publicPostAuthPAMvalidate(): \Psr\Http\Message\ResponseInterface
