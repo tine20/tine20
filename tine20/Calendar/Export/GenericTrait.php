@@ -51,6 +51,7 @@ trait Calendar_Export_GenericTrait
      */
     public function init(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
+        /** @var Calendar_Model_PeriodFilter $periodFilter */
         $periodFilter = $_filter->getFilter('period', false, true);
 
         if ($periodFilter) {
