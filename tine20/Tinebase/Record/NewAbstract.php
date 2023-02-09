@@ -17,6 +17,8 @@
  */
 class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const implements Tinebase_Record_Interface
 {
+    use Tinebase_Record_AbstractTrait;
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -37,22 +39,6 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      * @var array
      */
     protected $_data = [];
-
-    /**
-     * stores if values got modified after loaded via constructor
-     *
-     * @var bool
-     */
-    protected $_isDirty = false;
-
-    /**
-     * should data be validated on the fly(false) or only on demand(true)
-     *
-     * TODO it must not be public!
-     *
-     * @var bool
-     */
-    public $bypassFilters = false;
 
     /**
      * save state if data is validated
@@ -533,11 +519,6 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         return $this->_data;
     }
 
-    public function byPassFilters(): bool
-    {
-        return $this->bypassFilters;
-    }
-
     /**
      * unsets record related properties
      *
@@ -873,16 +854,6 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
     }
 
     /**
-     * check if data got modified
-     *
-     * @return boolean
-     */
-    public function isDirty()
-    {
-        return $this->_isDirty;
-    }
-
-    /**
      * returns TRUE if given record obsoletes this one
      *
      * @param  Tinebase_Record_Interface $_record
@@ -1172,31 +1143,6 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
                 $this->$property = $oldValue;
             }
         }
-    }
-
-    public static function resolveRelationId(string $id, $record = null)
-    {
-        return $id;
-    }
-
-    /**
-     * @param Tinebase_Record_RecordSet $_recordSet
-     * @param Tinebase_Record_RecordSetDiff $_recordSetDiff
-     * @return bool
-     */
-    public static function applyRecordSetDiff(Tinebase_Record_RecordSet $_recordSet, Tinebase_Record_RecordSetDiff $_recordSetDiff)
-    {
-        return false;
-    }
-
-    /**
-     * returns true if this record should be replicated
-     *
-     * @return boolean
-     */
-    public function isReplicable()
-    {
-        return false;
     }
 
     /**

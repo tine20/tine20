@@ -4,7 +4,7 @@
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -17,7 +17,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Group
  */
-class Sales_ControllerTest extends \PHPUnit\Framework\TestCase
+class Sales_ControllerTest extends TestCase
 {
     /**
      * @var Sales_Controller_Contract
@@ -38,23 +38,15 @@ class Sales_ControllerTest extends \PHPUnit\Framework\TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
+        parent::setUp();
+
         Sales_Config::getInstance()->set(Sales_Config::CONTRACT_NUMBER_VALIDATION, 'text');
         
         $this->_backend = Sales_Controller_Contract::getInstance();
         
         $this->_backend->setNumberPrefix();
         $this->_backend->setNumberZerofill();
-    }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown(): void
-{
     }
     
     /**
@@ -131,6 +123,24 @@ class Sales_ControllerTest extends \PHPUnit\Framework\TestCase
         // cleanup
         $this->_backend->delete($contract->getId());
         $this->_decreaseNumber();
+    }
+
+    public function testRelatedContractTouch()
+    {
+        $contract = $this->_backend->create($this->_getContract());
+        $this->assertSame(1, (int)$contract->seq);
+        Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'n_fn' => 'unittest',
+            'relations' => [[
+                'related_model' => Sales_Model_Contract::class,
+                'related_id' => $contract->getId(),
+                'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'type' => 'foo'
+            ]]
+        ]));
+
+        $contract = $this->_backend->get($contract->getId());
+        $this->assertSame(2, (int)$contract->seq);
     }
     
     /**

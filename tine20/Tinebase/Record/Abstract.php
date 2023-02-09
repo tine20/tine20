@@ -17,6 +17,8 @@
  */
 abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Const implements Tinebase_Record_Interface
 {
+    use Tinebase_Record_AbstractTrait;
+
     /**
      * ISO8601LONG datetime representation
      */
@@ -35,13 +37,6 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      * @var array
      */
     protected static $_modelConfiguration = NULL;
-
-    /**
-     * should datas be validated on the fly(false) or only on demand(true)
-     *
-     * @var bool
-     */
-    public $bypassFilters;
     
     /**
      * should datetimeFields be converted from iso8601 (or optionally others {@see $this->dateConversionFormat}) strings to DateTime objects and back 
@@ -73,13 +68,6 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      * @var string
      */
     protected $_application = NULL;
-    
-    /**
-     * stores if values got modified after loaded via constructor
-     * 
-     * @var bool
-     */
-    protected $_isDirty = false;
     
     /**
      * holds properties of record
@@ -641,11 +629,6 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     {
         $this->isValid(true);
     }
-
-    public function byPassFilters(): bool
-    {
-        return $this->bypassFilters;
-    }
     
     /**
      * sets record related properties
@@ -1192,16 +1175,6 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         
         return $this;
     }
-    
-    /**
-     * check if data got modified
-     * 
-     * @return boolean
-     */
-    public function isDirty()
-    {
-        return $this->_isDirty;
-    }
 
     /**
      * returns TRUE if given record obsoletes this one
@@ -1470,11 +1443,6 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         }
     }
 
-    public static function resolveRelationId(string $id, $record = null)
-    {
-        return $id;
-    }
-
     public static function getSimpleModelName($application, $model)
     {
         $appName = is_string($application) ? $application : $application->name;
@@ -1607,26 +1575,6 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      */
     public static function modelConfigHook(array &$_definition)
     {
-    }
-
-    /**
-     * @param Tinebase_Record_RecordSet $_recordSet
-     * @param Tinebase_Record_RecordSetDiff $_recordSetDiff
-     * @return bool
-     */
-    public static function applyRecordSetDiff(Tinebase_Record_RecordSet $_recordSet, Tinebase_Record_RecordSetDiff $_recordSetDiff)
-    {
-        return false;
-    }
-
-    /**
-     * returns true if this record should be replicated
-     *
-     * @return boolean
-     */
-    public function isReplicable()
-    {
-        return false;
     }
 
     /**
