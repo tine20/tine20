@@ -222,11 +222,17 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
 
     public function fillAttachmentCache(array $accountIds, ?int $seconds = null): void
     {
+        $lockKey = __METHOD__ . Tinebase_Core::getUser()->getId();
+        if (false === Tinebase_Core::acquireMultiServerLock($lockKey)) {
+            return;
+        }
+
                                             // 4 weeks
         if (null === $seconds || $seconds > 4 * 7 * 24 * 3600) {
             $seconds = 2 * 7 * 24 * 3600; // 2 weeks
         }
         $old = Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->doSynchronousPreviewCreation(true);
+        $lastKeepAlive = time();
         try {
             foreach(Felamimail_Controller_Account::getInstance()->search(
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
@@ -241,11 +247,16 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
                 ]), new Tinebase_Model_Pagination(['sort' => 'received', 'dir' => 'DESC']), false, true) as $msgId) {
                     foreach ($msgCtrl->getAttachments($msgId) as $attachment) {
                         $this->get(Felamimail_Model_Message::class . ':' . $msgId . ':' . $attachment['partId']);
+                        if (time() - $lastKeepAlive > 10) {
+                            Tinebase_Core::getMultiServerLock($lockKey)->keepAlive();
+                            $lastKeepAlive = time();
+                        }
                     }
                 }
             }
         } finally {
             Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->doSynchronousPreviewCreation($old);
+            Tinebase_Core::releaseMultiServerLock($lockKey);
         }
     }
 }
