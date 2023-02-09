@@ -272,14 +272,6 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
         const colModel = this.supr().getColumnModel.call(this);
 
-        // manage discount field mode
-        const checkDiscountFieldMode = () => {
-            this.colModel.columns.find(c => c.dataIndex === 'position_discount_sum').editor.field.singleField =
-                this.colModel.columns.find(c => c.dataIndex === 'position_discount_percentage').hidden;
-
-        }
-        colModel.on('hiddenchange', checkDiscountFieldMode)
-
         return colModel;
     },
 
