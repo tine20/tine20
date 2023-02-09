@@ -411,4 +411,6 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     public function isDirty();
 
     public function byPassFilters(): bool;
+
+    public static function touchOnRelated(Tinebase_Model_Relation $relation): bool;
 }
