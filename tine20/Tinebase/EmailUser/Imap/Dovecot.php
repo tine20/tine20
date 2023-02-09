@@ -284,8 +284,12 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
             'QUOTATABLE' => $this->_quotasTable
         ));
         
-        // set domain from imap config
+        // check domain
         $this->_config['domain'] = !empty($this->_config['domain']) ? $this->_config['domain'] : null;
+
+        if (! $this->_config['domain'] && (! isset($this->_config['instanceName']) || empty($this->_config['instanceName']))) {
+            throw new Tinebase_Exception_Backend('domain or instanceName needed in config');
+        }
         
         // copy over default scheme, home, UID, GID from preconfigured defaults
         $this->_config['emailScheme'] = $this->_config['scheme'];
@@ -398,7 +402,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
             $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' = ?',
                 $this->_config['domain']);
         } else {
-            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . " = ''");
+            $select->where('1 = 0');
         }
     }
     
