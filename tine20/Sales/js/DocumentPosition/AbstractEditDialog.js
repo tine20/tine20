@@ -49,8 +49,9 @@ Tine.Sales.AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         if (isProductType) {
             this.record.computePrice();
-            this.getForm().findField('net_price').setValue(this.record.get('net_price'));
-            this.getForm().findField('gross_price').setValue(this.record.get('gross_price'));
+            ['position_price', 'net_price', 'sales_tax', 'gross_price'].forEach((fieldName) => {
+                this.getForm().findField(fieldName).setValue(this.record.get(fieldName));
+            });
         }
         _.defer(_.bind(this.doLayout, this));
     }
