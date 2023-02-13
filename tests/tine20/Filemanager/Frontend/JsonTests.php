@@ -805,7 +805,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 $this->_getUit()->createNodes($filepaths, Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFileIds,
                     true);
                 static::fail('quota should be exceeded, but createNodes succeeded');
-            } catch (Tinebase_Exception_Record_NotAllowed $terna) {}
+            } catch (Tinebase_Exception_SystemGeneric $tes) {}
 
             // check file is there but empty and deleted!
             $node = Tinebase_Filesystem::getInstance()->get($result[0]['id'], true);
@@ -912,8 +912,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
             try {
                 $this->_getUit()->moveNodes($secondFolderJson['path'] . '/' . basename($file0Path), $targetPath, false);
                 static::fail('Quota exceed did not work');
-            } catch (Tinebase_Exception_Record_NotAllowed $e) {
-                static::assertEquals('quota exceeded', $e->getMessage());
+            } catch (Tinebase_Exception_SystemGeneric $e) {
+                static::assertEquals('Quota is exceeded', $e->getMessage());
             }
             // TODO add assertions!
 
@@ -934,8 +934,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 $this->_getUit()->createNode([$targetFile], Tinebase_Model_Tree_FileObject::TYPE_FILE, [$tempFileId],
                     true);
                 static::fail('Quota exceed did not work');
-            } catch (Tinebase_Exception_Record_NotAllowed $e) {
-                static::assertEquals('quota exceeded', $e->getMessage());
+            } catch (Tinebase_Exception_SystemGeneric $e) {
+                static::assertEquals('Quota is exceeded', $e->getMessage());
             }
             try {
                 $this->_fsController->stat(Tinebase_Model_Tree_Node_Path::createFromPath(
@@ -1164,6 +1164,25 @@ class Filemanager_Frontend_JsonTests extends TestCase
         static::assertEquals($personalContainerNode['quota'], 10 * 1024 * 1024 * 1024);
 
         return $updatedNode;
+    }
+
+    /**
+     * testUpdateNodeWithCustomfield
+     *
+     * ·@see 0009292: Filemanager node quota = 0 can not be saved
+     */
+    public function testUpdateNodeQuota()
+    {
+        // test quota = 0
+        $node = $this->testUpdateNodeWithCustomfield();
+        $node['quota'] = 0; // 0 byte
+        $node = $this->_getUit()->saveNode($node);
+        static::assertSame('0', $node['quota'], 'quota should be 0');
+
+        // test quota > 0
+        $node['quota'] = 10 * 1024 * 1024 * 1024; 
+        $node = $this->_getUit()->saveNode($node);
+        static::assertEquals(10 * 1024 * 1024 * 1024, $node['quota'], 'quota should be ' . $node['quota']);
     }
 
     public function testUnsetQuota()

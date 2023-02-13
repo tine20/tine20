@@ -243,9 +243,6 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
-                self::INPUT_FILTERS             => [
-                    Zend_Filter_Empty::class => null
-                ],
                 self::NULLABLE                  => true,
                 self::UNSIGNED                  => true,
             ],

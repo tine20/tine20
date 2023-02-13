@@ -5326,3 +5326,6 @@ msgstr "Wie möchten Sie Ihren Export speichern?"
 
 msgid "Export only currently shown columns"
 msgstr "Nur die angezeigten Spalten exportieren"
+
+msgid "Quota is exceeded"
+msgstr "Quota ist überschritten"
