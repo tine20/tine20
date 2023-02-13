@@ -61,14 +61,15 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
                     //'resultsCount' => $response->resultCount !== null..
                     'status' => $response->getStatusCode()
                 ]));
-            } // else { TODO do something or remove this
-            // maybe react to status !== 200
-            // if client wants json envelop
-            // if response->getStatusCode() !== 200
-            // make body rewindable, writable, in doubt just create a new response or use withBody()
-            // $response->getBody()->rewind();
-            // $response->getBody()->write(json_encode(['results' => [], 'status' => $response->getStatusCode()]));
-            //}
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+            $response = new Response($body = 'php://memory', Tinebase_Server_Expressive::HTTP_ERROR_CODE_NOT_FOUND);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
+            $response = new Response($body = 'php://memory', Tinebase_Server_Expressive::HTTP_ERROR_CODE_FORBIDDEN);
         } catch (Tinebase_Exception_Expressive_HttpStatus $teeh) {
             // the exception can use logToSentry and logLevelMethod properties to achieve desired logging
             // default is false (no sentry) and info log level
@@ -76,7 +77,7 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
             $response = new Response($body = 'php://memory', $teeh->getCode());
         } catch (Exception $e) {
             Tinebase_Exception::log($e, false);
-            $response = new Response($body = 'php://memory', 500);
+            $response = new Response($body = 'php://memory', Tinebase_Server_Expressive::HTTP_ERROR_CODE_INTERNAL_SERVER_ERROR);
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
