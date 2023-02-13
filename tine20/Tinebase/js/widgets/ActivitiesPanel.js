@@ -134,16 +134,17 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             recordClass = Tine.Tinebase.data.RecordMgr.get(this.record_model) || Tine.Tinebase.data.RecordMgr.get(this.app + '_Model_' + this.record_model),
             appName = recordClass.getMeta('appName'),
             app = Tine.Tinebase.appMgr.get(appName),
-            i18n = app ? app.i18n : window.i18n;
+            i18n = app ? app.i18n : window.i18n,
+            fieldTags = ['added', 'removed', 'modified'].map((tag) => { return window.i18n._hidden(tag) + ':'}).concat('-&gt;');
 
         note = Ext.util.Format.htmlEncode(note);
-        note = note.replace(/( +[^ ]+ \(.*? -&gt; [^)]*)\)/g, '<br> \u00A0\u2022\u00A0 $&');
+        note = note.replace(new RegExp(`( +[^ ]+ \\(.*? (${fieldTags.join('|')}) [^)]*)\\)`,'g'), '<br> \u00A0\u2022\u00A0 $&');
 
         if (recordClass) {
             Ext.each(recordClass.getFieldDefinitions(), function(field) {
                 var _ = window.lodash,
                     i18nLabel = field.label ? i18n._hidden(field.label) : field.name,
-                    regexp = new RegExp(' (' + _.escapeRegExp(field.name) +'|' + _.escapeRegExp(i18nLabel) + ') \\((.*?) (-&gt;) ([^)]*)\\)'),
+                    regexp = new RegExp(' (' + _.escapeRegExp(field.name) +'|' + _.escapeRegExp(i18nLabel) + `) \\((.*?) (-&gt;) ([^)]*)\\)`),
                     struct = regexp.exec(note),
                     label = struct && struct.length == 5 ? struct[1] : null,
                     oldValue = label ? struct[2] : null,
@@ -157,7 +158,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
                     note = note.replace(regexp, i18nLabel + ' (' + oldValue + ' \u27bd ' + newValue + ')');
                 } else {
                     // alternative form
-                    regexp = new RegExp(' (' + _.escapeRegExp(field.name) +'|' + _.escapeRegExp(i18nLabel) + ') \\((.*)\\)');
+                    regexp = new RegExp(' (' + _.escapeRegExp(field.name) +'|' + _.escapeRegExp(i18nLabel) + ') \\((.[^)])\\)');
 
                     struct = regexp.exec(note);
                     label = struct && struct.length == 3 ? struct[1] : null;
