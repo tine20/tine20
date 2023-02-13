@@ -273,7 +273,11 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
             }
         } finally {
             Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->doSynchronousPreviewCreation($old);
-            Tinebase_Core::releaseMultiServerLock($lockKey);
+            try {
+                Tinebase_Core::releaseMultiServerLock($lockKey);
+            } catch (Tinebase_Exception_Backend $teb) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $teb->getMessage());
+            }
         }
     }
 }
