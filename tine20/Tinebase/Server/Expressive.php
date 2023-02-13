@@ -93,8 +93,6 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
                 .' Is Routing request. uri: ' . $this->_request->getUri()->getPath() . '?'
                 . $this->_request->getUri()->getQuery() . ' method: ' . $this->_request->getMethod());
 
-            $responsePrototype = new Response();
-
             $middleWarePipe = new MiddlewarePipe();
             $middleWarePipe->pipe(new Tinebase_Expressive_Middleware_ResponseEnvelop());
             $middleWarePipe->pipe(new Tinebase_Expressive_Middleware_FastRoute());
