@@ -157,8 +157,8 @@ Tine.Felamimail.nodeActions.EmptyFolderAction = {
             if (selectedNode) {
                 selectedNode.getUI().addClass("x-tree-node-loading");
                 const result = await Tine.Felamimail.emptyFolder(folder.id);
-                const folder = Tine.Felamimail.folderBackend.recordReader({responseText: result});
-                app.getFolderStore().updateFolder(folder);
+                const folderRecord = Tine.Felamimail.folderBackend.recordReader({responseText: result});
+                app.getFolderStore().updateFolder(folderRecord);
                 selectedNode.removeAll();
                 selectedNode.getUI().removeClass("x-tree-node-loading");
             } else {
