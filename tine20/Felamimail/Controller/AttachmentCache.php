@@ -123,10 +123,14 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
     }
 
     /**
-     * inspect creation of one record (before create)
-     *
-     * @param   Felamimail_Model_AttachmentCache $_record
-     * @return  void
+     * @param Felamimail_Model_AttachmentCache $_record
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Zend_Mime_Exception
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
@@ -153,8 +157,12 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
             $fileName = $attachment['filename'];
 
         } else {
-            $msgPart = $ctrl->getMessagePart($_record->{Felamimail_Model_AttachmentCache::FLD_SOURCE_ID},
-                $_record->{Felamimail_Model_AttachmentCache::FLD_PART_ID});
+            try {
+                $msgPart = $ctrl->getMessagePart($_record->{Felamimail_Model_AttachmentCache::FLD_SOURCE_ID},
+                    $_record->{Felamimail_Model_AttachmentCache::FLD_PART_ID});
+            } catch (Felamimail_Exception_IMAPMessageNotFound $feiamnf) {
+                throw new Tinebase_Exception_NotFound($feiamnf->getMessage());
+            }
             $stream = $msgPart->getDecodedStream();
             $fileName = $msgPart->filename;
         }
