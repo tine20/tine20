@@ -146,10 +146,10 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
 
     afterRender: function() {
         this.supr().afterRender.call(this);
-        var editDialog = this.findParentBy(function(c){return !!c.record}),
-            record = editDialog ? editDialog.record : {};
-
-        Tine.Filemanager.getFolderUsage(record.id, this.onFolderUsageLoad.createDelegate(this));
+        const editDialog = this.findParentBy(function(c){return !!c.record});
+        this.record = editDialog ? editDialog.record : {};
+        debugger
+        Tine.Filemanager.getFolderUsage(this.record.id, this.onFolderUsageLoad.createDelegate(this));
     },
 
     onFolderUsageLoad: function(response) {
@@ -168,20 +168,21 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
         me.byUserStore.loadData(_.map(_.get(response, 'createdBy', []), function(o, user) {
             return [lodash.get(userNameMap, user + '.n_fn' , me.app.i18n._('unknown')), o.size, o.revision_size];
         }));
-
+        const quota = this.record.get('quota');
+        if (quota !== null && quota !== '') {
+            this.hasOwnQuotaCheckbox.setValue(true);
+        }
+        this.quotaField.setValue(quota);
     },
 
     onRecordLoad: function(editDialog, record, ticketFn) {
-        var _ = window.lodash,
-            effectiveQuota = _.get(record, 'data.effectiveAndLocalQuota.effectiveQuota', null),
-            effectiveUsage = _.get(record, 'data.effectiveAndLocalQuota.effectiveUsage'),
-            quota = +record.get('quota'),
-            hasOwnQuota = !!quota;
+        const effectiveQuota = _.get(record, 'data.effectiveAndLocalQuota.effectiveQuota', null);
+        const effectiveUsage = _.get(record, 'data.effectiveAndLocalQuota.effectiveUsage');
+        const hasOwnQuota = record.get('quota') ?? false;
         
         const quotaManageRight = !_.get(record, 'data.account_grants.adminGrant', false)
             || record.get('type') !== 'folder';
         this.hasOwnQuotaCheckbox.setDisabled(quotaManageRight);
-        
         this.hasOwnQuotaCheckbox.setValue(hasOwnQuota);
         this.quotaField.setDisabled(! hasOwnQuota || quotaManageRight);
         
@@ -196,7 +197,7 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
     },
 
     onRecordUpdate: function(editDialog, record) {
-        var quota = +this.quotaField.getValue() || null;
+        const quota = this.quotaField.getValue() ?? null;
 
         record.set('quota', quota);
     }
