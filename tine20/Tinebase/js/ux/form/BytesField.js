@@ -73,6 +73,8 @@ Ext.ux.form.BytesField = Ext.extend(Ext.form.NumberField, {
             suffix = parts ? parts[2] : this.suffixes[this.basePow],
             pow = suffix ? this.suffixes.indexOf(suffix.toLowerCase()) : 0;
 
+        if (value === '' || value === null) return null;
+        
         value = this.supr().parseValue.call(this, number);
 
         value = value * Math.pow(this.divisor, pow);
@@ -87,8 +89,8 @@ Ext.ux.form.BytesField = Ext.extend(Ext.form.NumberField, {
 
     setValue: function(value) {
         this.supr().setValue.call(this, value);
-
-        value = value ?
+        
+        value = value !== null && value !== ''?
             Tine.Tinebase.common.byteFormatter(value * Math.pow(this.divisor, this.basePow), this.forceUnit, this.decimalPrecision, false) :
             this.emptyText;
 

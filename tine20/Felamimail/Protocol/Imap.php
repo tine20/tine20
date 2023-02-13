@@ -211,4 +211,30 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
             return false;
         }
     }
+
+    /**
+     * TODO: implement selection dialog to subscribe/unsubscribe imap folder
+     * subscribe a new folder
+     *
+     * @param string $folder folder name
+     * @return bool
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function subscribe($folder): bool
+    {
+        return $this->requestAndResponse('SUBSCRIBE', [$this->escapeString($folder)]);
+    }
+
+    /**
+     * TODO: implement selection dialog to subscribe/unsubscribe imap folder
+     * unsubscribe a folder
+     *
+     * @param string $folder folder name
+     * @return bool
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function unsubscribe($folder): bool
+    {
+        return $this->requestAndResponse('UNSUBSCRIBE', [$this->escapeString($folder)]);
+    }
 }

@@ -968,8 +968,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 } else {
                     try {
                         $this->_backend->copyTempfile($_tempFileId, $_statpath, true);
-                    } catch (Tinebase_Exception_Record_NotAllowed $e) {
-                        if ('quota exceeded' === $e->getMessage()) {
+                    } catch (Tinebase_Exception_SystemGeneric $e) {
+                        if ('Quota is exceeded' === $e->getMessage()) {
                             $this->_backend->unlink($_statpath);
                         }
                         throw $e;
