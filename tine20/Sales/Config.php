@@ -205,7 +205,14 @@ class Sales_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const FEATURE_OFFERS_MODULE = 'offersModule';
-    
+
+    /**
+     * legacy offers feature
+     *
+     * @var string
+     */
+    const FEATURE_LEGACY_OFFERS = 'legacyOffers';
+
     /**
      * order confirmations module feature
      *
@@ -923,6 +930,15 @@ class Sales_Config extends Tinebase_Config_Abstract
                     self::DESCRIPTION                       => 'Offers Module',
                     self::TYPE                              => self::TYPE_BOOL,
                     self::DEFAULT_STR                       => true,
+                ],
+                // TODO remove that after migration (maybe in 2023.11)
+                self::FEATURE_LEGACY_OFFERS             => [
+                    self::LABEL                             => 'Legacy Offers',
+                    //_('Legacy Offers')
+                    self::DESCRIPTION                       => 'Legacy (non-document) Offers',
+                    //_('Legacy (non-document) Offers'')
+                    self::TYPE                              => self::TYPE_BOOL,
+                    self::DEFAULT_STR                       => false,
                 ],
                 self::FEATURE_ORDERCONFIRMATIONS_MODULE => [
                     self::LABEL                             => 'Order Confirmations Module',
