@@ -19,7 +19,9 @@
         paths:
           - "**/*.php"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-source/
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_SOURCE_SCHEDULE != "false"
+    - if: $PIPELINE_TYPE =~ /default-tests/
+    - if: $PIPELINE_TYPE =~ /mr-tests/
+    - if: $PIPELINE_TYPE =~ /matrix-tests/
     - if: $CI_COMMIT_TAG
 php-unit-all-tests-source-sequential:
   extends: .php-unit-all-tests-source
@@ -88,7 +90,7 @@ php-unit-all-tests-source-matrix:
         paths:
           - "**/*.php"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-source-postfixmultiinstance/
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_SOURCE_POSTFIXMULTIINSTANCE_SCHEDULE != "false"
+    - if: $PIPELINE_TYPE =~ /default-tests/
 php-unit-all-tests-source-postfixmultiinstance-sequential:
   extends: .php-unit-all-tests-source-postfixmultiinstance
   variables:
@@ -125,7 +127,7 @@ php-unit-setup-tests-source:
         paths:
           - "**/*.php"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-setup-tests-source/
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_SETUP_TESTS_SOURCE_SCHEDULE != "false"
+    - if: $PIPELINE_TYPE =~ /default-tests/
 
 
 php-unit-servertests-source:
@@ -144,7 +146,8 @@ php-unit-servertests-source:
         paths:
           - "**/*.php"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-servertests-source/
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_SERVERTESTS_SOURCE_SCHEDULE != "false"
+    - if: $PIPELINE_TYPE =~ /default-tests/
+    - if: $PIPELINE_TYPE =~ /mr-tests/
 
 
 .php-unit-all-tests-ldap-source:
@@ -176,7 +179,8 @@ php-unit-servertests-source:
           - "tine20/Tinebase/Group/*.php"
           - "tine20/Tinebase/Group/LdapPlugin/*.php"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-ldap-source/
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_LDAP_SOURCE_SCHEDULE != "false"
+    - if: $PIPELINE_TYPE =~ /default-tests/
+    - if: $PIPELINE_TYPE =~ /mr-tests/
 phpunit-all-tests-ldap-source-sequential:
   extends: .php-unit-all-tests-ldap-source
   variables:
@@ -213,7 +217,7 @@ php-unit-all-tests-ldap-source-parallel:
         paths:
           - "**/*.php"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-built/
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_BUILT_SCHEDULE == "true"
+    - if: $PIPELINE_TYPE =~ /default-tests/
 php-unit-all-tests-built-sequential:
   extends: .php-unit-all-tests-built
   variables:
@@ -253,7 +257,7 @@ php-unit-tinebase-tests-built:
         paths:
           - "**/*.php"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-tinebase-tests-built/
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_TINEBASE_TESTS_BUILT_SCHEDULE != "false"
+    - if: $PIPELINE_TYPE =~ /default-tests/
 
 
 .php-unit-nogitlabci-tests-built:
@@ -272,7 +276,7 @@ php-unit-tinebase-tests-built:
         paths:
           - "**/*.php"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-nogitlabci-tests-built/
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_NOGITLABCI_TESTS_BUILT_SCHEDULE != "false"
+    - if: $PIPELINE_TYPE =~ /default-tests/
   allow_failure: true
 php-unit-nogitlabci-tests-built-sequential:
   extends: .php-unit-nogitlabci-tests-built
@@ -329,4 +333,4 @@ php-unit-update-tests:
       changes:
         paths:
           - "**/*.php"
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_UPDATE_TESTS_SCHEDULE == "true"
+    - if: $PIPELINE_TYPE =~ /update-tests/
