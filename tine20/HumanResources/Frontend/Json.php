@@ -727,6 +727,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $openRecords['results'][] = $lastRecord;
         }
         $openRecords['totalcount'] = count($openRecords['results']);
+        $openRecords['currentTime'] = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format(Tinebase_Record_Abstract::ISO8601LONG);
 
         return $openRecords;
     }

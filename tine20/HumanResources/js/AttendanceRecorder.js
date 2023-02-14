@@ -69,6 +69,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
     // properties
     ptAllowPause: true,
     ptAllowMultiStart: true,
+    currentTimeDiff: 0,
 
     initComponent() {
         const me = this;
@@ -219,7 +220,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
                                         time: a.time + (record[FLD_TYPE] !== TYPE_CLOCK_IN ? Date.parseDate(record[FLD_TIMESTAMP], Date.patterns.ISO8601Long).getTime() - Date.parseDate(lastClockIn, Date.patterns.ISO8601Long).getTime() : 0)
                                     });
                                 }, {time: 0, lastClockIn: 0});
-                                const duration = time + (type === TYPE_CLOCK_IN ? (new Date().getTime() - Date.parseDate(lastClockIn, Date.patterns.ISO8601Long).getTime()) : 0);
+                                const duration = time + (type === TYPE_CLOCK_IN ? (this.getServerDate().getTime() - Date.parseDate(lastClockIn, Date.patterns.ISO8601Long).getTime()) : 0);
 
                                 window.setTimeout(() => {
                                     me.menu.timeAccountPickerGrid.view.refresh()
@@ -247,7 +248,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
             return !((x>box.x && x<box.x+box.width && y>box.y && y<box.y+box.height)
                 || Ext.EventObject.getTarget('.x-combo-selected'));
         }, this);
-        this.menu.on('render', () => {
+        this.menu.on('render', async () => {
             this.menu.mon(this.menu.el, { 'click': this.onMenuClick, scope: this });
 
             this.resizer = new Ext.Resizable(this.menu.el,  {
@@ -303,7 +304,9 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
 
     async applyDeviceStates() {
         this.autoRefreshTask.delay(this.autoRefreshInterval * 1000);
-        const { results: deviceRecords } = await Tine.HumanResources.getAttendanceRecorderDeviceStates();
+        const { results: deviceRecords, currentTime } = await Tine.HumanResources.getAttendanceRecorderDeviceStates();
+
+        this.currentTimeDiff = Date.parseDate(currentTime, Date.patterns.ISO8601Long).getTime() - new Date().getTime();
 
         const wtDeviceRecord = _.findLast(deviceRecords, {
             [FLD_STATUS]: STATUS_OPEN,
@@ -369,6 +372,10 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
 
         this.el.removeClass(_.get(this.el.dom.className.match(/(attendance-clock-menu-button-[_a-z]+)/), [0]));
         this.el.addClass(`attendance-clock-menu-button-${this.wtType}`);
+    },
+
+    getServerDate() {
+        return new Date().add(Date.MILLI, this.currentTimeDiff);
     },
 
     async onWTClock(fn, options, btn) {
@@ -503,7 +510,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
     },
 
     showClock() {
-        const date = new Date();
+        const date = this.getServerDate();
         let wtStatus = this.wtType === TYPE_CLOCK_PAUSED ? `${this.app.i18n._('Away')}: ${this.app.i18n._hidden(this.freeTimeType.name)}`  : (this.wtType === TYPE_CLOCK_IN ?  this.app.i18n._('Clocked-in') : this.app.i18n._('Clocked-out'));
         this.menu.displayPanel.update(`
             <div class="attendance-clock-status">${wtStatus}</div>
