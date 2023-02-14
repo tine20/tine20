@@ -58,7 +58,7 @@ async function createTasks(targetFolderPath, files, batchID) {
         Ext.MessageBox.alert(
             i18n._('Upload Failed'),
             app.i18n._(e.message)
-        ).setIcon(Ext.MessageBox.ERROR);
+        );
     }
 }
 
