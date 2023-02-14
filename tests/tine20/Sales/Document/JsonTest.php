@@ -363,7 +363,8 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         ]);
 
         $savedDocument = $this->_instance->saveDocument_Offer($document->toArray(true));
-        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $savedDocument[Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_STATUS]);
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $savedDocument[Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_CREATED_STATUS]);
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $savedDocument[Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_BOOKED_STATUS]);
         $savedDocument[Sales_Model_Document_Offer::FLD_OFFER_STATUS] = Sales_Model_Document_Offer::STATUS_RELEASED;
         $savedDocument = $this->_instance->saveDocument_Offer($savedDocument);
         $this->assertNotSame($customer->getId(), $savedDocument[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['id']);
@@ -387,12 +388,14 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->assertSame(Sales_Model_Document_Order::STATUS_RECEIVED, $result[Sales_Model_Document_Order::FLD_ORDER_STATUS]);
 
         $updatedOffer = $this->_instance->getDocument_Offer($savedDocument['id']);
-        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $updatedOffer[Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_STATUS]);
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED, $updatedOffer[Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_CREATED_STATUS]);
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $updatedOffer[Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_BOOKED_STATUS]);
 
         $result[Sales_Model_Document_Order::FLD_ORDER_STATUS] = Sales_Model_Document_Order::STATUS_ACCEPTED;
         $this->_instance->saveDocument_Order($result);
         $updatedOffer = $this->_instance->getDocument_Offer($savedDocument['id']);
-        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED, $updatedOffer[Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_STATUS]);
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED, $updatedOffer[Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_CREATED_STATUS]);
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED, $updatedOffer[Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_BOOKED_STATUS]);
     }
 
     public function testOrderDocument()

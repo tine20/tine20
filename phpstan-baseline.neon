@@ -4826,11 +4826,6 @@ parameters:
 			path: tine20/Tinebase/Controller/Record/Abstract.php
 
 		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$createedRecord$#"
-			count: 1
-			path: tine20/Tinebase/Controller/Record/Abstract.php
-
-		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$toggle$#"
 			count: 1
 			path: tine20/Tinebase/Controller/Record/Abstract.php

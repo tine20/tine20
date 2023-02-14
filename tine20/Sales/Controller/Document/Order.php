@@ -48,8 +48,8 @@ class Sales_Controller_Document_Order extends Sales_Controller_Document_Abstract
             Sales_Model_Document_Order::FLD_DESCRIPTION,
             Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID,
             Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID,
-            Sales_Model_Document_Order::FLD_FOLLOWUP_DELIVERY_STATUS,
-            Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_STATUS,
+            Sales_Model_Document_Order::FLD_FOLLOWUP_DELIVERY_CREATED_STATUS,
+            Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_CREATED_STATUS,
             'tags', 'attachments', 'relations',
         ];
         $this->_bookRecordRequiredFields = [

@@ -1265,7 +1265,7 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * inspect creation of one record (after setReleatedData)
      *
-     * @param   Tinebase_Record_Interface $createedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $createdRecord   the just updated record
      * @param   Tinebase_Record_Interface $record          the update record
      * @return  void
      */

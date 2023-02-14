@@ -65,6 +65,9 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        $_record->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} = $_oldRecord
+            ->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS};
+
         if (!empty($_record->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID})) {
             // the recipient address is not part of a customer, we enforce that here
             $_record->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID}
@@ -131,9 +134,6 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             }
 
             if (!empty($removeDocumentIds)) {
-                $_record->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} = $_oldRecord
-                    ->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS};
-
                 /** @var Tinebase_Model_DynamicRecordWrapper $precursor */
                 foreach ($_record->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} as $precursor) {
                     if (isset($removeDocumentIds[$precursor->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD}])) {
@@ -178,42 +178,44 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
     }
 
     /**
-     * @param Sales_Model_Document_Abstract $_createdRecord
-     * @param Sales_Model_Document_Abstract $_record
-     * @return void
+     * inspect creation of one record (after setReleatedData)
+     *
+     * @param   Tinebase_Record_Interface $createdRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @return  void
      */
-    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    protected function _inspectAfterSetRelatedDataCreate($createdRecord, $record)
     {
-        parent::_inspectAfterCreate($_createdRecord, $_record);
-
-        $this->_inspectAfterBookedTransition($_createdRecord);
+        parent::_inspectAfterSetRelatedDataCreate($createdRecord, $record);
+        $this->_inspectFollowUpStati($createdRecord);
     }
 
     /**
-     * @param Sales_Model_Document_Abstract $updatedRecord
-     * @param Sales_Model_Document_Abstract $record
-     * @param Sales_Model_Document_Abstract $currentRecord
-     * @return void
+     * inspect update of one record (after setReleatedData)
+     *
+     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
+     * @return  void
      */
-    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    protected function _inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord)
     {
-        parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
-
-        $this->_inspectAfterBookedTransition($updatedRecord, $currentRecord);
+        parent::_inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord);
+        $this->_inspectFollowUpStati($updatedRecord, $currentRecord);
     }
 
     /**
-     * after a document transitioned from not booked to booked all precursor documents need to update their followup status
+     * all precursor documents need to update their followup stati
      *
      * @param Sales_Model_Document_Abstract $_record
      * @param Sales_Model_Document_Abstract|null $_oldRecord
      * @return void
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _inspectAfterBookedTransition(Sales_Model_Document_Abstract $_record, ?Sales_Model_Document_Abstract $_oldRecord = null): void
+    protected function _inspectFollowUpStati(Sales_Model_Document_Abstract $_record, ?Sales_Model_Document_Abstract $_oldRecord = null): void
     {
-        if (($_oldRecord && $_oldRecord->isBooked()) || !$_record->isBooked()) {
-            // no transition from "not booked" to "booked" => nothing to do for us here
+        if ($_oldRecord && $_oldRecord->isBooked()) {
+            // nothing to do if we were already booked, nothing is allowed to change -> no change -> nothing to do
             return;
         }
 
@@ -227,9 +229,10 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             ]
         ]))->expand(new Tinebase_Record_RecordSet($this->_modelName, [$_record]));
 
+        $booked = $_record->isBooked();
         /** @var Tinebase_Model_DynamicRecordWrapper $precursorDocument */
         foreach ($_record->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} ?? [] as $precursorDocument) {
-            $precursorDocument->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD}->updateFollowupStatus();
+            $precursorDocument->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD}->updateFollowupStati($booked);
         }
     }
 
