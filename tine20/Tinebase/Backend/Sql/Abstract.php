@@ -689,10 +689,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         } else {
             $colsToFetch = (array) $_cols;
             
-            if (in_array(self::IDCOL, $colsToFetch) && count($colsToFetch) == 2) {
+            if (count($colsToFetch) === 2) {
                 // id/value pair requested
                 $getIdValuePair = TRUE;
-            } else if (! in_array(self::IDCOL, $colsToFetch) && count($colsToFetch) == 1) {
+            } else if (! in_array(self::IDCOL, $colsToFetch) && count($colsToFetch) === 1) {
                 // only one non-id column was requested -> add id and treat it like id/value pair
                 array_push($colsToFetch, self::IDCOL);
                 $getIdValuePair = TRUE;

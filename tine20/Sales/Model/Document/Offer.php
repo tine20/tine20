@@ -22,7 +22,8 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
 
     public const FLD_ORDER_ID = 'order_id';
     public const FLD_OFFER_STATUS = 'offer_status';
-    public const FLD_FOLLOWUP_ORDER_STATUS = 'followup_order_status';
+    public const FLD_FOLLOWUP_ORDER_CREATED_STATUS = 'followup_order_created_status';
+    public const FLD_FOLLOWUP_ORDER_BOOKED_STATUS = 'followup_order_booked_status';
 
     /**
      * offer status
@@ -100,8 +101,16 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
                 self::LENGTH => 255,
                 self::NULLABLE => true,
             ],
-            self::FLD_FOLLOWUP_ORDER_STATUS     => [
-                self::LABEL                         => 'Followup Order Status', // _('Followup Order Status')
+            self::FLD_FOLLOWUP_ORDER_CREATED_STATUS     => [
+                self::LABEL                         => 'Followup Order Creation Status', // _('Followup Order Creation Status')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Sales_Config::DOCUMENT_FOLLOWUP_STATUS,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+            ],
+            self::FLD_FOLLOWUP_ORDER_BOOKED_STATUS     => [
+                self::LABEL                         => 'Followup Order Booked Status', // _('Followup Order Booked Status')
                 self::TYPE                          => self::TYPE_KEY_FIELD,
                 self::NAME                          => Sales_Config::DOCUMENT_FOLLOWUP_STATUS,
                 self::UI_CONFIG                     => [
@@ -121,8 +130,13 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
     protected static string $_statusField = self::FLD_OFFER_STATUS;
     protected static string $_statusConfigKey = Sales_Config::DOCUMENT_OFFER_STATUS;
     protected static string $_documentNumberPrefix = 'OF-'; // _('OF-')
-    protected static array $_followupStatusFields = [
-        self::FLD_FOLLOWUP_ORDER_STATUS => [
+    protected static array $_followupCreatedStatusFields = [
+        self::FLD_FOLLOWUP_ORDER_CREATED_STATUS => [
+            self::MODEL_NAME => Sales_Model_Document_Order::class,
+        ],
+    ];
+    protected static array $_followupBookedStatusFields = [
+        self::FLD_FOLLOWUP_ORDER_BOOKED_STATUS => [
             self::MODEL_NAME => Sales_Model_Document_Order::class,
         ],
     ];

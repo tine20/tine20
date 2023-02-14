@@ -377,7 +377,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     protected static string $_statusField = '';
     protected static string $_statusConfigKey = '';
     protected static string $_documentNumberPrefix = '';
-    protected static array $_followupStatusFields = [];
+    protected static array $_followupCreatedStatusFields = [];
+    protected static array $_followupBookedStatusFields = [];
 
     /**
      * @param array $_definition
@@ -674,9 +675,21 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         unset($_data[self::FLD_PRECURSOR_DOCUMENTS]);
     }
 
-    public function updateFollowupStatus(): void
+    public function updateFollowupStati(bool $booked): void
     {
-        if (empty(static::$_followupStatusFields)) {
+        $isDirty = $this->_isDirty;
+
+        $this->_updateFollowupStatusFields('_followupCreatedStatusFields');
+        if ($booked) {
+            $this->_updateFollowupStatusFields('_followupBookedStatusFields', true);
+        }
+
+        $this->_isDirty = $isDirty;
+    }
+
+    protected function _updateFollowupStatusFields(string $statusFields, bool $onlyBooked = false): void
+    {
+        if (empty(static::$$statusFields)) {
             return;
         }
 
@@ -692,9 +705,12 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         $this->_isDirty = false;
 
         /** @var string $statusField */
-        foreach (static::$_followupStatusFields as $statusField => $followupConfig) {
+        foreach (static::$$statusFields as $statusField => $followupConfig) {
             $status = Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED;
             $foundProduct = false;
+            /** @var Tinebase_Controller_Record_Abstract $followupDocCtrl */
+            $followupDocCtrl = Tinebase_Core::getApplicationInstance($followupConfig[self::MODEL_NAME]);
+            $followUpDocs = [];
             $followupPositionClass = $this->_getPositionClassName($followupConfig[self::MODEL_NAME]);
             /** @var Tinebase_Controller_Record_Abstract $followupPositionCtrl */
             $followupPositionCtrl = Tinebase_Core::getApplicationInstance($followupPositionClass);
@@ -709,8 +725,17 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                             Tinebase_Model_Filter_FilterGroup::getFilterForModel($followupPositionClass, [
                                 [TMFA::FIELD => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION, TMFA::OPERATOR => 'equals', TMFA::VALUE => $position->getId()],
                                 [TMFA::FIELD => Sales_Model_DocumentPosition_Abstract::FLD_IS_REVERSED, TMFA::OPERATOR => 'equals', TMFA::VALUE => false],
-                            ]), null, false, [Tinebase_Backend_Sql_Abstract::IDCOL, Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY]
-                        ) as $qty) {
+                            ]), null, false, [Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID, Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY]
+                        ) as $docId => $qty) {
+                    if ($onlyBooked) {
+                        if (!isset($followUpDocs[$docId])) {
+                            $followUpDocs[$docId] = $followupDocCtrl->get($docId);
+                        }
+                        /** @var array<Sales_Model_Document_Abstract> $followUpDocs */
+                        if (!$followUpDocs[$docId]->isBooked()) {
+                            continue;
+                        }
+                    }
                     $quantity += (int)$qty;
                 }
                 if (null === $quantity) {
@@ -742,7 +767,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             $this->{self::FLD_POSITIONS} = null;
             /** @var Tinebase_Controller_Record_Abstract $ownCtrl */
             $ownCtrl = Tinebase_Core::getApplicationInstance(static::class);
-            $ownCtrl->update($this);
+            $updated = $ownCtrl->update($this);
+            $this->seq = $updated->seq;
         }
     }
 }

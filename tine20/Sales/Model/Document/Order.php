@@ -24,8 +24,11 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
     public const FLD_DELIVERY_RECIPIENT_ID = 'delivery_recipient_id';
 
     public const FLD_ORDER_STATUS = 'order_status';
-    public const FLD_FOLLOWUP_INVOICE_STATUS = 'followup_invoice_status';
-    public const FLD_FOLLOWUP_DELIVERY_STATUS = 'followup_delivery_status';
+    public const FLD_FOLLOWUP_INVOICE_CREATED_STATUS = 'followup_invoice_created_status';
+    public const FLD_FOLLOWUP_DELIVERY_CREATED_STATUS = 'followup_delivery_created_status';
+
+    public const FLD_FOLLOWUP_INVOICE_BOOKED_STATUS = 'followup_invoice_booked_status';
+    public const FLD_FOLLOWUP_DELIVERY_BOOKED_STATUS = 'followup_delivery_booked_status';
 
     /**
      * order status
@@ -60,16 +63,32 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                 self::LENGTH => 255,
                 self::NULLABLE => true,
             ],
-            self::FLD_FOLLOWUP_DELIVERY_STATUS  => [
-                self::LABEL                         => 'Followup Delivery Status', // _('Followup Delivery Status')
+            self::FLD_FOLLOWUP_DELIVERY_CREATED_STATUS  => [
+                self::LABEL                         => 'Followup Delivery Creation Status', // _('Followup Delivery Creation Status')
                 self::TYPE                          => self::TYPE_KEY_FIELD,
                 self::NAME                          => Sales_Config::DOCUMENT_FOLLOWUP_STATUS,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
             ],
-            self::FLD_FOLLOWUP_INVOICE_STATUS   => [
-                self::LABEL                         => 'Followup Invoice Status', // _('Followup Invoice Status')
+            self::FLD_FOLLOWUP_INVOICE_CREATED_STATUS   => [
+                self::LABEL                         => 'Followup Invoice Creation Status', // _('Followup Invoice Creation Status')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Sales_Config::DOCUMENT_FOLLOWUP_STATUS,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+            ],
+            self::FLD_FOLLOWUP_DELIVERY_BOOKED_STATUS => [
+                self::LABEL                         => 'Followup Delivery Booked Status', // _('Followup Delivery Booked Status')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Sales_Config::DOCUMENT_FOLLOWUP_STATUS,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+            ],
+            self::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS   => [
+                self::LABEL                         => 'Followup Invoice Booked Status', // _('Followup Invoice Booked Status')
                 self::TYPE                          => self::TYPE_KEY_FIELD,
                 self::NAME                          => Sales_Config::DOCUMENT_FOLLOWUP_STATUS,
                 self::UI_CONFIG                     => [
@@ -149,11 +168,19 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
     protected static string $_statusField = self::FLD_ORDER_STATUS;
     protected static string $_statusConfigKey = Sales_Config::DOCUMENT_ORDER_STATUS;
     protected static string $_documentNumberPrefix = 'OR-'; // _('OR-')
-    protected static array $_followupStatusFields = [
-        self::FLD_FOLLOWUP_DELIVERY_STATUS => [
+    protected static array $_followupCreatedStatusFields = [
+        self::FLD_FOLLOWUP_DELIVERY_CREATED_STATUS => [
             self::MODEL_NAME => Sales_Model_Document_Delivery::class,
         ],
-        self::FLD_FOLLOWUP_INVOICE_STATUS => [
+        self::FLD_FOLLOWUP_INVOICE_CREATED_STATUS => [
+            self::MODEL_NAME => Sales_Model_Document_Invoice::class,
+        ],
+    ];
+    protected static array $_followupBookedStatusFields = [
+        self::FLD_FOLLOWUP_DELIVERY_BOOKED_STATUS => [
+            self::MODEL_NAME => Sales_Model_Document_Delivery::class,
+        ],
+        self::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS => [
             self::MODEL_NAME => Sales_Model_Document_Invoice::class,
         ],
     ];

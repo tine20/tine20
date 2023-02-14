@@ -46,7 +46,8 @@ class Sales_Controller_Document_Offer extends Sales_Controller_Document_Abstract
             Sales_Model_Document_Offer::FLD_COST_CENTER_ID,
             Sales_Model_Document_Offer::FLD_COST_BEARER_ID,
             Sales_Model_Document_Offer::FLD_DESCRIPTION,
-            Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_STATUS,
+            Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_CREATED_STATUS,
+            Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_BOOKED_STATUS,
             'tags', 'attachments', 'relations',
         ];
         $this->_bookRecordRequiredFields = [
@@ -56,7 +57,7 @@ class Sales_Controller_Document_Offer extends Sales_Controller_Document_Abstract
         parent::__construct();
     }
 
-    protected function _inspectAfterBookedTransition(Sales_Model_Document_Abstract $_record, ?Sales_Model_Document_Abstract $_oldRecord = null): void
+    protected function _inspectFollowUpStati(Sales_Model_Document_Abstract $_record, ?Sales_Model_Document_Abstract $_oldRecord = null): void
     {
         // we do not do this for offers, they are first in chain
     }
