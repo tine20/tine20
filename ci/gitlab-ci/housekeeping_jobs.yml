@@ -42,4 +42,6 @@ docker-populate-cache:
   rules:
     # do not push cache if tests failed
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $RUN_NO_TESTS != "true"
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_NO_TESTS != "true"
+    - if: $PIPELINE_TYPE =~ /default-tests/
+    - if: $PIPELINE_TYPE =~ /mr-tests/
+    - if: $PIPELINE_TYPE =~ /matrix-tests/

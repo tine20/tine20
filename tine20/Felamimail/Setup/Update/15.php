@@ -20,6 +20,7 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE015_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE015_UPDATE006 = __CLASS__ . '::update006';
+    const RELEASE015_UPDATE007 = __CLASS__ . '::update007';
     
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -52,6 +53,10 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
+            ],
+            self::RELEASE015_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
             ],
         ],
     ];
@@ -199,5 +204,23 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Felamimail', '15.6', self::RELEASE015_UPDATE006);
+    }
+
+    public function update007()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        if ($this->getTableVersion('felamimail_cache_message') < 14) {            
+            // truncate email cache to make this go faster
+            Felamimail_Controller::getInstance()->truncateEmailCache();
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>sender</name>
+                    <type>text</type>
+                </field>
+            ');
+            $this->_backend->alterCol('felamimail_cache_message', $declaration);
+            $this->setTableVersion('felamimail_cache_message', 14);
+        }
+        $this->addApplicationUpdate('Felamimail', '15.7',self::RELEASE015_UPDATE007);
     }
 }

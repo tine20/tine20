@@ -13,7 +13,6 @@ deploy-built-image-to-gitlab:
     - if: $DEPLOY_BUILT_IMAGE_TO_GITLAB == "false"
       when: never
     - if: $DEPLOY_BUILT_IMAGE_TO_GITLAB == "true"
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_BUILD_IMAGE_TO_GITLAB_SCHEDULE != "false"
   timeout: 20m
   interruptible: false
 deploy-built-image-to-gitlab-arm64:
@@ -32,7 +31,6 @@ deploy-built-image-to-gitlab-arm64:
       when: never
     - if: $DEPLOY_BUILT_IMAGE_TO_GITLAB_ARM64 == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-built-image-to-gitlab-arm64/
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_BUILD_IMAGE_TO_GITLAB_ARM64_SCHEDULE == "true"
 
 # pushes dev-commit as dev to our gitlab registry.
 # They can be accessed essayer.
@@ -47,7 +45,7 @@ deploy-dev-image-to-gitlab:
     - if: $DEPLOY_DEV_IMAGE_TO_GITLAB == "false"
       when: never
     - if: $DEPLOY_DEV_IMAGE_TO_GITLAB == "true"
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_DEV_IMAGE_TO_GITLAB_SCHEDULE != "false"
+    - if: $PIPELINE_TYPE =~ /build-dev-images/
   timeout: 20m
   interruptible: false
 deploy-dev-image-to-gitlab-arm64:
@@ -66,7 +64,7 @@ deploy-dev-image-to-gitlab-arm64:
       when: never
     - if: $DEPLOY_DEV_IMAGE_TO_GITLAB_ARM64 == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab-arm64/
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_DEV_IMAGE_TO_GITLAB_ARM64_SCHEDULE == "true"
+    - if: $PIPELINE_TYPE =~ /build-dev-images/
 
 # pushing built-commit as tine20/tine20 to dockerhub.
 # The tag is also overwritten and set to $DOCKERHUB_TAG
@@ -203,5 +201,6 @@ trigger-release:
     - if: $TRIGGER_RELEASE == "false"
       when: never
     - if: $TRIGGER_RELEASE == "true"
+    - if: $PIPELINE_TYPE =~ /trigger-release/
   timeout: 20m
   interruptible: false
