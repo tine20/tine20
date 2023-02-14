@@ -766,7 +766,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }, this);
 
         Tine.Calendar.getFreeBusyInfo(
-            Tine.Calendar.Model.Attender.getAttendeeStore.getData(this.store),
+            _.map(Tine.Calendar.Model.Attender.getAttendeeStore.getData(this.store),(attendee) => {
+                return Object.assign({... attendee}, {user_id: _.get(attendee, 'user_id.id'), id: null})
+            }),
             [schedulingInfo],
             [this.record.get('uid')],
             function(freeBusyData) {
