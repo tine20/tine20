@@ -1651,9 +1651,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             return parent::fileMessageAttachment($location, $message, $attachment, $forceOverwrite);
         }
 
+        $partId = $attachment['partId'] ?? null;
+
         $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile(
             $message,
-            $attachment['partId']);
+            $partId);
 
         $filename = $this->_getfiledAttachmentFilename($attachment, $message);
         $targetPath = $this->_getLocationTargetPath($location);
