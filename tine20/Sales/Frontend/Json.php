@@ -33,7 +33,6 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_relatableModels = array(
         'Sales_Model_Contract',
         'Sales_Model_Customer',
-        'Sales_Model_Offer',
         'Sales_Model_Address',
         'Sales_Model_ProductAggregate',
     );
@@ -50,7 +49,6 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_Product::MODEL_NAME_PART,
         Sales_Model_ProductLocalization::MODEL_NAME_PART,
         Sales_Model_SubProductMapping::MODEL_NAME_PART,
-        Sales_Model_Document_Offer::MODEL_NAME_PART,
         Sales_Model_DocumentPosition_Offer::MODEL_NAME_PART,
         Sales_Model_Document_Order::MODEL_NAME_PART,
         Sales_Model_DocumentPosition_Order::MODEL_NAME_PART,
@@ -60,7 +58,6 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_DocumentPosition_Invoice::MODEL_NAME_PART,
         'Contract',
         'Customer',
-        'Offer',
         'Address',
         'ProductAggregate',
         'Boilerplate'
@@ -79,8 +76,13 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Invoices module disabled');
         }
         if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_OFFERS_MODULE)) {
-            $this->_relatableModels[]  = 'Sales_Model_Offer';
-            $this->_configuredModels[] = 'Offer';
+            if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_LEGACY_OFFERS)) {
+                $this->_relatableModels[] = Sales_Model_Offer::class;
+                $this->_configuredModels[] = 'Offer';
+            } else {
+                $this->_relatableModels[] = Sales_Model_Document_Offer::class;
+                $this->_configuredModels[] = Sales_Model_Document_Offer::MODEL_NAME_PART;
+            }
         }
         if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_SUPPLIERS_MODULE)) {
             $this->_relatableModels[]  = 'Sales_Model_Supplier';
