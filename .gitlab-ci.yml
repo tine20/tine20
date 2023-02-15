@@ -34,11 +34,11 @@ stages:
   - deploy
   - housekeeping
   - housekeeping-cleanup
-  - notify
   - merge1
   - merge2
   - merge3
   - merge4
+  - notify
 
 workflow:
   rules:

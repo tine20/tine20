@@ -190,7 +190,6 @@ test-with-health-check:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $TEST_WITH_HEALTH_CHECK_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /test-with-health-check/
     - if: $PIPELINE_TYPE =~ /default-tests/
-    - if: $PIPELINE_TYPE =~ /mr-tests/
     - if: $CI_COMMIT_TAG
 
 test-install-demodata:

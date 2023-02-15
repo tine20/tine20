@@ -21,7 +21,6 @@
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-source/
     - if: $PIPELINE_TYPE =~ /default-tests/
     - if: $PIPELINE_TYPE =~ /mr-tests/
-    - if: $PIPELINE_TYPE =~ /matrix-tests/
     - if: $CI_COMMIT_TAG
 php-unit-all-tests-source-sequential:
   extends: .php-unit-all-tests-source
@@ -41,6 +40,7 @@ php-unit-all-tests-source-parallel:
   needs:
     - docker_build_source
   rules:
+    - if: $PIPELINE_TYPE =~ /matrix-tests/
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "parallel"
       when: never
     - !reference [.php-unit-all-tests-source, rules]
