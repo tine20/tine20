@@ -438,6 +438,8 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
         Setup_SchemaTool::updateSchema([
             Sales_Model_Document_Offer::class,
             Sales_Model_Document_Order::class,
+            Sales_Model_Document_Delivery::class,
+            Sales_Model_Document_Invoice::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.22', self::RELEASE015_UPDATE022);
     }

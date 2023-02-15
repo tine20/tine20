@@ -5,11 +5,13 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        add functions again (__call interceptor doesn't work because of the reflection api)
  * @todo        check if we can add these functions to the reflection without implementing them here
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  *
@@ -98,7 +100,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
     }
     
-   /**
+    /**
      * Returns registry data of the application.
      *
      * Each application has its own registry to supply static data to the client.
@@ -786,6 +788,48 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_recordToJson(
             Sales_Controller_Document_Abstract::executeTransition($documentTransition)
         );
+    }
+
+    public function getSharedOrderDocumentTransition(string $customerId, string $targetDocument): array
+    {
+        switch ($targetDocument) {
+            case Sales_Model_Document_Invoice::class:
+                $field = Sales_Model_Document_Order::FLD_SHARED_INVOICE;
+                $followUpStatusFld = Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_CREATED_STATUS;
+                break;
+            case Sales_Model_Document_Delivery::class:
+                $field = Sales_Model_Document_Order::FLD_SHARED_DELIVERY;
+                $followUpStatusFld = Sales_Model_Document_Order::FLD_FOLLOWUP_DELIVERY_CREATED_STATUS;
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument('target document needs to be either invoice or delivery');
+        }
+
+        $orders = Sales_Controller_Document_Order::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Order::class, [
+                [TMFA::FIELD => Sales_Model_Document_Abstract::FLD_CUSTOMER_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $customerId]
+                ]],
+                [TMFA::FIELD => $field, TMFA::OPERATOR => 'equals', TMFA::VALUE => true],
+                [TMFA::FIELD => $followUpStatusFld, TMFA::OPERATOR => 'not', TMFA::VALUE => Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED],
+                [TMFA::FIELD => Sales_Model_Document_Order::FLD_ORDER_STATUS, TMFA::OPERATOR => 'equals', TMFA::VALUE => Sales_Model_Document_Order::STATUS_ACCEPTED],
+            ]));
+
+        if ($orders->count() === 0) {
+            return [];
+        }
+
+        $transitionSources = new Tinebase_Record_RecordSet(Sales_Model_Document_TransitionSource::class);
+        foreach ($orders as $order) {
+            $transitionSources->addRecord(new Sales_Model_Document_TransitionSource([
+                Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => $order,
+                Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL => Sales_Model_Document_Order::class,
+            ]));
+        }
+        return $this->_recordToJson(new Sales_Model_Document_Transition([
+            Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => $targetDocument,
+            Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => $transitionSources,
+        ]));
     }
 
     /**

@@ -101,6 +101,9 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
         '_getUser' => array()
     );
 
+    private $_name = null;
+    public const NAME_NOT_IN_PATH = 'nameNotInPath';
+
     /**
      * contructor
      * 
@@ -118,6 +121,9 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             );
         }
 
+        if (isset($options[self::NAME_NOT_IN_PATH])) {
+            $this->_name = $options[self::NAME_NOT_IN_PATH];
+        }
         if (isset($options['useIdAsName'])) {
             $this->_useIdAsName = $options['useIdAsName'];
         }
@@ -748,24 +754,25 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
      */
     public function getName()
     {
-        if (count($this->_getPathParts()) === 2 && 
-            Tinebase_Helper::array_value(1, $this->_getPathParts()) !== Tinebase_Model_Container::TYPE_SHARED &&
-            !$this->_useIdAsName
-        ) {
-            try {
-                $user = $this->_getUser(Tinebase_Helper::array_value(1, $this->_getPathParts()));
-                
-                $name = $this->_useLoginAsFolderName() ? $user->accountLoginName : $user->accountDisplayName;
-                
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                list(,$name) = Sabre\DAV\URLUtil::splitPath($this->_path);
+        if (null === $this->_name) {
+            if (count($this->_getPathParts()) === 2 &&
+                Tinebase_Helper::array_value(1, $this->_getPathParts()) !== Tinebase_Model_Container::TYPE_SHARED &&
+                !$this->_useIdAsName
+            ) {
+                try {
+                    $user = $this->_getUser(Tinebase_Helper::array_value(1, $this->_getPathParts()));
+
+                    $this->_name = $this->_useLoginAsFolderName() ? $user->accountLoginName : $user->accountDisplayName;
+
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    list(, $this->_name) = Sabre\DAV\URLUtil::splitPath($this->_path);
+                }
+
+            } else {
+                list(, $this->_name) = Sabre\DAV\URLUtil::splitPath($this->_path);
             }
-            
-        } else {
-            list(,$name) = Sabre\DAV\URLUtil::splitPath($this->_path);
         }
-        
-        return $name;
+        return $this->_name;
     }
     
     /**

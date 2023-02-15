@@ -30,6 +30,9 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
     public const FLD_FOLLOWUP_INVOICE_BOOKED_STATUS = 'followup_invoice_booked_status';
     public const FLD_FOLLOWUP_DELIVERY_BOOKED_STATUS = 'followup_delivery_booked_status';
 
+    public const FLD_SHARED_INVOICE = 'shared_invoice';
+    public const FLD_SHARED_DELIVERY = 'shared_delivery';
+
     /**
      * order status
      */
@@ -144,6 +147,16 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                         ['field' => Sales_Model_Document_Address::FLD_DOCUMENT_FIELD, 'operator' => 'equals', 'value' => self::FLD_DELIVERY_RECIPIENT_ID],
                     ],
                 ],
+            ],
+            self::FLD_SHARED_DELIVERY   => [
+                self::TYPE                  => self::TYPE_BOOLEAN,
+                self::LABEL                 => 'Shared Delivery', //_('Shared Delivery')
+                self::DEFAULT_VAL           => false,
+            ],
+            self::FLD_SHARED_INVOICE    => [
+                self::TYPE                  => self::TYPE_BOOLEAN,
+                self::LABEL                 => 'Shared Invoice', //_('Shared Invoice')
+                self::DEFAULT_VAL           => false,
             ],
         ]);
 
