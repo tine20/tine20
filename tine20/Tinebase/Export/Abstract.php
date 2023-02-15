@@ -1484,23 +1484,27 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
         if (true === $this->_dumpRecords) {
             if ($this->_config->columns) {
+                $fields = $this->_modelConfig ? $this->_modelConfig->getFields() : [];
                 foreach (Tinebase_Helper_ZendConfig::getChildrenConfigs($this->_config->columns, 'column') as $column) {
-                    $this->_writeValue($this->_convertToString($_record->{$column->identifier}));
+                    $this->_writeValue($this->_convertToString($_record->{$column->identifier},
+                        $fields[$column->identifier][Tinebase_ModelConfiguration_Const::TYPE] ?? null));
                 }
                 
             } else {
                 // TODO we should support "writing" whole records here and not only single fields - see \Calendar_Export_VCalendar
+                $fields = $this->_modelConfig ? $this->_modelConfig->getFields() : [];
                 foreach (empty($this->_fields) ? $_record->getFields() : $this->_fields as $field) {
                     if ($this->_rawData === false) {
-                        if ($this->_modelConfig && isset($this->_modelConfig->getFields()[$field])
-                            && isset($this->_modelConfig->getFields()[$field]['system'])
-                            && $this->_modelConfig->getFields()[$field]['system'] === true
+                        if ($this->_modelConfig && isset($fields[$field])
+                            && isset($fields[$field]['system'])
+                            && $fields[$field]['system'] === true
                         ) {
                             continue;
                         }
                     }
 
-                    $this->_writeValue($this->_convertToString($_record->{$field}));
+                    $this->_writeValue($this->_convertToString($_record->{$field},
+                        $fields[$field][Tinebase_ModelConfiguration_Const::TYPE] ?? null));
                 }
             }
         } elseif (true !== $this->_hasTemplate) {
@@ -1621,9 +1625,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
     /**
      * @param mixed $_value
+     * @param ?string $_type
      * @return string
      */
-    protected function _convertToString($_value)
+    protected function _convertToString($_value, ?string $_type = null)
     {
         if (is_object($_value)) {
             if ($this->_rawData) {
@@ -1644,8 +1649,19 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 }
             } else {
                 if ($_value instanceof DateTime) {
+                    switch ($_type) {
+                        case Tinebase_ModelConfiguration_Const::TYPE_TIME:
+                            $format = 'time';
+                            break;
+                        case Tinebase_ModelConfiguration_Const::TYPE_DATE:
+                            $format = 'date';
+                            break;
+                        case Tinebase_ModelConfiguration_Const::TYPE_DATETIME:
+                        default:
+                            $format = $this->_config->datetimeformat;
+                    }
                     $_value = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_value, null, null,
-                        $this->_config->datetimeformat);
+                        $format);
                 } elseif($_value instanceof Tinebase_Model_CustomField_Config) {
                     $_value = $_value->value->__toString();
                 } elseif ($_value instanceof Tinebase_Config_KeyFieldRecord) {
@@ -1670,6 +1686,16 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 $_value = json_encode($_value);
             } else {
                 $_value = '';
+            }
+        }
+
+        if (!$this->_rawData && $_type) {
+            switch ($_type) {
+                case Tinebase_ModelConfiguration_Const::TYPE_MONEY:
+                    $_value = sprintf('%01.2f ' . Tinebase_Config::getInstance()->{Tinebase_Config::CURRENCY_SYMBOL}, round((float)$_value, 2));
+                    break;
+                default:
+                    break;
             }
         }
 
