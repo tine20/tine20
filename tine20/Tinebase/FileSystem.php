@@ -1133,15 +1133,15 @@ class Tinebase_FileSystem implements
             $rootRevisionSize = 0;
         }
         $translation = Tinebase_Translation::getTranslation('Tinebase');
-
-        if ($sizeIncrease && $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB} > 0) {
-            $total = $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB} * 1024 * 1024;
+        $fsTotalQuotaInByte = Tinebase_FileSystem_Quota::getTotalQuotaBytes();
+        
+        if ($sizeIncrease && $fsTotalQuotaInByte > 0) {
             if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
-                if ($rootRevisionSize > $total) {
+                if ($rootRevisionSize > $fsTotalQuotaInByte) {
                     throw new Tinebase_Exception_SystemGeneric($translation->_('Quota is exceeded'));
                 }
             } else {
-                if ($rootSize > $total) {
+                if ($rootSize > $fsTotalQuotaInByte) {
                     throw new Tinebase_Exception_SystemGeneric($translation->_('Quota is exceeded'));
                 }
             }
