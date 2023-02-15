@@ -258,9 +258,10 @@ Tine.Filemanager.nodeActions.Edit = {
         }
     },
     actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
+        Tine.Filemanager.nodeActions.actionUpdater(action, grants, records, isFilterSelect, filteredContainers);
+        
         const record = records[0];
         const disabledNodeIds = ['myUser', 'shared', 'otherUsers'];
-    
         if (!record) return;
         if (disabledNodeIds.includes(record.id)) {
             action.setDisabled(true);
