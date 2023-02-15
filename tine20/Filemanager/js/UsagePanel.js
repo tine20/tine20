@@ -148,7 +148,7 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
         this.supr().afterRender.call(this);
         const editDialog = this.findParentBy(function(c){return !!c.record});
         this.record = editDialog ? editDialog.record : {};
-        debugger
+        
         Tine.Filemanager.getFolderUsage(this.record.id, this.onFolderUsageLoad.createDelegate(this));
     },
 

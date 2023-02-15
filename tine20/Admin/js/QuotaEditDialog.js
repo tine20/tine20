@@ -171,7 +171,6 @@ Tine.Admin.QuotaEditDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     getFileSystemTabItems() {
         this.translation.textdomain('Filemanager');
         const showQuotaUi = Tine.Tinebase.configManager.get('quota')?.showUI || true;
-        debugger
         //if (Tine.Tinebase.registry.get('manageImapEmailUser')) {
         this.pathField = [{
             fieldLabel: this.translation.gettext('path'),
