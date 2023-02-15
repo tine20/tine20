@@ -666,7 +666,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.initHtmlEditorDD();
 
         _.delay(() => {
-            if (this.recipientGrid.store.getCount()) {
+            // recipientGrid should have 1 empty item by default
+            if (this.recipientGrid.store.getCount() > 1) {
                 if (!this.subjectField.getValue()) {
                     this.subjectField.focus();
                 } else {
