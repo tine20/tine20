@@ -63,10 +63,18 @@ class Tinebase_WebDav_Root extends \Sabre\DAV\SimpleCollection
         // main entry point for ownCloud 
         if ($applications->find('name', 'Filemanager')) {
             $this->addChild(
-                new \Sabre\DAV\SimpleCollection(
-                    'remote.php', 
-                    array(new Filemanager_Frontend_WebDAV('webdav'))
-                )
+                new \Sabre\DAV\SimpleCollection('remote.php', [
+                    // for owncloud v2
+                    new Filemanager_Frontend_WebDAV('webdav'),
+                    // for owncloud v3 , they have the same "path" => 'webdav',add the path rewrite as option there.
+                    new \Sabre\DAV\SimpleCollection('dav', [
+                        new \Sabre\DAV\SimpleCollection('files', [
+                            new Filemanager_Frontend_WebDAV('webdav', [
+                                Tinebase_WebDav_Collection_AbstractContainerTree::NAME_NOT_IN_PATH => Tinebase_Core::getUser()->accountLoginName,
+                            ]),
+                        ])
+                    ]),
+                ])
             );
         }
         

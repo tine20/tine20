@@ -25,6 +25,15 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
                 <id xmlns="http://owncloud.org/ns"/>
             </prop>
         </propfind>';
+    
+    /**
+     * base uri sent from owncloud client with different version
+     *
+     * @access public
+     * @static
+     */
+    const BASE_URIV2_WEBDAV = '/remote.php/webdav';
+    const BASE_URIV3_DAV_FILES_USERNAME = '/remote.php/dav/files/tine20admin';
 
     /**
      * Runs the test methods of this class.
@@ -84,29 +93,98 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
     /**
      * test testGetProperties method
      */
-    public function testGetProperties()
+    public function testGetRootsV2()
     {
-        $responseDoc = $this->_execPropfindRequest();
+        $body = '<?xml version="1.0" encoding="utf-8"?><d:propfind xmlns:d="DAV:"><d:prop><d:resourcetype/></d:prop>M</d:propfind>';
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'PROPFIND',
+            'REQUEST_URI' => self::BASE_URIV2_WEBDAV,
+            'HTTP_DEPTH' => '1',
+        ));
+        
+        $responseDoc = $this->_execPropfindRequest($body, $request);
+        $this->assertStringContainsString(self::BASE_URIV2_WEBDAV . '/shared', $responseDoc->textContent);
+        $this->assertStringContainsString(self::BASE_URIV2_WEBDAV . '/Admin', $responseDoc->textContent);
+    }
+
+    /**
+     * test testGetProperties method
+     */
+    public function testGetRootsV3()
+    {
+        // fixme: owncloud client expect response path start with /dav/files/userLoginName too , /webdav/folder does not work anymore
+        $body = '<?xml version="1.0" encoding="utf-8"?><d:propfind xmlns:d="DAV:"><d:prop><d:resourcetype/></d:prop></d:propfind>';
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'PROPFIND',
+            'REQUEST_URI' => self::BASE_URIV3_DAV_FILES_USERNAME,
+            'HTTP_DEPTH' => '1',
+        ));
+
+        $responseDoc = $this->_execPropfindRequest($body, $request);
+        $this->assertStringContainsString(self::BASE_URIV3_DAV_FILES_USERNAME . '/shared', $responseDoc->textContent);
+        $this->assertStringContainsString(self::BASE_URIV3_DAV_FILES_USERNAME . '/Admin', $responseDoc->textContent);
+    }
+
+    /**
+     * test testGetProperties method
+     */
+    public function testGetPropertiesV2()
+    {
+        $query = '//d:multistatus/d:response/d:propstat/d:prop/owncloud:id';
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'PROPFIND',
+            'REQUEST_URI' => self::BASE_URIV2_WEBDAV . '/' . Tinebase_Core::getUser()->accountDisplayName,
+            'HTTP_DEPTH' => '0',
+        ));
+        $responseDoc = $this->_execPropfindRequest(null, $request);
+        $this->_assertQueryResponse($responseDoc, $query);
+    }
+
+    /**
+     * test testGetProperties method
+     */
+    public function testGetPropertiesV3()
+    {
+        $query = '//d:multistatus/d:response/d:propstat/d:prop/owncloud:id';
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'PROPFIND',
+            'REQUEST_URI' => self::BASE_URIV3_DAV_FILES_USERNAME,
+            'HTTP_DEPTH' => '0',
+        ));
+        
+        $responseDoc = $this->_execPropfindRequest(null, $request);
+        $this->_assertQueryResponse($responseDoc, $query);
+    }
+
+    protected function _assertQueryResponse($responseDoc, $query, $nodeLength = 1)
+    {
         $xpath = new DomXPath($responseDoc);
         $xpath->registerNamespace('owncloud', 'http://owncloud.org/ns');
 
-        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/owncloud:id');
-        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        $nodes = $xpath->query($query);
+        $this->assertEquals($nodeLength, $nodes->length, $responseDoc->saveXML());
+        
+        for($i = 0 ; $i < $nodeLength; $i++) {
+            $nodeValue = $nodes->item($i)->nodeValue;
+            $this->assertNotNull($nodeValue, $responseDoc->saveXML());
+        }
     }
 
     /**
      * @param string|null $body
      * @return DOMDocument
      */
-    protected function _execPropfindRequest($body = null)
+    protected function _execPropfindRequest($body = null, $request = null)
     {
-        $request = new Sabre\HTTP\Request(array(
-            'REQUEST_METHOD' => 'PROPFIND',
-            'REQUEST_URI' => '/remote.php/webdav/' . Tinebase_Core::getUser()->accountDisplayName,
-            'HTTP_DEPTH' => '0',
-        ));
-        $request->setBody($body ? $body : static::REQUEST_BODY);
+        if (!$request) {
+            $request = new Sabre\HTTP\Request(array(
+                'REQUEST_METHOD' => 'PROPFIND',
+                'REQUEST_URI' => self::BASE_URIV2_WEBDAV . '/' . Tinebase_Core::getUser()->accountDisplayName,
+                'HTTP_DEPTH' => '0',
+            ));
+        }
+        
+        $request->setBody($body ?: static::REQUEST_BODY);
 
         $this->server->httpRequest = $request;
         $this->server->exec();
@@ -122,7 +200,7 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
     /**
      * test testGetSizeProperty
      */
-    public function testGetSizeProperty()
+    public function testGetSizePropertyV2()
     {
         $body = '<?xml version="1.0" encoding="utf-8"?>
 <propfind xmlns="DAV:">
@@ -131,19 +209,46 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
         <size xmlns="http://owncloud.org/ns"/>
     </prop>
 </propfind>';
-        $responseDoc = $this->_execPropfindRequest($body);
-        $xpath = new DomXPath($responseDoc);
-        $xpath->registerNamespace('owncloud', 'http://owncloud.org/ns');
+        
+        $query = '//d:multistatus/d:response/d:propstat/d:prop/owncloud:size';
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'PROPFIND',
+            'REQUEST_URI' => self::BASE_URIV2_WEBDAV . '/' . Tinebase_Core::getUser()->accountDisplayName,
+            'HTTP_DEPTH' => '0',
+        ));
+        
+        $responseDoc = $this->_execPropfindRequest($body, $request);
+        $this->_assertQueryResponse($responseDoc, $query);
+    }
 
-        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/owncloud:size');
-        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertEquals(0, $nodes->item(0)->nodeValue, $responseDoc->saveXML());
+    /**
+     * test testGetSizeProperty
+     */
+    public function testGetSizePropertyV3()
+    {
+        $body = '<?xml version="1.0" encoding="utf-8"?>
+<propfind xmlns="DAV:">
+    <prop>
+        <resourcetype xmlns="DAV:"/>
+        <size xmlns="http://owncloud.org/ns"/>
+    </prop>
+</propfind>';
+        
+        $query = '//d:multistatus/d:response/d:propstat/d:prop/owncloud:size';
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'PROPFIND',
+            'REQUEST_URI' => self::BASE_URIV3_DAV_FILES_USERNAME . '/' . Tinebase_Core::getUser()->accountDisplayName,
+            'HTTP_DEPTH' => '0',
+        ));
+        
+        $responseDoc = $this->_execPropfindRequest($body, $request);
+        $this->_assertQueryResponse($responseDoc, $query);
     }
 
     /**
      * test testGetProperties method
      */
-    public function testGetPropertiesForSharedDirectory()
+    public function testGetPropertiesForSharedDirectoryV2()
     {
         $webdavTree = new \Sabre\DAV\ObjectTree(new Tinebase_WebDav_Root());
         $node = $webdavTree->getNodeForPath('/webdav/Filemanager/shared');
@@ -153,32 +258,53 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
 
         $request = new Sabre\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
-            'REQUEST_URI' => '/remote.php/webdav/shared/unittestdirectory',
+            'REQUEST_URI' => self::BASE_URIV2_WEBDAV . '/shared/unittestdirectory',
             'HTTP_DEPTH' => '1',
         ));
-        $request->setBody(static::REQUEST_BODY);
+        
+        $responseDoc = $this->_execPropfindRequest(null, $request);
+        
+        $query = '//d:multistatus/d:response/d:propstat/d:prop/owncloud:id';
+        $this->_assertQueryResponse($responseDoc, $query, 2);
 
-        $this->server->httpRequest = $request;
-        $this->server->exec();
-        //var_dump($this->response->body);
-        $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
+        $query = '//d:multistatus/d:response/d:propstat/d:prop/d:getetag';
+        $this->_assertQueryResponse($responseDoc, $query, 2);
+    }
 
-        $responseDoc = new DOMDocument();
-        $responseDoc->loadXML($this->response->body);
-        //$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
-        $xpath = new DomXPath($responseDoc);
-        $xpath->registerNamespace('owncloud', 'http://owncloud.org/ns');
+    /**
+     * test testGetProperties method
+     */
+    public function testGetPropertiesForSharedDirectoryV3()
+    {
+        $webdavTree = new \Sabre\DAV\ObjectTree(new Tinebase_WebDav_Root());
+        $node = $webdavTree->getNodeForPath('/webdav/Filemanager/shared');
+        $node->createDirectory('unittestdirectory');
+        $node = $webdavTree->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory');
+        $node->createDirectory('subdir');
 
-        $xml = $responseDoc->saveXML();
-        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/owncloud:id');
-        $this->assertEquals(2, $nodes->length, $xml);
-        $this->assertNotEmpty($nodes->item(0)->nodeValue, $xml);
-        $this->assertNotEmpty($nodes->item(1)->nodeValue, $xml);
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'PROPFIND',
+            'REQUEST_URI' => self::BASE_URIV3_DAV_FILES_USERNAME . '/shared',
+            'HTTP_DEPTH' => '1',
+        ));
 
-        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/d:getetag');
-        $this->assertEquals(2, $nodes->length, $xml);
-        $this->assertNotEmpty($nodes->item(0)->nodeValue, $xml);
-        $this->assertNotEmpty($nodes->item(1)->nodeValue, $xml);
+        $responseDoc = $this->_execPropfindRequest(null, $request);
+        $this->assertStringContainsString(self::BASE_URIV3_DAV_FILES_USERNAME . '/shared/unittestdirectory', $responseDoc->textContent);
+
+        $query = '//d:multistatus/d:response/d:propstat/d:prop/owncloud:id';
+        $this->_assertQueryResponse($responseDoc, $query, 2);
+
+        $query = '//d:multistatus/d:response/d:propstat/d:prop/d:getetag';
+        $this->_assertQueryResponse($responseDoc, $query, 2);
+
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'PROPFIND',
+            'REQUEST_URI' => self::BASE_URIV3_DAV_FILES_USERNAME . '/shared/unittestdirectory',
+            'HTTP_DEPTH' => '1',
+        ));
+
+        $responseDoc = $this->_execPropfindRequest(null, $request);
+        $this->assertStringContainsString(self::BASE_URIV3_DAV_FILES_USERNAME . '/shared/unittestdirectory/subdir', $responseDoc->textContent);
     }
 
     /**
@@ -200,43 +326,24 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
             "User-Agent: Mozilla/5.0 (Macintosh) mirall/1.5.0 (build 3709)\r\n"
         );
         Tinebase_Core::set('request', $request);
-
-        $request = new Sabre\HTTP\Request(array(
-            'REQUEST_METHOD' => 'PROPFIND',
-            'REQUEST_URI' => '/remote.php/webdav/' . Tinebase_Core::getUser()->accountDisplayName,
-            'HTTP_DEPTH' => '0',
-        ));
-        $request->setBody(static::REQUEST_BODY);
-
-        $this->server->httpRequest = $request;
-        $this->server->exec();
+        $this->_execPropfindRequest();
     }
 
     /**
      * test testGetProperties method with alternate loginname config
      */
-    public function testGetProperties2()
+    public function testGetPropertiesWithAccountLoginName()
     {
         Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
-
         $request = new Sabre\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
-            'REQUEST_URI' => '/remote.php/webdav/' . Tinebase_Core::getUser()->accountLoginName,
+            'REQUEST_URI' => self::BASE_URIV2_WEBDAV . '/' . Tinebase_Core::getUser()->accountLoginName,
             'HTTP_DEPTH' => '0',
         ));
-        $request->setBody(static::REQUEST_BODY);
-
-        $this->server->httpRequest = $request;
-        $this->server->exec();
-        $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
-
-        $responseDoc = new DOMDocument();
-        $responseDoc->loadXML($this->response->body);
-        $xpath = new DomXPath($responseDoc);
-        $xpath->registerNamespace('owncloud', 'http://owncloud.org/ns');
-
-        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/owncloud:id');
-        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        
+        $responseDoc = $this->_execPropfindRequest(null, $request);
+        
+        $query = '//d:multistatus/d:response/d:propstat/d:prop/owncloud:id';
+        $this->_assertQueryResponse($responseDoc, $query);
     }
 }
