@@ -567,7 +567,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     locationRecordField.setValue(attender?.data?.user_id);
                 }
             }, '-'];
-
+            //TODO: use grid panel hook ?
             var felamimailApp = Tine.Tinebase.appMgr.get('Felamimail');
             if (felamimailApp && attender.get('user_type') == 'user') {
                 Tine.log.debug('Adding email compose hook for attender');
@@ -576,14 +576,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     iconCls: felamimailApp.getIconCls(),
                     disabled: false,
                     scope: this,
-                    handler: function() {
-                        var _ = window.lodash;
-                        var email = Tine.Felamimail.getEmailStringFromContact(new Tine.Addressbook.Model.Contact(attender.get('user_id')));
-                        var record = new Tine.Felamimail.Model.Message({
-                            subject: _.get(this.record, 'data.poll.name', _.get(this.record, 'data.summary', '') , ''),
+                    handler: async() => {
+                        const record = new Tine.Felamimail.Model.Message({
+                            subject: _.get(this.record, 'data.poll.name', _.get(this.record, 'data.summary', ''), ''),
                             body: this.record.hasPoll() ? String.format(this.app.i18n._('Poll URL: {0}'), this.record.getPollUrl()) : '',
                             massMailingFlag: this.record.hasPoll(),
-                            to: [email]
+                            to: [attender.data.user_id.email]
                         }, 0);
                         var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
                             record: record
