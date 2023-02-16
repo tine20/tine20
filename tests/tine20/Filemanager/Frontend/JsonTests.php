@@ -913,7 +913,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 $this->_getUit()->moveNodes($secondFolderJson['path'] . '/' . basename($file0Path), $targetPath, false);
                 static::fail('Quota exceed did not work');
             } catch (Tinebase_Exception_SystemGeneric $e) {
-                static::assertEquals('Quota is exceeded', $e->getMessage());
+                $translation = Tinebase_Translation::getTranslation('Tinebase');
+                static::assertEquals($translation->_('Quota is exceeded'), $e->getMessage());
             }
             // TODO add assertions!
 
@@ -935,7 +936,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
                     true);
                 static::fail('Quota exceed did not work');
             } catch (Tinebase_Exception_SystemGeneric $e) {
-                static::assertEquals('Quota is exceeded', $e->getMessage());
+                $translation = Tinebase_Translation::getTranslation('Tinebase');
+                static::assertEquals($translation->_('Quota is exceeded'), $e->getMessage());
             }
             try {
                 $this->_fsController->stat(Tinebase_Model_Tree_Node_Path::createFromPath(
