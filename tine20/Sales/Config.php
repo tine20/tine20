@@ -248,20 +248,20 @@ class Sales_Config extends Tinebase_Config_Abstract
                 self::RECORDS => [
                     [
                         'id' => self::DOCUMENT_FOLLOWUP_STATUS_NONE,
-                        //_('No followups booked')
-                        'value' => 'No followups booked',
+                        //_('None')
+                        'value' => 'None',
                         'icon' => null,
                         'system' => true,
                     ], [
                         'id' => self::DOCUMENT_FOLLOWUP_STATUS_PARTIALLY,
-                        //_('Followups partially booked')
-                        'value' => 'Followups partially booked',
+                        //_('Partially')
+                        'value' => 'Partially',
                         'icon' => null,
                         'system' => true,
                     ], [
                         'id' => self::DOCUMENT_FOLLOWUP_STATUS_COMPLETED,
-                        //_('Followups booked')
-                        'value' => 'Followups booked',
+                        //_('Completed')
+                        'value' => 'Completed',
                         'icon' => null,
                         'system' => true,
                     ],

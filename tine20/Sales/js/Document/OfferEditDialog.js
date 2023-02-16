@@ -16,6 +16,18 @@ Tine.Sales.Document_OfferEditDialog = Ext.extend(Tine.Sales.Document_AbstractEdi
 
     initComponent () {
         this.supr().initComponent.call(this)
+    },
+
+    getRecordFormItems() {
+        const rtnVal = this.supr().getRecordFormItems.call(this)
+        const items = rtnVal[0].items
+        const placeholder = {xtype: 'label', html: '&nbsp', columnWidth: 1/5}
+
+        const statusLine = [this.fields.reversal_status, this.fields.followup_order_created_status, this.fields.followup_order_booked_status, {... placeholder}, {... placeholder}]
+        statusLine.cls = 'status-fields'
+        items.splice(0, 0, statusLine)
+
+        return rtnVal
     }
 })
 
