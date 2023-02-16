@@ -39,6 +39,7 @@ Tine.Felamimail.nodeActions.accountActions = [
 Tine.Felamimail.nodeActions.folderActions = [
     'MarkFolderSeenAction',
     'AddFolderAction',
+    'RefreshFolderAction',
     'MoveFolderAction',
     'EmptyFolderAction',
     'rename',
@@ -126,6 +127,7 @@ Tine.Felamimail.nodeActions.actionUpdater = function(action, grants, records, is
         switch (action.itemId) {
             case 'MarkFolderSeenAction':
             case 'AddFolderAction':
+            case 'RefreshFolderAction':
                 break;
             case 'EmptyFolderAction':
                 action.baseAction.setHidden(!isTrashFolder);
@@ -438,6 +440,38 @@ Tine.Felamimail.nodeActions.MoveFolderAction = {
                 }
             }
         });
+    },
+    actionUpdater: Tine.Felamimail.nodeActions.actionUpdater,
+};
+
+Tine.Felamimail.nodeActions.RefreshFolderAction = {
+    app: 'Felamimail',
+    text: 'Update Folder',
+    itemId: 'RefreshFolderAction',
+    iconCls: 'action_update_cache',
+    scope: this,
+    qtip: 'clear single folder message cache',
+    handler: async function(action) {
+        if (!action.node) return;
+        const app = action.app;
+        const folder = action.folder;
+        const selectedNode = action.node;
+        
+        try {
+            selectedNode.getUI().addClass("x-tree-node-loading");
+            await Tine.Felamimail.refreshFolder(folder.get('id'));
+            Ext.Msg.show({
+                title: app.i18n._('Update Folder'),
+                msg: app.i18n._('Folder cache has been cleared!'),
+                icon: Ext.MessageBox.INFO,
+                buttons: Ext.Msg.OK,
+                scope: this
+            });
+        } catch (e) {
+            Tine.Felamimail.folderBackend.handleRequestException(e);
+        } finally {
+            selectedNode.getUI().removeClass("x-tree-node-loading");
+        }
     },
     actionUpdater: Tine.Felamimail.nodeActions.actionUpdater,
 };

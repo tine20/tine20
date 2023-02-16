@@ -2943,4 +2943,20 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $testFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account, $this->_testFolderName);
         self::assertEquals(1, $testFolder->has_children, 'has_children should be 1');
     }
+    
+    public function testRefreshFolder()
+    {
+        $folder = $this->_getFolder($this->_testFolderName);
+
+        $this->_moveMessageToFolder($this->_testFolderName);
+        $result = $this->_json->updateMessageCache($folder['id'], 30);
+        $this->assertGreaterThan(0, $result['cache_totalcount']);
+        $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_COMPLETE, $result['cache_status']);
+        $this->assertNotNull($result['cache_timestamp']);
+
+        $this->_json->refreshFolder($folder->getId());
+        $updatedFolder = $this->_getFolder($this->_testFolderName);
+        $this->assertEquals(0, $updatedFolder['cache_totalcount']);
+        $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_EMPTY, $updatedFolder['cache_status']);
+    }
 }
