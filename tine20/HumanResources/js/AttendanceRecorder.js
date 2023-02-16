@@ -220,7 +220,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
                                         time: a.time + (record[FLD_TYPE] !== TYPE_CLOCK_IN ? Date.parseDate(record[FLD_TIMESTAMP], Date.patterns.ISO8601Long).getTime() - Date.parseDate(lastClockIn, Date.patterns.ISO8601Long).getTime() : 0)
                                     });
                                 }, {time: 0, lastClockIn: 0});
-                                const duration = time + (type === TYPE_CLOCK_IN ? (this.getServerDate().getTime() - Date.parseDate(lastClockIn, Date.patterns.ISO8601Long).getTime()) : 0);
+                                const duration = time + (type === TYPE_CLOCK_IN ? (me.getServerDate().getTime() - Date.parseDate(lastClockIn, Date.patterns.ISO8601Long).getTime()) : 0);
 
                                 window.setTimeout(() => {
                                     me.menu.timeAccountPickerGrid.view.refresh()
