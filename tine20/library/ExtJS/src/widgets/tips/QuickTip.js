@@ -112,7 +112,7 @@ Ext.QuickTip = Ext.extend(Ext.ToolTip, {
         }
         if (! ttp) {
             t = e.getTarget('.x-grid3-cell-inner')
-            if (t && t.offsetWidth < t.scrollWidth) {
+            if (t && t.offsetWidth - t.scrollWidth > 4) {
                 ttp = t.innerHTML;
             }
         }

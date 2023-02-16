@@ -73,6 +73,7 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
                 xtype: 'container',
                 border: false,
                 layout: 'column',
+                cls: initialRowConfig.cls || '',
                 items: [],
                 listeners: {
                     scope: this,

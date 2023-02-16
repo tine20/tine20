@@ -24,11 +24,11 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
     public const FLD_DELIVERY_RECIPIENT_ID = 'delivery_recipient_id';
 
     public const FLD_ORDER_STATUS = 'order_status';
-    public const FLD_FOLLOWUP_INVOICE_CREATED_STATUS = 'followup_invoice_created_status';
     public const FLD_FOLLOWUP_DELIVERY_CREATED_STATUS = 'followup_delivery_created_status';
-
-    public const FLD_FOLLOWUP_INVOICE_BOOKED_STATUS = 'followup_invoice_booked_status';
     public const FLD_FOLLOWUP_DELIVERY_BOOKED_STATUS = 'followup_delivery_booked_status';
+
+    public const FLD_FOLLOWUP_INVOICE_CREATED_STATUS = 'followup_invoice_created_status';
+    public const FLD_FOLLOWUP_INVOICE_BOOKED_STATUS = 'followup_invoice_booked_status';
 
     public const FLD_SHARED_INVOICE = 'shared_invoice';
     public const FLD_SHARED_DELIVERY = 'shared_delivery';
@@ -67,33 +67,37 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                 self::NULLABLE => true,
             ],
             self::FLD_FOLLOWUP_DELIVERY_CREATED_STATUS  => [
-                self::LABEL                         => 'Followup Delivery Creation Status', // _('Followup Delivery Creation Status')
+                self::LABEL                         => 'Delivery Created', // _('Delivery Created')
                 self::TYPE                          => self::TYPE_KEY_FIELD,
                 self::NAME                          => Sales_Config::DOCUMENT_FOLLOWUP_STATUS,
-                self::UI_CONFIG                     => [
-                    self::READ_ONLY                     => true,
-                ],
-            ],
-            self::FLD_FOLLOWUP_INVOICE_CREATED_STATUS   => [
-                self::LABEL                         => 'Followup Invoice Creation Status', // _('Followup Invoice Creation Status')
-                self::TYPE                          => self::TYPE_KEY_FIELD,
-                self::NAME                          => Sales_Config::DOCUMENT_FOLLOWUP_STATUS,
+                self::SHY                           => true,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
             ],
             self::FLD_FOLLOWUP_DELIVERY_BOOKED_STATUS => [
-                self::LABEL                         => 'Followup Delivery Booked Status', // _('Followup Delivery Booked Status')
+                self::LABEL                         => 'Delivery Booked', // _('Delivery Booked')
                 self::TYPE                          => self::TYPE_KEY_FIELD,
                 self::NAME                          => Sales_Config::DOCUMENT_FOLLOWUP_STATUS,
+                self::SHY                           => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+            ],
+            self::FLD_FOLLOWUP_INVOICE_CREATED_STATUS   => [
+                self::LABEL                         => 'Invoice Created', // _('Invoice Created')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Sales_Config::DOCUMENT_FOLLOWUP_STATUS,
+                self::SHY                           => true,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
             ],
             self::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS   => [
-                self::LABEL                         => 'Followup Invoice Booked Status', // _('Followup Invoice Booked Status')
+                self::LABEL                         => 'Invoice Booked', // _('Invoice Booked')
                 self::TYPE                          => self::TYPE_KEY_FIELD,
                 self::NAME                          => Sales_Config::DOCUMENT_FOLLOWUP_STATUS,
+                self::SHY                           => true,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
@@ -114,6 +118,7 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                 self::TYPE                  => self::TYPE_RECORD,
                 self::LABEL                 => 'Invoice Recipient', //_('Invoice Recipient')
                 self::NULLABLE              => true,
+                self::SHY                   => true,
                 self::UI_CONFIG             => [
                     self::TYPE                  => Sales_Model_Document_Address::TYPE_BILLING,
                 ],
@@ -133,6 +138,7 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                 self::TYPE                  => self::TYPE_RECORD,
                 self::LABEL                 => 'Delivery Recipient', //_('Delivery Recipient')
                 self::NULLABLE              => true,
+                self::SHY                   => true,
                 self::UI_CONFIG             => [
                     self::TYPE                  => Sales_Model_Document_Address::TYPE_DELIVERY,
                 ],
@@ -151,12 +157,16 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
             self::FLD_SHARED_DELIVERY   => [
                 self::TYPE                  => self::TYPE_BOOLEAN,
                 self::LABEL                 => 'Shared Delivery', //_('Shared Delivery')
+                self::BOX_LABEL             => 'include in shared delivery',
                 self::DEFAULT_VAL           => false,
+                self::SHY                   => true,
             ],
             self::FLD_SHARED_INVOICE    => [
                 self::TYPE                  => self::TYPE_BOOLEAN,
                 self::LABEL                 => 'Shared Invoice', //_('Shared Invoice')
+                self::BOX_LABEL             => 'include in shared invoice',
                 self::DEFAULT_VAL           => false,
+                self::SHY                   => true,
             ],
         ]);
 

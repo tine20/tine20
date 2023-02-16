@@ -35,6 +35,8 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         const targetRecordClass = Tine.Tinebase.data.RecordMgr.get(`Sales.Document_${targetType}`)
         const targetRecordName = isReversal ? app.i18n._('Reversal') : targetRecordClass.getRecordName()
         const targetRecordsName = isReversal ? app.i18n._('Reversals') : targetRecordClass.getRecordsName()
+        const sharedTransitionFlag = `shared_${targetRecordClass.getMeta('recordName').toLowerCase()}`
+        const supportsSharedTransition = sourceRecordClass.hasField(sharedTransitionFlag)
         return new Ext.Action(Object.assign({
             text: config.text || app.formatMessage('Create { targetRecordName }', { targetRecordName }),
             iconCls: `SalesDocument_${targetType} ${isReversal ? 'SalesDocument_Reversal' : ''}`,
@@ -70,7 +72,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 if (unbooked.length) {
                     if (await Ext.MessageBox.confirm(
                         app.formatMessage('Book unbooked { sourceRecordsName }', { sourceRecordsName }),
-                        app.formatMessage('Creating followup { targetRecordsName } is allowed for booked { sourceRecordsName } only. Book selected { sourceTypes } now?', { sourceRecordsName, targetRecordsName })
+                        app.formatMessage('Creating followup { targetRecordsName } is allowed for booked { sourceRecordsName } only. Book selected { sourceRecordsName } now?', { sourceRecordsName, targetRecordsName })
                     ) !== 'yes') { return false }
 
                     // @TODO: maybe we should define default booked state somehow? e.g. offer should be accepted (not only send) or let the user select?
@@ -99,19 +101,62 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 }
 
                 const followUpDocuments = [];
+                let processedSourceIds = [];
                 // @TODO: have all docs into one followUp vs. each doc gets an individual followUp
+                // allow 'ad-hoc' shared followups? -> no :-)
+                // check if document is 'shared' -> getSharedOrderDocumentTransition
+                // NOTE: the selection might contain other documents which are part of the shared followup
+                //       those docs must not be processed individually
+                //       unbooked documents are not included -> inform user about this? (are they included in getSharedOrderDocumentTransition?)
                 await selections.asyncForEach(async (record) => {
                     try {
-                        const followUpDocumentData = await Tine.Sales.createFollowupDocument({
-                            sourceDocuments: [{sourceDocumentModel: sourceRecordClass.getPhpClassName(), sourceDocument: record.id, isReversal}],
-                            targetDocumentType: targetRecordClass.getPhpClassName()
-                        })
-                        window.postal.publish({
-                            channel: "recordchange",
-                            topic: [app.appName, targetRecordClass.getMeta('modelName'), 'create'].join('.'),
-                            data: followUpDocumentData
-                        })
-                        followUpDocuments.push(Tine.Tinebase.data.Record.setFromJson(followUpDocumentData, targetRecordClass))
+                        if (processedSourceIds.indexOf(record.id) < 0) {
+                            let transition = {
+                                sourceDocuments: [{
+                                    sourceDocumentModel: sourceRecordClass.getPhpClassName(),
+                                    sourceDocument: record.id,
+                                    isReversal
+                                }],
+                                targetDocumentType: targetRecordClass.getPhpClassName()
+                            }
+
+                            if (supportsSharedTransition && !!+record.get(sharedTransitionFlag)) {
+                                const customerId = _.get(record, 'data.customer_id.original_id')
+                                transition = await Tine.Sales.getSharedOrderDocumentTransition(customerId, transition.targetDocumentType)
+
+                                if (! transition?.sourceDocuments?.length) {
+                                    return await Ext.MessageBox.show({
+                                        buttons: Ext.Msg.OK,
+                                        icon: Ext.MessageBox.WARNING,
+                                        title: app.formatMessage('Nothing to do'),
+                                        msg: app.formatMessage('{ document } has no open positions left.', { document: record.getTitle() })
+                                    });
+                                }
+                            }
+
+                            if (transition.sourceDocuments.length > 1) {
+                                transition.sourceDocuments = _.map(await Tine.widgets.dialog.MultiOptionsDialog.getOption({
+                                    title: app.formatMessage('Choose { sourceRecordsName }', { sourceRecordsName }),
+                                    questionText: app.formatMessage('Please choose which { sourceRecordsName } should be included in shared { targetRecordName }', { sourceRecordsName, targetRecordName}),
+                                    allowMultiple: true,
+                                    allowCancel: false,
+                                    height: transition.sourceDocuments.length * 30 + 100,
+                                    options: transition.sourceDocuments.map((source) => {
+                                        const sourceDocument = Tine.Tinebase.data.Record.setFromJson(source.sourceDocument, sourceRecordClass)
+                                        return { text: sourceDocument.getTitle(), name: sourceDocument.id, checked: true, source }
+                                    })
+                                }), 'source');
+                            }
+
+                            const followUpDocumentData = await Tine.Sales.createFollowupDocument(transition)
+                            window.postal.publish({
+                                channel: "recordchange",
+                                topic: [app.appName, targetRecordClass.getMeta('modelName'), 'create'].join('.'),
+                                data: followUpDocumentData
+                            })
+                            followUpDocuments.push(Tine.Tinebase.data.Record.setFromJson(followUpDocumentData, targetRecordClass))
+                            processedSourceIds = processedSourceIds.concat(_.map(transition.sourceDocuments, 'sourceDocument.id'))
+                        }
                     } catch (e) {
                         errorMsgs.push(app.formatMessage('Cannot create { targetType } from { sourceDocument }: ({e.code}) { e.message }', { sourceDocument: record.getTitle(), targetType: targetRecordClass.getRecordName(), e }))
                     }

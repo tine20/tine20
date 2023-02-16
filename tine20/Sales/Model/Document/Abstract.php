@@ -150,15 +150,25 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
                 ]*/
             ],
+            self::FLD_REVERSAL_STATUS           => [
+                self::LABEL                         => 'Reversal', // _('Reversal')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Sales_Config::DOCUMENT_REVERSAL_STATUS,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+            ],
             self::FLD_DOCUMENT_LANGUAGE => [
                 self::LABEL                 => 'Language', // _('Language')
                 self::TYPE                  => self::TYPE_KEY_FIELD,
                 self::NAME                  => Sales_Config::LANGUAGES_AVAILABLE,
+                self::SHY                   => true,
             ],
             self::FLD_DOCUMENT_CATEGORY => [
                 self::LABEL                 => 'Category', // _('Category')
                 self::TYPE                  => self::TYPE_KEY_FIELD,
                 self::NAME                  => Sales_Config::DOCUMENT_CATEGORY,
+                self::SHY                   => true,
             ],
             self::FLD_PRECURSOR_DOCUMENTS => [
                 self::TYPE                      => self::TYPE_RECORDS,
@@ -209,6 +219,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LENGTH                        => 255,
                 self::NULLABLE                      => true,
                 self::QUERY_FILTER                  => true,
+                self::SHY                           => true,
             ],
 
             self::FLD_CUSTOMER_ID       => [
@@ -234,6 +245,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::REF_ID_FIELD          => Sales_Model_Document_Address::FLD_DOCUMENT_ID,
                     self::TYPE                  => Sales_Model_Document_Address::TYPE_POSTAL,
                 ],
+                self::SHY                   => true,
             ],
             self::FLD_CONTACT_ID => [
                 self::TYPE                  => self::TYPE_RECORD,
@@ -244,6 +256,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME            => Addressbook_Model_Contact::MODEL_PART_NAME,
                 ],
                 self::NULLABLE              => true,
+                self::SHY                   => true,
             ],
 
             self::FLD_POSITIONS                 => [
@@ -260,6 +273,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Positions Net Sum', //_('Positions Net Sum')
                 self::TYPE                          => self::TYPE_MONEY,
                 self::NULLABLE                      => true,
+                self::SHY                           => true,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
@@ -268,6 +282,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Positions Discount Sum', //_('Positions Discount Sum')
                 self::TYPE                          => self::TYPE_MONEY,
                 self::NULLABLE                      => true,
+                self::SHY                           => true,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
@@ -278,6 +293,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::TYPE                          => self::TYPE_KEY_FIELD,
                 self::NAME                          => Sales_Config::INVOICE_DISCOUNT_TYPE,
                 self::NULLABLE                      => true,
+                self::SHY                           => true,
                 self::DEFAULT_VAL                   => 'SUM'
             ],
             self::FLD_INVOICE_DISCOUNT_PERCENTAGE => [
@@ -291,6 +307,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::TYPE                          => self::TYPE_FLOAT,
                 self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_DISCOUNT,
                 self::NULLABLE                      => true,
+                self::SHY                           => true,
                 self::UI_CONFIG                     => [
                     'price_field'   => self::FLD_POSITIONS_NET_SUM,
                     'net_field'     => self::FLD_NET_SUM
@@ -309,6 +326,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Sales Tax', //_('Sales Tax')
                 self::TYPE                          => self::TYPE_MONEY,
                 self::NULLABLE                      => true,
+                self::SHY                           => true,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
@@ -347,6 +365,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME                    => Tinebase_Model_CostCenter::MODEL_NAME_PART,
                 ],
                 self::NULLABLE                      => true,
+                self::SHY                           => true,
             ],
             self::FLD_COST_BEARER_ID            => [
                 self::LABEL                         => 'Cost Bearer', //_('Cost Bearer')
@@ -356,20 +375,14 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME                    => Tinebase_Model_CostUnit::MODEL_NAME_PART,
                 ],
                 self::NULLABLE                      => true,
+                self::SHY                           => true,
             ],
             self::FLD_DESCRIPTION               => [
                 self::LABEL                         => 'Internal Note', //_('Internal Note')
                 self::TYPE                          => self::TYPE_TEXT,
                 self::NULLABLE                      => true,
                 self::QUERY_FILTER                  => true,
-            ],
-            self::FLD_REVERSAL_STATUS           => [
-                self::LABEL                         => 'Reversal Status', // _('Reversal Status')
-                self::TYPE                          => self::TYPE_KEY_FIELD,
-                self::NAME                          => Sales_Config::DOCUMENT_REVERSAL_STATUS,
-                self::UI_CONFIG                     => [
-                    self::READ_ONLY                     => true,
-                ],
+                self::SHY                           => true,
             ],
         ]
     ];
