@@ -61,13 +61,15 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
             Sales_Model_DocumentPosition_Delivery::MODEL_NAME_PART;
 
         // delivery status
-        $_definition[self::FIELDS][self::FLD_DELIVERY_STATUS] = [
-            self::LABEL => 'Status', // _('Status')
-            self::TYPE => self::TYPE_KEY_FIELD,
-            self::NAME => Sales_Config::DOCUMENT_DELIVERY_STATUS,
-            self::LENGTH => 255,
-            self::NULLABLE => true,
-        ];
+        Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_DOCUMENT_NUMBER,[
+            self::FLD_DELIVERY_STATUS => [
+                self::LABEL => 'Status', // _('Status')
+                self::TYPE => self::TYPE_KEY_FIELD,
+                self::NAME => Sales_Config::DOCUMENT_DELIVERY_STATUS,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+            ]
+        ]);
 
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::NULLABLE] = true;
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE] =
@@ -94,6 +96,7 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
             self::TYPE                  => self::TYPE_BOOLEAN,
             self::LABEL                 => 'Shared Document', //_('Shared Document')
             self::DEFAULT_VAL           => false,
+            self::SHY                   => true,
         ];
 
         // remove all moneytary fields, this is a delivery document, no money here

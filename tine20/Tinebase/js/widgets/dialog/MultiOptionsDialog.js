@@ -37,6 +37,10 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
      */
     handler: Ext.emptyFn,
     /**
+     * @cfg {Boolean} allowMultiple options at once
+     */
+    allowMultiple: false,
+    /**
      * @cfg {Boolean} allowCancel
      */
     allowCancel: false,
@@ -80,7 +84,7 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
                     cls: 'ext-mb-text',
                     html: this.questionText || i18n._('What would you like to do?')
                 }, {
-                    xtype: 'radiogroup',
+                    xtype: this.allowMultiple ? 'checkboxgroup' : 'radiogroup',
                     hideLabel: true,
                     itemCls: 'x-check-group-alt',
                     columns: 1,
@@ -139,11 +143,18 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
     },
     
     onOk: function() {
-        var field = this.getForm().findField('optionGroup');
-        var selecedRadio = field.getValue();
-        
-        var option = selecedRadio ? selecedRadio.getGroupValue() : null;
-        
+        const field = this.getForm().findField('optionGroup');
+        const selected = field.getValue();
+        let option = null;
+        if (this.allowMultiple) {
+            const values = _.map(selected, 'initialConfig.inputValue');
+            option = selected.length ? this.options.filter((option) => {
+                return values.indexOf(option.name) >= 0;
+            }) : null;
+        } else {
+            option = selected ? selected.getGroupValue() : null;
+        }
+
         if (! option) {
             field.markInvalid(this.invalidText || i18n._('You need to select an option!'));
             return;

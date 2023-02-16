@@ -82,6 +82,18 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
         $_definition[self::FIELDS][self::FLD_POSITIONS][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_DocumentPosition_Offer::MODEL_NAME_PART;
 
+        // OFFER_STATUS keyfield: In Bearbeitung(ungebucht, offen), Zugestellt(gebucht, offen),
+        //                        Beauftragt(gebucht, offen), Abgelehnt(gebucht, geschlossen)
+        Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_DOCUMENT_NUMBER, [
+            self::FLD_OFFER_STATUS => [
+                self::LABEL => 'Status', // _('Status')
+                self::TYPE => self::TYPE_KEY_FIELD,
+                self::NAME => Sales_Config::DOCUMENT_OFFER_STATUS,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+            ],
+        ]);
+
         $_definition[self::FIELDS] = array_merge($_definition[self::FIELDS], [
             self::FLD_ORDER_ID => [
                 self::TYPE => self::TYPE_RECORD,
@@ -92,27 +104,20 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
                 ],
                 self::NULLABLE => true,
             ],
-            // OFFER_STATUS keyfield: In Bearbeitung(ungebucht, offen), Zugestellt(gebucht, offen),
-            //                        Beauftragt(gebucht, offen), Abgelehnt(gebucht, geschlossen)
-            self::FLD_OFFER_STATUS => [
-                self::LABEL => 'Status', // _('Status')
-                self::TYPE => self::TYPE_KEY_FIELD,
-                self::NAME => Sales_Config::DOCUMENT_OFFER_STATUS,
-                self::LENGTH => 255,
-                self::NULLABLE => true,
-            ],
             self::FLD_FOLLOWUP_ORDER_CREATED_STATUS     => [
-                self::LABEL                         => 'Followup Order Creation Status', // _('Followup Order Creation Status')
+                self::LABEL                         => 'Order Created', // _('Order Created')
                 self::TYPE                          => self::TYPE_KEY_FIELD,
                 self::NAME                          => Sales_Config::DOCUMENT_FOLLOWUP_STATUS,
+                self::SHY                           => true,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
             ],
             self::FLD_FOLLOWUP_ORDER_BOOKED_STATUS     => [
-                self::LABEL                         => 'Followup Order Booked Status', // _('Followup Order Booked Status')
+                self::LABEL                         => 'Order Booked', // _('Order Booked')
                 self::TYPE                          => self::TYPE_KEY_FIELD,
                 self::NAME                          => Sales_Config::DOCUMENT_FOLLOWUP_STATUS,
+                self::SHY                           => true,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],

@@ -22,7 +22,11 @@ Tine.Sales.Document_OrderEditDialog = Ext.extend(Tine.Sales.Document_AbstractEdi
         const items = rtnVal[0].items
         const placeholder = {xtype: 'label', html: '&nbsp', columnWidth: 1/5}
 
-        const followUpLine = [{... placeholder}, this.fields.invoice_recipient_id, this.fields.delivery_recipient_id, {... placeholder}, {... placeholder}]
+        const statusLine = [this.fields.reversal_status, this.fields.followup_delivery_created_status, this.fields.followup_delivery_booked_status, this.fields.followup_invoice_created_status, this.fields.followup_invoice_booked_status]
+        statusLine.cls = 'status-fields'
+        items.splice(0, 0, statusLine)
+
+        const followUpLine = [{... placeholder}, this.fields.delivery_recipient_id, this.fields.shared_delivery, this.fields.invoice_recipient_id, this.fields.shared_invoice]
         const rIdx = _.indexOf(items, _.find(items, {line: 'recipient'}))
         items.splice(rIdx+1, 0, followUpLine)
 
