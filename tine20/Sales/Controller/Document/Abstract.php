@@ -232,6 +232,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         $booked = $_record->isBooked();
         /** @var Tinebase_Model_DynamicRecordWrapper $precursorDocument */
         foreach ($_record->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} ?? [] as $precursorDocument) {
+            Tinebase_Record_Expander::expandRecord($precursorDocument->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD});
             $precursorDocument->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD}->updateFollowupStati($booked);
         }
     }
