@@ -46,6 +46,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
             Sales_Model_Document_Invoice::FLD_COST_CENTER_ID,
             Sales_Model_Document_Invoice::FLD_COST_BEARER_ID,
             Sales_Model_Document_Invoice::FLD_DESCRIPTION,
+            Sales_Model_Document_Invoice::FLD_REVERSAL_STATUS,
             'tags', 'attachments', 'relations',
         ];
         $this->_bookRecordRequiredFields = [
