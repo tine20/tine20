@@ -469,9 +469,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }
                 }
             }
-
-            this.addSignature(account, format);
-
+            
             this.record.set('content_type', format);
             this.record.set('body', this.msgBody);
         }
@@ -559,34 +557,12 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     /**
-     * add signature to message
+     * add default signature to message
      *
-     * @param {Tine.Felamimail.Model.Account} account
-     * @param {String} format
      */
-    addSignature: function (account, format, signatureText, msgBody) {
-        if (this.draftOrTemplate && !_.isString(arguments[3])) {
-            return;
-        }
-
-        msgBody = _.isString(arguments[3]) ? arguments[3] : this.msgBody;
-
-        const signaturePosition = this.getSignaturePosition(account);
-        signatureText = _.isString(arguments[2]) ? arguments[2] : this.getSignature(account, format);
-        
-        if (signaturePosition === 'below') {
-            msgBody += signatureText;
-        } 
-        
-        if (signaturePosition === 'above') {
-            msgBody = signatureText !== '' ? signatureText + '<br/><br/>' + msgBody : msgBody;
-        }
-
-        if (! arguments[3]) {
-            this.msgBody = msgBody;
-        }
-
-        return msgBody;
+    addDefaultSignature: function () {
+        if (this.draftOrTemplate) return;
+        this.updateSignature(this.record.get('account_id'), null, this.record.get('body'));
     },
 
 
@@ -972,6 +948,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.autoSave) {
             this.trottledsaveAsDraft.cancel();
         }
+    
+        const matches = this.htmlEditor.getDoc().getElementsByClassName('felamimail-body-signature-current');
+        while (matches.length > 0) matches[0].outerHTML = matches[0].innerHTML;
         
         this.onRecordUpdate();
 
@@ -1078,11 +1057,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     onToggleEncrypt: function (btn, e) {
         btn.setIconClass(btn.pressed ? 'felamimail-action-encrypt' : 'felamimail-action-decrypt');
-
-        var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
-            text = this.bodyCards.layout.activeItem.getValue() || this.record.get('body'),
-            format = this.record.getBodyType(),
-            textEditor = format == 'text/html' ? this.htmlEditor : this.textEditor;
+    
+        const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
+        const text = this.bodyCards.layout.activeItem.getValue() || this.record.get('body');
+        const format = this.record.getBodyType();
+        const textEditor = format === 'text/html' ? this.htmlEditor : this.textEditor;
 
         this.bodyCards.layout.setActiveItem(btn.pressed ? this.mailvelopeWrap : textEditor);
 
@@ -1199,15 +1178,15 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.onRecordLoad.defer(250, this);
             return;
         }
-
-        var title = this.app.i18n._('Compose email:'),
-            editor = this.record.get('content_type') == 'text/html' ? this.htmlEditor : this.textEditor;
+    
+        let title = this.app.i18n._('Compose email:');
+        const editor = this.record.get('content_type') === 'text/html' ? this.htmlEditor : this.textEditor;
 
         if (this.record.get('subject')) {
             title = title + ' ' + this.record.get('subject');
         }
         this.window.setTitle(title);
-
+        
         if (!this.button_toggleEncrypt.pressed) {
             editor.setValue(this.record.get('body'));
             this.bodyCards.layout.setActiveItem(editor);
@@ -1229,6 +1208,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.massMailingInfoText.show();
         }
         
+        this.addDefaultSignature();
         this.updateFileLocations();
         this.onFileMessageSelectionChange('', this.action_fileRecord.getSelected());
         this.onAfterRecordLoad();
@@ -1279,9 +1259,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.data.attachments = [];
         var attachmentData = null;
 
-        var format = this.bodyCards.layout.activeItem.mimeType;
+        const format = this.bodyCards.layout.activeItem.mimeType;
         if (format.match(/^text/)) {
-            var editor = format == 'text/html' ? this.htmlEditor : this.textEditor;
+            const editor = format === 'text/html' ? this.htmlEditor : this.textEditor;
 
             this.record.set('content_type', format);
             this.record.set('body', editor.getValue());
@@ -1456,7 +1436,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             listeners: {
                 scope: this,
                 beforeselect: (combo, signature, index) => {
-                    this.updateSignature(signature);
+                    this.updateSignature(signature.get('account_id'), signature);
                 }
             }
         });
@@ -1465,51 +1445,70 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * updates signature in mail body
      *
-     * @param Tine.Felamimail.Model.Signature signature
      */
-    updateSignature: function(signature, accountId = null) {
-        const oldAccount = this.app.getAccountStore().getById(this.record.get('account_id'));
-        const newAccount = accountId ? this.app.getAccountStore().getById(accountId) : oldAccount;
+    updateSignature: function(accountId = null, newSignatureRecord = null, bodyContent = '') {
+        accountId = accountId && accountId !== '' ? accountId : this.record.get('account_id');
+        bodyContent = this.bodyCards.layout.activeItem.getValue() || bodyContent;
         const format = this.record.get('content_type');
     
-        const oldSignature = this.getSignature(oldAccount, format, _.find(this.signatureCombo.store.data.items, (r) => {return _.get(r, 'data.name') === this.signatureCombo.getValue()})).substring(4);
-        const newSignature = this.getSignature(newAccount, format, signature).substring(4);
-
-        let bodyContent = this.bodyCards.layout.activeItem.getValue();
-        bodyContent = oldSignature ? this.replaceSignature(newAccount, bodyContent, oldSignature, newSignature) 
-            : this.addSignature(newAccount, format, newSignature, bodyContent);
-
+        const oldAccount = this.app.getAccountStore().getById(this.record.get('account_id'));
+        const oldSignatureRecord = this.signatureCombo.store.data.items.find((r) => r?.data?.name === this.signatureCombo.getValue());
+        const oldSignature = this.getSignature(oldAccount, format, oldSignatureRecord);
+        const oldPosition = this.getSignaturePosition(oldAccount);
+    
+        const newAccount = this.app.getAccountStore().getById(accountId);
+        const newSignature = this.getSignature(newAccount, format, newSignatureRecord);
+        const newPosition = this.getSignaturePosition(newAccount);
+        let matches = [];
+        
+        if (format === 'text/plain') {
+            const resolvedSignature = newSignature === '' ? '' : `--\n${newSignature}`;
+            if (oldSignature !== '') {
+                matches = [...bodyContent.matchAll(new RegExp(`-*\\s*${oldSignature}`, 'g'))];
+            }
+            
+            if (matches.length > 0) {
+                const match = oldPosition === 'above' ? matches[0] : matches[matches.length - 1];
+                const startPos = match.index;
+                const endPos = match.index + match[0].length;
+                if (oldPosition === newPosition) {
+                    // always remove old signature and replace new signature if found , it might be in the middle of the message
+                    bodyContent = bodyContent.slice(0, startPos) + resolvedSignature + bodyContent.slice(endPos);
+                } else {
+                    bodyContent = bodyContent.slice(0, startPos) + bodyContent.slice(endPos);
+                    bodyContent = this.appendSignatureText(bodyContent, format, newPosition, resolvedSignature);
+                }
+            } else {
+                bodyContent = this.appendSignatureText(bodyContent, format, newPosition, resolvedSignature);
+            }
+        } else {
+            matches = this.htmlEditor.getDoc().getElementsByClassName('felamimail-body-signature-current');
+            while (matches.length > 0) {
+                // if the existing signature is unchanged, it should be removed here
+                matches[0].outerHTML = matches[0].innerHTML.replace(`--<br>${oldSignature}`, '');
+            }
+            
+            const span = document.createElement('span');
+            span.className = 'felamimail-body-signature-current';
+            span.innerHTML = newSignature === '' ? '' : `--<br>${newSignature}`;
+            // always append new signature depends on new position
+            bodyContent = this.bodyCards.layout.activeItem.getValue() || '';
+            bodyContent = this.appendSignatureText(bodyContent, format, newPosition, span.outerHTML);
+        }
+    
+        this.record.set('body', bodyContent);
+        this.msgBody = this.record.get('body');
         this.bodyCards.layout.activeItem.setValue(bodyContent);
     },
-    
-    /**
-     * replace signature in mail body
-     *
-     */
-    replaceSignature: function(account, bodyContent, oldSignature, newSignature) {
-        // remove style first
-        newSignature = newSignature.substring(4);
-        bodyContent = bodyContent.replace(/<span class="felamimail-body-signature".*>--([\S\s]*)<br><\s*\/\s*span>/
-            , newSignature);
-    
-        // we only replace the content inside <span>.*</span> , in case user delete the default new lines
-        
-        // remove generated extra newlines when user change the signature
-        if (newSignature === '') {
-            const position = this.getSignaturePosition(account);
-            
-            if (position === 'above') {
-               bodyContent = bodyContent.replace(/^<br><br><br><br>/, '');
-            }
-            
-            if (position === 'below') {
-                bodyContent = bodyContent.replace(/<br><br>$/, '');
-            }
-        }
-        
-        return bodyContent;
-    },
 
+    appendSignatureText(bodyContent, format, position, signature) {
+        const ch = format === 'text/html' ? '<br>' : '\n';
+        if (position === 'below' && !bodyContent.endsWith(ch)) bodyContent = `${bodyContent}${ch}${ch}`;
+        if (position === 'above' && !bodyContent.startsWith(ch)) bodyContent = `${ch}${ch}${bodyContent}`;
+        
+        return position === 'above' ? `${signature}${bodyContent}` : `${bodyContent}${signature}`;
+    },
+    
     /**
      * if 'account_id' is changed we need to update the signature
      *
@@ -1519,17 +1518,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onFromSelect: function (combo, record, index) {
         const newAccountId = record.get('original_id');
-        const newSignature = this.app.getDefaultSignature(newAccountId);
-        
-        this.updateSignature(newSignature, newAccountId);
-
-        this.signatureCombo.setValue(_.get(newSignature, 'data.name', this.app.i18n._('None')));
-
-        this.record.set('account_id', newAccountId);
+        const defaultSignature = this.app.getDefaultSignature(newAccountId);
+        this.updateSignature(newAccountId, defaultSignature);
+        this.signatureCombo.setValue(_.get(defaultSignature, 'data.name', this.app.i18n._('None')));
 
         // update reply-to
-        var replyTo = record.get('reply_to');
-        if (replyTo && replyTo != '') {
+        const replyTo = record.get('reply_to');
+        if (replyTo && replyTo !== '') {
             this.replyToField.setValue(replyTo);
         }
 
@@ -1873,7 +1868,12 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
             return;
         }
-
+        
+        const matches = this.htmlEditor.getDoc().getElementsByClassName('felamimail-body-signature-current');
+        while (matches.length > 0) matches[0].outerHTML = matches[0].innerHTML;
+        
+        this.record.set('body', this.bodyCards.layout.activeItem.getValue());
+        
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::doApplyChanges - call parent');
         this.doApplyChanges(closeWindow);
     },
