@@ -48,6 +48,7 @@ class Sales_Controller_Document_Offer extends Sales_Controller_Document_Abstract
             Sales_Model_Document_Offer::FLD_DESCRIPTION,
             Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_CREATED_STATUS,
             Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_BOOKED_STATUS,
+            Sales_Model_Document_Offer::FLD_REVERSAL_STATUS,
             'tags', 'attachments', 'relations',
         ];
         $this->_bookRecordRequiredFields = [

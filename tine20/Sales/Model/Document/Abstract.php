@@ -570,6 +570,14 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             $translation = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
                 new Zend_Locale($this->{self::FLD_DOCUMENT_LANGUAGE}));
             $this->{self::FLD_DOCUMENT_TITLE} = $translation->_('Reversal') . ': ' . $this->{self::FLD_DOCUMENT_TITLE};
+
+            /** @var Sales_Model_Document_TransitionSource $record */
+            foreach ($transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}
+                         ->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT} as $record) {
+                if (get_class($record) !== static::class) {
+                    throw new Tinebase_Exception_UnexpectedValue('reversal transitions need to to have same source and target document class');
+                }
+            }
         }
 
         $this->{static::$_statusField} = Sales_Config::getInstance()->{static::$_statusConfigKey}->default;
@@ -686,6 +694,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         parent::_setFromJson($_data);
 
         unset($_data[self::FLD_PRECURSOR_DOCUMENTS]);
+        unset($_data[self::FLD_REVERSAL_STATUS]);
     }
 
     public function updateFollowupStati(bool $booked): void
