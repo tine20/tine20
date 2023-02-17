@@ -40,7 +40,7 @@ class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_In
         } else {
             try {
                 $this->_socket->assertAlive();
-            } catch (\Socket\Raw\Exception $sre) {
+            } catch (\Socket\Raw\Exception|\Error $sre) {
                 $this->_socket = null;
                 $this->_connect();
             }
