@@ -18,9 +18,10 @@ class Sales_Export_Product extends Tinebase_Export_CsvNew
 
     /**
      * @param mixed $_value
+     * @param ?string $_type
      * @return string
      */
-    protected function _convertToString($_value)
+    protected function _convertToString($_value, ?string $_type = null)
     {
         if ($_value instanceof Tinebase_Record_RecordSet && $_value->getRecordClassName() === Sales_Model_ProductLocalization::class) {
             // TODO generalize & use default language if not in config
@@ -28,7 +29,7 @@ class Sales_Export_Product extends Tinebase_Export_CsvNew
             $langValue = $_value->filter('language', $lang)->getFirstRecord();
             return $langValue ? $langValue->text : '';
         } else {
-            return parent::_convertToString($_value);
+            return parent::_convertToString($_value, $_type);
         }
     }
 }
