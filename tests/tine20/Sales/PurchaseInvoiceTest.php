@@ -160,7 +160,45 @@ class Sales_PurchaseInvoiceTest extends TestCase
 
         return $this->_json->savePurchaseInvoice($purchaseData);
     }
-    
+
+    public function testXlsExport()
+    {
+        $purchase = $this->_createPurchaseInvoice();
+
+        $export = new Sales_Export_PurchaseInvoiceXls(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_PurchaseInvoice::class, [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $purchase['id']],
+            ]),
+            null,
+            [
+                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
+                    'model' => Sales_Model_PurchaseInvoice::class,
+                    'name' => 'purchaseinvoice_xls'
+                ]))->getFirstRecord()->getId()
+            ]);
+
+        $xlsPath = Tinebase_TempFile::getTempPath();
+        $unlinkRaii = new Tinebase_RAII(function() use ($xlsPath) {
+            @unlink($xlsPath);
+        });
+        $export->generate();
+        $export->write($xlsPath);
+
+        $reader = PHPExcel_IOFactory::createReader('Excel2007');
+        $doc = $reader->load($xlsPath);
+        $arrayData = $doc->getActiveSheet()->rangeToArray('A2:Z3');
+
+        $this->assertTrue(false !== ($offset = array_search(Tinebase_Translation::getTranslation(Sales_Config::APP_NAME)->_('Price Net'), $arrayData[0])));
+        $this->assertSame('10.00 ' . Tinebase_Config::getInstance()->{Tinebase_Config::CURRENCY_SYMBOL},
+            $arrayData[1][$offset]);
+        $this->assertTrue(false !== ($offset = array_search(Tinebase_Translation::getTranslation(Sales_Config::APP_NAME)->_('Date of invoice'), $arrayData[0])));
+        $date = new Zend_Date($purchase['date']);
+        $this->assertSame($date->toString(Zend_Locale_Format::getDateFormat(Tinebase_Core::getLocale()), Tinebase_Core::getLocale()),
+            $arrayData[1][$offset]);
+
+        unset($unlinkRaii);
+    }
+
     /**
      * try to save a PurchaseInvoice
      */
