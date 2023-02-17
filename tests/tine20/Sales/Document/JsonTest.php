@@ -460,6 +460,9 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $updatedOrder[Sales_Model_Document_Order::FLD_FOLLOWUP_DELIVERY_CREATED_STATUS]);
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $updatedOrder[Sales_Model_Document_Order::FLD_FOLLOWUP_DELIVERY_CREATED_STATUS]);
 
+        // important to test the resolving in the next saveDocument_Invoice call!
+        Tinebase_Record_Expander_DataRequest::clearCache();
+
         $result[Sales_Model_Document_Invoice::FLD_RECIPIENT_ID] = $customer->postal->toArray();
         $result[Sales_Model_Document_Invoice::FLD_INVOICE_STATUS] = Sales_Model_Document_Invoice::STATUS_BOOKED;
         $this->_instance->saveDocument_Invoice($result);
