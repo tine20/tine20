@@ -256,7 +256,14 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
 
             $account['visibility'] = Felamimail_Model_Account::VISIBILITY_HIDDEN;
             $account = $this->_json->saveEmailAccount($account);
-            self::assertNull($account['contact_id']);
+            $contact = Addressbook_Controller_Contact::getInstance()->get($account['contact_id'], null, true, true);
+            // we do soft delete , so contact id should be set
+            self::assertEquals('1', $contact['is_deleted'], 'contact should be delete softly');
+
+            $account['visibility'] = Felamimail_Model_Account::VISIBILITY_DISPLAYED;
+            $account = $this->_json->saveEmailAccount($account);
+            $contact = Addressbook_Controller_Contact::getInstance()->get($account['contact_id'], null, true, true);
+            self::assertEquals('0', $contact['is_deleted'], 'contact should be restored');
         } finally {
             if ($account) {
                 $this->_json->deleteEmailAccounts([$account['id']]);
