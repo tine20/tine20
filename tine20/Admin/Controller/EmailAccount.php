@@ -274,7 +274,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('delete');
 
-        $this->_deleteEmailAccountContact($_ids);
+        Felamimail_Controller_Account::getInstance()->deleteEmailAccountContact($_ids, true);
         $records = $this->_backend->delete($_ids);
         foreach ($records as $record) {
             if ($record->type === Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST) {
@@ -394,50 +394,6 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
 
             if (method_exists($smtpUserBackend, 'getEmailuser')) {
                 $_record->email_smtp_user = $smtpUserBackend->getEmailuser($fullUser)->toArray();
-            }
-        }
-    }
-
-    /**
-     * remove one groupmember from the group
-     *
-     * @return void
-     * @throws Tinebase_Exception
-     * @throws Tinebase_Exception_AccessDenied
-     */
-    public function _deleteEmailAccountContact($ids)
-    {
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-
-        try {
-            $ids = is_array($ids) ? $ids : [$ids];
-
-            foreach ($ids as $id) {
-                $emailAccount = $id instanceof Felamimail_Model_Account ? $id : $this->get($id);
-
-                if ($emailAccount->type === Felamimail_Model_Account::TYPE_SHARED ||
-                    $emailAccount->type === Felamimail_Model_Account::TYPE_USER ||
-                    $emailAccount->type === Felamimail_Model_Account::TYPE_USER_INTERNAL ||
-                    $emailAccount->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
-
-                    if (!empty($emailAccount->contact_id)) {
-                        try {
-                            $contact = Addressbook_Controller_Contact::getInstance()->get($emailAccount->contact_id);
-                            // hard delete contact in admin module
-                            $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-                            $contactsBackend->delete($contact->getId());
-                        } catch (Exception $e) {
-                            continue;
-                        }
-                    }
-                }
-            }
-
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            $transactionId = null;
-        } finally {
-            if (null !== $transactionId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
             }
         }
     }

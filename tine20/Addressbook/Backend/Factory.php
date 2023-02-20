@@ -46,7 +46,6 @@ class Addressbook_Backend_Factory
      * factory function to return a selected contacts backend class
      *
      * @param   string $_type
-     * @return  Tinebase_Backend_Interface
      * @throws  Addressbook_Exception_InvalidArgument if unsupported type was given
      */
     static public function factory ($_type)

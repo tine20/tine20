@@ -232,6 +232,10 @@ var form = new Ext.form.FormPanel({
             if(this.inputType){
                 cfg.type = this.inputType;
             }
+            
+            if (this.qtip) {
+                cfg.qtip = this.qtip;
+            }
             this.autoEl = cfg;
         }
         Ext.form.Field.superclass.onRender.call(this, ct, position);
