@@ -4518,7 +4518,7 @@ class Tinebase_FileSystem implements
     protected function _sendQuotaNotification(Tinebase_Model_Tree_Node $node = null, $softQuota = true)
     {
         try {
-            $path = $this->getPathOfNode($node, true);
+            $path = $node === null ? 'Filesystem' : $this->getPathOfNode($node, true);
             $senders = $this->getNotificationSenders($node);
             
             /** @var Tinebase_Model_FullUser $sender */
