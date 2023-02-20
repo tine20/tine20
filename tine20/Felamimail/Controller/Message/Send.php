@@ -353,9 +353,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             }
 
             if (isset($_message['sent_copy_folder']) && sizeof($_message['sent_copy_folder']) > 0) {
-                $folders = $this->_saveMessageCopyToImapFolders($transport, $_account, $_message);
-                if ($folders[0]) {
-                    $this->_fileSentMessage($_message, $folders[0]);
+                $fileMessageInFolder = $this->_saveMessageCopyToImapFolders($transport, $_account, $_message)->getFirstRecord();
+                if ($fileMessageInFolder) {
+                    $this->_fileSentMessage($_message, $fileMessageInFolder);
                 }
             }
         }
@@ -473,6 +473,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param Felamimail_Model_Message $_message
      * @throws Felamimail_Exception_IMAPInvalidCredentials
      * @throws Zend_Mail_Transport_Exception
+     * @return Tinebase_Record_RecordSet
      */
     protected function _saveMessageCopyToImapFolders(Felamimail_Transport_Interface $_transport, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message)
     {
