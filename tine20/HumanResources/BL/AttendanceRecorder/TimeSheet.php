@@ -88,19 +88,20 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                 $refIdRecords = $accountData->filter(HumanResources_Model_AttendanceRecord::FLD_REFID, $refId);
                 /** @var HumanResources_Model_AttendanceRecord $record */
                 foreach ($refIdRecords as $record) {
-                    if (!$tsRs && isset($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['id'])) {
-                        try {
-                            $tsRs = Timetracker_Controller_Timesheet::getInstance()->getMultiple($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['id']);
-                            $tsRs->sort(function(Timetracker_Model_Timesheet $ts1, Timetracker_Model_Timesheet $ts2): int {
-                                return $ts1->start_date->compare($ts2->start_date);
-                            });
-                            Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($tsRs);
-                            $prevRecord = $record;
-                            continue;
-                        } catch (Tinebase_Exception_NotFound $tenf) {
+                    while (!$tsRs && isset($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['id'])) {
+                        $tsRs = Timetracker_Controller_Timesheet::getInstance()->getMultiple($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['id']);
+                        if (0 === $tsRs->count()) {
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
                                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ts not found!');
+                            $tsRs = null;
+                            break;
                         }
+                        $tsRs->sort(function(Timetracker_Model_Timesheet $ts1, Timetracker_Model_Timesheet $ts2): int {
+                            return $ts1->start_date->compare($ts2->start_date);
+                        });
+                        Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($tsRs);
+                        $prevRecord = $record;
+                        continue 2;
                     }
                     if (!$tsRs) {
                         if (HumanResources_Model_AttendanceRecord::TYPE_CLOCK_IN !== $record->{HumanResources_Model_AttendanceRecord::FLD_TYPE}) {
