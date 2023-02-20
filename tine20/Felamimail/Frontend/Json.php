@@ -228,11 +228,11 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $filterOfField = $filter->getFilter($field, false, true);
             if ($filterOfField) {
                 // filter could be empty - client sends some strange value here (path filter)
-                if (
-                    (is_object($filterOfField) && ! empty($filterOfField->getValue()))
+                if ($field === 'id' ||
+                    ((is_object($filterOfField) && ! empty($filterOfField->getValue()))
                     || (is_array($filterOfField) && isset($filterOfField['value']) && ! empty($filterOfField['value'])
                         && $filterOfField['value'] !== [""]
-                    )) {
+                    ))) {
                     $found = true;
                     break;
                 }
@@ -311,7 +311,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // close session to allow other requests
         Tinebase_Session::writeClose(true);
         
-        $filter = $this->_decodeFilter($filterData, Felamimail_Model_Message::class);
+        $filter = parent::_decodeFilter($filterData, Felamimail_Model_Message::class);
         $updatedFolders = Felamimail_Controller_Message_Move::getInstance()->moveMessages($filter, $targetFolderId, $keepOriginalMessages);
 
         return ($updatedFolders !== NULL) ? $this->_multipleRecordsToJson($updatedFolders) : array();
