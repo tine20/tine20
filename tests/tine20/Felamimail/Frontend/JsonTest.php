@@ -857,6 +857,26 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     }
 
     /**
+     * should be not moved messages without selected mails
+     */
+    public function testMoveMessagesWithoutSelectionToTrash()
+    {
+        $this->_sendMessage();
+        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder, $this->_account->trash_folder);
+        $messageInInboxBeforeMove = $this->_getMessages();
+        $messageInTrashBeforeMove = $this->_getMessages($this->_account->trash_folder);
+
+        $this->_json->moveMessages(array(array(
+            'field' => 'id', 'operator' => 'in', 'value' => array()
+        )), Felamimail_Model_Folder::FOLDER_TRASH);
+
+        $messageInTrash = $this->_getMessages($this->_account->trash_folder);
+        $messageInInbox = $this->_getMessages();
+        self::assertEquals($messageInTrashBeforeMove['totalcount'], $messageInTrash['totalcount'], 'message should be not moved from inbox to trash');
+        self::assertEquals($messageInInboxBeforeMove['totalcount'], $messageInInbox['totalcount'], 'message should be not moved from inbox to trash');
+    }
+
+    /**
      * test reply mail and check some headers
      *
      * @see 0006106: Add References header / https://forge.tine20.org/mantisbt/view.php?id=6106
