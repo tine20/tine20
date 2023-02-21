@@ -256,7 +256,7 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
                     ['field' => 'id', 'operator' => 'in', 'value' => $accountIds],
                 ]
             ), null, false, true) as $accountId) {
-                $msgCtrl = Felamimail_Controller_Cache_Message::getInstance();
+                $msgCtrl = Felamimail_Controller_Message::getInstance();
                 foreach ($msgCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
                     ['field' => 'received', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->subSecond($seconds)],
                     ['field' => 'account_id', 'operator' => 'equals', 'value' => $accountId],
