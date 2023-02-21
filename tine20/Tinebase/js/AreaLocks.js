@@ -119,13 +119,13 @@ class AreaLocks extends Ext.util.Observable {
     }
     if (mfaDevices.length > 1) {
       selectedDevice = _.find(mfaDevices, {
-        mfa_config_id: await Tine.widgets.dialog.MultiOptionsDialog.getOption({
+        id: await Tine.widgets.dialog.MultiOptionsDialog.getOption({
           title: window.i18n._('Choose MFA Deivce'),
           questionText: window.i18n._('This area is locked. Which device should be used to unlock.'),
           height: 100 + mfaDevices.length * 30,
           allowCancel: true,
           options: _.map(mfaDevices, (mfaDevice) => {
-            return { text: mfaDevice.device_name, name: mfaDevice.mfa_config_id };
+            return { text: mfaDevice.device_name, name: mfaDevice.id };
           })
         })
       })
