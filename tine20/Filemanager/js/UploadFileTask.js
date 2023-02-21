@@ -79,12 +79,19 @@ export default class UploadFileTask {
                     args.nodeData.progress = fileRecord.get('progress');
                     await updateTask(args, false);
                     //need to update grid with existing node id
-                    args.nodeData = await Tine.Filemanager.createNode(args.uploadId, fileRecord.get('type'), fileRecord.get('id'), true);
-                    args.nodeData.progress = 100;
-                    args.nodeData.status = uploadManager.status.COMPLETE;
-                    await updateTask(args);
-        
-                    resolve(true);
+                    try {
+                        args.nodeData = await Tine.Filemanager.createNode(args.uploadId, fileRecord.get('type'), fileRecord.get('id'), true);
+                        args.nodeData.progress = 100;
+                        args.nodeData.status = uploadManager.status.COMPLETE;
+                        await updateTask(args);
+                        resolve(true);
+                    } catch (e) {
+                        args.nodeData.status = uploadManager.status.FAILURE;
+                        args.nodeData.reason = e.message;
+                        await updateTask(args);
+                        resolve(true);
+                        throw e;
+                    }
                 });
     
                 upload.on('uploadfailure', async (upload, fileRecord) => {
