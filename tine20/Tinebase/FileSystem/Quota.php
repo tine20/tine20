@@ -52,6 +52,17 @@ class Tinebase_FileSystem_Quota
     /**
      * @return int
      */
+    public static function getTotalQuotaBytes()
+    {
+        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
+        $totalInMb = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB};
+        $totalFSInMb = !empty($totalInMb) ? $totalInMb : $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB};
+        return $totalFSInMb * 1024 * 1024;
+    }
+
+    /**
+     * @return int
+     */
     public static function getPersonalQuotaBytes()
     {
         return self::getConfig()->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} * 1024 * 1024;
