@@ -427,8 +427,8 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
         const allTasks = await this.getAllTasks();
         return allTasks
             .filter(t => {
-                const parentPath = this.getParentPath(t.args.nodeData.path);
-                return path === `${parentPath}/` && t.tag !== this.tag.REMOVE;
+                const parentPath = Tine.Filemanager.Model.Node.dirname(t.args.nodeData.path);
+                return path === parentPath && t.tag !== this.tag.REMOVE;
             })
             .map(t => t.args.nodeData);
     },
@@ -802,25 +802,6 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
             this.applyBatchAction[batchID] = '';
         }
         return this.applyBatchAction[batchID];
-    },
-    
-    /**
-     * get parent path
-     *
-     * @param path
-     * @returns {string|*}
-     */
-    getParentPath(path) {
-        if (String(path).match(/\/.*\/.+/)) {
-            let pathParts = path.split('/');
-            pathParts.pop();
-            // handle folder path that end with '/' 
-            if (path.endsWith('/')) {
-                pathParts.pop();
-            }
-            return pathParts.join('/');
-        }
-        return '/';
     },
     
     /**
