@@ -146,8 +146,9 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 // prefill attachmentCache
                 _.forEach(record.get('attachments'), (attachment) => {
                     if (! attachment.cache) {
-                        attachment.cache = Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', record.id, attachment.partId].join(':'), true).then(cache => {
-                            attachment.cache = new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]);;
+                        const recordId = record.id.split('_');
+                        attachment.cache = Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', recordId[0], attachment.partId].join(':'), true).then(cache => {
+                            attachment.cache = new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]);
                         });
                     }
                 })
