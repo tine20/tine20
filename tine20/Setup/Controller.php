@@ -2619,9 +2619,13 @@ class Setup_Controller
     /**
      * clear cache directories
      */
-    public function clearCacheDir(){
-        // clear routing cache
-        foreach (new DirectoryIterator(Tinebase_Core::getCacheDir()) as $directoryIterator) {
+    public function clearCacheDir()
+    {
+        $cacheDir = Tinebase_Core::getCacheDir();
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Clearing routing cache in ' . $cacheDir . ' ...');
+
+        foreach (new DirectoryIterator($cacheDir) as $directoryIterator) {
             if (strpos($directoryIterator->getFilename(), 'route.cache') !== false && $directoryIterator->isFile()) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Deleting routing cache file ' . $directoryIterator->getPathname());
