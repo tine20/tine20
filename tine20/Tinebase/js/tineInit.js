@@ -1274,6 +1274,7 @@ Tine.Tinebase.tineInit = {
         // adjust modal windows when browser gets resized (also orientation change)
         Tine.Tinebase.viewport.on('resize', function(viewport, adjWidth, adjHeight, rawWidth, rawHeight) {
             Ext.WindowMgr.each(function(win) {
+                if (!win.modal) return;
                 var currSize = win.getSize(),
                     normSize = win.normSize || currSize,
                     maxSize = {width: adjWidth, height: adjHeight};
