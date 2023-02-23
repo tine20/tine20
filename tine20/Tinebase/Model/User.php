@@ -268,7 +268,11 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
 
     public function applyAccountTwig($name, $twig)
     {
-        $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(), [
+        $locale = Tinebase_Core::getLocale();
+        if (! $locale) {
+            $locale = Tinebase_Translation::getLocale();
+        }
+        $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation(), [
             Tinebase_Twig::TWIG_LOADER =>
                 new Tinebase_Twig_CallBackLoader(__METHOD__ . $name, time() - 1, function() use($twig) { return $twig; })
         ]);
