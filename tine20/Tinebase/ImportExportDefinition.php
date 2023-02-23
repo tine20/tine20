@@ -278,15 +278,15 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $_name
         );
 
-        if ($definition->{Tinebase_Model_ImportExportDefinition::FLDS_SKIP_UPSTREAM_UPDATES}) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Skip updating definition: ' . $definition->name);
-            return $definition;
-        }
-
         // try to get definition and update if it exists
         try {
             // also update deleted
             $existing = $this->getByName($definition->name, true);
+            if ($existing->{Tinebase_Model_ImportExportDefinition::FLDS_SKIP_UPSTREAM_UPDATES}) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Skip updating definition: ' . $definition->name);
+                return $existing;
+            }
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating definition: ' . $definition->name);
             $definition->setId($existing->getId());
             $definition->is_deleted = $existing->is_deleted;
