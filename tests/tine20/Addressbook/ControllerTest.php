@@ -315,70 +315,6 @@ class Addressbook_ControllerTest extends TestCase
             ['field' => 'adr_one_street', 'operator' => 'contains', 'value' => 'IsVeryS']
         ], '', [Tinebase_Model_Filter_Text::CASE_SENSITIVE => true]))->count(), 'cs search did not work');
     }
-
-    public function testSearchContactWithBackslash()
-    {
-        $this->objects['initialContact']->adr_one_street = '\\\\';
-        $this->objects['initialContact']->adr_two_street = 'test\\hola\\*uijuiui';
-        $contact = $this->_addContact();
-        $this->assertEquals($this->objects['initialContact']->adr_two_street, $contact->adr_two_street);
-
-        $this->assertSame(1, $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Addressbook_Model_Contact::class, [
-                ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => 't\\h']
-            ]))->count(), 'search for \\ did not work');
-        $this->assertSame(1, $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Addressbook_Model_Contact::class, [
-            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => '\\h']
-        ]))->count(), 'search for \\ did not work');
-        $this->assertSame(1, $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Addressbook_Model_Contact::class, [
-            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => 't\\']
-        ]))->count(), 'search for \\ did not work');
-        $this->assertSame(1, $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Addressbook_Model_Contact::class, [
-            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => '\\']
-        ]))->count(), 'search for \\ did not work');
-
-        $this->assertSame(1, $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Addressbook_Model_Contact::class, [
-            ['field' => 'adr_one_street', 'operator' => 'contains', 'value' => '\\']
-        ]))->count(), 'search for \\ did not work');
-        $this->assertSame(1, $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Addressbook_Model_Contact::class, [
-            ['field' => 'adr_one_street', 'operator' => 'contains', 'value' => '\\\\']
-        ]))->count(), 'search for \\ did not work');
-        $this->assertSame(0, $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Addressbook_Model_Contact::class, [
-            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => '\\\\']
-        ]))->count(), 'search for \\ did not work');
-
-        // testing for *
-        $this->assertSame(1, $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Addressbook_Model_Contact::class, [
-            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => 'a\\\\\\*ui']
-        ]))->count(), 'search for \\ did not work');
-        $this->assertSame(1, $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Addressbook_Model_Contact::class, [
-            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => 'a\\\\*jui']
-        ]))->count(), 'search for \\ did not work');
-        $this->assertSame(1, $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Addressbook_Model_Contact::class, [
-            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => '\\\\\\*ui']
-        ]))->count(), 'search for \\ did not work');
-        $this->assertSame(0, $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Addressbook_Model_Contact::class, [
-            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => '\\\\\\*jui']
-        ]))->count(), 'search for \\ did not work');
-        $this->assertSame(1, $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Addressbook_Model_Contact::class, [
-            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => '\\\\*jui']
-        ]))->count(), 'search for \\ did not work');
-        $this->assertSame(1, $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Addressbook_Model_Contact::class, [
-            ['field' => 'adr_two_street', 'operator' => 'equals', 'value' => '*juiui']
-        ]))->count(), 'search with * did not work');
-    }
     
     /**
      * test remove image
@@ -774,6 +710,19 @@ class Addressbook_ControllerTest extends TestCase
         $result = $this->_instance->update($adminContact);
 
         static::assertEquals($adminContact->tel_car, $result->tel_car);
+    }
+
+    public function testContactWithBackslashAndWildcardsAndPipes()
+    {
+        foreach (['|', '_', '%', '*', '\\'] as $char) {
+            $created = $this->_instance->create(new Addressbook_Model_Contact(['org_name' => 'my org with ' . $char . 'fun'], true));
+            $result = $this->_instance->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+                    ['field' => 'org_name', 'operator' => 'equals', 'value' => 'my org with ' . $char . 'fun'],
+                ]));
+            $this->assertSame(1, $result->count(), $char);
+            $this->assertSame($created->getId(), $result->getFirstRecord()->getId(), $char);
+        }
     }
 
     public function testContactModelPerformance()
