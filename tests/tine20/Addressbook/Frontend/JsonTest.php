@@ -5,7 +5,7 @@
  *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  */
@@ -201,6 +201,58 @@ class Addressbook_Frontend_JsonTest extends TestCase
             }
         }
         $this->assertTrue($found);
+    }
+
+    public function testSearchContactWithBackslash()
+    {
+        $contact = $this->_getContactData();
+        $contact['adr_one_street'] = '\\\\';
+        $contact['adr_two_street'] = 'test\\hola\\*uijuiui';
+        $savedContact = $this->_uit->saveContact($contact);
+        $this->assertSame($contact['adr_two_street'], $savedContact['adr_two_street']);
+
+        $this->assertSame(1, $this->_uit->searchContacts([
+            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => 't\\h']
+        ], '')['totalcount'], 'search for \\ did not work');
+        $this->assertSame(1, $this->_uit->searchContacts([
+            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => '\\h']
+        ], '')['totalcount'], 'search for \\ did not work');
+        $this->assertSame(1, $this->_uit->searchContacts([
+            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => 't\\']
+        ], '')['totalcount'], 'search for \\ did not work');
+        $this->assertSame(1, $this->_uit->searchContacts([
+            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => '\\']
+        ], '')['totalcount'], 'search for \\ did not work');
+
+        $this->assertSame(1, $this->_uit->searchContacts([
+            ['field' => 'adr_one_street', 'operator' => 'contains', 'value' => '\\']
+        ], '')['totalcount'], 'search for \\ did not work');
+        $this->assertSame(1, $this->_uit->searchContacts([
+            ['field' => 'adr_one_street', 'operator' => 'contains', 'value' => '\\\\']
+        ], '')['totalcount'], 'search for \\ did not work');
+        $this->assertSame(0, $this->_uit->searchContacts([
+            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => '\\\\']
+        ], '')['totalcount'], 'search for \\ did not work');
+
+        // testing for *
+        $this->assertSame(1, $this->_uit->searchContacts([
+            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => 'a\\\\\\*ui']
+        ], '')['totalcount'], 'search for \\ did not work');
+        $this->assertSame(1, $this->_uit->searchContacts([
+            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => 'a\\\\*jui']
+        ], '')['totalcount'], 'search for \\ did not work');
+        $this->assertSame(1, $this->_uit->searchContacts([
+            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => '\\\\\\*ui']
+        ], '')['totalcount'], 'search for \\ did not work');
+        $this->assertSame(0, $this->_uit->searchContacts([
+            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => '\\\\\\*jui']
+        ], '')['totalcount'], 'search for \\ did not work');
+        $this->assertSame(1, $this->_uit->searchContacts([
+            ['field' => 'adr_two_street', 'operator' => 'contains', 'value' => '\\\\*jui']
+        ], '')['totalcount'], 'search for \\ did not work');
+        $this->assertSame(1, $this->_uit->searchContacts([
+            ['field' => 'adr_two_street', 'operator' => 'equals', 'value' => '*juiui']
+        ], '')['totalcount'], 'search with * did not work');
     }
 
     public function testGetListWithAccountOnlyField()
@@ -2613,18 +2665,18 @@ Steuernummer 33/111/32212";
     /**
      * @see 0013780: fix backslash in text filter
      */
-    public function testBackslashInFilter()
+    public function testFunCharsInFilter()
     {
-        $contact = $this->_getContactData();
-        $contact['org_name'] = 'my org with \\backslash';
-        $this->_uit->saveContact($contact);
-        $filter = array(array(
-            'field' => 'org_name',
-            'operator' => 'equals',
-            'value' => 'my org with \\backslash'
-        ));
-        $result = $this->_uit->searchContacts($filter, '');
-        $this->assertEquals(1, $result['totalcount'], 'contact not found ' . print_r($result, true));
+        $contact = [];
+        foreach (['|' => '|', '_' => '\\_', '%' => '%', '*' => '\\*', '\\' => '\\'] as $char => $search) {
+            $contact['org_name'] = 'my org with ' . $char . 'fun';
+            $created = $this->_uit->saveContact($contact);
+            $result = $this->_uit->searchContacts([
+                    ['field' => 'org_name', 'operator' => 'equals', 'value' => 'my org with ' . $search . 'fun'],
+                ], '');
+            $this->assertSame(1, (int)$result['totalcount'], $char);
+            $this->assertSame($created['id'], $result['results'][0]['id'], $char);
+        }
     }
 
     public function testSearchListWithPathFilter()
