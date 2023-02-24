@@ -956,6 +956,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         }
     }
 
+    public function setFromUser(bool $val): void
+    {
+        $this->_isInSetFromUser = $val;
+    }
+
     public function isInSetFromUser()
     {
         return $this->_isInSetFromUser;

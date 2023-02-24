@@ -4,7 +4,7 @@
  *
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -1570,6 +1570,21 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $path = Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash);
         static::assertTrue(is_file($path), 'hash does not exist in FS');
         static::assertSame('someData', file_get_contents($path));
+
+
+        $newName = substr($filepaths[1], 0, -1) . '_';
+        $result = $this->_getUit()->moveNodes($filepaths[1], [$newName], false);
+        $this->assertSame($this->_createdNodesJson[1]['id'], $result[0]['id']);
+
+        $node = Tinebase_FileSystem::getInstance()->get($this->_createdNodesJson[1]['id']);
+        $this->assertStringEndsWith('/' . $node->name, $newName);
+
+        $newName2 = substr($filepaths[1], 0, -1) . '*';
+        $result = $this->_getUit()->moveNodes($newName, [$newName2], false);
+        $this->assertSame($this->_createdNodesJson[1]['id'], $result[0]['id']);
+
+        $node = Tinebase_FileSystem::getInstance()->get($this->_createdNodesJson[1]['id']);
+        $this->assertStringEndsWith('/' . $node->name, $newName2);
     }
 
     public function testMoveFolderToRenameIt()
