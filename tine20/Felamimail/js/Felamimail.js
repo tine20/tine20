@@ -1036,10 +1036,11 @@ Tine.Felamimail.loadFlagsStore = function(reload) {
  * gets default signature text of given account
  *
  * @param {String|Tine.Felamimail.Model.Account} account
+ * @param signatureRecord
  * @return {String}
  */
-Tine.Felamimail.getSignature = function(account, signature) {
-    let app = Tine.Tinebase.appMgr.get('Felamimail');
+Tine.Felamimail.getSignature = function(account = null, signatureRecord = null) {
+    const app = Tine.Tinebase.appMgr.get('Felamimail');
     let signatureText = '';
 
     account = _.isString(account) ? app.getAccountStore().getById(account) : account;
@@ -1047,11 +1048,11 @@ Tine.Felamimail.getSignature = function(account, signature) {
 
     if (account) {
         Tine.log.info('Tine.Felamimail.getSignature() - Fetch signature of account ' + account.id + ' (' + account.name + ')');
-        signature = signature || app.getDefaultSignature(account);
+        signatureRecord = signatureRecord || app.getDefaultSignature(account);
 
-        if (signature && signature.id !== 'none') {
+        if (signatureRecord && signatureRecord.id !== 'none') {
             // NOTE: signature is always in html, nl2br here would cause duplicate linebreaks!
-            signatureText = '<br><br><span class="felamimail-body-signature">-- <br>' + _.get(signature, 'data.signature', '') + '<br></span>';
+            signatureText = _.get(signatureRecord, 'data.signature', '');
         }
     }
 

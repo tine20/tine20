@@ -12,8 +12,14 @@ class Tinebase_OwncloudAPI
         /** @var \Laminas\Diactoros\ServerRequest $request */
         $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
         $params = $request->getServerParams();
+
+        if (! isset($params['PHP_AUTH_USER']) || ! isset($params['PHP_AUTH_PW']) ) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response->getBody()->write('User and/or password missing.');
+            return $response;
+        }
+
         $authResult = Tinebase_Auth::getInstance()->authenticate($params['PHP_AUTH_USER'], $params['PHP_AUTH_PW']);
-        
         if ($authResult->isValid()) {
             $response = new \Laminas\Diactoros\Response('php://memory', 200, [
                 'Access-Control-Allow-Origin' => '*',

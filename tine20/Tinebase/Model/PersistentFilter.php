@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  PersistentFilter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -134,7 +134,12 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
         if ($_fromUserTime === TRUE) {
             $filter->setFromArrayInUsersTimezone($_filterData);
         } else {
-            $filter->setFromArray($_filterData);
+            $filter->setFromUser(true);
+            try {
+                $filter->setFromArray($_filterData);
+            } finally {
+                $filter->setFromUser(false);
+            }
         }
         
         return $filter;

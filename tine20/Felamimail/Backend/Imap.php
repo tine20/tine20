@@ -776,44 +776,46 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $structure = $this->_getBasicNonMultipartStructure($_partId);
         
         /** basic fields begin **/
-        
+
         // contentType
-        $type    = strtolower($_structure[0]);
+        $type = strtolower($_structure[0]);
         $subType = strtolower($_structure[1]);
         $structure['contentType'] = $type . '/' . $subType;
-        $structure['type']        = $type;
-        $structure['subType']     = $subType;
-        
+        $structure['type'] = $type;
+        $structure['subType'] = $subType;
+
         // body parameters
-        if(is_array($_structure[2])) {
+        if (is_array($_structure[2])) {
             $parameters = array();
-            for($i=0; $i<count($_structure[2]); $i++) {
-                $key   = strtolower($_structure[2][$i]);
-                if (isset($_structure[2][++$i])) {
-                    $value = $_structure[2][$i];
-                    $parameters[$key] = $this->_mimeDecodeHeader($value);
+            for ($i = 0; $i < count($_structure[2]); $i++) {
+                if (is_scalar($_structure[2][$i])) {
+                    $key = strtolower($_structure[2][$i]);
+                    if (isset($_structure[2][++$i])) {
+                        $value = $_structure[2][$i];
+                        $parameters[$key] = $this->_mimeDecodeHeader($value);
+                    }
                 }
             }
             $structure['parameters'] = $parameters;
         }
-        
+
         // body id
-        if($_structure[3] != 'NIL') {
+        if ($_structure[3] != 'NIL') {
             $structure['id'] = $_structure[3];
         }
-        
+
         // body description
-        if($_structure[4] != 'NIL') {
+        if ($_structure[4] != 'NIL') {
             $structure['description'] = $_structure[4];
         }
-        
+
         // body encoding
-        if($_structure[5] != 'NIL') {
+        if ($_structure[5] != 'NIL') {
             $structure['encoding'] = strtolower($_structure[5]);
         }
-        
+
         // body size
-        if($_structure[6] != 'NIL') {
+        if ($_structure[6] != 'NIL') {
             $structure['size'] = strtolower($_structure[6]);
         }
         

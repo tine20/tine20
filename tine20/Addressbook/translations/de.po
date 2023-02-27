@@ -1296,5 +1296,8 @@ msgstr "Gruppenmitglied"
 msgid "You do not have the required private grant to view history."
 msgstr "Sie verfügen nicht über das benötigte Privat-Recht um die Historie anzuzeigen."
 
+msgid "This field is automatically taken from the email account and therefore cannot be edited here."
+msgstr "Dieses Feld wird automatisch aus dem Email konto übernommen und kann daher hier nicht bearbeitet werden."
+
 msgid "E-Mail (all)"
 msgstr "E-Mail (alle)"

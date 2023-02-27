@@ -32,6 +32,7 @@
  * @property  string $sieve_hostname
  * @property  string $migration_approved
  * @property  string $message_sent_copy_behavior
+ * @property  Tinebase_Record_Abstract $contact_id
  * @property  Tinebase_Model_EmailUser $email_imap_user
  * @property  Tinebase_Model_EmailUser $email_smtp_user
  * @property  Tinebase_Record_RecordSet $aliases (Tinebase_Model_EmailUser_Alias)
@@ -172,7 +173,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 255,
                 self::NULLABLE => true,
-                self::LABEL => 'Name', // _('Name')
+                self::LABEL => 'Account Name', // _('Account Name')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::QUERY_FILTER              => true,
             ],

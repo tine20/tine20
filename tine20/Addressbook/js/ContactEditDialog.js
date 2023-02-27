@@ -98,7 +98,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         } else {
             this.contactEventPanel = null;
         }
-
+        const emailContactToolTip =  this.app.i18n._('This field is automatically taken from the email account and therefore cannot be edited here.');
+    
         var contactNorthPanel = {
             xtype: 'fieldset',
             region: 'north',
@@ -150,26 +151,27 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                             fieldLabel: this.app.i18n._('First Name'),
                             name: 'n_given',
                             maxLength: 64,
-                            readOnly: this.record.data?.type === 'email_account'
                         }, {
                             columnWidth: 0.30,
                             fieldLabel: this.app.i18n._('Middle Name'),
                             name: 'n_middle',
                             maxLength: 64,
-                            readOnly: this.record.data?.type === 'email_account'
                         }, {
                             columnWidth: 0.35,
                             fieldLabel: this.app.i18n._('Last Name'),
                             name: 'n_family',
                             maxLength: 255,
-                            readOnly: this.record.data?.type === 'email_account'
+                            readOnly: this.record.data?.type === 'email_account',
+                            qtip: emailContactToolTip,
                         }], [{
                             columnWidth: 0.65,
                             xtype: 'tine.widget.field.AutoCompleteField',
                             recordClass: this.recordClass,
                             fieldLabel: this.app.i18n._('Company / Organisation'),
                             name: 'org_name',
-                            maxLength: 255
+                            maxLength: 255,
+                            readOnly: this.record.data?.type === 'email_account',
+                            qtip: emailContactToolTip,
                         }, {
                             columnWidth: 0.35,
                             fieldLabel: this.app.i18n._('Unit'),
@@ -313,7 +315,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     vtype: 'email',
                     maxLength: 64,
                     disabled: this.checkDisableEmailField(),
-                    readOnly: this.record.data?.type === 'email_account'
+                    readOnly: this.record.data?.type === 'email_account',
+                    qtip: emailContactToolTip,
                 }, {
                     fieldLabel: this.app.i18n._('E-Mail (private)'),
                     labelIcon: 'images/icon-set/icon_email.svg',

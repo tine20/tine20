@@ -1304,7 +1304,7 @@ msgstr "Arbeitszeit"
 
 #: js/AttendanceRecorder.js:175
 msgid "Create Timesheet"
-msgstr "Stunenzettel erstellen"
+msgstr "Stundenzettel erstellen"
 
 #: js/AttendanceRecorder.js:337
 msgid "Data saving is performed ..."

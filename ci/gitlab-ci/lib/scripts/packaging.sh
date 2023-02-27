@@ -104,7 +104,10 @@ packaging_gitlab_set_current_link() {
         -XPUT --data "${version}" \
         "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/current"
 
-    ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_matrix_message.sh $MATRIX_ROOM "🟢 Package for ${version} is ready."
+    matrix_send_message $MATRIX_ROOM "🟢 Package for ${version} is ready."
+    if [ "${MAJOR_COMMIT_REF_NAME}" == "${CI_DEFAULT_BRANCH}" ]; then
+        matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" 'We just released the new version "${CODENAME}" ${version} 🎉\nCheck https://www.tine-groupware.de/ and https://packages.tine20.com/maintenance for more information and the downloads.\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine'
+    fi
 }
 
 packaging_push_package_to_github() {
@@ -132,7 +135,7 @@ packaging_push_package_to_github() {
 
     github_release_add_asset "$release_json" "$asset_name" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${release}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
 
-    ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_matrix_message.sh $MATRIX_ROOM "🟢 Package for ${version} is released to github."
+   matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
 }
 
 packaging_push_to_vpackages() {

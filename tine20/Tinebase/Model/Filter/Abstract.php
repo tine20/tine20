@@ -92,6 +92,14 @@ abstract class Tinebase_Model_Filter_Abstract
      * @var Tinebase_Model_Filter_FilterGroup|null parent reference
      */
     protected $_parent = null;
+
+    /**
+     * if this filter was created by a user via json api at some point (we may have been persisted...)
+     * if so, we should allow wildcards, otherwise not
+     *
+     * @var bool $_userFilter
+     */
+    protected $_userFilter = false;
     
     /**
      * get a new single filter action
@@ -508,7 +516,9 @@ abstract class Tinebase_Model_Filter_Abstract
         $value = (string)$value;
 
         // be wary of explode on empty string
-        if (stripos($action['sqlop'], 'LIKE') !== false && '' !== $value) {
+        if (stripos($action['sqlop'], 'LIKE') !== false && !$this->_userFilter) {
+            $value = str_replace(['|', '%', '_'], ['||', '|%', '|_'], $value);
+        } elseif (stripos($action['sqlop'], 'LIKE') !== false && '' !== $value) {
             // we have a LIKE op, so we need to do some stuff:
             // tine20 supports * and _ as wildcards, where * transforms to % and _ stays _ and \ escapes them
             // \ also escapes itself, but ONLY in front of a wildcard -> \\* => one backslash (escaped, two...) followed by %
@@ -587,6 +597,7 @@ abstract class Tinebase_Model_Filter_Abstract
     public function setParent(Tinebase_Model_Filter_FilterGroup $_parent)
     {
         $this->_parent = $_parent;
+        $this->_userFilter = $_parent->getRootParent()->isInSetFromUser();
     }
 
     /**

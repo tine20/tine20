@@ -1009,7 +1009,7 @@ Tine.Tinebase.common = {
                 .replace(/\//g, '-slash-')
                 .replace(/\./g, '-dot-')
                 .replace(/\+/g, '-plus-');
-    }
+    },
 };
 
 /*

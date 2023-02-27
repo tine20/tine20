@@ -4,7 +4,7 @@
  *
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -913,7 +913,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 $this->_getUit()->moveNodes($secondFolderJson['path'] . '/' . basename($file0Path), $targetPath, false);
                 static::fail('Quota exceed did not work');
             } catch (Tinebase_Exception_SystemGeneric $e) {
-                static::assertEquals('Quota is exceeded', $e->getMessage());
+                $translation = Tinebase_Translation::getTranslation('Tinebase');
+                static::assertEquals($translation->_('Quota is exceeded'), $e->getMessage());
             }
             // TODO add assertions!
 
@@ -935,7 +936,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
                     true);
                 static::fail('Quota exceed did not work');
             } catch (Tinebase_Exception_SystemGeneric $e) {
-                static::assertEquals('Quota is exceeded', $e->getMessage());
+                $translation = Tinebase_Translation::getTranslation('Tinebase');
+                static::assertEquals($translation->_('Quota is exceeded'), $e->getMessage());
             }
             try {
                 $this->_fsController->stat(Tinebase_Model_Tree_Node_Path::createFromPath(
@@ -1568,6 +1570,21 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $path = Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash);
         static::assertTrue(is_file($path), 'hash does not exist in FS');
         static::assertSame('someData', file_get_contents($path));
+
+
+        $newName = substr($filepaths[1], 0, -1) . '_';
+        $result = $this->_getUit()->moveNodes($filepaths[1], [$newName], false);
+        $this->assertSame($this->_createdNodesJson[1]['id'], $result[0]['id']);
+
+        $node = Tinebase_FileSystem::getInstance()->get($this->_createdNodesJson[1]['id']);
+        $this->assertStringEndsWith('/' . $node->name, $newName);
+
+        $newName2 = substr($filepaths[1], 0, -1) . '*';
+        $result = $this->_getUit()->moveNodes($newName, [$newName2], false);
+        $this->assertSame($this->_createdNodesJson[1]['id'], $result[0]['id']);
+
+        $node = Tinebase_FileSystem::getInstance()->get($this->_createdNodesJson[1]['id']);
+        $this->assertStringEndsWith('/' . $node->name, $newName2);
     }
 
     public function testMoveFolderToRenameIt()

@@ -181,7 +181,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     public function delete($_ids)
     {
-        $this->deleteEmailAccountContact($_ids);
+        $this->deleteEmailAccountContact($_ids, true);
 
         $records = parent::delete($_ids);
         $this->_updateDefaultAccountPreference($records);
@@ -488,7 +488,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * @throws Tinebase_Exception
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function deleteEmailAccountContact($ids)
+    public function deleteEmailAccountContact($ids, $hardDelete = false)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
@@ -509,7 +509,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                             if ($contact->type !== Addressbook_Model_Contact::CONTACTTYPE_USER) {
                                 // hard delete contact in admin module
                                 $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-                                $contactsBackend->delete($contact->getId());
+                                if ($hardDelete) {
+                                    $contactsBackend->delete($contact->getId());
+                                } else {
+                                    $contactsBackend->softDelete($contact->getId());
+                                }
                             }
                         } catch (Exception $e) {
                             continue;
@@ -610,16 +614,18 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     }
 
     /**
-     * @throws Tinebase_Exception_AccessDenied
-     * @throws Tinebase_Exception_Record_DefinitionFailure
-     * @throws Tinebase_Exception_Record_Validation
-     * @throws Tinebase_Exception_NotFound
-     * @throws Tinebase_Exception_InvalidArgument
+     * @param Felamimail_Model_Account $account
+     * @param Felamimail_Model_Account|null $_oldRecord
+     * @return Felamimail_Model_Account
      * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Date
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
      */
-    public function checkEmailAccountContact($_record, $_oldRecord = null)
+    public function checkEmailAccountContact(Felamimail_Model_Account $account, ?Felamimail_Model_Account $_oldRecord = null)
     {
-        $diff = $_oldRecord ? $_oldRecord->diff($_record)->diff : $_record;
+        $diff = $_oldRecord ? $_oldRecord->diff($account)->diff : $account->toArray();
 
         if (!empty($_oldRecord['contact_id'])) {
             $expander = new Tinebase_Record_Expander(Felamimail_Model_Account::class, [
@@ -631,75 +637,90 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
         
         $oldContainer = $_oldRecord['contact_id']['container_id'] ?? null;
-        $updatedContainer = $_record['contact_id']['container_id'] ?? null;
+        $updatedContainer = $account['contact_id']['container_id'] ?? null;
 
         $isContainerUpdated = ((!empty($updatedContainer) || !empty($oldContainer))) && $updatedContainer !== $oldContainer;
 
-        if (!isset($diff['visibility'])
-            && !isset($diff['name'])
-            && !isset($diff['accountDisplayName']) 
-            && !isset($diff['email'])
+        if (!array_key_exists('visibility', $diff)
+            && !array_key_exists('name', $diff)
+            && !array_key_exists('from', $diff)
+            && !array_key_exists('organization', $diff)
+            && !array_key_exists('accountDisplayName', $diff)
+            && !array_key_exists('email', $diff)
             && !$isContainerUpdated
         ) {
-            return $_record;
+            return $account;
         }
         
-        if ($_record->type === Felamimail_Model_Account::TYPE_SHARED ||
-            $_record->type === Felamimail_Model_Account::TYPE_USER ||
-            $_record->type === Felamimail_Model_Account::TYPE_USER_INTERNAL ||
-            $_record->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
-
-            $filter = new Addressbook_Model_ContactFilter([
-                ['field'    => 'email', 'operator' => 'equals', 'value'    => $_record->email]
-            ]);
-
-            $existContact = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
-
-            if ($_record->visibility === Tinebase_Model_User::VISIBILITY_DISPLAYED) {
-                $name = $_record['name'];
-
-                if (empty($name) && ! empty($_record['user_id'])) {
-                    $record = Tinebase_User::getInstance()->getFullUserById($_record['user_id']);
-                    $name = $record['accountDisplayName'];
-                }
-
-                $contactData = new Addressbook_Model_Contact([
-                    'container_id' => $_record['contact_id']['container_id'] ?? Admin_Controller_User::getInstance()->getDefaultInternalAddressbook(),
-                    'type' => Addressbook_Model_Contact::CONTACTTYPE_EMAIL_ACCOUNT,
-                    'email' => $_record['email'],
-                    'n_fileas' => $name,
-                ], true);
-
-                try {
-                    if (! $existContact) {
-                        $contact = Addressbook_Controller_Contact::getInstance()->create($contactData, false);
-                    } else {
-                        $contact = Addressbook_Controller_Contact::getInstance()->get($existContact['id']);
-                        $contact['email'] = $_record['email'];
-                        $contact['container_id'] = $_record['contact_id']['container_id'] ?? $contact['container_id'];
-                        $contact['n_fileas'] = $name;
-
-                        $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
-                    }
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    $contact = Addressbook_Controller_Contact::getInstance()->create($contactData);
-                }
-
-                $_record->contact_id = $contact->getId();
+        if ($account->type === Felamimail_Model_Account::TYPE_SHARED ||
+            $account->type === Felamimail_Model_Account::TYPE_USER ||
+            $account->type === Felamimail_Model_Account::TYPE_USER_INTERNAL ||
+            $account->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
+            
+            if ($account->visibility === Tinebase_Model_User::VISIBILITY_DISPLAYED) {
+                $this->_updateEmailContact($account);
             }
 
-            if ($_record->visibility === Tinebase_Model_User::VISIBILITY_HIDDEN) {
+            if ($account->visibility === Tinebase_Model_User::VISIBILITY_HIDDEN) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' Delete email_account type contact for email account : ' . $_record['id']);
+                        . ' Delete email_account type contact for email account : ' . $account['id']);
                 };
 
-                $this->deleteEmailAccountContact([$_record]);
-                $_record->contact_id = null;
+                $this->deleteEmailAccountContact([$account]);
             }
         }
 
-        return $_record;
+        return $account;
+    }
+
+    protected function _updateEmailContact(Felamimail_Model_Account $account)
+    {
+        $name = $account['from'] ?? $account['name'];
+
+        if (empty($name) && ! empty($account['user_id'])) {
+            $record = Tinebase_User::getInstance()->getFullUserById($account['user_id']);
+            $name = $record['accountDisplayName'];
+        }
+
+        $contactData = new Addressbook_Model_Contact([
+            'container_id' => $account['contact_id']['container_id'] ?? Admin_Controller_User::getInstance()->getDefaultInternalAddressbook(),
+            'type' => Addressbook_Model_Contact::CONTACTTYPE_EMAIL_ACCOUNT,
+            'email' => $account['email'],
+            'n_family' => $name,
+            'org_name' => $account['organization'],
+        ], true);
+
+        try {
+            try {
+                $contactId = $account->contact_id instanceof Tinebase_Record_Interface ?$account->contact_id->getId() : $account->contact_id;
+                $existContact = null;
+
+                if ($contactId) {
+                    $existContact = Addressbook_Controller_Contact::getInstance()->get($contactId, null, true, true);
+                }
+                if (! $existContact) {
+                    $contact = Addressbook_Controller_Contact::getInstance()->create($contactData, false);
+                } else {
+                    if ($existContact->is_deleted) {
+                        Addressbook_Controller_Contact::getInstance()->unDelete($existContact);
+                    }
+                    $existContact['email'] = $account['email'];
+                    $existContact['container_id'] = $account['contact_id']['container_id'] ?? $existContact['container_id'];
+                    $existContact['n_family'] = $name;
+                    $existContact['org_name'] = $account['organization'];
+                    $contact = Addressbook_Controller_Contact::getInstance()->update($existContact, true, true);
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $contact = Addressbook_Controller_Contact::getInstance()->create($contactData);
+            }
+            $account->contact_id = $contact->getId();
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' ' . $tead->getMessage());
+            };
+        }
     }
 
     /**

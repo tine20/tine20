@@ -1238,28 +1238,30 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                     ['field' => 'id', 'operator' => 'equals', 'value' => $event->isRecurException() ? $event->base_event_id : $event->getId()],
                 ]), 'get')->getFirstRecord();
                 if ($baseEvent && Calendar_Model_Attender::getAttendee($baseEvent->attendee, $attendee)) {
-                    $eventLength = $baseEvent->dtstart->diff($baseEvent->dtend);
-                    $remove = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
-                    $add = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
-
-                    /** @var Calendar_Model_Event $exdate */
-                    foreach ($baseEvent->exdate as $exdate) {
-                        if (!Calendar_Model_Attender::getAttendee($exdate->attendee, $attendee)) {
-                            $remove->addRecord($exdate);
-
-                            $fakeEvent = new Calendar_Model_Event([
-                                'uid' => $exdate->uid,
-                                'dtstart' => $exdate->getOriginalDtStart(),
-                                'dtend' => $exdate->getOriginalDtStart()->add($eventLength),
-                                'is_deleted' => true,
-                            ], true);
-                            $fakeEvent->setRecurId($baseEvent->getId());
-                            $add->addRecord($fakeEvent);
-                        }
-                    }
-                    $baseEvent->exdate->removeRecords($remove);
-                    $baseEvent->exdate->merge($add);
                     $event = $baseEvent;
+                    if ($baseEvent->exdate) {
+                        $eventLength = $baseEvent->dtstart->diff($baseEvent->dtend);
+                        $remove = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
+                        $add = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
+
+                        /** @var Calendar_Model_Event $exdate */
+                        foreach ($baseEvent->exdate as $exdate) {
+                            if (!Calendar_Model_Attender::getAttendee($exdate->attendee, $attendee)) {
+                                $remove->addRecord($exdate);
+
+                                $fakeEvent = new Calendar_Model_Event([
+                                    'uid' => $exdate->uid,
+                                    'dtstart' => $exdate->getOriginalDtStart(),
+                                    'dtend' => $exdate->getOriginalDtStart()->add($eventLength),
+                                    'is_deleted' => true,
+                                ], true);
+                                $fakeEvent->setRecurId($baseEvent->getId());
+                                $add->addRecord($fakeEvent);
+                            }
+                        }
+                        $baseEvent->exdate->removeRecords($remove);
+                        $baseEvent->exdate->merge($add);
+                    }
                 }
             } catch (Tinebase_Exception_NotFound $tenf) {
             } catch (Tinebase_Exception_AccessDenied $tead) {

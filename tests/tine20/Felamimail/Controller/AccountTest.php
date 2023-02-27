@@ -593,19 +593,32 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         self::assertEquals('changeOrganization', $account->organization);
     }
 
-    public function testCreateEmailAccountContact()
+    public function testUpdateEmailAccountContact()
     {
         // change email address and check if email user is updated, too
         $this->_testNeedsTransaction();
         $account = $this->_createSharedAccount();
         $account->visibility = Felamimail_Model_Account::VISIBILITY_DISPLAYED;
+        $account['from'] = 'test from name';
         try {
             $account = Admin_Controller_EmailAccount::getInstance()->update($account);
             $contact = Addressbook_Controller_Contact::getInstance()->get($account->contact_id);
-            self::assertEquals($account->name, $contact['n_fileas'], 'name was not updated');
+            self::assertEquals('test from name', $contact['n_fileas'], 'name was not updated');
             self::assertEquals($account->email, $contact['email'], 'email was not updated');
+            self::assertEquals('test from name', $contact['n_family'], 'family name was not updated');
+
+            $account->visibility = Felamimail_Model_Account::VISIBILITY_HIDDEN;
+            $account = Admin_Controller_EmailAccount::getInstance()->update($account);
+            $existContact = Addressbook_Controller_Contact::getInstance()->get($account->contact_id, null, true, true);
+            self::assertEquals(true, $existContact['is_deleted'], 'contact soft delete failed');
+
+            $account->visibility = Felamimail_Model_Account::VISIBILITY_DISPLAYED;
+            $account = Admin_Controller_EmailAccount::getInstance()->update($account);
+            $existContact = Addressbook_Controller_Contact::getInstance()->get($account->contact_id, null, true, true);
+            self::assertEquals('0', $existContact['is_deleted'], 'contact should be restored');
         } finally {
-            Felamimail_Controller_Account::getInstance()->deleteEmailAccountContact([$account->getId()]);
+            Felamimail_Controller_Account::getInstance()->deleteEmailAccountContact([$account->getId()], true);
         }
     }
+
 }

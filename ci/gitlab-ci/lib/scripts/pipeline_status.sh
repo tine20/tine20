@@ -17,5 +17,5 @@ pipeline_status_send () {
 
     echo "$message"
 
-    ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_matrix_message.sh $MATRIX_ROOM "$message"
+    matrix_send_message $MATRIX_ROOM "$message"
 }
