@@ -301,7 +301,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
 
         if ((! $oldUser || empty($oldUser->accountEmailAddress))
-            && ! empty($user->accountEmailAddress)
+            && ! empty($user->accountEmailAddress) && Tinebase_EmailUser::manages(Tinebase_Config::SMTP)
         ) {
             if (! $oldUser || $oldUser->accountEmailAddress !== $user->accountEmailAddress) {
                 Tinebase_EmailUser::checkIfEmailUserExists($user);
