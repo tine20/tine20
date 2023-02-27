@@ -1258,6 +1258,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             'id'          => true,
             'note'        => true,
             'email'       => true,
+            'email_home'  => true,
             'n_family'    => true,
             'n_given'     => true,
             'n_fileas'    => true,
