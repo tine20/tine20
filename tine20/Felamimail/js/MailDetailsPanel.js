@@ -300,7 +300,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 showAttachments: function(attachments, messageData) {
                     const idPrefix = Ext.id();
                     const attachmentsStr = this.app.i18n._('Attachments');
-
+                    if (!attachments) return '';
                     let result = (attachments.length > 0) ? `<span id=${idPrefix}:all class="tinebase-download-link tinebase-download-all"><b>${attachmentsStr}:</b><div class="tinebase-download-link-wait"></div></span>` : '';
 
                     for (var i=0, id, cls; i < attachments.length; i++) {
@@ -383,6 +383,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     items: [{
                             text: this.app.i18n._('Open'),
                             iconCls: 'action_preview',
+                            disabled: this.record.get('from_node'), // not implemented yet
                             hidden: attachments.length !== 1 || _.get(attachments, '[0]content-type') !== 'message/rfc822',
                             handler: () => {
                                 Tine.Felamimail.MessageDisplayDialog.openWindow({
