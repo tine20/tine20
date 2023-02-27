@@ -110,7 +110,7 @@ msgid "Overwrite Existing File?"
 msgstr "Bestehende Datei überschreiben?"
 
 msgid "Preparing Attachment..."
-msgstr "Anhang wir vorbereitet..."
+msgstr "Anhang wird vorbereitet..."
 
 #: js/OnlyOfficeEditDialog.js:261
 #, python-brace-format
