@@ -173,6 +173,8 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
                 foreach($lists as $list) {
                     /** @var DFCom_Model_DeviceList $list */
                     try {
+                        // NOTE: lists starting with a lodash need special handling in domain specific handlers and are ignored here
+                        if($list->name[0] === '_') continue;
                         if ($list->list_version != $deviceListController->getSyncToken($list)) {
                             $response->updateDeviceList($list, $device);
                             // device supports one list per request only
@@ -196,6 +198,18 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
                             if ($list->list_status == -1) {
                                 $list->list_status = $deviceRecord->xprops('data')['reason'];
                                 $deviceListController->update($list);
+                                if ($list->controlCommands) {
+                                    foreach(explode("\n", $list->controlCommands) as $controlCommand) {
+                                        try {
+                                            if (! preg_match('/^\/\/|#/', $controlCommand)) {
+                                                eval('$response->' . preg_replace('/;{0,1}$/', ';', trim($controlCommand)));
+                                            }
+                                        } catch (Exception $e) {
+                                            $deviceRecord->xprops()['controlCommandError'] = "// {$controlCommand} failed -> {$e->getMessage()}";
+                                        }
+                                    }
+                                }
+                                $deviceRecordController->create($deviceRecord);
                             }
                         }
                         break;

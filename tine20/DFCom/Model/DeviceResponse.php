@@ -158,9 +158,12 @@ class DFCom_Model_DeviceResponse //extends \Zend\Diactoros\Response
      * @param DFCom_Model_DeviceList $deviceList
      * @param DFCom_Model_Device $device
      */
-    public function updateDeviceList(DFCom_Model_DeviceList $deviceList, DFCom_Model_Device $device)
+    public function updateDeviceList(DFCom_Model_DeviceList $deviceList, DFCom_Model_Device $device, $query='')
     {
         $link = '/' . ltrim(Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH) . "/DFCom/v1/device/{$device->getId()}/list/{$deviceList->getId()}/{$device->authKey}", '/');
+        if ($query) {
+            $link .= urlencode('?' . ltrim($query, '?'));
+        }
         $this->_responseData['df_setup_list'] = $deviceList->name . ',' . ($link);
     }
 

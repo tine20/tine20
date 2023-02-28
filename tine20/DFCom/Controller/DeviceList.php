@@ -14,6 +14,7 @@
  */
 class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
 {
+
     /**
      * the constructor
      *
@@ -77,6 +78,7 @@ class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
                 'device_id' => $device->getId(),
                 'name' => $options->deviceName,
                 'export_definition_id' => $exportDefinition->getId(),
+                'controlCommands' => $options->controlCommands,
             ])));
         }
 
@@ -105,6 +107,11 @@ class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
             HumanResources_Controller_Employee::getInstance()->assertPublicUsage(),
             HumanResources_Controller_FreeTimeType::getInstance()->assertPublicUsage(),
         ];
+
+        if ($request->getQuery('userId')) {
+            $currentUser = Tinebase_Core::getUser();
+            $user = Tinebase_Core::setUser(Tinebase_User::getInstance()->getUserById($request->getQuery('userId'), Tinebase_Model_FullUser::class));
+        }
 
         try {
             /** @var DFCom_Model_Device $device */
@@ -159,6 +166,9 @@ class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
             $response->getBody()->write('DeviceList export error');
             return $response;
         } finally {
+            if (isset($currentUser)) {
+                Tinebase_Core::setUser($currentUser);
+            }
             foreach(array_reverse($assertACLUsageCallbacks) as $assertACLUsageCallback) {
                 $assertACLUsageCallback();
             }

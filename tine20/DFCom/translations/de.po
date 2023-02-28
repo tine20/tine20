@@ -191,7 +191,7 @@ msgstr "Eine weitere Listen-Aktualisierung ist im Gange"
 
 #: Config.php:66
 msgid "Initial AuthKey for Device Setup"
-msgstr "Ungültiger Authentifikationsschlüssel für die Geräte Einrichtung"
+msgstr "Authentifikationsschlüssel für die Geräte Einrichtung"
 
 #: Config.php:68
 msgid "Must be set as default for global variable authKey (max 20 chars) in DataFox Studio for the device setup."

@@ -122,6 +122,17 @@ class DFCom_Model_DeviceList extends Tinebase_Record_Abstract
                 'label' => 'List status', // _('List status')
                 'nullable' => true,
             ],
+            'controlCommands' => [
+                'type' => 'text',
+                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'label' => 'Control Commands on List Feedback', // _('Control Commands on List Feedback')
+                'nullable' => true,
+                self::UI_CONFIG => [
+                    'emptyText' => "setDeviceVariable('TAListLoaded', 1);
+triggerEventChain('projectTime');
+"
+                ],
+            ],
         ]
     ];
 

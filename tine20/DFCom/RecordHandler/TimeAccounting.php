@@ -21,6 +21,7 @@ class DFCom_RecordHandler_TimeAccounting
     const FUNCTION_KEY_CLOCKIN = 'CLIN';
     const FUNCTION_KEY_CLOCKOUT = 'CLOT';
     const FUNCTION_KEY_ABSENCE = 'ASCE';
+    const FUNCTION_KEY_PROJECT = 'PRCT';
 
     const XPROP_TIMESHEET_ID = self::class . '::timesheet_id';
     const XPROP_UNKNOWN_CARD_ID = self::class . '::unknown_card_id';
@@ -77,6 +78,7 @@ class DFCom_RecordHandler_TimeAccounting
         // end attention
 
         $dateTime = new Tinebase_DateTime($this->deviceData['dateTime'], $this->device->timezone);
+        $dateTime->setTimezone('UTC');
 
         $this->currentUser = null;
         $result = null;
@@ -99,14 +101,37 @@ class DFCom_RecordHandler_TimeAccounting
             $this->user = Tinebase_Core::setUser(Tinebase_User::getInstance()->getUserById($this->employee->account_id, Tinebase_Model_FullUser::class));
 
             switch ($this->deviceData['functionKey']) {
+                case self::FUNCTION_KEY_PROJECT:
+                    if ($this->deviceData['functionValue'] === 'QUERY') {
+                        // device needs account specific project list
+                        $deviceListController = DFCom_Controller_DeviceList::getInstance();
+                        $timeaccountList = $deviceListController->getDeviceLists($this->device)->filter('name', '_timeaccounts')->getFirstRecord();
+                        $this->deviceResponse->updateDeviceList($timeaccountList, $this->device, "?userId=".$this->employee->account_id);
+                        break;
+                    }
+                    if (! $this->deviceData['functionValue']) break;
+                    /** @var HumanResources_Model_AttendanceRecorderDevice $device */
+                    $device = HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get(
+                        HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID);
+                    $cfg = (new HumanResources_Config_AttendanceRecorder())
+                        ->setMetaData([
+                            HumanResources_Config_AttendanceRecorder::METADATA_SOURCE => __METHOD__,
+                            Timetracker_Model_Timeaccount::class => $this->deviceData['functionValue']
+                        ])
+                        ->setDevice($device)
+                        ->setEmployee($this->employee)
+                        ->setAccount(Tinebase_User::getInstance()->getFullUserById($this->employee->account_id))
+                        ->setTimeStamp($dateTime);
+
+                    HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn($cfg);
+                    break;
+
                 case self::FUNCTION_KEY_CLOCKIN:
                 case self::FUNCTION_KEY_CLOCKOUT:
                 case self::FUNCTION_KEY_ABSENCE:
-                    
                     /** @var HumanResources_Model_AttendanceRecorderDevice $device */
                     $device = HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get(
                         HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID);
-                    $dateTime->setTimezone('UTC');
                     $cfg = (new HumanResources_Config_AttendanceRecorder())
                         ->setMetaData([
                             HumanResources_Config_AttendanceRecorder::METADATA_SOURCE => __METHOD__,
@@ -130,7 +155,7 @@ class DFCom_RecordHandler_TimeAccounting
                         HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut($cfg);
                     }
                     $result = false;
-                    // fallthrough to display info
+                    break;
 
                 case self::FUNCTION_KEY_INFO:
                     $employeeName = $this->user->accountDisplayName;
