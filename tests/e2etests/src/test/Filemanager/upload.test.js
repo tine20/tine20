@@ -18,6 +18,7 @@ describe('filemanager', () => {
             }
 
             await expect(page).toClick('.t-app-filemanager .tine-mainscreen-centerpanel-west-treecards li img.x-tree-elbow-plus');
+            await page.waitForTimeout(2000);
             await expect(page).toClick('.t-app-filemanager .tine-mainscreen-centerpanel-west-treecards span', {text: 'Persönliche Dateien von ' + process.env.TEST_USER, timeout: 5000});
             await page.waitForTimeout(2000);
         });
@@ -35,9 +36,10 @@ describe('filemanager', () => {
                 await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name' ,{text:folder});
             });
             test('open editDialog', async () => {
-                await expect(page).toClick('.t-app-filemanager button', {text: 'Eigenschaften bearbeiten'});
-                editDialog = await lib.getNewWindow();
-                await editDialog.waitForTimeout(2000);
+                editDialog = lib.getNewWindow();
+                await expect(page).toClick('.t-app-filemanager button', {text: 'Eigenschaften bearbeiten',visibile:true});
+                editDialog = await editDialog;
+                await editDialog.waitForTimeout(5000);
                 await expect(editDialog).toClick('span',{text: 'Berechtigungen'});
             });
             test('add user in grantsPanel', async () => {
