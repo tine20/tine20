@@ -36,6 +36,7 @@ describe('Contacts', () => {
             await expect(importDialog).toMatchElement('span', {text: 'Zusammenfassung'});
             await importDialog.screenshot({path: 'screenshots/Adressbuch/8_adressbuch_mit_import_zusammenfassung.png'});
             await expect(importDialog).toClick('button', {text: 'Ende'});
+            await importDialog.close();
         });
 
         test('Import conflicts', async () => {
@@ -186,6 +187,7 @@ describe('Contacts', () => {
                 text: process.env.TEST_USER + 's persönliches Adressbuch',
                 button: 'right'
             });
+            await page.waitForTimeout(1000);
             await page.waitForSelector('.x-menu-item-icon.action_managePermissions');
             await page.hover('.x-menu-item-icon.action_managePermissions');
             await page.screenshot({path: 'screenshots/StandardBedienhinweise/3_standardbedienhinweise_adresse_berechtigungen.png'});
