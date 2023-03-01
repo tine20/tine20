@@ -469,12 +469,12 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         
         foreach ($allGrants as $grants) {
             if ($grants['resourceNotificationGrant']) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' Converting grants to notification recipients: '
-                    . print_r($grants, true)
-                );
-
                 $recipients = array_merge($recipients, Tinebase_Model_Grants::resolveGrantAccounts($grants));
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Got recipients: '
+                    . print_r($recipients, true)
+                );
             }
         }
 
