@@ -285,12 +285,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
 
-        $result = array(
+        return array(
             'results'     => array_values($results),
             'totalcount'  => Admin_Controller_User::getInstance()->searchCount($filter)
         );
-        
-        return $result;
     }
 
     /**
