@@ -678,8 +678,11 @@ class Tinebase_FileSystem implements
                 list ($hash, $hashFile, $avResult) = $this->createFileBlob($handle);
 
                 try {
+                    $aquireWriteLock = !Tinebase_TransactionManager::getInstance()->hasOpenTransactions();
                     $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-                    $this->acquireWriteLock();
+                    if ($aquireWriteLock) {
+                        $this->acquireWriteLock();
+                    }
 
                     $parentFolder = $this->stat($parentPath);
 
