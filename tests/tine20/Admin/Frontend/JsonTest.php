@@ -1383,4 +1383,18 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
                 ]];
         $this->_json->searchImportExportDefinitions($filter, []);
     }
+
+    public function testSearchUsersShowEmailUsage()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+
+        $filter = [['field' => "query", 'operator' => "contains", 'value' => Tinebase_Core::getUser()->accountEmailAddress]];
+        $users = $this->_json->searchUsers($filter, []);
+        self::assertEquals(1, $users['totalcount'], print_r($users, true));
+        $user = $users['results'][0];
+        self::assertArrayHasKey('emailUser', $user);
+        $emailUser = $user['emailUser'];
+        self::assertArrayHasKey('emailMailSize', $emailUser, print_r($emailUser, true));
+        self::assertArrayHasKey('emailMailQuota', $emailUser, print_r($emailUser, true));
+    }
 }

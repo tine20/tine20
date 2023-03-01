@@ -92,16 +92,16 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $result = $this->_userBackend->getUsers($_filter, $_sort, $_dir, $_start, $_limit, 'Tinebase_Model_FullUser');
 
         if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
-            $emailUser = null;
+            $emailUserBackend = null;
             try {
-                $emailUser = Tinebase_EmailUser::getInstance();
+                $emailUserBackend = Tinebase_EmailUser::getInstance();
             } catch (Tinebase_Exception_NotFound $tenf) {
             }
 
-            // FIXME if you want quota info: in Tinebase_User_Plugin_LdapInterface, inspectGetUserByProperty has a second param!
-            if (null !== $emailUser && !$emailUser instanceof Tinebase_User_Plugin_LdapInterface) {
-                foreach ($result as $user) {
-                    $emailUser->inspectGetUserByProperty($user);
+            // FIXME LDAP email backends not supported! in Tinebase_User_Plugin_LdapInterface, inspectGetUserByProperty has a second param!
+            if (null !== $emailUserBackend && !$emailUserBackend instanceof Tinebase_User_Plugin_LdapInterface) {
+                foreach ($result as $idx => $user) {
+                    $result[$idx] = $this->get($user->getId());
                 }
             }
         }
@@ -119,9 +119,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     {
         $this->checkRight('VIEW_ACCOUNTS');
         
-        $result = $this->_userBackend->getUsersCount($_filter);
-        
-        return $result;
+        return $this->_userBackend->getUsersCount($_filter);
     }
     
     /**
