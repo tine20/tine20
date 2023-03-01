@@ -1710,7 +1710,8 @@ class Tinebase_FileSystem implements
 
         try {
             try {
-                $node = $this->stat($path);
+                // if modlog is not active, we want to hard delete a soft deleted node
+                $node = $this->stat($path, null, !$this->_modLogActive);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // we don't want a roll back here, we didn't do anything, nothing went really wrong
                 // if the TENF is catched outside gracefully, a roll back in here would kill it!
@@ -1923,7 +1924,8 @@ class Tinebase_FileSystem implements
 
         try {
             try {
-                $node = $this->stat($path);
+                // if modlog is not active, we want to hard delete a soft deleted node
+                $node = $this->stat($path, null, !$this->_modLogActive);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
                 $transactionId = null;
