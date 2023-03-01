@@ -2784,12 +2784,13 @@ class Tinebase_FileSystem implements
         // remove from filesystem if not existing any more
         foreach ($hashesToDelete as $hashToDelete) {
             $filename = $this->_basePath . '/' . substr($hashToDelete, 0, 3) . '/' . substr($hashToDelete, 3);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Deleting ' . $filename);
-            unlink($filename);
-            $deleteCount++;
-
-            Tinebase_Lock::keepLocksAlive();
+            if (file_exists($filename)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Deleting ' . $filename);
+                unlink($filename);
+                $deleteCount++;
+                Tinebase_Lock::keepLocksAlive();
+            }
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
