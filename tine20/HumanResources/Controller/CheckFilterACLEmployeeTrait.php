@@ -58,6 +58,7 @@ trait HumanResources_Controller_CheckFilterACLEmployeeTrait
         $andWrapper->addFilter($this->_getCheckFilterACLTraitFilter());
         $orWrapper->addFilterGroup($andWrapper);
 
+        $orWrapper->isImplicit(true);
         $_filter->addFilterGroup($orWrapper);
     }
 

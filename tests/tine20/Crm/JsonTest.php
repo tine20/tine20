@@ -731,6 +731,6 @@ class Crm_JsonTest extends Crm_AbstractTest
         self::assertCount(1, $leadFilters);
         $result = $this->_getUit()->searchLeads($leadFilters, []);
         self::assertGreaterThanOrEqual(1, $result['totalcount']);
-        self::assertCount(2, $result['filter']);
+        self::assertCount(1, $result['filter']);
     }
 }
