@@ -94,6 +94,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             'headline'                    => 0,
             'use_headline'                => 1,
             'mapUndefinedFieldsEnable'    => 0,
+            'mapUndefinedFieldsIgnoreEmpty' => 0,
             'mapUndefinedFieldsTo'        => 'description',
             'demoData'                    => false
         ));
@@ -395,9 +396,8 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
      */
     protected function _createInfoTextForUnmappedFields ($_data_indexed)
     {
-        $return = null;
-        
-        $translation = Tinebase_Translation::getTranslation('Tinebase');
+        $translation = Tinebase_Translation::getTranslation();
+        $ignoreEmpty = (bool) $this->_options['mapUndefinedFieldsIgnoreEmpty'];
         
         $validKeys = array();
         foreach ($this->_options['mapping']['field'] as $keys) {
@@ -407,13 +407,21 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         $notImportedFields = array_diff_key($_data_indexed, $validKeys);
         
         if (count($notImportedFields) >= 1) {
-            $description = sprintf($translation->_("The following fields weren't imported: %s"), "\n");
+            $description = ! $ignoreEmpty
+                ? sprintf($translation->_("The following fields weren't imported: %s"), "\n") : '';
             $valueIfEmpty = $translation->_("N/A");
             
             foreach ($notImportedFields as $nKey => $nVal) {
-                if (trim($nKey) == "") $nKey = $valueIfEmpty;
-                if (trim($nVal) == "") $nVal = $valueIfEmpty;
-                
+                if (trim($nVal) == "") {
+                    if ($ignoreEmpty) {
+                        continue;
+                    }
+                    $nVal = $valueIfEmpty;
+                }
+                if (trim($nKey) == "") {
+                    $nKey = $valueIfEmpty;
+                }
+
                 $description .= $nKey . " : " . $nVal . " \n";
             }
             $return = $description;
