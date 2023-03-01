@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -456,12 +456,36 @@ class Addressbook_Import_CsvTest extends ImportTestCase
 
     public function testAppendField()
     {
-        $definition = $this->_getDefinitionFromFile('adb_import_csv_append.xml');
-        $this->_filename = dirname(__FILE__) . '/files/append.csv';
+        $contact = $this->_doImportSingleContact('adb_import_csv_append.xml', 'append.csv');
+        self::assertEquals('0190 800', $contact->tel_work, print_r($contact->toArray(), true));
+    }
+
+    public function testMapUndefinedFields()
+    {
+        $contact = $this->_doImportSingleContact('adb_import_csv_mapundefined.xml', 'mapundefined.csv');
+
+        $translation = Tinebase_Translation::getTranslation('Tinebase');
+
+        $valueIfEmpty = $translation->_("N/A");
+        $expected = sprintf($translation->_("The following fields weren't imported: %s"), "\n");
+        $expected .= "und_so_weiter : irgendwas \nleer : " . $valueIfEmpty . " \n";
+        self::assertEquals($expected, $contact->note, print_r($contact->toArray(), true));
+    }
+
+    public function testMapUndefinedFieldsIgnoreEmpty()
+    {
+        $contact = $this->_doImportSingleContact('adb_import_csv_mapundefinedempty.xml', 'mapundefined.csv');
+        $expected = "und_so_weiter : irgendwas \n";
+        self::assertEquals($expected, $contact->note, print_r($contact->toArray(), true));
+    }
+
+    protected function _doImportSingleContact($xml, $csv)
+    {
+        $definition = $this->_getDefinitionFromFile($xml);
+        $this->_filename = dirname(__FILE__) . '/files/' . $csv;
         $this->_deleteImportFile = false;
         $result = $this->_doImport(array('dryrun' => true), $definition);
         self::assertEquals(1, $result['totalcount'], print_r($result, true));
-        $contact = $result['results']->getFirstRecord();
-        self::assertEquals('0190 800', $contact->tel_work, print_r($contact->toArray(), true));
+        return $result['results']->getFirstRecord();
     }
 }

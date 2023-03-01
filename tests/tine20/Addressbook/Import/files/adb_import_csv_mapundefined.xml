@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>adb_csv_mapundefined</name>
+    <model>Addressbook_Model_Contact</model>
+    <plugin>Addressbook_Import_Csv</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>;</delimiter>
+    <label>mapundefined CSV import</label>
+    <description>mapundefined import</description>
+    <extension>csv</extension>
+    <mapUndefinedFieldsEnable>1</mapUndefinedFieldsEnable>
+    <mapUndefinedFieldsTo>note</mapUndefinedFieldsTo>
+    <mapping>
+        <field>
+            <source>Vorname</source>
+            <destination>n_given</destination>
+        </field>
+        <field>
+            <source>Name</source>
+            <destination>n_family</destination>
+        </field>
+        <field>
+            <source>Vorwahl_Tel</source>
+            <destination>tel_work</destination>
+        </field>
+        <field>
+            <source>Telefonnummer</source>
+            <destination>tel_work</destination>
+        </field>
+    </mapping>
+</config>
