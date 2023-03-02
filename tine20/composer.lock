@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "53da36ddba8df3418f0da3ea93cf8e65",
+    "content-hash": "68ea86bb44c7fa1a59e231b69ed00cd4",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -10778,16 +10778,16 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.5.3",
+            "version": "1.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "d48e3e9ad28547777a3fa1a822ec9fc436646591"
+                "reference": "90cbcdf8a1a203b48b678b11de0d195e07b0404f"
             },
             "require": {
                 "ext-ctype": "*",
                 "php": ">=7.4.0",
-                "zendframework/zendframework1": "1.12.20pl61 as 1.12.20"
+                "zendframework/zendframework1": "1.12.20pl62 as 1.12.20"
             },
             "require-dev": {
                 "phing/phing": "2.6.1-p0",
@@ -10818,7 +10818,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2022-12-28T13:09:22+00:00"
+            "time": "2023-03-02T14:38:37+00:00"
         },
         {
             "name": "thecodingmachine/safe",
@@ -11682,11 +11682,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl61",
+            "version": "1.12.20pl62",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/zendframework1.git",
-                "reference": "7b16470eb5a064052f0dbc4f3d846bf2c9a645dc"
+                "reference": "580090c126963e31de2b816ecde36998ade7f5fb"
             },
             "require": {
                 "php": ">=7.4.0"
@@ -11703,7 +11703,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2022-09-22T18:53:23+00:00"
+            "time": "2023-03-02T14:09:00+00:00"
         }
     ],
     "packages-dev": [
@@ -13377,7 +13377,7 @@
         },
         {
             "package": "zendframework/zendframework1",
-            "version": "1.12.20.0-patch61",
+            "version": "1.12.20.0-patch62",
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0"
         }
