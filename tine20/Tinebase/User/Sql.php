@@ -233,11 +233,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         if (!empty($_filter)) {
             $whereStatement = array();
-            $defaultValues  = array(
+            $defaultValues = [
                 $this->rowNameMapping['accountLastName'], 
                 $this->rowNameMapping['accountFirstName'], 
-                $this->rowNameMapping['accountLoginName']
-            );
+                $this->rowNameMapping['accountLoginName'],
+                $this->rowNameMapping['accountEmailAddress'],
+            ];
             
             // prepare for case insensitive search
             foreach ($defaultValues as $defaultValue) {

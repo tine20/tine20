@@ -678,8 +678,11 @@ class Tinebase_FileSystem implements
                 list ($hash, $hashFile, $avResult) = $this->createFileBlob($handle);
 
                 try {
+                    $aquireWriteLock = !Tinebase_TransactionManager::getInstance()->hasOpenTransactions();
                     $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-                    $this->acquireWriteLock();
+                    if ($aquireWriteLock) {
+                        $this->acquireWriteLock();
+                    }
 
                     $parentFolder = $this->stat($parentPath);
 
@@ -1707,7 +1710,8 @@ class Tinebase_FileSystem implements
 
         try {
             try {
-                $node = $this->stat($path);
+                // if modlog is not active, we want to hard delete a soft deleted node
+                $node = $this->stat($path, null, !$this->_modLogActive);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // we don't want a roll back here, we didn't do anything, nothing went really wrong
                 // if the TENF is catched outside gracefully, a roll back in here would kill it!
@@ -1920,7 +1924,8 @@ class Tinebase_FileSystem implements
 
         try {
             try {
-                $node = $this->stat($path);
+                // if modlog is not active, we want to hard delete a soft deleted node
+                $node = $this->stat($path, null, !$this->_modLogActive);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
                 $transactionId = null;
@@ -2784,12 +2789,13 @@ class Tinebase_FileSystem implements
         // remove from filesystem if not existing any more
         foreach ($hashesToDelete as $hashToDelete) {
             $filename = $this->_basePath . '/' . substr($hashToDelete, 0, 3) . '/' . substr($hashToDelete, 3);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Deleting ' . $filename);
-            unlink($filename);
-            $deleteCount++;
-
-            Tinebase_Lock::keepLocksAlive();
+            if (file_exists($filename)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Deleting ' . $filename);
+                unlink($filename);
+                $deleteCount++;
+                Tinebase_Lock::keepLocksAlive();
+            }
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__

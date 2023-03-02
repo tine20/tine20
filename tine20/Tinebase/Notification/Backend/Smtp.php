@@ -111,12 +111,14 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
                 $mail->createAttachment($attachment);
             }
         }
+
+        $preferredEmailAddress = $_recipient->getPreferredEmailAddress();
         
         // send
-        if (! empty($_recipient->email)) {
+        if (! empty($preferredEmailAddress)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' Send notification email to ' . $_recipient->email);
-            $mail->addTo($_recipient->email, $_recipient->n_fn);
+                __METHOD__ . '::' . __LINE__ . ' Send notification email to ' . $preferredEmailAddress);
+            $mail->addTo($preferredEmailAddress, $_recipient->n_fn);
             try {
                 Tinebase_Smtp::getInstance()->sendMessage($mail);
             } catch (Zend_Mail_Protocol_Exception $zmpe) {

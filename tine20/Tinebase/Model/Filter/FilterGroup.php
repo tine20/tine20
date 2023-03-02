@@ -198,7 +198,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
 
     protected $_isInSetFromUser = false;
 
-    public static $beStrict = false;
+    protected $_isImplicit = false;
+
+    public static $beStrict = true;
     
     /******************************** functions ********************************/
     
@@ -258,6 +260,15 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             $this->_filterObjects[$idx] = clone $filter;
             $this->_filterObjects[$idx]->setParent($this);
         }
+    }
+
+    public function isImplicit(?bool $val = null): bool
+    {
+        $oldValue = $this->_isImplicit;
+        if (null !== $val) {
+            $this->_isImplicit = $val;
+        }
+        return $oldValue;
     }
 
     public function andWrapItself()
@@ -916,7 +927,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     public function toArray($_valueToJson = false)
     {
         $result = array();
+        /** @var Tinebase_Model_Filter_FilterGroup|Tinebase_Model_Filter_Abstract $filter */
         foreach ($this->_filterObjects as $filter) {
+            if ($filter->isImplicit()) {
+                continue;
+            }
             if ($filter instanceof Tinebase_Model_Filter_FilterGroup && ! $filter instanceof Tinebase_Model_Filter_Query) {
                 $result[] = array(
                     self::CONDITION => $filter->getCondition(),

@@ -411,7 +411,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             }
         }
 
-        foreach($_recordSetDiff->modified as $data) {
+        foreach ($_recordSetDiff->modified as $data) {
             $diff = new Tinebase_Record_Diff($data);
             $found = false;
             /** @var Tinebase_Model_Grants $record */
@@ -426,13 +426,12 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             if (true === $found) {
                 $record->applyDiff($diff);
             } else {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' Did not find the record supposed to be modified with id: ' . $data[$idProperty]);
-                throw new Tinebase_Exception_InvalidArgument('Did not find the record supposed to be modified with id: ' . $data[$idProperty]);
             }
         }
 
-        foreach($_recordSetDiff->added as $data) {
+        foreach ($_recordSetDiff->added as $data) {
             $found = false;
             /** @var Tinebase_Model_Grants $record */
             foreach ($_recordSet as $record) {
