@@ -125,4 +125,9 @@ trait Tinebase_Record_AbstractTrait
             }
         }
     }
+
+    public function notifyBroadcastHub(): bool
+    {
+        return true;
+    }
 }

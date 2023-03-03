@@ -654,4 +654,22 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
     {
         return $this->parent_id;
     }
+
+    protected $_notifyBC = null;
+    public function notifyBroadcastHub(): bool
+    {
+        if (null === $this->_notifyBC) {
+            if ($this->type !== Tinebase_Model_Tree_FileObject::TYPE_FILE && $this->type !==
+                    Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
+                $this->_notifyBC = false;
+            } else {
+                $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(
+                    Tinebase_FileSystem::getInstance()->getPathOfNode($this, true, true));
+
+                $this->_notifyBC = $path->containerType === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL ||
+                    $path->containerType === Tinebase_FileSystem::FOLDER_TYPE_SHARED;
+            }
+        }
+        return $this->_notifyBC;
+    }
 }

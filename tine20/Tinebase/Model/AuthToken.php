@@ -104,4 +104,9 @@ class Tinebase_Model_AuthToken extends Tinebase_Record_NewAbstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    public function notifyBroadcastHub(): bool
+    {
+        return false;
+    }
 }

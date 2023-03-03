@@ -79,4 +79,9 @@ class Tinebase_Model_Tree_RefLog extends Tinebase_Record_NewAbstract
             ],
         ],
     ];
+
+    public function notifyBroadcastHub(): bool
+    {
+        return false;
+    }
 }

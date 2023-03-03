@@ -312,4 +312,9 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
     {
         return static::$_isReplicable && (self::TYPE_FILE === $this->type || self::TYPE_FOLDER === $this->type);
     }
+
+    public function notifyBroadcastHub(): bool
+    {
+        return false;
+    }
 }
