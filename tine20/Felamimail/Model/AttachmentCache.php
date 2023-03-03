@@ -122,6 +122,11 @@ class Felamimail_Model_AttachmentCache extends Tinebase_Record_NewAbstract
         $this->{self::FLD_PART_ID} = $partId;
     }
 
+    public function notifyBroadcastHub(): bool
+    {
+        return false;
+    }
+    
     /**
      * holds the configuration object (must be declared in the concrete class)
      *

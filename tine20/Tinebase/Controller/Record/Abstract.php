@@ -1792,7 +1792,7 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _inspectAfterDelete(Tinebase_Record_Interface $record)
     {
         $bchub = Tinebase_BroadcastHub::getInstance();
-        if ($bchub->isActive()) {
+        if ($bchub->isActive() && $record->notifyBroadcastHub()) {
             $bchub->pushAfterCommit('delete', get_class($record), $record->getId(), $record->has('container_id') ? $record->container_id : null);
         }
     }
