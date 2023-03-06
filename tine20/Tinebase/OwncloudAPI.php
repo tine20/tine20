@@ -190,7 +190,7 @@ class Tinebase_OwncloudAPI
                         ],
                         "dav"=> [
                             "reports"   => ["search-files"],
-                            "chunking"=>"1.0",
+                            "chunking"=>"0",
                             "propfind" => [
                                 "depth_infinity" =>false,
                             ],
