@@ -95,7 +95,7 @@ class Sales_Export_Ods_InvoicePosition extends Sales_Export_Ods_Abstract
                         $value = $record[$identifier];
                         break;
                     default:
-                        $value = $record['product_id'][$identifier];
+                        $value = $record['product_id'][$identifier] ?? '';
                 } 
                 
                 // create cell with type and value and add style

@@ -1301,3 +1301,6 @@ msgstr "Dieses Feld wird automatisch aus dem Email konto übernommen und kann da
 
 msgid "E-Mail (all)"
 msgstr "E-Mail (alle)"
+
+msgid "Company / Organisation"
+msgstr "Firma / Organisation"

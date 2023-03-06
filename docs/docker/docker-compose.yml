@@ -31,7 +31,9 @@ services:
       ### apps to install - if omitted, all available apps are installed
       # TINE20_APPLICATION_TO_INSTALL: "Addressbook,Felamimail,Calendar,Filemanager"
     volumes:
-      - "tine20_files:/var/lib/tine20/files"
+      - "/var/lib/tine20_files:/var/lib/tine20/files"
+    ### OR
+#      - "tine20_files:/var/lib/tine20/files"
     networks:
       - external_network
       - internal_network
@@ -55,8 +57,8 @@ services:
       MYSQL_USER: &MYSQL_USER tine
       MYSQL_PASSWORD: &MYSQL_PASSWORD tine
     ### use volume for persistent DB
-#    volumes:
-#      - "/var/lib/mysql:/var/lib/mysql"
+    volumes:
+      - "/var/lib/mysql:/var/lib/mysql"
     ### OR
 #      - "tine20_db:/var/lib/mysql"
     networks:
@@ -140,8 +142,9 @@ services:
 #      - "./letsencrypt:/letsencrypt"
 #      - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
-volumes:
-  tine20_files:
+### optional: use docker volumes instead of directory mounts
+# volumes:
+#  tine20_files:
 #  clamav_files:
 #  tine20_db:
 
