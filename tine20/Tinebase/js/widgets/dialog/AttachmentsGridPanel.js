@@ -107,7 +107,9 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
     onAttachmentChanges: function(data, e) {
         const record = Tine.Tinebase.data.Record.setFromJson(data, Tine.Tinebase.Model.Tree_Node);
         const existingRecord = this.store.getById(data.id);
-
+        
+        if (!record.data.size && !record.data.name) return;
+    
         if (existingRecord && e.topic.match(/\.update/)) {
             const idx = this.store.indexOf(existingRecord);
             const isSelected = this.selModel.isSelected(idx);
