@@ -1144,11 +1144,11 @@ class Tinebase_FileSystem implements
         if ($sizeIncrease && $fsTotalQuotaInByte > 0) {
             if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
                 if ($rootRevisionSize > $fsTotalQuotaInByte) {
-                    throw new Tinebase_Exception_SystemGeneric($translation->_('Quota is exceeded'));
+                    throw new Tinebase_Exception_QuotaExceeded();
                 }
             } else {
                 if ($rootSize > $fsTotalQuotaInByte) {
-                    throw new Tinebase_Exception_SystemGeneric($translation->_('Quota is exceeded'));
+                    throw new Tinebase_Exception_QuotaExceeded();
                 }
             }
         }
@@ -1181,7 +1181,7 @@ class Tinebase_FileSystem implements
 
             // folder quota
             if (null !== $parentNode->quota && $size > $parentNode->quota) {
-                throw new Tinebase_Exception_SystemGeneric($translation->_('Quota is exceeded'));
+                throw new Tinebase_Exception_QuotaExceeded();
             }
 
             //personal quota
@@ -1192,7 +1192,7 @@ class Tinebase_FileSystem implements
                     $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] :
                     $totalByUser;
                 if ($quota > 0 && $size > $quota) {
-                    throw new Tinebase_Exception_SystemGeneric($translation->_('Quota is exceeded'));
+                    throw new Tinebase_Exception_QuotaExceeded();
                 }
             }
         }
