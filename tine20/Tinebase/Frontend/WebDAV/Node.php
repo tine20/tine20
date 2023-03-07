@@ -73,15 +73,13 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
     {
         if ($this->_node instanceof Tinebase_Model_Tree_Node) {
             if ($this->_node->last_modified_time instanceof Tinebase_DateTime) {
-                $timestamp = $this->_node->last_modified_time->getTimestamp();
-            } else {
-                $timestamp = $this->_node->creation_time->getTimestamp();
+                return $this->_node->last_modified_time->getTimestamp();
+            } else if ($this->_node->creation_time instanceof Tinebase_DateTime) {
+                return $this->_node->creation_time->getTimestamp();
             }
-        } else {
-            $timestamp = Tinebase_DateTime::now()->getTimestamp();
         }
-        
-        return $timestamp;
+
+        return Tinebase_DateTime::now()->getTimestamp();
     }
 
     /**
