@@ -933,11 +933,11 @@ class Tinebase_FileSystem implements
         });
 
         $refLogBackend = static::$_refLogBackend;
-        $refLogIds = $refLogBackend->search(null, new Tinebase_Model_Pagination([
+        $refLogIdsFolderIds = $refLogBackend->search(null, new Tinebase_Model_Pagination([
             'limit'     => 1000,
             'sort'      => 'id'
-        ]), Tinebase_Backend_Sql_Abstract::IDCOL);
-        if (empty($refLogIds)) {
+        ]), [Tinebase_Backend_Sql_Abstract::IDCOL, Tinebase_Model_Tree_RefLog::FLD_FOLDER_ID]);
+        if (empty($refLogIdsFolderIds)) {
             return;
         }
 
@@ -953,26 +953,27 @@ class Tinebase_FileSystem implements
             $rootRevisionSize = (int)$applicationController->getApplicationState($tinebaseApplication,
                 Tinebase_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE, true);
 
+            $treeBackend = $this->_getTreeNodeBackend();
+            $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($treeBackend);
+
+            $folders = $allFolders = $treeBackend->getMultiple(array_Values($refLogIdsFolderIds));
+            while (!empty($parentIds = array_filter($folders->parent_id, function($val) use($allFolders) {
+                return $val && $allFolders->getIndexById($val) === false;
+            }))) {
+                $folders = $treeBackend->getMultiple($parentIds);
+                $allFolders->mergeById($folders);
+            }
+            unset($raii);
+
             $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($refLogBackend);
+            $refLogIds = array_keys($refLogIdsFolderIds);
             $refLogs = $refLogBackend->getMultiple($refLogIds);
             if (!$refLogs->count()) {
                 $transMgr->commitTransaction($transId);
                 $transId = null;
                 return;
             }
-            $refLogIds = $refLogs->getArrayOfIds();
-            unset($raii);
-
-            $treeBackend = $this->_getTreeNodeBackend();
-            $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($treeBackend);
-
-            $folders = $allFolders = $treeBackend->getMultiple($refLogs->{Tinebase_Model_Tree_RefLog::FLD_FOLDER_ID});
-            while (!empty($parentIds = array_filter($folders->parent_id, function($val) use($allFolders) {
-                        return $val && $allFolders->getIndexById($val) === false;
-                    }))) {
-                $folders = $treeBackend->getMultiple($parentIds);
-                $allFolders->mergeById($folders);
-            }
+            $refLogIdsFolderIds = $refLogs->getArrayOfIds();
             unset($raii);
 
             while ($refLogs->count()) {
@@ -1083,8 +1084,6 @@ class Tinebase_FileSystem implements
             return;
         }
 
-        $path = $this->getPathOfNode($_node, true, true);
-
         $transactionMgr->registerOnCommitCallback([self::class, 'flushRefLogs']);
         $transactionMgr->registerAfterCommitCallback([self::class, 'insertRefLogActionQueue']);
 
@@ -1161,7 +1160,8 @@ class Tinebase_FileSystem implements
                 $personalNode = $this->stat('/Filemanager/folders/personal');
             }
         }
-        
+
+        $path = $this->getPathOfNode($_node, true, true);
         while (($path = dirname($path)) !== DIRECTORY_SEPARATOR) {
             $parentNode = $this->stat($path);
             $parentNode->size += $_sizeDiff;
