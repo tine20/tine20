@@ -415,7 +415,7 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
         Ext.each([].concat(this.duplicates), function(duplicate, idx) {this.duplicates[idx] = this.createRecord(this.duplicates[idx]);}, this);
 
         if (this.clientRecord.id) {
-            this.resolveStrategy = 'keep';
+            this.resolveStrategy = resolveStrategy || 'keep';
         } else {
             this.resolveStrategy = resolveStrategy || this.defaultResolveStrategy;
         }
