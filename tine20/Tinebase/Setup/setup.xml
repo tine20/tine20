@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>15.25</version>
+    <version>15.26</version>
     <order>0</order>
     <minimumRequiredVersion>12.28</minimumRequiredVersion>
     <tables>
@@ -3033,7 +3033,7 @@
         </table>
         <table>
             <name>tree_filerevisions</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3110,6 +3110,12 @@
                     <name>revision</name>
                     <field>
                         <name>revision</name>
+                    </field>
+                </index>
+                <index>
+                    <name>hash</name>
+                    <field>
+                        <name>hash</name>
                     </field>
                 </index>
                 <index>

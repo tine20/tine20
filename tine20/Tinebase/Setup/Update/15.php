@@ -39,6 +39,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE023 = __CLASS__ . '::update023';
     const RELEASE015_UPDATE024 = __CLASS__ . '::update024';
     const RELEASE015_UPDATE025 = __CLASS__ . '::update025';
+    const RELEASE015_UPDATE026 = __CLASS__ . '::update026';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -120,6 +121,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE025          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update025',
+            ],
+            self::RELEASE015_UPDATE026          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update026',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -737,5 +742,30 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             $this->setTableVersion('importexport_definition', 16);
         }
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.25', self::RELEASE015_UPDATE025);
+    }
+
+    public function update026()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $found = false;
+        foreach ($this->_backend->getExistingSchema('tree_filerevisions')->indices as $index) {
+            if (['hash'] === $index->field) {
+                $found = true;
+            }
+        }
+        if (!$found) {
+            $this->_backend->addIndex('tree_filerevisions', new Setup_Backend_Schema_Field_Xml('<index>
+                    <name>hash</name>
+                    <field>
+                        <name>hash</name>
+                    </field>
+                </index>'));
+        }
+        if ($this->getTableVersion('tree_filerevisions') < 5) {
+            $this->setTableVersion('tree_filerevisions', 5);
+        }
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.26', self::RELEASE015_UPDATE026);
     }
 }
