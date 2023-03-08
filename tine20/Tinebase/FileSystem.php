@@ -973,7 +973,7 @@ class Tinebase_FileSystem implements
                 $transId = null;
                 return;
             }
-            $refLogIdsFolderIds = $refLogs->getArrayOfIds();
+            $refLogIds = $refLogs->getArrayOfIds();
             unset($raii);
 
             while ($refLogs->count()) {
