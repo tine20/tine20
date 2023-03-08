@@ -460,12 +460,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * get message part
      *
      * @param string|Felamimail_Model_Message $_id
-     * @param string $_partId (the part id, can look like this: 1.3.2 -> returns the second part of third part of first part...)
+     * @param ?string $_partId (the part id, can look like this: 1.3.2 -> returns the second part of third part of first part...)
      * @param boolean $_onlyBodyOfRfc822 only fetch body of rfc822 messages (FALSE to get headers, too)
-     * @param array $_partStructure (is fetched if NULL/omitted)
+     * @param ?array $_partStructure (is fetched if NULL/omitted)
      * @return Zend_Mime_Part
+     * @throws Felamimail_Exception_IMAPMessageNotFound
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
      */
-    public function getMessagePart($_id, $_partId = NULL, $_onlyBodyOfRfc822 = FALSE, $_partStructure = NULL)
+    public function getMessagePart($_id, $_partId = null, $_onlyBodyOfRfc822 = false, $_partStructure = null): Zend_Mime_Part
     {
         if ($_id instanceof Felamimail_Model_Message) {
             $message = $_id;
@@ -487,6 +490,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (! $partStructure) {
             // try to get part structure from attachment
             $partStructure = $this->_getPartStructureFromAttachments($message, $_partId);
+            if (! $partStructure) {
+                throw new Tinebase_Exception_NotFound('Part structure not found');
+            }
         }
         return $this->_createMimePart($rawContent, $partStructure);
     }
