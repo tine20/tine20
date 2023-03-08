@@ -755,7 +755,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             }
         }
         if (!$found) {
-            $this->_backend->addIndex('tree_filerevisions', new Setup_Backend_Schema_Field_Xml('<index>
+            $this->_backend->addIndex('tree_filerevisions', new Setup_Backend_Schema_Index_Xml('<index>
                     <name>hash</name>
                     <field>
                         <name>hash</name>
