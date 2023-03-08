@@ -1,5 +1,22 @@
 version: '2'
 services:
+  db:
+    image: mariadb:10.6
+    command: --max-allowed-packet=209715210
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: &MYSQL_DATABASE tine
+      MYSQL_USER: &MYSQL_USER tine
+      MYSQL_PASSWORD: &MYSQL_PASSWORD tine
+    ### use volume for persistent DB
+    volumes:
+      - "/data/tine_mysql:/var/lib/mysql"
+    ### OR
+#      - "tine_db:/var/lib/mysql"
+    networks:
+      - internal_network
+
   web:
     image: tinegroupware/tine:2022
     restart: always
@@ -11,15 +28,15 @@ services:
       TINE20_DATABASE_DBNAME: *MYSQL_DATABASE
       TINE20_DATABASE_USERNAME: *MYSQL_USER
       TINE20_DATABASE_PASSWORD: *MYSQL_PASSWORD
-      TINE20_DATABASE_TABLEPREFIX: tine20_
+      TINE20_DATABASE_TABLEPREFIX: tine_
       TINE20_CACHING_BACKEND: Redis
       TINE20_CACHING_REDIS_HOST: cache
       TINE20_ACTIONQUEUE_HOST: cache
       TINE20_SESSION_BACKEND: Redis
       TINE20_SESSION_HOST: cache
       TINE20_CREDENTIALCACHESHAREDKEY: change_me
-      TINE20_SETUPUSER_USERNAME: tine20setup
-      TINE20_SETUPUSER_PASSWORD: tine20setup
+      TINE20_SETUPUSER_USERNAME: tinesetup
+      TINE20_SETUPUSER_PASSWORD: tinesetup
       ### the url of you tine installation (should be adjusted)
       # TINE20_URL: http://localhost:4000
       ### install+update tine automatically
@@ -31,9 +48,9 @@ services:
       ### apps to install - if omitted, all available apps are installed
       # TINE20_APPLICATION_TO_INSTALL: "Addressbook,Felamimail,Calendar,Filemanager"
     volumes:
-      - "/var/lib/tine20_files:/var/lib/tine20/files"
+      - "/data/tine_files:/var/lib/tine20/files"
     ### OR
-#      - "tine20_files:/var/lib/tine20/files"
+#      - "tine_files:/var/lib/tine20/files"
     networks:
       - external_network
       - internal_network
@@ -46,23 +63,6 @@ services:
 #      - "traefik.http.routers.web.entrypoints=websecure"
 #      - "traefik.http.routers.web.tls.certresolver=http01"
 #      - "traefik.http.services.web.loadbalancer.server.port=80"
-
-  db:
-    image: mariadb:10.6
-    command: --max-allowed-packet=209715210
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: &MYSQL_DATABASE tine
-      MYSQL_USER: &MYSQL_USER tine
-      MYSQL_PASSWORD: &MYSQL_PASSWORD tine
-    ### use volume for persistent DB
-    volumes:
-      - "/var/lib/mysql:/var/lib/mysql"
-    ### OR
-#      - "tine20_db:/var/lib/mysql"
-    networks:
-      - internal_network
 
   cache:
     image: redis:5.0.5
@@ -144,9 +144,9 @@ services:
 
 ### optional: use docker volumes instead of directory mounts
 # volumes:
-#  tine20_files:
+#  tine_files:
+#  tine_db:
 #  clamav_files:
-#  tine20_db:
 
 networks:
   external_network:
