@@ -263,6 +263,8 @@ disabledDates: ["^03"]
             this.markInvalid(String.format(this.disabledDatesText, fvalue));
             return false;
         }
+        
+        this.fullDateTime = value;
         return true;
     },
 

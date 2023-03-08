@@ -538,28 +538,31 @@ Tine.Filemanager.nodeActions.Publish = {
     iconCls: 'action_publish',
     scope: this,
     handler: function() {
-        var app = this.initialConfig.app,
-            i18n = app.i18n,
-            selected = _.get(this, 'initialConfig.selections[0]') ||_.get(this, 'initialConfig.filteredContainer');
-
-        if (! selected) {
-            return;
-        }
-
-        var passwordDialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
+        const app = this.initialConfig.app;
+        const selected = _.get(this, 'initialConfig.selections[0]') || _.get(this, 'initialConfig.filteredContainer');
+        if (! selected) return;
+        
+        const date = new Date();
+        const defaultValidDate = Tine.Tinebase.configManager.get('publicDownloadDefaultValidTime', 'Filemanager') ?? 30;
+        date.setDate(date.getDate() + defaultValidDate);
+        
+        this.validDateField  = new Ext.form.DateField({
+            fieldLabel: app.i18n._('Valid until'),
+            value: date
+        });
+        
+        const passwordDialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
             allowEmptyPassword: true,
             locked: false,
-            questionText: i18n._('Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files.')
+            questionText: app.i18n._('Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files.'),
+            additionalFields: [this.validDateField]
         });
+        
         passwordDialog.openWindow();
-
         passwordDialog.on('apply', function (password) {
-            var date = new Date();
-            date.setDate(date.getDate() + 30);
-
-            var record = new Tine.Filemanager.Model.DownloadLink({
+            const record = new Tine.Filemanager.Model.DownloadLink({
                 node_id: selected.id,
-                expiry_time: date,
+                expiry_time: this.validDateField.value,
                 password: password
             });
 

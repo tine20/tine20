@@ -53,6 +53,8 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
 
     layout: 'fit',
     border: false,
+    
+    additionalFields: [],
 
 
     /**
@@ -92,7 +94,7 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
                             keyup: this.onChange,
                             keydown: this.onKeyDown
                         }
-                    }]
+                    }], this.additionalFields
                 ]
             }]
         }];
@@ -194,7 +196,8 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
             width: 400,
             height: 130 +
                 (this.hasPwGen ? 20 : 0) +
-                (Math.ceil(this.questionText.length/70) * 20),
+                (Math.ceil(this.questionText.length/70) * 20) + 
+                this.additionalFields.length * 30,
             layout: 'fit',
             items: this
         }, config));
