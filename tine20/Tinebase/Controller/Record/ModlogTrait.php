@@ -68,12 +68,15 @@ trait Tinebase_Controller_Record_ModlogTrait
         if ($bchub->isActive()) {
             $verb = null;
             $cId = null;
-            if (null === $_newRecord && $_oldRecord->notifyBroadcastHub()) {
+            if (null === $_newRecord && $_oldRecord && $_oldRecord->notifyBroadcastHub()) {
                 $verb = 'delete';
                 $cId = $notNullRecord->getContainerId();
             } elseif ($_newRecord) {
                 if (null === $_oldRecord && $_newRecord->notifyBroadcastHub()) {
                     $verb = 'create';
+                    $cId = $notNullRecord->getContainerId();
+                } elseif ($_newRecord->is_deleted && $_oldRecord && !$_oldRecord->is_deleted) {
+                    $verb = 'delete';
                     $cId = $notNullRecord->getContainerId();
                 } elseif ($_newRecord->notifyBroadcastHub() || $_oldRecord && $_oldRecord->notifyBroadcastHub()) {
                     $verb = 'update';
