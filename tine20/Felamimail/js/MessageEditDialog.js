@@ -8,6 +8,7 @@
  */
 
 const { retryAllRejectedPromises } = require('promises-to-retry');
+import waitFor from "util/waitFor.es6";
 
 require('./MessageFileAction');
 
@@ -563,6 +564,15 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     addDefaultSignature: function () {
         if (this.draftOrTemplate) return;
         this.updateSignature(this.record.get('account_id'), null, this.record.get('body'));
+    
+        const bodyContent = this.record.get('body');
+        const format = this.record.get('content_type');
+        const ch = format === 'text/html' ? '<br>' : '\n';
+        if (bodyContent !== '' && !bodyContent.startsWith(ch)) {
+            this.record.set('body', `${ch}${ch}${bodyContent}`);
+            this.msgBody = this.record.get('body');
+            this.bodyCards.layout.activeItem.setValue(this.msgBody);
+        }
     },
 
 
@@ -626,21 +636,24 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * after render
      */
-    afterRender: function () {
+    afterRender: async function () {
         Tine.Felamimail.MessageEditDialog.superclass.afterRender.apply(this, arguments);
-
+    
         this.getEl().on(Ext.EventManager.useKeydown ? 'keydown' : 'keypress', this.onKeyPress, this);
         this.recipientGrid.on('specialkey', function (field, e) {
             this.onKeyPress(e);
         }, this);
-
+    
         this.htmlEditor.on('keydown', function (ed, e) {
             this.onKeyPress(e);
         }, this);
-
+    
         this.htmlEditor.on('toggleFormat', this.onToggleFormat, this);
         this.initHtmlEditorDD();
-
+    
+        await waitFor(() => {
+            return this.recipientGrid.store.getCount() > 0
+        });
         _.delay(() => {
             // recipientGrid should have 1 empty item by default
             if (this.recipientGrid.store.getCount() > 1) {
