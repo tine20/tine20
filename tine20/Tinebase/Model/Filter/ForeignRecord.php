@@ -418,4 +418,15 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
      * @return array
      */
     abstract protected function _getGenericFilterInformation();
+
+    /**
+     * @param Tinebase_Model_Filter_FilterGroup $_parent
+     */
+    public function setParent(Tinebase_Model_Filter_FilterGroup $_parent)
+    {
+        parent::setParent($_parent);
+        if ($this->_filterGroup) {
+            $this->_filterGroup->setParent($_parent);
+        }
+    }
 }
