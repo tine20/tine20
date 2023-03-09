@@ -2608,6 +2608,41 @@ Steuernummer 33/111/32212";
         $this->assertEquals(1, $result['totalcount']);
     }
 
+    public function testSearchListWildcardDefinedBy()
+    {
+        $list = $this->testCreateListWithMemberAndRole();
+
+        $filter = [
+            [
+                'field' => 'list_role_id',
+                'operator' => 'definedBy?condition=and&setOperator=oneOf',
+                'value' => [[
+                    'field' => 'query',
+                    'operator' => 'contains',
+                    'value' => 'my test role'
+                ]]
+            ]
+        ];
+
+        $result = $this->_uit->searchContacts($filter, array());
+        $this->assertEquals(1, $result['totalcount'], 'We should find one result');
+
+        $filter = [
+            [
+                'field' => 'list_role_id',
+                'operator' => 'definedBy?condition=and&setOperator=oneOf',
+                'value' => [[
+                    'field' => 'query',
+                    'operator' => 'contains',
+                    'value' => '*'
+                ]]
+            ]
+        ];
+
+        $result = $this->_uit->searchContacts($filter, array());
+        $this->assertGreaterThanOrEqual(1, $result['totalcount'], 'This filter should find at least one result as well');
+    }
+
     /**
      * @see 0012834: Tinbase_Model_Filter_Query - reimplement using FilterGroup
      */
