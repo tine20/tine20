@@ -307,6 +307,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     public function setParent($_parent)
     {
         $this->_parent = $_parent;
+        if ($_parent->isInSetFromUser() && !$this->_isInSetFromUser) {
+            $this->_isInSetFromUser = true;
+            foreach($this->_filterObjects as $filterObject) {
+                $filterObject->setParent($this);
+            }
+        }
     }
 
     /**
@@ -616,15 +622,14 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function addFilterGroup($_filtergroup)
     {
-        $_filtergroup->setParent($this);
-
         if (! $_filtergroup instanceof Tinebase_Model_Filter_FilterGroup) {
             if ($_filtergroup instanceof Tinebase_Model_Filter_Abstract) {
                 return $this->addFilter($_filtergroup);
             }
             throw new Tinebase_Exception_InvalidArgument('Filters must be of instance Tinebase_Model_Filter_FilterGroup');
         }
-        
+
+        $_filtergroup->setParent($this);
         $this->_filterObjects[] = $_filtergroup;
         
         return $this;
