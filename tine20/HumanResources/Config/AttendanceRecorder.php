@@ -3,6 +3,7 @@
 class HumanResources_Config_AttendanceRecorder
 {
     public const METADATA_SOURCE = 'source';
+    public const METADATA_TS_DESCRIPTION = 'ts_description';
 
     protected $account;
     protected $autoGen = false;

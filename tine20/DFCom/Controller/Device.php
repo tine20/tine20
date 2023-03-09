@@ -192,10 +192,11 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
                         break;
                     case 'listFeedback':
                         $lists = $deviceListController->getDeviceLists($device);
+                        $listName = explode(',', $deviceRecord->data['detail1'])[0];
                         /** @var DFCom_Model_DeviceList $list */
                         foreach($lists as $list) {
                             // NOTE: device can't signal for which list the feedback was
-                            if ($list->list_status == -1) {
+                            if ($list->name === $listName) {
                                 $list->list_status = $deviceRecord->xprops('data')['reason'];
                                 $deviceListController->update($list);
                                 if ($list->controlCommands) {

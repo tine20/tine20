@@ -128,6 +128,9 @@ msgstr "Allen Arbeitszeiten unabhängig der Abteilungsrechte managen."
 msgid "Clock in: %1$s"
 msgstr "Einstemplen: %1$s"
 
+msgid "attendance recorder generated"
+msgstr "Angelegt durch die Stempeluhr"
+
 #: BL/AttendanceRecorder/TimeSheet.php:241
 #: BL/AttendanceRecorder/TimeSheet.php:246
 msgid "Clock out: %1$s"
