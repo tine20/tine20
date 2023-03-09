@@ -713,6 +713,12 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 return;
             }
         }
+
+        $backend = new Setup_Backend_Mysql();
+        if (! $backend->tableExists('config')) {
+            // no config table found
+            return;
+        }
         
         try {
             $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($this->_appName);

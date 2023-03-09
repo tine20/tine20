@@ -105,9 +105,19 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
         return $this->_sortColumns;
     }
 
+    protected function _customFieldConfigTableExists()
+    {
+        $backend = new Setup_Backend_Mysql();
+        return $backend->tableExists('customfield_config');
+    }
+
     protected function _readModelConfig()
     {
         if (empty($this->model) || null !== $this->_customFields) {
+            return false;
+        }
+
+        if (! $this->_customFieldConfigTableExists()) {
             return false;
         }
 

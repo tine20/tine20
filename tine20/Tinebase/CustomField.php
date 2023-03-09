@@ -242,11 +242,6 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         $cacheId = Tinebase_Helper::convertCacheId('getCustomFieldsForApplication' . $cfIndex);
         $result = $cache->load($cacheId);
 
-        if (! Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-            // custom fields might not be available yet
-            return new Tinebase_Record_RecordSet(Tinebase_Model_CustomField_Config::class);
-        }
-        
         if (false === $result) {
             $filterValues = array(array(
                 'field'     => 'application_id', 
