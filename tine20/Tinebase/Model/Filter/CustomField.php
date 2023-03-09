@@ -397,4 +397,21 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
         
         return $result;
     }
+
+    /**
+     * @param Tinebase_Model_Filter_FilterGroup $_parent
+     */
+    public function setParent(Tinebase_Model_Filter_FilterGroup $_parent)
+    {
+        parent::setParent($_parent);
+        if ($this->_subFilter) {
+            $this->_subFilter->setParent($_parent);
+        }
+        if ($this->_valueFilter) {
+            $this->_valueFilter->setParent($_parent);
+        }
+        if ($this->_passThroughFilter) {
+            $this->_passThroughFilter->setParent($_parent);
+        }
+    }
 }
