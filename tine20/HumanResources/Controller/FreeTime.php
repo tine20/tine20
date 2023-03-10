@@ -214,6 +214,28 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         $record->days_count = $freeDays->filter('sickoverwrite', false)->count();
         $this->_backend->update($record);
 
+        $dwtrCtrl = HumanResources_Controller_DailyWTReport::getInstance();
+        $dwtrRaii = new Tinebase_RAII($dwtrCtrl->assertPublicUsage());
+
+        if (($oldRecord && $dwtrCtrl->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    HumanResources_Model_DailyWTReport::class,[
+                    ['field' => 'date', 'operator' => 'after_or_equals', 'value' => $oldRecord->firstday_date],
+                    ['field' => 'employee_id', 'operator' => 'equals', 'value' => $oldRecord->employee_id],
+                    ['field' => 'is_cleared', 'operator' => 'equals', 'value' => true],
+                    ['field' => 'date', 'operator' => 'before_or_equals', 'value' => $oldRecord->lastday_date],
+                ])) > 0) ||
+                $dwtrCtrl->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    HumanResources_Model_DailyWTReport::class,[
+                    ['field' => 'date', 'operator' => 'after_or_equals', 'value' => $record->firstday_date],
+                    ['field' => 'employee_id', 'operator' => 'equals', 'value' => $record->employee_id],
+                    ['field' => 'is_cleared', 'operator' => 'equals', 'value' => true],
+                    ['field' => 'date', 'operator' => 'before_or_equals', 'value' => $record->lastday_date],
+                ])) > 0) {
+            throw new Tinebase_Exception_SystemGeneric('wtr during affected time is already booked, no changes possible anymore');
+        }
+
+        unset($dwtrRaii);
+
         if ((null === $oldRecord && $record->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS} !==
                 \HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED) || ($oldRecord &&
                 $oldRecord->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS} !==
@@ -231,6 +253,29 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function() use($event) {
             Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
         });
+    }
+
+    protected function _inspectDelete(array $_ids)
+    {
+        $_ids = parent::_inspectDelete($_ids);
+
+        $dwtrCtrl = HumanResources_Controller_DailyWTReport::getInstance();
+        $dwtrRaii = new Tinebase_RAII($dwtrCtrl->assertPublicUsage());
+        /** @var HumanResources_Model_FreeTime $freeTime */
+        foreach ($this->getMultiple($_ids, true) as $freeTime) {
+            if ($dwtrCtrl->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    HumanResources_Model_DailyWTReport::class,[
+                        ['field' => 'date', 'operator' => 'after_or_equals', 'value' => $freeTime->firstday_date],
+                        ['field' => 'employee_id', 'operator' => 'equals', 'value' => $freeTime->employee_id],
+                        ['field' => 'is_cleared', 'operator' => 'equals', 'value' => true],
+                        ['field' => 'date', 'operator' => 'before_or_equals', 'value' => $freeTime->lastday_date],
+                    ])) > 0) {
+                unset($_ids[array_search($freeTime->getId(), $_ids)]);
+            }
+        }
+        unset($dwtrRaii);
+
+        return $_ids;
     }
    
    /**

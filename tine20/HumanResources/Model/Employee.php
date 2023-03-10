@@ -410,9 +410,8 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
             return null;
         }
         if (null === $_date) {
-            $_date = Tinebase_DateTime::now();
+            $_date = Tinebase_DateTime::today();
         }
-        $_date = $_date->getClone()->setTimezone(Tinebase_Core::getInstanceTimeZone());
 
         /** @var HumanResources_Model_Contract $contract */
         foreach ($this->contracts as $contract) {
