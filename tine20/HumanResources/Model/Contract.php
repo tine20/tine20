@@ -196,7 +196,8 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
      */
     public function isValidAt(Tinebase_DateTime $_date)
     {
-        $_date = $_date->getClone()->setTime(0,0,0);
+        $_date = $_date->getClone();
+        $_date->hasTime(false);
         if ($this->start_date->isEarlierOrEquals($_date) && (empty($this->end_date) || $this->end_date
                     ->isLaterOrEquals($_date))) {
             return true;

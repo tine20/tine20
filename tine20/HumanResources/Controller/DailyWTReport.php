@@ -313,8 +313,6 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             try {
                 $dailyTransaction = new Tinebase_TransactionManager_Handle();
 
-                $monthlyWTR = $this->_getOrCreateMonthlyWTR();
-
                 /** @var HumanResources_Model_DailyWTReport $oldReport */
                 $oldReport = null;
                 if (isset($existingReports[$dateStr])) {
@@ -349,6 +347,8 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                     $dailyTransaction->commit();
                     continue;
                 }
+
+                $monthlyWTR = $this->_getOrCreateMonthlyWTR();
 
                 if (false === ($blPipe = $this->_getBLPipe($contract->working_time_scheme))) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ .
