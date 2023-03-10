@@ -98,7 +98,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         } else {
             this.contactEventPanel = null;
         }
-        const emailContactToolTip =  this.app.i18n._('This field is automatically taken from the email account and therefore cannot be edited here.');
+        const emailContactToolTip =  this.record.data?.type === 'email_account' ? 
+            this.app.i18n._('This field is automatically taken from the email account and therefore cannot be edited here.')
+            : '';
     
         var contactNorthPanel = {
             xtype: 'fieldset',
