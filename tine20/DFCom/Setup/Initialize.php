@@ -38,6 +38,8 @@ class DFCom_Setup_Initialize extends Setup_Initialize
         DFCom_Config::getInstance()->set(DFCom_Config::DEFAULT_DEVICE_LISTS, [
             'DFCom_device_list_employee',
             'DFCom_device_list_absenceReasons',
+            'DFCom_device_list_timeaccounts',
+            'keyField_DFCom_DeviceListPercentage',
         ]);
     }
 

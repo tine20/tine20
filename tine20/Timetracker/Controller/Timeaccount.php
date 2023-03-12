@@ -224,6 +224,10 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
      */
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
+        if ($this->_doContainerACLChecks == FALSE) {
+            $_filter->doIgnoreAcl(true);
+            return TRUE;
+        }
         switch ($_action) {
             case 'get':
                 $_filter->setRequiredGrants(array(

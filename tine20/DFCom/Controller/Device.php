@@ -61,6 +61,9 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
 
     public function dispatchRecord()
     {
+        $requestStartTime = Tinebase_DateTime::now();
+        $deviceNeedsCurrentTime = false;
+
         /** @var Tinebase_Http_Request $request */
         $request = Tinebase_Core::get(Tinebase_Core::REQUEST);
         $query = $request->getQuery();
@@ -173,6 +176,8 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
                 foreach($lists as $list) {
                     /** @var DFCom_Model_DeviceList $list */
                     try {
+                        // NOTE: lists starting with a lodash need special handling in domain specific handlers and are ignored here
+                        if($list->name[0] === '_') continue;
                         if ($list->list_version != $deviceListController->getSyncToken($list)) {
                             $response->updateDeviceList($list, $device);
                             // device supports one list per request only
@@ -186,16 +191,38 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
 
                 switch ($deviceRecord->device_table) {
                     case 'alive':
-                            // noting special to do here
+                        // check clock (hopefully the device does not store/stack alive records)
+                        if (isset($deviceRecord->data['dateTime'])) {
+                            $deviceTime = new Tinebase_DateTime($deviceRecord->data['dateTime'], $device->timezone);
+                            $deviceNeedsCurrentTime = abs($deviceTime->getTimestamp()-$requestStartTime->getTimestamp()) >= 10;
+                        }
                         break;
+                    case 'feedback':
                     case 'listFeedback':
+                        // NOTE: as of fw 04.03.20.xx listFeedback got extended to generic feedbacks distinguished by
+                        //       df_col_reason. @see docu chapter 2.3.1
+                        $reason = $deviceRecord->data['reason'];
+                        if ($reason != 0 && ($reason < 1000) || ($reason > 1100)) break;
                         $lists = $deviceListController->getDeviceLists($device);
+                        $listName = explode(',', $deviceRecord->data['detail1'])[0];
                         /** @var DFCom_Model_DeviceList $list */
                         foreach($lists as $list) {
                             // NOTE: device can't signal for which list the feedback was
-                            if ($list->list_status == -1) {
+                            if ($list->name === $listName) {
                                 $list->list_status = $deviceRecord->xprops('data')['reason'];
                                 $deviceListController->update($list);
+                                if ($list->controlCommands) {
+                                    foreach(explode("\n", $list->controlCommands) as $controlCommand) {
+                                        try {
+                                            if (! preg_match('/^\/\/|#/', $controlCommand)) {
+                                                eval('$response->' . preg_replace('/;{0,1}$/', ';', trim($controlCommand)));
+                                            }
+                                        } catch (Exception $e) {
+                                            $deviceRecord->xprops()['controlCommandError'] = "// {$controlCommand} failed -> {$e->getMessage()}";
+                                        }
+                                    }
+                                }
+                                $deviceRecordController->create($deviceRecord);
                             }
                         }
                         break;
@@ -228,7 +255,7 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
 
             // update dateTime and maybe more (like flush)
             $device->mergeStatusData($deviceRecord);
-            $device->lastSeen = Tinebase_DateTime::now();
+            $device->lastSeen = $requestStartTime;
             $this->update($device);
 
             $transaction->release();
@@ -240,7 +267,9 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        $response->setTime(Tinebase_DateTime::now()->setTimezone($device->timezone));
+        if ($deviceNeedsCurrentTime) {
+            $response->setTime(Tinebase_DateTime::now()->setTimezone($device->timezone));
+        }
         return $response->getHTTPResponse();
     }
 }

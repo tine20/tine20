@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Timetracker_Model_Timeaccount</model>
+    <name>DFCom_device_list_timeaccounts</name>
+    <deviceName>_timeaccounts</deviceName>
+    <controlCommands>setDeviceVariable('TAListLoaded', 1);
+triggerEventChain('projectTime');</controlCommands>
+    <!-- _('Absence Reasons Device List') -->
+    <label>Timeaccounts Device List</label>
+    <type>export</type>
+    <plugin>Tinebase_Export_CsvNew</plugin>
+    <filter>[{"field": "is_open", "operator": "equals", "value": true}]</filter>
+    <icon_class>tinebase-action-export-csv</icon_class>
+    <sort>
+        <field>number</field>
+        <direction>ASC</direction>
+    </sort>
+    <header>0</header>
+    <delimiter>&#x09;</delimiter>
+    <enclosure></enclosure>
+    <columns>
+        <column>
+            <identifier>id</identifier>
+            <header>id</header>
+        </column>
+        <column>
+            <identifier>title</identifier>
+            <header>title</header>
+            <twig>{{ record.getTitle()[:40] }}</twig>
+        </column>
+    </columns>
+</config>

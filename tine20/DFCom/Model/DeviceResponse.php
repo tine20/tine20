@@ -96,7 +96,8 @@ class DFCom_Model_DeviceResponse //extends \Zend\Diactoros\Response
         if ($name == 'setupVersion') {
             throw new Tinebase_Exception_InvalidArgument('setupVersion can only be set in setup!');
         }
-        $this->_responseData['df_var'] = "setup.$name," . urlencode($value);
+        // NOTE: No urlencode here for some reason device doesn't decode
+        $this->_responseData['df_var'] = "setup.$name," . $value;
 
         return $this;
     }
@@ -148,7 +149,7 @@ class DFCom_Model_DeviceResponse //extends \Zend\Diactoros\Response
      */
     public function displayMessage($message, $duration=5, $beep=self::BEEP_SHORTLONG, $font=self::FONT_STANDARD)
     {
-        $this->_responseData['df_msg'] = implode(',', [rawurlencode($message), $duration, $beep, $font]);
+        $this->_responseData['df_msg'] = implode(',', [rawurlencode(utf8_decode($message)), $duration, $beep, $font]);
         return $this;
     }
 
@@ -158,9 +159,12 @@ class DFCom_Model_DeviceResponse //extends \Zend\Diactoros\Response
      * @param DFCom_Model_DeviceList $deviceList
      * @param DFCom_Model_Device $device
      */
-    public function updateDeviceList(DFCom_Model_DeviceList $deviceList, DFCom_Model_Device $device)
+    public function updateDeviceList(DFCom_Model_DeviceList $deviceList, DFCom_Model_Device $device, $query='')
     {
         $link = '/' . ltrim(Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH) . "/DFCom/v1/device/{$device->getId()}/list/{$deviceList->getId()}/{$device->authKey}", '/');
+        if ($query) {
+            $link .= urlencode('?' . ltrim($query, '?'));
+        }
         $this->_responseData['df_setup_list'] = $deviceList->name . ',' . ($link);
     }
 
