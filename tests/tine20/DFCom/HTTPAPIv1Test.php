@@ -92,7 +92,7 @@ class DFCom_HTTPAPIv1Test extends TestCase
         $this->assertTrue(!!preg_match('/setup\.authKey,([a-f0-9]{20})/', $body, $matches));
         $authKey = $matches[1];
 
-        $this->assertTrue(!!preg_match('/df_time=(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/', $body, $matches));
+        $this->assertTrue(!!preg_match('/df_time=(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/', $body, $matches), 'df_time failure');
 
         /** @var DFCom_Model_Device $device */
         $device = DFCom_Controller_Device::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(DFCom_Model_Device::class, [
@@ -174,6 +174,7 @@ class DFCom_HTTPAPIv1Test extends TestCase
         $request = Tinebase_Http_Request::fromString(self::getTestRecordRequestData('listFeedback', [
             'df_col_authKey' => $device->authKey,
             'df_col_reason' => 0,
+            'df_col_detail1' => "{$list->name}, 12 updates",
         ]));
 
         $this->container->set(\Psr\Http\Message\RequestInterface::class, \Zend\Psr7Bridge\Psr7ServerRequest::fromZend($request));
@@ -287,7 +288,7 @@ class DFCom_HTTPAPIv1Test extends TestCase
         $data = [
             'df_api' => 1,
             'df_table' => $table,
-            'df_col_dateTime' => Tinebase_DateTime::now()->format(Tinebase_DateTime::ISO8601),
+            'df_col_dateTime' => Tinebase_DateTime::now()->subSecond(30)->format(Tinebase_DateTime::ISO8601),
             'df_col_deviceString' => 'EVO-Line 4.3',
             'df_col_serialNumber' => 1111,
             'df_col_authKey' => $setupAuthKey,

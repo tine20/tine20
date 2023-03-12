@@ -162,7 +162,7 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                                         'note_type_id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
                                     ]));
                                     if (empty($absenceTS->description)) {
-                                        $absenceTS->description = Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)->_('attendance recorder generated');
+                                        $absenceTS->description = self::getTSDescription($record);
                                     }
 
                                     if ($absenceTS->getId()) {
@@ -243,7 +243,7 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
 
         foreach ($tsRs as $ts) {
             if (empty($ts->description)) {
-                $ts->description = Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)->_('attendance recorder generated');
+                $ts->description = self::getTSDescription($record);
             }
             if (empty($ts->notes) || is_array($ts->notes)) {
                 $ts->notes = new Tinebase_Record_RecordSet(Tinebase_Model_Note::class,
@@ -262,7 +262,7 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                 $lastTs->end_time = null;
                 $lastTs->duration = 0;
                 $lastTs->start_date->addDay(1);
-                $lastTs->description = Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)->_('attendance recorder generated');
+                $lastTs->description = self::getTSDescription($record);
                 $lastTs->notes = null;
                 $tsRs->addRecord($lastTs = Timetracker_Controller_Timesheet::getInstance()->create($lastTs));
                 $lastTs->notes = new Tinebase_Record_RecordSet(Tinebase_Model_Note::class);
@@ -293,7 +293,7 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                         'end_time' => $startDate->format('H:i:00'),
                         'duration' => 0,
                         HumanResources_Model_FreeTimeType::TT_TS_SYSCF_ABSENCE_REASON => $fttId,
-                        'description' => Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)->_('attendance recorder generated'),
+                        'description' => self::getTSDescription($record),
                         'notes' => new Tinebase_Record_RecordSet(Tinebase_Model_Note::class, [
                             new Tinebase_Model_Note([
                                 'note' => sprintf(Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)->_('Clock in: %1$s'), $startDate->format('H:i:s')),
@@ -577,8 +577,7 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
             'end_time' => $date->format('H:i:00'),
             'duration' => 0,
             'notes' => new Tinebase_Record_RecordSet(Tinebase_Model_Note::class),
-            'description' => Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)
-                ->_('attendance recorder generated'),
+            'description' => self::getTSDescription($record),
         ], true);
 
         $note = sprintf($translate->_($type ?
@@ -606,6 +605,13 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
         $record->{HumanResources_Model_AttendanceRecord::FLD_STATUS} = (string)$record->{HumanResources_Model_AttendanceRecord::FLD_STATUS};
 
         return $ts;
+    }
+
+    public static function getTSDescription(HumanResources_Model_AttendanceRecord $record): string
+    {
+        return isset($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][HumanResources_Config_AttendanceRecorder::METADATA_TS_DESCRIPTION]) ?
+            $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][HumanResources_Config_AttendanceRecorder::METADATA_TS_DESCRIPTION] :
+            Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)->_('attendance recorder generated');
     }
 
     public function undo(Tinebase_Record_RecordSet $data): void

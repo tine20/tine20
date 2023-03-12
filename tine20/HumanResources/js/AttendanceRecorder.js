@@ -456,7 +456,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
         if (el && !Ext.fly(el).hasClass('x-item-disabled')) {
             const row = this.menu.timeAccountPickerGrid.view.findRowIndex(el);
             const timeAccount = this.menu.timeAccountPickerGrid.store.getAt(row);
-            const timesheet = _.get(timeAccount, `data.xprops.HumanResources_Model_AttendanceRecord.bottom.xprops.metaData.Timetracker_Model_Timesheet`);
+            const timesheet = { id: _.get(timeAccount, `data.xprops.HumanResources_Model_AttendanceRecord.bottom.xprops.metaData.Timetracker_Model_Timesheet.id[0]`) };
             const action = el.dataset.action;
             const multiStart = e.ctrlKey || e.shiftKey;
 
@@ -467,7 +467,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
 
                 let result;
                 const openTimesheet = (timeAccount) => {
-                    const timesheet = _.get(timeAccount, `data.xprops.HumanResources_Model_AttendanceRecord.bottom.xprops.metaData.Timetracker_Model_Timesheet`);
+                    const timesheet = { id: _.get(timeAccount, `data.xprops.HumanResources_Model_AttendanceRecord.bottom.xprops.metaData.Timetracker_Model_Timesheet.id[0]`) };
                     Tine.Timetracker.TimesheetEditDialog.openWindow({
                         record: timesheet,
                         contentPanelConstructorInterceptor: async (config) => {

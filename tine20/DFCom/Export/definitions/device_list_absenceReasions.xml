@@ -24,7 +24,7 @@
         <column>
             <identifier>name</identifier>
             <header>Label</header>
-            <twig>{{ record.name| preg_replace('/^\\[.*\\]\\s*/', '') }}</twig>
+            <twig>{{ record.name| preg_replace('/^\\[.*\\]\\s*/', '')[:40] }}</twig>
         </column>
     </columns>
 </config>

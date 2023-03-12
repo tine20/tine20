@@ -28,6 +28,7 @@
         <column>
             <identifier>n_fn</identifier>
             <header>name</header>
+<!--            <twig>{{ record.n_fn[:32] }}</twig>-->
         </column>
 
     </columns>

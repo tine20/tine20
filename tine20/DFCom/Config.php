@@ -35,6 +35,8 @@ class DFCom_Config extends Tinebase_Config_Abstract
 
     const DFCOM_ID_TYPE = 'dfcomIdType';
 
+    const DEVICE_LISTE_PERCENTAGE = 'DeviceListPercentage';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -68,6 +70,31 @@ class DFCom_Config extends Tinebase_Config_Abstract
                     ['id' => 1005, 'value' => 'List is ignored', 'system' => true], //_('List is ignored')
                     ['id' => 1006, 'value' => 'Duplicate list definition', 'system' => true], //_('Duplicate list definition')
                     ['id' => 1007, 'value' => 'An other list upgrade is in progress', 'system' => true], //_('An other list upgrade is in progress')
+                ),
+                'default' => 0
+            ]
+        ],
+        self::DEVICE_LISTE_PERCENTAGE => [
+            //_('Device List Percentage')
+            'label'                 => 'Device List Percentage',
+            //_('Device list with Percentage entries.')
+            'description'           => 'Device list with Percentage entries.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => true,
+            'default'               => [
+                'records' => array(
+                    ['id' => '  0', 'value' => '  0 %',],
+                    ['id' => ' 10', 'value' => ' 10 %',],
+                    ['id' => ' 20', 'value' => ' 20 %',],
+                    ['id' => ' 30', 'value' => ' 30 %',],
+                    ['id' => ' 40', 'value' => ' 40 %',],
+                    ['id' => ' 50', 'value' => ' 50 %',],
+                    ['id' => ' 60', 'value' => ' 60 %',],
+                    ['id' => ' 70', 'value' => ' 70 %',],
+                    ['id' => ' 80', 'value' => ' 80 %',],
+                    ['id' => ' 90', 'value' => ' 90 %',],
+                    ['id' => '100', 'value' => '100 %',],
                 ),
                 'default' => 0
             ]

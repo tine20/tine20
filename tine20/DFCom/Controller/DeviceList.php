@@ -14,6 +14,7 @@
  */
 class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
 {
+
     /**
      * the constructor
      *
@@ -71,13 +72,28 @@ class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
         $defaultListNames = DFCom_Config::getInstance()->get(DFCom_Config::DEFAULT_DEVICE_LISTS);
 
         foreach($defaultListNames as $listName) {
-            $exportDefinition = Tinebase_ImportExportDefinition::getInstance()->getByName($listName);
-            $options = Tinebase_ImportExportDefinition::getInstance()->getOptionsAsZendConfigXml($exportDefinition);
-            $createdLists->addRecord($this->create(new DFCom_Model_DeviceList([
-                'device_id' => $device->getId(),
-                'name' => $options->deviceName,
-                'export_definition_id' => $exportDefinition->getId(),
-            ])));
+            try {
+                $exportDefinition = Tinebase_ImportExportDefinition::getInstance()->getByName($listName);
+                $options = Tinebase_ImportExportDefinition::getInstance()->getOptionsAsZendConfigXml($exportDefinition);
+                $deviceList = new DFCom_Model_DeviceList([
+                    'device_id' => $device->getId(),
+                    'name' => $options->deviceName,
+                    'export_definition_id' => $exportDefinition->getId(),
+                    'controlCommands' => $options->controlCommands,
+                ]);
+            } catch (Exception $e) {
+                $deviceName  = preg_match('/^keyField_/', $listName) ?
+                    strtolower(str_replace('DeviceList', '', explode('_', $listName)[2]))
+                    : $listName;
+
+                $deviceList = new DFCom_Model_DeviceList([
+                    'device_id' => $device->getId(),
+                    'name' => $deviceName,
+                    'export_definition_id' => $listName,
+                ]);
+            }
+
+            $createdLists->addRecord($this->create($deviceList));
         }
 
         return $createdLists;
@@ -106,6 +122,11 @@ class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
             HumanResources_Controller_FreeTimeType::getInstance()->assertPublicUsage(),
         ];
 
+        if ($request->getQuery('userId')) {
+            $currentUser = Tinebase_Core::getUser();
+            $user = Tinebase_Core::setUser(Tinebase_User::getInstance()->getUserById($request->getQuery('userId'), Tinebase_Model_FullUser::class));
+        }
+
         try {
             /** @var DFCom_Model_Device $device */
             $device = $deviceController->get($deviceId);
@@ -127,23 +148,35 @@ class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
                 return $response;
             }
 
-            /** @var Tinebase_Export_CsvNew $export */
-            $export = Tinebase_Export::factory(null, [
-                'definitionId' => $deviceList->export_definition_id,
-                'charset' => str_replace(' ', '-', $request
-                    ->getHeader('Accept-Charset')
-                    ->getFieldValue()),
-                'ignoreACL' => true,
-            ]);
-            $export->generate();
-
             $responseStream = fopen('php://memory', 'w');
-            $export->write($responseStream);
+            if(preg_match('/^keyField_/', $deviceList->export_definition_id)) {
+                try {
+                    [, $appName, $keyFieldName] = explode('_', $deviceList->export_definition_id);
+                    $config = Tinebase_Config::getAppConfig($appName)->$keyFieldName;
+                    foreach($config->records as $record) {
+                        Tinebase_Export_CsvNew::fputcsv($responseStream, array_values($record->toArray()), "\t", '');
+                    };
+                } catch (Exception $e) {
+                    $response = new \Zend\Diactoros\Response('php://memory', 404);
+                    $response->getBody()->write('keyField '. $deviceList->name. ' not found!');
+                    return $response;
+                }
+            } else {
+                /** @var Tinebase_Export_CsvNew $export */
+                $export = Tinebase_Export::factory(null, [
+                    'definitionId' => $deviceList->export_definition_id,
+                    'charset' => str_replace(' ', '-', $request
+                        ->getHeader('Accept-Charset')
+                        ->getFieldValue()),
+                    'ignoreACL' => true,
+                ]);
+                $export->generate();
+                $export->write($responseStream);
+            }
 
-
+            $deviceList->list_version = $this->getSyncToken($deviceList);
             $deviceList->list_status = -1;
-            $deviceList->list_version = Tinebase_FilterSyncToken::getInstance()
-                ->getFilterSyncToken($export->getFilter(), $export->getController());
+
             $this->update($deviceList);
 
             $device->lastSeen = Tinebase_DateTime::now();
@@ -159,6 +192,9 @@ class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
             $response->getBody()->write('DeviceList export error');
             return $response;
         } finally {
+            if (isset($currentUser)) {
+                Tinebase_Core::setUser($currentUser);
+            }
             foreach(array_reverse($assertACLUsageCallbacks) as $assertACLUsageCallback) {
                 $assertACLUsageCallback();
             }
@@ -191,10 +227,16 @@ class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
      */
     public function getSyncToken($deviceList)
     {
-        $export = Tinebase_Export::factory(null, [
-            'definitionId' => $deviceList->export_definition_id,
-            'ignoreACL' => true,
-        ]);
-        return Tinebase_FilterSyncToken::getInstance()->getFilterSyncToken($export->getFilter(), $export->getController());
+        if(preg_match('/^keyField_/', $deviceList->export_definition_id)) {
+            [, $appName, $keyFieldName] = explode('_', $deviceList->export_definition_id);
+            $config = Tinebase_Config::getAppConfig($appName)->$keyFieldName;
+            return sha1(print_r($config->records->toArray(), true));
+        } else {
+            $export = Tinebase_Export::factory(null, [
+                'definitionId' => $deviceList->export_definition_id,
+                'ignoreACL' => true,
+            ]);
+            return Tinebase_FilterSyncToken::getInstance()->getFilterSyncToken($export->getFilter(), $export->getController());
+        }
     }
 }
