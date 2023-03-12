@@ -70,17 +70,19 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
             var el = this.getEl().select('div.tb-about-dlg div.tb-about-credits-license a.license');
             el.insertHtml('beforeBegin', ' ' + i18n._('Released under different') + ' ');
             el.insertHtml('beforeEnd', i18n._('Open Source Licenses'));
-            el.on('click', function(){
+            el.on('click', function(e){
                 var ls = new Tine.Tinebase.LicenseScreen();
                 ls.show();
+                e.stopEvent();
             });
             
             var el = this.getEl().select('div.tb-about-dlg div.tb-about-credits-license a.credits');
             el.insertHtml('beforeBegin', ' ' + i18n._('with the help of our') + ' ');
             el.insertHtml('beforeEnd', i18n._('Contributors'));
-            el.on('click', function() {
+            el.on('click', function(e) {
                 var cs = new Tine.Tinebase.CreditsScreen();
                 cs.show();
+                e.stopEvent();
             });
             
             
