@@ -43,11 +43,10 @@ class Tinebase_WebDav_ObjectTree extends \Sabre\DAV\ObjectTree
                     ' excpected to be instance of ' . Filemanager_Frontend_WebDAV_Container::class . ' or ' .
                     Filemanager_Frontend_WebDAV::class . ' or ' . Filemanager_Frontend_WebDAV_Directory::class);
             }
-
+            // fixme: \Filemanager_Frontend_WebDAVTest::testMove5 failed to throw forbidden errors when move file to personal root folder, should we check node type here ?
             $destinationParentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($destinationParent->getPath());
             if ($destinationParentPath->isSystemPath() || ($destinationParentPath->isToplevelPath() &&
-                    $destinationParentPath->containerType !== Tinebase_FileSystem::FOLDER_TYPE_SHARED &&
-                    explode('/', trim($destinationParentPath->flatpath, '/')) !== 4)) {
+                    $sourceNode instanceof Tinebase_Frontend_WebDAV_File)) {
                 throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file to: ' . $destinationPath);
             }
             try {
