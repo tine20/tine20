@@ -1024,6 +1024,10 @@ class Tinebase_FileSystem implements
 
             $transMgr->commitTransaction($transId);
             $transId = null;
+        } catch (Throwable $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' exception: ' . $e->getMessage());
+            Tinebase_Exception::log($e);
         } finally {
             if (null !== $transId) {
                 $transMgr->rollBack();
