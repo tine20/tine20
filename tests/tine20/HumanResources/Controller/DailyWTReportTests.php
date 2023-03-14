@@ -15,6 +15,8 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
 {
     protected $_ts;
 
+    protected $wtTAid;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -441,5 +443,15 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
             Tinebase_Setup_DemoData_Import::IMPORT_DIR => __DIR__,
             'demoData' => false,
         ]);
+
+        $this->wtTAid = HumanResources_Controller_WorkingTimeScheme::getInstance()
+            ->getWorkingTimeAccount($this->employee)->getId();
+
+        if ($this->wtTAid) {
+            foreach ($this->_ts as $ts) {
+                $ts->timeaccount_id = $this->wtTAid;
+                $ts->seq = Timetracker_Controller_Timesheet::getInstance()->update($ts)->seq;
+            }
+        }
     }
 }
