@@ -298,6 +298,8 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         $existingReports = $this->_getEmployeesReports();
         $timeSheets = $this->_getEmployeesTimesheets();
         $freeTimes = $this->_getEmployeesFreeTimes();
+        $wtTAid = HumanResources_Controller_WorkingTimeScheme::getInstance()
+            ->getWorkingTimeAccount($this->_employee)->getId();
 
         $dataReadTransaction->commit();
 
@@ -396,7 +398,10 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                         $blPipe->hasInstanceOf(HumanResources_BL_DailyWTReport_LimitWorkingTime::class)) {
                         $blPipeData->allowTimesheetOverlap = false;
                     }
-                    $blPipeData->convertTimeSheetsToTimeSlots($timeSheets[$dateStr]);
+                    $blPipeData->convertTimeSheetsToTimeSlots($timeSheets[$dateStr]
+                        ->filter(function(Timetracker_Model_Timesheet $ts) use($wtTAid) {
+                            return $ts->getIdFromProperty('timeaccount_id') === $wtTAid;
+                        }));
                 }
 
                 $blPipe->execute($blPipeData, false);
