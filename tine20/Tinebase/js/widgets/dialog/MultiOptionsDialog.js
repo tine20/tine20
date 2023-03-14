@@ -95,9 +95,29 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
         }];
         
         this.afterIsRendered().then(() => {
+            this.el.child('input').focus(100);
             this.mon(this.el, 'dblclick', (e) => {
                 window.getSelection().removeAllRanges();
                 _.defer(_.bind(this.onOk, this));
+            });
+            this.mon(this.el, 'keydown', (e) => {
+                if (e.getKey() === e.ENTER) {
+                    window.getSelection().removeAllRanges();
+                    _.defer(_.bind(this.onOk, this));
+                }
+            });
+            this.mon(this.el, 'keydown', (e) => {
+                if (e.getKey() === e.TAB) {
+                    if (this.allowMultiple) {
+                        // TODO not supported yet
+                    } else {
+                        const idx = _.indexOf(this.options, _.find(this.options,
+                            {name: this.getForm().findField('optionGroup').getValue()?.inputValue}));
+                        const selectIdx = idx === this.options.length - 1 ? 0 : idx + 1;
+                        this.getForm().findField('optionGroup').setValue(this.options[selectIdx].name);
+                        this.el.child('input').focus(100);
+                    }
+                }
             });
         });
         this.supr().initComponent.call(this);
