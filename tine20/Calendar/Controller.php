@@ -368,29 +368,21 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
      *
      * @param mixed[int|Tinebase_Model_User] $_account   the account object
      * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
-     * 
-     * @todo use Tinebase_Container::getDefaultContainer
      */
     public function createPersonalFolder($_account)
     {
-        $translation = Tinebase_Translation::getTranslation('Calendar');
-        
+        $result = new Tinebase_Record_RecordSet(Tinebase_Model_Container::class);
+        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
         $account = Tinebase_User::getInstance()->getUserById($_account);
-        
-        $newContainer = new Tinebase_Model_Container(array(
-            'name'              => sprintf($translation->_("%s's personal calendar"), $account->accountFullName),
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'          => $account->getId(),
-            'backend'           => Tinebase_User::SQL,
-            'color'             => '#FF6600',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'model'             => static::$_defaultModel
-        ));
-        
-        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
-        $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
-        
-        return $container;
+        $name = sprintf($translation->_("%s's personal calendar"), $account->accountFullName);
+        $container = Tinebase_Container::getInstance()->createDefaultContainer(
+            static::$_defaultModel,
+            $this->_applicationName,
+            $account,
+            $name
+        );
+        $result->addRecord($container);
+        return $result;
     }
     
     /**

@@ -408,17 +408,19 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      *
      * TODO use array as param (with array_merge)
      */
-    protected function _getTestContainer($applicationName, $model, $shared = false, $name = null)
+    protected function _getTestContainer($applicationName, $model, $shared = false, $name = null): Tinebase_Model_Container
     {
-        return Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'           => $name ? $name : 'PHPUnit ' . $model . ($shared ? ' shared' : '') . ' container',
+        $name = $name ?: 'PHPUnit ' . $model . ($shared ? ' shared' : '') . ' container';
+        $container = new Tinebase_Model_Container(array(
+            'name' => $name,
             'type'           => $shared ? Tinebase_Model_Container::TYPE_SHARED :
                 Tinebase_Model_Container::TYPE_PERSONAL,
             'owner_id'       => $shared ? null : Tinebase_Core::getUser(),
             'backend'        => 'Sql',
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId(),
             'model'          => $model,
-        ), true));
+        ), true);
+        return Tinebase_Container::getInstance()->addContainer($container, null, false, true);
     }
     
     /**

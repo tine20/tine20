@@ -52,6 +52,11 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected $_calendars = array();
 
     /**
+     * @var Tinebase_Model_Container|null
+     */
+    protected ?Tinebase_Model_Container $sharedCalendar = null;
+
+    /**
      * the constructor
      *
      */
@@ -151,15 +156,10 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     private function _createSharedCalendar()
     {
         // create shared calendar
-        $this->sharedCalendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'           => static::$_de ? 'Gemeinsamer Kalender' : 'Shared Calendar',
-            'type'           => Tinebase_Model_Container::TYPE_SHARED,
-            'owner_id'       => Tinebase_Core::getUser(),
-            'backend'        => 'SQL',
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00FF00',
-            'model'             => Calendar_Model_Event::class,
-        ), true));
+        $this->sharedCalendar = $this->_createTestCal(
+            static::$_de ? 'Gemeinsamer Kalender' : 'Shared Calendar',
+            Tinebase_Model_Container::TYPE_SHARED
+        );
 
         $group = Tinebase_Group::getInstance()->getDefaultGroup();
         Tinebase_Container::getInstance()->addGrants($this->sharedCalendar->getId(), 'group', $group->getId(), $this->_userGrants, true);
@@ -522,15 +522,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $this->_createEvent($eData, false);
         }
 
-        $cal = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'           => static::$_de ? 'Geschäftlich' : 'Business',
-            'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'       => Tinebase_Core::getUser(),
-            'backend'        => 'SQL',
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00CCFF',
-            'model'             => Calendar_Model_Event::class,
-        ), true));
+        $cal = $this->_createTestCal();
 
         if (isset($this->_personas['sclever'])) {
             Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
@@ -681,15 +673,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $this->_createEvent($eData, false);
         }
 
-        $cal = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'           => static::$_de ? 'Geschäftlich' : 'Business',
-            'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'       => Tinebase_Core::getUser(),
-            'backend'        => 'SQL',
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00CCFF',
-            'model'             => Calendar_Model_Event::class,
-        ), true));
+        $cal = $this->_createTestCal();
 
         if (isset($this->_personas['sclever'])) {
             Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
@@ -732,14 +716,9 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $monday = clone $this->_monday;
         $tuesday = clone $this->_tuesday;
         $wednesday = clone $this->_wednesday;
-        $thursday = clone $this->_thursday;
         $friday = clone $this->_friday;
         $saturday = clone $this->_saturday;
-        $sunday = clone $this->_sunday;
-        $lastMonday = clone $this->_lastMonday;
-        $lastFriday = clone $this->_lastFriday;
         $lastSaturday = clone $this->_lastSaturday;
-        $lastSunday = clone $this->_lastSunday;
 
         $cal = $this->_calendars['rwright'];
         $user = $this->_personas['rwright'];
@@ -852,15 +831,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $this->_createEvent($eData, false);
         }
 
-        $cal = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'           => static::$_de ? 'Geschäftlich' : 'Business',
-            'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'       => Tinebase_Core::getUser(),
-            'backend'        => 'SQL',
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00CCFF',
-            'model'             => Calendar_Model_Event::class,
-        ), true));
+        $cal = $this->_createTestCal();
 
         if (isset($this->_personas['sclever'])) {
             Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
@@ -1242,15 +1213,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $this->_createEvent($eData, false);
         }
 
-        $cal = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'           => static::$_de ? 'Geschäftlich' : 'Business',
-            'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'       => Tinebase_Core::getUser(),
-            'backend'        => 'SQL',
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00CCFF',
-            'model'             => Calendar_Model_Event::class,
-        ), true));
+        $cal = $this->_createTestCal();
 
         if (isset($this->_personas['sclever'])) {
             Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
@@ -1325,5 +1288,19 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         date_default_timezone_set('UTC');
 
         $this->_controller->create($event, $checkBusy);
+    }
+
+    protected function _createTestCal(?string $name = null, string $type = Tinebase_Model_Container::TYPE_PERSONAL): Tinebase_Model_Container
+    {
+        $name = $name ?: (static::$_de ? 'Geschäftlich' : 'Business');
+        return Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+            'name'           => $name,
+            'type'           => $type,
+            'owner_id'       => Tinebase_Core::getUser(),
+            'backend'        => 'SQL',
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'color'          => '#00CCFF',
+            'model'             => Calendar_Model_Event::class,
+        ), true), null, false, true);
     }
 }

@@ -130,47 +130,31 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
                 break;
         }
     }
-        
+
     /**
      * creates the initial folder for new accounts
      *
-     * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
+     * @param mixed|Tinebase_Model_User $_account
      * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
-     * 
-     * @todo replace this with Tinebase_Container::getInstance()->getDefaultContainer
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_NotAllowed
      */
-    public function createPersonalFolder($_account)
+    public function createPersonalFolder($_account): Tinebase_Record_RecordSet
     {
-        static $recursion = false;
-
-        $container = null;
-        if (!$recursion) {
-            try {
-                $recursion = true;
-                $account = Tinebase_User::getInstance()->getUserById($_account);
-                $translation = Tinebase_Translation::getTranslation($this->_applicationName);
-                $name = sprintf($translation->_("%s's personal addressbook"), $account->accountFullName);
-
-                if (null === ($container = Tinebase_Container::getInstance()->getPersonalContainer($account->getId(),
-                        Addressbook_Model_Contact::class, $account->getId())->find('name', $name))) {
-                    $container = new Tinebase_Model_Container(array(
-                        'name' => $name,
-                        'type' => Tinebase_Model_Container::TYPE_PERSONAL,
-                        'owner_id' => $account->getId(),
-                        'backend' => 'Sql',
-                        'application_id' => Tinebase_Application::getInstance()
-                            ->getApplicationByName($this->_applicationName)->getId(),
-                        'model' => Addressbook_Model_Contact::class
-                    ));
-
-                    $container = Tinebase_Container::getInstance()->addContainer($container);
-                }
-            } finally {
-                $recursion = false;
-            }
-        }
-
-        return new Tinebase_Record_RecordSet(Tinebase_Model_Container::class, $container ? [$container] : []);
+        $result = new Tinebase_Record_RecordSet(Tinebase_Model_Container::class);
+        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+        $account = Tinebase_User::getInstance()->getUserById($_account);
+        $name = sprintf($translation->_("%s's personal addressbook"), $account->accountFullName);
+        $container = Tinebase_Container::getInstance()->createDefaultContainer(
+            Addressbook_Model_Contact::class,
+            $this->_applicationName,
+            $account,
+            $name
+        );
+        $result->addRecord($container);
+        return $result;
     }
 
     protected function _handleContainerBeforeCreateEvent(Tinebase_Event_Container_BeforeCreate $_eventObject)

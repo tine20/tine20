@@ -213,13 +213,20 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * creates a new container
      *
      * @param   Tinebase_Model_Container $_container the new container
-     * @param   Tinebase_Record_RecordSet $_grants the grants for the new folder 
+     * @param   Tinebase_Record_RecordSet $_grants the grants for the new folder
      * @param   bool  $_ignoreAcl
+     * @param   bool  $_ignoreDuplicate
      * @return  Tinebase_Model_Container the newly created container
-     * @throws  Tinebase_Exception_InvalidArgument
-     * @throws  Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_SystemGeneric
      */
-    public function addContainer(Tinebase_Model_Container $_container, $_grants = NULL, $_ignoreAcl = FALSE)
+    public function addContainer(Tinebase_Model_Container $_container, $_grants = null, $_ignoreAcl = false, $_ignoreDuplicate = false)
     {
         $_container->isValid(TRUE);
 
@@ -227,37 +234,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             . __LINE__ . ' Add new container: ' . print_r($_container->toArray(), true) . ' with the following grants: '
             . print_r($_grants instanceof Tinebase_Record_RecordSet ? $_grants->toArray() : $_grants, true));
         
-        if ($_ignoreAcl !== TRUE) {
-            switch ($_container->type) {
-                case Tinebase_Model_Container::TYPE_PERSONAL:
-                    // is the user allowed to create personal container?
-                    break;
-                    
-                case Tinebase_Model_Container::TYPE_SHARED:
-                    $application = Tinebase_Application::getInstance()->getApplicationById($_container->application_id);
-                    $appName = (string) $application;
-                    $manageRight = FALSE;
-                    
-                    // check for MANAGE_SHARED_FOLDERS right
-                    $appAclClassName = $appName . '_Acl_Rights';
-                    if (@class_exists($appAclClassName)) {
-                        $appAclObj = call_user_func(array($appAclClassName, 'getInstance'));
-                        $allRights = $appAclObj->getAllApplicationRights();
-                        if (in_array(Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS, $allRights)) {
-                            $manageRight = Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS);
-                        }
-                    }
-                    
-
-                    if (!$manageRight && !Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights::ADMIN)) {
-                        throw new Tinebase_Exception_AccessDenied('Permission to add shared container denied.');
-                    }
-                    break;
-                    
-                default:
-                    throw new Tinebase_Exception_InvalidArgument('Can add personal or shared folders only when ignoring ACL.');
-                    break;
-            }
+        if ($_ignoreAcl !== true) {
+            $this->_checkAddAcl($_container);
         }
         
         if (! empty($_container->owner_id)) {
@@ -268,8 +246,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 $_container->owner_id = $accountId;
             }
         }
-        
-        if($_grants === NULL || count($_grants) == 0) {
+
+        $this->_handleDuplicate($_container, $_ignoreDuplicate);
+
+        if ($_grants === NULL || count($_grants) == 0) {
             // TODO fetch personal grants depending on grants/record model
             $grants = Tinebase_Model_Grants::getPersonalGrants($accountId);
             if (    $_container->type === Tinebase_Model_Container::TYPE_SHARED
@@ -297,19 +277,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         Tinebase_Event::fireEvent($event);
         
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($_container, 'create');
-        try {
-            /** @var Tinebase_Model_Container $container */
-            $container = $this->create($_container);
-        } catch (Zend_Db_Statement_Exception $zdse) {
-            if (Tinebase_Exception::isDbDuplicate($zdse)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
-                $translation = Tinebase_Translation::getTranslation();
-                throw new Tinebase_Exception_SystemGeneric($translation->_('The container already exists'));
-            } else {
-                throw $zdse;
-            }
-        }
+        /** @var Tinebase_Model_Container $container */
+        $container = $this->create($_container);
         Tinebase_Notes::getInstance()->addSystemNote($container, Tinebase_Core::getUser());
         $this->setGrants($container->getId(), $event->grants, TRUE, FALSE);
 
@@ -318,6 +287,89 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             . ' with container_id ' . $container->getId());
 
         return $container;
+    }
+
+    /**
+     * @param Tinebase_Model_Container $_container
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _checkAddAcl(Tinebase_Model_Container $_container)
+    {
+        switch ($_container->type) {
+            case Tinebase_Model_Container::TYPE_PERSONAL:
+                // is the user allowed to create personal container?
+                break;
+
+            case Tinebase_Model_Container::TYPE_SHARED:
+                $application = Tinebase_Application::getInstance()->getApplicationById($_container->application_id);
+                $appName = (string) $application;
+                $manageRight = false;
+
+                // check for MANAGE_SHARED_FOLDERS right
+                $appAclClassName = $appName . '_Acl_Rights';
+                if (@class_exists($appAclClassName)) {
+                    $appAclObj = call_user_func(array($appAclClassName, 'getInstance'));
+                    $allRights = $appAclObj->getAllApplicationRights();
+                    if (in_array(Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS, $allRights)) {
+                        $manageRight = Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS);
+                    }
+                }
+
+
+                if (!$manageRight && !Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights::ADMIN)) {
+                    throw new Tinebase_Exception_AccessDenied('Permission to add shared container denied.');
+                }
+                break;
+
+            default:
+                throw new Tinebase_Exception_InvalidArgument('Can add personal or shared folders only when ignoring ACL.');
+        }
+    }
+
+    /**
+     * @param Tinebase_Model_Container $container
+     * @param bool $ignoreDuplicate
+     * @return void
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _handleDuplicate(Tinebase_Model_Container $container, bool $ignoreDuplicate)
+    {
+        try {
+            $this->_checkExistence($container);
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            if ($ignoreDuplicate) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Found existing container - adding UID to name ...');
+                $container->name = $container->name . ' ' . Tinebase_Record_Abstract::generateUID(6);
+            } else {
+                throw $tesg;
+            }
+        }
+    }
+
+    /**
+     * @param Tinebase_Model_Container $container
+     * @return void
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _checkExistence(Tinebase_Model_Container $container)
+    {
+        $filter = [
+            'application_id' => $container->application_id,
+            'model' => $container->model,
+            'name' => $container->name,
+        ];
+        if (! empty($container->owner)) {
+            $filter['owner'] = $container->owner;
+        }
+        $existingContainer = $this->_getExistingContainer($filter);
+        if ($existingContainer) {
+            $translation = Tinebase_Translation::getTranslation();
+            throw new Tinebase_Exception_SystemGeneric($translation->_('The container already exists'));
+        }
     }
 
     /**
@@ -741,26 +793,15 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             $containerName = sprintf($translation->_("%s's personal container"), $account->accountFullName);
         }
 
-        try {
-            $container = $this->addContainer(new Tinebase_Model_Container(array(
-                'name' => $containerName,
-                'type' => Tinebase_Model_Container::TYPE_PERSONAL,
-                'owner_id' => $account->getId(),
-                'backend' => 'Sql',
-                'model' => $recordClass,
-                'application_id' => Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId()
-            )));
-        } catch (Zend_Db_Statement_Exception $zdse) {
-            if (! Tinebase_Exception::isDbDuplicate($zdse)) {
-                throw $zdse;
-            } else {
-                // try again with uuid in name
-                $container = $this->createDefaultContainer($recordClass, $applicationName, $account,
-                    $containerName . ' ' . Tinebase_Record_Abstract::generateUID(6));
-            }
-        }
-
-        return $container;
+        return $this->addContainer(new Tinebase_Model_Container(array(
+            'name' => $containerName,
+            'type' => Tinebase_Model_Container::TYPE_PERSONAL,
+            'owner_id' => $account->getId(),
+            'backend' => 'Sql',
+            'model' => $recordClass,
+            'color' => '#' . Tinebase_Record_Abstract::generateUID(6),
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId()
+        )), null, false, true);
     }
 
     /**
@@ -2090,13 +2131,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     {
         $application = ($application instanceof Tinebase_Model_Application) ? $application : Tinebase_Application::getInstance()->getApplicationById($application);
 
-        $aclFilter = $this->doSearchAclFilter(false);
-        $systemContainer = $this->search(new Tinebase_Model_ContainerFilter([
-            ['field' => 'application_id', 'operator' => 'equals', 'value' => $application->getId()],
-            ['field' => 'model', 'operator' => 'equals', 'value' => $model],
-            ['field' => 'name', 'operator' => 'equals', 'value' => $name]
-        ]))->getFirstRecord();
-        $this->doSearchAclFilter($aclFilter);
+        $systemContainer = $this->_getExistingContainer([
+            'application_id' => $application->getId(),
+            'model' => $model,
+            'name' => $name,
+        ]);
         if ($systemContainer) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Found existing system container for model ' . $model);
@@ -2112,7 +2151,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 'model' => $model
             ));
 
-            $grants = ($grants) ? $grants : Tinebase_Model_Grants::getDefaultGrants();
+            $grants = ($grants) ?: Tinebase_Model_Grants::getDefaultGrants();
             $systemContainer = $this->addContainer($newContainer, $grants, TRUE);
 
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -2135,6 +2174,19 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $this->resetClassCache();
 
         return $systemContainer;
+    }
+
+    protected function _getExistingContainer(array $props): ?Tinebase_Model_Container
+    {
+        $aclFilter = $this->doSearchAclFilter(false);
+        $filter = [];
+        foreach ($props as $field => $value) {
+            $filter[] = ['field' => $field, 'operator' => 'equals', 'value' => $value ];
+        }
+        /** @var ?Tinebase_Model_Container $existingContainer */
+        $existingContainer = $this->search(new Tinebase_Model_ContainerFilter($filter))->getFirstRecord();
+        $this->doSearchAclFilter($aclFilter);
+        return $existingContainer;
     }
 
     /**
