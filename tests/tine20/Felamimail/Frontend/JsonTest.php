@@ -2035,6 +2035,20 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $this->assertStringContainsString('currentdate', $sieveScriptRules);
     }
 
+    public function testSetLongVacation()
+    {
+        $vacationData = self::getVacationData($this->_account);
+        $vacationData['reason'] = 'Sehr geehrte Damen und Herren,<br><br>vielen Dank für Ihre E-Mail.<br><br>Ich bin bis einschließlich den 27.03.2023 nicht zu erreichen. '
+            . '<br>Bitte wenden Sie sich während meiner Abwesenheit an xasxsaxsa sdvccds, x.xxxxxxx@masasxas.de, <br>Tel. +4911111111111 oder verwenden Sie unser Ticket System,'
+            . ' asxasxs@masxasxs.net.<br> <br>Ihre E-Mail wird nicht weitergeleitet.<br><br>Mit freundlichen Grüßen<br>xxxa aaaaaaaaaaaa<br><br>--<br><br>Dear Sir or Madam,<br>'
+            . '<br>Thank you for your e-mail.<br><br>I am not reachable until Mar 27, 2023.<br>During my absence please contact asxasxasx vsvsdvd, x.asxasxs@sdvcsdss.de,<br>'
+            . 'phone +4921221212222 or use our ticket system, asxasxs@aassssys.net. <br>Your e-mail will not be forwarded.<br><br>Best regards<br>xxxx dfvdfvdfvfff<br><br>-- '
+            . '<br><br>asxa xasxaxsxxxxx <br>Metaways Infosystems GmbH <br>Pickhuben 2, D-20457 Hamburg <br><br>E-Mail: x.asxasxasxsas@ssssssss.de<br>Web: http://www.metaways.de'
+            . '<br>Tel: +49 (0)40 111112-222 <br>Fax: +49 (0)11 212122-222<br>Mobile: +49 (0)1222 1212-222 <br><br>Metaways Infosystems GmbH - Sitz: D-22967 Tremsbüttel <br>'
+            . 'Handelsregister: Amtsgericht Lübeck HRB 4508 AH<br>Geschäftsführung: Hermann Thaele, Lüder-H.Thaele<br><br><br>';
+        $this->_sieveTestHelper($vacationData, false, "Fax: +49 (0)11 212122-222\r\nMobile: +49 (0)1222 1212-222 ");
+    }
+
     /**
      * testSieveRulesOrder
      *
