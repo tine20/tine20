@@ -48,14 +48,14 @@ Tine.Felamimail.FolderFilterModel = Ext.extend(Tine.widgets.grid.PickerFilter, {
                 return this.selectionWidget.selectPanel && ! this.selectionWidget.selectPanel.isDestroyed        
             },
             getRecordText: function(value) {
-                var path = (Ext.isString(value)) ? value : (value.path) ? value.path : '/' + value.id,
-                    index = this.valueStore.findExact('path', path),
-                    record = this.valueStore.getAt(index),
-                    text = null;
+                const path = (Ext.isString(value)) ? value : (value.path) ? value.path : '/' + value.id;
+                const index = this.valueStore.findExact('path', path);
+                let record = this.valueStore.getAt(index);
+                let text = path;
                 
                 if (! record) {
                     // try account
-                    var accountId = path.substr(1, 40);
+                    const accountId = path.substring(1, 40);
                     record = this.app.getAccountStore().getById(accountId);
                 }
                 if (record) {
@@ -64,8 +64,7 @@ Tine.Felamimail.FolderFilterModel = Ext.extend(Tine.widgets.grid.PickerFilter, {
                     this.store.add(record.copy());
                     text = this.labelRenderer(record.id, {}, record);
                 } else {
-                    text = value;
-                    this.currentValue.push(value);
+                    this.currentValue.push(text);
                 }
                 
                 return text;
