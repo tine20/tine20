@@ -272,15 +272,14 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 }
             }
 
-        
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Got ' . count($result) . ' uncached custom fields for app id ' . $applicationId . ' (cacheid: ' . $cacheId . ')');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ . ' Got ' . count($result) . ' uncached custom fields for app id '
+                . $applicationId . ' (cacheid: ' . $cacheId . ')');
             
             $cache->save($result, $cacheId, array('customfields'));
         }
         
         $this->_cfByApplicationCache[$cfIndex] = $result;
-        
         return $result;
     }
     
