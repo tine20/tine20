@@ -186,7 +186,7 @@ const priorities = {
             width: 1366,
             height: 768,
         });
-        await page.goto(process.env.TEST_URL, {waitUntil: 'domcontentloaded'});
+        await page.goto(process.env.TEST_URL, {waitUntil: 'domcontentloaded', timeout: '30000'},);
         await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
 
         if (process.env.TEST_MODE !== 'headless' && process.env.TEST_BROWSER_LANGUAGE !== 'de') {
