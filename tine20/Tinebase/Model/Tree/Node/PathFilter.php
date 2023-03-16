@@ -67,15 +67,23 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
     /**
      * returns array with the filter settings of this filter
      *
-     * @param  bool $_valueToJson resolve value for json api?
+     * @param bool $_valueToJson resolve value for json api?
      * @return array
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
      */
     public function toArray($_valueToJson = false)
     {
         $result = parent::toArray($_valueToJson);
         
         if (! $this->_path && '/' !== $this->_value) {
-            $this->_path = Tinebase_Model_Tree_Node_Path::createFromPath($this->_value);
+            try {
+                $this->_path = Tinebase_Model_Tree_Node_Path::createFromPath($this->_value);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' ' . $tenf->getMessage());
+                return $result;
+            }
         }
         
         if ('/' === $this->_value || $this->_path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
@@ -105,6 +113,8 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
                 $result['value']['path'] = $nodePath;
             }
         } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' ' . $e->getMessage());
             $result['value'] = $node->toArray();
         }
         
