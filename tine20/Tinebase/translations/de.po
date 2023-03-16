@@ -5008,6 +5008,9 @@ msgstr ""
 msgid "Choose MFA Deivce"
 msgstr "MFA Gerät auswählen"
 
+msgid "MFA password wrong"
+msgstr "MFA-Passwort falsch"
+
 msgid "This area is locked. Which device should be used to unlock."
 msgstr ""
 "Dieser Bereich ist gesperrt. Welches Gerät soll verwendet werden um ihn zu "

@@ -214,16 +214,18 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
             $testUserCfg->runConvertToRecord();
             $user->mfa_configs->addRecord($testUserCfg);
 
+            $translation = Tinebase_Translation::getTranslation();
+
             // test the mfa user config
             if (null !== $MFAPassword) {
                 if (!$mfa->validate($MFAPassword, $testUserCfg)) {
-                    $e = new Tinebase_Exception_AreaUnlockFailed('mfa password wrong');
+                    $e = new Tinebase_Exception_AreaUnlockFailed($translation->_('MFA password wrong'));
                     $e->setMFAUserConfigs(new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class, [$userCfg]));
                     throw $e;
                 }
             } else {
                 $mfa->sendOut($testUserCfg);
-                $e = new Tinebase_Exception_AreaLocked('mfa send out triggered');
+                $e = new Tinebase_Exception_AreaLocked($translation->_('MFA send out triggered'));
                 $e->setMFAUserConfigs(new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class, [$userCfg]));
                 throw $e;
             }
