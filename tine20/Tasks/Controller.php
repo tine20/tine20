@@ -96,21 +96,18 @@ class Tasks_Controller extends Tinebase_Controller_Event implements Tinebase_App
      */
     public function createPersonalFolder($_accountId)
     {
-        $translation = Tinebase_Translation::getTranslation('Tasks');
-        
+        $result = new Tinebase_Record_RecordSet(Tinebase_Model_Container::class);
+        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
         $account = Tinebase_User::getInstance()->getUserById($_accountId);
-        
-        $newContainer = new Tinebase_Model_Container(array(
-            'name'              => sprintf($translation->_("%s's personal tasks"), $account->accountFullName),
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'          => $account->getId(),
-            'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
-            'model'             => static::$_defaultModel
-        ));
-        
-        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
-        return new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
+        $name = sprintf($translation->_("%s's personal tasks"), $account->accountFullName);
+        $container = Tinebase_Container::getInstance()->createDefaultContainer(
+            static::$_defaultModel,
+            $this->_applicationName,
+            $account,
+            $name
+        );
+        $result->addRecord($container);
+        return $result;
     }
 
     /**
