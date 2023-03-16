@@ -722,7 +722,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         
         try {
             $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($this->_appName);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
                 __METHOD__ . '::' . __LINE__ . ' Loading all configs for app ' . $this->_appName);
             $filter = new Tinebase_Model_ConfigFilter(array(
                 array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),

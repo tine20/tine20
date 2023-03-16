@@ -937,12 +937,10 @@ class Tinebase_Core
             $logging = isset($config->caching->logging) ? $config->caching->logging : false;
 
             if ($logging) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . " Cache logging enabled");
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                    __METHOD__ . '::' . __LINE__ . " Cache logging enabled");
                 $logger = self::getLogger();
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . " Cache logging disabled");
                 $logger = null;
             }
 
@@ -971,9 +969,9 @@ class Tinebase_Core
                         break;
                         
                     case 'Memcached':
-                        $host = $config->caching->host ? $config->caching->host : (isset($config->caching->memcached->host)
+                        $host = $config->caching->host ?: (isset($config->caching->memcached->host)
                             ? $config->caching->memcached->host : 'localhost');
-                        $port = $config->caching->port ? $config->caching->port : (isset($config->caching->memcached->port)
+                        $port = $config->caching->port ?: (isset($config->caching->memcached->port)
                             ? $config->caching->memcached->port : 11211);
                         $backendOptions = array(
                             'servers' => array(
@@ -984,9 +982,9 @@ class Tinebase_Core
                         break;
                         
                     case 'Redis':
-                        $host = $config->caching->host ? $config->caching->host :
+                        $host = $config->caching->host ?:
                             ($config->caching->redis && $config->caching->redis->host ? $config->caching->redis->host : 'localhost');
-                        $port = $config->caching->port ? $config->caching->port :
+                        $port = $config->caching->port ?:
                             ($config->caching->redis && $config->caching->redis->port ? $config->caching->redis->port : 6379);
                         if ($config->caching && $config->caching->prefix) {
                             $prefix = $config->caching->prefix;
@@ -1010,15 +1008,16 @@ class Tinebase_Core
                 }
             }
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " cache of backend type '{$backendType}' enabled");
-            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ . " cache of backend type '{$backendType}' enabled");
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
                 Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " Caching options: "
                     . print_r($config->caching->toArray(), TRUE));
             }
             
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Cache disabled');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ . ' Cache disabled');
             $backendType = 'Test';
             $frontendOptions = array(
                 'caching' => false
@@ -1029,7 +1028,7 @@ class Tinebase_Core
         try {
             $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions);
             if (($cacheBackend = $cache->getBackend()) instanceof Zend_Cache_Backend_Redis) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__
                     . '::' . __LINE__ . ' Adding exception logger to Redis Backend');
                 $refProp = new ReflectionProperty(Zend_Cache_Backend_Redis::class, '_redis');
                 $refProp->setAccessible(true);
@@ -1177,7 +1176,7 @@ class Tinebase_Core
             }
         }
 
-        if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
+        if (self::isLogLevel(Zend_Log::TRACE)) self::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Creating ' . $dbBackend . ' DB adapter'
             . (isset($dbConfigArray['dbname']) ? ' (db name: ' . $dbConfigArray['dbname'] . ')' : ''));
 
@@ -1196,7 +1195,7 @@ class Tinebase_Core
                 $dbConfigArray['charset'] = Tinebase_Backend_Sql_Adapter_Pdo_Mysql::getCharsetFromConfigOrCache($dbConfigArray);
                 $upperCaseCharset = strtoupper($dbConfigArray['charset']);
 
-                if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                if (self::isLogLevel(Zend_Log::TRACE)) self::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' Using MySQL charset: ' . $dbConfigArray['charset']);
 
                 // force some driver options
@@ -1229,8 +1228,9 @@ class Tinebase_Core
                     }
                 }
 
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . '  connection id: ' . $db->query('SELECT connection_id()')->fetchColumn());
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' DB connection id: '
+                    . $db->query('SELECT connection_id()')->fetchColumn());
 
                 break;
                 
