@@ -775,8 +775,6 @@ class Tinebase_Frontend_JsonTest extends TestCase
      */
     public function testGetAllPersistentFilters()
     {
-        $this->markTestSkipped('@see 0010192: fix persistent filter tests');
-        
         $registryData = $this->_instance->getAllRegistryData();
         
         $filterData = $registryData['Tinebase']['persistentFilters'];
@@ -787,6 +785,38 @@ class Tinebase_Frontend_JsonTest extends TestCase
         
         // check if accounts are resolved
         $this->assertTrue(is_array($grants[0]['account_name']), 'account should be resolved: ' . print_r($grants[0], true));
+    }
+
+    public function testGetAllPersistentFiltersAfterRenameUser() {
+
+        $userToCreate = TestCase::getTestUser([
+            'accountLoginName'      => 'phpunitadminjson',
+            'accountEmailAddress'   => 'phpunitadminjson@' . TestServer::getPrimaryMailDomain(),
+        ]);
+        $userToCreate->smtpUser = new Tinebase_Model_EmailUser(array(
+            'emailAddress'     => $userToCreate->accountEmailAddress,
+        ));
+        $pw = Tinebase_Record_Abstract::generateUID(12);
+        $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+
+        $filter = new Tinebase_Model_PersistentFilter([
+            'name'              => 'PHPUnit testFilter',
+            'description'       => 'a test filter created by PHPUnit',
+            'account_id'        => null,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId(),
+            'model'             => 'Filemanager_Model_NodeFilter',
+            'filters'           => [
+                ['field' => 'path',        'operator' => 'equals',  'value' => '/personal/phpunitadminjson/']
+            ]]);
+        $newFilter = Tinebase_PersistentFilter::getInstance()->create($filter);
+
+        $user['accountLoginName'] = 'phpunitadminjsonTest';
+        Admin_Controller_User::getInstance()->update($user);
+
+        $registryData = $this->_instance->getAllRegistryData();
+
+        $filterData = $registryData['Tinebase']['persistentFilters'];
+        self::assertNotEmpty($filterData, 'persistent filters can not loaded in the store');
     }
     
     /**
