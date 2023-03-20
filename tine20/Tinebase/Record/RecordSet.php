@@ -242,7 +242,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     public function toArray()
     {
         $resultArray = array();
-        foreach($this->_listOfRecords as $index => $record) {
+        foreach ($this->_listOfRecords as $index => $record) {
             $resultArray[$index] = $record->toArray();
         }
          
