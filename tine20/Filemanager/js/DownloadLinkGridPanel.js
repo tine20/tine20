@@ -290,7 +290,7 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 hidden: true
             }, {
                 id: 'expiry_time',
-                header: this.app.i18n._("Expiration Time"),
+                header: this.app.i18n._("Valid until"),
                 width: 100,
                 sortable: true,
                 dataIndex: 'expiry_time',
