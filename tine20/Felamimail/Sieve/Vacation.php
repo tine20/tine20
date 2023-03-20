@@ -270,6 +270,20 @@ class Felamimail_Sieve_Vacation
         $reason = $this->_reason;
         $plaintextReason = $this->_getPlaintext($reason);
         
+        // format html
+        $doc = new DOMDocument('1.0', 'UTF-8');
+        $doc->preserveWhiteSpace = true;
+        $doc->formatOutput = true;
+        $doc->loadHTML('<?xml version="1.0" encoding="utf-8"?>' . $reason);
+        $doc->saveXML();
+        $xpath = new DOMXPath($doc);
+        $bodyNodes = $xpath->query('/html/body')->item(0)->childNodes;
+        $outputFragments = [];
+        foreach ($bodyNodes as $bodyNode) {
+            $outputFragments[] = $doc->saveXML($bodyNode);
+        }
+        $formattedHTMLBody = implode(PHP_EOL, $outputFragments);
+        
         if (! empty($this->_mime)) {
             $mime = ':mime ';
             $contentType = 'Content-Type: ' . $this->_mime;
@@ -279,7 +293,7 @@ class Felamimail_Sieve_Vacation
                 $reason = sprintf(
                       "--foo\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n%s\r\n\r\n"
                     . "--foo\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n%s\r\n\r\n"
-                    . "--foo--", $plaintextReason, $reason
+                    . "--foo--", $plaintextReason, $formattedHTMLBody
                 );
             } else {
                 $contentType .= "; charset=UTF-8\r\n\r\n";

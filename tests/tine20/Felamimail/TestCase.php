@@ -462,12 +462,12 @@ abstract class Felamimail_TestCase extends TestCase
     }
 
     /**
-     * sieve test helper
-     *
      * @param array $_sieveData
+     * @param bool $_isMime
+     * @param string|null $_reasonToCheck
      * @return array
      */
-    protected function _sieveTestHelper($_sieveData, $_isMime = FALSE)
+    protected function _sieveTestHelper(array $_sieveData, bool $_isMime = false, ?string $_reasonToCheck = null): array
     {
         $this->_setTestScriptname();
 
@@ -492,6 +492,9 @@ abstract class Felamimail_TestCase extends TestCase
                 // TODO check why behaviour changed with php 7 (test was relaxed to hotfix this)
                 //$this->assertEquals(html_entity_decode('unittest vacation&nbsp;message', ENT_NOQUOTES, 'UTF-8'), $resultSet['reason']);
                 self::assertStringContainsString('unittest vacation', $resultSet['reason']);
+            } else if ($_reasonToCheck) {
+                $sieveServerScript = Felamimail_Controller_Sieve::getInstance()->getSieveScript($this->_account);
+                self::assertStringContainsString($_reasonToCheck, $sieveServerScript->getSieve());
             } else {
                 $this->assertEquals($_sieveData['reason'], $resultSet['reason']);
             }
