@@ -737,7 +737,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     {
         foreach ([[
             'query' => '',
-            'allinboxes' => true,
+            'allinboxes' => false,
         ],[
             'query' => 'someemail@bla.com',
             'allinboxes' => false,
