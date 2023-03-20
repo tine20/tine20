@@ -286,7 +286,14 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $extension = '.eml';
         }
         
-        return $messageId . $extension;
+        try {
+            $message = Felamimail_Controller_Message::getInstance()->get($messageId);
+            $filename = Felamimail_Controller_Message::getInstance()->getMessageNodeFilename($message);
+        } catch (Tinebase_Exception $e) {
+            $filename = $messageId . $extension;;
+        }
+
+        return $filename;
     }
 
     /**
