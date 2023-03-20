@@ -276,7 +276,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         $class = static::class;
         $children = new $class([], $this->_concatenationCondition);
         foreach($this->_filterObjects as $idx => $filter) {
-            $children->addFilter($this->_filterObjects[$idx]);
+            if ($this->_filterObjects[$idx] instanceof Tinebase_Model_Filter_Abstract) {
+                $children->addFilter($this->_filterObjects[$idx]);
+            } else {
+                $children->addFilterGroup($this->_filterObjects[$idx]);
+            }
         }
         $this->_filterObjects = [];
         $this->_concatenationCondition = self::CONDITION_AND;
@@ -594,13 +598,6 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function addFilter(Tinebase_Model_Filter_Abstract $_filter, $_setFromArray = FALSE)
     {
-        if (! $_filter instanceof Tinebase_Model_Filter_Abstract) {
-            if ($_filter instanceof Tinebase_Model_Filter_FilterGroup) {
-                return $this->addFilterGroup($_filter);
-            }
-            throw new Tinebase_Exception_InvalidArgument('Filters must be of instance Tinebase_Model_Filter_Abstract');
-        }
-        
         if (! $_setFromArray && $_filter instanceof Tinebase_Model_Filter_AclFilter) {
             // this is added afterwards and considered as an implicit acl filter
             $_filter->setIsImplicit(TRUE);
