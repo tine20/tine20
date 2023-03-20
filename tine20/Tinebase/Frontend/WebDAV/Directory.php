@@ -167,7 +167,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         } catch (Exception $e) {
             Tinebase_FileSystem::getInstance()->unlink($path);
             $translation = Tinebase_Translation::getTranslation('Tinebase');
-            if ($e instanceof Tinebase_Exception_SystemGeneric && $e->getMessage() === $translation->_('Quota is exceeded')) {
+            if ($e instanceof Tinebase_Exception_QuotaExceeded) {
                 throw new Sabre\DAV\Exception\InsufficientStorage($e->getMessage());
             } else if ($e instanceof Tinebase_Exception_NotFound) {
                 throw new Sabre\DAV\Exception\NotFound($e->getMessage());
