@@ -1457,7 +1457,8 @@ viewConfig: {
             if (ct && ct.getLayout()){
                 ct.on('afterlayout', function(){ 
                     this.fitColumns(true, true);
-                    this.updateHeaders(); 
+                    this.updateHeaders();
+                    this.updateHeaderSortState();
                 }, this, {single: true}); 
             }else{ 
                 this.fitColumns(true, true); 
