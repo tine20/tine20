@@ -198,64 +198,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * @param string|array $_filter
-     * @param string $_filterModel the class name of the filter model to use
-     * @param boolean $_throwExceptionIfEmpty
-     * @return Felamimail_Model_MessageFilter|Tinebase_Model_Filter_FilterGroup
-     * @throws Tinebase_Exception_InvalidArgument
-     */
-    protected function _decodeFilter($_filter, $_filterModel, $_throwExceptionIfEmpty = false)
-    {
-        $filter = parent::_decodeFilter($_filter, $_filterModel, $_throwExceptionIfEmpty);
-        if ($filter->getModelName() === Felamimail_Model_Message::class) {
-            return $this->_handleEmptyMessageFilter($filter, $_filterModel, $_throwExceptionIfEmpty);
-        }
-        return $filter;
-    }
-
-    /**
-     * @param Felamimail_Model_MessageFilter $filter
-     * @param string $_filterModel
-     * @param boolean $_throwExceptionIfEmpty
-     * @return Felamimail_Model_MessageFilter|Tinebase_Model_Filter_FilterGroup
-     * @throws Tinebase_Exception_InvalidArgument
-     */
-    protected function _handleEmptyMessageFilter(Felamimail_Model_MessageFilter $filter, $_filterModel, $_throwExceptionIfEmpty)
-    {
-        $filtersToCheck = ['folder_id', 'path', 'flags', 'id'];
-        $found = false;
-        foreach ($filtersToCheck as $field) {
-            $filterOfField = $filter->getFilter($field, false, true);
-            if ($filterOfField) {
-                // filter could be empty - client sends some strange value here (path filter)
-                if ($field === 'id' ||
-                    ((is_object($filterOfField) && ! empty($filterOfField->getValue()))
-                    || (is_array($filterOfField) && isset($filterOfField['value']) && ! empty($filterOfField['value'])
-                        && $filterOfField['value'] !== [""]
-                    ))) {
-                    $found = true;
-                    break;
-                }
-            }
-        }
-
-        if (! $found) {
-            $queryFilter = $filter->getFilter('query', false, true);
-            if (! $queryFilter || $queryFilter->getValue() === '') {
-                // TODO use allinboxes or better the default account INBOX?
-                // add default filter if path and flags filter missing and query is empty
-                $defaultFilter = [[
-                    'field' => 'path',
-                    'operator' => 'in',
-                    'value' => '/allinboxes',
-                ]];
-                return parent::_decodeFilter($defaultFilter, $_filterModel, $_throwExceptionIfEmpty);
-            }
-        }
-        return $filter;
-    }
-
-    /**
      * update message cache
      * - use session/writeClose to update incomplete cache and allow following requests
      *
