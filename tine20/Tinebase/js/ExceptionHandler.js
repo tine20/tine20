@@ -320,6 +320,16 @@ Tine.Tinebase.ExceptionHandler = function() {
                     );
                 }
                 break;
+            // handle quota exceeded exception
+            case 660:
+                if (exception.info) {
+                    exception.message += '<br />' + exception.info;
+                }
+                Ext.MessageBox.show(Ext.apply(defaults, {
+                    title: i18n._(exception.title),
+                    msg: Ext.util.Format.nl2br(i18n._(exception.message))
+                }));
+                break;
                 
             // Tinebase_Exception_InvalidRelationConstraints
             case 912: 
