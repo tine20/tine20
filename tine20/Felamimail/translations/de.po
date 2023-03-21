@@ -1531,8 +1531,8 @@ msgstr[0] "Nachricht"
 msgstr[1] "Nachrichten"
 
 #: js/Model.js:218
-msgid "Subject/From"
-msgstr "Betreff/Von"
+msgid "Subject/From/To"
+msgstr "Betreff/Von/An"
 
 #: js/Model.js:221 js/GridPanel.js:522
 msgid "From (Name)"
