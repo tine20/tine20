@@ -223,9 +223,9 @@ Tine.Filemanager.nodeBackendMixin = {
         const cb = options.success;
         options.success = async function (response) {
             const path = _.get(_.find(filter, {field: 'path'}), 'value');
-            if (path) {
+            
+            if (path && filter.length === 1) {
                 const virtualNodes = await Tine.Tinebase.uploadManager.getProcessingNodesByPath(path);
-                
                 _.each(virtualNodes, (nodeData) => {
                     if (!_.find(_.map(response.records, 'data'), {name: nodeData.name})) {
                         response.records.push(new this.recordClass(nodeData));
