@@ -211,36 +211,22 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         return '';
                     }
                 },
-
+                linkifyEmail(name, email) {
+                    const id = Ext.id() + ':' + email + Ext.util.Format.htmlEncode(':' + Ext.util.Format.trim(name));
+                    const address = name.length ? `${name} < ${email} >` : email;
+                    return `<a id="${id}" class="tinebase-email-link">${address}</a>`;
+                },
                 showDate: function (sent, recordData) {
                     var date = sent
                         ? (Ext.isDate(sent) ? sent : Date.parseDate(sent, Date.patterns.ISO8601Long))
                         : Date.parseDate(recordData.received, Date.patterns.ISO8601Long);
                     return date ? date.format('l') + ', ' + Tine.Tinebase.common.dateTimeRenderer(date) : '';
                 },
-
                 showFrom: function(email, name, addText, qtip) {
-                    if (! name) {
-                        return '';
-                    }
-
-                    var result = this.encode(name + ' <' + email + '>');
-
-                    // add link with 'add to contacts'
-                    var id = Ext.id() + ':' + email;
-
-                    var nameSplit = name.match(/^"*([^,^ ]+)(,*) *(.+)/i);
-                    var firstname = (nameSplit && nameSplit[1]) ? nameSplit[1] : '';
-                    var lastname = (nameSplit && nameSplit[3]) ? nameSplit[3] : '';
-                    if (nameSplit && nameSplit[2] == ',') {
-                        firstname = lastname;
-                        lastname = nameSplit[1];
-                    }
-
-                    id += Ext.util.Format.htmlEncode(':' + Ext.util.Format.trim(name));
-                    result = '<a id="' + id + '" class="tinebase-email-link">' + result + '</a>'
-                    
-                    return result;
+                    if (! name) return '';
+                    const emails = this.panel.record.get('from');
+                    const fromEmail = emails[0] ?? [];
+                    return this.linkifyEmail(fromEmail.name, fromEmail.email);
                 },
 
                 showBody: function(body, messageData) {
@@ -282,19 +268,22 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 },
 
                 showRecipients: function(value) {
-                    if (value) {
-                        var i18n = Tine.Tinebase.appMgr.get('Felamimail').i18n,
-                            result = '';
-                        for (var header in value) {
-                            if (value.hasOwnProperty(header) && (header == 'to' || header == 'cc' || header == 'bcc')) {
-                                result += '<br/><b>' + i18n._hidden(Ext.util.Format.capitalize(header)) + ':</b> '
-                                    + Ext.util.Format.htmlEncode(value[header]);
-                            }
+                    if (!value) return '';
+                    
+                    const i18n = Tine.Tinebase.appMgr.get('Felamimail').i18n;
+                    let result = '';
+                    for (const header in value) {
+                        if (value.hasOwnProperty(header) && ['to', 'cc', 'bcc'].includes(header)) {
+                            result += '<br/><b>' + i18n._hidden(Ext.util.Format.capitalize(header)) + ':</b> ';
+                            const emails = this.panel.record.get(header);
+                            //TODO: bcc only store email in \Zend_Mail::addBcc($email), do we want to change it ?
+                            emails.forEach((emailData, idx) => {
+                                if (idx > 0) result += ', ';
+                                result += this.linkifyEmail(emailData?.name, emailData?.email);
+                            })
                         }
-                        return result;
-                    } else {
-                        return '';
                     }
+                    return result;
                 },
 
                 showAttachments: function(attachments, messageData) {

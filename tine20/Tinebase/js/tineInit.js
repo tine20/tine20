@@ -372,7 +372,8 @@ Tine.Tinebase.tineInit = {
         if (type === 'group' || type ===  'mailingList' || type ===  'list') {
             items = await this.getListContextMenuItems(email, name);
         } else {
-            items = await this.getContactContextMenuItems(target, email, name);
+            // fixme: search contact name sometimes get empty result , skip it for now
+            items = await this.getContactContextMenuItems(target, email, '');
         }
     
         items.forEach((item) => {
