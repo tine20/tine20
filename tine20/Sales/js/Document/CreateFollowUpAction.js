@@ -31,6 +31,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
     const getFollowUpAction = (sourceType, targetType, config) => {
         const isReversal = !!config.isReversal
         const sourceRecordClass = Tine.Tinebase.data.RecordMgr.get(`Sales.Document_${sourceType}`)
+        if (!sourceRecordClass) return null
         const sourceRecordsName = sourceRecordClass.getRecordsName()
         const targetRecordClass = Tine.Tinebase.data.RecordMgr.get(`Sales.Document_${targetType}`)
         const targetRecordName = isReversal ? app.i18n._('Reversal') : targetRecordClass.getRecordName()
