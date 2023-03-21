@@ -1,7 +1,4 @@
 <?php declare(strict_types=1);
-
-use Idaas\OpenID\Repositories\ClaimRepositoryInterface;
-
 /**
  * facade for ClaimRepository
  *
@@ -9,9 +6,11 @@ use Idaas\OpenID\Repositories\ClaimRepositoryInterface;
  * @subpackage  Facade
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+
+use Idaas\OpenID\Repositories\ClaimRepositoryInterface;
 
 class SSO_Facade_OpenIdConnect_ClaimRepository implements ClaimRepositoryInterface
 {
@@ -23,7 +22,13 @@ class SSO_Facade_OpenIdConnect_ClaimRepository implements ClaimRepositoryInterfa
 
     public function getClaimsByScope(\League\OAuth2\Server\Entities\ScopeEntityInterface $scope): iterable
     {
-        return [];
+        return [
+            'sub',
+            'name',
+            'given_name',
+            'family_name',
+            'email'
+        ];
     }
 
     public function claimsRequestToEntities(array $json = null)

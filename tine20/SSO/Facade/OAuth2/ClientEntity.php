@@ -7,7 +7,7 @@
  * @subpackage  Facade
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -22,7 +22,7 @@ class SSO_Facade_OAuth2_ClientEntity implements League\OAuth2\Server\Entities\Cl
 
     public function getIdentifier(): string
     {
-        return $this->relyingParty->getId();
+        return $this->relyingParty->{SSO_Model_RelyingParty::FLD_NAME};
     }
 
     public function getName(): string

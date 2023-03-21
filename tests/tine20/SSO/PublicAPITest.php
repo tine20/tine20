@@ -4,7 +4,7 @@
  *
  * @package     SSO
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -51,6 +51,7 @@ class SSO_PublicAPITest extends TestCase
             copy(__DIR__ . '/keys/private.key', $path);
             chmod($path, 0600);
             $keys[0]['privatekey'] = $path;
+            $keys[0]['kid'] = 'unittestkey';
         }
         if (!isset($keys[0]['publickey']) || !is_file($keys[0]['publickey'])) {
             $keys[0]['publickey'] = __DIR__ . '/keys/public.key';
@@ -179,14 +180,14 @@ class SSO_PublicAPITest extends TestCase
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
             (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/shalala?response_type=code' .
                 '&scope=openid%20profile%20email' .
-                '&client_id=' . urlencode($relyingParty->getId()) .
+                '&client_id=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_NAME}) .
                 '&state=af0ifjsldkj' .
                 '&nonce=nonce' .
                 '&redirect_uri=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0]), 'GET'))
             ->withQueryParams([
                 'response_type' => 'code',
                 'scope' => 'openid profile email',
-                'client_id' => $relyingParty->getId(),
+                'client_id' => $relyingParty->{SSO_Model_RelyingParty::FLD_NAME},
                 'state' => 'af0ifjsldkj',
                 'nonce' => 'nonce',
                 'redirect_uri' => $relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0]
@@ -221,14 +222,14 @@ class SSO_PublicAPITest extends TestCase
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
             (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/shalala?response_type=code' .
                 '&scope=openid%20profile%20email' .
-                '&client_id=' . urlencode($relyingParty->getId()) .
+                '&client_id=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_NAME}) .
                 '&state=af0ifjsldkj' .
                 '&nonce=nonce' .
                 '&redirect_uri=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0]), 'POST'))
                 ->withQueryParams([
                     'response_type' => 'code',
                     'scope' => 'openid profile email',
-                    'client_id' => $relyingParty->getId(),
+                    'client_id' => $relyingParty->{SSO_Model_RelyingParty::FLD_NAME},
                     'state' => 'af0ifjsldkj',
                     'nonce' => 'nonce',
                     'redirect_uri' => $relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0],
@@ -264,14 +265,14 @@ class SSO_PublicAPITest extends TestCase
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
             (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/shalala?response_type=code' .
                 '&scope=openid%20profile%20email' .
-                '&client_id=' . urlencode($relyingParty->getId()) .
+                '&client_id=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_NAME}) .
                 '&state=af0ifjsldkj' .
                 '&nonce=nonce' .
                 '&redirect_uri=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0]), 'GET'))
                 ->withQueryParams([
                     'response_type' => 'code',
                     'scope' => 'openid profile email',
-                    'client_id' => $relyingParty->getId(),
+                    'client_id' => $relyingParty->{SSO_Model_RelyingParty::FLD_NAME},
                     'state' => 'af0ifjsldkj',
                     'nonce' => 'nonce',
                     'redirect_uri' => $relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0]
