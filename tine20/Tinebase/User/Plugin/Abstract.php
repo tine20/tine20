@@ -142,9 +142,9 @@ abstract class Tinebase_User_Plugin_Abstract
      *
      * @param Tinebase_Model_FullUser $user
      * @param $alternativeLoginName
-     * @return string
+     * @return null|string
      */
-    public function getEmailUserName(Tinebase_Model_FullUser $user, $alternativeLoginName = null): string
+    public function getEmailUserName(Tinebase_Model_FullUser $user, $alternativeLoginName = null): ?string
     {
         $userId = Tinebase_EmailUser_XpropsFacade::getEmailUserId($user);
         return $this->getLoginName($userId, $user->accountLoginName, $user->accountEmailAddress,
