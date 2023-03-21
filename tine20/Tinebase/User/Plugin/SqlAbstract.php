@@ -18,6 +18,14 @@
 abstract class Tinebase_User_Plugin_SqlAbstract extends Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_SqlInterface
 {
     /**
+     * email user config defaults
+     *
+     * @var array
+     */
+    protected $_defaults = array(
+    );
+
+    /**
     * @var Zend_Db_Adapter_Abstract
     */
     protected $_db = NULL;
@@ -40,16 +48,6 @@ abstract class Tinebase_User_Plugin_SqlAbstract extends Tinebase_User_Plugin_Abs
      * @var array
      */
     protected static $_dbConnections =  [];
-
-    /**
-     * inspect get user by property
-     *
-     * @param Tinebase_Model_User  $_user  the user object
-     */
-    public function inspectGetUserByProperty(Tinebase_Model_User $_user)
-    {
-        // do nothing here - implement in plugin if needed
-    }
 
     /**
      * inspect data used to create user
@@ -213,5 +211,51 @@ abstract class Tinebase_User_Plugin_SqlAbstract extends Tinebase_User_Plugin_Abs
         }
 
         return $systemDefaults;
+    }
+
+    /**
+     * inspect get user by property
+     *
+     * @param Tinebase_Model_User  $_user  the user object
+     */
+    public function inspectGetUserByProperty(Tinebase_Model_User $_user)
+    {
+        if (! $_user instanceof Tinebase_Model_FullUser) {
+            return;
+        }
+
+        // convert data to Tinebase_Model_EmailUser
+        $data = [];
+        $emailUser = $this->_rawDataToRecord($data);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($emailUser->toArray(), TRUE));
+
+        $emailUser->emailUsername = $this->getEmailUserName($_user);
+
+        if ($this instanceof Tinebase_EmailUser_Smtp_Interface) {
+            $_user->smtpUser  = $emailUser;
+            $_user->emailUser = Tinebase_EmailUser::merge($_user->emailUser, clone $_user->smtpUser);
+        } else {
+            $_user->imapUser  = $emailUser;
+            $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, $_user->emailUser);
+        }
+    }
+
+    /**
+     * converts raw data from adapter into a single record / do mapping
+     *
+     * @param array $_rawdata
+     * @return Tinebase_Model_EmailUser
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _rawDataToRecord(array &$_rawdata)
+    {
+        $data = array_merge($this->_defaults, $this->_getConfiguredSystemDefaults());
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' raw data: ' . print_r($_rawdata, true));
+
+        return new Tinebase_Model_EmailUser($data, TRUE);
     }
 }
