@@ -47,14 +47,9 @@ class Calendar_Export_Ods extends Tinebase_Export_Spreadsheet_Ods
         $translation = Tinebase_Translation::getTranslation('Calendar');
 
         if ($record->status == 'CANCELED'){
-            $record->summary =  $this->_strikeText($record->summary) . '  (' . $translation->_('Canceled') . ')';
+            $record->summary =  $this->strikeText($record->summary) . '  (' . $translation->_('Canceled') . ')';
         };
         
         return parent::processRecord($record, $idx);
-    }
-    
-    private function _strikeText($text){
-        $splitText = str_split($text);
-        return implode(IntlChar::chr(822), $splitText) . IntlChar::chr(822);
     }
 }
