@@ -368,7 +368,10 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => [
                 '' => [
                     self::TRANSITION_TARGET_STATUS => [
-                        Sales_Model_Document_Offer::STATUS_DRAFT
+                        Sales_Model_Document_Offer::STATUS_DRAFT,
+                        Sales_Model_Document_Offer::STATUS_RELEASED,
+                        Sales_Model_Document_Offer::STATUS_ORDERED,
+                        Sales_Model_Document_Offer::STATUS_REJECTED,
                     ]
                 ],
                 Sales_Model_Document_Offer::STATUS_DRAFT => [
@@ -453,7 +456,9 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => [
                 '' => [
                     self::TRANSITION_TARGET_STATUS => [
-                        Sales_Model_Document_Order::STATUS_RECEIVED
+                        Sales_Model_Document_Order::STATUS_RECEIVED,
+                        Sales_Model_Document_Order::STATUS_ACCEPTED,
+                        Sales_Model_Document_Order::STATUS_DONE,
                     ]
                 ],
                 Sales_Model_Document_Order::STATUS_RECEIVED => [
@@ -520,7 +525,8 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => [
                 '' => [
                     self::TRANSITION_TARGET_STATUS => [
-                        Sales_Model_Document_Delivery::STATUS_CREATED
+                        Sales_Model_Document_Delivery::STATUS_CREATED,
+                        Sales_Model_Document_Delivery::STATUS_DELIVERED,
                     ]
                 ],
                 Sales_Model_Document_Delivery::STATUS_CREATED => [
@@ -596,7 +602,9 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => [
                 '' => [
                     self::TRANSITION_TARGET_STATUS => [
-                        Sales_Model_Document_Invoice::STATUS_PROFORMA
+                        Sales_Model_Document_Invoice::STATUS_PROFORMA,
+                        Sales_Model_Document_Invoice::STATUS_BOOKED,
+                        Sales_Model_Document_Invoice::STATUS_SHIPPED,
                     ]
                 ],
                 Sales_Model_Document_Invoice::STATUS_PROFORMA => [

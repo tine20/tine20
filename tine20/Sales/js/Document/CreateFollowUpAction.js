@@ -31,6 +31,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
     const getFollowUpAction = (sourceType, targetType, config) => {
         const isReversal = !!config.isReversal
         const sourceRecordClass = Tine.Tinebase.data.RecordMgr.get(`Sales.Document_${sourceType}`)
+        if (!sourceRecordClass) return null
         const sourceRecordsName = sourceRecordClass.getRecordsName()
         const targetRecordClass = Tine.Tinebase.data.RecordMgr.get(`Sales.Document_${targetType}`)
         const targetRecordName = isReversal ? app.i18n._('Reversal') : targetRecordClass.getRecordName()
@@ -84,12 +85,12 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         let updatedRecord
                         try {
                             updatedRecord = await sourceRecordClass.getProxy().promiseSaveRecord(record)
+                            selections.splice.apply(selections, [selections.indexOf(record), 1].concat(updatedRecord ? [updatedRecord] : []))
+                            editDialog ? await editDialog.loadRecord(updatedRecord) : null
                         } catch (e) {
                             record.reject()
                             errorMsgs.push(app.formatMessage('Cannot book { sourceDocument }: ({e.code}) { e.message }', { sourceDocument: record.getTitle(), e }))
                         }
-                        selections.splice.apply(selections, [selections.indexOf(record), 1].concat(updatedRecord ? [updatedRecord] : []))
-                        editDialog ? await editDialog.loadRecord(updatedRecord) : null;
                     })
                 }
 
