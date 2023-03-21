@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2015-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke
  */
 
@@ -45,34 +45,6 @@ class Tinebase_EmailUser_Smtp_Standard extends Tinebase_User_Plugin_SqlAbstract 
     }
     
     /**
-     * inspect get user by property
-     * 
-     * @param Tinebase_Model_User  $_user  the user object
-     */
-    public function inspectGetUserByProperty(Tinebase_Model_User $_user)
-    {
-        if (! $_user instanceof Tinebase_Model_FullUser) {
-            return;
-        }
-        
-        // convert data to Tinebase_Model_EmailUser
-        $data = [];
-        $emailUser = $this->_rawDataToRecord($data);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($emailUser->toArray(), TRUE));
-        
-        $emailUser->emailUsername = $this->getEmailUserName($_user);
-        
-        if ($this instanceof Tinebase_EmailUser_Smtp_Interface) {
-            $_user->smtpUser  = $emailUser;
-            $_user->emailUser = Tinebase_EmailUser::merge($_user->emailUser, clone $_user->smtpUser);
-        } else {
-            $_user->imapUser  = $emailUser;
-            $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, $_user->emailUser);
-        }
-    }
-
-    /**
      * update/set email user password
      *
      * @param string $_userId
@@ -106,24 +78,6 @@ class Tinebase_EmailUser_Smtp_Standard extends Tinebase_User_Plugin_SqlAbstract 
     protected function _addUser(Tinebase_Model_FullUser $_addedUser, Tinebase_Model_FullUser $_newUserProperties)
     {
         // do nothing
-    }
-    
-    /**
-     * converts raw data from adapter into a single record / do mapping
-     *
-     * @param  array $_data
-     * @return Tinebase_Record_Interface
-     */
-    protected function _rawDataToRecord(array &$_rawdata)
-    {
-        $data = array_merge($this->_defaults, $this->_getConfiguredSystemDefaults());
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' raw data: ' . print_r($_rawdata, true));
-        
-        $emailUser = new Tinebase_Model_EmailUser($data, TRUE);
-        
-        return $emailUser;
     }
     
     /**

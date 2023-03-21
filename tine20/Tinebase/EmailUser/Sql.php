@@ -566,14 +566,6 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
     }
 
     /**
-     * converts raw data from adapter into a single record / do mapping
-     *
-     * @param  array                    $_data
-     * @return Tinebase_Model_EmailUser
-     */
-    abstract protected function _rawDataToRecord(array &$_rawdata);
-     
-    /**
      * returns array of raw user data
      *
      * @param  Tinebase_Model_FullUser  $_user
