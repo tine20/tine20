@@ -6,10 +6,11 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
+use League\OAuth2\Server\AuthorizationValidators\BearerTokenValidator;
 use SAML2\AuthnRequest;
 use SAML2\Binding;
 use SAML2\Constants;
@@ -58,6 +59,10 @@ class SSO_Controller extends Tinebase_Controller_Event
                 self::class, 'publicCerts', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
+            $routeCollector->get('/openidconnect/userinfo', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicOIUserInfo', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
             $routeCollector->get('/saml2/idpmetadata', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicSaml2IdPMetaData', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
@@ -84,7 +89,23 @@ class SSO_Controller extends Tinebase_Controller_Event
             return self::serviceNotEnabled();
         }
 
-        $keys = [
+        $keys = [];
+
+        foreach (SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS} as $key) {
+            if (!isset($key['use']) || !isset($key['kty']) || !isset($key['alg']) || !isset($key['kid']) || !isset($key['e']) || !isset($key['n'])) {
+                continue;
+            }
+            $keys[] = [
+                'use' => $key['use'],
+                'kty' => $key['kty'],
+                'alg' => $key['alg'],
+                'kid' => $key['kid'],
+                'e'   => $key['e'],
+                'n'   => $key['n'],
+            ];
+        }
+
+        /*$keys = [
             'keys' => [
                 [
                     'use' => 'sig',
@@ -95,11 +116,11 @@ class SSO_Controller extends Tinebase_Controller_Event
                     'n'   => 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArXkViV0Cz0cwmGAcnP1U9z2K5utziToHUBHnWanV1HvLym8xsvlpjXVtqPXdnBQuHIXxDcDUfL7SWlKrrdkZTDZn21YJQvar3nS0Hwl1fpKd/CK1uWukmkfiOnuew6cwgskAbr4Oc3QVREEGBNTnpqiB0rLwlUqB4Pey/nGXCe2h8bm9NwNp/T9IlZhrwhfzMDhUSLo7FA6v9ShWVSLBDwvwXodLbq9DVX9OomZCPAapFjljxveCcSoKy1oQNUMDKdE7t1MEh5V4FAP2Ezhvexrq3cyLZtImypL15wgWujY2CXlDi9NkKAL7LyeevrQ2SbRAmKzTmCiZ7OKH4OpZWwIDAQAB',
                 ]
             ]
-        ];
+        ];*/
         $response = (new \Laminas\Diactoros\Response())
             // the jwks_uri SHOULD include a Cache-Control header in the response that contains a max-age directive
             ->withHeader('cache-control', 'public, max-age=20683, must-revalidate, no-transform');
-        $response->getBody()->write(json_encode($keys));
+        $response->getBody()->write(json_encode(['keys' => $keys]));
 
         return $response;
     }
@@ -110,6 +131,28 @@ class SSO_Controller extends Tinebase_Controller_Event
         //if (! SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::ENABLED}) {
             return self::serviceNotEnabled();
         //}
+    }
+
+    public static function publicOIUserInfo(): \Psr\Http\Message\ResponseInterface
+    {
+        if (!SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::ENABLED}) {
+            return self::serviceNotEnabled();
+        }
+
+        /** @var \Psr\Http\Message\ServerRequestInterface $request */
+        $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+        (new Idaas\OpenID\UserInfo(
+            new SSO_Facade_OpenIdConnect_UserRepository(),
+            $tokenRepo = new SSO_Facade_OAuth2_AccessTokenRepository(),
+            new \League\OAuth2\Server\ResourceServer(
+                $tokenRepo,
+                SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['publickey'],
+                new BearerTokenValidator($tokenRepo)
+            ),
+            new SSO_Facade_OpenIdConnect_ClaimRepository()
+        ))->respondToUserInfoRequest($request, $response = new \Laminas\Diactoros\Response());
+
+        return $response;
     }
 
     // TODO FIX ME
@@ -231,10 +274,17 @@ class SSO_Controller extends Tinebase_Controller_Event
             ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS));
         $server = static::getOpenIdConnectServer();
 
-        return $server->respondToAccessTokenRequest(
+        $response = $server->respondToAccessTokenRequest(
             Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class),
             new \Laminas\Diactoros\Response()
         );
+
+        return $response;
+    }
+
+    protected static function getOAuthIssuer(): string
+    {
+        return Tinebase_Core::getUrl(Tinebase_Core::GET_URL_NOPATH);
     }
 
     public static function publicGetWellKnownOpenIdConfiguration(): \Psr\Http\Message\ResponseInterface
@@ -248,7 +298,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         $serverUrl = rtrim(Tinebase_Core::getUrl(), '/');
 
         $config = [
-            'issuer'                                            => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_NOPATH),
+            'issuer'                                            => static::getOAuthIssuer(),
             'authorization_endpoint'                            => $serverUrl . '/sso/oauth2/authorize',
             'token_endpoint'                                    => $serverUrl . '/sso/oauth2/token',
             'registration_endpoint'                             => $serverUrl . '/sso/oauth2/register',
@@ -721,7 +771,8 @@ class SSO_Controller extends Tinebase_Controller_Event
             new SSO_Facade_OAuth2_ClientRepository(),
             new SSO_Facade_OAuth2_AccessTokenRepository(),
             new SSO_Facade_OAuth2_ScopeRepository(),
-            SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['privatekey'],
+            new SSO_Facade_OAuth2_CryptKey(SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['privatekey'],
+                SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['kid']),
             SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['publickey'],
             new \Idaas\OpenID\ResponseTypes\BearerTokenResponse
         );
@@ -735,6 +786,7 @@ class SSO_Controller extends Tinebase_Controller_Event
             new \DateInterval('PT1H') // id tokens will expire after 1 hour
         );
 
+        $grant->setIssuer(static::getOAuthIssuer());
         $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // refresh tokens will expire after 1 month
 
         // Enable the authentication code grant on the server
