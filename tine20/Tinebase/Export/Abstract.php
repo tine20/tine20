@@ -1798,4 +1798,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             ],
         ];
     }
+
+    public function strikeText($text){
+        $splitText = preg_split('//u', $text, null, PREG_SPLIT_NO_EMPTY);
+        return implode(IntlChar::chr(822), $splitText) . IntlChar::chr(822);
+    }
+
 }
