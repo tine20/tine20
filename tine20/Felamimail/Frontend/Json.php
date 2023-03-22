@@ -569,6 +569,13 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 // remove ADB list type from result set
                 unset($accounts[$idx]);
             } else {
+                if ($account['type'] === Felamimail_Model_Account::TYPE_SYSTEM
+                    && Felamimail_Controller_Account::getInstance()->skipSystemMailAccountActiveForUser(Tinebase_Core::getUser())
+                ) {
+                    unset($accounts[$idx]);
+                    continue;
+                }
+
                 try {
                     // add signatures
                     $account = Felamimail_Controller_Account::getInstance()->get($account['id']);

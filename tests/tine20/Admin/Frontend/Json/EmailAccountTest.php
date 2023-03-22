@@ -409,6 +409,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
     {
         $user = $this->_createUserWithEmailAccount();
         $emailAccount = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
+        self::assertNotNull($emailAccount);
         $emailAccount->email = 'somenewmail' . Tinebase_Record_Abstract::generateUID(6) . '@' . TestServer::getPrimaryMailDomain();
         $updatedAccount = $this->_json->saveEmailAccount($emailAccount->toArray());
         self::assertEquals($emailAccount->email, $updatedAccount['email']);
