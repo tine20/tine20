@@ -7,7 +7,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -43,7 +43,7 @@ class SSO_Model_Token extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
+        self::VERSION => 2,
         self::RECORD_NAME => 'OAuth2 Access Token',
         self::RECORDS_NAME => 'OAuth2 Access Tokens', // ngettext('OAuth2 Access Token', 'OAuth2 Access Tokens', n)
         self::MODLOG_ACTIVE => true,
@@ -80,11 +80,12 @@ class SSO_Model_Token extends Tinebase_Record_Abstract
                 ],
                 self::LABEL                 => 'Type', // _('Type')
             ],
-            /*self::FLD_DATA              => [
+            self::FLD_DATA              => [
                 self::TYPE                  => self::TYPE_JSON,
+                self::NULLABLE              => true,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY  => true],
                 self::LABEL                 => 'Data', // _('Data')
-            ],*/
+            ],
         ]
     ];
 }
