@@ -1863,6 +1863,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     protected function _createSystemAccount(Tinebase_Model_FullUser $_user, string $pwd = null)
     {
+        if ($this->skipSystemMailAccountActiveForUser($_user)) {
+            return null;
+        }
+
         $systemAccount = new Felamimail_Model_Account([
             'type' => Felamimail_Model_Account::TYPE_SYSTEM,
             'user_id' => $_user->getId(),
@@ -1909,6 +1913,18 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             . ' Created new system account "' . $systemAccount->name . '".');
 
         return $systemAccount;
+    }
+
+    public function skipSystemMailAccountActiveForUser($user)
+    {
+        $xprops = $user->xprops();
+        if (isset($xprops[Tinebase_Model_FullUser::XPROP_FMAIL_SKIP_MAILACCOUNT]) && $xprops[Tinebase_Model_FullUser::XPROP_FMAIL_SKIP_MAILACCOUNT]) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' User xprop XPROP_FMAIL_SKIP_MAILACCOUNT'
+                . ' is active - skipping creation of system mail account');
+            return true;
+        }
+
+        return false;
     }
 
     /**

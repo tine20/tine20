@@ -39,15 +39,15 @@ class Felamimail_Controller_AccountMock extends Felamimail_Controller_Account
         parent::_inspectAfterCreate($_createdRecord, $_record);
 
         if ($_createdRecord->type === Felamimail_Model_Account::TYPE_SYSTEM) {
-            $imapDb = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP)->getDb();
+            $imapDb = Tinebase_EmailUser::getInstance()->getDb();
             $smtpDb = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->getDb();
-            if (Tinebase_Core::getDb() !== $imapDb) {
+            if ($imapDb && Tinebase_Core::getDb() !== $imapDb) {
                 try {
                     $imapDb->commit();
                     Tinebase_TransactionManager::getInstance()->unitTestRemoveTransactionable($imapDb);
                 } catch (PDOException $e) {}
             }
-            if (Tinebase_Core::getDb() !== $smtpDb) {
+            if ($smtpDb && Tinebase_Core::getDb() !== $smtpDb) {
                 try {
                     $smtpDb->commit();
                     Tinebase_TransactionManager::getInstance()->unitTestRemoveTransactionable($smtpDb);

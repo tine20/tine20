@@ -51,6 +51,9 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     const XPROP_EMAIL_USERID_IMAP = 'emailUserIdImap';
     const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
 
+    // don't create and show users system mail account
+    const XPROP_FMAIL_SKIP_MAILACCOUNT = 'emailSkipFmailAccount';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
