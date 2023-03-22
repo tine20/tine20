@@ -1415,7 +1415,7 @@ msgstr "Umfrage Link: {0}"
 #: js/Felamimail.js:262
 #, python-brace-format
 msgid "{0} as default mailer"
-msgstr "{0} als default Mailer"
+msgstr "{0} als Standard-E-Mailprogramm"
 
 #: js/Felamimail.js:692
 msgid "New mails"
