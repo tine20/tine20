@@ -324,8 +324,6 @@ docker_build_dev_arm64:
 docker_build_packages:
   extends: .abstract_jobs.docker
   stage: build3
-  needs:
-    - docker_build_built
   script:
     - !reference [.lib, script]
     - packaging
