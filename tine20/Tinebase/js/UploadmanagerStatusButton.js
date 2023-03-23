@@ -31,7 +31,9 @@ Tine.Tinebase.UploadManagerStatusButton = Ext.extend(Ext.Button, {
     status: 'idle',
 
     initComponent: async function () {
+        this.hidden = !Tine.Tinebase.appMgr.isEnabled('Filemanager');
         this.app = Tine.Tinebase.appMgr.get('Filemanager');
+        if (!this.app) return;
         const allTasks = await Tine.Tinebase.uploadManager.getAllTasks();
         const tasks = allTasks.filter(t => t.handler === 'FilemanagerUploadFileTask');
     
