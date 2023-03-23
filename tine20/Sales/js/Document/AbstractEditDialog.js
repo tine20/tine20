@@ -88,8 +88,8 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         const booked = statusField.store.getById(statusField.getValue())?.json.booked
         this.getForm().items.each((field) => {
             if (_.get(field, 'initialConfig.readOnly')) return;
-            if ([this.statusFieldName, 'cost_center_id', 'cost_bearer_id', 'description', 'tags', 'attachments', 'relations'].indexOf(field.name) < 0
-            || field.name?.match(/^shared_.*/)) {
+            if ([this.statusFieldName, 'cost_center_id', 'cost_bearer_id', 'description', 'customer_reference', 'contact_id', 'tags', 'attachments', 'relations'].indexOf(field.name) < 0
+            && !field.name?.match(/(^shared_.*)|(.*_recipient_id$)/)) {
                 field.setReadOnly(booked);
             }
         });

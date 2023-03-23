@@ -37,6 +37,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         const targetRecordName = isReversal ? app.i18n._('Reversal') : targetRecordClass.getRecordName()
         const targetRecordsName = isReversal ? app.i18n._('Reversals') : targetRecordClass.getRecordsName()
         const sharedTransitionFlag = `shared_${targetRecordClass.getMeta('recordName').toLowerCase()}`
+        const recipientField = `${targetRecordClass.getMeta('recordName').toLowerCase()}_recipient_id`
         const supportsSharedTransition = sourceRecordClass.hasField(sharedTransitionFlag)
         return new Ext.Action(Object.assign({
             text: config.text || app.formatMessage('Create { targetRecordName }', { targetRecordName }),
@@ -108,7 +109,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 // check if document is 'shared' -> getSharedOrderDocumentTransition
                 // NOTE: the selection might contain other documents which are part of the shared followup
                 //       those docs must not be processed individually
-                //       unbooked documents are not included -> inform user about this? (are they included in getSharedOrderDocumentTransition?)
+                //       unbooked documents are not included -> inform user about this?
                 await selections.asyncForEach(async (record) => {
                     try {
                         if (processedSourceIds.indexOf(record.id) < 0) {
@@ -122,8 +123,10 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             }
 
                             if (supportsSharedTransition && !!+record.get(sharedTransitionFlag)) {
-                                const customerId = _.get(record, 'data.customer_id.original_id')
-                                transition = await Tine.Sales.getSharedOrderDocumentTransition(customerId, transition.targetDocumentType)
+                                // group by address?
+                                const recipientId = _.get(record, `data.${recipientField}.original_id`)
+                                const category = record.get('document_category')
+                                transition = await Tine.Sales.getSharedOrderDocumentTransition(recipientId, category, transition.targetDocumentType)
 
                                 if (! transition?.sourceDocuments?.length) {
                                     return await Ext.MessageBox.show({
