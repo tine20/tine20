@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -94,7 +94,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                             setup.php --migrateUtf8mb4',
                 'maintenance_mode'          => 'set systems maintenance mode state
                         Examples:
-                           setup.php --maintenance_mode -- state=[normal|all|off]',
+                           setup.php --maintenance_mode -- mode=[on|off] apps=[OnlyOfficeIntegrator,Felamimail,etc.] flags=[skipApps,onlyApps,allowAdminLogin]',
                 'config_from_env'           => 'generates config from environment variables like TINE20__<application>_<propertiy>',
                 'is_installed'           => 'Checks if tine20 is installed, otherwise returns 1.',
                 'add_auth_token'        => 'Add a new token to table tine20_auth_token

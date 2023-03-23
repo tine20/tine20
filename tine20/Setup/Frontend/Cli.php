@@ -4,7 +4,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add ext check again
  */
@@ -15,10 +15,8 @@
  * This class handles all requests from cli scripts
  *
  * @package     Tinebase
- *
- * TODO extend TFCliAbstract
  */
-class Setup_Frontend_Cli
+class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 {
     /**
      * the internal name of the application
@@ -1167,21 +1165,83 @@ class Setup_Frontend_Cli
      */
     protected function _maintenanceMode(Zend_Console_Getopt $_opts)
     {
-        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
-        $modes = [
-            Tinebase_Config::MAINTENANCE_MODE_NORMAL,
-            Tinebase_Config::MAINTENANCE_MODE_ALL,
-            Tinebase_Config::MAINTENANCE_MODE_OFF,
-        ];
-        if (!isset($options['state']) || !in_array($options['state'], $modes)) {
-            echo PHP_EOL . 'parameter --state=[' . implode('|', $modes) . '] missing' . PHP_EOL;
-        } else {
-            if (Setup_Controller::getInstance()->setMaintenanceMode($options)) {
-                echo PHP_EOL . 'set maintenance mode to: ' . $options['state'] . PHP_EOL;
+        $options = $this->_parseArgs($_opts);
+
+        // legacy, remove once ansible .... died?
+        if (isset($options['state']) && !isset($options['mode'])) {
+            if ('all' === $options['state']) {
+                $options['mode'] = Tinebase_Config::MAINTENANCE_MODE_ON;
             } else {
-                echo PHP_EOL . 'failed to set maintance mode to: ' . $options['state'] . PHP_EOL;
+                $options['mode'] = $options['state'];
             }
         }
+        
+        $modes = [
+            Tinebase_Config::MAINTENANCE_MODE_ON,
+            Tinebase_Config::MAINTENANCE_MODE_OFF,
+        ];
+        if (!in_array($options['mode'] ?? null, $modes)) {
+            echo PHP_EOL . 'mandatory parameter --mode=[' . implode('|', $modes) . '] missing or not recognized' . PHP_EOL;
+            return 1;
+        }
+
+        $flags = (array)($options[Tinebase_Config::MAINTENANCE_MODE_FLAGS] ?? []);
+
+        if (!in_array(Tinebase_Config::MAINTENANCE_MODE_FLAG_SKIP_APPS, $flags)) {
+            $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
+            if (isset($options['apps'])) {
+                $apps = (array)$options['apps'];
+                $enabledApplications = $enabledApplications->filter(function (Tinebase_Model_Application $app) use ($apps) {
+                    return in_array($app->name, $apps);
+                });
+            }
+
+            $enable = Tinebase_Config::MAINTENANCE_MODE_ON === $options['mode'];
+            foreach ($enabledApplications as $application) {
+                $app = Tinebase_Core::getApplicationInstance($application->name);
+                if (true === $enable) {
+                    $app->goIntoMaintenanceMode(/*$flags*/);
+                } else {
+                    $app->leaveMaintenanceMode(/*$flags*/);
+                }
+            }
+
+            echo PHP_EOL . 'Apps ' . ($enable ? 'going into' : 'leaving') . ' maintenance mode. waiting...' . PHP_EOL;
+
+            do {
+                foreach ($enabledApplications as $application) {
+                    $app = Tinebase_Core::getApplicationInstance($application->name);
+                    if ($app->isInMaintenanceMode() === $enable) {
+                        $enabledApplications->removeById($application->id);
+                    }
+                }
+                if ($enabledApplications->count() > 0) {
+                    echo '.';
+                    usleep(100000);
+                }
+
+            } while ($enabledApplications->count() > 0);
+            echo 'done' . PHP_EOL;
+
+            if (isset($options['apps']) || in_array(Tinebase_Config::MAINTENANCE_MODE_FLAG_ONLY_APPS, $flags)) {
+                return 0;
+            }
+        }
+
+        if (Tinebase_Config::MAINTENANCE_MODE_ON === $options['mode']) {
+            if (in_array(Tinebase_Config::MAINTENANCE_MODE_FLAG_ALLOW_ADMIN_LOGIN, $flags)) {
+                $options['state'] = Tinebase_Config::MAINTENANCE_MODE_NORMAL;
+            } else {
+                $options['state'] = Tinebase_Config::MAINTENANCE_MODE_ALL;
+            }
+        }
+        if (Setup_Controller::getInstance()->setMaintenanceMode($options)) {
+            echo PHP_EOL . 'set maintenance mode to: ' . $options['mode'] . PHP_EOL;
+        } else {
+            echo PHP_EOL . 'failed to set maintance mode to: ' . $options['mode'] . PHP_EOL;
+        }
+
+        return 0;
     }
 
     /**
