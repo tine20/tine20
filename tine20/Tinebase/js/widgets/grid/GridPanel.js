@@ -2013,6 +2013,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             items.push(this.addToRecordAction);
 
             this.contextMenu = new Ext.menu.Menu({
+                ownerCt: this,
                 items: items,
                 plugins: [{
                     ptype: 'ux.itemregistry',
