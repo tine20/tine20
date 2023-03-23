@@ -68,6 +68,7 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
                 fields.remove(field);
             } else {
                 field = new Ext.form.TextArea({
+                    allowBlank: false,
                     fieldLabel,
                     name,
                     enableKeyEvents: true,
