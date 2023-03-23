@@ -790,16 +790,18 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
     }
 
-    public function getSharedOrderDocumentTransition(string $customerId, string $targetDocument): array
+    public function getSharedOrderDocumentTransition(string $recipientId, string $category, string $targetDocument): array
     {
         switch ($targetDocument) {
             case Sales_Model_Document_Invoice::class:
                 $field = Sales_Model_Document_Order::FLD_SHARED_INVOICE;
                 $followUpStatusFld = Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_CREATED_STATUS;
+                $recipientField = Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID;
                 break;
             case Sales_Model_Document_Delivery::class:
                 $field = Sales_Model_Document_Order::FLD_SHARED_DELIVERY;
                 $followUpStatusFld = Sales_Model_Document_Order::FLD_FOLLOWUP_DELIVERY_CREATED_STATUS;
+                $recipientField = Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID;
                 break;
             default:
                 throw new Tinebase_Exception_InvalidArgument('target document needs to be either invoice or delivery');
@@ -807,9 +809,10 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $orders = Sales_Controller_Document_Order::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Order::class, [
-                [TMFA::FIELD => Sales_Model_Document_Abstract::FLD_CUSTOMER_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
-                    [TMFA::FIELD => Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $customerId]
+                [TMFA::FIELD => $recipientField, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $recipientId]
                 ]],
+                [TMFA::FIELD => Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY, TMFA::OPERATOR => 'equals', TMFA::VALUE => $category],
                 [TMFA::FIELD => $field, TMFA::OPERATOR => 'equals', TMFA::VALUE => true],
                 [TMFA::FIELD => $followUpStatusFld, TMFA::OPERATOR => 'not', TMFA::VALUE => Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED],
                 [TMFA::FIELD => Sales_Model_Document_Order::FLD_ORDER_STATUS, TMFA::OPERATOR => 'equals', TMFA::VALUE => Sales_Model_Document_Order::STATUS_ACCEPTED],

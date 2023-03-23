@@ -45,6 +45,8 @@ class Sales_Controller_Document_Order extends Sales_Controller_Document_Abstract
             Sales_Model_Document_Order::FLD_ORDER_STATUS,
             Sales_Model_Document_Order::FLD_COST_CENTER_ID,
             Sales_Model_Document_Order::FLD_COST_BEARER_ID,
+            Sales_Model_Document_Order::FLD_CUSTOMER_REFERENCE,
+            Sales_Model_Document_Order::FLD_CONTACT_ID,
             Sales_Model_Document_Order::FLD_DESCRIPTION,
             Sales_Model_Document_Order::FLD_SHARED_INVOICE,
             Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID,
