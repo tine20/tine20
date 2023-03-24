@@ -872,6 +872,32 @@ class Tinebase_FileSystemTest extends TestCase
         static::assertTrue(!$node->is_quarantined, 'expect is_quarantined to be false');
     }
 
+    public function testAVModeUnittestAll()
+    {
+        $fObjIds = array_keys(Tinebase_FileSystem::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Tinebase_Model_Tree_Node_Filter::class, [
+                ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE],
+            ]
+        ), null, ['object_id']));
+
+        $db = Tinebase_Core::getDb();
+        $count = $db->query($db->quoteInto('SELECT count(*) FROM ' . SQL_TABLE_PREFIX . 'tree_filerevisions WHERE id IN (?)', $fObjIds))->fetchColumn();
+        $countNull = $db->query($db->quoteInto('SELECT count(*) FROM ' . SQL_TABLE_PREFIX . 'tree_filerevisions WHERE id IN (?) AND lastavscan_time IS NULL', $fObjIds))->fetchColumn();
+        $this->assertSame($count, $countNull);
+        $this->assertGreaterThan(0, (int)$countNull);
+
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE} =
+            'unittest';
+        Tinebase_FileSystem_AVScan_Factory::registerScanner('unittest', Tinebase_FileSystem_TestAVScanner::class);
+        Tinebase_FileSystem_TestAVScanner::$desiredResult = null;
+
+        Tinebase_FileSystem::getInstance()->avScan();
+
+        $countNull = $db->query($db->quoteInto('SELECT count(*) FROM ' . SQL_TABLE_PREFIX . 'tree_filerevisions WHERE id IN (?) AND lastavscan_time IS NULL', $fObjIds))->fetchColumn();
+        $this->assertNotFalse($countNull);
+        $this->assertSame(0, (int)$countNull);
+    }
+
     public function testAVModeUnittest()
     {
         Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE} =
