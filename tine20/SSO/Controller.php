@@ -245,23 +245,7 @@ class SSO_Controller extends Tinebase_Controller_Event
             return $server->completeAuthorizationRequest($authRequest, new \Laminas\Diactoros\Response());
         }
 
-        // render login mask
-        $response = new \Laminas\Diactoros\Response();
-        $response->getBody()->write('<html>
-<body>
-<form method="post">');
-        foreach ($request->getQueryParams() as $name => $value) {
-            $response->getBody()->write('<input type="hidden" name="' . htmlspecialchars($name, ENT_HTML5 | ENT_COMPAT)
-                . '" value="' . htmlspecialchars($value, ENT_HTML5 | ENT_COMPAT) . '"/>');
-        }
-        $response->getBody()->write('<input type="text" name="username"/><br/>
-<input type="password" name="password"/><br/>
-<input type="submit" value="Login"/>
-</form>
-</body>
-</html>');
-
-        return $response;
+        return static::renderLoginPage($authRequest->getClient()->getRelyingPart(), []);
     }
 
     public static function publicToken(): \Psr\Http\Message\ResponseInterface
@@ -312,8 +296,14 @@ class SSO_Controller extends Tinebase_Controller_Event
             'grant_types_supported'                             => [
                 'authorization_code',
             ],
-            //'token_endpoint_auth_methods_supported'             => ['client_secret_basic', 'private_key_jwt'],
-            //'token_endpoint_auth_signing_alg_values_supported'  => ["RS256", "ES256"],
+            'token_endpoint_auth_methods_supported'             => ['client_secret_basic', 'private_key_jwt'],
+            'token_endpoint_auth_signing_alg_values_supported'  => ['RS256'],
+            'subject_types_supported' => [
+                'public',
+            ],
+            'id_token_signing_alg_values_supported' => [
+                'RS256',
+            ],
         ];
         /**
         {
@@ -737,14 +727,20 @@ class SSO_Controller extends Tinebase_Controller_Event
     {
         $binding = Binding::getCurrentBinding();
         $samlRequest = $binding->receive();
+        /** @var SSO_Model_RelyingParty $rp */
         $rp = SSO_Controller_RelyingParty::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             SSO_Model_RelyingParty::class, [
-                ['field' => 'name', 'operator' => 'equals', 'value' => $samlRequest->getIssuer()->getValue()]
-            ]))->getFirstRecord();
+            ['field' => 'name', 'operator' => 'equals', 'value' => $samlRequest->getIssuer()->getValue()]
+        ]))->getFirstRecord();
 
         $data = $request->getQueryParams();
         $data['SAMLRequest'] = base64_encode(gzinflate(base64_decode($data['SAMLRequest'])));
 
+        return static::renderLoginPage($rp, $data);
+    }
+
+    protected static function renderLoginPage(SSO_Model_RelyingParty $rp, array $data)
+    {
         $locale = Tinebase_Core::getLocale();
 
         $jsFiles = ['SSO/js/login.js'];
@@ -777,7 +773,7 @@ class SSO_Controller extends Tinebase_Controller_Event
             new \Idaas\OpenID\ResponseTypes\BearerTokenResponse
         );
 
-        $grant = new \Idaas\OpenID\Grant\AuthCodeGrant(
+        $grant = new SSO_Facade_OpenIdConnect_AuthCodeGrant(
             new SSO_Facade_OAuth2_AuthCodeRepository(),
             new SSO_Facade_OAuth2_RefreshTokenRepository(),
             new SSO_Facade_OpenIdConnect_ClaimRepository(),

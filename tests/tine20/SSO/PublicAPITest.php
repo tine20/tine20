@@ -169,6 +169,7 @@ class SSO_PublicAPITest extends TestCase
     {
         $relyingParty = SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
             SSO_Model_RelyingParty::FLD_NAME => 'unittest',
+            SSO_Model_RelyingParty::FLD_LABEL => 'unittest label',
             SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_OAuthOIdRPConfig::class,
             SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_OAuthOIdRPConfig([
                 SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS   => ['https://unittest.test/uri'],
@@ -204,7 +205,7 @@ class SSO_PublicAPITest extends TestCase
         $response->getBody()->rewind();
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertStringContainsString('<input type="hidden" name="nonce" value="nonce"/>', $response->getBody()->getContents());
+        $this->assertStringContainsString('"label":"'. $relyingParty->{SSO_Model_RelyingParty::FLD_LABEL}, $response->getBody()->getContents());
     }
 
     public function testOAuthPostLoginMask()
