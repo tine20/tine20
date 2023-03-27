@@ -251,6 +251,9 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function create(Tinebase_Record_Interface $_record)
     {
+        if (!$_record->creation_time) {
+            $_record->creation_time = Tinebase_DateTime::now();
+        }
         if (true === static::$_delayDisabled) {
             return parent::create($_record);
         }
