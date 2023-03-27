@@ -727,6 +727,9 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
                 $record = new Tinebase_Model_Tree_FileObject($diff->diff);
                 $this->_prepareReplicationRecord($record);
+                $seq = $record->seq;
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, Tinebase_Controller_Record_Abstract::ACTION_CREATE);
+                $record->seq = $seq;
                 $this->create($record);
                 if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $record->type && null !== $record->hash &&
                         !is_file($record->getFilesystemPath())) {
@@ -747,6 +750,9 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 $currentRecord = clone $record;
                 $record->applyDiff($diff);
                 $this->_prepareReplicationRecord($record);
+                $seq = $record->seq;
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, Tinebase_Controller_Record_Abstract::ACTION_UPDATE, $currentRecord);
+                $record->seq = $seq;
                 if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $record->type && $record->size > 0
                         && $currentRecord->hash !== $record->hash && null !== $record->hash
                         && !is_file($record->getFilesystemPath())) {
