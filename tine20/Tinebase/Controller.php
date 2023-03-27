@@ -1010,6 +1010,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             }
         }
 
+        Tinebase_TransactionManager::getInstance()->resetTransactions();
+        /** @phpstan-ignore-next-line */
+        Tinebase_Record_Path::getInstance()->getBackend()->executeDelayed();
         Tinebase_Path_Backend_Sql::optimizePathsTable();
 
         return true;
