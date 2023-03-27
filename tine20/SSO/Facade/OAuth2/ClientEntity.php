@@ -39,4 +39,9 @@ class SSO_Facade_OAuth2_ClientEntity implements League\OAuth2\Server\Entities\Cl
     {
         return (bool)$this->relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_IS_CONFIDENTIAL};
     }
+
+    public function getRelyingPart(): SSO_Model_RelyingParty
+    {
+        return $this->relyingParty;
+    }
 }

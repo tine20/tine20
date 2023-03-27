@@ -7,7 +7,7 @@
  * @subpackage  Facade
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -32,7 +32,7 @@ class SSO_Facade_OAuth2_RefreshTokenRepository implements \League\OAuth2\Server\
     {
         return Tinebase_Model_Filter_FilterGroup::getFilterForModel(SSO_Model_Token::class, [
             ['field' => SSO_Model_Token::FLD_TOKEN, 'operator' => 'equals', 'value' => $token],
-            ['field' => SSO_Model_Token::FLD_TYPE,  'operator' => 'equals', 'value' => SSO_Model_Token::TYPE_ACCESS]
+            ['field' => SSO_Model_Token::FLD_TYPE,  'operator' => 'equals', 'value' => SSO_Model_Token::TYPE_REFRESH]
         ]);
     }
 

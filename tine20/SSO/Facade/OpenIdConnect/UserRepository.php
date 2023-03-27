@@ -26,7 +26,7 @@ class SSO_Facade_OpenIdConnect_UserRepository implements \Idaas\OpenID\Repositor
         foreach ($claims as $claim) {
             switch ($claim) {
                 case 'sub':
-                    $result['sub'] = $userEntity->getIdentifier();
+                    $result['sub'] = $userEntity->getTineUser()->accountEmailAddress;
                     break;
                 case 'name':
                     $result['name'] = $userEntity->getTineUser()->accountFullName;
@@ -39,6 +39,10 @@ class SSO_Facade_OpenIdConnect_UserRepository implements \Idaas\OpenID\Repositor
                     break;
                 case 'email':
                     $result['email'] = $userEntity->getTineUser()->accountEmailAddress;
+                    break;
+                case 'groups':
+                    $result['groups'] = array_values(Tinebase_Group::getInstance()->getMultiple(
+                        Tinebase_Group::getInstance()->getGroupMemberships($userEntity->getTineUser()->getId()))->name);
                     break;
             }
         }
