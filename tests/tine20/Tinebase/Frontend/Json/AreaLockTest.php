@@ -111,6 +111,12 @@ class Tinebase_Frontend_Json_AreaLockTest extends TestCase
         Tinebase_Core::setUser($this->_personas['sclever']);
         Tinebase_Core::setUser($user);
 
+        $userCfg = $areaLockFE->getUsersMFAUserConfigs(null);
+        $this->assertCount(1, $userCfg);
+        $this->assertTrue(isset($userCfg[0]['config']['pin']));
+        $this->assertSame('', $userCfg[0]['config']['pin']);
+
+
         $userCfg = [
             Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'pin',
             Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS => Tinebase_Model_MFA_PinUserConfig::class,
@@ -122,6 +128,13 @@ class Tinebase_Frontend_Json_AreaLockTest extends TestCase
 
         $user = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
         $this->assertSame(2, $user->mfa_configs->filter(Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID, 'pin')->count());
+
+        $userCfg = $areaLockFE->getUsersMFAUserConfigs(null);
+        $this->assertCount(2, $userCfg);
+        $this->assertTrue(isset($userCfg[0]['config']['pin']));
+        $this->assertSame('', $userCfg[0]['config']['pin']);
+        $this->assertTrue(isset($userCfg[1]['config']['pin']));
+        $this->assertSame('', $userCfg[1]['config']['pin']);
 
         // to force cleanup
         Tinebase_Core::setUser($this->_personas['sclever']);
