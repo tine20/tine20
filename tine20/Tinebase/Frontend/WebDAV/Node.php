@@ -96,8 +96,9 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
 
         list($dirname,) = Sabre\DAV\URLUtil::splitPath($this->_path);
 
-        if (!Tinebase_FileSystem::getInstance()->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname)
-                , 'update', true, false, Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path))) {
+        if (!Tinebase_FileSystem::getInstance()->checkPathACL($parentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname)
+                , 'add', true, false, $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path)) ||
+            !Tinebase_FileSystem::getInstance()->checkPathACL($parentPath, 'delete', true, false, $path)) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
         }
 
@@ -121,14 +122,8 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to move file: ' . $this->_path);
         }
 
-        if (!Tinebase_FileSystem::getInstance()->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname)
-                , 'update', true, false, Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path))) {
-            throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
-        }
-
-
         if (!Tinebase_FileSystem::getInstance()->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath(dirname($newPath))
-                , 'update', true, false, Tinebase_Model_Tree_Node_Path::createFromStatPath($newPath))) {
+                , 'add', true, false, Tinebase_Model_Tree_Node_Path::createFromStatPath($newPath))) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to create file: ' . $newPath);
         }
 

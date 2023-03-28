@@ -2506,6 +2506,11 @@ class Tinebase_FileSystem implements
 
         try {
             $currentNodeObject = $this->get($_node->getId());
+
+            if ($_node->name !== $currentNodeObject->name) {
+                throw new Tinebase_Exception_Record_Validation('name may not be changed in update');
+            }
+
             /** @var Tinebase_Model_Tree_FileObject $fileObject */
             $fileObject = $this->_fileObjectBackend->get($currentNodeObject->object_id);
 

@@ -302,7 +302,7 @@ class EFile_Controller extends Tinebase_Controller_Event
             $_parent->{EFile_Config::TREE_NODE_FLD_TIER_REF_NUMBER} . $prefix . $tierToken;
 
         if ($_updateChild) {
-            Tinebase_FileSystem::getInstance()->update($_child);
+            Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->update($_child);
             if ($_recursive && Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_child->type) {
                 Tinebase_FileSystem::getInstance()->getFromStatCache($_child->getId())
                     ->{EFile_Config::TREE_NODE_FLD_TIER_COUNTER} = [];

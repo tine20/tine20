@@ -286,14 +286,19 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     public function setName($name) 
     {
         Tinebase_Frontend_WebDAV_Node::checkForbiddenFile($name);
-        
-        if (!Tinebase_Core::getUser()->hasGrant($this->_getContainer(), Tinebase_Model_Grants::GRANT_EDIT)) {
+
+        $fs = Tinebase_FileSystem::getInstance();
+        if (!$fs->checkPathACL($parentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($fs->getPathOfNode(
+                $this->_getContainer()->parent_id, true)), 'add') || !$fs->checkPathACL($parentPath, 'delete')) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
         }
-        
-        $this->_getContainer()->name = $name;
+
+        $oldPath = $fs->getPathOfNode($this->_getContainer(), true);
         try {
-            Tinebase_FileSystem::getInstance()->update($this->_getContainer());
+            $result = $fs->rename($oldPath, dirname($oldPath) . '/' . $name);
+            if ($result) {
+                $this->_container = $result;
+            }
         } catch (Zend_Db_Statement_Exception $zdse) {
             if (Tinebase_Exception::isDbDuplicate($zdse)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
