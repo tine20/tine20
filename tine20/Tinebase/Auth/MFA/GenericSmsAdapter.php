@@ -98,7 +98,13 @@ class Tinebase_Auth_MFA_GenericSmsAdapter implements Tinebase_Auth_MFA_AdapterIn
                     ->{Tinebase_Model_MFA_SmsUserConfig::FLD_CELLPHONENUMBER},
             ]));
 
-        $response = $client->request();
+        try {
+            $response = $client->request();
+        } catch (Zend_Http_Client_Adapter_Exception $e) {
+            Tinebase_Exception::log($e);
+            return false;
+        }
+        
         if (200 === $response->getStatus()) {
             try {
                 Tinebase_Session::getSessionNamespace()->{static::class} = [
