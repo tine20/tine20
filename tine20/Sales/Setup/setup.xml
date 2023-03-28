@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>15.22</version>
+    <version>15.23</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -619,7 +619,7 @@
         </table>
         <table>
             <name>sales_sales_invoices</name>
-            <version>8</version>
+            <version>9</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -698,7 +698,7 @@
                     <name>costcenter_id</name>
                     <type>text</type>
                     <length>40</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>cleared</name>

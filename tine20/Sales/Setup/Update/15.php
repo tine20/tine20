@@ -6,7 +6,7 @@
  * @package     Sales
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * this is 2022.11 (ONLY!)
@@ -36,6 +36,7 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE020 = __CLASS__ . '::update020';
     const RELEASE015_UPDATE021 = __CLASS__ . '::update021';
     const RELEASE015_UPDATE022 = __CLASS__ . '::update022';
+    const RELEASE015_UPDATE023 = __CLASS__ . '::update023';
 
     static protected $_allUpdates = [
         // this needs to be executed before TB struct update! cause we move the table from sales to tb
@@ -121,6 +122,10 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE022          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update022',
+            ],
+            self::RELEASE015_UPDATE023          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update023',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -442,5 +447,21 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             Sales_Model_Document_Invoice::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.22', self::RELEASE015_UPDATE022);
+    }
+
+    public function update023()
+    {
+        if ($this->getTableVersion('sales_sales_invoices') < 9) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+               <field>
+                    <name>costcenter_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>');
+            $this->_backend->alterCol('sales_sales_invoices', $declaration);
+            $this->setTableVersion('sales_sales_invoices', 9);
+        }
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.23', self::RELEASE015_UPDATE023);
     }
 }
