@@ -80,14 +80,10 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
         }
         if ($mfas instanceof Tinebase_Record_RecordSet &&
                 ($mfaUserConfigs = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId())->mfa_configs) instanceof Tinebase_Record_RecordSet) {
-            $mfaUserConfigs = $mfaUserConfigs->filter(function ($val) use ($mfas) {
+            $result = $mfaUserConfigs->filter(function ($val) use ($mfas) {
                 return $mfas->find(Tinebase_Model_MFA_Config::FLD_ID,
                     $val->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID}) !== null;
-            });
-            /** @var Tinebase_Model_MFA_UserConfig $mfaUCfg */
-            foreach ($mfaUserConfigs as $mfaUCfg) {
-                $result[] = $mfaUCfg->toFEArray();
-            }
+            })->toArray();
         }
 
         return $result;
