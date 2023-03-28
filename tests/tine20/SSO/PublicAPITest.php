@@ -92,7 +92,7 @@ class SSO_PublicAPITest extends TestCase
      * @throws Tinebase_Exception
      * @throws Zend_Session_Exception
      *
-     * @group nojenkins
+     * @group needsbuild
      */
     public function testSaml2LoginPage()
     {
@@ -102,15 +102,7 @@ class SSO_PublicAPITest extends TestCase
         Tinebase_Core::unsetUser();
         Tinebase_Session::getSessionNamespace()->unsetAll();
 
-        try {
-            $response = SSO_Controller::publicSaml2RedirectRequest();
-        } catch (Exception $e) {
-            if (preg_match('/You need to run webpack-dev-server in dev mode/', $e->getMessage())) {
-                self::markTestSkipped('only working with frontend available');
-            } else {
-                throw $e;
-            }
-        }
+        $response = SSO_Controller::publicSaml2RedirectRequest();
         $response->getBody()->rewind();
 
         $this->assertSame(200, $response->getStatusCode());
@@ -165,6 +157,11 @@ class SSO_PublicAPITest extends TestCase
             $xml);
     }
 
+    /**
+     * testOAuthGetLoginMask
+     *
+     * @group needsbuild
+     */
     public function testOAuthGetLoginMask()
     {
         $relyingParty = SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
