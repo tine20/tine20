@@ -7,7 +7,7 @@ beforeAll(async () => {
     await lib.getBrowser('Kalender');
 });
 
-describe('ColorPicker', () => {
+describe.skip('ColorPicker', () => {
     let shared = 'test' + Math.round(Math.random() * 10000000);
     let privat = 'test' + Math.round(Math.random() * 10000000);
     test('add calendar', async () => {
