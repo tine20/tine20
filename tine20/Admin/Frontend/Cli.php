@@ -814,4 +814,49 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             echo "Args are missing\n";
         }
     }
+
+    public function ldapUserSearchQuery(Zend_Console_Getopt $opts)
+    {
+        // TODO make this work with '=' in filter param ...
+        // $args = $this->_parseArgs($opts, array(),'other', false);
+        // $userFilter = $args['filter'] ?? 'objectclass=posixaccount';
+
+        $userFilter = 'objectclass=posixaccount';
+        // $userFilter = 'memberof=cn=somegroup,cn=groups,dc=something,dc=lan';
+
+        $ldapOptions = Tinebase_User::getBackendConfiguration();
+        // show LDAP settings
+        // unset($ldapOptions['syncOptions']);
+        // print_r($ldapOptions);
+        $ldap = new Tinebase_Ldap($ldapOptions);
+
+        $filter = Zend_Ldap_Filter::andFilter(
+            Zend_Ldap_Filter::string($userFilter)
+        );
+        $userSearchScope = $ldapOptions['userSearchScope'];
+        $baseDn = $ldapOptions['userDn'];
+        $attributes = [
+            'displayname',
+            'cn',
+            'givenname',
+            'sn',
+            'uid',
+            // TODO add more attributes if required
+        ];
+        echo "userFilter = $userFilter\n";
+        // echo "userSearchScope = $userSearchScope\n";
+        echo "baseDn = $baseDn\n";
+
+        $counter = 0;
+        foreach ($ldap->search(
+            $filter,
+            $baseDn,
+            $userSearchScope,
+            $attributes
+        ) as $account) {
+            print_r($account);
+            $counter++;
+        }
+        echo "found $counter accounts\n";
+    }
 }
