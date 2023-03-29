@@ -884,7 +884,6 @@ var menu = new Ext.menu.Menu({
         this.innerList.update(this.loadingText ?
                '<div class="loading-indicator"><div class="loading-indicator-wait"></div>'+this.loadingText+'</div>' : '');
         this.restrictHeight();
-        this.selectedIndex = -1;
     },
 
     // private
@@ -892,6 +891,8 @@ var menu = new Ext.menu.Menu({
         if(!this.hasFocus){
             return;
         }
+        this.selectedIndex = -1;
+        
         if(this.store.getCount() > 0 || this.listEmptyText){
             this.expand();
             this.restrictHeight();
