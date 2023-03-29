@@ -223,7 +223,14 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function saveNode($recordData)
     {
         if((isset($recordData['created_by']) || array_key_exists('created_by', $recordData))) {
-            return $this->_save($recordData, Filemanager_Controller_Node::getInstance(), 'Node');
+            $result = $this->_save($recordData, Filemanager_Controller_Node::getInstance(), 'Node');
+            if ($recordData['name'] !== $result['name']) {
+                $moveResult = $this->moveNodes($result['path'], [dirname($result['path']) . '/' . $recordData['name']], false);
+                if (isset($moveResult[0]['id'])) {
+                    return $moveResult[0];
+                }
+            }
+            return $result;
         } else {    // on upload complete
             return $recordData;
         }
