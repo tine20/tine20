@@ -72,8 +72,6 @@ class Tinebase_Auth_CredentialCache_Adapter_Config implements Tinebase_Auth_Cred
      */
     public function getDefaultKey()
     {
-        $result = NULL;
-        
         $config = Tinebase_Core::getConfig();
         if ($config->{self::CONFIG_KEY}) {
             $result = $config->{self::CONFIG_KEY};

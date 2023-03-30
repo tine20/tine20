@@ -32,13 +32,6 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
     protected $_modelName = Tinebase_Model_CredentialCache::class;
     
     /**
-     * holds credential cache id/key pair for current request
-     *
-     * @var array
-     */
-    protected static $_credentialcacheid = NULL;
-    
-    /**
      * credential cache adapter
      * 
      * @var Tinebase_Auth_CredentialCache_Adapter_Interface
@@ -250,24 +243,24 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
      */
     public static function encryptData($_data, $_key)
     {
-        // there was a bug with openssl_random_pseudo_bytes but its fixed in all major PHP versions, so we use it. People have to update their PHP versions
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(self::CIPHER_ALGORITHM), $secure);
         if (!$secure) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                 __METHOD__ . '::' . __LINE__ . ' openssl_random_pseudo_bytes returned weak random bytes!');
             if (function_exists('random_bytes')) {
                 $iv = random_bytes(openssl_cipher_iv_length(self::CIPHER_ALGORITHM));
-            } elseif (function_exists('mcrypt_create_iv')) {
-                $iv = mcrypt_create_iv(openssl_cipher_iv_length(self::CIPHER_ALGORITHM), MCRYPT_DEV_URANDOM);
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
-                    __METHOD__ . '::' . __LINE__ . ' openssl_random_pseudo_bytes returned weak random bytes and we could not find a method better suited!');
+                    __METHOD__ . '::' . __LINE__ . ' openssl_random_pseudo_bytes returned weak random bytes and'
+                    . ' we could not find a method better suited!');
             }
         }
 
         $hash = openssl_digest($_key, self::HASH_ALGORITHM, true);
 
-        if (false === ($encrypted = openssl_encrypt($_data, self::CIPHER_ALGORITHM, $hash, OPENSSL_RAW_DATA, $iv))) {
+        if (false === (
+            $encrypted = openssl_encrypt($_data, self::CIPHER_ALGORITHM, $hash, OPENSSL_RAW_DATA, $iv)
+        )) {
             throw new Tinebase_Exception('encryption failed: ' . openssl_error_string());
         }
 
