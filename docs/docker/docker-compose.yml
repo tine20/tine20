@@ -11,7 +11,7 @@ services:
       MYSQL_PASSWORD: &MYSQL_PASSWORD tine
     ### use volume for persistent DB
     volumes:
-      - "/data/tine_mysql:/var/lib/mysql"
+      - "./data/tine_mysql:/var/lib/mysql"
     ### OR
 #      - "tine_db:/var/lib/mysql"
     networks:
@@ -48,7 +48,8 @@ services:
       ### apps to install - if omitted, all available apps are installed
       # TINE20_APPLICATION_TO_INSTALL: "Addressbook,Felamimail,Calendar,Filemanager"
     volumes:
-      - "/data/tine_files:/var/lib/tine20/files"
+      - "./data/tine_files:/var/lib/tine20/files"
+      - "./conf.d:/etc/tine20/conf.d"
     ### OR
 #      - "tine_files:/var/lib/tine20/files"
     networks:
@@ -72,6 +73,9 @@ services:
 
 ### other optional services
 
+############################################################################
+#  broadcasthub
+############################################################################
 #  broadcasthub:
 #    image: tinegroupware/broadcasthub:0.6
 #    networks:
@@ -90,6 +94,9 @@ services:
 #      DEBUG_LOG_TO_FILE: "off"
 #      DEBUG_LOG_FILE: ../../stdout.log
 
+############################################################################
+#  documentserver
+############################################################################
 #  documentserver:
 #    image: onlyoffice/documentserver:latest
 #    ports:
@@ -101,12 +108,22 @@ services:
 #      - external_network
 #      - internal_network
 
-#  document-preview:
+############################################################################
+# docservice
+############
+# to use this in tine, you need to add the following to your config:
+#
+# 'filesystem' => [
+#   'createPreviews' => true,
+#   'previewServiceUrl' => 'http://docservice/v2/documentPreviewService',
+#   'previewServiceVersion' => 2,
+#   [...]
+# ],
+############################################################################
+#  documentpreview:
 #    image: tinegroupware/document-preview-service:2.1
 #    networks:
 #      - internal_network
-#    ports:
-#      - "127.0.0.1:5000:80"
 
 #  clamav:
 #    image: tiredofit/clamav
