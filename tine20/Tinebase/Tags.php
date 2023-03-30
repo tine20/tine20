@@ -899,7 +899,7 @@ class Tinebase_Tags
     }
     
     /**
-     * update tag occurrrence
+     * update tag occurrence
      * 
      * @param Tinebase_Model_Tag|string $tag
      * @param integer $toAddOrRemove
@@ -912,7 +912,8 @@ class Tinebase_Tags
         
         $tagId = $tag instanceof Tinebase_Model_Tag ? $tag->getId() : $tag;
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " de/increasing tag occurrence of $tagId by $toAddOrRemove");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . " de/increasing tag occurrence of $tagId by $toAddOrRemove");
 
         $quotedIdentifier = $this->_db->quoteIdentifier('occurrence');
         
@@ -924,11 +925,14 @@ class Tinebase_Tags
         } else {
             $toRemove = abs((int) $toAddOrRemove);
             $data = array(
-                'occurrence' => new Zend_Db_Expr('(CASE WHEN (' . $quotedIdentifier . ' - ' . $toRemove . ') > 0 THEN ' . $quotedIdentifier . ' - ' . $toRemove . ' ELSE 0 END)')
+                'occurrence' => new Zend_Db_Expr('(CASE WHEN '
+                    . $quotedIdentifier . ' > ' . $toRemove . ' THEN '
+                    . $quotedIdentifier . ' - ' . $toRemove . ' ELSE 0 END)')
             );
         }
-        
-        $this->_db->update(SQL_TABLE_PREFIX . 'tags', $data, $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $tagId));
+
+        $this->_db->update(SQL_TABLE_PREFIX . 'tags', $data,
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $tagId));
     }
 
     /**
