@@ -48,7 +48,7 @@ class Calendar_Import_CalDAV extends Calendar_Import_Abstract
         if (isset($this->_options['cc_id'])) {
             /** @var Tinebase_Model_CredentialCache $cc */
             $cc = Tinebase_Auth_CredentialCache::getInstance()->get($this->_options['cc_id']);
-            $cc->key = Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY};
+            $cc->key = Tinebase_Auth_CredentialCache_Adapter_Shared::getKey();
             Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($cc);
         }
 

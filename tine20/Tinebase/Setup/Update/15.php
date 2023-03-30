@@ -697,10 +697,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     public function update021()
     {
         if(!Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY}) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . ' Auto generated CREDENTIAL_CACHE_SHARED_KEY was saved to db. For enhanced security'
-                . ' you should move it to a config file to not be part of a db dump.');
-            Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY} = Tinebase_Record_Abstract::generateUID();
+            Tinebase_Auth_CredentialCache_Adapter_Shared::setRandomKeyInConfig();
         }
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.21', self::RELEASE015_UPDATE021);
