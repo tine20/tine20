@@ -2005,8 +2005,6 @@ class Calendar_JsonTests extends Calendar_TestCase
 
         $this->_testNeedsTransaction();
 
-        Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY} = 'foooooooooooooo';
-
         $local_container = $this->_getTestContainer('Calendar', Calendar_Model_Event::class, true, 'local_calendar');
         $event = $this->_getEvent();
         $event->container_id = $local_container->getId();

@@ -61,7 +61,7 @@ class Tinebase_Auth_MFA_YubicoOTPAdapter implements Tinebase_Auth_MFA_AdapterInt
         /** @var Tinebase_Model_CredentialCache $cc */
         $cc = Tinebase_Auth_CredentialCache::getInstance()->get(
             $yubicoOTPCfg->{Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_CC_ID});
-        $cc->key = Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY};
+        $cc->key = Tinebase_Auth_CredentialCache_Adapter_Shared::getKey();
         Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($cc);
 
         $ciphertext = Yubico::modhex2hex($modhex_ciphertext);
