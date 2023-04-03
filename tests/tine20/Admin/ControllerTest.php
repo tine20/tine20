@@ -171,6 +171,34 @@ class Admin_ControllerTest extends TestCase
         } catch (Tinebase_Exception_NotFound $tenf) {}
     }
 
+    /**
+     * testCustomFieldSearchAcl
+     */
+    public function testCustomFieldSearchAcl()
+    {
+        $this->testCustomFieldCreate();
+        $cfs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication('Addressbook');
+        $customField = $cfs->filter('name', 'unittest_test')->getFirstRecord();
+
+        // give the cf config to sclever
+        $customField->name = 'changed name';
+        $customField->grants = [
+            [
+                'customfield_id' => $customField->getId(),
+                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                'account_id'    => $this->_personas['sclever']->getId(),
+                Tinebase_Model_CustomField_Grant::GRANT_READ => true,
+                Tinebase_Model_CustomField_Grant::GRANT_WRITE => true,
+            ]
+        ];
+        Admin_Controller_Customfield::getInstance()->update($customField);
+        $result = Admin_Controller_Customfield::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CustomField_Config::class, [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $customField->getId()]
+            ]));
+        self::assertCount(1, $result, 'admin should see all cf configs');
+    }
+
     public function testFailedListCreation()
     {
         $controllerMock = Admin_Controller_GroupMock::getInstance();
