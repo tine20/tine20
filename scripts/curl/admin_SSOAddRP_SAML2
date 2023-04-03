@@ -1,0 +1,32 @@
+#! /bin/sh
+
+curl $URL \
+  -H 'Content-Type: application/json' \
+  -H 'Cookie: TINE20SESSID='"$SESSIONID"'' \
+  -H 'X-Requested-With: XMLHttpRequest' \
+  -H 'X-Tine20-JsonKey: '"$JSONKEY"'' \
+  -H 'X-Tine20-Request-Type: JSON' \
+  --insecure \
+  -d '{"jsonrpc":"2.0","method":"SSO.saveRelyingParty","params":{"recordData":{
+    "name": "saml-test-sp",
+    "label": "saml-test-sp",
+    "description": "you might test with ghcr.io/beryju/saml-test-sp",
+    "logo": null,
+    "config_class": "SSO_Model_Saml2RPConfig",
+    "config": {
+      "name": "saml-test-sp",
+      "entityid": "saml-test-sp",
+      "metaUrl": "http://localhost:4902/saml/metadata",
+      "AssertionConsumerServiceBinding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+      "AssertionConsumerServiceLocation": "http://localhost:4902/saml/acs",
+      "singleLogoutServiceLocation": "http://localhost:4902/saml/slo",
+      "singleLogoutServiceBinding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+      "attributeMapping": {
+        "uid": "accountEmailAddress"
+      },
+      "customHooks": {
+        "postAuthenticate": "/etc/tine20/samlPostAuthHook.php"
+      },
+      "id": "0"
+    }
+  },"duplicateCheck":true},"id":3}'

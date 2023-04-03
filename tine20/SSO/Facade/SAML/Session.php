@@ -54,7 +54,7 @@ class SSO_Facade_SAML_Session
     {
         $this->_getData();
 
-        $requests = [];
+        $messages = [];
         if (isset($this->data[$authority]) && is_array($this->data[$authority])) {
             foreach ($this->data[$authority] as $spEntityId => $data) {
                 if ($this->spEntityId === $spEntityId || !isset($data['SPMetadata']['SingleLogoutService']['Location']))
@@ -68,10 +68,14 @@ class SSO_Facade_SAML_Session
                     );
                     if (is_object($dstCfg->getConfigItem('SingleLogoutService')) && !empty($dstCfg->getConfigItem('SingleLogoutService')->getString('Location'))) {
                         $lr->setDestination($dstCfg->getConfigItem('SingleLogoutService')->getString('Location'));
+                        $binding = $dstCfg->getConfigItem('SingleLogoutService')->getString('Binding', SSO_Config::SAML2_BINDINGS_REDIRECT);
                         $nameId = new SAML2\XML\saml\NameID();
                         $nameId->setValue(Tinebase_Core::getUser()->accountLoginName);
                         $lr->setNameId($nameId);
-                        $requests[] = $lr;
+                        if (!isset($messages[$binding])) {
+                            $messages[$binding] = [];
+                        }
+                        $messages[$binding][] = $lr;
                     }
 
                 } catch (Exception $e) {
@@ -83,7 +87,7 @@ class SSO_Facade_SAML_Session
         unset($this->data[$authority]);
         Tinebase_Session::getSessionNamespace(self::class)->data = $this->data;
 
-        return $requests;
+        return $messages;
     }
 
     public function doLogin($authority, $data)

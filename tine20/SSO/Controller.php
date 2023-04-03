@@ -242,10 +242,18 @@ class SSO_Controller extends Tinebase_Controller_Event
 
             $authRequest->setUser(new SSO_Facade_OAuth2_UserEntity($user));
             $authRequest->setAuthorizationApproved(true);
-            return $server->completeAuthorizationRequest($authRequest, new \Laminas\Diactoros\Response());
+            $response = $server->completeAuthorizationRequest($authRequest, new \Laminas\Diactoros\Response());
+            if ($request->hasHeader('x-requested-with') && $request->getHeader('x-requested-With')[0] === 'XMLHttpRequest') {
+                // our login client
+                $response->getBody()->write('{ "Location": "' . $response->getHeader('Location')[0] . '" }');
+                return $response->withoutHeader('Location');
+            } else {
+                return $response;
+            }
+
         }
 
-        return static::renderLoginPage($authRequest->getClient()->getRelyingPart(), []);
+        return static::renderLoginPage($authRequest->getClient()->getRelyingPart(), ['url' => $request->getUri()]);
     }
 
     public static function publicToken(): \Psr\Http\Message\ResponseInterface
@@ -483,14 +491,31 @@ class SSO_Controller extends Tinebase_Controller_Event
             $idp = \SimpleSAML\IdP::getById('saml2:tine20');
 
             // @phpstan-ignore-next-line
-            if ($logoutRequests = \SimpleSAML\Session::getSessionFromRequest()->doLogout(substr($idp->getId(), 6))) {
-                $redirect = new \SAML2\HTTPRedirect();
+            if ($logoutMessages = \SimpleSAML\Session::getSessionFromRequest()->doLogout(substr($idp->getId(), 6))) {
                 $urls = [];
-                foreach ($logoutRequests as $request) {
-                    try {
-                        $redirect->send($request);
-                    } catch (SSO_Facade_SAML_RedirectException $e) {
-                        $urls[] = $e->redirectUrl;
+                foreach ($logoutMessages as $binding => $messages) {
+                    switch ($binding) {
+                        case SSO_Config::SAML2_BINDINGS_POST:
+                            $redirect = new \SAML2\HTTPPost();
+                            break;
+                        case SSO_Config::SAML2_BINDINGS_REDIRECT:
+                            $redirect = new \SAML2\HTTPRedirect();
+                            break;
+                        default:
+                            throw new Tinebase_Exception_NotImplemented($binding);
+                    }
+                    foreach ($messages as $message) {
+                        try {
+                            $redirect->send($message);
+                        } catch (SSO_Facade_SAML_RedirectException $e) {
+                            if (!isset($urls[$e->binding])) {
+                                $urls[$e->binding] = [];
+                            }
+                            $urls[$e->binding][] = [
+                                'url' => $e->redirectUrl,
+                                'data' => $e->data,
+                            ];
+                        }
                     }
                 }
 
@@ -584,7 +609,10 @@ class SSO_Controller extends Tinebase_Controller_Event
                 ]);
             }
             $response = new \Laminas\Diactoros\Response('php://memory', 302, [
-                'Location' => $spMetadata->getValue('SingleLogoutService')['Location']
+                // @TODO: when logging out from tine the final redirect should be our login-page
+                //        but with the test-sp we created a redirect loop here (but saml-test-sp might be borke)
+                //'Location' => $spMetadata->getValue('SingleLogoutService')['Location']
+                'Location' => Tinebase_Core::getUrl()
             ]);
             return $response;
 

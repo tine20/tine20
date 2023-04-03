@@ -32,18 +32,22 @@ import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(functi
             onLoginPress: function (additionalParams) {
                 Ext.MessageBox.wait(window.i18n._hidden('Logging you in...'), window.i18n._hidden('Please wait'));
 
+                const url = window.initialData.url || `${window.location.href}`;
                 const form = this.getLoginPanel().getForm();
                 const values = form.getFieldValues();
                 const formData = new FormData();
                 formData.append('username', values.username);
                 formData.append('password', values.password);
                 Object.keys(window.initialData.sso).forEach((key) => {formData.append(key, window.initialData.sso[key])});
-                Object.keys(additionalParams || {}).forEach((key) => {formData.append(key, additionalParams[key])});
+                if (additionalParams !== window) {
+                    Object.keys(additionalParams || {}).forEach((key) => {formData.append(key, additionalParams[key])});
+                }
 
                 var xhr = new XMLHttpRequest();
                 xhr.addEventListener("load", () => {
                     const isJSON = xhr.responseText.match(/^{/);
                     if (xhr.status >= 200 && xhr.status < 300 && !isJSON) {
+                        // saml2 post binding (NOTE: we don't know the binding here :-( )
                         window.document.body.innerHTML = xhr.responseText;
                         document.getElementsByTagName("form")[0].submit();
                     } else {
@@ -51,6 +55,9 @@ import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(functi
                             const response = JSON.parse(xhr.responseText);
                             if (response?.error?.data) {
                                 return this.onLoginFail({responseText: JSON.stringify(response.error)});
+                            } else if (response?.Location) {
+                                // oidc redirect (xhr redirects don't work as rp's often have no cors headers)
+                                return window.location.href = response.Location;
                             }
                         }
                         Ext.MessageBox.show({
@@ -64,7 +71,8 @@ import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(functi
                         });
                     }
                 });
-                xhr.open("POST", `${window.location.origin}${window.location.pathname}`, true);
+                xhr.open("POST", url, true);
+                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                 xhr.withCredentials = true;
                 xhr.send(formData);
             }

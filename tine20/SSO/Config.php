@@ -27,7 +27,9 @@ class SSO_Config extends Tinebase_Config_Abstract
     public const SAML2_ENTITYID = 'entityid';
     public const SAML2_KEYS = 'keys';
     public const SAML2_TINELOGOUT = 'tineLogout';
-
+    public const SAML2_BINDINGS = 'saml2Bindings';
+    public const SAML2_BINDINGS_POST = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST';
+    public const SAML2_BINDINGS_REDIRECT = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect';
 
     /**
      * (non-PHPdoc)
@@ -41,7 +43,7 @@ class SSO_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION           => 'Oauth2',
             self::TYPE                  => self::TYPE_OBJECT,
             self::CLASSNAME             => Tinebase_Config_Struct::class,
-            self::CLIENTREGISTRYINCLUDE => true,
+            self::CLIENTREGISTRYINCLUDE => false,
             self::CONTENT               => [
                 self::ENABLED               => [
                     self::TYPE                  => self::TYPE_BOOL,
@@ -61,7 +63,7 @@ class SSO_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION           => 'SAML2',
             self::TYPE                  => self::TYPE_OBJECT,
             self::CLASSNAME             => Tinebase_Config_Struct::class,
-            self::CLIENTREGISTRYINCLUDE => true,
+            self::CLIENTREGISTRYINCLUDE => false,
             self::CONTENT               => [
                 self::ENABLED               => [
                     self::TYPE                  => self::TYPE_BOOL,
@@ -78,10 +80,24 @@ class SSO_Config extends Tinebase_Config_Abstract
                 self::SAML2_TINELOGOUT      => [
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => false,
-                ]
+                ],
             ],
             self::DEFAULT_STR           => [],
-        ]
+        ],
+        self::SAML2_BINDINGS => [
+            self::LABEL                 => 'SAML2 bindings', //_('SAML2 bindings')
+            self::DESCRIPTION           => 'SAML2 bindings', //_('SAML2 bindings')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => self::SAML2_BINDINGS_POST,     'value' => self::SAML2_BINDINGS_POST],
+                    ['id' => self::SAML2_BINDINGS_REDIRECT, 'value' => self::SAML2_BINDINGS_REDIRECT],
+                ],
+                self::DEFAULT_STR           => self::SAML2_BINDINGS_POST,
+            ],
+        ],
     ];
 
     static function getProperties()

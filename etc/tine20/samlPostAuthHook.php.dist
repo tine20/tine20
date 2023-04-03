@@ -1,0 +1,7 @@
+<?php
+
+// example SAML2 post authenticate hook
+// adds the users groups to the attributes
+$groupCtrl = Tinebase_Group::getInstance();
+$userGroups = $groupCtrl->getMultiple($groupCtrl->getGroupMemberships($user->getId()));
+$state['Attributes']['groups'] = array_values($userGroups->name); // value must be an array
