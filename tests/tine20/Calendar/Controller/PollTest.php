@@ -66,10 +66,13 @@ class Calendar_Controller_PollTest extends TestCase
         parent::tearDown();
     }
 
+    /**
+     * testPublicApiMainScreen
+     *
+     * @group needsbuild
+     */
     public function testPublicApiMainScreen()
     {
-        $this->markTestSkipped('needs running webpack-dev-server or build');
-
         $response = $this->_uit->publicApiMainScreen('');
 
         $this->assertTrue(!!preg_match('#pollClient/src/index.es6.js#', $response->getBody()), 'entry point missing');

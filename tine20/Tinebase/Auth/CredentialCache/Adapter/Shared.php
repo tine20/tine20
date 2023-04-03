@@ -21,6 +21,7 @@ class Tinebase_Auth_CredentialCache_Adapter_Shared implements Tinebase_Auth_Cred
      * config key const
      */
     const CONFIG_KEY = Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY;
+    protected const MAX_KEY_LENGTH = 24;
 
     /**
      * setCache() - persists cache
@@ -57,21 +58,44 @@ class Tinebase_Auth_CredentialCache_Adapter_Shared implements Tinebase_Auth_Cred
      */
     public function getDefaultKey()
     {
-        if (empty($key = Tinebase_Config::getInstance()->{self::CONFIG_KEY})) {
-            throw new Tinebase_Exception_UnexpectedValue(self::CONFIG_KEY . ' not set in config!');
-        }
-
-        return $key;
+        return self::getKey();
     }
 
     /**
      * getDefaultId() - get default cache id
-     * - use user id as default cache id
      *
      * @return string
      */
     public function getDefaultId()
     {
         return Tinebase_Record_Abstract::generateUID();
+    }
+
+    /**
+     * @return string
+     */
+    public static function getKey(): string
+    {
+        if (empty($key = Tinebase_Config::getInstance()->{self::CONFIG_KEY})) {
+            throw new Tinebase_Exception_UnexpectedValue(self::CONFIG_KEY . ' not set in config!');
+        }
+
+        if (strlen($key) > self::MAX_KEY_LENGTH) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . self::CONFIG_KEY . ' is longer than '
+                . self::MAX_KEY_LENGTH . ' chars');
+            $key = substr($key, 0, self::MAX_KEY_LENGTH);
+        }
+
+        return $key;
+    }
+
+    public static function setRandomKeyInConfig()
+    {
+        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+            . ' Auto generated CREDENTIAL_CACHE_SHARED_KEY was saved to db. For enhanced security'
+            . ' you should move it to a config file to not be part of a db dump.');
+        Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY} =
+            Tinebase_Record_Abstract::generateUID(self::MAX_KEY_LENGTH);
     }
 }

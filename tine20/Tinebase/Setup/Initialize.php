@@ -88,17 +88,16 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         $defaults['accounts'][Tinebase_User::getConfiguredBackend()] = array_merge($defaults['accounts'][Tinebase_User::getConfiguredBackend()], $defaultGroupNames);
 
         if (!Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY}) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . ' Auto generated CREDENTIAL_CACHE_SHARED_KEY was saved to db. For enhanced security'
-                . ' you should move it to a config file to not be part of a db dump.');
-            Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY} = Tinebase_Record_Abstract::generateUID();
+            Tinebase_Auth_CredentialCache_Adapter_Shared::setRandomKeyInConfig();
         }
         
         $emailConfigKeys = Setup_Controller::getInstance()->getEmailConfigKeys();
         $configsToSet = array_merge($emailConfigKeys, array('authentication', 'accounts', 'redirectSettings', 'acceptedTermsVersion'));
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($configsToSet, TRUE));
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($defaults, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($configsToSet, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($defaults, TRUE));
 
         $optionsToSave = array();
         foreach ($configsToSet as $group) {

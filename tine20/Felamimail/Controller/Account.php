@@ -1121,7 +1121,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $credentials = null;
         if ($_oldRecord->credentials_id) {
             $credentials = $credentialsBackend->get($_oldRecord->credentials_id);
-            $credentials->key = Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY};
+            $credentials->key = Tinebase_Auth_CredentialCache_Adapter_Shared::getKey();
             try {
                 $credentialsBackend->getCachedCredentials($credentials);
             } catch (Tinebase_Exception_NotFound $tenf) {

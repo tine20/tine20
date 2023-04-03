@@ -573,8 +573,6 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 
         // figure out target path ... also file ending rewrite happens here
         $srcEnding = ltrim(substr($requestData['url'], strrpos($requestData['url'], '.')), '.');
-        $oldName = null;
-        $newName = '';
         $tempFile = null;
         $node = null;
         $dataSafeRAII = null;
@@ -603,8 +601,9 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
                     });
                 }
 
-                $trgtPath = 'tine20://' . Tinebase_FileSystem::getInstance()->getPathOfNode($accessToken
-                        ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID}, true);
+                $pathOfNode = Tinebase_FileSystem::getInstance()->getPathOfNode($accessToken
+                    ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID}, true);
+                $trgtPath = 'tine20://' . $pathOfNode;
 
                 $trgtEnding = ltrim(substr($trgtPath, $pos = strrpos($trgtPath, '.')), '.');
                 if (!$saveConflict) {
@@ -641,11 +640,10 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
                             $node = Tinebase_FileSystem::getInstance()->get($accessToken
                                 ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID});
                         }
-                        $oldName = $node->name;
                         $array = explode('/', $trgtPath);
-                        $newName = $node->name = @end($array);
+                        $node->name = @end($array);
                         /** do not use the return of this call! revision will be increased later! */
-                        Tinebase_FileSystem::getInstance()->update($node);
+                        Tinebase_FileSystem::getInstance()->rename($pathOfNode, substr($trgtPath, 9));
                         Tinebase_FileSystem::getInstance()->clearStatCache();
                     }
                 }
@@ -694,7 +692,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
             ]), new Tinebase_Model_Pagination([
                 'sort' => 'seq',
                 'dir' => 'DESC',
-                'limit' => 2,
+                'limit' => 1,
             ]));
 
             $note = $notes->getFirstRecord();
@@ -702,16 +700,6 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
             if (null === $note || $note->created_by !== $user->getId()) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' did not find file modification note');
             } else {
-                if ($oldName !== null) {
-                    $newNote = ' name (' . $oldName . ' -> ' . $newName . ')';
-                    $note->note = $note->note . $newNote;
-                    if ($notes->count() === 2 && strpos($notes->getLastRecord()->note, $newNote) !== false) {
-                        $notes->removeFirst();
-                        Tinebase_Notes::getInstance()->deleteNotes($notes);
-                    } else {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' did not find file rename note');
-                    }
-                }
                 $allUsers = join(', ', Tinebase_User::getInstance()->getMultiple($allTokens
                     ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_USER_ID}, Tinebase_Model_FullUser::class)
                     ->accountDisplayName);

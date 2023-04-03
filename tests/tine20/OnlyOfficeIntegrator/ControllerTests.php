@@ -539,10 +539,12 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
             'limit' => 2,
         ]));
 
-        static::assertStringContainsString(' name (test.txt -> test.docx)', $notes->getFirstRecord()->note);
-        static::assertStringNotContainsString(' name (test.txt -> test.docx)', $notes->getLastRecord()->note);
+        $first = strpos($notes->getFirstRecord()->note, 'test.txt') === false ? $notes->getFirstRecord() : $notes->getLastRecord();
+        $last = strpos($notes->getFirstRecord()->note, 'test.txt') !== false ? $notes->getFirstRecord() : $notes->getLastRecord();
+        static::assertStringContainsString('ame (test.txt -> test.docx)', $last->note);
+        static::assertStringNotContainsString('ame (test.txt -> test.docx)', $first->note);
         $_ = Tinebase_Translation::getTranslation(Tinebase_Config::APP_NAME, Tinebase_Core::getLocale());
-        static::assertStringContainsString(' ' . $_->_('size') . ' (', $notes->getFirstRecord()->note);
+        static::assertStringContainsString(' ' . $_->_('size') . ' (', $first->note);
         
         static::assertSame('changesContent', file_get_contents('tine20://' .
             OnlyOfficeIntegrator_Controller::getRevisionsChangesPath() . '/' . $node->getId() . '/' . $node->revision));

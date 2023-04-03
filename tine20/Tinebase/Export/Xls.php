@@ -382,7 +382,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         if (!$this->_findCellCacheOff && count($parts) > 1 && is_numeric($parts[count($parts)-1])) {
             $parts[count($parts)-1] = '0';
             $key = join('#', $parts);
-            if (isset($notFound[$key])) {
+            if (isset($notFound[$key]) && $notFound[$key]) {
                 return null;
             }
         }
@@ -404,12 +404,15 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             /** @var Cell $cell */
             foreach($cellIter as $cell) {
                 if (false !== strpos((string)$cell->getValue(), $_search)) {
+                    if (null !== $key) {
+                        $notFound[$key] = false;
+                    }
                     return $cell;
                 }
             }
         }
 
-        if (null !== $key) {
+        if (null !== $key && ($notFound[$key] ?? true)) {
             $notFound[$key] = true;
         }
         return null;
@@ -623,6 +626,10 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
         if (null === ($block = $this->_findCell('${/GROUP_START}'))) {
             return;
+        }
+
+        if ($this->_rowOffset > $rowOffset) {
+            $this->_rowOffset = $rowOffset;
         }
 
         $endColumn = $block->getColumn();

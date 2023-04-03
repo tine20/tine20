@@ -92,7 +92,7 @@ class SSO_PublicAPITest extends TestCase
      * @throws Tinebase_Exception
      * @throws Zend_Session_Exception
      *
-     * @group nojenkins
+     * @group needsbuild
      */
     public function testSaml2LoginPage()
     {
@@ -102,15 +102,7 @@ class SSO_PublicAPITest extends TestCase
         Tinebase_Core::unsetUser();
         Tinebase_Session::getSessionNamespace()->unsetAll();
 
-        try {
-            $response = SSO_Controller::publicSaml2RedirectRequest();
-        } catch (Exception $e) {
-            if (preg_match('/You need to run webpack-dev-server in dev mode/', $e->getMessage())) {
-                self::markTestSkipped('only working with frontend available');
-            } else {
-                throw $e;
-            }
-        }
+        $response = SSO_Controller::publicSaml2RedirectRequest();
         $response->getBody()->rewind();
 
         $this->assertSame(200, $response->getStatusCode());
@@ -165,10 +157,16 @@ class SSO_PublicAPITest extends TestCase
             $xml);
     }
 
+    /**
+     * testOAuthGetLoginMask
+     *
+     * @group needsbuild
+     */
     public function testOAuthGetLoginMask()
     {
         $relyingParty = SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
             SSO_Model_RelyingParty::FLD_NAME => 'unittest',
+            SSO_Model_RelyingParty::FLD_LABEL => 'unittest label',
             SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_OAuthOIdRPConfig::class,
             SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_OAuthOIdRPConfig([
                 SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS   => ['https://unittest.test/uri'],
@@ -204,7 +202,7 @@ class SSO_PublicAPITest extends TestCase
         $response->getBody()->rewind();
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertStringContainsString('<input type="hidden" name="nonce" value="nonce"/>', $response->getBody()->getContents());
+        $this->assertStringContainsString('"label":"'. $relyingParty->{SSO_Model_RelyingParty::FLD_LABEL}, $response->getBody()->getContents());
     }
 
     public function testOAuthPostLoginMask()

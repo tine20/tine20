@@ -1192,6 +1192,7 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
         $path = Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/newsubfolder/testFile'));
         $node = $filesystem->stat($path->statpath);
         static::assertEquals('someData', $filesystem->getNodeContents($node->getId()));
+        $this->assertNotNull($node->creation_time);
 
         // delete file
         $mod = $modifications->getFirstRecord();

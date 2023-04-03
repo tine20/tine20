@@ -1738,7 +1738,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
      * @see 0006736: Create File (Edit)InfoDialog
      * @return array
      */
-    public function testGetUpdate()
+    public function testGetUpdate($doUpdateMove = true)
     {
         $this->testCreateFileNodes();
         $filter = array(array(
@@ -1753,6 +1753,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
         
         $node = $this->_getUit()->getNode($initialNode['id']);
         $this->assertEquals('file', $node['type']);
+        if (!$doUpdateMove) {
+            return $node;
+        }
         
         $node['description'] = 'UNITTEST';
         $node = $this->_getUit()->saveNode($node);
@@ -1760,6 +1763,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->assertEquals('UNITTEST', $node['description']);
         $this->assertEquals($initialNode['contenttype'], $node['contenttype'], 'contenttype  not preserved');
 
+        $newName = $node['name'] . 'new';
+        $node['name'] = $newName;
+        $node['description'] = 'unittest';
+        $node = $this->_getUit()->saveNode($node);
+        $this->assertSame($newName, $node['name']);
+        $this->assertSame('unittest', $node['description']);
         
         return $node;
     }
@@ -1792,7 +1801,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     public function testSetRelation()
     {
-        $node = $this->testGetUpdate();
+        $node = $this->testGetUpdate(false);
         $node['relations'] = array($this->_getRelationData($node));
         $node = $this->_getUit()->saveNode($node);
         

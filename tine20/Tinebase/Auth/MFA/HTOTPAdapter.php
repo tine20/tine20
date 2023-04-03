@@ -49,7 +49,7 @@ class Tinebase_Auth_MFA_HTOTPAdapter implements Tinebase_Auth_MFA_AdapterInterfa
         /** @var Tinebase_Model_CredentialCache $cc */
         $cc = Tinebase_Auth_CredentialCache::getInstance()->get(
             $htOTPCfg->{Tinebase_Model_MFA_HOTPUserConfig::FLD_CC_ID});
-        $cc->key = Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY};
+        $cc->key = Tinebase_Auth_CredentialCache_Adapter_Shared::getKey();
         Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($cc);
 
         if ($htOTPCfg instanceof Tinebase_Model_MFA_HOTPUserConfig) {

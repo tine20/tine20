@@ -1434,16 +1434,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $documentFactory = new Pear\DocumentFactory();
             
             $hashFile = Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash);
-            $ole = $documentFactory->createFromFile($hashFile);
-            $parsedMessage = $messageFactory->parseMessage($ole);
             try {
+                $ole = $documentFactory->createFromFile($hashFile);
+                $parsedMessage = $messageFactory->parseMessage($ole);
                 $content = $parsedMessage->toMimeString();
-            } catch (Exception $e) {
-                $message = 'Could not parse message: ' . $e->getMessage();
+            } catch (Throwable $t) {
+                $message = 'Could not parse message: ' . $t->getMessage();
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                     __METHOD__ . '::' . __LINE__ . ' ' . $message);
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                    __METHOD__ . '::' . __LINE__ . ' ' . $t->getTraceAsString());
                 throw new Tinebase_Exception_SystemGeneric($message);
             }
 
