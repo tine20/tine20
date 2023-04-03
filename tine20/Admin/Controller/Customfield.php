@@ -69,7 +69,19 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
         return self::$_instance;
     }
     
-    /**************** overriden methods ***************************/
+    /**************** overridden methods ***************************/
+
+    /**
+     * Removes containers where current user has no access to
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action get|update
+     */
+    public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
+    {
+        // ignore acl in filters
+        $_filter->doIgnoreAcl(true);
+    }
 
     /**
      * add one record
