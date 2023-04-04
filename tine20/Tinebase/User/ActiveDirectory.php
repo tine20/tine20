@@ -490,6 +490,9 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             $accountObject = null;
         } else {
             $accountObject = new $_accountClass($accountArray, TRUE);
+            if (isset($_userData['uidnumber'])) {
+                $accountObject->xprops()['uidnumber'] = $_userData['uidnumber'][0];
+            }
         }
         
         if ($accountObject instanceof Tinebase_Model_FullUser) {
@@ -527,6 +530,10 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         $ldapData = array(
             'useraccountcontrol' => isset($_ldapEntry['useraccountcontrol']) ? $_ldapEntry['useraccountcontrol'][0] : self::NORMAL_ACCOUNT
         );
+
+        if (isset($_user->xprops()['uidnumber'])) {
+            $_ldapEntry['uidnumber'] = $_user->xprops()['uidnumber'];
+        }
 
         foreach ($_user as $key => $value) {
             $ldapProperty = (isset($this->_rowNameMapping[$key]) || array_key_exists($key, $this->_rowNameMapping)) ? $this->_rowNameMapping[$key] : false;

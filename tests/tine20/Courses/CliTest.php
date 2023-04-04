@@ -4,7 +4,7 @@
  * 
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -16,7 +16,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Courses
  */
-class Courses_CliTest extends \PHPUnit\Framework\TestCase
+class Courses_CliTest extends TestCase
 {
     /**
      * Backend
@@ -38,18 +38,6 @@ class Courses_CliTest extends \PHPUnit\Framework\TestCase
      * @var Tinebase_Model_Group::
      */
     protected $_internetFilteredGroup = NULL;
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Courses Cli Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
 
     /**
      * Sets up the fixture.
@@ -58,8 +46,8 @@ class Courses_CliTest extends \PHPUnit\Framework\TestCase
      * @access protected
      */
     protected function setUp(): void
-{
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+    {
+        parent::setUp();
         
         // enable courses app
         Tinebase_Application::getInstance()->setApplicationStatus(array(
@@ -97,18 +85,10 @@ class Courses_CliTest extends \PHPUnit\Framework\TestCase
             'description'   => 'blabla',
             'type'          => $department->getId(),
             'internet'      => 'OFF',
+            'members'       => [
+                ['id' => Tinebase_Core::getUser()->getId()],
+            ],
         ));
-    }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown(): void
-{
-        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**

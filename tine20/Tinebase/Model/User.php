@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -24,6 +24,7 @@
  * @property    string  accountDisplayName
  * @property    string  accountLastName
  * @property    string  accountFirstName
+ * @property    string  $accountLoginName
  */
 class Tinebase_Model_User extends Tinebase_Record_Abstract
 {
