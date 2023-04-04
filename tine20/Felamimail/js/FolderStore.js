@@ -193,22 +193,23 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
 
     /**
      * compute paths for folder records
-     * 
+     *
      * @param {Tine.Felamimail.Model.Folder} records
-     * @param {String|null} parentPath
+     * @param givenParentPath
      */
     computePaths: function(records, givenParentPath) {
-        var parentPath, path;
+        let parentPath; 
+
         Ext.each(records, function(record) {
+            const parent = this.getParent(record);
             if (givenParentPath === null) {
-                var parent = this.getParent(record);
-                parentPath = (parent) ? parent.get('path') : '/' + record.get('account_id');
+                parentPath = parent ? parent.get('path') : '/' + record.get('account_id');
             } else {
-                parentPath = givenParentPath;
+                parentPath = parent ? parent.get('path') : givenParentPath;
             }
-            path = parentPath + '/' + record.id;
+            const path = parentPath + '/' + record.id;
             
-            if (record.get('parent_path') != parentPath || record.get('path') != path) {
+            if (record.get('parent_path') !== parentPath || record.get('path') !== path) {
                 record.beginEdit();
                 record.set('parent_path', parentPath);
                 record.set('path', path);
