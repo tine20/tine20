@@ -829,49 +829,61 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * get custom field record
      *
-     * @param string $name
+     * @param string|array $nameOrValues
      * @param string $model
      * @param string $type
-     * @param array $definition
+     * @param array|null $definition
      * @return Tinebase_Model_CustomField_Config
-     *
-     * TODO use a single array as param that is merged with the defaults
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
      */
-    protected function _createCustomField($name = 'YomiName', $model = 'Addressbook_Model_Contact', $type = 'string', $definition = null)
+    protected function _createCustomField($nameOrValues = 'YomiName',
+                                          string $model = 'Addressbook_Model_Contact',
+                                          string $type = 'string',
+                                          ?array $definition = null): Tinebase_Model_CustomField_Config
     {
-        if ($definition === null) {
-            $definition = array(
+        $name = is_array($nameOrValues)
+            ? $nameOrValues['name'] ?? 'cf' . Tinebase_Record_Abstract::generateUID(8)
+            : $nameOrValues;
+        $application = substr($model, 0, strpos($model, '_'));
+        $configData = [
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($application)->getId(),
+            'name'              => $name,
+            'model'             => $model,
+        ];
+        if (is_array($nameOrValues)) {
+            $configData = array_merge($configData, $nameOrValues);
+        }
+
+        if (! isset($configData['definition'])) {
+            $configData['definition'] = $definition ?? [
                 'label' => Tinebase_Record_Abstract::generateUID(),
                 'type'  => $type,
                 'recordConfig' => $type === 'record'
                     ? array('value' => array('records' => 'Tine.Addressbook.Model.Contact'))
                     : null,
-                'uiconfig' => array(
+                'uiconfig' => [
                     'xtype'  => Tinebase_Record_Abstract::generateUID(),
                     'length' => 10,
                     'group'  => 'unittest',
                     'order'  => 100,
-                )
-            );
+                ]
+            ];
         }
 
-        $application = substr($model, 0, strpos($model, '_'));
-        $cfData = new Tinebase_Model_CustomField_Config(array(
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($application)->getId(),
-            'name'              => $name,
-            'model'             => $model,
-            'definition'        => $definition,
-        ));
+        $cfData = new Tinebase_Model_CustomField_Config($configData);
 
         try {
             $result = Tinebase_CustomField::getInstance()->addCustomField($cfData);
             $this->_customfieldIdsToDelete[] = $result->getId();
         } catch (Zend_Db_Statement_Exception $zdse) {
-            // customfield already exists
+            // custom field already exists
             $cfs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application);
             $result = $cfs->filter('name', $name)->getFirstRecord();
         }
 
+        /** @var Tinebase_Model_CustomField_Config $result */
         return $result;
     }
 
