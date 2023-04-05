@@ -27,6 +27,7 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract implements SSO_RP
     public const FLD_ASSERTION_CONSUMER_SERVICE_BINDING = 'AssertionConsumerServiceBinding';
     public const FLD_ENTITYID = 'entityid';
     public const FLD_SINGLE_LOGOUT_SERVICE_LOCATION = 'singleLogoutServiceLocation';
+    public const FLD_SINGLE_LOGOUT_SERVICE_BINDING = 'singleLogoutServiceBinding';
     public const FLD_ATTRIBUTE_MAPPING = 'attributeMapping';
     public const FLD_CUSTOM_HOOKS = 'customHooks';
 
@@ -76,20 +77,32 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract implements SSO_RP
                 self::LABEL                 => 'Metadata URL', // _('Metadata URL')
             ],
             self::FLD_ASSERTION_CONSUMER_SERVICE_BINDING    => [
-                self::TYPE                  => self::TYPE_STRING,
-                self::LENGTH                => 255,
+                self::LABEL                 => 'Assertion Consumer Service Binding', // _('Assertion Consumer Service Binding')
+                self::TYPE                  => self::TYPE_KEY_FIELD,
+                self::NAME                  => SSO_Config::SAML2_BINDINGS,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
                 self::VALIDATORS            => [
                     Zend_Filter_Input::ALLOW_EMPTY  => true,
                 ],
-                self::LABEL                 => 'Consumer Service Binding', // _('Consumer Service Binding')
             ],
             self::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION   => [
+                self::LABEL                 => 'Assertion Consumer Service Location', // _('Assertion Consumer Service Location')
                 self::TYPE                  => self::TYPE_STRING,
                 self::LENGTH                => 255,
                 self::VALIDATORS            => [
                     Zend_Filter_Input::ALLOW_EMPTY  => true,
                 ],
-                self::LABEL                 => 'Consumer Service Location', // _('Consumer Service Location')
+            ],
+            self::FLD_SINGLE_LOGOUT_SERVICE_BINDING    => [
+                self::LABEL                 => 'Logout Service Binding', // _('Logout Service Binding')
+                self::TYPE                  => self::TYPE_KEY_FIELD,
+                self::NAME                  => SSO_Config::SAML2_BINDINGS,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY  => true,
+                ],
             ],
             self::FLD_SINGLE_LOGOUT_SERVICE_LOCATION   => [
                 self::TYPE                  => self::TYPE_STRING,
@@ -117,6 +130,7 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract implements SSO_RP
             ],
             'SingleLogoutService' => [
                 'Location' => $this->{self::FLD_SINGLE_LOGOUT_SERVICE_LOCATION},
+                'Binding' => $this->{self::FLD_SINGLE_LOGOUT_SERVICE_BINDING},
             ],
             'IDPList' => [ /* add us, aka IDP */],
             'entityid' => $this->{self::FLD_ENTITYID},
@@ -163,26 +177,34 @@ DTD;
         foreach ($rootNode->childNodes as $node) {
             if ('SPSSODescriptor' === $node->nodeName) {
                 $foundPostLocation = false;
+                $foundRedirectLocation = false;
                 foreach ($node->childNodes as $childNode) {
                     switch($childNode->nodeName) {
                         case 'SingleLogoutService':
                             if ($childNode->hasAttributes() && ($attr = $childNode->attributes->getNamedItem('Binding'))
-                                    && $attr->nodeValue === 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect' &&
+                                    && $attr->nodeValue === SSO_Config::SAML2_BINDINGS_REDIRECT &&
                                     ($attr = $childNode->attributes->getNamedItem('Location'))) {
+                                $foundRedirectLocation = true;
                                 $this->{self::FLD_SINGLE_LOGOUT_SERVICE_LOCATION} = $attr->nodeValue;
-                            }
+                                $this->{self::FLD_SINGLE_LOGOUT_SERVICE_BINDING} = SSO_Config::SAML2_BINDINGS_REDIRECT;
+                            } elseif ($childNode->hasAttributes() && ($attr = $childNode->attributes->getNamedItem('Binding'))
+                                    && $attr->nodeValue === SSO_Config::SAML2_BINDINGS_POST && !$foundRedirectLocation
+                                    && ($attr = $childNode->attributes->getNamedItem('Location'))) {
+                                $this->{self::FLD_SINGLE_LOGOUT_SERVICE_LOCATION} = $attr->nodeValue;
+                                $this->{self::FLD_SINGLE_LOGOUT_SERVICE_BINDING} = SSO_Config::SAML2_BINDINGS_POST;
+                        }
                             break;
                         case 'AssertionConsumerService':
                             if ($childNode->hasAttributes() && ($attr = $childNode->attributes->getNamedItem('Binding'))
-                                    && $attr->nodeValue === 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect' &&
+                                    && $attr->nodeValue === SSO_Config::SAML2_BINDINGS_REDIRECT &&
                                     ($attr = $childNode->attributes->getNamedItem('Location')) && !$foundPostLocation) {
                                 $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION} = $attr->nodeValue;
-                                $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_BINDING} = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect';
+                                $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_BINDING} = SSO_Config::SAML2_BINDINGS_REDIRECT;
                             } elseif ($childNode->hasAttributes() && ($attr = $childNode->attributes->getNamedItem('Binding'))
-                                    && $attr->nodeValue === 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST' &&
+                                    && $attr->nodeValue === SSO_Config::SAML2_BINDINGS_POST &&
                                     ($attr = $childNode->attributes->getNamedItem('Location'))) {
                                 $foundPostLocation = true;
-                                $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_BINDING} = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST';
+                                $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_BINDING} = SSO_Config::SAML2_BINDINGS_POST;
                                 $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION} = $attr->nodeValue;
                             }
                             break;

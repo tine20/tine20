@@ -1,0 +1,3 @@
+#! /bin/sh
+
+docker-compose exec --user tine20 web sh -c "cd /usr/share/tine20/ && php setup.php --config=\$TINE20_CONFIG_PATH --clear_cache -v"

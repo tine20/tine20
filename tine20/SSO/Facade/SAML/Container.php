@@ -34,12 +34,12 @@ class SSO_Facade_SAML_Container extends \SAML2\Compat\AbstractContainer
     public function redirect(string $url, array $data = []): void
     {
         //throw new Exception('getRedirect is not supported');
-        throw new SSO_Facade_SAML_RedirectException($url, $data);
+        throw new SSO_Facade_SAML_RedirectException($url, $data, 'redirect');
     }
 
     public function postRedirect(string $url, array $data = []): void
     {
-        throw new SSO_Facade_SAML_RedirectException($url, $data);
+        throw new SSO_Facade_SAML_RedirectException($url, $data, 'post');
         //throw new Exception('postRedirect is not supported');
     }
 

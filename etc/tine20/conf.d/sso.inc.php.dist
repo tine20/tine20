@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'SSO' => [
+        'oauth2' => [
+            'enabled' => true,
+            'keys' => [
+                array_merge(json_decode(file_get_contents(__DIR__ . '/sso_cert.jwk'), true), [
+                    'use' => 'sig',
+                    'alg' => 'RS256',
+                    'kid' => 'tine-sso',
+                    'publickey' => '/etc/tine20/conf.d/sso_cert.crt',
+                    'privatekey' => '/etc/tine20/conf.d/sso_key.pem',
+                ]),
+            ],
+        ],
+        'saml2' => [
+            'enabled' => true,
+            'tineLogout' => true,
+            'keys' => [
+                [
+                    'privatekey' => '/etc/tine20/conf.d/sso_key.pem',
+                    'certificate' => '/etc/tine20/conf.d/sso_cert.pem',
+                ]
+            ]
+        ],
+    ],
+];

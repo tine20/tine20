@@ -26,11 +26,11 @@ class SSO_Facade_SAML_AuthSource extends \SimpleSAML\Auth\Source
      *
      * @param array &$state Information about the current logout operation.
      * @return void
-     */
+     *
     public function logout(&$state)
     {
         throw new SSO_Facade_SAML_RedirectException('https://localhost:8443/auth/saml2/sp/saml2-logout.php/localhost', null);
-    }
+    }*/
 
     /**
      * Reauthenticate an user.
