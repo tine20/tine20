@@ -40,7 +40,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         'id'            => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Felamimail_Model_Message')), 
         'query'         => array(
             'filter'        => 'Tinebase_Model_Filter_Query', 
-            'options'       => array('fields' => array('subject', 'from_email', 'from_name'))
+            'options'       => array('fields' => array('subject', 'from_email', 'from_name', 'to'))
         ),
         'folder_id'     => array('filter' => 'Tinebase_Model_Filter_Id'),
         'subject'       => array('filter' => 'Tinebase_Model_Filter_Text'),
@@ -52,9 +52,9 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         'has_attachment'=> ['filter' => Tinebase_Model_Filter_Bool::class],
     // custom filters
         'path'          => array('custom' => true),
-        'to'            => array('custom' => true, 'requiredCols' => array('to' => 'felamimail_cache_message_to.*')),
-        'cc'            => array('custom' => true, 'requiredCols' => array('cc' => 'felamimail_cache_message_cc.*')),
-        'bcc'           => array('custom' => true, 'requiredCols' => array('bcc' => 'felamimail_cache_message_bcc.*')),
+        'to'            => array('filter' => Felamimail_Model_RecipientFilter::class),
+        'cc'            => array('filter' => Felamimail_Model_RecipientFilter::class),
+        'bcc'           => array('filter' => Felamimail_Model_RecipientFilter::class),
         'flags'         => array('custom' => true, 'requiredCols' => array('flags' => 'felamimail_cache_msg_flag.flag')),
         'account_id'    => array('custom' => true),
         'tag'           => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
@@ -85,7 +85,12 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
             } else if ($customData['field'] == 'path') {
                 $this->_addPathSql($_select, $_backend, $customData);
             } else {
-                $this->_addRecipientAndFlagsSql($_select, $_backend, $customData);
+                $this->_addFlagsSql($_select, $_backend, $customData);
+            }
+        }
+        foreach ($this->_filterObjects as $filterObject) {
+            if ($filterObject instanceof Felamimail_Model_RecipientFilter) {
+                $filterObject->appendFilterSql($_select, $_backend);
             }
         }
         
@@ -190,36 +195,29 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
     }
     
     /**
-     * add to/cc/bcc and flags custom filters
+     * add flags custom filters
      * 
      * @param  Zend_Db_Select                       $_select
      * @param  Felamimail_Backend_Cache_Sql_Message $_backend
      * @param  array                                $_filterData
      * @return void
      */
-    protected function _addRecipientAndFlagsSql($_select, $_backend, $_filterData)
+    protected function _addFlagsSql($_select, $_backend, $_filterData)
     {
         $db = $_backend->getAdapter();
         $foreignTables = $_backend->getForeignTables();
         
         // add conditions
         $tablename  = $foreignTables[$_filterData['field']]['table'];
-        if ($_filterData['field'] !== 'flags') {
-            $fieldName  = $tablename . '.name';
-            $fieldEmail = $tablename . '.email';
-        }
-        
+
         // add filter value
         if (! isset($_filterData['value'])) {
             $_filterData['value'] = '';
         }
-        if (! is_array($_filterData['value'])) {
-            $value      = '%' . $_filterData['value'] . '%';
-        } else {
-            $value = array();
-            foreach ((array)$_filterData['value'] as $customValue) {
-                $value[]      = '%' . $customValue . '%';
-            }
+
+        $value = array();
+        foreach ((array)$_filterData['value'] as $customValue) {
+            $value[]      = '%' . $customValue . '%';
         }
 
         if ($_filterData['field'] == 'flags') {
@@ -242,11 +240,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
             if ($orConditions) {
                 $_select->where('(' . $orConditions . ')');
             }
-        } elseif (!empty($_filterData['value'])) {
-            $_select->where(
-                $db->quoteInto($fieldName  . ' LIKE ?', $value) . ' OR ' .
-                $db->quoteInto($fieldEmail . ' LIKE ?', $value)
-            );
         }
     }
+    
 }

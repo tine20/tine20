@@ -760,6 +760,29 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
             $this->assertEquals($filterTest['allinboxes'], $allinboxesFilterFound, print_r($result['filter'], true));
         }
     }
+    
+    public function testSearchMessageMixedQueryFilter()
+    {
+        $fromEmail = 'unittestalias@' . $this->_mailDomain;
+        $messageToSend = $this->_getMessageData($fromEmail);
+        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+        $messageToSend['to'] = [$sclever->accountEmailAddress];
+        $messageToSend['subject'] = 'subjectfilter';
+        $this->_json->saveMessage($messageToSend);
+        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
+
+        // check if message is in sent folder
+        $message = $this->_searchForMessageBySubject($messageToSend['subject'], $this->_account->sent_folder);
+        //search subject
+        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => 'subjectfilter']], '');
+        $this->assertEquals('subjectfilter', $result['results'][0]['subject'], print_r($result['filter'], true));
+        //search to email
+        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => $sclever->accountEmailAddress]], '');
+        $this->assertEquals($sclever->accountEmailAddress, $result['results'][0]['to'][0], print_r($result['filter'], true));
+        //search from email
+        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => $fromEmail]], '');
+        $this->assertEquals($fromEmail, $result['results'][0]['from_email'], print_r($result['filter'], true));
+    }
 
     /**
      * test flags (add + clear + deleted)
