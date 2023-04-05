@@ -1546,7 +1546,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         foreach ($_toConvert as $field => $value) {
             if (! $value) {
                 $dateTimeFields = static::$_configurationObject->datetimeFields;
-                if ($dateTimeFields && in_array($field, $dateTimeFields)) {
+                if ($dateTimeFields && in_array($field, $dateTimeFields, true)) {
                     $_toConvert[$field] = NULL;
                 }
             } elseif ($value instanceof DateTime) {
