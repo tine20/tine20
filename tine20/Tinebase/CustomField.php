@@ -479,22 +479,20 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         
         foreach ($appCustomFields as $customField) {
             if (is_array($_record->customfields) && (isset($_record->customfields[$customField->name]) || array_key_exists($customField->name, $_record->customfields))) {
-                $value = $_record->customfields[$customField->name];
                 $filtered = $existingCustomFields->filter('customfield_id', $customField->id);
-                
-                // we need to resolve the modelName and the record value if array is given (e.g. on updating customfield)
-                if (isset($customField->definition['type']) && (strtolower($customField->definition['type']) == 'record' || strtolower($customField->definition['type']) == 'recordlist')) {
-                    $value = $this->_getValueForRecordOrListCf($_record, $customField, $value);
-                }
+                $value = $this->_getCustomFieldValue($_record, $customField);
 
                 switch (count($filtered)) {
                     case 1:
                         $cf = $filtered->getFirstRecord();
                         if ($customField->valueIsEmpty($value)) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting cf value for ' . $customField->name);
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                                __METHOD__ . '::' . __LINE__ . ' Deleting cf value for ' . $customField->name);
                             $this->_backendValue->delete($cf);
                         } else {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating value for ' . $customField->name . ' to ' . $value);
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                                __METHOD__ . '::' . __LINE__ . ' Updating value for ' . $customField->name . ' to '
+                                . $value);
                             $cf->value = $value;
                             $this->_backendValue->update($cf);
                         }
@@ -507,7 +505,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                                 'value'             => $value
                             ));
                             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                                __METHOD__ . '::' . __LINE__ . ' Creating value for ' . $customField->name . ' -> ' . print_r($value, true));
+                                __METHOD__ . '::' . __LINE__ . ' Creating value for ' . $customField->name . ' -> '
+                                . print_r($value, true));
                             try {
                                 $this->_backendValue->create($cf);
                             } catch (Zend_Db_Statement_Exception $zdse) {
@@ -525,6 +524,34 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 }
             }
         }
+    }
+
+    /**
+     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Model_CustomField_Config $customField
+     * @return null|string
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _getCustomFieldValue(Tinebase_Record_Interface $_record,
+                                            Tinebase_Model_CustomField_Config $customField): ?string
+    {
+        $value = $_record->customfields[$customField->name];
+
+        if (isset($customField->definition['type'])) {
+            switch (strtolower($customField->definition['type'])) {
+                case 'record':
+                case 'recordlist':
+                    // we need to resolve the modelName and the record value if array is given (e.g. on updating customfield)
+                    $value = $this->_getValueForRecordOrListCf($_record, $customField, $value);
+                    break;
+                case 'date':
+                    if (strpos($value, '00:00:00') === false) {
+                        $value .= ' 00:00:00';
+                    }
+                    break;
+            }
+        }
+        return $value;
     }
 
     public static function getModelNameFromDefinition($definition)
@@ -546,7 +573,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         $modelName = self::getModelNameFromDefinition($_customField->definition);
         $model = new $modelName(array(), true);
         $idProperty = $model->getIdProperty();
-        if (is_array($_value)) {
+        if (! is_scalar($_value)) {
             if (strtolower($_customField->definition['type']) == 'record') {
                 /** @var Tinebase_Record_Interface $model */
                 $value = $_value[$idProperty];
