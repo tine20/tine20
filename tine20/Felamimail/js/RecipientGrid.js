@@ -729,12 +729,11 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * 
      */
     initRecord: async function() {
-        await _.reduce(['to', 'cc', 'bcc'], (pre, type) => {
-            return pre.then(async () => {
+        const promises = [];
+        ['to', 'cc', 'bcc'].forEach((type) => {
+            const promise = new Promise(async (resolve) => {
                 let contacts = this.record.data[type];
-                let emails = _.filter(contacts, (addressData) => {
-                    return _.isString(addressData)
-                });
+                let emails = _.filter(contacts, (addressData) => {return _.isString(addressData)});
                 if (emails.length > 0) {
                     emails = _.join(emails, ', ');
                     const resolvedContacts = await Tine.Tinebase.common.findContactsByEmailString(emails);
@@ -746,10 +745,12 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                         }
                     })
                 }
-    
                 this.record.data[type] = contacts;
-            })
-        }, Promise.resolve());
+                resolve();
+            });
+            promises.push(promise);
+        })
+        await Promise.all(promises);
     },
 
     /**
@@ -765,7 +766,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         if (clearStore) {
             this.store.removeAll(true);
         }
-    
+        
         record = record || this.record;
         
         let contacts = [];
