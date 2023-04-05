@@ -404,8 +404,12 @@ class Tinebase_CustomFieldTest extends TestCase
      * @param string $type
      * @param mixed $customFieldValue
      * @param array $filtersToTest
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
      */
-    protected function _testContactCustomFieldOfType($type, $customFieldValue, $filtersToTest)
+    protected function _testContactCustomFieldOfType(string $type, $customFieldValue, array $filtersToTest)
     {
         $this->_testCustomField = $this->_createCustomField('test', 'Addressbook_Model_Contact', $type);
         $contact = $this->_createContactWithCustomField($customFieldValue);
@@ -425,6 +429,11 @@ class Tinebase_CustomFieldTest extends TestCase
                     . ' cf value: ' . $customFieldValue
                 );
                 static::assertTrue(in_array($contact->getId(), $result->getArrayOfIds()));
+                if (isset($filterToTest['expectedValue'])) {
+                    $recordCustomfields = $result->getFirstRecord()->customfields;
+                    self::assertEquals($filterToTest['expectedValue'],
+                        $recordCustomfields[$this->_testCustomField->name], print_r($recordCustomfields, true));
+                }
             } else {
                 static::assertFalse(in_array($contact->getId(), $result->getArrayOfIds()));
             }
@@ -716,5 +725,14 @@ class Tinebase_CustomFieldTest extends TestCase
             ['operator' => 'in', 'value' => 'a', 'expectContactToBeFound' => false],
         ];
         $this->_testContactCustomFieldOfType('keyField', $value, $filtersToTest);
+    }
+
+    public function testCustomDateField()
+    {
+        $value = '2022-01-21';
+        $filtersToTest = [
+            ['operator' => 'equals', 'value' => '2022-01-21', 'expectContactToBeFound' => 1, 'expectedValue' => '2022-01-21 00:00:00'],
+        ];
+        $this->_testContactCustomFieldOfType('date', $value, $filtersToTest);
     }
 }

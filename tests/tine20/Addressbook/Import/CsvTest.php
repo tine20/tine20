@@ -211,11 +211,15 @@ class Addressbook_Import_CsvTest extends ImportTestCase
             . '"key":null},"label":"CF ausgestellt am:","type":"date","required":false}');
         $this->_customFieldImportExportHelper([
             'definition' => $definition,
-        ], '2023-04-04');
+        ], '2023-04-04',
+            // client expects TIME
+            '2023-04-04 00:00:00');
     }
 
     /**
-     * @param array|string $cfConfig
+     * @param $cfConfig
+     * @param string $cfTestValue
+     * @param string|null $expectedValue
      * @return void
      * @throws Addressbook_Exception_AccessDenied
      * @throws Addressbook_Exception_NotFound
@@ -224,7 +228,9 @@ class Addressbook_Import_CsvTest extends ImportTestCase
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_Record_DefinitionFailure
      */
-    protected function _customFieldImportExportHelper($cfConfig = 'YomiName', $cfTestValue = 'testing')
+    protected function _customFieldImportExportHelper($cfConfig = 'YomiName',
+                                                      string $cfTestValue = 'testing',
+                                                      ?string $expectedValue = null)
     {
         $customField = $this->_createCustomField($cfConfig);
         $this->assertTrue($customField instanceof Tinebase_Model_CustomField_Config);
@@ -251,7 +257,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         $exceptionArray = $result['exceptions']->toArray();
         $this->assertTrue(isset($exceptionArray[0]['exception']['clientRecord']['customfields']),
             'could not find customfields in client record: ' . print_r($exceptionArray[0]['exception']['clientRecord'], TRUE));
-        $this->assertEquals($cfTestValue, $exceptionArray[0]['exception']['clientRecord']['customfields'][$customField->name],
+        $this->assertEquals($expectedValue ?? $cfTestValue, $exceptionArray[0]['exception']['clientRecord']['customfields'][$customField->name],
             'could not find cf value in client record: ' . print_r($exceptionArray[0]['exception']['clientRecord'], TRUE));
     }
 

@@ -1662,7 +1662,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     }
                     $_value = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_value, null, null,
                         $format);
-                } elseif($_value instanceof Tinebase_Model_CustomField_Config) {
+                } elseif ($_value instanceof Tinebase_Model_CustomField_Config) {
                     $_value = $_value->value->__toString();
                 } elseif ($_value instanceof Tinebase_Config_KeyFieldRecord) {
                     $_value = $_value->__toString();
