@@ -93,7 +93,7 @@ Tine.HumanResources.WorkingTimeSchemeEditDialog = Ext.extend(Tine.widgets.dialog
 
         for (var index = 0; index < 7; index++) {
             form.findField('weekdays_' + index).setValue(days[index]);
-            sum = sum + parseFloat(days[index]);
+            sum = sum + (parseFloat(days[index]) || 0);
         }
         
         form.findField('working_hours').setValue(sum);
