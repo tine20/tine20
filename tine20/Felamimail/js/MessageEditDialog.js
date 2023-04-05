@@ -1195,7 +1195,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordLoad: function () {
         // interrupt process flow till dialog is rendered
-        if (!this.rendered) {
+        if (!this.rendered || (this.record.get('content_type') === 'text/html' && !this.htmlEditor?.initialized)) {
             this.onRecordLoad.defer(250, this);
             return;
         }
