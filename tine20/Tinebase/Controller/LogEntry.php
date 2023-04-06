@@ -75,7 +75,13 @@ class Tinebase_Controller_LogEntry extends Tinebase_Controller_Record_Abstract
                 ['field' => 'timestamp', 'operator' => 'before', 'value' => $before]
             ]
         );
-        $this->deleteByFilter($deleteFilter);
+        $pagination = new Tinebase_Model_Pagination([
+            'limit' => 1000,
+            'sort' => 'timestamp',
+            'dir' => 'ASC',
+            'start' => 0,
+        ]);
+        $this->deleteByFilter($deleteFilter, $pagination);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
             ' Cleaned up log entries before ' . $before->toString());
