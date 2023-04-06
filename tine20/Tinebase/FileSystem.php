@@ -4337,6 +4337,9 @@ class Tinebase_FileSystem implements
                     $fh = null;
 
                     if (Tinebase_FileSystem_AVScan_Result::RESULT_ERROR === $scanResult->result) {
+                        // TODO is it ok to return FALSE if a single file fails? the scheduler job will run again in 1 hour and scan everything again!
+                        Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue(
+                            'got RESULT_ERROR from scanner'));
                         $result = false;
                     } else {
                         $this->_updateAvScanOfFileHash($hashDir . $file, $scanResult->result);
