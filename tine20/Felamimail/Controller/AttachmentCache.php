@@ -44,6 +44,11 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
         $this->deleteByFilter(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_AttachmentCache::class, [
                 ['field' => Felamimail_Model_AttachmentCache::FLD_TTL, 'operator' => 'before', 'value' => Tinebase_DateTime::now()],
+        ]), new Tinebase_Model_Pagination([
+            'limit' => 1000,
+            'sort' => Felamimail_Model_AttachmentCache::FLD_TTL,
+            'dir' => 'ASC',
+            'start' => 0,
         ]));
 
         return true;

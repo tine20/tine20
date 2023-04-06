@@ -2184,18 +2184,21 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * delete records by filter
+     * delete by given filter (+ optional pagination)
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @return  Tinebase_Record_RecordSet
+     * @param Tinebase_Model_Pagination|null $_pagination
+     * @return null|Tinebase_Record_RecordSet
+     * @throws Exception
      */
-    public function deleteByFilter(Tinebase_Model_Filter_FilterGroup $_filter)
+    public function deleteByFilter(Tinebase_Model_Filter_FilterGroup $_filter,
+                                   Tinebase_Model_Pagination $_pagination = null): ?Tinebase_Record_RecordSet
     {
         $oldMaxExcecutionTime = ini_get('max_execution_time');
 
         Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
 
-        $ids = $this->search($_filter, NULL, FALSE, TRUE);
+        $ids = $this->search($_filter, $_pagination, false, true);
         $deletedRecords = $this->delete($ids);
         
         // reset max execution time to old value
