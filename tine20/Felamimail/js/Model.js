@@ -189,12 +189,12 @@ Tine.Felamimail.Model.Message.getDefaultData = function() {
  * @return {Object} filterModel definition
  */ 
 Tine.Felamimail.Model.Message.getFilterModel = function() {
-    var app = Tine.Tinebase.appMgr.get('Felamimail');
+    const app = Tine.Tinebase.appMgr.get('Felamimail');
     
     return [
         {filtertype: 'tine.felamimail.folder.filtermodel', app: app},
-        {label: app.i18n._('Subject/From'),field: 'query',         operators: ['contains']},
         {label: app.i18n._('Subject'),     field: 'subject',       operators: ['contains']},
+        {label: app.i18n._('Subject/From/To'),  field: 'query',    operators: ['contains']},
         {label: app.i18n._('From (Email)'),field: 'from_email',    operators: ['contains']},
         {label: app.i18n._('From (Name)'), field: 'from_name',     operators: ['contains']},
         {label: app.i18n._('To'),          field: 'to',            operators: ['contains']},

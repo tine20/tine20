@@ -47,6 +47,7 @@ class SSO_Facade_OAuth2_AccessTokenEntity implements AccessTokenEntityInterface
      */
     private function convertToJWT()
     {
+        $this->initJwtConfiguration();
         return $this->jwtConfiguration->builder()
             ->permittedFor($this->getClient()->getIdentifier())
             ->identifiedBy($this->getIdentifier())

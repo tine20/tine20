@@ -189,12 +189,53 @@ class Addressbook_Import_CsvTest extends ImportTestCase
      * 
      * @see 0006230: add customfields to csv export
      */
-    public function testExportAndImportWithCustomField()
+    public function testImportExportWithCustomFieldTypeString()
     {
-        $customField = $this->_createCustomField();
+        $this->_customFieldImportExportHelper();
+    }
+
+    public function testImportExportWithCustomFieldTypeKeyfield()
+    {
+        $definition = Tinebase_Helper::jsonDecode('{"uiconfig":{"order":null,"group":null,"tab":"TAB","key":null},'
+            . '"label":"CF ok","type":"keyField","required":false,"keyFieldConfig":'
+            . '{"value":{"records":[{"id":"abgelaufen","value":"abgelaufen"},{"id":"Eintrag vorhanden - nicht ok",'
+            . '"value":"Eintrag vorhanden - nicht ok"},{"id":"kein Eintrag vorhanden - ok","value":"kein Eintrag vorhanden - ok"}]}}}');
+        $this->_customFieldImportExportHelper([
+            'definition' => $definition,
+        ], 'kein Eintrag vorhanden - ok');
+    }
+
+    public function testImportExportWithCustomFieldTypeDate()
+    {
+        $definition = Tinebase_Helper::jsonDecode('{"uiconfig":{"order":null,"group":null,"tab":"TAB",'
+            . '"key":null},"label":"CF ausgestellt am:","type":"date","required":false}');
+        $this->_customFieldImportExportHelper([
+            'definition' => $definition,
+        ], '2023-04-04',
+            // client expects TIME
+            '2023-04-04 00:00:00');
+    }
+
+    /**
+     * @param $cfConfig
+     * @param string $cfTestValue
+     * @param string|null $expectedValue
+     * @return void
+     * @throws Addressbook_Exception_AccessDenied
+     * @throws Addressbook_Exception_NotFound
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     */
+    protected function _customFieldImportExportHelper($cfConfig = 'YomiName',
+                                                      string $cfTestValue = 'testing',
+                                                      ?string $expectedValue = null)
+    {
+        $customField = $this->_createCustomField($cfConfig);
         $this->assertTrue($customField instanceof Tinebase_Model_CustomField_Config);
         $ownContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
-        $cfValue = array($customField->name => 'testing');
+        $cfValue = array($customField->name => $cfTestValue);
         $ownContact->customfields = $cfValue;
         Addressbook_Controller_Contact::getInstance()->update($ownContact);
 
@@ -216,7 +257,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         $exceptionArray = $result['exceptions']->toArray();
         $this->assertTrue(isset($exceptionArray[0]['exception']['clientRecord']['customfields']),
             'could not find customfields in client record: ' . print_r($exceptionArray[0]['exception']['clientRecord'], TRUE));
-        $this->assertEquals('testing', $exceptionArray[0]['exception']['clientRecord']['customfields'][$customField->name],
+        $this->assertEquals($expectedValue ?? $cfTestValue, $exceptionArray[0]['exception']['clientRecord']['customfields'][$customField->name],
             'could not find cf value in client record: ' . print_r($exceptionArray[0]['exception']['clientRecord'], TRUE));
     }
 

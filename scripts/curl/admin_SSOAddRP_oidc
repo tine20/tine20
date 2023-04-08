@@ -1,0 +1,25 @@
+#! /bin/sh
+
+curl $URL \
+  -H 'Accept: */*' \
+  -H 'Content-Type: application/json' \
+  -H 'Cookie: TINE20SESSID='"$SESSIONID"'' \
+  -H 'X-Requested-With: XMLHttpRequest' \
+  -H 'X-Tine20-JsonKey: '"$JSONKEY"'' \
+  -H 'X-Tine20-Request-Type: JSON' \
+  --insecure \
+  -d '{"jsonrpc":"2.0","method":"SSO.saveRelyingParty","params":{"recordData":{
+    "name": "oidc-test-sp",
+    "label": "oidc test service provider",
+    "description": "you might test with ghcr.io/beryju/oidc-test-client",
+    "logo": "https://openid.net/wordpress-content/uploads/2014/09/openid-r-logo-900x360.png",
+    "config_class": "SSO_Model_OAuthOIdRPConfig",
+      "config": {
+        "redirect_urls": [
+          "http://localhost:4901/auth/callback"
+        ],
+        "secret": "test-secret",
+        "is_confidential": false,
+        "id": "0"
+      }
+  },"duplicateCheck":true},"id":3}'

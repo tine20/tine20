@@ -1,0 +1,28 @@
+#! /bin/sh
+
+URL=http://web:4000/
+USER=tine20admin
+read PASS
+
+TMP=$(curl -s $URL \
+  -H 'Content-Type: application/json' \
+  -H 'X-Requested-With: XMLHttpRequest' \
+  -H 'X-Tine20-ClientAssetHash: 64558b09a551cee0fac4c9f1dcd5c7a3ac5c0e34' \
+  -H 'X-Tine20-Request-Type: JSON' \
+  --insecure \
+  -d '{"jsonrpc":"2.0","method":"Tinebase.login","params":{"username":"'"$USER"'","password":"'"$PASS"'"},"id":0}' \
+  | jq  -r '.result.sessionId, .result.jsonKey')
+
+i=0
+for line in $TMP; do
+  if [ $i -eq 0 ]; then
+    SESSIONID="$line"
+  else
+    JSONKEY="$line"
+  fi
+    echo "$line"
+    i=$((i+1))
+done
+
+export SESSIONID
+export JSONKEY

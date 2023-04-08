@@ -38,7 +38,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
     /**
      * @var {Ext.data.JsonStore} Store for available tags
      */
-    availableTagsStore: false,
+    //availableTagsStore: false,
     /**
      * @var {Ext.form.ComboBox} live search field to search tags to add
      */
@@ -75,7 +75,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         });
         
         // init availableTagsStore
-        this.availableTagsStore = new Ext.data.JsonStore({
+/*        this.availableTagsStore = new Ext.data.JsonStore({
             id: 'id',
             root: 'results',
             totalProperty: 'totalCount',
@@ -88,7 +88,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 },
                 paging : {}
             }
-        });
+        });*/
 
         this.searchField = new Tine.widgets.tags.TagCombo({
             app: this.app,
@@ -282,8 +282,9 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                                             },
                                             success: function(_result, _request) {
                                                 // reset avail tag store
-                                                this.availableTagsStore.lastOptions = null;
-                                                
+                                                //this.availableTagsStore.lastOptions = null;
+
+                                                this.searchField.lastQuery = null;
                                                 for (var i=0,j=selectedTags.length; i<j; i++){
                                                     this.recordTagsStore.remove(selectedTags[i]);
                                                 }
@@ -355,11 +356,13 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             
             if (!isAttached) {
                 var tagToAttach = false;
+/*
+                @todo check if tag exist here
                 this.availableTagsStore.each(function(tag){
                     if(tag.data.name == tagName) {
                         tagToAttach = tag;
                     }
-                }, this);
+                }, this);*/
                 
                 if (!tagToAttach) {
                     tagToAttach = new Tine.Tinebase.Model.Tag({
@@ -383,7 +386,8 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                             this.recordTagsStore.add(newTag);
                             
                             // reset avail tag store
-                            this.availableTagsStore.lastOptions = null;
+                            //this.availableTagsStore.lastOptions = null;
+                            this.searchField.lastQuery = null;
                             this.el.unmask();
                         },
                         failure: function ( result, request) {
@@ -416,7 +420,8 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 },
                 success: function(_result, _request) {
                     // reset avail tag store
-                    this.availableTagsStore.lastOptions = null;
+                    //this.availableTagsStore.lastOptions = null;
+                    this.searchField.lastQuery = null;
                     this.el.unmask();
                 },
                 failure: function ( result, request) {
