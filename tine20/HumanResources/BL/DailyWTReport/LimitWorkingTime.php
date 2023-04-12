@@ -132,6 +132,7 @@ class HumanResources_BL_DailyWTReport_LimitWorkingTime implements Tinebase_BL_El
                 $_data->timeSlots = array_slice($_data->timeSlots, 0, array_search($key, array_keys($_data->timeSlots), true));
                 return;
             }
+            next($_data->timeSlots);
         }
     }
 }
