@@ -6,7 +6,7 @@
  * @subpackage  BL
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -120,8 +120,9 @@ class HumanResources_BL_DailyWTReport_LimitWorkingTime implements Tinebase_BL_El
             $duration += $timeSlot->end->getTimestamp() - $timeSlot->start->getTimestamp();
 
             if ($duration > $maxDuration) {
-                if ($maxDuration - $duration !== $timeSlot->end->getTimestamp() - $timeSlot->start->getTimestamp()) {
-                    $timeSlot->end->subSecond($maxDuration - $duration);
+                $diff = $duration - $maxDuration;
+                if ($diff !== $timeSlot->end->getTimestamp() - $timeSlot->start->getTimestamp()) {
+                    $timeSlot->end->subSecond($diff);
                     if (!next($_data->timeSlots)) {
                         return;
                     }
