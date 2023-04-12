@@ -9,8 +9,8 @@ return [
                     'use' => 'sig',
                     'alg' => 'RS256',
                     'kid' => 'tine-sso',
-                    'publickey' => '/etc/tine20/conf.d/sso_cert.crt',
-                    'privatekey' => '/etc/tine20/conf.d/sso_key.pem',
+                    'publickey' => __DIR__ . '/sso_cert.crt',
+                    'privatekey' => __DIR__ . '/sso_key.pem',
                 ]),
             ],
         ],
@@ -19,8 +19,8 @@ return [
             'tineLogout' => true,
             'keys' => [
                 [
-                    'privatekey' => '/etc/tine20/conf.d/sso_key.pem',
-                    'certificate' => '/etc/tine20/conf.d/sso_cert.pem',
+                    'privatekey' => __DIR__ . '/sso_key.pem',
+                    'certificate' => __DIR__ . '/sso_cert.pem',
                 ]
             ]
         ],
