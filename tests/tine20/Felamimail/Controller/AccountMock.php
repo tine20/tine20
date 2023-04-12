@@ -53,7 +53,7 @@ class Felamimail_Controller_AccountMock extends Felamimail_Controller_Account
                     Tinebase_TransactionManager::getInstance()->unitTestRemoveTransactionable($smtpDb);
                 } catch (PDOException $e) {}
             }
-            $this->createdAccounts[] = $_createdRecord;
+            $this->createdAccounts[] = Tinebase_User::getInstance()->getFullUserById($_createdRecord->user_id);
         }
     }
 
@@ -63,9 +63,12 @@ class Felamimail_Controller_AccountMock extends Felamimail_Controller_Account
             return;
         }
 
-        /** @var Felamimail_Model_Account $account */
+        /** @var Tinebase_Model_FullUser $account */
         foreach ($this->createdAccounts as $account) {
-            Tinebase_EmailUser_XpropsFacade::deleteEmailUsers($account);
+            $account->setId($account->xprops()['emailUserIdImap']);
+            Tinebase_EmailUser::getInstance()->inspectDeleteUser($account);
+            $account->setId($account->xprops()['emailUserIdSmtp']);
+            Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP)->inspectDeleteUser($account);
         }
         $this->createdAccounts = [];
     }
