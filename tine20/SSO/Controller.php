@@ -38,11 +38,12 @@ class SSO_Controller extends Tinebase_Controller_Event
         /** @noinspection PhpUnusedParameterInspection */
         \FastRoute\RouteCollector $r
     ) {
+        $r->get('/.well-known/openid-configuration', (new Tinebase_Expressive_RouteHandler(
+            self::class, 'publicGetWellKnownOpenIdConfiguration', [
+            Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+        ]))->toArray());
+
         $r->addGroup('/sso', function (\FastRoute\RouteCollector $routeCollector) {
-            $routeCollector->get('/.well-known/openid-configuration', (new Tinebase_Expressive_RouteHandler(
-                self::class, 'publicGetWellKnownOpenIdConfiguration', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
-            ]))->toArray());
             $routeCollector->addRoute(['GET', 'POST'], '/oauth2/authorize', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicAuthorize', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
@@ -190,54 +191,27 @@ class SSO_Controller extends Tinebase_Controller_Event
         // The Authentication Request contains the prompt parameter with the value login. In this case, the Authorization Server MUST reauthenticate the End-User even if the End-User is already authenticated.
 
         if ($user = Tinebase_Core::getUser()) {
-            $areaLock = Tinebase_AreaLock::getInstance();
-            $userConfigIntersection = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
-            if ($areaLock->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN) &&
-                    $areaLock->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
-                foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN) as $areaConfig) {
-                    $userConfigIntersection->mergeById($areaConfig->getUserMFAIntersection($user));
-                }
 
-                // user has no 2FA config -> currently its sort of optional -> no check
-                if ($userConfigIntersection->count() === 0) {
-                    $areaLock->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
-                } else {
-
-                    if (isset($request->getQueryParams()['mfaid'])) {
-                        $mfaId = $request->getQueryParams()['mfaid'];
-                        $userCfg = $userConfigIntersection->getById($mfaId);
-
-                        if (isset($request->getQueryParams()['mfa'])) {
-                            foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN)->filter(function($rec) use($userCfg) {
-                                return in_array($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID}, $rec->{Tinebase_Model_AreaLockConfig::FLD_MFAS});
-                            }) as $areaCfg) {
-                                if (!$areaCfg->getBackend()->hasValidAuth()) {
-                                    $areaLock->unlock(
-                                        $areaCfg->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME},
-                                        $mfaId,
-                                        $request->getQueryParams()['mfa'],
-                                        $user
-                                    );
-                                    break;
-                                }
-                            }
-                        } else {
-                            if (!Tinebase_Auth_MFA::getInstance($userCfg
-                                    ->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})->sendOut($userCfg)) {
-                                throw new Tinebase_Exception('mfa send out failed');
-                            } //else {
-                                // success, FE to render input field
-                            //}
-                        }
-                    }
-
-                    if ($areaLock->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
-                        // render mfa mask
-                        $response = new \Laminas\Diactoros\Response();
-                        $response->getBody()->write('mfa mask');
-                        return $response;
-                    }
-                }
+            $accessLog = new Tinebase_Model_AccessLog(['clienttype' => Tinebase_Frontend_Json::REQUEST_TYPE], true);
+            Tinebase_Controller::getInstance()->forceUnlockLoginArea();
+            Tinebase_Controller::getInstance()->setRequestContext(array(
+                'MFAPassword' => isset($request->getParsedBody()['MFAPassword']) ? $request->getParsedBody()['MFAPassword'] : null,
+                'MFAId'       => isset($request->getParsedBody()['MFAUserConfigId']) ? $request->getParsedBody()['MFAUserConfigId'] : null,
+            ));
+            try {
+                Tinebase_Controller::getInstance()->_validateSecondFactor($accessLog, $user);
+            } catch (Tinebase_Exception_AreaUnlockFailed | Tinebase_Exception_AreaLocked $tea) { // 630 + 631
+                $response = (new \Laminas\Diactoros\Response())->withHeader('content-type', 'application/json');
+                $response->getBody()->write(json_encode([
+                    'jsonrpc' => '2.0',
+                    'id' => 'fakeid',
+                    'error' => [
+                        'code' => -32000,
+                        'message' => $tea->getMessage(),
+                        'data' => $tea->toArray(),
+                    ],
+                ]));
+                return $response;
             }
 
             $authRequest->setUser(new SSO_Facade_OAuth2_UserEntity($user));
