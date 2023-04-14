@@ -926,6 +926,42 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
         switch (get_class($_eventObject)) {
+            case Tinebase_Event_Record_Delete::class:
+                if ($_eventObject->observable instanceof Timetracker_Model_Timesheet) {
+                    if (!HumanResources_Config::getInstance()->featureEnabled(
+                            HumanResources_Config::FEATURE_CALCULATE_DAILY_REPORTS) &&
+                        !HumanResources_Config::getInstance()->featureEnabled(
+                            HumanResources_Config::FEATURE_WORKING_TIME_ACCOUNTING)
+                    ) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                            __METHOD__ . '::' . __LINE__ . ' FEATURE_WORKING_TIME_ACCOUNTING/FEATURE_CALCULATE_DAILY_REPORTS disabled - Skipping.'
+                        );
+                        break;
+                    }
+
+                    $accountId = $_eventObject->observable->getIdFromProperty('account_id');
+                    static $earliestDeletionDate = [];
+                    if (!isset($earliestDeletionDate[$accountId])) {
+                        $earliestDeletionDate[$accountId] = $_eventObject->observable->start_date;
+                        Tinebase_TransactionManager::getInstance()->registerAfterAfterCommitCallback(function() use(&$earliestDeletionDate) {
+                            // context async / sync
+                            $context = (array)HumanResources_Controller_DailyWTReport::getInstance()->getRequestContext();
+                            if (isset($context['tsSyncron'])) {
+                                foreach ($earliestDeletionDate as $accountId => $date) {
+                                    $this->calculateReportsForAccountId($accountId, $date);
+                                }
+                            } else {
+                                foreach ($earliestDeletionDate as $accountId => $date) {
+                                    Tinebase_ActionQueue::getInstance()->queueAction(HumanResources_Controller_DailyWTReport::class
+                                        . '.calculateReportsForAccountId', $accountId, $date);
+                                }
+                            }
+                        });
+                    } elseif ($earliestDeletionDate[$accountId]->isEarlier($_eventObject->observable->start_date)) {
+                        $earliestDeletionDate[$accountId] = $_eventObject->observable->start_date;
+                    }
+                }
+                break;
             case Tinebase_Event_Record_Update::class:
                 if ($_eventObject->observable instanceof Timetracker_Model_Timesheet) {
                     if (! HumanResources_Config::getInstance()->featureEnabled(
@@ -939,15 +975,17 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                         break;
                     }
 
+                    $date = $_eventObject->oldRecord ?
+                        ($_eventObject->oldRecord->start_date->isEarlier($_eventObject->observable->start_date) ?
+                            $_eventObject->oldRecord->start_date : $_eventObject->observable->start_date)
+                        : $_eventObject->observable->start_date;
                     // context async / sync
                     $context = (array)HumanResources_Controller_DailyWTReport::getInstance()->getRequestContext();
                     if (isset($context['tsSyncron'])) {
-                        $this->calculateReportsForAccountId($_eventObject->observable->account_id,
-                            $_eventObject->observable->start_date);
+                        $this->calculateReportsForAccountId($_eventObject->observable->account_id, $date);
                     } else {
                         Tinebase_ActionQueue::getInstance()->queueAction(HumanResources_Controller_DailyWTReport::class
-                            . '.calculateReportsForAccountId', $_eventObject->observable->account_id,
-                            $_eventObject->observable->start_date);
+                            . '.calculateReportsForAccountId', $_eventObject->observable->account_id, $date);
                     }
 
                 } elseif ($_eventObject->observable instanceof HumanResources_Model_FreeTime) {
