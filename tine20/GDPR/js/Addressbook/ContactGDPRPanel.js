@@ -42,6 +42,10 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
         this.dataIntendedPurposesGrid = new Tine.widgets.grid.QuickaddGridPanel({
             border: true,
             frame: false,
+            useBBar: true,
+            allowCreateNew: true,
+            allowDelete: false,
+            editDialogConfig: {mode: 'local'},
             recordClass: Tine.GDPR.Model.DataIntendedPurposeRecord,
             columns: ['intendedPurpose', 'agreeDate', 'agreeComment', 'withdrawDate', 'withdrawComment'],
             defaultSortInfo: {field: 'agreeDate'},
