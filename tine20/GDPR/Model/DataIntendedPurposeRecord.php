@@ -104,6 +104,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                 self::TYPE              => self::TYPE_STRING,
                 self::LENGTH            => 40,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
+                self::DISABLED          => true,
             ],
             'agreeDate' => [
                 self::TYPE              => self::TYPE_DATE,
