@@ -308,13 +308,25 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         if ($updatedRecord->duration != $currentRecord->duration ||
                 $updatedRecord->start_date != $currentRecord->start_date ||
                 $updatedRecord->stat_time != $currentRecord->start_time) {
-            $this->_tsChanged($updatedRecord);
+            $this->_tsChanged($updatedRecord, $currentRecord);
         }
     }
 
-    protected function _tsChanged(Timetracker_Model_Timesheet $record)
+    protected function _tsChanged(Timetracker_Model_Timesheet $record, ?Timetracker_Model_Timesheet $oldRecord = null)
     {
         $event = new Tinebase_Event_Record_Update();
+        $event->observable = $record;
+        $event->oldRecord = $oldRecord;
+        Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function() use($event) {
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
+        });
+    }
+
+    protected function _inspectAfterDelete(Tinebase_Record_Interface $record)
+    {
+        parent::_inspectAfterDelete($record);
+
+        $event = new Tinebase_Event_Record_Delete();
         $event->observable = $record;
         Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function() use($event) {
             Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
