@@ -48,6 +48,11 @@ class Tinebase_TransactionManager
     protected $_afterCommitCallbacks = array();
 
     /**
+     * @var array list of callbacks to call after "afterCommitCallbacks" have been processed
+     */
+    protected $_afterAfterCommitCallbacks = array();
+
+    /**
      * @var array list of callbacks to call just before rollback
      */
     protected $_onRollbackCallbacks = array();
@@ -166,6 +171,7 @@ class Tinebase_TransactionManager
              $afterCallbacks = $this->_afterCommitCallbacks;
              $this->_onCommitCallbacks = array();
              $this->_afterCommitCallbacks = array();
+             $this->_afterAfterCommitCallbacks = [];
 
              static::$_rollBackOccurred = false;
              try {
@@ -192,6 +198,23 @@ class Tinebase_TransactionManager
              $this->_onRollbackCallbacks = array();
 
              foreach ($afterCallbacks as $callable) {
+                 try {
+                     call_user_func_array($callable[0], $callable[1]);
+                 } catch (Tinebase_Exception_AccessDenied $tead) {
+                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                         __METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
+                 } catch (Tinebase_Exception_NotFound $tenf) {
+                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                         __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                 } catch (Exception $e) {
+                     // we don't want to fail after we committed. Otherwise, a rollback maybe triggered outside which
+                     // actually can't roll back anything anymore as we already committed.
+                     // So afterCommitCallbacks will fail "silently", they only log and go to sentry
+                     Tinebase_Exception::log($e, false);
+                 }
+             }
+
+             foreach ($this->_afterAfterCommitCallbacks as $callable) {
                  try {
                      call_user_func_array($callable[0], $callable[1]);
                  } catch (Tinebase_Exception_AccessDenied $tead) {
@@ -277,6 +300,17 @@ class Tinebase_TransactionManager
     }
 
     /**
+     * register a callable to call after "afterCommitCallbacks" have been processed
+     *
+     * @param array|callable $callable
+     * @param array $param
+     */
+    public function registerAfterAfterCommitCallback($callable, array $param = array())
+    {
+        $this->_afterAfterCommitCallbacks[] = array($callable, $param);
+    }
+
+    /**
      * register a callable to call just before the rollback happens
      *
      * @param array|callable $callable
@@ -301,6 +335,7 @@ class Tinebase_TransactionManager
     {
         $this->_onCommitCallbacks = [];
         $this->_afterCommitCallbacks = [];
+        $this->_afterAfterCommitCallbacks = [];
         $this->_onRollbackCallbacks = [];
         $this->_openTransactionables = [];
         $this->_openTransactions = [];
