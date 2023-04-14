@@ -80,7 +80,8 @@ class HumanResources_Model_BLDailyWTReport_BreakTimeConfig extends Tinebase_Reco
      */
     public function cmp(Tinebase_BL_ElementConfigInterface $_element)
     {
-        if ($_element instanceof HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig) {
+        if ($_element instanceof HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig ||
+                $_element instanceof HumanResources_Model_BLDailyWTReport_ConvertTsPtWtToTimeSlot) {
             return 1;
         }
         if ($_element instanceof HumanResources_Model_BLDailyWTReport_PopulateReportConfig) {

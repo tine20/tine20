@@ -85,6 +85,9 @@ class HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig extends Tineba
      */
     public function cmp(Tinebase_BL_ElementConfigInterface $_element)
     {
+        if ($_element instanceof HumanResources_Model_BLDailyWTReport_ConvertTsPtWtToTimeSlot) {
+            return 1;
+        }
         if ($_element instanceof self) {
             return 0;
         }
