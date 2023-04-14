@@ -458,6 +458,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }, this);
 
         this.attendeeGridPanel.store.on('remove', function(store, record, idx) {
+            if(_.get(record, 'data.user_id', false)){
             //remove location if location is location from deleted ressource
             var typeId = _.get(record, 'data.user_id.type'),
                 type = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'resourceTypes').getById(typeId),
@@ -467,7 +468,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             if (type?.get('is_location') && locationName === locationField.getValue()) {
                 locationField.setValue('');
             }
-        }, this);
+        }}, this);
         
         this.on('render', function() {this.getForm().add(organizerCombo);}, this);
 
