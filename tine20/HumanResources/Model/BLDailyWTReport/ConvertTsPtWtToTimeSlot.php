@@ -61,6 +61,9 @@ class HumanResources_Model_BLDailyWTReport_ConvertTsPtWtToTimeSlot extends Tineb
      */
     public function cmp(Tinebase_BL_ElementConfigInterface $_element)
     {
+        if ($_element instanceof self) {
+            return 0;
+        }
         return -1;
     }
 }

@@ -850,7 +850,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
                 }
                 break;
             case 'function':
-                uasort ($this->_listOfRecords , $_field);
+                uasort ($this->_listOfRecords, $_field);
                 $offsetToSortFieldMap = $this->_listOfRecords;
                 break;
             default:
