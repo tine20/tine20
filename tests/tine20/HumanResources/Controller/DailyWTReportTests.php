@@ -144,6 +144,79 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         $this->assertArrayHasKey('id', $reportMonthlyDeleted['results'][0]['employee_id']);
     }
 
+    public function testCustomBLPipe()
+    {
+        $this->_createBasicData();
+
+        $wts = $this->employee->contracts->getFirstRecord()->working_time_scheme;
+
+        $wts = HumanResources_Controller_WorkingTimeScheme::getInstance()->get($wts);
+        $wts->blpipe = new Tinebase_Record_RecordSet(HumanResources_Model_BLDailyWTReport_Config::class, [
+            [
+                HumanResources_Model_BLDailyWTReport_Config::FLDS_CLASSNAME => HumanResources_Model_BLDailyWTReport_BreakTimeConfig::class,
+                HumanResources_Model_BLDailyWTReport_Config::FLDS_CONFIG_RECORD => [
+                    HumanResources_Model_BLDailyWTReport_BreakTimeConfig::FLDS_TIME_WORKED => 6 * 3600,
+                    HumanResources_Model_BLDailyWTReport_BreakTimeConfig::FLDS_BREAK_TIME => 1800,
+                ],
+            ], [
+                HumanResources_Model_BLDailyWTReport_Config::FLDS_CLASSNAME => HumanResources_Model_BLDailyWTReport_ConvertTsPtWtToTimeSlot::class,
+                HumanResources_Model_BLDailyWTReport_Config::FLDS_CONFIG_RECORD => [],
+            ], [
+                HumanResources_Model_BLDailyWTReport_Config::FLDS_CLASSNAME => HumanResources_Model_BLDailyWTReport_BreakTimeConfig::class,
+                HumanResources_Model_BLDailyWTReport_Config::FLDS_CONFIG_RECORD => [
+                    HumanResources_Model_BLDailyWTReport_BreakTimeConfig::FLDS_TIME_WORKED => 9 * 3600,
+                    HumanResources_Model_BLDailyWTReport_BreakTimeConfig::FLDS_BREAK_TIME => 2700,
+                ],
+            ], [
+                HumanResources_Model_BLDailyWTReport_Config::FLDS_CLASSNAME => HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::class,
+                HumanResources_Model_BLDailyWTReport_Config::FLDS_CONFIG_RECORD => [
+                    HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::FLDS_START_TIME => '06:00:00',
+                    HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::FLDS_END_TIME => '22:00:00',
+                    HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::FLDS_MAX_DURATION => 36000,
+                ],
+            ],
+        ]);
+        HumanResources_Controller_WorkingTimeScheme::getInstance()->update($wts);
+
+        //'2018-07-01 00:00:00'
+        $this->wtTAid = HumanResources_Controller_WorkingTimeScheme::getInstance()
+            ->getWorkingTimeAccount($this->employee)->getId();
+        Timetracker_Controller_Timesheet::getInstance()->create(new Timetracker_Model_Timesheet([
+            'start_date' => '2018-07-01',
+            'start_time' => '09:15',
+            'end_time' => '17:45',
+            'duration' => 0,
+            'description' => 'bla',
+            'account_id' => $this->employee->account_id,
+            'timeaccount_id' => $this->wtTAid,
+        ]));
+
+        $ta = Timetracker_Controller_Timeaccount::getInstance()->create(new Timetracker_Model_Timeaccount([
+            'title' => 'unittest xgasdfg',
+            'number' => '456476'
+        ]));
+
+        Timetracker_Controller_Timesheet::getInstance()->create(new Timetracker_Model_Timesheet([
+            'start_date' => '2018-07-01',
+            'start_time' => '10:15',
+            'end_time' => '12:45',
+            'duration' => 0,
+            'description' => 'bla',
+            'account_id' => $this->employee->account_id,
+            'timeaccount_id' => $ta->getId(),
+        ]));
+
+        // create report
+        $start = new Tinebase_DateTime('2018-07-01 00:00:00');
+        $end = new Tinebase_DateTime('2018-07-02 23:59:59');
+        HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee($this->employee, $start, $end);
+
+        $result = $this->_getReportsForEmployee($this->employee);
+        /** @var HumanResources_Model_DailyWTReport $report */
+        $report = $result->find('date', '2018-07-01 00:00:00');
+        $this->assertSame(1800, (int)$report->break_time_deduction);
+    }
+
     public function testConvertTsPtWtToTimeSlot()
     {
         $this->_createBasicData();
