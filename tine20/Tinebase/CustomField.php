@@ -573,7 +573,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         $modelName = self::getModelNameFromDefinition($_customField->definition);
         $model = new $modelName(array(), true);
         $idProperty = $model->getIdProperty();
-        if (! is_scalar($_value)) {
+        if (! is_scalar($_value) && $_value !== null) {
             if (strtolower($_customField->definition['type']) == 'record') {
                 /** @var Tinebase_Record_Interface $model */
                 $value = $_value[$idProperty];
