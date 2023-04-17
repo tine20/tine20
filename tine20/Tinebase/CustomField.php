@@ -529,11 +529,11 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     /**
      * @param Tinebase_Record_Interface $_record
      * @param Tinebase_Model_CustomField_Config $customField
-     * @return null|string
+     * @return null|mixed
      * @throws Tinebase_Exception_Record_Validation
      */
     protected function _getCustomFieldValue(Tinebase_Record_Interface $_record,
-                                            Tinebase_Model_CustomField_Config $customField): ?string
+                                            Tinebase_Model_CustomField_Config $customField)
     {
         $value = $_record->customfields[$customField->name];
 
