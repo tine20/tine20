@@ -203,6 +203,7 @@ const priorities = {
         await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
         await expect(page).toMatchElement('input[name=username]');
         await page.waitForFunction('document.activeElement === document.querySelector("input[name=username]")');
+        await page.focus('input[name=username]');
         await expect(page).toFill('input[name=username]', process.env.TEST_USERNAME);
         await expect(page).toFill('input[name=password]', process.env.TEST_PASSWORD);
         await expect(page).toClick('button', {text: 'Anmelden'});
