@@ -1995,11 +1995,36 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $pwulf = Tinebase_User::getInstance()->getFullUserByLoginName('pwulf');
         $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie<br /> Paul Wulf (" .
             $pwulf->accountEmailAddress . ") oder Susan Clever (" .
-            $sclever->accountEmailAddress . ").<br /><br />I am on vacation until Apr 20, 2012. Please contact Paul Wulf<br />(" .
+            $sclever->accountEmailAddress . ").<br /><br />I am on vacation until Apr 20, 2012. Please contact<br /> Paul Wulf (" .
             $pwulf->accountEmailAddress . ") or Susan Clever (" .
             $sclever->accountEmailAddress . ") instead.<br /><br />" .
-            Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId())->n_fn, $result['message']);
+            Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId())->n_fn . "<br />", 
+            $result['message'],
+        );
     }
+
+    /**
+     * testGetVacationMessage
+     */
+    public function testGetVacationMessageWithoutContacts()
+    {
+        $template = $this->testGetVacationTemplates();
+        $result = $this->_json->getVacationMessage(array(
+            'start_date' => '2012-04-18',
+            'end_date' => '2012-04-20',
+            'contact_ids' => array(
+            ),
+            'template_id' => $template['id'],
+            'signature' => $this->_account->signature
+        ));
+
+        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie andere Kollegen.<br /><br /><br />" .
+            "I am on vacation until Apr 20, 2012. Please contact other colleagues.<br /><br /><br />" .
+            Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId())->n_fn . "<br />",
+            $result['message'],
+        );
+    }
+
 
     /**
      * get vacation message with template
