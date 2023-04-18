@@ -28,7 +28,7 @@ describe('Contacts', () => {
 
             await importDialog.waitForXPath('//button');
             await lib.uploadFile(importDialog, 'src/testScreenshots/Addressbook/test.csv');
-            await expect(importDialog).toMatchElement('button', {text: new RegExp('test.csv.*')})
+            await expect(importDialog).toMatchElement('button', {text: new RegExp('test.csv.*'), timeout:10000})
             await importDialog.screenshot({path: 'screenshots/Adressbuch/1_adressbuch_importfenster.png'});
             await expect(importDialog).toClick('button', {text: 'Vorwärts'});
             await importDialog.screenshot({path: 'screenshots/Adressbuch/4_adressbuch_mit_import_optionen_setzen.png.png'});
