@@ -62,7 +62,9 @@ class Sales_Controller_Boilerplate extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * @throws Tinebase_Exception_Record_Validation
+     * @param Sales_Model_Boilerplate $boilerplate
+     * @return void
+     * @throws Tinebase_Exception_SystemGeneric
      */
     protected function _checkUniqueAndDateOverlaps(Sales_Model_Boilerplate $boilerplate): void
     {
@@ -111,16 +113,18 @@ class Sales_Controller_Boilerplate extends Tinebase_Controller_Record_Abstract
 
         if ($overlap = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                 Sales_Model_Boilerplate::class, $filter))->getFirstRecord()) {
+            $translation = Tinebase_Translation::getTranslation($this->_applicationName);
             if (!$boilerplate->{Sales_Model_Boilerplate::FLD_FROM} &&
                     !$boilerplate->{Sales_Model_Boilerplate::FLD_UNTIL}) {
-                throw new Tinebase_Exception_Record_Validation('Name needs to be unique.');
+                $message = $translation->_('Name needs to be unique.');
             } else {
-                throw new Tinebase_Exception_Record_Validation('Dates "' .
+                $message = $translation->_('Dates "' .
                     $boilerplate->{Sales_Model_Boilerplate::FLD_FROM} . ' - ' .
                     $boilerplate->{Sales_Model_Boilerplate::FLD_UNTIL} . '" overlap with existing records dates "' .
                     $overlap->{Sales_Model_Boilerplate::FLD_FROM} . ' - ' .
                     $overlap->{Sales_Model_Boilerplate::FLD_UNTIL} . '"');
             }
+            throw new Tinebase_Exception_SystemGeneric($message);
         }
     }
 

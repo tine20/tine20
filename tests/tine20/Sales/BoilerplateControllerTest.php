@@ -128,7 +128,7 @@ class Sales_BoilerplateControllerTest extends TestCase
         $created = $this->ctrl->create($this->getBoilerplate());
         $created->setId(null);
 
-        $this->expectException(Tinebase_Exception_Record_Validation::class);
+        $this->expectException(Tinebase_Exception_SystemGeneric::class);
         $this->expectExceptionMessage('Name needs to be unique.');
         $this->ctrl->create($created);
     }
@@ -144,7 +144,7 @@ class Sales_BoilerplateControllerTest extends TestCase
 
         $dates = '"' . $created->{Sales_Model_Boilerplate::FLD_FROM} . ' - ' .
             $created->{Sales_Model_Boilerplate::FLD_UNTIL} . '"';
-        $this->expectException(Tinebase_Exception_Record_Validation::class);
+        $this->expectException(Tinebase_Exception_SystemGeneric::class);
         $this->expectExceptionMessage('Dates ' . $dates . ' overlap with existing records dates ' . $dates);
         $this->ctrl->create($created);
     }
@@ -160,7 +160,7 @@ class Sales_BoilerplateControllerTest extends TestCase
         $created->{Sales_Model_Boilerplate::FLD_FROM} = $created->{Sales_Model_Boilerplate::FLD_UNTIL};
         $created->{Sales_Model_Boilerplate::FLD_UNTIL} = null;
 
-        $this->expectException(Tinebase_Exception_Record_Validation::class);
+        $this->expectException(Tinebase_Exception_SystemGeneric::class);
         $this->ctrl->create($created);
     }
 
@@ -174,7 +174,7 @@ class Sales_BoilerplateControllerTest extends TestCase
         $created->{Sales_Model_Boilerplate::FLD_FROM} = $created->{Sales_Model_Boilerplate::FLD_UNTIL};
         $created->{Sales_Model_Boilerplate::FLD_UNTIL} = null;
 
-        $this->expectException(Tinebase_Exception_Record_Validation::class);
+        $this->expectException(Tinebase_Exception_SystemGeneric::class);
         $this->ctrl->create($created);
     }
 
