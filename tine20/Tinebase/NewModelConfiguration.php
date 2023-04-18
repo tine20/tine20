@@ -34,13 +34,20 @@ class Tinebase_NewModelConfiguration  extends Tinebase_ModelConfiguration
      * the constructor (must be called in a singleton per model fashion, each model maintains its own singleton)
      *
      * @var array $modelClassConfiguration
-     * @var string $recordClas
+     * @var string $recordClass
      * @throws Tinebase_Exception_Record_DefinitionFailure
      */
-    public function __construct($modelClassConfiguration, $recordClas)
+    public function __construct($modelClassConfiguration, $recordClass)
     {
         try {
-            parent::__construct($modelClassConfiguration, $recordClas);
+            try {
+                parent::__construct($modelClassConfiguration, $recordClass);
+            } catch (Zend_Db_Statement_Exception $e) {
+                // retry during wakeup for example
+                Tinebase_Core::set(Tinebase_Core::DB, null);
+                Tinebase_Core::setupDatabaseConnection();
+                parent::__construct($modelClassConfiguration, $recordClass);
+            }
         } catch (Tinebase_Exception_Record_DefinitionFailure $e) {
             throw $e;
         } catch (Exception $e) {
