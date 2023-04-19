@@ -204,8 +204,9 @@ const priorities = {
         await expect(page).toMatchElement('input[name=username]');
         await page.waitForFunction('document.activeElement === document.querySelector("input[name=username]")');
         await page.focus('input[name=username]');
-        await expect(page).toFill('input[name=username]', process.env.TEST_USERNAME);
-        await expect(page).toFill('input[name=password]', process.env.TEST_PASSWORD);
+        await page.waitForTimeout(1000); //wait for input field completely loaded
+        await expect(page).toFill('input[name=username]', process.env.TEST_USERNAME, {delay: 50});
+        await expect(page).toFill('input[name=password]', process.env.TEST_PASSWORD, {delay: 50});
         await expect(page).toClick('button', {text: 'Anmelden'});
         try {
             await page.waitForSelector('.x-tab-strip-closable.x-tab-with-icon.tine-mainscreen-apptabspanel-menu-tabel', {timeout: 0});
