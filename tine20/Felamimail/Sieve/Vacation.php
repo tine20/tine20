@@ -248,10 +248,11 @@ class Felamimail_Sieve_Vacation
     
     /**
      * return the vacation Sieve code
-     * 
+     *
      * @return string
+     * @throws DOMException
      */
-    public function __toString() 
+    public function __toString(): string
     {
         $days      = ":days $this->_days ";
         $from      = !empty($this->_from) ? ":from {$this->_quoteString($this->_from)} " : null;
@@ -269,21 +270,8 @@ class Felamimail_Sieve_Vacation
         
         $reason = $this->_reason;
         $plaintextReason = $this->_getPlaintext($reason);
-        
-        // format html
-        $doc = new DOMDocument('1.0', 'UTF-8');
-        $doc->preserveWhiteSpace = true;
-        $doc->formatOutput = true;
-        $doc->loadHTML('<?xml version="1.0" encoding="utf-8"?>' . $reason);
-        $doc->saveXML();
-        $xpath = new DOMXPath($doc);
-        $bodyNodes = $xpath->query('/html/body')->item(0)->childNodes;
-        $outputFragments = [];
-        foreach ($bodyNodes as $bodyNode) {
-            $outputFragments[] = $doc->saveXML($bodyNode);
-        }
-        $formattedHTMLBody = implode(PHP_EOL, $outputFragments);
-        
+        $formattedHTMLBody = $this->_getFormattedHTMLBody($reason);
+
         if (! empty($this->_mime)) {
             $mime = ':mime ';
             $contentType = 'Content-Type: ' . $this->_mime;
@@ -332,6 +320,29 @@ class Felamimail_Sieve_Vacation
         }
 
         return $vacation;
+    }
+
+    /**
+     * @param string $reason
+     * @return string
+     * @throws DOMException
+     */
+    protected function _getFormattedHTMLBody(string $reason): string
+    {
+        $doc = new DOMDocument('1.0', 'UTF-8');
+        $doc->preserveWhiteSpace = true;
+        $doc->formatOutput = true;
+        $html = $doc->createElement('html');
+        $html->appendChild($doc->createElement('body', $reason));
+        $doc->appendChild($html);
+        $doc->saveXML();
+        $xpath = new DOMXPath($doc);
+        $bodyNodes = $xpath->query('/html/body')->item(0)->childNodes;
+        $outputFragments = [];
+        foreach ($bodyNodes as $bodyNode) {
+            $outputFragments[] = $doc->saveXML($bodyNode);
+        }
+        return implode(PHP_EOL, $outputFragments);
     }
     
     /**
