@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Exception
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -170,10 +170,12 @@ class Tinebase_Exception extends Exception
             return false;
         }
 
+        $callTrace = (new Exception())->getTraceAsString();
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Sending exception to Sentry');
         // TODO add more information? add it here or in \Tinebase_Core::setupSentry?
-        Sentry\configureScope(function (Sentry\State\Scope $scope): void {
+        Sentry\configureScope(function (Sentry\State\Scope $scope) use($callTrace): void {
             $scope->setExtra('tinebaseId', Tinebase_Core::getTinebaseId());
+            $scope->setExtra('callTrace', $callTrace);
         });
         Sentry\captureException($exception);
         return true;
