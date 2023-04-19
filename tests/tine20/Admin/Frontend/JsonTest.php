@@ -1397,4 +1397,12 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         self::assertArrayHasKey('emailMailSize', $emailUser, print_r($emailUser, true));
         self::assertArrayHasKey('emailMailQuota', $emailUser, print_r($emailUser, true));
     }
+
+    public function testSearchCustomfields()
+    {
+        $this->_createCustomField();
+        $filter = [['field' => "query", 'operator' => "contains", 'value' => 'YomiName']];
+        $cfs = $this->_json->searchCustomfields($filter, []);
+        self::assertEquals(1, $cfs['totalcount'], print_r($cfs, true));
+    }
 }

@@ -6,7 +6,7 @@
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -34,6 +34,7 @@ class Tinebase_Model_CustomField_ConfigFilter extends Tinebase_Model_Filter_Filt
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
+        'query'             => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', 'model'))),
         'id'                => array('filter' => 'Tinebase_Model_Filter_Id'),
         'application_id'    => array('filter' => 'Tinebase_Model_Filter_Id'),
         'name'              => array('filter' => 'Tinebase_Model_Filter_Text'),
