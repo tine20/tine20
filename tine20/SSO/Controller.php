@@ -166,19 +166,25 @@ class SSO_Controller extends Tinebase_Controller_Event
 
         $server = static::getOpenIdConnectServer();
 
-        // \League\OAuth2\Server\Grant\AuthCodeGrant::canRespondToAuthorizationRequest
-        // expects ['response_type'] === 'code' && isset($request->getQueryParams()['client_id'])
-        $authRequest = $server->validateAuthorizationRequest(
+        try {
+            // \League\OAuth2\Server\Grant\AuthCodeGrant::canRespondToAuthorizationRequest
+            // expects ['response_type'] === 'code' && isset($request->getQueryParams()['client_id'])
+            $authRequest = $server->validateAuthorizationRequest(
             /** @var \Psr\Http\Message\ServerRequestInterface $request */
-            $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class)
-        );
+                $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class)
+            );
+        } catch (League\OAuth2\Server\Exception\OAuthServerException $oauthException) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $oauthException->getMessage());
+            return new \Laminas\Diactoros\Response('php://memory', 401);
+        }
 
         try {
             Tinebase_Core::startCoreSession();
         } catch (Zend_Session_Exception $zse) {
             // expire session cookie for client
             Tinebase_Session::expireSessionCookie();
-            return new \Laminas\Diactoros\Response($body = 'php://memory', $status = 500);
+            return new \Laminas\Diactoros\Response('php://memory', 500);
         }
 
         if (isset($request->getParsedBody()['username']) && isset($request->getParsedBody()['password'])) {
