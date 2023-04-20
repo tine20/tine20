@@ -25,7 +25,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      *
      * @var Tinebase_ModelConfiguration
      */
-    protected static $_configurationObject = NULL;
+    protected static $_configurationObject = null;
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -40,15 +40,17 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         'titleProperty'     => 'name',
         'containerName'     => 'Inventory item list',
         'containersName'    => 'Inventory item lists', // ngettext('Inventory item list', 'Inventory item lists', n)
-        'hasRelations'      => TRUE,
-        'hasCustomFields'   => TRUE,
-        'hasNotes'          => TRUE,
-        'hasTags'           => TRUE,
-        'modlogActive'      => TRUE,
-        'hasAttachments'    => TRUE,
-        'exposeJsonApi'     => TRUE,
+        'hasRelations'      => true,
+        'hasCustomFields'   => true,
+        'hasNotes'          => true,
+        'hasTags'           => true,
+        'modlogActive'      => true,
+        'hasAttachments'    => true,
+        'copyNoAppendTitle' => true,
+        
+        'exposeJsonApi'     => true,
 
-        'createModule'      => TRUE,
+        'createModule'      => true,
 
         'appName'           => 'Inventory',
         'modelName'         => 'InventoryItem',
@@ -83,7 +85,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'queryFilter' => true,
             ),
             'status' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'nullable' => true,
                 'label' => 'Status', // _('Status')
                 'type' => 'keyfield',
@@ -93,70 +95,70 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'type'       => 'string',
                 'length'     => 100,
                 'nullable'   => true,
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Inventory ID' // _('Inventory ID')
             ),
             'description' => array(
                 // TODO convert to fulltext
                 'type'       => 'text',
                 'nullable'   => true,
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      =>'Description' // _('Description')
             ),
             'location' => array(
                 'type'       => 'string',
                 'length'     => 255,
                 'nullable'   => true,
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Location', // _('Location')
                 'queryFilter' => true,
             ),
             'invoice_date' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Invoice date', // _('Invoice date')
-                'inputFilters' => array('Zend_Filter_Empty' => NULL),
-                'hidden'     => TRUE,
-                'default'    => NULL,
+                'inputFilters' => array('Zend_Filter_Empty' => null),
+                'hidden'     => true,
+                'default'    => null,
                 'type'       => 'datetime',
                 'nullable'     => true,
             ),
             'total_number' => array(
                 'type'         => 'integer',
                 'nullable'     => true,
-                'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'label'        => NULL,
-                'inputFilters' => array('Zend_Filter_Empty' => NULL),
+                'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'label'        => null,
+                'inputFilters' => array('Zend_Filter_Empty' => null),
                 'default'      => 1,
             ),
             'active_number' => array(
                 'type'         => 'integer',
                 'nullable'     => true,
-                'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'        => 'Available number', // _(Available number)
-                'inputFilters' => array('Zend_Filter_Empty' => NULL),
+                'inputFilters' => array('Zend_Filter_Empty' => null),
                 'default'      => 1,
             ),
             'invoice' => array(
                 'type'       => 'string',
                 'nullable'   => true,
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Invoice', // _('Invoice')
-                'hidden'     => TRUE
+                'hidden'     => true
             ),
             'price' => array(
                 'type'         => 'money',
                 'nullable'     => true,
-                'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'        => 'Price', // _('Price')
-                'hidden'       => TRUE,
-                'inputFilters' => array('Zend_Filter_Empty' => NULL),
+                'hidden'       => true,
+                'inputFilters' => array('Zend_Filter_Empty' => null),
             ),
             'costcenter' => array(
                 'label'      => 'Cost center', // _('Cost Center')
-                'hidden'     => TRUE,
+                'hidden'     => true,
                 'type'       => 'record',
                 'nullable'   => true,
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => null),
                 'config' => array(
                     'appName'     => Tinebase_Config::APP_NAME,
                     'modelName'   => Tinebase_Model_CostCenter::MODEL_NAME_PART,
@@ -164,39 +166,39 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 ),
             ),
             'warranty' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Warranty', // _('Warranty')
-                'hidden'     => TRUE,
-                'inputFilters' => array('Zend_Filter_Empty' => NULL),
+                'hidden'     => true,
+                'inputFilters' => array('Zend_Filter_Empty' => null),
                 'type'       => 'datetime',
                 'nullable'   => true,
             ),
             'added_date' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Added', // _('Added')
-                'hidden'     => TRUE,
-                'inputFilters' => array('Zend_Filter_Empty' => NULL),
+                'hidden'     => true,
+                'inputFilters' => array('Zend_Filter_Empty' => null),
                 'type'       => 'datetime',
                 'nullable'   => true,
             ),
             'removed_date' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'      => 'Removed', // _('Removed')
-                'hidden'     => TRUE,
-                'inputFilters' => array('Zend_Filter_Empty' => NULL),
+                'hidden'     => true,
+                'inputFilters' => array('Zend_Filter_Empty' => null),
                 'type'       => 'datetime',
                 'nullable'   => true,
             ),
             'deprecated_status' => array(
                 'type'         => 'integer',
-                'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => 0),
+                'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
                 //'label'        => 'Depreciate', // _('Depreciate')
-                'label'        => NULL,
+                'label'        => null,
                 'default'      => 0,
             ),
             'image' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'inputFilters' => array('Zend_Filter_Empty' => NULL),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'inputFilters' => array('Zend_Filter_Empty' => null),
                 // is saved in vfs, only image files allowed
                 'type' => 'image'
             ),
