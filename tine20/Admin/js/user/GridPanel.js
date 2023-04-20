@@ -199,7 +199,8 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { header: this.app.i18n._('MFA Configured'), id: 'mfa_configs', dataIndex: 'mfa_configs', width: 100, renderer: this.mfaRenderer.createDelegate(this), hidden: false},
             { header: this.app.i18n._('Password Must Change'), id: 'password_must_change', dataIndex: 'password_must_change', width: 200, renderer: Tine.Tinebase.common.booleanRenderer, hidden: false},
             { header: this.app.i18n._('Password changed'), id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: false},
-            { header: this.app.i18n._('Expires'), id: 'accountExpires', dataIndex: 'accountExpires', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: false}
+            { header: this.app.i18n._('Expires'), id: 'accountExpires', dataIndex: 'accountExpires', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: false},
+            { header: this.app.i18n._('Full Name'), id: 'accountFullName', dataIndex: 'accountFullName'}
         ].concat(this.getModlogColumns());
     },
     

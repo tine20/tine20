@@ -37,11 +37,17 @@ msgid_plural "Applications"
 msgstr[0] "Anwendung"
 msgstr[1] "Anwendungen"
 
+msgid "GENDER_User"
+msgstr "male"
+
 #: js/Admin.js:28 js/AccessLog.js:106 js/user/Users.js:77
 msgid "User"
 msgid_plural "Users"
 msgstr[0] "Benutzer"
 msgstr[1] "Benutzer"
+
+msgid "Full Name"
+msgstr "Vollständiger Name"
 
 #: js/Admin.js:41 js/Models.js:91
 msgid "Groups"
