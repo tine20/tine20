@@ -1305,9 +1305,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     protected function _genericCsvExport(array $config, Tinebase_Model_Filter_FilterGroup $filter = null)
     {
-        $app = Tinebase_Application::getInstance()->getApplicationByName($config['app']);
-        $definition = Tinebase_ImportExportDefinition::getInstance()
-            ->updateOrCreateFromFilename($config['definition'], $app);
+        if (isset($config['definitionName'])) {
+            $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($config['definitionName']);
+        } else {
+            $app = Tinebase_Application::getInstance()->getApplicationByName($config['app']);
+            $definition = Tinebase_ImportExportDefinition::getInstance()
+                ->updateOrCreateFromFilename($config['definition'], $app);
+        }
 
         if (isset($config['exportClass'])) {
             $class = $config['exportClass'];
