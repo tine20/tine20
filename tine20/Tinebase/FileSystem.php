@@ -4263,7 +4263,6 @@ class Tinebase_FileSystem implements
         $lastKeepAlive = time();
 
         $avScanner = Tinebase_FileSystem_AVScan_Factory::getScanner();
-        $result = true;
 
         if (!($baseDir = opendir($this->_basePath))) {
             Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('can not open basedir'));
@@ -4273,6 +4272,7 @@ class Tinebase_FileSystem implements
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Starting AVSCan with basedir ' . $this->_basePath);
 
+        $errorCount = 0;
         while (false !== ($hashDir = readdir($baseDir))) {
             $hashDirPath = $this->_basePath . DIRECTORY_SEPARATOR . $hashDir;
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -4284,9 +4284,9 @@ class Tinebase_FileSystem implements
                 continue;
             }
             if (!($fileDir = opendir($hashDirPath))) {
-                Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('can not open filedir: ' .
+                Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('can not open filedir (skipping): ' .
                     $hashDirPath));
-                $result = false;
+                $errorCount++;
                 continue;
             }
             while (false !== ($file = readdir($fileDir))) {
@@ -4302,9 +4302,9 @@ class Tinebase_FileSystem implements
                     . ' Scanning file ' . $path . ' ...');
 
                 if (false === ($fileSize = filesize($path))) {
-                    Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('failed to get hash file size: ' .
+                    Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('failed to get hash file size (skipping): ' .
                         $path));
-                    $result = false;
+                    $errorCount++;
                     continue;
                 }
                 if ($fileSize > Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
@@ -4328,7 +4328,7 @@ class Tinebase_FileSystem implements
                     if (false === ($fh = fopen($path, 'r'))) {
                         Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue(
                             'could not open file ' . $path . ' for reading... skipping'));
-                        $result = false;
+                        $errorCount++;
                         continue;
                     }
 
@@ -4337,10 +4337,9 @@ class Tinebase_FileSystem implements
                     $fh = null;
 
                     if (Tinebase_FileSystem_AVScan_Result::RESULT_ERROR === $scanResult->result) {
-                        // TODO is it ok to return FALSE if a single file fails? the scheduler job will run again in 1 hour and scan everything again!
                         Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue(
-                            'got RESULT_ERROR from scanner'));
-                        $result = false;
+                            'Got RESULT_ERROR from scanner for file: ' . $path));
+                        $errorCount++;
                     } else {
                         $this->_updateAvScanOfFileHash($hashDir . $file, $scanResult->result);
                     }
@@ -4357,7 +4356,10 @@ class Tinebase_FileSystem implements
         // only for unused variable check
         unset($raii);
 
-        return $result;
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Scan complete. Error count: ' . $errorCount);
+
+        return true;
     }
 
     /**
