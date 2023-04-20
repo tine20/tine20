@@ -40,6 +40,9 @@ class Generic extends Abstract {
       pwDlg.on('cancel', () => {
         reject(new Error('USERABORT'))
       })
+      pwDlg.on('destroy', () => {
+        reject(new Error('USERABORT'))
+      })
     })
   }
 }
