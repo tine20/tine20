@@ -190,11 +190,11 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'nullable'   => true,
             ),
             'deprecated_status' => array(
-                'type'         => 'integer',
-                'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-                //'label'        => 'Depreciate', // _('Depreciate')
-                'label'        => null,
-                'default'      => 0,
+                self::TYPE => self::TYPE_BOOLEAN,
+                self::VALIDATORS => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+                self::LABEL => null,
+                self::DEFAULT_VAL => 0,
+                //'label'        => 'Depreciated', // _('Depreciated')
             ),
             'image' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
