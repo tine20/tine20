@@ -436,7 +436,9 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             return;
         }
         
-        var ar = this.el.parent().select('.tinebase-editmultipledialog-dirty');
+        var ar = this.el.parent().down('.tinebase-editmultipledialog-dirty')
+            || this.el.parent().down('.tinebase-editmultipledialog-clearer');
+
         var originalValue = this.hasOwnProperty('startingValue') ? this.startingValue : this.originalValue,
             currentValue;
         
@@ -451,7 +453,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         Tine.log.info('Start value: "' + originalValue + '", current: "' + currentValue + '"');
         if ((Ext.encode(originalValue) != Ext.encode(currentValue)) || (this.cleared === true)) {  // if edited or cleared
             // Create or set arrow
-            if (ar.elements.length > 0) {
+            if (ar) {
                 ar.setStyle('display','block');
             } else {
                 var arrow = new Ext.Element(document.createElement('img'));
@@ -475,7 +477,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             }
         } else {    // If set back
             // Set arrow
-            if (ar.elements.length > 0) {
+            if (ar) {
                 ar.setStyle('display','none');
             }
             // Set field
@@ -629,6 +631,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                         ff.startRecord = val;
                     }
                 }
+                ff.setValue(this.interRecord.get(field.recordKey));
             } else {
                 ff.setValue(this.interRecord.get(field.recordKey));
             }
