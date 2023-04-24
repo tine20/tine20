@@ -107,6 +107,27 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                         $_eventObject->account, $_eventObject->oldAccount, $_eventObject->pwd);
                 }
                 break;
+            case Tinebase_Event_User_ChangePassword::class:
+                /** @var Tinebase_Event_User_ChangePassword $_eventObject */
+                try {
+                    $internalAccounts = Admin_Controller_EmailAccount::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                        ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_USER_INTERNAL],
+                        ['field' => 'user_id', 'operator' => 'equals', 'value' => $_eventObject->userId]
+                    ]));
+                    $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+                    $emailUserSMTPBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+                    
+                    foreach ($internalAccounts as $internalAccount) {
+                        /** @var Tinebase_EmailUser_Sql $emailUserBackend */
+                        $emailUserId = Tinebase_EmailUser_XpropsFacade::getEmailUserId($internalAccount);
+                        $emailUserBackend->inspectSetPassword($emailUserId, $_eventObject->password, );
+                        $emailUserSMTPBackend->inspectSetPassword($emailUserId, $_eventObject->password);
+                    }
+                } catch (Exception $e) {
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not change internal email accounts password: ' . $e);
+                    throw new Tinebase_Exception_Backend($e->getMessage());
+                }
+                break;
             case Tinebase_Event_User_DeleteAccount::class:
                 /** @var Tinebase_Event_User_DeleteAccount $_eventObject */
                 if ($_eventObject->deleteEmailAccounts()) {
