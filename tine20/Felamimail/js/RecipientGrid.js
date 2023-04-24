@@ -129,6 +129,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     initComponent: function() {
+        this.initialLoad = true;
         this.initStore();
         this.initColumnModel();
         this.initActions();
@@ -233,6 +234,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         await this.initRecord().then(() => {
             this.syncRecipientsToStore(['to', 'cc', 'bcc'], this.record);
         })
+        this.initialLoad = false;
     
         this.store.on('update', this.onUpdateStore, this);
         this.store.on('add', this.onAddStore, this);
