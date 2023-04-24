@@ -585,7 +585,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
                     $delimiter . ' ',
                     ' ' . $delimiter . ' '
                  ] as $testDelimiter) {
-            $message['to'] = [Tinebase_Core::getUser()->accountEmailAddress . $testDelimiter . $this->_personas['sclever']->accountEmailAddress];
+            $message['to'] = [Tinebase_Core::getUser()->accountEmailAddress . $testDelimiter . $this->_personas['jsmith']->accountEmailAddress];
             $this->_sendMessage(
                 'INBOX',
                 array(),
@@ -765,8 +765,8 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     {
         $fromEmail = 'unittestalias@' . $this->_mailDomain;
         $messageToSend = $this->_getMessageData($fromEmail);
-        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
-        $messageToSend['to'] = [$sclever->accountEmailAddress];
+        $jsmith = Tinebase_User::getInstance()->getFullUserByLoginName('jsmith');
+        $messageToSend['to'] = [$jsmith->accountEmailAddress];
         $messageToSend['subject'] = 'subjectfilter';
         $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
@@ -777,8 +777,8 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => 'subjectfilter']], '');
         $this->assertEquals('subjectfilter', $result['results'][0]['subject'], print_r($result['filter'], true));
         //search to email
-        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => $sclever->accountEmailAddress]], '');
-        $this->assertEquals($sclever->accountEmailAddress, $result['results'][0]['to'][0], print_r($result['filter'], true));
+        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => $jsmith->accountEmailAddress]], '');
+        $this->assertEquals($jsmith->accountEmailAddress, $result['results'][0]['to'][0], print_r($result['filter'], true));
         //search from email
         $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => $fromEmail]], '');
         $this->assertEquals($fromEmail, $result['results'][0]['from_email'], print_r($result['filter'], true));
