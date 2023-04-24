@@ -710,6 +710,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     checkStates: function() {
+        if (this.recipientGrid.initialLoad) {
+            return _.delay(_.bind(this.checkStates, this), 250);
+        }
         Tine.Felamimail.MessageEditDialog.superclass.checkStates.apply(this, arguments);
         if (this.autoSave && _.keys(this.record.getChanges()).length) {
             this.trottledsaveAsDraft();
