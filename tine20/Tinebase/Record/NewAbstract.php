@@ -200,8 +200,11 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         static::$_inputFilters = [];
         static::$_configurationObject = null;
         // we have to re-instantiate it immediately, we depend on it
-        static::getConfiguration();
-
+        try {
+            static::getConfiguration();
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ": " . $tenf->getMessage());
+        }
         // TODO ??? Tinebase_ModelConfiguration::resetAvailableApps();
     }
 
