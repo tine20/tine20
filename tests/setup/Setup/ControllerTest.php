@@ -4,7 +4,7 @@
  *
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -15,7 +15,7 @@
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
- * Test class for Tinebase_Group
+ * Test class for Setup Controller
  */
 class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
 {
@@ -345,25 +345,33 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
      */
     public function testInstallFromDump()
     {
-        if ($this->_uit->isInstalled('Tinebase')) {
-            $this->_uninstallAllApplications();
+        if (! is_executable('/usr/bin/mysqldump')) {
+            self::markTestSkipped('no mysqldump executable available');
         }
 
-        $tempPath = Tinebase_Core::getTempDir() . '/2021-12-03-14-49-49';
-        $this->assertTrue(is_dir($tempPath) || mkdir($tempPath));
-        $this->assertTrue(copy(dirname(__DIR__) . '/files/2021-12-03-14-49-49/tine20_mysql.sql.bz2', $tempPath . '/tine20_mysql.sql.bz2'));
+        if (! $this->_uit->isInstalled('Tinebase')) {
+            $this->_uit->installApplications(['Addressbook']);
+        }
 
-        $oldTinebaseId = '819218c9cfa0941aac7eaa63147a3f63ced2d269';
+        $tempPath = Tinebase_Core::getTempDir();
+
         $options = array(
             'backupDir' => $tempPath,
             'db' => 1,
+            'noTimestamp' => true,
         );
+
+        // create dump
+        $this->_uit->getInstance()->backup($options);
+
+        $this->assertTrue(is_dir($tempPath) || mkdir($tempPath));
+
+        $this->_uit->uninstallApplications(['Tinebase']);
         $result = $this->_uit->getInstance()->installFromDump($options);
         $this->assertTrue($result);
         $this->assertTrue($this->_uit->isInstalled('Addressbook'), 'Addressbook is not installed');
         $tinebaseId = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
-        $this->assertNotEquals($oldTinebaseId, $tinebaseId);
-        $this->assertGreaterThan(40, Tinebase_Application::getInstance()->getApplicationTables($tinebaseId));
+        $this->assertGreaterThan(20, Tinebase_Application::getInstance()->getApplicationTables($tinebaseId));
 
         $this->_uninstallAllApplications();
     }
