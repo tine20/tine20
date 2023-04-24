@@ -2419,8 +2419,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     public static function resetAllCreatedModels()
     {
         /** @var Tinebase_Record_Interface $model */
-        foreach (self::$createdModels as $model)
-        {
+        foreach (self::$createdModels as $model) {
             $model::resetConfiguration();
         }
         self::$createdModels = [];

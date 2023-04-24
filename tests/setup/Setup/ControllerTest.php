@@ -280,18 +280,18 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
         
         $this->assertGreaterThan(0, $apps['totalcount']);
         
-        // get active sync
+        // get addressbook
         foreach ($apps['results'] as $app) {
-            if ($app['name'] == 'ActiveSync') {
-                $activeSyncApp = $app;
+            if ($app['name'] == 'Addressbook') {
+                $adbApp = $app;
                 break;
             }
         }
         
         // checks
-        $this->assertTrue(isset($activeSyncApp));
-        $this->assertTrue(isset($activeSyncApp['id']), 'ActiveSync ID missing ' . print_r($apps['results'], true));
-        $this->assertEquals('uptodate', $activeSyncApp['install_status']);
+        $this->assertTrue(isset($adbApp));
+        $this->assertTrue(isset($adbApp['id']), 'ActiveSync ID missing ' . print_r($apps['results'], true));
+        $this->assertEquals('uptodate', $adbApp['install_status']);
     }
     
     /**
@@ -300,10 +300,10 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
     public function testInstallApplications()
     {
         try {
-            $result = $this->_uit->installApplications(array('ActiveSync'));
+            $this->_uit->installApplications(array('ActiveSync'));
         } catch (Exception $e) {
             $this->_uit->uninstallApplications(array('ActiveSync'));
-            $result = $this->_uit->installApplications(array('ActiveSync'));
+            $this->_uit->installApplications(array('ActiveSync'));
         }
                 
         $apps = $this->_uit->searchApplications();
