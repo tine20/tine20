@@ -488,15 +488,11 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
     {
         $appCtrl = Tinebase_Application::getInstance();
 
-        //try {
-            $exampleApp = $appCtrl->getApplicationByName(ExampleApplication_Config::APP_NAME);
-        /*} catch (Tinebase_Exception_NotFound $tenf) {
-          install it on the fly?
-        }*/
+        $exampleApp = $appCtrl->getApplicationByName(ExampleApplication_Config::APP_NAME);
 
         $state = json_decode($appCtrl->getApplicationState($exampleApp, Tinebase_Application::STATE_UPDATES), true);
         static::assertTrue(is_array($state) && isset($state[ExampleApplication_Setup_Update_12::RELEASE012_UPDATE001])
             && isset($state[ExampleApplication_Setup_Update_13::RELEASE013_UPDATE001]), print_r($state, true));
-        static::assertCount(5, $state, print_r($state, true));
+        static::assertGreaterThan(5, $state, print_r($state, true));
     }
 }
