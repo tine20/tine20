@@ -61,10 +61,12 @@
         <field>
             <source>Preis</source>
             <destination>price</destination>
+            <typecast>float</typecast>
         </field>
         <field>
             <source>Kostenstelle</source>
             <destination>costcenter</destination>
+            <typecast>integer</typecast>
         </field>
         <field>
             <source>Rechnung</source>
@@ -78,6 +80,7 @@
         <field>
             <source>Abgeschrieben</source>
             <destination>deprecated_status</destination>
+            <typecast>integer</typecast>
         </field>
         
         <field>
@@ -112,7 +115,7 @@
         <field>
             <source>Totale Anzahl</source>
             <destination>total_number</destination>
+            <typecast>integer</typecast>
         </field>
-
     </mapping>
 </config>
