@@ -152,6 +152,7 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
                 self::TYPE                          => self::TYPE_RECORDS,
                 self::UI_CONFIG                     => [
                     'allowDelete'                       => false, // we should have a mc option for models which could not be deleted
+                    'enableTbar'                        => false, // we should find a mc option?!
                 ],
                 self::VALIDATORS                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::CONFIG                        => [
