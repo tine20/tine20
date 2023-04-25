@@ -278,6 +278,8 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $_name
         );
 
+        $aclCheck = $this->doContainerACLChecks(false);
+
         // try to get definition and update if it exists
         try {
             // also update deleted
@@ -299,6 +301,8 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating import/export definion from file: ' . $_filename);
             $result = $this->create($definition);
         }
+
+        $this->doContainerACLChecks($aclCheck);
         
         return $result;
     }
