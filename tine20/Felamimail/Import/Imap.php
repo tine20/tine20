@@ -212,9 +212,24 @@ class Felamimail_Import_Imap extends Tinebase_Import_Abstract
                 Zend_Mail_Storage::FLAG_FLAGGED,
             ]);
 
-        // remove no longer needed import account (hard delete!)
+        $this->_removeImportAccount();
+    }
+
+    /**
+     * remove no longer needed import account (hard delete!)
+     *
+     * @return void
+     */
+    protected function _removeImportAccount(): void
+    {
         $purgeSetting = Felamimail_Controller_Account::getInstance()->purgeRecords(true);
-        Felamimail_Controller_Account::getInstance()->delete([$this->_account->getId()]);
-        Felamimail_Controller_Account::getInstance()->purgeRecords($purgeSetting);
+        try {
+            Felamimail_Controller_Account::getInstance()->delete([$this->_account->getId()]);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+        } finally {
+            Felamimail_Controller_Account::getInstance()->purgeRecords($purgeSetting);
+        }
     }
 }
