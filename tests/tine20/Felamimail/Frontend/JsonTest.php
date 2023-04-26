@@ -677,6 +677,21 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     }
 
     /**
+     * try search for a message with to filter
+     */
+    public function testSearchMessageWithToFilter()
+    {
+        $sentMessage = $this->_sendMessage();
+        $filter = [
+            ['field' => 'to', 'operator' => 'contains', 'value' => Tinebase_Core::getUser()->accountEmailAddress],
+            ['field' => 'query', 'operator' => 'contains', 'value' => ''],
+        ];
+        $result = $this->_json->searchMessages($filter, '');
+        $message = $this->_getMessageFromSearchResult($result, $sentMessage['subject']);
+        $this->assertTrue(!empty($message), 'Sent message not found with to/contains filter');
+    }
+
+    /**
      * try search for a message with all inboxes and flags filter
      */
     public function testSearchMessageWithAllInboxesFilter()
