@@ -1522,7 +1522,7 @@ viewConfig: {
 
     // private
     onDataChange : function(){
-        this.refresh();
+        this.refresh(true);
         this.updateHeaderSortState();
         this.syncFocusEl(0);
     },
