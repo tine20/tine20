@@ -47,9 +47,6 @@ class Felamimail_Model_RecipientFilter extends Tinebase_Model_Filter_Text
                 /* on     */ $this->_db->quoteIdentifier('felamimail_cache_message' . '.' . 'id') . ' = ' . $this->_db->quoteIdentifier($tablename . '.' . 'message_id'),
                 /* select */ $selectArray
             );
-        } else {
-            // join is defined already => just add the column
-            $_select->columns($selectArray, $tablename);
         }
         
         if (!empty($this->_value)) {
