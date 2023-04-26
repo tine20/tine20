@@ -264,6 +264,11 @@ Tine.Admin.config.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 break;
         }
 
+        const option = _.find(record.get('options'), {id: value})
+        if (option?.title) {
+            value = option.title;
+        }
+
         if (record.get('source') == 'DEFAULT') {
             return String.format(this.app.i18n._('Default ({0})'), value);
         }
