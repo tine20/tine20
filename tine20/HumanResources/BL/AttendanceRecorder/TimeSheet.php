@@ -611,7 +611,9 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
     {
         return isset($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][HumanResources_Config_AttendanceRecorder::METADATA_TS_DESCRIPTION]) ?
             $record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][HumanResources_Config_AttendanceRecorder::METADATA_TS_DESCRIPTION] :
-            Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)->_('attendance recorder generated');
+            Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)->translate(
+                HumanResources_Config::getInstance()->{HumanResources_Config::ATTENDANCE_RECORDER_DEFAULT_TS_DESCRIPTION}
+            );
     }
 
     public function undo(Tinebase_Record_RecordSet $data): void

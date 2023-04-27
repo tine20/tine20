@@ -968,6 +968,24 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     }
 
     /**
+     * get options (for combo ui)
+     * @param $name
+     * @param $definition
+     * @return array [value => label] or null
+     */
+    public function getOptions($name, $definition) {
+        return $definition['options'] ?? null;
+    }
+
+    public static function recordsToOption(Tinebase_Record_RecordSet $records) : array {
+        $options = [];
+        foreach($records as $record) {
+            $options[] = ['id' => $record->getId(), 'title' => $record->getTitle()];
+        }
+        return $options;
+    }
+
+    /**
      * @param $target
      * @param $key
      * @param $val

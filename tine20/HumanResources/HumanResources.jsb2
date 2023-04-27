@@ -72,10 +72,6 @@
           "path": "js/"
         },
         {
-          "text": "AdminPanel.js",
-          "path": "js/"
-        },
-        {
           "text": "WorkingTimeSchemeEditDialog.js",
           "path": "js/"
         }
