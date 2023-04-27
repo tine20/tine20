@@ -664,10 +664,10 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
         $replace = array('${GROUP_START}', '${/GROUP_START}');
         /** @var Cell $cell */
-        foreach($cellIterator as $cell) {
+        foreach ($cellIterator as $cell) {
             $this->_cloneGroupStartRow[] = array(
                 'column'        => $cell->getColumn(),
-                'value'         => str_replace($replace, '', $cell->getValue()),
+                'value'         => str_replace($replace, '', $cell->getValue() ?? ''),
                 'XFIndex'       => $cell->getXfIndex()
             );
             $cell->setValue(null);
