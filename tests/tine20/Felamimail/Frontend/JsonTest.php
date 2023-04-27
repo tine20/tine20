@@ -1791,7 +1791,34 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             $vacationData['mime'] = 'text/html';
         }
 
-        $this->_sieveTestHelper($vacationData, TRUE);
+        $this->_sieveTestHelper($vacationData, true);
+    }
+
+    /**
+     * test mime vacation sieve script (invalid namespace)
+     */
+    public function testMimeVacationWithInvalidNamespace()
+    {
+        $vacationData = self::getVacationData($this->_account);
+        $vacationData['reason'] = '<p class="MsoNormal" style="font-family: tahoma; font-size: 11px;"><br></p><div style=""><span style="background: rgb(255, 255, 255);">
+<p class="MsoNormal" style="font-family: tahoma; font-size: 11px; color: rgb(0, 0, 0);">Sehr geehrte Damen und Herren,&nbsp;</p><p class="MsoNormal" style="font-family: tahoma; font-size: 11px; color: rgb(0, 0, 0);">vielen Dank für Ihre Nachricht.<o:p></o:p></p>
+
+<p class="MsoNormal" style="font-family: tahoma; font-size: 11px; color: rgb(0, 0, 0);">Ich mache bis zum 12.05.2023 Urlaub und werde anschließend Ihre Mail bearbeiten.&nbsp;<o:p></o:p></p>
+
+<p class="MsoNormal" style="font-family: tahoma; font-size: 11px; color: rgb(0, 0, 0);">Meine E-Mails werden in meiner
+Abwesenheit nicht gelesen und nicht weitergeleitet. unittest vacation<o:p></o:p></p>
+
+<p class="MsoNormal" style="font-family: tahoma; font-size: 11px;">In dringenden Fällen wenden Sie
+sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<o:p></o:p></p>
+
+    </span>';
+
+        $_sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
+        if (!in_array('mime', $_sieveBackend->capability())) {
+            $vacationData['mime'] = 'text/html';
+        }
+
+        $this->_sieveTestHelper($vacationData, true);
     }
 
     /**

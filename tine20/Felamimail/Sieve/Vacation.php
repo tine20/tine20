@@ -332,7 +332,10 @@ class Felamimail_Sieve_Vacation
         $doc = new DOMDocument('1.0', 'UTF-8');
         $doc->preserveWhiteSpace = true;
         $doc->formatOutput = true;
-        $doc->loadHTML('<?xml version="1.0" encoding="utf-8"?>' . $reason);
+        $doc->loadHTML('<?xml version="1.0" encoding="utf-8"?>' . $reason,
+            LIBXML_NOERROR | // Suppress any errors
+            LIBXML_NOWARNING        // or warnings about prefixes.
+        );
         $doc->saveXML();
         $xpath = new DOMXPath($doc);
         $bodyNodes = $xpath->query('/html/body')->item(0)->childNodes;
