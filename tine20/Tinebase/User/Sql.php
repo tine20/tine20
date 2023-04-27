@@ -945,7 +945,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $updatePluginUser = null;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
             __METHOD__ . '::' . __LINE__ . ' Calling ' . get_class($plugin) . '::' . $method);
 
         try {
