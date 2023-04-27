@@ -542,7 +542,7 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
     {
         $this->_createAreaLockConfig();
 
-        $user = $this->_personas['sclever']->toArray();
+        $user = $this->_personas['rwright']->toArray();
         $user['mfa_configs'] = [[
             'id' => Tinebase_Record_Abstract::generateUID(),
             Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'pin',
