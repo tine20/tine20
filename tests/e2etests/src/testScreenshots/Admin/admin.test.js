@@ -123,9 +123,10 @@ describe('application', () => {
     });
     test('hr settings', async () => {
         await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Human Resources', clickCount: 2});
-        let dialog = await page.$('.x-window.x-resizable-pinned');
-        await dialog.screenshot({path: 'screenshots/Administration/17_admin_hr_einstellungen.png'});
-        await page.keyboard.press('Escape');
+        newPage = await lib.getNewWindow();
+        await newPage.waitForTimeout(2000);
+        await newPage.screenshot({path: 'screenshots/Administration/17_admin_hr_einstellungen.png'});
+        await newPage.close();
     });
     test('sales settings', async () => {
         await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Sales', clickCount: 2});

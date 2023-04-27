@@ -34,6 +34,9 @@ Tine.Admin.config.FieldManager = function() {
                 constr = items[type]
             } else {
                 switch (type) {
+                    case 'int':
+                        constr = Ext.form.NumberField;
+                        break;
                     case 'string':
                         constr = Ext.form.TextField;
                         break;
@@ -89,6 +92,25 @@ Tine.Admin.config.FieldManager = function() {
                 }
             }
 
+            if (['string', 'int'].indexOf(type) >= 0 && _.isArray(configRecord.get('options'))) {
+                var store = new Ext.data.JsonStore({
+                    fields: ['id', 'title'],
+                    data : configRecord.get('options')
+                });
+
+                options = {
+                    mode: 'local',
+                    forceSelection: true,
+                    allowBlank: false,
+                    triggerAction: 'all',
+                    editable: false,
+                    valueField: 'id',
+                    displayField: 'title',
+                    store: store
+                };
+
+                constr = Ext.form.ComboBox;
+            }
             return Ext.isFunction(constr) ? new constr(options) : null;
 
         },
