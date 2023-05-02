@@ -341,7 +341,7 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
         let defaultFolder = messageCopyFolderType === 'source' ? selectedFolder : sentFolder;
         if (!defaultFolder) return null;
         
-        if (messageCopyFolderType === 'source' && defaultFolder.get('globalname') === 'INBOX') {
+        if (messageCopyFolderType === 'source' && defaultFolder.isSystemFolder()) {
             defaultFolder = sentFolder;
         }
         
