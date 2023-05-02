@@ -85,7 +85,13 @@ class SSO_Facade_SAML_Session
         }
 
         unset($this->data[$authority]);
-        Tinebase_Session::getSessionNamespace(self::class)->data = $this->data;
+        try {
+            Tinebase_Session::getSessionNamespace(self::class)->data = $this->data;
+        } catch (Zend_Session_Exception $zse) {
+            // session might already have been closed (marked read-only) by another (batched) request
+            // TODO if this is a problem, we need to make sure that other requests don't close the session before logout
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zse->getMessage());
+        }
 
         return $messages;
     }
