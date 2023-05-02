@@ -780,7 +780,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     hideLabel: true,
                     xtype: 'checkbox',
                     name: 'save_sent_mail_to_source',
-                    boxLabel: this.app.i18n._('Folder of the source mail if it is not your INBOX.'),
+                    boxLabel: this.app.i18n._('Folder of the source mail if it is no system folder.'),
                     checked: me.record.get('message_sent_copy_behavior') === 'source',
                     listeners: {
                         'check': (checkbox, value) => {
