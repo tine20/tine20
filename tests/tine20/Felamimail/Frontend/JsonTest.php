@@ -1448,7 +1448,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
             /* $_emailFrom */
             '',
             /*$_subject */
-            'test\test' // is converted to 'test_test'
+            'testÄÖÜäöüß\test' // is converted to 'testÄÖÜäöüß_test'
         );
         $message2 = $this->_sendMessage(
             'INBOX',
@@ -1469,6 +1469,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $emlNode = $nodes->getFirstRecord();
 
         // assertions!
+        self::assertStringContainsString('testÄÖÜäöüß_test', $emlNode->name);
         return $this->_assertFiledMessageNode($message, $result, $emlNode, $personalFilemanagerContainer);
     }
 
