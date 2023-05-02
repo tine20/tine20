@@ -301,7 +301,8 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
                     const folderDeps = task.folderDependencies;
                     const entry = folderDeps[0] ?? 'root';
                     
-                    if (!typeof fileHandle.queryPermission === 'function'
+                    if (!fileHandle
+                        || !typeof fileHandle.queryPermission === 'function'
                         || !typeof fileHandle.getFile === 'function') 
                     {
                         resolve('skip');
@@ -581,6 +582,7 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
                 t.args.nodeData.status = t.status;
             }
             t.tag = this.tag.REMOVE;
+            t.args.fileObject = null;
         })
         
         await this.mainChannel.storage.updateBatch(tasks);
@@ -637,7 +639,10 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
                 return taskPaths.filter(path => paths.includes(path)).length > 0;
             });
         
-        tasks.forEach(t => t.tag = this.tag.REMOVE);
+        tasks.forEach((t) => {
+            t.tag = this.tag.REMOVE;
+            t.args.fileObject = null;
+        });
         
         await this.mainChannel.storage.updateBatch(tasks);
         await this.removeChannelsByTasks(tasks);
@@ -704,6 +709,10 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
                 task.tag = this.tag.REMOVE;
             }
 
+            if (task.tag === this.tag.REMOVE || task.tag === this.tag.CANCELLED) {
+                task.args.fileObject = null;
+            }
+            
             task.args.nodeData.status = task.status;
             task.args.nodeData.reason = task.reason;
     
@@ -847,7 +856,10 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
         await this.mainChannel.storage.updateBatch(existFolderTasks);
         await this.mainChannel.addBatch(tasksToQueue);
     
-        queueTasks.forEach(t => t.tag = this.tag.ADDED);        
+        queueTasks.forEach((t) => {
+            t.tag = this.tag.ADDED;
+            t.args.fileObject = null;
+        });        
         // update main queue channel
         await this.mainQueueChannel.storage.updateBatch(queueTasks);
     }
