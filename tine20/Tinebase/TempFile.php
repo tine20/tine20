@@ -330,8 +330,8 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
             }
 
             if ($directoryIterator->isFile() && $date->isLater(new Tinebase_DateTime($directoryIterator->getMTime())) && file_exists($directoryIterator->getPathname())) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Deleting file ' . $filename);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Deleting file ' . $filename);
                 unlink($directoryIterator->getPathname());
                 ++$numberOfDeletedFiles;
             } else if ($directoryIterator->isDir()) {
@@ -341,7 +341,12 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
                 } catch (UnexpectedValueException $uve) {
                     // sub dir was already removed...
                 }
-                rmdir($directoryIterator->getPathname());
+                try {
+                    rmdir($directoryIterator->getPathname());
+                } catch (Throwable $t) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $t->getMessage());
+                }
             }
 
             Tinebase_Lock::keepLocksAlive();
