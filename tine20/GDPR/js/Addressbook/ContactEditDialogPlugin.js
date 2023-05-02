@@ -29,13 +29,20 @@ Tine.GDPR.Addressbook.EditDialogPlugin.prototype = {
     onBeforeSave: function(cmp, record, ticketFn) {
         var resolve = ticketFn();
 
-        var window = Tine.GDPR.Addressbook.DataProvenanceDialog.openWindow({
-            listeners: {
-                scope: this,
-                beforeapply: this.onBeforeApplyProvenanceDialog
-            }
-        });
-        window.on('beforeclose', this.onBeforeCloseProvenanceDialog.createDelegate(this, [resolve]), this);
+        if (this.data) {
+            // need this for duplicate check. Doesn´t show GDPR Windows after duplicate check.
+            this.onBeforeApplyProvenanceDialog(this.data);
+            resolve();
+
+        } else {
+            var window = Tine.GDPR.Addressbook.DataProvenanceDialog.openWindow({
+                listeners: {
+                    scope: this,
+                    beforeapply: this.onBeforeApplyProvenanceDialog
+                }
+            });
+            window.on('beforeclose', this.onBeforeCloseProvenanceDialog.createDelegate(this, [resolve]), this);
+        }
     },
 
     validateDataProvenance: function() {
@@ -53,6 +60,8 @@ Tine.GDPR.Addressbook.EditDialogPlugin.prototype = {
                 me.contactEditDialog.record.set(k, v);
             }
         });
+
+        this.data = data;
 
         return me.validateDataProvenance();
     },
