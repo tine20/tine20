@@ -1284,37 +1284,47 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         
         // merge old and new attendee
         Calendar_Model_Attender::emailsToAttendee($event, $newAttendees);
-        
-        if (empty($event->seq)) {
-            $event->seq = 1;
-        }
-        
-        if (empty($event->class)) {
-            $event->class = Calendar_Model_Event::CLASS_PUBLIC;
-        }
-        
-        $this->_manageAttachmentsFromClient($event, $attachments);
-        
-        if (empty($event->dtend)) {
-            if (empty($event->dtstart)) {
-                throw new Tinebase_Exception_UnexpectedValue("Got event without dtstart and dtend");
-            }
-            
-            // TODO find out duration (see TRIGGER DURATION)
-//             if (isset($vevent->DURATION)) {
-//             }
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' Got event without dtend. Assuming 30 minutes duration');
-            $event->dtend = clone $event->dtstart;
-            $event->dtend->addMinute(30);
-        }
-        
+
+        $this->_setDefaultsForEmptyValues($event);
+
         $this->_manageAttachmentsFromClient($event, $attachments);
         
         // convert all datetime fields to UTC
         $event->setTimezone('UTC');
     }
-    
+
+    /**
+     * @param Calendar_Model_Event $event
+     * @return void
+     */
+    protected function _setDefaultsForEmptyValues(Calendar_Model_Event $event): void
+    {
+        if (empty($event->seq)) {
+            $event->seq = 1;
+        }
+        if (empty($event->class)) {
+            $event->class = Calendar_Model_Event::CLASS_PUBLIC;
+        }
+        if (empty($event->transp)) {
+            $event->transp = Calendar_Model_Event::TRANSP_OPAQUE;
+        }
+
+        if (empty($event->dtend)) {
+            if (empty($event->dtstart)) {
+                throw new Tinebase_Exception_UnexpectedValue("Got event without dtstart and dtend");
+            }
+
+            // TODO find out duration (see TRIGGER DURATION)
+            // if (isset($vevent->DURATION)) {
+            // }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Got event without dtend. Assuming 30 minutes duration');
+            $event->dtend = clone $event->dtstart;
+            $event->dtend->addMinute(30);
+        }
+    }
+
     /**
      * get utc datetime from date string and handle dates (ie 20140922) in usertime
      * 
