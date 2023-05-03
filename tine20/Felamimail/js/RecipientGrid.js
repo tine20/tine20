@@ -348,13 +348,14 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                         return ''; 
                     }
                     
-                    const renderEmail = values.email !== '' && values.name !== '' ? ` < ${values.email} >` : values.email;
+                    const renderEmail = values.email !== '' && values.name !== '' ? ` <${values.email}>` : values.email;
                     const iconCls = this.searchCombo.resolveAddressIconCls(values);
                     const note = values?.note && values.note !== '' ? `( ${values.note} )` : '';
                     
                     return iconCls + 
                         '<span class="tinebase-contact-link">' 
-                            + '<b>' + Ext.util.Format.htmlEncode(`${values.name}${renderEmail}`) + '</b>'
+                            + Ext.util.Format.htmlEncode(`${values.name}`)
+                            + '<b>' + Ext.util.Format.htmlEncode(`${renderEmail}`) + '</b>'
                             + ' ' + Ext.util.Format.htmlEncode(note)
                         + '</span>'
                         + '<div class="tinebase-contact-link-wait"></div>';

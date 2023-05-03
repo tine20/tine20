@@ -67,7 +67,7 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
                     let value = _.get(values, field) ?? '';
                     
                     if (field === 'email' && value !== '') {
-                        value = `( ${value} )`;
+                        value = `<${value}>`;
                     }
                     
                     return Ext.util.Format.htmlEncode(value);
