@@ -258,11 +258,11 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
         $old = Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->doSynchronousPreviewCreation(true);
         $lastKeepAlive = time();
         try {
-            foreach(Felamimail_Controller_Account::getInstance()->search(
+            foreach (Felamimail_Controller_Account::getInstance()->search(
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
-                    ['field' => 'id', 'operator' => 'in', 'value' => $accountIds],
-                ]
-            ), null, false, true) as $accountId) {
+                        ['field' => 'id', 'operator' => 'in', 'value' => $accountIds],
+                    ]
+                ), null, false, true) as $accountId) {
                 $msgCtrl = Felamimail_Controller_Message::getInstance();
                 foreach ($msgCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
                     ['field' => 'received', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->subSecond($seconds)],
@@ -278,6 +278,8 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
                     }
                 }
             }
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
         } finally {
             Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->doSynchronousPreviewCreation($old);
             try {
