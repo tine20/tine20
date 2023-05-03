@@ -820,19 +820,27 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     initReplyRecipients: async function () {
         // should resolve recipients here , save data
         const replyTo = this.replyTo.get('headers')['reply-to'];
-
+        
         if (replyTo) {
             this.to = replyTo;
         } else {
-            const toEmail = this.replyTo.get('from_email');
-            const toName = this.replyTo.get('from_name');
-            this.to = (toName && toName !== toEmail) ? `${toName} <${toEmail}>` : toEmail;
+            const email = this.replyTo.get('from_email');
+            const name =  this.replyTo.get('from_name');
+            this.to = [{
+                'email': email ?? '',
+                'email_type': '',
+                'type': '',
+                'n_fileas': '',
+                'name': name !== email ? name : '',
+                'record_id': ''
+            }];
+            
             // we might get the recipient token from server
             if (this.replyTo.get('from')) {
                 this.to = this.replyTo.get('from');
             }
         }
-    
+
         if (this.replyToAll) {
             if (!Ext.isArray(this.to)) {
                 this.to = [this.to];
