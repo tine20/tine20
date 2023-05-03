@@ -667,7 +667,6 @@ class Tinebase_Application
             'definitions'   => array('tablename' => 'importexport_definition'),
             'filter'        => array('tablename' => 'filter'),
             'modlog'        => array('tablename' => 'timemachine_modlog'),
-            'import'        => array('tablename' => 'import'),
             'rootnode'      => array('tablename' => ''),
             'pobserver'     => array(),
         );
