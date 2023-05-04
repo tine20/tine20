@@ -222,6 +222,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'type'                  => 'record',
                 'inputFilters'          => array('Zend_Filter_Empty' => NULL),
                 'nullable'              => true,
+                'sortable'              => false,
                 'config'                => array(
                     'appName'               => 'Sales',
                     'modelName'             => 'Invoice',
