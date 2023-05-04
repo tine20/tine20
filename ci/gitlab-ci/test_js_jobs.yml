@@ -67,6 +67,7 @@
     paths:
       - ${CI_PROJECT_DIR}/tine20.log
       - ${CI_PROJECT_DIR}/phpunit-report.xml
+      - ${CI_PROJECT_DIR}/tests/e2etests/screenshots/Error/
     expire_in: 7 day
   interruptible: true
   rules:
