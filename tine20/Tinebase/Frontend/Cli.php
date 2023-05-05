@@ -1680,6 +1680,34 @@ fi';
         return $result;
     }
 
+    /**
+     * undo modlog operations (like file delete, ...)
+     *
+     * usage:
+     *
+     * --method=Tinebase.undo [-d] -- iseqfrom=INSTANCESEQ1 iseqto=INSTANCESEQ2 accountid=IDFROMUSERTABLE models=MODELS
+     *
+     * params:
+     *
+     * - iseqfrom: starting instance_seq
+     * - iseqto: ending instance_seq
+     * - accountid: user account whose actions should be undeleted (field in modlog: modification_account)
+     * - models: the models for undelete, "fs" means Filesystem (undo all filesystem operations)
+     *           comma separated string, example: Addressbook_Model_Contact,Addressbook_Model_List
+     *           (field in modlog: record_type)
+     *
+     * => all param information can be fetched from timemachine_modlog table
+     *
+     * example:
+     *
+     * --method Tinebase.undo -- iseqfrom=1932 iseqto=1934 accountid=81db314e75f5c5e8eab8d2b3a7a5a566b0b98d5d models=fs
+     *
+     * @param Zend_Console_Getopt $opts
+     * @return int
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
     public function undo(Zend_Console_Getopt $opts)
     {
         $this->_checkAdminRight();

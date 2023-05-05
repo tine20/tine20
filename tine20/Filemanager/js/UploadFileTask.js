@@ -83,6 +83,7 @@ export default class UploadFileTask {
                         args.nodeData = await Tine.Filemanager.createNode(args.uploadId, fileRecord.get('type'), fileRecord.get('id'), true);
                         args.nodeData.progress = 100;
                         args.nodeData.status = uploadManager.status.COMPLETE;
+                        args.fileObject = null;
                         await updateTask(args);
                         resolve(true);
                     } catch (e) {
