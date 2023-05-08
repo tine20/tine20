@@ -1,7 +1,7 @@
 ---
 
 # TODO
-#- name: install docker and docker-composer
+#- name: include role dockercomposeinstall
 
 - name: Log into private registry
   docker_login:

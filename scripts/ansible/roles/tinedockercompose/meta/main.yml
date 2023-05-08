@@ -1,0 +1,12 @@
+galaxy_info:
+  author: Philipp Schüle
+  description: Deploy tine via docker-compose
+  company: Metaways Infosystems GmbH
+  license: AGPL-3.0-or-later
+  min_ansible_version: 2.8
+  platforms:
+    - name: Ubuntu
+      versions:
+        - "jammy"
+
+dependencies: []
