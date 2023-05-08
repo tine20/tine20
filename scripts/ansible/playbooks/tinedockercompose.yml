@@ -1,0 +1,6 @@
+#!/usr/bin/ansible-playbook
+- hosts:
+    - all
+  become: true
+  roles:
+    - tinedockercompose

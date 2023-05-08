@@ -1,0 +1,55 @@
+---
+
+# TODO
+#- name: include role dockercomposeinstall
+
+- name: Log into private registry
+  docker_login:
+    registry: "{{ tinedockercompose_registry_url }}"
+    username: "{{ tinedockercompose_registry_username }}"
+    password: "{{ tinedockercompose_registry_password }}"
+  when:
+    - tinedockercompose_registry_url is defined
+    - tinedockercompose_registry_username is defined
+    - tinedockercompose_registry_password is defined
+
+- name: deploy docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ tinedockercompose_path }}/docker-compose.yml"
+    owner: root
+    group: root
+    mode: 0640
+  become: true
+
+- name: set group_vars_dir
+  set_fact: "group_vars_dir='group_vars{{ inventory_file | replace(inventory_dir, \"\") }}'"
+
+- name: create customer conf.d files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ tinedockercompose_confd_path }}"
+    owner: root
+    group: root
+    mode: 0640
+  with_fileglob:
+    - "{{ group_vars_dir }}/conf.d/*.php"
+  become: true
+
+### TODO more config via env-file
+
+- name: start docker compose
+  ansible.builtin.shell: docker compose up -d
+  args:
+    chdir: "{{ tinedockercompose_path }}"
+
+## TODO make this work
+#- name: Create and start services
+#  community.docker.docker_compose:
+#    project_src: "{{ tinedockercompose_path }}"
+#  register: output
+#  vars:
+#    ansible_python_interpreter: /usr/bin/python3
+#
+#- ansible.builtin.debug:
+#    var: output
