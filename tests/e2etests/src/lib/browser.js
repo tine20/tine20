@@ -149,18 +149,17 @@ const priorities = {
 
     getBrowser: async function (app, module) {
 
+        jasmine.getEnv().addReporter({
+            specStarted: result => jasmine.currentTest = result
+        });
+
         expect.setDefaultOptions({timeout: 5000});
 
-        args = ['--lang=de-DE,de'];
+        let args = ['--lang=de-DE,de', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'];
 
-        if(process.env.TEST_DOCKER === 'true') {
-            args.push('--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage');
-        }
-
-	try {
+        try {
             const opts = {
-                headless: process.env.TEST_MODE != 'debug',
-                //ignoreDefaultArgs: ['--enable-automation'],
+                headless: process.env.TEST_MODE != 'debug', //ignoreDefaultArgs: ['--enable-automation'],
                 //slowMo: 250,
                 //defaultViewport: {width: 1366, height: 768},
                 args: args

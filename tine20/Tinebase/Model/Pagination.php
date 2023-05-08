@@ -181,6 +181,10 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
 
         $this->_readModelConfig();
 
+        if ($this->xprops('sort') === null) {
+            return;
+        }
+
         /** @var Tinebase_Record_Interface $model */
         $model = $this->model;
         if (null === ($mc = $model::getConfiguration())) {
@@ -197,7 +201,6 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
         }
         $mapping = $this->_externalSortMapping;
         $customfields = $this->_customFields;
-
         $joinCount = 0;
         $joined = [];
         foreach ($this->xprops('sort') as &$field) {

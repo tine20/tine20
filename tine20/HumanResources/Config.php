@@ -65,6 +65,13 @@ class HumanResources_Config extends Tinebase_Config_Abstract
     const FEATURE_WORKING_TIME_ACCOUNTING = 'workingTimeAccounting';
 
     /**
+     * attendance recorder default description
+     * 
+     * @stering
+     */
+    const ATTENDANCE_RECORDER_DEFAULT_TS_DESCRIPTION = 'attendanceRecorderDefaultDescription';
+    
+    /**
      * id of (filsystem) container for vacation templates
      *
      * @var string
@@ -151,6 +158,16 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
         ),
+        self::ATTENDANCE_RECORDER_DEFAULT_TS_DESCRIPTION => [
+            // _('AR TS Description')
+            self::LABEL                 =>  'AR TS Description',
+            // _('Default description for attendance recorder created timesheets.')
+            self::DESCRIPTION           => 'Default description for attendance recorder created timesheets.',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR => 'attendance recorder generated', // _('attendance recorder generated')
+        ],
         self::ENABLED_FEATURES => [
             //_('Enabled Features')
             self::LABEL                 => 'Enabled Features',
@@ -210,7 +227,11 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             //_('Timetracker Timeaccount for Workingtime Tracking')
             'label'                 => 'Timetracker Timeaccount for Workingtime Tracking',
             'description'           => 'Timetracker Timeaccount for Workingtime Tracking',
-            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+            self::TYPE                  => self::TYPE_RECORD,
+            self::OPTIONS               => [
+                self::APPLICATION_NAME      => Timetracker_Config::APP_NAME,
+                self::MODEL_NAME            => Timetracker_Model_Timeaccount::MODEL_NAME_PART,
+            ],
             'clientRegistryInclude' => true,
             'setByAdminModule'      => true,
             'setBySetupModule'      => false,
@@ -313,5 +334,16 @@ class HumanResources_Config extends Tinebase_Config_Abstract
         
         [$month, $day] = preg_split('/-/', $this->{self::VACATION_EXPIRES});
         return new Tinebase_DateTime("{$year}-{$month}-{$day} 00:00:00");
+    }
+
+    public function getOptions($name, $definition) {
+        switch ($name) {
+            case self::DEFAULT_FEAST_CALENDAR:
+                return self::recordsToOption(Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), Calendar_Model_Event::class, [
+                    Tinebase_Model_Grants::GRANT_READ
+                ]));
+            default:
+                return parent::getOptions($name, $definition);
+        }
     }
 }

@@ -423,19 +423,19 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
     {
         $this->_skipIfXpropsUserIdDeactivated();
 
-        $scleverExtraAccount = $this->_createUserInternalAccount($this->_personas['sclever']);
+        $extraAccount = $this->_createUserInternalAccount($this->_personas['jsmith']);
         $json = new Felamimail_Frontend_Json();
         $result = $json->searchAccounts([]);
         foreach ($result['results'] as $account) {
-            if ($scleverExtraAccount->getId() === $account['id']) {
+            if ($extraAccount->getId() === $account['id']) {
                 self::fail('should not find sclevers account! ' . print_r($account, true));
             }
         }
 
-        $extraUserInBackend = self::checkInternalUserAccount($scleverExtraAccount);
+        $extraUserInBackend = self::checkInternalUserAccount($extraAccount);
 
         // compare with original email home (should be different!)
-        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($this->_personas['sclever']);
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($this->_personas['jsmith']);
         $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         $originalUserInBackend = $emailUserBackend->getRawUserById($emailUser);
         if ($originalUserInBackend) {

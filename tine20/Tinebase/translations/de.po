@@ -4995,7 +4995,7 @@ msgid ""
 "device_name}."
 msgstr ""
 "Dieser Bereich ist gesperrt. Wir haben einen Sicherheitscode via {mfaDevice."
-"device_name} zum entsperren gesendet."
+"device_name} zum Entsperren gesendet."
 
 msgid "Security code from {mfaDevice.device_name}"
 msgstr "{mfaDevice.device_name} Sicherheitscode"

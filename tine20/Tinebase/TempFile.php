@@ -330,16 +330,22 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
             }
 
             if ($directoryIterator->isFile() && $date->isLater(new Tinebase_DateTime($directoryIterator->getMTime())) && file_exists($directoryIterator->getPathname())) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Deleting file ' . $filename);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Deleting file ' . $filename);
                 unlink($directoryIterator->getPathname());
                 ++$numberOfDeletedFiles;
             } else if ($directoryIterator->isDir()) {
-                // delete sub dir contents, too
+                // delete sub dir (including contents)
                 try {
                     $numberOfDeletedFiles += $this->_removeFilesFromDirByTimestamp($directoryIterator->getPathname(), $date);
                 } catch (UnexpectedValueException $uve) {
                     // sub dir was already removed...
+                }
+                try {
+                    rmdir($directoryIterator->getPathname());
+                } catch (Throwable $t) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $t->getMessage());
                 }
             }
 

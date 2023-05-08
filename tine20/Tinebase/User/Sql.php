@@ -6,7 +6,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo        extend Tinebase_Application_Backend_Sql and replace some functions
@@ -508,6 +508,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountData = $this->_updatePasswordProperty($userId, $_password, 'password', $_encrypt, $_mustChange);
         $this->_setPluginsPassword($user, $_password, $_encrypt);
 
+        // fire needed events
+        $event = new Tinebase_Event_User_ChangePassword();
+        $event->userId = $userId;
+        $event->password = $_password;
+        Tinebase_Event::fireEvent($event);
+
         $accountData['id'] = $userId;
         $oldPassword = new Tinebase_Model_UserPassword(array('id' => $userId), true);
         $newPassword = new Tinebase_Model_UserPassword($accountData, true);
@@ -939,7 +945,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $updatePluginUser = null;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
             __METHOD__ . '::' . __LINE__ . ' Calling ' . get_class($plugin) . '::' . $method);
 
         try {
@@ -975,12 +981,19 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
     }
 
-    public function treatMFA(Tinebase_Model_FullUser $_user, Tinebase_Model_FullUser $oldUser = null)
+    /**
+     * @param Tinebase_Model_FullUser $_user
+     * @param Tinebase_Model_FullUser|null $oldUser
+     * @return void
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    public function treatMFA(Tinebase_Model_FullUser $_user, ?Tinebase_Model_FullUser $oldUser = null): void
     {
         if ($_user->mfa_configs) {
             if (!$_user->mfa_configs->isValid()) {
-                throw new Tinebase_Exception_Record_Validation('mfa configs are not valid: ' .
-                    print_r($_user->mfa_configs->getValidationErrors(), true));
+                $translation = Tinebase_Translation::getTranslation();
+                throw new Tinebase_Exception_SystemGeneric($translation->_('MFA configs are not valid:')
+                    . ' ' .  print_r($_user->mfa_configs->getValidationErrors(), true));
             }
             if ($oldUser && $oldUser->mfa_configs) {
                 /** @var Tinebase_Model_MFA_UserConfig $userCfg */
@@ -995,12 +1008,13 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
 
     /**
-     * updates an user
-     * 
-     * this function updates an user 
+     * updates a user
      *
      * @param Tinebase_Model_FullUser $_user
-     * @return Tinebase_Model_FullUser
+     * @return Tinebase_Model_FullUser|Tinebase_Model_User
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_SystemGeneric
      */
     public function updateUserInSqlBackend(Tinebase_Model_FullUser $_user)
     {

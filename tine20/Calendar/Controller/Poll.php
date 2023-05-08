@@ -883,7 +883,14 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
     public function sendPollConfirmationMail(Calendar_Model_Poll $poll, Addressbook_Model_Contact $contact)
     {
-        $alternativeEvents = $this->getPollEvents($poll->getId());
+        try {
+            $alternativeEvents = $this->getPollEvents($poll->getId());
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__. ' Could not get poll event: ' . $tead->getMessage() . ' Poll ID: '
+                . $poll->getId() . ' Contact ID: ' . $contact->getId());
+            return;
+        }
         $event = $alternativeEvents->getFirstRecord();
         $attendee = new Calendar_Model_Attender([
             'user_type' => Calendar_Model_Attender::USERTYPE_USER,

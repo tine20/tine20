@@ -129,6 +129,7 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
                     }
 
                     $configRecord->value = json_encode(Tinebase_Config::uncertainJsonDecode($configRecord->value));
+                    $configRecord->options = $appConfigObject->getOptions($name, $definition);
 
                     $configRecords->addRecord($configRecord);
                 }

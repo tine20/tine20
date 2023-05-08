@@ -128,6 +128,12 @@ msgstr "Allen Arbeitszeiten unabhängig der Abteilungsrechte managen."
 msgid "Clock in: %1$s"
 msgstr "Einstemplen: %1$s"
 
+msgid "AR TS Description"
+msgstr "SU SZ Beschreibung"
+
+msgid "Default description for attendance recorder created timesheets."
+msgstr "Standard Beschreibung für durch die Stempeluhr erzeugte Stundenzettel."
+
 msgid "attendance recorder generated"
 msgstr "Angelegt durch die Stempeluhr"
 
