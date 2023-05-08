@@ -50,12 +50,17 @@ class SSO_Facade_SAML_Session
         return null;
     }
 
-    public function doLogout($authority)
+    public function doLogout($authority): array
     {
-        $this->_getData();
+        if (Tinebase_Session::isStarted()) {
+            $this->_getData();
+        }
 
         $messages = [];
-        if (isset($this->data[$authority]) && is_array($this->data[$authority])) {
+        if (! isset($this->data[$authority])) {
+            return $messages;
+        }
+        if (is_array($this->data[$authority])) {
             foreach ($this->data[$authority] as $spEntityId => $data) {
                 if ($this->spEntityId === $spEntityId || !isset($data['SPMetadata']['SingleLogoutService']['Location']))
                     continue;
