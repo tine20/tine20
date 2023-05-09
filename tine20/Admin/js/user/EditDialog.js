@@ -1163,10 +1163,10 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // suggest for new users only!
         if (!this.record.id) {
             // accountFullName (cn im AD) + accountDisplayName(displayname im AD) + accountLoginName + accountEmailAddress
-            for (const [fieldName, template] of Object.entries(Tine.Tinebase.configManager.get('accountTwig'))) {
+            Object.keys(Tine.Tinebase.configManager.get('accountTwig')).asyncForEach(async (fieldName) => {
                 if (fieldName === 'accountEmailAddress' && ! Tine.Tinebase.registry.get('primarydomain')) {
                     // skip email without configured domain
-                    continue;
+                    return;
                 }
                 const field = this.getForm().findField(fieldName);
                 // suggest for unchanged fields only
@@ -1174,11 +1174,13 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     this.onRecordUpdate();
                     // @FIXME twing can't cope with null values yet, remove this once twing fixed it
                     const accountData = JSON.parse(JSON.stringify(this.record.data).replace(/:null([,}])/g, ':""$1'));
-                    const suggestion = this.twingEnv.render(fieldName, {account: accountData, email: {primarydomain: Tine.Tinebase.registry.get('primarydomain')}});
+                    const suggestion = await this.twingEnv.render(fieldName, {account: accountData, email: {primarydomain: Tine.Tinebase.registry.get('primarydomain')}});
+
                     field.setValue(suggestion);
+                    this.record.set(fieldName, suggestion);
                     field.suggestedValue = suggestion;
                 }
-            }
+            });
         }
     },
 
