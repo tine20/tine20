@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -96,7 +96,16 @@ class HumanResources_Model_FreeDay extends Tinebase_Record_Abstract
             'sickoverwrite' => [
                 self::TYPE => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL => 0,
-            ]
+            ],
+            'event' => [
+                self::TYPE          => self::TYPE_RECORD,
+                self::NULLABLE      => true,
+                self::NORESOLVE     => true,
+                self::CONFIG        => [
+                    self::APP_NAME      => Calendar_Config::APP_NAME,
+                    self::MODEL_NAME    => Calendar_Model_Event::MODEL_PART_NAME,
+                ],
+            ],
         ),
     );
 }

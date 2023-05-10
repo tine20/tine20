@@ -48,6 +48,26 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
             ])
         );
     }
+
+    public function testAbsenceCal()
+    {
+        $this->_getAccount2018();
+        $division = $this->_getDivision();
+        $division->{HumanResources_Model_Division::FLD_FREE_TIME_CAL} =
+            $this->_getTestContainer(Calendar_Config::APP_NAME, Calendar_Model_Event::class, true);
+        $division = HumanResources_Controller_Division::getInstance()->update($division);
+        $this->assertFalse(!$division->{HumanResources_Model_Division::FLD_FREE_TIME_CAL});
+
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $freeTime = $this->_createFreeTime();
+
+        $events = Calendar_Controller_Event::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Calendar_Model_Event::class, [
+                ['field' => 'container_id', 'operator' => 'equals', 'value' => $division->{HumanResources_Model_Division::FLD_FREE_TIME_CAL}],
+            ]));
+        $this->assertSame(2, $events->count());
+    }
+
     public function testGetRemainingVacationDays()
     {
         $this->_getAccount2018();

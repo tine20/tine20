@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -15,6 +15,8 @@
  */
 class Calendar_Config extends Tinebase_Config_Abstract
 {
+    const APP_NAME = 'Calendar';
+
     /**
      * Fixed Calendars
      * 
