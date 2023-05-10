@@ -703,17 +703,19 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             '{representation-n_fn-2}',
             '{representation-email-1}',
             '{representation-email-2}',
+            '{representation-tel_work-1}',
+            '{representation-tel_work-2}',
             '{owncontact-n_fn}',
             '{signature}',
         );
 
         if (!isset($representativesArray[1])) {
-            $message = str_replace(" or {representation-n_fn-2} ({representation-email-2}) instead.", '', $message);
-            $message = str_replace(" oder {representation-n_fn-2} ({representation-email-2}).", '', $message);
+            $message = str_replace(" or {representation-n_fn-2} ({representation-email-2}) {representation-tel_work-2} instead.", '', $message);
+            $message = str_replace(" oder {representation-n_fn-2} ({representation-email-2}) {representation-tel_work-2}.", '', $message);
         }
         
         if (!isset($representativesArray[0])) {
-            $message = str_replace(" {representation-n_fn-1} ({representation-email-1})", '', $message);
+            $message = str_replace(" {representation-n_fn-1} ({representation-email-1}) {representation-tel_work-1}", '', $message);
         }
 
         if (!isset($representativesArray[0]) && !isset($representativesArray[1])) {
@@ -730,6 +732,8 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             (isset($representativesArray[1])) ? $representativesArray[1]->n_fn : 'unknown person',
             (isset($representativesArray[0])) ? $representativesArray[0]->email : 'unknown email',
             (isset($representativesArray[1])) ? $representativesArray[1]->email : 'unknown email',
+            (isset($representativesArray[0])) ? $representativesArray[0]->tel_work : '',
+            (isset($representativesArray[1])) ? $representativesArray[1]->tel_work : '',
             ($ownContact) ? $ownContact->n_fn : '',
             ($vacation->signature) ? Felamimail_Model_Message::convertHTMLToPlainTextWithQuotes(
                 preg_replace("/\\r|\\n/", '', $vacation->signature)) : '',
