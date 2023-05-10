@@ -729,13 +729,15 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             ));
             $allConfigs = $this->_getBackend()->search($filter);
         } catch (Zend_Db_Exception $zdae) {
-            // DB might not exist or tables are not created, yet
-            Tinebase_Exception::log($zdae);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' DB might not exist or tables are not created, yet: '
+                . $zdae->getMessage());
             $this->_cachedApplicationConfig = array();
             return;
         } catch (Tinebase_Exception_NotFound $tenf) {
-            // application might not yet exist
-            Tinebase_Exception::log($tenf);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Application might not yet exist: '
+                . $tenf->getMessage());
             $this->_cachedApplicationConfig = array();
             return;
         }
