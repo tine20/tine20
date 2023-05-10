@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -164,6 +164,13 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
     protected function _inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord)
     {
         $this->_inspect($updatedRecord, $currentRecord);
+
+        if ($updatedRecord->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS} !==
+                $currentRecord->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS}) {
+            foreach ($updatedRecord->freedays as $freeday) {
+                HumanResources_Controller_FreeDay::getInstance()->inspectFreeDay($freeday);
+            }
+        }
     }
 
     /**

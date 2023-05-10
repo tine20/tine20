@@ -787,11 +787,10 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function setConfiguredModel($configuredModel)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' Re-create filter model from model config (' . $configuredModel . ')');
+
         $this->_configuredModel = $configuredModel;
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Re-create filter model from model config (' . $configuredModel . ')');
-
         $this->_createFromModelConfiguration();
     }
     
