@@ -23,6 +23,13 @@ class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_In
     protected $_quahog = null;
 
     /**
+     * client timeout in seconds (default: 2 minutes)
+     *
+     * @var int
+     */
+    protected int $_quahogClientTimeout = 120;
+
+    /**
      * @throws \Xenolope\Quahog\Exception\ConnectionException
      * @throws \Socket\Raw\Exception
      */
@@ -32,7 +39,7 @@ class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_In
             $avUrl = Tinebase_Config::getInstance()
                 ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_URL};
             $this->_socket = (new \Socket\Raw\Factory())->createClient($avUrl);
-            $this->_quahog = new \Xenolope\Quahog\Client($this->_socket, 30, PHP_NORMAL_READ);
+            $this->_quahog = new \Xenolope\Quahog\Client($this->_socket, $this->_quahogClientTimeout, PHP_NORMAL_READ);
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                     ' Socket client created for url ' . $avUrl);
