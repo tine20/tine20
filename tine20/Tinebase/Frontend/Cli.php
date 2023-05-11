@@ -1408,9 +1408,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                             . ($now - $lastLRDurationUpdate);
                     }
 
-
-                    if (null === ($queueState = json_decode(Tinebase_Application::getInstance()->getApplicationState('Tinebase',
-                            Tinebase_Application::STATE_ACTION_QUEUE_STATE), true))) {
+                    $queueState = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                        Tinebase_Application::STATE_ACTION_QUEUE_STATE);
+                    if (null === $queueState) {
                         $queueState = [
                             'lastFullCheck' => 0,
                             'lastSizeOver10k' => false,
@@ -1420,6 +1420,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                             'actionQueueLRMissingQueueKeys' => [],
                             'actionQueueLRMissingDaemonKeys' => [],
                         ];
+                    } else {
+                        $queueState = json_decode($queueState, true);
                     }
 
                     $queueSize = $actionQueue->getQueueSize();

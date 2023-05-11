@@ -766,6 +766,9 @@
                     . '/' . $attachment->name;
                 
                 $handle = fopen($path, 'r');
+                if (! $handle) {
+                    throw new Tinebase_Exception('could not open file ' . $path . ' for reading');
+                }
                 $stream = fopen("php://temp", 'r+');
                 stream_copy_to_stream($handle, $stream);
                 rewind($stream);
