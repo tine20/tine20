@@ -89,6 +89,8 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
     initTpl: function() {
         if (this.showIcon) {
             this.tpl = '<tpl for="."><div class="x-combo-list-item {_itemCls}"><tpl if="icon"><img src="{icon}" class="tine-keyfield-icon"/></tpl>{' + this.displayField + '}</div></tpl>';
+        }else {
+            this.tpl = '<tpl for="."><div class="x-combo-list-item {_itemCls}">{' + this.displayField + '}</div></tpl>';
         }
     },
 
@@ -97,7 +99,7 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
 
         this.store.each((record) => {
             const selectable = allowedTargetStatus ? record.id === value || allowedTargetStatus.indexOf(record.id) >= 0 : true;
-            record.set('_itemCls', selectable ? '' : 'x-combo-list-unselectable-item');
+            record.set('_itemCls', (selectable && !record.json.disabled) ? '' : 'x-combo-list-unselectable-item');
         });
 
         return Tine.Tinebase.widgets.keyfield.ComboBox.superclass.setValue.apply(this, arguments);
