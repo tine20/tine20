@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  MFA
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -155,6 +155,17 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         self::MODLOG_ACTIVE                 => true,
         self::HAS_XPROPS                    => true,
         self::EXPOSE_JSON_API               => true,
+
+        self::TABLE                         => [
+            self::INDEXES                       => [
+                self::FLD_DOCUMENT_ID               => [
+                    self::COLUMNS                       => [self::FLD_DOCUMENT_ID],
+                ],
+                self::FLD_PARENT_ID                 => [
+                    self::COLUMNS                       => [self::FLD_PARENT_ID],
+                ],
+            ],
+        ],
 
         self::JSON_EXPANDER                 => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
