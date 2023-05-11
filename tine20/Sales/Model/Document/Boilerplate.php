@@ -6,7 +6,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -33,9 +33,16 @@ class Sales_Model_Document_Boilerplate extends Sales_Model_Boilerplate
     {
         parent::inheritModelConfigHook($_definition);
 
-        $_definition[self::VERSION] = 1;
+        $_definition[self::VERSION] = 2;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
+        $_definition[self::TABLE][self::INDEXES][self::FLD_DOCUMENT_ID] = [
+            self::COLUMNS => [self::FLD_DOCUMENT_ID],
+        ];
+        $_definition[self::TABLE][self::INDEXES][self::FLD_ORIGINAL_ID] = [
+            self::COLUMNS => [self::FLD_ORIGINAL_ID],
+        ];
+
         $_definition[self::EXPOSE_JSON_API] = true;
 
         if (!isset($_definition[self::ASSOCIATIONS][\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE])) {
