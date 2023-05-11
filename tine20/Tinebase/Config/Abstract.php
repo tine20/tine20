@@ -358,12 +358,12 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     public function delete($_name)
     {
         $config = $this->_loadConfig($_name);
+        if (isset($this->_mergedConfigCache[$_name]) || array_key_exists($_name, $this->_mergedConfigCache)) {
+            unset($this->_mergedConfigCache[$_name]);
+        }
         if ($config) {
             $this->_getBackend()->delete($config->getId());
             $this->clearCache(null, true);
-            if (isset($this->_mergedConfigCache[$_name]) || array_key_exists($_name, $this->_mergedConfigCache)) {
-                unset($this->_mergedConfigCache[$_name]);
-            }
         }
     }
     
@@ -714,6 +714,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             }
         }
 
+        $this->_cachedApplicationConfig = [];
         $backend = new Setup_Backend_Mysql();
         if (! $backend->tableExists('config')) {
             // no config table found
@@ -722,25 +723,16 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         
         try {
             $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($this->_appName);
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-                __METHOD__ . '::' . __LINE__ . ' Loading all configs for app ' . $this->_appName);
-            $filter = new Tinebase_Model_ConfigFilter(array(
-                array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),
-            ));
-            $allConfigs = $this->_getBackend()->search($filter);
-        } catch (Zend_Db_Exception $zdae) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' DB might not exist or tables are not created, yet: '
-                . $zdae->getMessage());
-            $this->_cachedApplicationConfig = array();
-            return;
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' Application might not yet exist: '
-                . $tenf->getMessage());
-            $this->_cachedApplicationConfig = array();
+        } catch (Tinebase_Exception_NotFound $e) {
+            // application might not yet exist
             return;
         }
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' Loading all configs for app ' . $this->_appName);
+        $filter = new Tinebase_Model_ConfigFilter(array(
+            array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),
+        ));
+        $allConfigs = $this->_getBackend()->search($filter);
 
         foreach ($allConfigs as $config) {
             $this->_cachedApplicationConfig[$config->name] = $config;
