@@ -5,7 +5,7 @@
  * @package     OnlyOfficeIntegrator
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2020-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2020-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -25,6 +25,11 @@ class OnlyOfficeIntegrator_Setup_Uninitialize extends Setup_Uninitialize
      */
     protected function _uninitializeCustomFields(Tinebase_Model_Application $_application, $_options = null)
     {
+        self::removeCfs();
+    }
+
+    protected static function removeCfs()
+    {
         $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
             Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME)->getId(),
             OnlyOfficeIntegrator_Config::FM_NODE_EDITING_CFNAME, null, true);
@@ -38,5 +43,10 @@ class OnlyOfficeIntegrator_Setup_Uninitialize extends Setup_Uninitialize
         if (null !== $cfc) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
         }
+    }
+
+    public static function removeAuxiliaryDataHook()
+    {
+        self::removeCfs();
     }
 }

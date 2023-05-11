@@ -113,4 +113,7 @@ class Setup_Uninitialize
             }
         }
     }
+
+    public static function removeAuxiliaryDataHook()
+    {}
 }
