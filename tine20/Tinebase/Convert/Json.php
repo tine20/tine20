@@ -585,7 +585,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             
             // addFilters can be added and must be added if the same model resides in more than one records fields
             if (isset($config['addFilters']) && is_array($config['addFilters'])) {
-                $filterArray = $config['addFilters'];
+                $filterArray = array_merge($filterArray, $config['addFilters']);
             }
 
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterName, $filterArray,
