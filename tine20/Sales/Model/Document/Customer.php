@@ -30,7 +30,7 @@ class Sales_Model_Document_Customer extends Sales_Model_Customer
     {
         parent::inheritModelConfigHook($_definition);
 
-        $_definition[self::VERSION] = 2;
+        $_definition[self::VERSION] = 3;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE] = [
             self::NAME      => self::TABLE_NAME,
@@ -38,6 +38,12 @@ class Sales_Model_Document_Customer extends Sales_Model_Customer
                 'description'   => [
                     self::COLUMNS   => ['description'],
                     self::FLAGS     => [self::TYPE_FULLTEXT],
+                ],
+                self::FLD_DOCUMENT_ID => [
+                    self::COLUMNS   => [self::FLD_DOCUMENT_ID],
+                ],
+                self::FLD_ORIGINAL_ID => [
+                    self::COLUMNS   => [self::FLD_ORIGINAL_ID],
                 ],
             ],
         ];
