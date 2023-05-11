@@ -378,9 +378,14 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             'value'     => $applicationId
         ));
             
-          $filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
-          $filter->customfieldACLChecks(FALSE);
-        $customFields = $this->_backendConfig->search($filter);
+        $filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
+        $filter->customfieldACLChecks(FALSE);
+        $this->_backendConfig->setAllCFs();
+        try {
+            $customFields = $this->_backendConfig->search($filter);
+        } finally {
+            $this->_backendConfig->setNoSystemCFs();
+        }
             
         $deletedCount = 0;
         foreach ($customFields as $customField) {
