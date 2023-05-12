@@ -30,9 +30,14 @@ class OnlyOfficeIntegrator_Setup_Initialize extends Setup_Initialize
             return;
         }
 
-        $group = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group([
-            'name' => 'OnlyOfficeIntegratorQuarantine'
-        ]));
+        try {
+            $group = Tinebase_Group::getInstance()->getGroupByName('OnlyOfficeIntegratorQuarantine');
+        } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+            $group = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group([
+                'name' => 'OnlyOfficeIntegratorQuarantine'
+            ]));
+        }
+
         $grants = [
             'account_id'                           => $group->getId(),
             'account_type'                         => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,

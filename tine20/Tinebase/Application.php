@@ -886,6 +886,7 @@ class Tinebase_Application
                 Setup_Controller::getInstance()->uninstallApplications([$record->name], [
                     Setup_Controller::INSTALL_NO_REPLICATION_SLAVE_CHECK => true
                 ]);
+                Setup_SchemaTool::resetUninstalledTables();
                 break;
 
             default:
