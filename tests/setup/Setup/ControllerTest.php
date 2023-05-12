@@ -415,6 +415,7 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
         Tinebase_Cache_PerRequest::getInstance()->reset();
         Admin_Config::unsetInstance();
         Tinebase_ImportExportDefinition::resetDefaultContainer();
+        Setup_SchemaTool::resetUninstalledTables();
     }
     
     /**
