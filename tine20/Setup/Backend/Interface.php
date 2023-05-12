@@ -30,7 +30,7 @@ interface Setup_Backend_Interface
      *
      * @param string $_tableName
      */
-    public function dropTable($_tableName);
+    public function dropTable($_tableName, $_applicationId = 'Tinebase');
 
     /**
      * renames table in database

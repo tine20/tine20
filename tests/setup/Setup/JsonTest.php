@@ -4,7 +4,7 @@
  *
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -53,7 +53,7 @@ class Setup_JsonTest extends \PHPUnit\Framework\TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         $this->_json = new Setup_Frontend_Json();
         $this->_originalAuthenticationData = $this->_json->loadAuthenticationData();
     }
@@ -65,7 +65,8 @@ class Setup_JsonTest extends \PHPUnit\Framework\TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
+        Setup_SchemaTool::resetUninstalledTables();
         $this->_installAllApps();
     }
     
