@@ -41,6 +41,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE025 = __CLASS__ . '::update025';
     const RELEASE015_UPDATE026 = __CLASS__ . '::update026';
     const RELEASE015_UPDATE027 = __CLASS__ . '::update027';
+    const RELEASE015_UPDATE028 = __CLASS__ . '::update028';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -126,6 +127,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE026          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update026',
+            ],
+            self::RELEASE015_UPDATE028          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update028',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -777,5 +782,14 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
         $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'tree_fileobjects SET created_by = "' .
             Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_REPLICATION)->getId() . '" WHERE created_by IS NULL');
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.27', self::RELEASE015_UPDATE027);
+    }
+
+    public function update028()
+    {
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_BankHoliday::class,
+            Tinebase_Model_BankHolidayCalendar::class,
+        ]);
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.28', self::RELEASE015_UPDATE028);
     }
 }
