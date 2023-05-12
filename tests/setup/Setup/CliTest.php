@@ -28,13 +28,13 @@ class Setup_CliTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         $this->_cli = new Setup_Frontend_Cli();
         parent::setUp();
     }
 
     protected function tearDown(): void
-{
+    {
         parent::tearDown();
 
         // reset old configs

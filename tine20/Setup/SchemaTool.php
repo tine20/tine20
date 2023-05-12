@@ -4,7 +4,7 @@
  *
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -22,6 +22,17 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 class Setup_SchemaTool
 {
     protected static $_dbParams = null;
+    protected static $_uninstalledTables = [];
+
+    public static function addUninstalledTable(string $table): void
+    {
+        static::$_uninstalledTables[$table] = $table;
+    }
+
+    public static function resetUninstalledTables(): void
+    {
+        static::$_uninstalledTables = [];
+    }
 
     public static function setDBParams(array $dbParams)
     {
@@ -120,22 +131,27 @@ class Setup_SchemaTool
     {
         $em = self::getEntityManager();
 
-        $classes = array();
+        $classes = [];
         foreach($modelNames as $modelName) {
-            $classes[] = $em->getClassMetadata($modelName);
+            $mdInfo = $em->getClassMetadata($modelName);
+            if (isset(self::$_uninstalledTables[$mdInfo->getTableName()])) {
+                continue;
+            }
+            $classes[] = $mdInfo;
         }
 
         return $classes;
     }
 
-    public static function createSchema(array $modelNames)
+    /*public static function createSchema(array $modelNames)
     {
         $em = self::getEntityManager();
         $tool = new SchemaTool($em);
         $classes = self::getMetadata($modelNames);
 
         $tool->createSchema($classes);
-    }
+        self::updateApplicationTable($modelNames);
+    }*/
 
     public static function updateSchema(array $modelNames)
     {
@@ -144,20 +160,42 @@ class Setup_SchemaTool
         $classes = self::getMetadata($modelNames);
 
         $tool->updateSchema($classes, true);
+        self::updateApplicationTable($modelNames);
     }
 
     public static function updateAllSchema()
     {
         $em = self::getEntityManager();
         $tool = new SchemaTool($em);
-        $classes = [];
-
-        $mappingDriver = new Tinebase_Record_DoctrineMappingDriver();
-        foreach($mappingDriver->getAllClassNames() as $modelName) {
-            $classes[] = $em->getClassMetadata($modelName);
-        }
+        $allModels = (new Tinebase_Record_DoctrineMappingDriver())->getAllClassNames();
+        $classes = self::getMetadata($allModels);
 
         $tool->updateSchema($classes, true);
+
+        self::updateApplicationTable($allModels);
+    }
+
+    public static function updateApplicationTable(array $models)
+    {
+        try {
+            Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            return;
+        }
+
+        /** @var Tinebase_Record_Interface $model */
+        foreach ($models as $model) {
+            if (($table = $model::getConfiguration()->getTableName()) &&
+                    ($version = $model::getConfiguration()->getVersion())) {
+                if (isset(self::$_uninstalledTables[SQL_TABLE_PREFIX . $table])) {
+                    continue;
+                }
+                Tinebase_Application::getInstance()->removeApplicationTable($model::getConfiguration()->getAppName(),
+                    $table);
+                Tinebase_Application::getInstance()->addApplicationTable($model::getConfiguration()->getAppName(),
+                    $table, $version);
+            }
+        }
     }
 
     public static function hasSchemaUpdates()

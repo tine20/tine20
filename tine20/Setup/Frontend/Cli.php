@@ -635,6 +635,8 @@ class Setup_Frontend_Cli
             $controller->uninstallApplications($applications->name);
             echo "Successfully uninstalled " . count($applications) . " applications.\n";
         } catch (Tinebase_Exception_NotFound $e) {
+        } finally {
+            Setup_SchemaTool::resetUninstalledTables();
         }
         //Install Applications
         try {
