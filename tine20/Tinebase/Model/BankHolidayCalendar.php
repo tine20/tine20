@@ -55,6 +55,7 @@ class Tinebase_Model_BankHolidayCalendar extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
+                self::QUERY_FILTER          => true,
             ],
             self::FLD_DESCRIPTION       => [
                 self::TYPE                  => self::TYPE_TEXT,
