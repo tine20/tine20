@@ -2020,9 +2020,10 @@ class Setup_Controller
             }
 
             // do doctrine/MCV2 then old xml
-            $createdTables = $this->_createModelConfigSchema($_xml->name);
+            $this->_createModelConfigSchema($_xml->name);
 
             // traditional xml declaration
+            $createdTables = [];
             if (isset($_xml->tables)) {
                 foreach ($_xml->tables[0] as $tableXML) {
                     $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
@@ -2036,6 +2037,8 @@ class Setup_Controller
 
             if ('Tinebase' === $application->name) {
                 $application = Tinebase_Application::getInstance()->addApplication($application);
+                $tbInstance = Setup_Core::getApplicationInstance($application->name, '', true);
+                Setup_SchemaTool::updateApplicationTable($tbInstance->getModels(true /* MCv2only */));
             }
 
             // keep track of tables belonging to this application
@@ -2103,38 +2106,16 @@ class Setup_Controller
         }
     }
 
-    /**
-     * @param $appName
-     * @return array
-     */
-    protected function _createModelConfigSchema($appName)
+    protected function _createModelConfigSchema(string $appName): void
     {
         $application = Setup_Core::getApplicationInstance($appName, '', true);
         $models = $application->getModels(true /* MCv2only */);
-        $createdTables = [];
 
         if (count($models) > 0) {
             // create tables using doctrine 2
             // NOTE: we don't use createSchema here because some tables might already been created
-            // TODO or use createSchema, catch exception and fallback to updateSchema ?
-            if ('Tinebase' === (string)$appName) {
-                Setup_SchemaTool::updateSchema($models);
-            } else {
-                Setup_SchemaTool::updateAllSchema();
-            }
-
-            // adopt to old workflow
-            /** @var Tinebase_Record_Abstract $model */
-            foreach ($models as $model) {
-                $modelConfiguration = $model::getConfiguration();
-                $createdTables[] = (object)array(
-                    'name' => Tinebase_Helper::array_value('name', $modelConfiguration->getTable()),
-                    'version' => $modelConfiguration->getVersion(),
-                );
-            }
+            Setup_SchemaTool::updateSchema($models);
         }
-
-        return $createdTables;
     }
 
     protected function _createTable($table)
@@ -2318,11 +2299,8 @@ class Setup_Controller
                     }
                     
                     // drop table
-                    $this->_backend->dropTable($table);
-                    
-                    if ($_application->name != 'Tinebase') {
-                        Tinebase_Application::getInstance()->removeApplicationTable($_application, $table);
-                    }
+                    $this->_backend->dropTable($table, $_application->name);
+                    Setup_SchemaTool::addUninstalledTable(SQL_TABLE_PREFIX . $table);
                     
                     unset($applicationTables[$key]);
                     
@@ -2336,6 +2314,7 @@ class Setup_Controller
                     // remove app table if table not found in db
                     if (preg_match('/SQLSTATE\[42S02\]: Base table or view not found/', $message) && $_application->name != 'Tinebase') {
                         Tinebase_Application::getInstance()->removeApplicationTable($_application, $table);
+                        Setup_SchemaTool::addUninstalledTable(SQL_TABLE_PREFIX . $table);
                         unset($applicationTables[$key]);
                     } else {
                         Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " Disabling foreign key checks ... ");

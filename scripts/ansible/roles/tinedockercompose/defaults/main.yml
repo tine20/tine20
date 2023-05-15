@@ -1,0 +1,9 @@
+---
+tinedockercompose_tine_image: "tinegroupware/tine:2022"
+tinedockercompose_tinesetuppw: "movemetovault"
+tinedockercompose_path: "/srv/tine"
+tinedockercompose_db_path: "/srv/tine/db"
+tinedockercompose_confd_path: "/srv/tine/conf.d"
+tinedockercompose_files_path: "/srv/tine/files"
+tinedockercompose_backup_path: "/srv/tine/backup"
+tinedockercompose_ports: "80:80"

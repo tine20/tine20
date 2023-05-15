@@ -6,7 +6,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
 
@@ -41,7 +41,7 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
+        self::VERSION => 2,
         self::MODLOG_ACTIVE => true,
         self::IS_DEPENDENT => true,
 
@@ -64,6 +64,11 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
 
         self::TABLE => [
             self::NAME => self::TABLE_NAME,
+            self::INDEXES => [
+                self::FLD_CUSTOMER => [
+                    self::COLUMNS => [self::FLD_CUSTOMER],
+                ],
+            ],
         ],
 
         self::FIELDS => [

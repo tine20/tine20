@@ -37,6 +37,8 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE021 = __CLASS__ . '::update021';
     const RELEASE015_UPDATE022 = __CLASS__ . '::update022';
     const RELEASE015_UPDATE023 = __CLASS__ . '::update023';
+    const RELEASE015_UPDATE024 = __CLASS__ . '::update024';
+    const RELEASE015_UPDATE025 = __CLASS__ . '::update025';
 
     static protected $_allUpdates = [
         // this needs to be executed before TB struct update! cause we move the table from sales to tb
@@ -126,6 +128,14 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE023          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update023',
+            ],
+            self::RELEASE015_UPDATE024          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update024',
+            ],
+            self::RELEASE015_UPDATE025          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update025',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -463,5 +473,29 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             $this->setTableVersion('sales_sales_invoices', 9);
         }
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.23', self::RELEASE015_UPDATE023);
+    }
+
+    public function update024()
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Address::class,
+            Sales_Model_Boilerplate::class,
+            Sales_Model_Document_Address::class,
+            Sales_Model_Document_Boilerplate::class,
+            Sales_Model_Document_Customer::class,
+            Sales_Model_DocumentPosition_Delivery::class,
+            Sales_Model_DocumentPosition_Invoice::class,
+            Sales_Model_DocumentPosition_Offer::class,
+            Sales_Model_DocumentPosition_Order::class,
+        ]);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.24', self::RELEASE015_UPDATE024);
+    }
+
+    public function update025()
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_Customer::class,
+        ]);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.25', self::RELEASE015_UPDATE025);
     }
 }

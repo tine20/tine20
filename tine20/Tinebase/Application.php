@@ -659,10 +659,14 @@ class Tinebase_Application
      */
     public function removeApplicationAuxiliaryData(Tinebase_Model_Application $_application)
     {
+        $class = $_application->name . '_Setup_Uninitialize';
+        if (class_exists($class)) {
+            $class::removeAuxiliaryDataHook();
+        }
         $dataToDelete = array(
-            'container'     => array('tablename' => ''),
-            'config'        => array('tablename' => ''),
-            'customfield'   => array('tablename' => ''),
+            'container'     => array(),
+            'config'        => array(),
+            'customfield'   => array(),
             'rights'        => array('tablename' => 'role_rights'),
             'definitions'   => array('tablename' => 'importexport_definition'),
             'filter'        => array('tablename' => 'filter'),
@@ -882,6 +886,7 @@ class Tinebase_Application
                 Setup_Controller::getInstance()->uninstallApplications([$record->name], [
                     Setup_Controller::INSTALL_NO_REPLICATION_SLAVE_CHECK => true
                 ]);
+                Setup_SchemaTool::resetUninstalledTables();
                 break;
 
             default:

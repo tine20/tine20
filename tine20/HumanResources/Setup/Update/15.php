@@ -6,7 +6,7 @@
  * @package     HumanResources
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * this is 2022.11 (ONLY!)
@@ -33,6 +33,8 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE017 = __CLASS__ . '::update017';
     const RELEASE015_UPDATE018 = __CLASS__ . '::update018';
     const RELEASE015_UPDATE019 = __CLASS__ . '::update019';
+    const RELEASE015_UPDATE020 = __CLASS__ . '::update020';
+
 
     static protected $_allUpdates = [
         // we'll do some querys here and we want them done before any schema tool comes along to play
@@ -94,6 +96,10 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE019          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update019',
+            ],
+            self::RELEASE015_UPDATE020          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update020',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -480,5 +486,14 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
         ]);
         
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '15.19', self::RELEASE015_UPDATE019);
+    }
+
+    public function update020(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            HumanResources_Model_Division::class,
+            HumanResources_Model_FreeDay::class,
+        ]);
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '15.20', self::RELEASE015_UPDATE020);
     }
 }

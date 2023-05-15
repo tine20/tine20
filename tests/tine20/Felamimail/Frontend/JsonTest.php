@@ -2036,11 +2036,10 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         $result = $this->_getVacationMessageWithTemplate();
         $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
         $pwulf = Tinebase_User::getInstance()->getFullUserByLoginName('pwulf');
-        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie<br /> Paul Wulf (" .
-            $pwulf->accountEmailAddress . ") oder Susan Clever (" .
-            $sclever->accountEmailAddress . ").<br /><br />I am on vacation until Apr 20, 2012. Please contact<br /> Paul Wulf (" .
-            $pwulf->accountEmailAddress . ") or Susan Clever (" .
-            $sclever->accountEmailAddress . ") instead.<br /><br />" .
+        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie" . 
+        "<br /> Paul Wulf (pwulf@mail.test) +441273-3766-376 oder Susan Clever (sclever@mail.test) +441273-3766-373.<br />" . 
+        "<br />I am on vacation until Apr 20, 2012. Please contact" .
+        "<br /> Paul Wulf (pwulf@mail.test) +441273-3766-376 or Susan Clever (sclever@mail.test) +441273-3766-373 instead.<br /><br />" .
             Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId())->n_fn . "<br />", 
             $result['message'],
         );

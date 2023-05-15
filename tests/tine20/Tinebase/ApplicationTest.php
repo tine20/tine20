@@ -617,6 +617,8 @@ class Tinebase_ApplicationTest extends TestCase
             } else {
                 throw $t;
             }
+        } finally {
+            Setup_SchemaTool::resetUninstalledTables();
         }
 
         $appId = Tinebase_Record_Abstract::generateUID();

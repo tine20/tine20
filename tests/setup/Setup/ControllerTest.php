@@ -31,7 +31,7 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         $this->_uit = Setup_ControllerMock::getInstance();
 
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
@@ -60,7 +60,7 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
         $testCredentials = Setup_TestServer::getInstance()->getTestCredentials();
         $this->_installAllApplications(array(
             'defaultAdminGroupName' => 'Administrators',
@@ -415,6 +415,7 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
         Tinebase_Cache_PerRequest::getInstance()->reset();
         Admin_Config::unsetInstance();
         Tinebase_ImportExportDefinition::resetDefaultContainer();
+        Setup_SchemaTool::resetUninstalledTables();
     }
     
     /**
@@ -429,6 +430,7 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
             throw new Setup_Exception('could not run test, Setup_Controller init failed');
         }
 
+        Setup_SchemaTool::resetUninstalledTables();
         Tinebase_ImportExportDefinition::resetDefaultContainer();
         Tinebase_Core::unsetTinebaseId();
         Tinebase_Group::unsetInstance();

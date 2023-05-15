@@ -6,7 +6,7 @@
  * @subpackage  Address
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -57,7 +57,7 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION   => 4,
+        self::VERSION   => 5,
         self::RECORD_NAME   => 'Address', // ngettext('Address', 'Addresss', n)
         self::RECORDS_NAME  => 'Addresss', // gettext('GENDER_Address')
         self::HAS_RELATIONS => true,
@@ -78,6 +78,11 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
 
         self::TABLE => [
             self::NAME => self::TABLE_NAME,
+            self::INDEXES   => [
+                self::FLD_CUSTOMER_ID   => [
+                    self::COLUMNS   => [self::FLD_CUSTOMER_ID],
+                ],
+            ],
         ],
 
         self::FIELDS          => [

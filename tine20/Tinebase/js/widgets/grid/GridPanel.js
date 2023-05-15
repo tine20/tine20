@@ -2023,7 +2023,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     key:   'Tinebase-MainContextMenu'
                 }]
             });
-
+            this.contextMenu.doLayout(false, true);
+            
             this.actionUpdater.addActions(this.contextMenu.items);
         }
 

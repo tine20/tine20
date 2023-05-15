@@ -5,7 +5,7 @@
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,6 +18,7 @@ class HumanResources_Model_Division extends Tinebase_Record_NewAbstract
     public const MODEL_NAME_PART    = 'Division';
     public const TABLE_NAME         = 'humanresources_division';
 
+    public const FLD_FREE_TIME_CAL  = 'free_time_cal';
     public const FLD_TITLE          = 'title';
     public const FLD_WORKING_TIME_TIMEACCOUNT_ID = 'wt_ta_id';
 
@@ -28,7 +29,7 @@ class HumanResources_Model_Division extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 1,
+        self::VERSION                   => 2,
         self::APP_NAME                  => HumanResources_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::RECORD_NAME               => 'Division', // gettext('GENDER_Division')
@@ -77,6 +78,17 @@ class HumanResources_Model_Division extends Tinebase_Record_NewAbstract
                 self::CONFIG                        => [
                     self::APP_NAME                      => Timetracker_Config::APP_NAME,
                     self::MODEL_NAME                    => Timetracker_Model_Timeaccount::MODEL_NAME_PART,
+                ],
+            ],
+            self::FLD_FREE_TIME_CAL         => [
+                self::TYPE                      => self::TYPE_CONTAINER,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Free Time Calendar', // _('Free Time Calendar')
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Filter_Container::class,
+                    self::OPTIONS                   => [
+                        self::MODEL_NAME                => Calendar_Model_Event::class,
+                    ]
                 ],
             ],
         ],
