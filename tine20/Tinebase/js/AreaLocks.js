@@ -141,7 +141,10 @@ class AreaLocks extends Ext.util.Observable {
         mfaDevice: selectedDevice
       }, opts))
     }
-    
+    if (this.providerInstances[key].mfaDevice !== selectedDevice) {
+      this.providerInstances[key].mfaDevice=selectedDevice;
+      this.providerInstances[key].passwordFieldLabel=selectedDevice.device_name;
+    }
     return this.providerInstances[key]
   }
 
