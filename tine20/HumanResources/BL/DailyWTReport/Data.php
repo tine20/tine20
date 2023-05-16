@@ -30,9 +30,9 @@ class HumanResources_BL_DailyWTReport_Data implements Tinebase_BL_DataInterface
     public $freeTimes = null;
 
     /**
-     * @var Tinebase_Record_RecordSet of Calendar_Model_Events;
+     * @var Tinebase_Model_BankHoliday|null;
      */
-    public $feastTimes = null;
+    public $bankHoliday = null;
 
     /**
      * @var HumanResources_Model_WorkingTimeScheme

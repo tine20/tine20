@@ -473,14 +473,7 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
 
         $start = new Tinebase_DateTime('2018-08-01 00:00:00');
 
-        $contract = $this->employee->getValidContract($start);
-        Calendar_Controller_Event::getInstance()->create(new Calendar_Model_Event([
-            'summary' => 'unittest feast',
-            'container_id' => $contract->feast_calendar_id,
-            'dtstart' => '2010-08-01 00:00:00',
-            'dtend' => '2010-08-01 23:59:59',
-            'rrule' => 'FREQ=MONTHLY;BYMONTHDAY=1'
-        ]));
+        $this->_createFeastDay($start);
 
         $end = new Tinebase_DateTime('2018-08-01 23:59:59');
         $calcResult = HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee($this->employee, $start, $end);
@@ -496,7 +489,7 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         self::assertEquals(8 * 3600, $result->working_times->getFirstRecord()->duration);
         self::assertEquals(8 * 3600, $result->working_time_total);
         self::assertEquals(HumanResources_Model_WageType::ID_FEAST, $result->working_times->getFirstRecord()->wage_type);
-        self::assertEquals('unittest feast', $result->system_remark);
+        self::assertEquals('Feast Day', $result->system_remark);
     }
 
     public function testCalculateReportsForEmployeeVacation()

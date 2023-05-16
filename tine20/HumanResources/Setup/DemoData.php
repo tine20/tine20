@@ -201,15 +201,11 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createSharedEmployees()
     {
         $controller = HumanResources_Controller_Employee::getInstance();
-        $this->_feastCalendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'           => 'Feast Calendar',
-            'type'           => Tinebase_Model_Container::TYPE_SHARED,
-            'owner_id'       => Tinebase_Core::getUser(),
-            'backend'        => 'SQL',
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'color'          => '#00FF00',
-            'model'             => Calendar_Model_Event::class,
-        ), TRUE));
+        $this->_feastCalendar = Tinebase_Controller_BankHolidayCalendar::getInstance()->create(
+            new Tinebase_Model_BankHolidayCalendar([
+                Tinebase_Model_BankHolidayCalendar::FLD_NAME => 'Feast Calendar',
+            ])
+        );
         
         $controller->transferUserAccounts(FALSE, $this->_feastCalendar->getId(), NULL, 27, TRUE);
         

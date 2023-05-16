@@ -6,9 +6,11 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * Contract controller class for HumanResources application
@@ -95,11 +97,6 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        // sanitize container_id
-        if (is_array($_record->feast_calendar_id)) {
-            $_record->feast_calendar_id = $_record->feast_calendar_id['id'];
-        }
-        
         $diff = $_record->diff($_oldRecord, array(
             'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'notes', 'end_date', 'seq', 'tags', 'account_grants', 'is_editable'
         ))->diff;
@@ -229,18 +226,6 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             throw new HumanResources_Exception_ContractDates();
         }
     }
-
-    /**
-     * resolves the container array to the corresponding id
-     * 
-     * @param Tinebase_Record_Interface $_record
-     */
-    protected function _containerToId(Tinebase_Record_Interface $_record)
-    {
-        if (is_array($_record->feast_calendar_id)) {
-            $_record->feast_calendar_id = $_record->feast_calendar_id['id'];
-        }
-    }
     
     /**
      * inspect creation of one record (before create)
@@ -251,11 +236,6 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         $this->_checkDates($_record);
-        $this->_containerToId($_record);
-        
-        if (empty($_record->feast_calendar_id)) {
-            $_record->feast_calendar_id = null;
-        }
 
         if (empty($_record->start_date)) {
             throw new Tinebase_Exception_Record_Validation('Contract needs a start date');
@@ -451,62 +431,31 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
     public function getFeastDays($contracts, Tinebase_DateTime $firstDate, Tinebase_DateTime $lastDate)
     {
         $contracts = $this->_convertToRecordSet($contracts);
-        
-        $dates = array();
-        foreach($contracts as $contract) {
-        
-            $fd = clone $firstDate;
-            $ld = clone $lastDate;
-            
-            // on calendar search we have to do this to get the right interval:
-            $fd->subSecond(1);
-            $ld->addSecond(1);
 
-            /** @var string $feastCalSeq */
-            $feastCalSeq = Tinebase_Container::getInstance()->getContentSequence($contract->feast_calendar_id);
-            $cacheKey = Tinebase_Helper::convertCacheId('getFeastDays' .
-                md5($contract->feast_calendar_id . '#' . $feastCalSeq . '#' . $fd->toString() . $ld->toString()));
-            if (false !== ($cachedDates = Tinebase_Core::getCache()->load($cacheKey))) {
-                $dates = array_merge($dates, $cachedDates);
-                continue;
-            }
-            
-            $periodFilter = new Calendar_Model_PeriodFilter(
-                array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $fd, 'until' => $ld)));
-            
-            $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
-                array('field' => 'container_id', 'operator' => 'equals', 'value' =>
-                    $contract->feast_calendar_id),
-            )));
-            
-            Calendar_Model_Rrule::mergeRecurrenceSet($events, $fd, $ld);
-            
-            $events->setTimezone(Tinebase_Core::getUserTimezone());
-
-            $newDates = [];
-            foreach($events as $event) {
-                if (! $event->isInPeriod($periodFilter)) {
-                    continue;
-                }
-                if ($event->is_all_day_event) {
-                    $days = round(($event->dtend->getTimestamp() - $event->dtstart->getTimestamp()) / 86400);
-                    $i=0;
-                    
-                    while ($i < $days) {
-                        $dateOfEvent = clone $event->dtstart;
-                        $dateOfEvent->addDay($i);
-                        $newDates[] = $dateOfEvent;
-                        $i++;
-                    }
-                } else {
-                    $newDates[] = $event->dtstart;
-                }
-            }
-            Tinebase_Core::getCache()->save($newDates, $cacheKey, [], 7 * 24 * 3600);
-            $dates = array_merge($dates, $newDates);
+        if (empty($bankHolidayCalendarIds =
+                array_filter(array_unique(array_values($contracts->getIdFromProperty('feast_calendar_id')))))) {
+            return [];
         }
-        
-        return array_unique($dates);
+
+        $firstDate = $firstDate->getClone();
+        $firstDate->hasTime(false);
+        $lastDate = $lastDate->getClone();
+        $lastDate->hasTime(false);
+
+        $dates = [];
+        foreach (array_unique(array_keys(Tinebase_Controller_BankHoliday::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_BankHoliday::class, [
+                    [TMFA::FIELD => Tinebase_Model_BankHoliday::FLD_CALENDAR_ID, TMFA::OPERATOR => 'in', TMFA::VALUE => $bankHolidayCalendarIds],
+                    [TMFA::FIELD => Tinebase_Model_BankHoliday::FLD_DATE, TMFA::OPERATOR => 'after_or_equals', TMFA::VALUE => $firstDate->toString()],
+                    [TMFA::FIELD => Tinebase_Model_BankHoliday::FLD_DATE, TMFA::OPERATOR => 'before_or_equals', TMFA::VALUE => $lastDate->toString()],
+                ]), new Tinebase_Model_Pagination(['sort' => Tinebase_Model_BankHoliday::FLD_DATE]), false,
+                [Tinebase_Model_BankHoliday::FLD_DATE]))) as $date) {
+            $date = new Tinebase_DateTime($date);
+            $date->hasTime(false);
+            $dates[] = $date;
+        }
+
+        return $dates;
     }
     
     /**
