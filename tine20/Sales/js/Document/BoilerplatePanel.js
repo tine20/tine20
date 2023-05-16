@@ -54,8 +54,7 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
             let field = editDialog.getForm().findField(fieldName);
             boilerplate.set('boilerplate', field.getValue());
         });
-
-        await this.loadBoilerplatesIf(editDialog, record);
+        record.set('boilerplates', Tine.Tinebase.common.assertComparable(_.map(this.store.data.items, 'data')));
     },
 
     onBoilerplatesLoad(editDialog) {
