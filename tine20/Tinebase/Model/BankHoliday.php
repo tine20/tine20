@@ -32,6 +32,10 @@ class Tinebase_Model_BankHoliday extends Tinebase_Record_NewAbstract
         self::MODLOG_ACTIVE => true,
         self::IS_DEPENDENT  => true,
 
+        self::RECORD_NAME    => 'Bank Holiday',
+        self::RECORDS_NAME   => 'Bank Holidays', // ngettext('Bank Holiday', 'Bank Holidays', n)
+        self::TITLE_PROPERTY => "{{ date |localizeddate('short', 'none', app.request.locale) }} - {{ name}}",
+
         self::APP_NAME      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME    => self::MODEL_NAME_PART,
 
@@ -70,6 +74,15 @@ class Tinebase_Model_BankHoliday extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
+                self::DISABLED              => true,
+            ],
+            self::FLD_DATE              => [
+                self::TYPE                  => self::TYPE_DATE,
+                self::LABEL                 => 'Date', // _('Date')
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
+                ],
             ],
             self::FLD_NAME              => [
                 self::TYPE                  => self::TYPE_STRING,
@@ -84,14 +97,6 @@ class Tinebase_Model_BankHoliday extends Tinebase_Record_NewAbstract
                 self::TYPE                  => self::TYPE_TEXT,
                 self::LABEL                 => 'Description', // _('Description')
                 self::NULLABLE              => true,
-            ],
-            self::FLD_DATE              => [
-                self::TYPE                  => self::TYPE_DATE,
-                self::LABEL                 => 'Date', // _('Date')
-                self::VALIDATORS            => [
-                    Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
-                ],
             ],
         ],
     ];
