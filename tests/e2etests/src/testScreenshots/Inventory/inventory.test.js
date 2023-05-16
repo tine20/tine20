@@ -21,6 +21,7 @@ describe('mainScreen', () => {
         await newPage.waitForXPath('//button');
         await newPage.screenshot({path: 'screenshots/Inventarisierung/5_inventar_import.png'});
         await newPage.keyboard.press('Escape')
+        await expect(newPage).toClick('button', {text: 'Abbrechen'});
     })
 });
 
