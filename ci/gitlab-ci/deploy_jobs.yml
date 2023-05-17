@@ -66,26 +66,41 @@ deploy-dev-image-to-gitlab-arm64:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab-arm64/
     - if: $PIPELINE_TYPE =~ /build-dev-images/
 
-# pushing built-commit as tine20/tine20 to dockerhub.
-# The tag is also overwritten and set to $DOCKERHUB_TAG
-# This job should only be triggered by a schedule or a manual pipeline trigger
 deploy-dev-image-to-dockerhub:
   extends: .abstract_jobs.docker
   stage: deploy
   script:
     - !reference [.lib, script]
-    - docker_hub_deploy dev dev $DOCKERHUB_TAG
+    - docker_hub_deploy dev dev $(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX}"
   rules:
-    - if: $RUN_NO_TESTS == "true"
-      when: never
-    - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-dockerhub/
+    - if: $DEPLOY_DEV_IMAGE_TO_DOCKERHUB == "false"
       when: never
     - if: $DEPLOY_DEV_IMAGE_TO_DOCKERHUB == "true"
+    - if: $PIPELINE_TYPE =~ /build-dev-images/
   timeout: 20m
   interruptible: false
+deploy-dev-image-to-dockerhub-arm64:
+  services:
+    - name: ${UTIL_REGISTRY}/docker:20.10.21-dind-r1
+      alias: docker
+  image: ${UTIL_REGISTRY}/docker:20.10.21-r1
+  extends: deploy-dev-image-to-gitlab
+  variables:
+    IMAGE_TAG_PLATFORM_POSTFIX: -arm64
+    IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}-arm64
+  tags:
+    - arm64
+  rules:
+    - if: $DEPLOY_DEV_IMAGE_TO_DOCKERHUB_ARM64 == "false"
+      when: never
+    - if: $DEPLOY_DEV_IMAGE_TO_DOCKERHUB_ARM64 == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-dockerhub-arm64/
+    - if: $PIPELINE_TYPE =~ /build-dev-images/
 
+# pushing built-commit as tine20/tine20 to dockerhub.
+# The tag is also overwritten and set to $DOCKERHUB_TAG
+# This job should only be triggered by a schedule or a manual pipeline trigger
 deploy-built-image-to-dockerhub:
   extends: .abstract_jobs.docker
   stage: deploy
