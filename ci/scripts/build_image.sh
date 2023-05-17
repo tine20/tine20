@@ -17,7 +17,7 @@ export BUILD_IMAGE="${REGISTRY}/build-commit:${IMAGE_TAG}"
 export BUILT_IMAGE="${REGISTRY}/build-commit:${IMAGE_TAG}"
 
 export VERSION=${CI_COMMIT_TAG:-nightly}
-export RELEASE=$(echo "${VERSION}" | sed sI-I~Ig)
+export RELEASE=${VERSION}
 export REVISION=0
 export CODENAME="${CODENAME}"
 
