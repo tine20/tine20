@@ -514,4 +514,23 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
     {
         return static::$context;
     }
+
+    /**
+     * can be reimplemented by subclasses to modify values during setFromJson
+     * @param array $_data the json decoded values
+     * @return void
+     */
+    protected function _setFromJson(array &$_data)
+    {
+        if (isset($_data['sort'])) {
+            if (!is_array($_data['sort'])) {
+                $_data['sort'] = [$_data['sort']];
+            }
+            foreach ($_data['sort'] as &$val) {
+                if (!preg_match('/^[\w\.\-]+$/', $val)) {
+                    $val = '';
+                }
+            }
+        }
+    }
 }
