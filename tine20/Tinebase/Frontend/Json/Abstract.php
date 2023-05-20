@@ -269,7 +269,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         } else if ($_filter) {
             $decodedPagination['model'] = $_filter->getModelName();
         }
-        return new Tinebase_Model_Pagination($decodedPagination);
+        $pagination = new Tinebase_Model_Pagination([], true);
+        $pagination->setFromJson($decodedPagination);
+        return $pagination;
     }
 
     /**

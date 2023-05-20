@@ -315,6 +315,7 @@ class Setup_JsonTest extends \PHPUnit\Framework\TestCase
         Tinebase_Group::unsetInstance();
         Tinebase_Cache_PerRequest::getInstance()->reset();
         Admin_Config::unsetInstance();
+        Setup_SchemaTool::resetUninstalledTables();
     }
     
     /**
