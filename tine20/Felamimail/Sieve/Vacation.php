@@ -323,12 +323,14 @@ class Felamimail_Sieve_Vacation
     }
 
     /**
-     * @param string $reason
+     * @param string|null $reason
      * @return string
-     * @throws DOMException
      */
-    protected function _getFormattedHTMLBody(string $reason): string
+    protected function _getFormattedHTMLBody(?string $reason): string
     {
+        if ($reason === null) {
+            $reason = '';
+        }
         $doc = new DOMDocument('1.0', 'UTF-8');
         $doc->preserveWhiteSpace = true;
         $doc->formatOutput = true;
