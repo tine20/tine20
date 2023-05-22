@@ -13,7 +13,7 @@ beforeAll(async () => {
 beforeEach(async () => {
     let popupWindow = await lib.getEditDialog('Verfassen');
     let currentUser = await lib.getCurrentUser(popupWindow);
-    await popupWindow.waitForTimeout(2000);
+    await popupWindow.waitForTimeout(3000);
     // add recipient
     let inputFields = await popupWindow.$$('input');
     await inputFields[2].type(currentUser.accountEmailAddress);
@@ -104,7 +104,7 @@ async function sendMail(subject, newWindowPromis, user= false) {
         await popupWindow.waitForSelector('.ext-el-mask', {timeout: 5000});
     } catch {}
     await popupWindow.waitForFunction(() => !document.querySelector('.ext-el-mask'));
-    await popupWindow.waitForTimeout(2000); //musst wait for input!
+    await popupWindow.waitForTimeout(3000); //musst wait for input!
 
     if(user) {
         let currentUser = await lib.getCurrentUser(popupWindow);
