@@ -115,11 +115,8 @@ class HumanResources_Controller_ContractTests extends HumanResources_TestCase
 
         // create feast days
         $feastDays2013 = array(
-            // two days after another in one date
-            array('2013-12-25', '2013-12-26'),
-            // a whole day event
-            array('2013-04-01'),
-            // normal dates
+            '2013-12-25', '2013-12-26',
+            '2013-04-01',
             '2013-05-01', '2013-05-09', '2013-05-20', '2013-10-03', '2013-01-01', '2013-03-29' , '2013-12-31',
             // additional date which has been accidentially inserted by the user (test filters in getFeastDays)
             '2009-12-31'
@@ -129,16 +126,7 @@ class HumanResources_Controller_ContractTests extends HumanResources_TestCase
         $contract->feast_calendar_id = $feastCalendar->getId();
 
         foreach($feastDays2013 as $day) {
-            if (is_array($day)) {
-                $date = array();
-                foreach($day as $dayQ) {
-                    $date[] = new Tinebase_DateTime($dayQ . ' 06:00:00');
-                }
-            } else {
-                $date = new Tinebase_DateTime($day . ' 06:00:00');
-            }
-
-            $this->_createFeastDay($date);
+            $this->_createFeastDay(new Tinebase_DateTime($day));
         }
 
         // test "calculateVacationDays"

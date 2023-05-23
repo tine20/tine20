@@ -52,6 +52,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Model_DynamicRecordWrapper::MODEL_NAME_PART,
         Tinebase_Model_CostCenter::MODEL_NAME_PART,
         Tinebase_Model_CostUnit::MODEL_NAME_PART,
+        Tinebase_Model_BankHolidayCalendar::MODEL_NAME_PART,
+        Tinebase_Model_BankHoliday::MODEL_NAME_PART,
     ];
     
     public function __construct()

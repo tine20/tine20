@@ -401,7 +401,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     {
         if (isset($contractData['feastCalendarId'])) {
             try {
-                $feastCalendar = Tinebase_Container::getInstance()->get($contractData['feastCalendarId']);
+                $feastCalendar = Tinebase_Controller_BankHolidayCalendar::getInstance()->get($contractData['feastCalendarId']);
             } catch (Exception $e) {
                 if ($cliCall) {
                     die('The Calendar with the id ' . $contractData['feastCalendarId'] . ' could not be found!' . chr(10));

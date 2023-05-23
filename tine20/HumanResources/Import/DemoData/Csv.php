@@ -57,11 +57,11 @@ class HumanResources_Import_DemoData_Csv extends Tinebase_Import_Csv_Abstract
     protected function _inspectAfterImport($importedRecord)
     {
         try {
-            $event_id = Tinebase_Container::getInstance()->getContainerByName('Calendar_Model_Event', 'Events','shared')['event_id'];
+            //$event_id = Tinebase_Container::getInstance()->getContainerByName('Calendar_Model_Event', 'Events','shared')['event_id'];
             $contract_Model = new HumanResources_Model_Contract(array(
                 'start_date' => Tinebase_DateTime::now(),
                 'employee_id' => $importedRecord['id'],
-                'feast_calendar_id' => $event_id,
+                //'feast_calendar_id' => $event_id,
                 'vacation_days' => '27',
                 'workingtime_json' => '{"days":[8,8,8,8,8,0,0]}'
             ));
@@ -76,7 +76,7 @@ class HumanResources_Import_DemoData_Csv extends Tinebase_Import_Csv_Abstract
         $contract_Model = new HumanResources_Model_Contract(array(
             'start_date' => Tinebase_DateTime::now(),
             'employee_id' => $importedRecord['id'],
-            'feast_calendar_id' => $event_id,
+            //'feast_calendar_id' => $event_id,
             'vacation_days' => '27',
             'working_time_scheme' => HumanResources_Controller_WorkingTimeScheme::getInstance()->search(
                 new HumanResources_Model_WorkingTimeSchemeFilter([
