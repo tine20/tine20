@@ -71,7 +71,7 @@ deploy-dev-image-to-dockerhub:
   stage: deploy
   script:
     - !reference [.lib, script]
-    - docker_hub_deploy dev dev $(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX}"
+    - docker_hub_deploy dev dev $(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX}
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-dockerhub/
     - if: $DEPLOY_DEV_IMAGE_TO_DOCKERHUB == "false"
