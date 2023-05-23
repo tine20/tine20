@@ -111,6 +111,8 @@
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /push-to-vpackages/
       variables:
         REUSE_IMAGES: "false"
+    # from deploy-dev-image-to-dockerhub
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-dockerhub/
     #
     - if: $PIPELINE_TYPE =~ /default-tests/
       variables:
@@ -215,6 +217,8 @@ docker_build_source_arm64:
     - if: $PIPELINE_TYPE =~ /build-dev-images/
       variables:
         REUSE_IMAGES: "false"
+    # from deploy-dev-image-to-dockerhub-arm64
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-dockerhub-arm64/
 
 docker_build_built:
   extends: .abstract_jobs.docker
@@ -294,10 +298,12 @@ docker_build_dev:
       when: never
     # from deploy-dev-image-to-gitlab:
     - if: $DEPLOY_DEV_IMAGE_TO_GITLAB == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab/
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab/ 
     - if: $PIPELINE_TYPE =~ /build-dev-images/
     # from deploy-images-to-dockerhub:
     - if: $DEPLOY_IMAGES_TO_DOCKERHUB == "true"
+    # from deploy-dev-image-to-dockerhub
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-dockerhub/
   timeout: 60m
   interruptible: true
 docker_build_dev_arm64:
@@ -320,6 +326,8 @@ docker_build_dev_arm64:
     - if: $DEPLOY_DEV_IMAGE_TO_GITLAB_ARM64 == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab-arm64/
     - if: $PIPELINE_TYPE =~ /build-dev-images/
+    # from deploy-dev-image-to-dockerhub-arm64
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-dockerhub-arm64/
 
 docker_build_packages:
   extends: .abstract_jobs.docker
