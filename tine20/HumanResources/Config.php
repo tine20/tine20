@@ -151,16 +151,20 @@ class HumanResources_Config extends Tinebase_Config_Abstract
         ),
         self::DEFAULT_FEAST_CALENDAR => array(
             // _('Default Feast Calendar')
-            'label'                 => 'Default Feast Calendar',
+            self::LABEL                 => 'Default Feast Calendar',
             // _('Here you can define the default public holiday calendar used to set public holidays and other free days in datepicker')
-            'description'           => 'Here you can define the default public holiday calendar used to set public holidays and other free days in datepicker',
-            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => TRUE,
+            self::DESCRIPTION           => 'Here you can define the default public holiday calendar used to set public holidays and other free days in datepicker',
+            self::TYPE                  =>  Tinebase_Config_Abstract::TYPE_RECORD,
+            self::OPTIONS               => [
+                self::APPLICATION_NAME      => Tinebase_Config::APP_NAME,
+                self::MODEL_NAME            => Tinebase_Model_BankHolidayCalendar::MODEL_NAME_PART,
+            ],
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
         ),
         self::ATTENDANCE_RECORDER_DEFAULT_TS_DESCRIPTION => [
             // _('AR TS Description')
-            self::LABEL                 =>  'AR TS Description',
+            self::LABEL                 => 'AR TS Description',
             // _('Default description for attendance recorder created timesheets.')
             self::DESCRIPTION           => 'Default description for attendance recorder created timesheets.',
             self::TYPE                  => Tinebase_Config_Abstract::TYPE_STRING,
@@ -334,16 +338,5 @@ class HumanResources_Config extends Tinebase_Config_Abstract
         
         [$month, $day] = preg_split('/-/', $this->{self::VACATION_EXPIRES});
         return new Tinebase_DateTime("{$year}-{$month}-{$day} 00:00:00");
-    }
-
-    public function getOptions($name, $definition) {
-        switch ($name) {
-            case self::DEFAULT_FEAST_CALENDAR:
-                return self::recordsToOption(Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), Calendar_Model_Event::class, [
-                    Tinebase_Model_Grants::GRANT_READ
-                ]));
-            default:
-                return parent::getOptions($name, $definition);
-        }
     }
 }
