@@ -4,7 +4,6 @@
     <version>15.21</version>
     <order>51</order>
     <depends>
-        <application>Calendar</application>
         <application>CoreData</application>
         <application>Timetracker</application>
     </depends>
