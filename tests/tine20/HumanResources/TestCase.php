@@ -15,7 +15,7 @@ class HumanResources_TestCase extends TestCase
 {
     /**
      * Feast Calendar
-     * @var Tinebase_Model_Container
+     * @var Tinebase_Model_BankHolidayCalendar
      */
     protected $_feast_calendar = NULL;
 
@@ -138,32 +138,20 @@ class HumanResources_TestCase extends TestCase
      * returns the default feast calendar
      * 
      * @param boolean $anotherone if another than the default one should be returned
-     * @return Tinebase_Model_Container
+     * @return Tinebase_Model_BankHolidayCalendar
      */
     protected function _getFeastCalendar($anotherone = false)
     {
         if ($anotherone) {
-            return Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+            return Tinebase_Controller_BankHolidayCalendar::getInstance()->create(new Tinebase_Model_BankHolidayCalendar([
                 'name'           => Tinebase_Record_Abstract::generateUID(),
-                'type'           => Tinebase_Model_Container::TYPE_SHARED,
-                'owner_id'       => Tinebase_Core::getUser(),
-                'backend'        => 'SQL',
-                'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-                'color'          => '#00FF00',
-                'model'          => Calendar_Model_Event::class,
-            ), true));
+            ]));
         }
         
         if(! $this->_feast_calendar) {
-            $this->_feast_calendar = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+            $this->_feast_calendar = Tinebase_Controller_BankHolidayCalendar::getInstance()->create(new Tinebase_Model_BankHolidayCalendar([
                 'name'           => 'Feast Calendar',
-                'type'           => Tinebase_Model_Container::TYPE_SHARED,
-                'owner_id'       => Tinebase_Core::getUser(),
-                'backend'        => 'SQL',
-                'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-                'color'          => '#00FF00',
-                'model'          => Calendar_Model_Event::class,
-            ), true));
+            ]));
         }
 
         return $this->_feast_calendar;
@@ -301,72 +289,30 @@ class HumanResources_TestCase extends TestCase
     
 
     /**
-     * adds feast days to feast calendar
+     * adds a feast day to feast calendar
      *
-     * @param array|Tinebase_DateTime $date
+     * @param Tinebase_DateTime $date
      */
-    protected function _createFeastDay($date)
+    protected function _createFeastDay($date): Tinebase_Model_BankHoliday
     {
         if (! $this->_feast_calendar) {
             $this->_getFeastCalendar();
         }
-        $organizer = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
-    
-        if (is_array($date)) {
-            $allDay = TRUE;
-            if (count($date) == 1) {
-                $dtstart = $date[0]->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
-                $dtend   = clone $dtstart;
-            } else {
-                $dtstart = $date[0]->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
-                $dtend   = clone $dtstart;
-                $dtend   = $dtend->addDay(count($date))->subHour(5);
-            }
-        } else {
-            $allDay = FALSE;
-            $dtstart = $date->setTimezone(Tinebase_Core::getUserTimezone())->setTime(6,0,0);
-            $dtend   = clone $dtstart;
-            $dtend->addMinute(15);
-        }
-        
-        $event = new Calendar_Model_Event(array(
-            'summary'     => 'Feast Day',
-            'dtstart'     => $dtstart->format('Y-m-d H:i:s'),
-            'dtend'       => $dtend->format('Y-m-d H:i:s'),
-            'description' => Tinebase_Record_Abstract::generateUID(10),
-    
-            'container_id' => $this->_feast_calendar->getId(),
-            'organizer'    => $organizer->getId(),
-            'uid'          => Calendar_Model_Event::generateUID(),
-            'is_all_day_event' => $allDay,
-            'attendee' => new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(array(
-                'user_id'        => $organizer->getId(),
-                'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
-                'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
-                'status_authkey' => Tinebase_Record_Abstract::generateUID(),
-            ))),
-    
-            Tinebase_Model_Grants::GRANT_READ    => true,
-            Tinebase_Model_Grants::GRANT_EDIT    => true,
-            Tinebase_Model_Grants::GRANT_DELETE  => true,
-        ));
-    
-        return Calendar_Controller_Event::getInstance()->create($event);
+
+        $dateStr = $date->format('Y-m-d');
+        $this->_feast_calendar->{Tinebase_Model_BankHolidayCalendar::FLD_BANKHOLIDAYS}->addRecord(
+            new Tinebase_Model_BankHoliday([
+                Tinebase_Model_BankHoliday::FLD_NAME => 'Feast Day',
+                Tinebase_Model_BankHoliday::FLD_DATE => $dateStr,
+            ], true));
+
+        $this->_feast_calendar = Tinebase_Controller_BankHolidayCalendar::getInstance()->update($this->_feast_calendar);
+
+        return $this->_feast_calendar->{Tinebase_Model_BankHolidayCalendar::FLD_BANKHOLIDAYS}->find(
+            function($bh) use ($dateStr) {
+                return $bh->{Tinebase_Model_BankHoliday::FLD_DATE}->format('Y-m-d') === $dateStr;
+            }, null
+        );
     }
-    
-    /**
-     * creates a recurring event
-     * 
-     * @param Tinebase_DateTime $date
-     * @return Calendar_Model_Event
-     */
-    protected function _createRecurringFeastDay($date)
-    {
-        $event = $this->_createFeastDay($date);
-        $event->rrule = "FREQ=YEARLY;INTERVAL=1;BYMONTH=12;BYMONTHDAY=24";
-        $event->dtstart->subYear(1);
-        $event->dtend->subYear(1);
-        
-        return Calendar_Controller_Event::getInstance()->update($event);
-    }
+
 }

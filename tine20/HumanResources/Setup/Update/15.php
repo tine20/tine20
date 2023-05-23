@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Tine 2.0
  *
@@ -11,6 +10,9 @@
  *
  * this is 2022.11 (ONLY!)
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
+
 class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
 {
     const RELEASE015_UPDATE000 = __CLASS__ . '::update000';
@@ -34,6 +36,7 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE018 = __CLASS__ . '::update018';
     const RELEASE015_UPDATE019 = __CLASS__ . '::update019';
     const RELEASE015_UPDATE020 = __CLASS__ . '::update020';
+    const RELEASE015_UPDATE021 = __CLASS__ . '::update021';
 
 
     static protected $_allUpdates = [
@@ -100,6 +103,10 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE020          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update020',
+            ],
+            self::RELEASE015_UPDATE021          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update021',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -495,5 +502,63 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             HumanResources_Model_FreeDay::class,
         ]);
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '15.20', self::RELEASE015_UPDATE020);
+    }
+
+    public function update021(): void
+    {
+        $contractBck = HumanResources_Controller_Contract::getInstance()->getBackend();
+        $contractTable = $contractBck->getTablePrefix() . $contractBck->getTableName();
+
+        $cals = [];
+        foreach ($this->getDb()
+                ->query('SELECT id, feast_calendar_id FROM ' . $contractTable . ' WHERE feast_calendar_id IS NOT NULL AND LENGTH(feast_calendar_id) > 0')
+                ->fetchAll(Zend_Db::FETCH_NUM) as $row) {
+            if (!isset($cals[$row[1]])) {
+                $cals[$row[1]] = [];
+            }
+            $cals[$row[1]][] = $row[0];
+        }
+
+        $calCtrl = Calendar_Controller_Event::getInstance();
+        $raii = new Tinebase_RAII($calCtrl->assertPublicUsage());
+
+        foreach ($cals as $calId => $contractIds) {
+            try {
+                $cal = Tinebase_Container::getInstance()->getContainerById($calId);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $this->getDb()->update($contractTable, ['feast_calendar_id' => null], $this->getDb()->quoteInto('id in (?)', $contractIds));
+                continue;
+            }
+
+            $bhCal = new Tinebase_Model_BankHolidayCalendar([
+                Tinebase_Model_BankHolidayCalendar::FLD_NAME => $cal->name,
+                Tinebase_Model_BankHolidayCalendar::FLD_BANKHOLIDAYS => new Tinebase_Record_RecordSet(Tinebase_Model_BankHoliday::class),
+            ]);
+
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Calendar_Model_Event::class, [
+                [TMFA::FIELD => 'container_id', TMFA::OPERATOR => 'equals', TMFA::VALUE => $calId],
+                [TMFA::FIELD => 'period', TMFA::OPERATOR => 'within', TMFA::VALUE => [
+                    'from' => Tinebase_DateTime::today()->subYear(10),
+                    'until' => Tinebase_DateTime::today()->addYear(10),
+                ]],
+            ]);
+            $events = $calCtrl->search($filter);
+            Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($events, $filter);
+
+            /** @var Calendar_Model_Event $event */
+            foreach($events as $event) {
+                $bhCal->{Tinebase_Model_BankHolidayCalendar::FLD_BANKHOLIDAYS}->addRecord(new Tinebase_Model_BankHoliday([
+                    Tinebase_Model_BankHoliday::FLD_NAME => $event->summary,
+                    Tinebase_Model_BankHoliday::FLD_DESCRIPTION => $event->description,
+                    Tinebase_Model_BankHoliday::FLD_DATE => $event->dtstart->getClone()->addHour(6),
+                ], true));
+            }
+
+            $bhCal = Tinebase_Controller_BankHolidayCalendar::getInstance()->create($bhCal);
+            $this->getDb()->update($contractTable, ['feast_calendar_id' => $bhCal->getId()], $this->getDb()->quoteInto('id in (?)', $contractIds));
+        }
+
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '15.21', self::RELEASE015_UPDATE021);
+        unset($raii);
     }
 }

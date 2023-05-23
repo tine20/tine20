@@ -290,7 +290,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     continue;
                 }
                 try { 
-                    $cal =  Tinebase_Container::getInstance()->get($employee['contracts'][$i]['feast_calendar_id']);
+                    $cal =  Tinebase_Controller_BankHolidayCalendar::getInstance()->get($employee['contracts'][$i]['feast_calendar_id']);
                     $employee['contracts'][$i]['feast_calendar_id'] = $cal->toArray();
                 } catch (Tinebase_Exception_NotFound $e) {
                     $employee['contracts'][$i]['feast_calendar_id'] = NULL;

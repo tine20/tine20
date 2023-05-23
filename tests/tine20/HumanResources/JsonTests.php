@@ -887,7 +887,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         // create feast days
         $feastDays = array(
             '01-01', '03-29', '04-01', '05-01', '05-09',
-            '05-20', '10-03', '12-25', '12-26', '12-31'
+            '05-20', '10-03', '12-24', '12-25', '12-26', '12-31'
         );
         
         foreach ($feastDays as $day) {
@@ -896,12 +896,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $date = new Tinebase_DateTime('2014-' . $day . ' 12:00:00');
             $this->_createFeastDay($date);
         }
-        
-        // what about the holy evening? it's recurring
-        // @see 0009114: Freetime edit dialog doesn't calculate recurring feast days
-        //      https://forge.tine20.org/mantisbt/view.php?id=9114
-        
-        $this->_createRecurringFeastDay(new Tinebase_DateTime('2011-12-24'));
         
         $result = $json->searchAccounts($accountsFilter, array('sort' => 'year', 'dir' => 'DESC'));
         $this->assertEquals('3', $result['totalcount'], 'Three accounts should have been found!');

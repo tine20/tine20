@@ -6,9 +6,11 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2018-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * DailyWorkingTimeReport controller class for HumanResources application
@@ -380,7 +382,8 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                 if (isset($freeTimes[$dateStr])) {
                     $blPipeData->freeTimes = $freeTimes[$dateStr];
                 }
-                $blPipeData->feastTimes = $this->_getFeastTimes($dateStr, $contract->feast_calendar_id);
+                $blPipeData->bankHoliday = $contract->feast_calendar_id ?
+                    $this->_getFeastTimes($dateStr, $contract->feast_calendar_id) : null;
 
                 $blPipeData->result = $oldReport ? $oldReport->getCleanClone() : /* @phpstan-ignore-line */
                     new HumanResources_Model_DailyWTReport([
@@ -496,34 +499,20 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
     /**
      * @param string $dateStr
      * @param string $feastCalendarId
-     * @return Tinebase_Record_RecordSet|null
+     * @return Tinebase_Model_BankHoliday|null
      */
     protected function _getFeastTimes($dateStr, $feastCalendarId)
     {
         if (!isset($this->_feastDays[$feastCalendarId])) {
             $this->_feastDays[$feastCalendarId] = [];
-            /** @var Calendar_Model_EventFilter $filter */
-            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Calendar_Model_Event::class, [
-                ['field' => 'container_id', 'operator' => 'equals', 'value' => $feastCalendarId],
-                ['field' => 'period', 'operator' => 'within', 'value' => [
-                    'from' => $this->_startDate,
-                    'until' => $this->_endDate,
-                ]]
-            ]);
 
-            $events = Calendar_Controller_Event::getInstance()->search($filter);
-            Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($events, $filter);
-
-            // turn off acl?
-            /** @var Calendar_Model_Event $event */
-            foreach ($events as $event) {
-                $event->dtstart->setTimezone($event->originator_tz);
-                $day = $event->dtstart->format('Y-m-d');
-                if (!isset($this->_feastDays[$feastCalendarId][$day])) {
-                    $this->_feastDays[$feastCalendarId][$day] =
-                        new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
-                }
-                $this->_feastDays[$feastCalendarId][$day]->addRecord($event);
+            foreach (Tinebase_Controller_BankHoliday::getInstance()->search(
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_BankHoliday::class, [
+                        [TMFA::FIELD => Tinebase_Model_BankHoliday::FLD_CALENDAR_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $feastCalendarId],
+                        [TMFA::FIELD => Tinebase_Model_BankHoliday::FLD_DATE, TMFA::OPERATOR => 'after_or_equals', TMFA::VALUE => $this->_startDate->toString()],
+                        [TMFA::FIELD => Tinebase_Model_BankHoliday::FLD_DATE, TMFA::OPERATOR => 'before_or_equals', TMFA::VALUE => $this->_endDate->toString()],
+                    ])) as $bankHoliday) {
+                $this->_feastDays[$feastCalendarId][$bankHoliday->{Tinebase_Model_BankHoliday::FLD_DATE}->format('Y-m-d')] = $bankHoliday;
             }
         }
 
