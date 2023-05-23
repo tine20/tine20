@@ -149,7 +149,7 @@ class Tinebase_Server_RoutingTests extends TestCase
         $effectiveUsage = $fileSystemStorage['effectiveUsage'];
         
         self::assertNotEmpty($content);
-        self::assertEquals('{"activeUsers":1,"fileStorage":' . $effectiveUsage . ',"emailStorage":12582912000,"quotas":{"showUI":true,"includeRevision":false,"totalInMB":0,"filesystemTotalInMB":0,"totalByUserInMB":0,"softQuota":90,"softQuotaNotificationRole":"soft quota notification","skipImapQuota":false,"quotaNotificationAddresses":[]}}', 
+        self::assertEquals('{"activeUsers":1,"fileStorage":' . $effectiveUsage . ',"emailStorage":"12000","quotas":{"showUI":true,"includeRevision":false,"totalInMB":0,"filesystemTotalInMB":0,"totalByUserInMB":0,"softQuota":90,"softQuotaNotificationRole":"soft quota notification","skipImapQuota":false,"quotaNotificationAddresses":[]}}', 
             $content, print_r($content));
         
     }

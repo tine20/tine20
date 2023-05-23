@@ -1591,7 +1591,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     try {
                         $imapBackend = Tinebase_EmailUser::getInstance();
                         $imapUsageQuota = $imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot ? $imapBackend->getTotalUsageQuota() : null;
-                        $totalEmailQuotaUsage = $imapUsageQuota['mailSize'] * 1024 * 1024;
+                        $totalEmailQuotaUsage = $imapUsageQuota['mailSize'];
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         $totalEmailQuotaUsage = 0;
                     }
@@ -1627,7 +1627,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                         $emailNode->name = 'Emails';
                         $emailNode->path = $virtualPath;
                         $imapUsageQuota = $imapBackend->getTotalUsageQuota();
-                        $emailNode->quota = $imapUsageQuota['mailQuota'] * 1024 * 1024;
+                        $emailNode->quota = $imapUsageQuota['mailQuota'];
                         $emailNode->size = $imapUsageQuota['mailSize'];
                         $emailNode->revision_size = $emailNode->size;
                         $emailNode->xprops('customfields')['emailQuotas'] = $imapUsageQuota;
@@ -1643,7 +1643,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                         $imapUsageQuota = $imapBackend->getTotalUsageQuota();
                         $node = $records->filter('name',
                             Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId())->getFirstRecord();
-                        $node->quota += $imapUsageQuota['mailQuota']  * 1024 * 1024;
+                        $node->quota += $imapUsageQuota['mailQuota'];
                         $node->size += $imapUsageQuota['mailSize'];
                         $node->xprops('customfields')['emailQuotas'] = $imapUsageQuota;
                     }
@@ -1696,7 +1696,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $node = new Tinebase_Model_Tree_Node(array(), true);
                 $node->parent_id = $parent_id;
                 $node->name = $domain;
-                $node->quota = $usageQuota['mailQuota'] * 1024 * 1024;
+                $node->quota = $usageQuota['mailQuota'];
                 $node->size = $usageQuota['mailSize'];
                 $node->revision_size = $usageQuota['mailSize'];
                 $node->setId(md5($domain));
