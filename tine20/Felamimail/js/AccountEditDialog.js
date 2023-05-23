@@ -280,14 +280,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * returns dialog
      *
-     * NOTE: when this method gets called, all initalisation is done.
+     * NOTE: when this method gets called, all initialization is done.
      * @private
      */
     getFormItems: function() {
         const me = this;
         this.grantsGrid = new Tine.widgets.account.PickerGridPanel({
             selectType: 'both',
-            title:  i18n._('Permissions'),
+            title: this.app.i18n._('Permissions'),
             store: this.getGrantsStore(),
             hasAccountPrefix: true,
             configColumns: this.getGrantsColumns(),
@@ -302,7 +302,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
 
         this.rulesGridPanel = new Tine.Felamimail.sieve.RulesGridPanel({
-            title: i18n._('Rules'),
+            title: this.app.i18n._('Filter Rules'),
             account: this.record ? this.record : null,
             recordProxy: this.ruleRecordProxy,
             initialLoadAfterRender: false,
@@ -310,7 +310,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
 
         this.vacationPanel = new Tine.Felamimail.sieve.VacationPanel({
-            title: i18n._('Vacation'),
+            title: this.app.i18n._('Vacation'),
             account: this.record,
             editDialog: this,
             disabled: !this.isSystemAccount()
