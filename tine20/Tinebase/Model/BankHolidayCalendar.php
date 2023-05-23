@@ -30,8 +30,8 @@ class Tinebase_Model_BankHolidayCalendar extends Tinebase_Record_NewAbstract
         self::VERSION       => 1,
         self::MODLOG_ACTIVE => true,
         self::EXPOSE_JSON_API => true,
-        self::RECORD_NAME   => 'Bank Holiday Calendar', // _('Bank Holiday Calendar')
-        self::RECORDS_NAME  => 'Bank Holiday Calendars', // _('Bank Holiday Calendars')
+        self::RECORD_NAME   => 'Bank Holiday Calendar', // _('GENDER_Bank Holiday Calendar')
+        self::RECORDS_NAME  => 'Bank Holiday Calendars', // ngettext('Bank Holiday Calendar', 'Bank Holiday Calendars', n)
 
         self::APP_NAME      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME    => self::MODEL_NAME_PART,
