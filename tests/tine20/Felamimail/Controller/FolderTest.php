@@ -193,9 +193,37 @@ class Felamimail_Controller_FolderTest extends \PHPUnit\Framework\TestCase
         $this->_createdFolders = array($testFolderName . '_renamed');
         
         $this->expectException('Felamimail_Exception_IMAPFolderNotFound');
-        $renamedFolder = $this->_controller->rename($this->_account->getId(), $testFolderName, $testFolderName);
+        $this->_controller->rename($this->_account->getId(), $testFolderName, $testFolderName);
     }
-    
+
+    /**
+     * create mail folder with quotes in the name directly on the serverand try to get it with tine
+     */
+    public function testCreateFolderByAnotherClientWithQuotes()
+    {
+        $parent = '';
+        $filter = $this->_getFolderFilter($parent);
+        $json = new Felamimail_Frontend_Json();
+        $resultBefore = $json->searchFolders($filter);
+
+        $testFolderName = '"test"';
+        $this->_imap->createFolder($testFolderName, $parent);
+
+        $this->_createdFolders = array($testFolderName);
+
+        Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account->getId());
+
+        $resultAfter = $json->searchFolders($filter);
+        self::assertGreaterThan($resultBefore['totalcount'], $resultAfter['totalcount'],
+            'created folder "test" not found');
+        $testFolders = array_filter($resultAfter['results'], function ($folder) use ($testFolderName) {
+            if ($folder['globalname'] === $testFolderName) {
+                return true;
+            }
+        });
+        self::assertCount(1, $testFolders);
+    }
+
     /**
      * rename mail folder on the server
      * 
@@ -229,7 +257,7 @@ class Felamimail_Controller_FolderTest extends \PHPUnit\Framework\TestCase
     {
         $this->_controller->create($this->_account->getId(), 'test', 'INBOX');
 
-        $renamedFolder = $this->_controller->rename($this->_account->getId(), 'test_renamed', 'INBOX' . $this->_account->delimiter . 'test');
+        $this->_controller->rename($this->_account->getId(), 'test_renamed', 'INBOX' . $this->_account->delimiter . 'test');
 
         $this->_createdFolders[] = 'INBOX' . $this->_account->delimiter . 'test_renamed' . $this->_account->delimiter . 'testsub';
         $this->_createdFolders[] = 'INBOX' . $this->_account->delimiter . 'test_renamed';
