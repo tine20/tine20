@@ -61,32 +61,6 @@ class HumanResources_Controller extends Tinebase_Controller_Event
     }
 
     /**
-     * save HR settings
-     *
-     * @param array config
-     * @return Sales_Model_Config
-     *
-     * @todo generalize this
-     */
-    public function setConfig($config)
-    {
-        if (! Tinebase_Core::getUser()->hasRight('HumanResources', 'admin')) {
-            throw new Tinebase_Exception_AccessDenied(_('You do not have admin rights on HumanResources'));
-        }
-        
-        foreach(array(HumanResources_Config::VACATION_EXPIRES, HumanResources_Config::DEFAULT_FEAST_CALENDAR) as $cfg) {
-            if (! empty($config[$cfg])) {
-                HumanResources_Config::getInstance()->set($cfg, $config[$cfg]);
-            } else {
-                HumanResources_Config::getInstance()->delete($cfg);
-            }
-        }
-
-        return array('SUCCESS' => TRUE);
-    }
-
-
-    /**
      * get core data for this application
      *
      * @return Tinebase_Record_RecordSet
