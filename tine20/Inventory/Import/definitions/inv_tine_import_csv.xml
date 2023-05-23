@@ -57,7 +57,6 @@
             <source>Status</source>
             <destination>status</destination>
         </field>
-        
         <field>
             <source>Preis</source>
             <destination>price</destination>
@@ -111,6 +110,7 @@
         <field>
             <source>Verfügbare Anzahl</source>
             <destination>active_number</destination>
+            <typecast>integer</typecast>
         </field>
         <field>
             <source>Totale Anzahl</source>
