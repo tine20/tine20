@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>inv_tine_import_alldata_csv</name>
+    <model>Inventory_Model_InventoryItem</model>
+    <plugin>Inventory_Import_Csv</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <label>Tine 2.0 inventory CSV import</label>
+    <!-- _("Tine 2.0 inventory CSV import") -->
+    <description>Import CSV formated contacts from Tine 2.0 Inventory (Export Format)</description>
+    <!-- _("Import CSV formated contacts from Tine 2.0 Inventory (Export Format)") -->
+    <extension>csv</extension>
+    <autotags>
+        <tag>
+            <name>Import list (###CURRENTDATE###)</name>
+            <!-- _("Import list (###CURRENTDATE###)") -->
+            <description>Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###</description>
+            <!-- _("Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###") -->
+            <contexts>
+                <Inventory />
+            </contexts>
+            <type>shared</type>
+        </tag>
+    </autotags>
+    <mapping>
+        <field>
+            <source>name</source>
+            <destination>name</destination>
+        </field>
+        <field>
+            <source>status</source>
+            <destination>status</destination>
+        </field>
+        <field>
+            <source>inventory_id</source>
+            <destination>inventory_id</destination>
+        </field>
+        <field>
+            <source>description</source>
+            <destination>description</destination>
+        </field>
+        <field>
+            <source>location</source>
+            <destination>location</destination>
+        </field>
+        <field>
+            <source>invoice_date</source>
+            <destination>invoice_date</destination>
+            <typecast>datetime</typecast>
+        </field>
+        <field>
+            <source>total_number</source>
+            <destination>total_number</destination>
+            <typecast>integer</typecast>
+        </field>
+        <field>
+            <source>active_number</source>
+            <destination>active_number</destination>
+            <typecast>integer</typecast>
+        </field>
+        <field>
+            <source>invoice</source>
+            <destination>invoice</destination>
+        </field>
+        <field>
+            <source>price</source>
+            <destination>price</destination>
+            <typecast>float</typecast>
+        </field>
+        <field>
+            <source>costcenter</source>
+            <destination>costcenter</destination>
+        </field>
+        <field>
+            <source>warranty</source>
+            <typecast>datetime</typecast>
+            <destination>warranty</destination>
+        </field>
+        <field>
+            <source>added_date</source>
+            <destination>added_date</destination>
+            <typecast>datetime</typecast>
+        </field>
+        <field>
+            <source>removed_date</source>
+            <destination>removed_date</destination>
+            <typecast>datetime</typecast>
+        </field>
+        <field>
+            <source>deprecated_status</source>
+            <destination>deprecated_status</destination>
+        </field>
+        <field>
+            <source>relations</source>
+            <destination>relations</destination>
+        </field>
+        <field>
+            <source>note</source>
+            <destination>note</destination>
+        </field>
+        <field>
+            <source>tags</source>
+            <destination>tags</destination>
+            <separator>,</separator>
+        </field>
+    </mapping>
+</config>
+
