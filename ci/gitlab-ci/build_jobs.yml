@@ -149,6 +149,7 @@ docker_build_source_matrix:
           - "8.0"
           - "8.1"
   rules:
+    - if: $PIPELINE_TYPE =~ /matrix-tests/
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "matrix"
       when: never
     - !reference [.docker_build_source, rules]
