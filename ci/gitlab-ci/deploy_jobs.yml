@@ -85,7 +85,7 @@ deploy-dev-image-to-dockerhub-arm64:
     - name: ${UTIL_REGISTRY}/docker:20.10.21-dind-r1
       alias: docker
   image: ${UTIL_REGISTRY}/docker:20.10.21-r1
-  extends: deploy-dev-image-to-gitlab
+  extends: deploy-dev-image-to-dockerhub
   variables:
     IMAGE_TAG_PLATFORM_POSTFIX: -arm64
     IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}-arm64
