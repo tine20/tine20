@@ -74,8 +74,10 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         Tine.HumanResources.ContractEditDialog.superclass.onRecordLoad.call(this);
 
-        if (! this.record.id) {
-            this.getForm().findField('feast_calendar_id').setValue(Tine.HumanResources.registry.get('defaultFeastCalendar'));
+        const isNewRecord = !this.record.get('creation_time');
+
+        if (isNewRecord) {
+            this.getForm().findField('feast_calendar_id').setValue(Tine.Tinebase.configManager.get('defaultFeastCalendar', 'HumanResources'));
         } else {
             this.window.setTitle(String.format(i18n._('Edit {0}'), this.i18nRecordName));
         }

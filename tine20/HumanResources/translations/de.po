@@ -1373,9 +1373,6 @@ msgstr "Status (Typabhängig)"
 msgid "Entitlement"
 msgstr "Anspruch"
 
-msgid "WK"
-msgstr "KW"
-
 #: js/FreeTimeEditDialog.js:419
 msgid "Remaining"
 msgstr "Übrig"

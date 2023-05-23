@@ -519,6 +519,7 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             $cals[$row[1]][] = $row[0];
         }
 
+        $defaultCal = HumanResources_Config::getInstance()->{HumanResources_Config::DEFAULT_FEAST_CALENDAR};
         $calCtrl = Calendar_Controller_Event::getInstance();
         $raii = new Tinebase_RAII($calCtrl->assertPublicUsage());
 
@@ -556,6 +557,9 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
 
             $bhCal = Tinebase_Controller_BankHolidayCalendar::getInstance()->create($bhCal);
             $this->getDb()->update($contractTable, ['feast_calendar_id' => $bhCal->getId()], $this->getDb()->quoteInto('id in (?)', $contractIds));
+            if ($defaultCal === $calId) {
+                HumanResources_Config::getInstance()->{HumanResources_Config::DEFAULT_FEAST_CALENDAR} = $bhCal->getId();
+            }
         }
 
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '15.21', self::RELEASE015_UPDATE021);
