@@ -36,6 +36,8 @@ class Tinebase_Model_BankHolidayCalendar extends Tinebase_Record_NewAbstract
         self::APP_NAME      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME    => self::MODEL_NAME_PART,
 
+        self::TITLE_PROPERTY => self::FLD_NAME,
+
         self::TABLE         => [
             self::NAME          => self::TABLE_NAME,
         ],
