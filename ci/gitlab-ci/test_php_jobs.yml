@@ -40,7 +40,6 @@ php-unit-all-tests-source-parallel:
   needs:
     - docker_build_source
   rules:
-    - if: $PIPELINE_TYPE =~ /matrix-tests/
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "parallel"
       when: never
     - !reference [.php-unit-all-tests-source, rules]
@@ -70,6 +69,7 @@ php-unit-all-tests-source-matrix:
           - "8.0"
           - "8.1"
   rules:
+    - if: $PIPELINE_TYPE =~ /matrix-tests/
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "matrix" && $JS_E2E_TESTS_SOURCE_TYPE != "matrix"
       when: never
     - !reference [.php-unit-all-tests-source, rules]
