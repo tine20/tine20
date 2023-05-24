@@ -323,7 +323,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             ActiveSync_Server_Http::REQUEST_TYPE
         ));
     }
-    
+
     /**
      * check user status
      * 
@@ -1312,7 +1312,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             
             if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
                 $imapUsageQuota = $imapBackend->getTotalUsageQuota();
-                $emailStorage = $imapUsageQuota['mailQuota'] * 1024 * 1024;
+                $emailStorage = $imapUsageQuota['mailQuota'];
                 $data = array_merge($data, ['emailStorage' => $emailStorage]);
 
                 // there are tine instances without felamimail that still have system mailaccounts
