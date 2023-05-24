@@ -150,11 +150,22 @@ holds the relation to user's DN:
               "skeleton":{
                 "objectclass":["simplemail","mailrouting"], 
                 "mailUserDN":"%s" 
-              } 
+              }, 
+              "property_mapping":{ 
+                "emailAliases":"additionalmailaddress",
+                "emailForwards":"mailforwardingaddress",
+                "emailForwardOnly":"maildiscard:boolean" 
+              }
             }
 
-3) Non-simpleMail-schema exemplified: Tine 2.0 serves the primary domain all 
-other mail options are set by a fantasy-admin-tool... 
+  Hint: Providing a full property mapping is required if you do not use defaults
+        (see above). Obviously the attributes need to match those in the schemes
+        you use. E.g. mailAlternateAddress may be already in use by a different
+        scheme, thus you use additionalMailAddress in simplemail.scheme and tell
+        Tine 2.0 about it here (useful i.e. for 389 Directory Server). 
+
+3) Non-simpleMail-schema (different to simplemail.schema) exemplified: Tine 2.0 
+serves the primary domain all other mail options are set by a fantasy-admin-tool. 
 
             "simplemail":{ 
               "base":"ou=postfixAdmin,dc=example,dc=com", 
@@ -177,6 +188,7 @@ FURTHER READINGS
 
 - Postfix' special_result_attribute http://www.postfix.org/ldap_table.5.html
 
-- Tine 2.0 cli functions https://wiki.tine20.org/CLI_Functions
+- Tine 2.0 cli functions https://github.com/tine20/tine20/wiki/EN%3ACli
 
 Edited 2017-10-22, small changes and typos. 
+       2023-05-18, add info for 389-ds and link to cli functions. 
