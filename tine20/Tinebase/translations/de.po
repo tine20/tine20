@@ -85,8 +85,8 @@ msgstr[1] "Kostenstellen"
 #, fuzzy
 msgid "Bank Holiday Calendar"
 msgid_plural "Bank Holiday Calendars"
-msgstr[0] "Feiertags Kalender"
-msgstr[1] "Feiertags Kalender"
+msgstr[0] "Feiertagskalender"
+msgstr[1] "Feiertagskalender"
 
 #: Record/PropertyLocalization.php:115
 msgid "GENDER_Text"
