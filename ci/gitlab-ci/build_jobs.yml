@@ -120,6 +120,9 @@
     - if: $PIPELINE_TYPE =~ /mr-tests/
       variables:
         REUSE_IMAGES: "false"
+    - if: $PIPELINE_TYPE =~ /e2e-tests/
+      variables:
+        REUSE_IMAGES: "false"
     - if: $PIPELINE_TYPE =~ /matrix-tests/
       variables:
         REUSE_IMAGES: "false"
