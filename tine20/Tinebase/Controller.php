@@ -1290,35 +1290,81 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if (! Tinebase_Config::getInstance()->get(Tinebase_Config::METRICS_API_KEY)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No API key configured');
-
             return new \Laminas\Diactoros\Response\EmptyResponse();
         }
 
         if ($apiKey !== Tinebase_Config::getInstance()->get(Tinebase_Config::METRICS_API_KEY, false)) {
             throw new Tinebase_Exception_AccessDenied('Not authorized. Invalid metrics API Key.');
         }
+
+        $data = [
+            'activeUsers' => Tinebase_User::getInstance()->getActiveUserCount(),
+            'quotas' => Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->toArray(),
+        ];
         
         try {
             $fileSystem = Tinebase_FileSystem::getInstance();
             $rootPath = $fileSystem->getApplicationBasePath('Tinebase');
             $fileSystemStorage = $fileSystem->getEffectiveAndLocalQuota($fileSystem->stat($rootPath));
-
+            $data = array_merge($data, ['fileStorage' => $fileSystemStorage['effectiveUsage']]);
+            
             $imapBackend = Tinebase_EmailUser::getInstance();
             
             if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
                 $imapUsageQuota = $imapBackend->getTotalUsageQuota();
-                $emailStorage = $imapUsageQuota['mailQuota'];
+                $emailStorage = $imapUsageQuota['mailQuota'] * 1024 * 1024;
+                $data = array_merge($data, ['emailStorage' => $emailStorage]);
+
+                // there are tine instances without felamimail that still have system mailaccounts
+                // we need to get the number of mail accounts from the users
+                $usersWithSystemAccount = 0;
+                foreach (Tinebase_User::getInstance()->getUsers() as $user) {
+                    $systemEmailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user);
+                    if ($imapBackend->userExists($systemEmailUser)) {
+                        $usersWithSystemAccount ++;
+                    }
+                }
+                $data = array_merge($data, ['usersWithSystemAccount' => $usersWithSystemAccount]);
+            }
+
+            if (Tinebase_Application::getInstance()->isInstalled('Felamimail')
+                && Tinebase_EmailUser::isEmailSystemAccountConfigured()) 
+            {
+                $backend = new Felamimail_Backend_Account();
+                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                    ['field' => 'type', 'operator' => 'in', 'value' => [
+                        Tinebase_EmailUser_Model_Account::TYPE_SYSTEM,
+                        Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST,
+                        Tinebase_EmailUser_Model_Account::TYPE_SHARED,
+                    ]]
+                ], '', [
+                    'ignoreAcl' => true,
+                ]);
+                $totalSystemAccounts = 0;
+                $totalSharedAccounts = 0;
+                $totalMailingLists = 0;
+                foreach ($backend->search($filter) as $account) {
+                    switch ($account->type) {
+                        case Tinebase_EmailUser_Model_Account::TYPE_SYSTEM:
+                            $totalSystemAccounts++;
+                            break;
+                        case Tinebase_EmailUser_Model_Account::TYPE_SHARED:
+                            $totalSharedAccounts++;
+                            break;
+                        case Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST:
+                            $totalMailingLists++;
+                            break;
+                    }
+                }
+                $data = array_merge($data, [
+                    'totalEmailSystemAccounts' => $totalSystemAccounts,
+                    'totalEmailSharedAccounts' => $totalSharedAccounts,
+                    'totalEmailMailingList' => $totalMailingLists,
+                ]);
             }
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
         }
-        
-        $data = [
-            'activeUsers' => Tinebase_User::getInstance()->getActiveUserCount(),
-            'fileStorage' => $fileSystemStorage['effectiveUsage'] ?? null,
-            'emailStorage' => $emailStorage ?? null,
-            'quotas' => Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->toArray(),
-        ];
         
         $response = new \Laminas\Diactoros\Response\JsonResponse($data);
         return $response;
