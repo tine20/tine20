@@ -715,10 +715,13 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         }
 
         $this->_cachedApplicationConfig = [];
-        $backend = new Setup_Backend_Mysql();
-        if (! $backend->tableExists('config')) {
-            // no config table found
-            return;
+        static $configTableExists = false;
+        if (!$configTableExists) { // this gets called a few times each request, lets cache it
+            $backend = new Setup_Backend_Mysql();
+            if (!($configTableExists = $backend->tableExists('config'))) {
+                // no config table found
+                return;
+            }
         }
         
         try {
