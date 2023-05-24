@@ -157,7 +157,7 @@ class Tinebase_Server_RoutingTests extends TestCase
         $imapBackend = Tinebase_EmailUser::getInstance();
         if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
             $imapUsageQuota = $imapBackend->getTotalUsageQuota();
-            $emailStorage = $imapUsageQuota['mailQuota'] * 1024 * 1024;
+            $emailStorage = $imapUsageQuota['mailQuota'];
             self::assertEquals($emailStorage, $content['emailStorage']);
             self::assertGreaterThanOrEqual(6, $content['usersWithSystemAccount']);
         }
