@@ -203,7 +203,6 @@ php-unit-all-tests-ldap-source-parallel:
   extends: .php-unit-all-tests-source
   variables:
     ARG_IMAGE: test-built
-    ARG_EXCLUDE_GROUP: nogitlabci
   needs:
     - docker_build_built
   rules:
@@ -244,7 +243,6 @@ php-unit-tinebase-tests-built:
     NODE_INDEX: 1
     ARG_IMAGE: test-built
     ARG_TEST: Tinebase/AllTests
-    ARG_EXCLUDE_GROUP: nogitlabci
   needs:
     - docker_build_built
   rules:
