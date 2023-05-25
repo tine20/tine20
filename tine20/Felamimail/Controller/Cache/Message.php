@@ -997,12 +997,23 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             if (! is_array($recipients)) {
                 continue;
             }
-            foreach ($recipients as $key => $value) {
+            $list = '';
+            foreach ($recipients as &$value) {
                 if (isset($value['email'])) {
-                    $recipients[$key]['email'] = $this->_filterEmailAddressBeforeAddingToCache($value['email']);
+                    $value['email'] = $this->_filterEmailAddressBeforeAddingToCache($value['email']);
+                }
+                if (!empty($value['email'] ?? null)) {
+                    $list .= ('' === $list ? '' : ' ') . $value['email'];
+                }
+                if (!empty($value['name'] ?? null)) {
+                    $list .= ('' === $list ? '' : ' ') . $value['name'];
                 }
             }
+            unset($value);
             $_message->{$type} = $recipients;
+            if ('' !== $list) {
+                $_message->{$type . '_list'} = $list;
+            }
         }
         
         try {
