@@ -502,8 +502,7 @@ Tine.Tinebase.Model.KeyFieldRecord = Tine.Tinebase.data.Record.create([
     { name: 'i18nValue' },
     { name: 'icon' },
     { name: 'color' },
-    { name: 'system' },
-    { name: 'disabled'}
+    { name: 'system' }
 ], {
     appName: 'Tinebase',
     modelName: 'KeyFieldRecord',
