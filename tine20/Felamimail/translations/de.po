@@ -641,6 +641,12 @@ msgstr "Ordner als gelesen markieren"
 msgid "Update Folder List"
 msgstr "Ordnerliste aktualisieren"
 
+msgid "Update Folder"
+msgstr "Ordner aktualisieren"
+
+msgid "Folder cache has been cleared!"
+msgstr "Der Ordner Cache wurde geleert!"
+
 #: js/TreeContextMenu.js:252 js/AccountEditDialog.js:288
 msgid "Approve Migration"
 msgstr "Migration freigeben"
