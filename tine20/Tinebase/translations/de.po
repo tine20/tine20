@@ -2972,7 +2972,7 @@ msgstr "Schlüsselfeld Datensätze"
 #: js/widgets/keyfield/ComboBox.js:111
 #, python-brace-format
 msgid "Transition from {current} to {target} is not allowed."
-msgstr "Übergang von{current} zu {target} ist nicht zulässig."
+msgstr "Übergang von {current} zu {target} ist nicht zulässig."
 
 #: js/widgets/keyfield/ComboBox.js:115 js/widgets/grid/GridPanel.js:2621
 msgid "Not Allowed"
