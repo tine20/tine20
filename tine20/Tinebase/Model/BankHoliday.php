@@ -34,7 +34,7 @@ class Tinebase_Model_BankHoliday extends Tinebase_Record_NewAbstract
 
         self::RECORD_NAME    => 'Bank Holiday', // _('GENDER_Bank Holiday')
         self::RECORDS_NAME   => 'Bank Holidays', // ngettext('Bank Holiday', 'Bank Holidays', n)
-        self::TITLE_PROPERTY => "{{ date |localizeddate('short', 'none', app.request.locale) }} - {{ name}}",
+        self::TITLE_PROPERTY => "{{ date |localizeddate('short', 'none', app.request.locale) }} - {{ name }}",
 
         self::APP_NAME      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME    => self::MODEL_NAME_PART,
