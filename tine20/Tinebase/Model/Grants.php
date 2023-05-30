@@ -537,19 +537,12 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
 
     /**
      * @param array $grants
-     * @return array
+     * @return array of user account ids
      * @throws Tinebase_Exception_AccessDenied
      */
     public static function resolveGrantAccounts(array $grants): array
     {
         $accounts = [];
-        if (is_array($grants['account_id'])) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                __METHOD__ . '::' . __LINE__ . ' Invalid grants array given: '
-                . print_r($grants, true)
-            );
-            return $accounts;
-        }
         switch ($grants['account_type']) {
             case 'user': 
                 $accounts[] = $grants['account_id'];
@@ -558,7 +551,17 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
                 $accounts = Tinebase_Group::getInstance()->getGroupMembers($grants['account_id']);
                 break;
             case 'role':
-                $accounts = Tinebase_Role::getInstance()->getRoleMembers($grants['account_id']);
+                $rolemembers = Tinebase_Role::getInstance()->getRoleMembers($grants['account_id']);
+                foreach ($rolemembers as $member) {
+                    switch ($member['account_type']) {
+                        case 'user':
+                            $accounts[] = $member['account_id'];
+                            break;
+                        case 'group':
+                            $accounts = Tinebase_Group::getInstance()->getGroupMembers($member['account_id']);
+                            break;
+                    }
+                }
                 break;
         }
        
