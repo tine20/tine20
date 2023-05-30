@@ -29,7 +29,7 @@ describe('Mainpage', () => {
         await expect(page).toFill('.x-form-text.x-form-field.x-form-invalid', favorite);
         await page.waitForSelector('.x-panel.x-wdgt-pickergrid.x-grid-panel.x-masked-relative.x-masked');
         await expect(page).toClick('.x-btn-image.action_saveAndClose');
-        await page.waitForTimeout(2000); //wait for save the favorite
+        await page.waitForTimeout(3000); //wait for save the favorite
     });
 
     test('save shared favorite', async () => {
@@ -45,10 +45,10 @@ describe('Mainpage', () => {
         await page.click('.x-form-checkbox.x-form-field');
         await page.waitForFunction(() => !document.querySelector('.x-panel.x-wdgt-pickergrid.x-grid-panel.x-masked-relative.x-masked'));
         await expect(page).toClick('.x-btn-image.action_saveAndClose');
-        await page.waitForTimeout(2000); //wait for save the favorite
+        await page.waitForTimeout(3000); //wait for save the favorite
     });
 
-    test.skip('edit favorite', async () => {
+    test('edit favorite', async () => {
         try {
             let favoritePanelCollapsed = await page.$x('//div[contains(@class, " ux-arrowcollapse ux-arrowcollapse-noborder x-tree x-panel-collapsed") and contains(., "Favoriten")]');
             await favoritePanelCollapsed[0].click();

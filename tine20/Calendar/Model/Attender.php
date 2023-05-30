@@ -1158,7 +1158,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     break;
                 default:
                     throw new Tinebase_Exception_InvalidArgument("type $type not supported");
-                    break;
             }
         }
         
@@ -1176,21 +1175,22 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     // already resolved from cache
                     continue;
                 }
-                if (empty($attender->user_id)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
-                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                            . ' user_id missing from attender: ' . print_r($attender->toArray(), true));
+                if (empty($attender->user_id) || ! is_scalar($attender->user_id)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' user_id missing from attender or not scalar: '
+                            . print_r($attender->toArray(), true));
                     continue;
                 }
 
                 $attendeeTypeSet = $typeMap[$attender->user_type];
                 $idx = $attendeeTypeSet->getIndexById($attender->user_id);
-                if (false == $idx && self::USERTYPE_GROUP === $attender->user_type) {
+                if (!$idx && self::USERTYPE_GROUP === $attender->user_type) {
                     if (null !== ($list = $attendeeTypeSet->find('group_id', $attender->user_id))) {
                         $idx = $attendeeTypeSet->getIndexById($list->getId());
                     }
                 }
-                
+
                 if ($idx !== false) {
                     $user = $attendeeTypeSet[$idx];
                     // copy to cache
@@ -1201,8 +1201,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             }
         }
         
-        
-        foreach ($eventAttendee as $idx => $attendee) {
+        foreach ($eventAttendee as $attendee) {
             foreach ($attendee as $attender) {
                 $event = $events->getById($attender->cal_event_id);
 

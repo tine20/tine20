@@ -191,7 +191,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 select: this.onDateSelect,
             },
             plugins: [new Ext.ux.DatePickerWeekPlugin({
-                weekHeaderString: Tine.Tinebase.appMgr.get('Calendar').i18n._('WK')
+                weekHeaderString: this.app.i18n._('WK')
             })]
         });
     },

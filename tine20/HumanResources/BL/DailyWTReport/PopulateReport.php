@@ -83,7 +83,7 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
         $workingTimeTarget = (int) $_data->result->working_time_target +
             ($_data->result->working_time_target_correction ?: 0);
 
-        if ($_data->feastTimes) {
+        if ($_data->bankHoliday) {
             if ($workingTimeTarget > 0) {
                 $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
                     'id' => Tinebase_Record_Abstract::generateUID(),
@@ -92,7 +92,7 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
                     HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $workingTimeTarget,
                 ]));
             }
-            $_data->result->system_remark = $_data->feastTimes->getFirstRecord()->summary;
+            $_data->result->system_remark = $_data->bankHoliday->{Tinebase_Model_BankHoliday::FLD_NAME};
             $_data->result->working_time_total += $workingTimeTarget;
             $_data->result->working_time_actual += $workingTimeTarget;
         } elseif ($_data->freeTimes) {

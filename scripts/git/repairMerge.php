@@ -100,6 +100,9 @@ if (!empty($updates)) {
 
 foreach (array_reverse($composerCmds) as $cmds) {
     foreach ($cmds as $cmd) {
+        if (preg_match('/^(composer\s+\S+)(.*?)$/', $cmd, $m)) {
+            $cmd = $m[1] . ' ' . $composerIgnores . ($m[2] ?? '');
+        }
         // found a composer command to execute
         // conny, 18.01.2019 im tine chat: injections? die community injected ja auch code :-) - wie fügen members bei GH zu bzw. reviewn merge reqeusts - für mich reicht das
         echo $cmd . PHP_EOL;

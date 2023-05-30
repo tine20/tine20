@@ -98,13 +98,17 @@ Ext.extend(Tine.CoreData.TreePanel, Ext.tree.TreePanel, {
                     });
                 }
 
-                coreDataNodes[coreData.application_id.name].push({
-                    path: path + '/' + coreData.application_id.id + '/' + coreData.id,
-                    id: coreData.id,
-                    text: coreData.label ? coreDataApp.i18n._(coreData.label) : Tine.Tinebase.data.RecordMgr.get(coreData.model).getModuleName(),
-                    leaf: true,
-                    attributes: coreData
-                });
+                const label = coreData.label ? coreDataApp.i18n._(coreData.label) : Tine.Tinebase.data.RecordMgr.get(coreData.model)?.getModuleName();
+                if (label) {
+                    coreDataNodes[coreData.application_id.name].push({
+                        path: path + '/' + coreData.application_id.id + '/' + coreData.id,
+                        id: coreData.id,
+                        // no access ? forgot to announce model?
+                        text: label,
+                        leaf: true,
+                        attributes: coreData
+                    });
+                }
             }
         }, this);
 

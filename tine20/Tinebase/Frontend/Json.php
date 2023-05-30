@@ -52,6 +52,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Model_DynamicRecordWrapper::MODEL_NAME_PART,
         Tinebase_Model_CostCenter::MODEL_NAME_PART,
         Tinebase_Model_CostUnit::MODEL_NAME_PART,
+        Tinebase_Model_BankHolidayCalendar::MODEL_NAME_PART,
+        Tinebase_Model_BankHoliday::MODEL_NAME_PART,
     ];
     
     public function __construct()
@@ -279,12 +281,22 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * set state
      *
-     * @param  string $name
-     * @param  string $value
-     * @return array
+     * @param string $name
+     * @param string|array $value
+     * @return bool[]
+     * @throws Exception
      */
-    public function setState($name, $value)
+    public function setState(string $name, $value): array
     {
+        if (is_array($value)) {
+            $value = json_encode($value);
+            if ($value === false) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . ' Could not json_encode value');
+                return ['success' => false];
+            }
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . " Setting state: {$name} -> {$value}");
 

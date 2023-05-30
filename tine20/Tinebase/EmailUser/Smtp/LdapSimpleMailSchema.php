@@ -62,7 +62,14 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
      *
      * @var array
      */
-    protected $_simpleMailConfig = NULL;
+    protected $_simpleMailConfig = [];
+
+    /**
+     * runtime config
+     *
+     * @var array
+     */
+    protected $_runtimeConfig = [];
 
     /**
      * second ldap directory connection

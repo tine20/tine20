@@ -142,15 +142,31 @@ class Tinebase_Server_RoutingTests extends TestCase
         ));
 
         $content = $this->_emitRequest($request);
-        $fileSystem = Tinebase_FileSystem::getInstance();
+        $content = json_decode($content, true);
 
+        $activeUsers = Tinebase_User::getInstance()->getActiveUserCount();
+        self::assertEquals($activeUsers, $content['activeUsers']);
+        $quotas = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->toArray();
+        self::assertEquals($quotas, $content['quotas']);
+        
+        $fileSystem = Tinebase_FileSystem::getInstance();
         $rootPath = $fileSystem->getApplicationBasePath('Tinebase');
         $fileSystemStorage = $fileSystem->getEffectiveAndLocalQuota($fileSystem->stat($rootPath));
-        $effectiveUsage = $fileSystemStorage['effectiveUsage'];
-        
-        self::assertNotEmpty($content);
-        self::assertEquals('{"activeUsers":1,"fileStorage":' . $effectiveUsage . ',"emailStorage":12582912000,"quotas":{"showUI":true,"includeRevision":false,"totalInMB":0,"filesystemTotalInMB":0,"totalByUserInMB":0,"softQuota":90,"softQuotaNotificationRole":"soft quota notification","skipImapQuota":false,"quotaNotificationAddresses":[]}}', 
-            $content, print_r($content));
-        
+        self::assertEquals($fileSystemStorage['effectiveUsage'], $content['fileStorage']);
+
+        $imapBackend = Tinebase_EmailUser::getInstance();
+        if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
+            $imapUsageQuota = $imapBackend->getTotalUsageQuota();
+            $emailStorage = $imapUsageQuota['mailQuota'];
+            self::assertEquals($emailStorage, $content['emailStorage']);
+            self::assertGreaterThanOrEqual(6, $content['usersWithSystemAccount']);
+        }
+
+        if (Tinebase_Application::getInstance()->isInstalled('Felamimail')
+            && Tinebase_EmailUser::isEmailSystemAccountConfigured()) {
+            self::assertGreaterThanOrEqual(6, $content['totalEmailSystemAccounts']);
+            self::assertGreaterThanOrEqual(0, $content['totalEmailSharedAccounts']);
+            self::assertGreaterThanOrEqual(0, $content['totalEmailMailingList']);
+        }
     }
 }

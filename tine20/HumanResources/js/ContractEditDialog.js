@@ -74,8 +74,10 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         Tine.HumanResources.ContractEditDialog.superclass.onRecordLoad.call(this);
 
-        if (! this.record.id) {
-            this.getForm().findField('feast_calendar_id').setValue(Tine.HumanResources.registry.get('defaultFeastCalendar'));
+        const isNewRecord = !this.record.get('creation_time');
+
+        if (isNewRecord) {
+            this.getForm().findField('feast_calendar_id').setValue(Tine.Tinebase.configManager.get('defaultFeastCalendar', 'HumanResources'));
         } else {
             this.window.setTitle(String.format(i18n._('Edit {0}'), this.i18nRecordName));
         }
@@ -196,6 +198,10 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     getFormItems: function() {
+        const fieldManager = _.bind(Tine.widgets.form.FieldManager.get,
+            Tine.widgets.form.FieldManager, 'HumanResources', 'Contract', _,
+            Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
+
         // blpipes is of type records with subrecord hr.blconfig
         this.blConfigPanel = new Tine.Tinebase.BL.BLConfigPanel({
             app: this.app,
@@ -254,19 +260,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 {xtype: 'datefield', name: 'start_date', fieldLabel: this.app.i18n._('Start Date'), allowBlank: false, columnWidth: 1/2 },
                                 {xtype: 'extuxclearabledatefield', name: 'end_date',   fieldLabel: this.app.i18n._('End Date'), columnWidth: 1/2}
                             ], [
-                                {
-                                    xtype: 'tinewidgetscontainerselectcombo',
-                                    name: 'feast_calendar_id',
-                                    containerName: this.app.i18n._('Calendar'),
-                                    containersName: this.app.i18n._('Calendars'),
-                                    recordClass: Tine.Calendar.Model.Event,
-                                    requiredGrant: 'readGrant',
-                                    hideTrigger2: true,
-                                    allowBlank: false,
-                                    blurOnSelect: true,
-                                    columnWidth: 1/2,
-                                    fieldLabel: this.app.i18n._('Public Holiday Calendar')
-                                },
+                                fieldManager('feast_calendar_id', { allowBlank: false, blurOnSelect: true, columnWidth: 1/2 }),
                                 {name: 'vacation_days', fieldLabel: this.app.i18n._('Vacation days of one calendar year'), allowBlank: false, columnWidth: 1/2}
                         ]]
                     }]

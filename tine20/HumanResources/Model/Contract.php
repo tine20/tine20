@@ -118,13 +118,16 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
             ),
             'feast_calendar_id' => array(
                 'label' => 'Feast Calendar',    // _('Feast Calendar')
-                'type'  => 'container',
-                'config' => array(
-                    'appName'   => 'Calendar',
-                    'modelName' => 'Event',
-                ),
+                'type'  => self::TYPE_RECORD,
+                'config' => [
+                    self::APP_NAME      => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME    => Tinebase_Model_BankHolidayCalendar::MODEL_NAME_PART,
+                ],
                 'sortable'   => FALSE,
                 'showInDetailsPanel' => TRUE,
+                self::FILTER    => [
+                    Zend_Filter_Empty::class => null,
+                ],
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
             ),

@@ -40,7 +40,7 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             'description'   => 'Transfers all Tine 2.0. User-Accounts to Employee Records. If feast_calendar_id and working_time_model_id is given, a contract will be generated for each employee.',
                 'params' => array(
                     'delete_private'        => "removes private information of the contact-record of the imported account",
-                    'feast_calendar_id'     => 'the id of the contracts\' feast calendar (container)',
+                    'feast_calendar_id'     => 'the id of the contracts\' feast calendar',
                     'working_time_model_id' => 'use this working time schema for the contract',
                     'vacation_days'         => 'use this amount of vacation days for the contract'
             )
@@ -48,7 +48,7 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         'importEmployee' => array(
             'description'   => 'Import Employee csv file',
                 'params' => array(
-                    'feast_calendar_id'     => 'the id of the contracts\' feast calendar (container)',
+                    'feast_calendar_id'     => 'the id of the contracts\' feast calendar',
                     'working_time_model_id' => 'use this working time schema for the contract',
                     'vacation_days'         => 'use this amount of vacation days for the contract'
             )

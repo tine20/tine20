@@ -114,6 +114,7 @@ Tine.widgets.container.SelectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     initComponent: function() {
         // autoinit config
+        this.recordClass = this.recordClass || Tine.Tinebase.data.RecordMgr.get(_.get(this, 'filterDefinition.options.modelName'));
         this.appName = ! this.appName && this.recordClass ? this.recordClass.getAppName() : this.appName;
         this.containerName = this.containerName == 'container' && this.recordClass ? this.recordClass.getContainerName() : this.containerName;
         this.containersName = this.containersName == 'containers' && this.recordClass ? this.recordClass.getContainersName() : this.containersName;

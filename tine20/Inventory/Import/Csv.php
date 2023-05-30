@@ -26,7 +26,7 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected $_additionalOptions = array(
         'container_id'      => '',
-        'dates' => array('added_date','warranty','invoice_date'),
+        'dates' => array('added_date','removed_date','warranty','invoice_date'),
     );
     
     /**
@@ -75,6 +75,14 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
         if ((isset($result['invoice_date']) || array_key_exists('invoice_date', $result)) && (empty($_data['invoice_date']))) {
             unset($result['invoice_date']);
         }
+
+        if ((isset($result['added_date']) || array_key_exists('added_date', $result)) && (empty($_data['added_date']))) {
+            unset($result['added_date']);
+        }
+
+        if ((isset($result['removed_date']) || array_key_exists('removed_date', $result)) && (empty($_data['removed_date']))) {
+            unset($result['removed_date']);
+        }
         
         if ((isset($result["name"]) || array_key_exists("name", $result)) && ($result['name'] == "")) {
             $result['name'] = "!Not defined!";
@@ -94,10 +102,13 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
         }
         
         if ((isset($result["status"]) || array_key_exists("status", $result))) {
-            
-            $statusRecord = Inventory_Config::getInstance()->get(Inventory_Config::INVENTORY_STATUS)->getKeyfieldRecordByValue($result["status"]);
+
+            $statusRecord = Inventory_Config::getInstance()->get(Inventory_Config::INVENTORY_STATUS)->records->getById($result["status"]);
             if (empty($statusRecord)) {
-                $statusRecord = Inventory_Config::getInstance()->get(Inventory_Config::INVENTORY_STATUS)->getKeyfieldDefault();
+                $statusRecord = Inventory_Config::getInstance()->get(Inventory_Config::INVENTORY_STATUS)->getKeyfieldRecordByValue($result["status"]);
+                if (empty($statusRecord)) {
+                    $statusRecord = Inventory_Config::getInstance()->get(Inventory_Config::INVENTORY_STATUS)->getKeyfieldDefault();
+                }
             }
             $result["status"] = $statusRecord['id'];
         }

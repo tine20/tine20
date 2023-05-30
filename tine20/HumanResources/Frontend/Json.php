@@ -290,7 +290,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     continue;
                 }
                 try { 
-                    $cal =  Tinebase_Container::getInstance()->get($employee['contracts'][$i]['feast_calendar_id']);
+                    $cal =  Tinebase_Controller_BankHolidayCalendar::getInstance()->get($employee['contracts'][$i]['feast_calendar_id']);
                     $employee['contracts'][$i]['feast_calendar_id'] = $cal->toArray();
                 } catch (Tinebase_Exception_NotFound $e) {
                     $employee['contracts'][$i]['feast_calendar_id'] = NULL;
@@ -773,41 +773,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $translation->_('Remaining vacation:') . ' ' . $remainingVacations;
     }
 
-    /**
-     * Sets the config for HR
-     * 
-     * @param array $config
-     */
-    public function setConfig($config) {
-        return HumanResources_Controller::getInstance()->setConfig($config);
-    }
-    
-    /**
-     * Returns registry data of the application.
-     *
-     * Each application has its own registry to supply static data to the client.
-     * Registry data is queried only once per session from the client.
-     *
-     * This registry must not be used for rights or ACL purposes. Use the generic
-     * rights and ACL mechanisms instead!
-     *
-     * @return mixed array 'variable name' => 'data'
-     */
-    public function getRegistryData()
-    {
-        $data = parent::getRegistryData();
-        $ci = HumanResources_Config::getInstance();
-        $calid = $ci->get($ci::DEFAULT_FEAST_CALENDAR, NULL);
-        try {
-            $data[$ci::DEFAULT_FEAST_CALENDAR] = $calid ? Tinebase_Container::getInstance()->get($calid)->toArray() : null;
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Exception::log($tenf);
-            $data[$ci::DEFAULT_FEAST_CALENDAR] = null;
-        }
-        $data[$ci::VACATION_EXPIRES] = $ci->get($ci::VACATION_EXPIRES);
-        return $data;
-    }
-    
     /**
      * 
      * @param integer $year
