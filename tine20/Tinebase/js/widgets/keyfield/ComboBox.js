@@ -112,7 +112,7 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
                 current: this.store.getById(this.getValue()).get(this.displayField),
                 target: record.get(this.displayField)
             });
-            Ext.ux.MessageBox.msg(this.app.i18n._('Not Allowed'), msg);
+            Ext.ux.MessageBox.msg(Tine.Tinebase.i18n._('Not Allowed'), msg);
         }
         return transistionAllowed
     },
