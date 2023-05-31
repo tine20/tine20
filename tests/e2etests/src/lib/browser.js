@@ -222,9 +222,11 @@ const priorities = {
 
         if (app) {
             await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
+            await page.waitForSelector('.x-menu-list.x-column-layout-ct');
             await expect(page).toClick('.x-menu-item-text', {text: app});
         }
         if (module) {
+            await page.waitForSelector('span', {text: 'Module'});
             await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: module});
         }
     },
