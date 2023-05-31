@@ -741,6 +741,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         var split = value.split('_Model_');
         if (Tine[split[0]] && Tine[split[0]].Model) {
             var model = Tine[split[0]].Model[split[1]];
+            if (!model) return '';
             if (model.getPhpClassName() === 'Filemanager_Model_Node') {
                 return '<span class="tine-recordclass-gridicon ' + model.getMeta('appName')
                 + model.getMeta('modelName') + '">&nbsp;</span>'
