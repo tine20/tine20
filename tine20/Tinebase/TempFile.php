@@ -339,13 +339,14 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
                 // delete sub dir (including contents)
                 try {
                     $numberOfDeletedFiles += $this->_removeFilesFromDirByTimestamp($directoryIterator->getPathname(), $date);
+                    $subDirIterator = new FilesystemIterator($directoryIterator->getPathname());
+                    $isDirEmpty = !$subDirIterator->valid();
+                    if ($isDirEmpty) {
+                        rmdir($directoryIterator->getPathname());
+                    }
                 } catch (UnexpectedValueException $uve) {
-                    // sub dir was already removed...
-                }
-                $subDirIterator = new FilesystemIterator($directoryIterator->getPathname());
-                $isDirEmpty = !$subDirIterator->valid();
-                if ($isDirEmpty) {
-                    rmdir($directoryIterator->getPathname());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' Sub dir was already removed: ' . $uve->getMessage());
                 }
             }
 
