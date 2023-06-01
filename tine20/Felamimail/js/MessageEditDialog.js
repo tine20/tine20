@@ -1911,7 +1911,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }
 
-        if (!emptySubject && this.getForm().findField('subject').getValue() == '') {
+        if (!emptySubject && !this.getForm().findField('subject').getValue()) {
             Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges - empty subject');
             Ext.MessageBox.confirm(
                 this.app.i18n._('Empty subject'),
