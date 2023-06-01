@@ -62,7 +62,7 @@ const priorities = {
     },
 
     getEditDialog: async function (btnText, win) {
-        await expect(win || page).toMatchElement('.x-btn-text', {text: btnText});
+        await expect(win || page).toMatchElement('.x-btn-text', {text: btnText, visible: true});
         await page.waitForTimeout(100); // wait for btn to get active
         let popupWindow = this.getNewWindow();
         await expect(win || page).toClick('.x-btn-text', {text: btnText});
@@ -185,7 +185,7 @@ const priorities = {
             width: 1366,
             height: 768,
         });
-        await page.goto(process.env.TEST_URL, {waitUntil: 'domcontentloaded', timeout: '30000'},);
+        await page.goto(process.env.TEST_URL, {waitUntil: 'domcontentloaded', timeout: '30000'});
         await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
 
         if (process.env.TEST_MODE !== 'headless' && process.env.TEST_BROWSER_LANGUAGE !== 'de') {
@@ -259,7 +259,77 @@ const priorities = {
                     }
             })
     },
-    
+
+
+    getSetup: async function() {
+
+        jasmine.getEnv().addReporter({
+            specStarted: result => jasmine.currentTest = result
+        });
+
+        expect.setDefaultOptions({timeout: 5000});
+
+        let args = ['--lang=de-DE,de', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'];
+
+        try {
+            const opts = {
+                headless: process.env.TEST_MODE != 'debug', //ignoreDefaultArgs: ['--enable-automation'],
+                //slowMo: 250,
+                //defaultViewport: {width: 1366, height: 768},
+                args: args
+            };
+
+            if (process.platform === "darwin") {
+                opts.executablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+            }
+
+            browser = await puppeteer.launch(opts);
+        } catch (e) {
+            console.log(e);
+        }
+
+        page = await browser.newPage();
+
+        this.proxyConsole(page);
+
+        await page.setExtraHTTPHeaders({
+            'Accept-Language': 'de'
+        });
+        await page.setDefaultTimeout(15000);
+        await page.setViewport({
+            width: 1366,
+            height: 768,
+        });
+        await page.goto(process.env.TEST_URL+'/setup.php', {waitUntil: 'domcontentloaded', timeout: '30000'});
+        await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
+
+        if (process.env.TEST_MODE !== 'headless' && process.env.TEST_BROWSER_LANGUAGE !== 'de') {
+            console.log('switching to german');
+            await page.waitForSelector('input[name=locale]');
+            await page.click('input[name=locale]');
+            await expect(page).toClick('.x-combo-list-item', {text: 'Deutsch [de]'});
+            // wait for reload
+            await page.waitForTimeout(500);
+            await page.waitForSelector('input[name=locale]');
+        }
+
+        await page.waitForSelector('input[name=username]');
+        await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
+        await expect(page).toMatchElement('input[name=username]');
+        await page.waitForFunction('document.activeElement === document.querySelector("input[name=username]")');
+        await page.focus('input[name=username]');
+        await page.waitForTimeout(1000); //wait for input field completely loaded
+        await expect(page).toFill('input[name=username]', process.env.SETUP_USERNAME, {delay: 50});
+        await expect(page).toFill('input[name=password]', process.env.SETUP_PASSWORD, {delay: 50});
+        await expect(page).toClick('button', {text: 'Anmelden'});
+        try {
+            await page.waitForSelector('.renderer_accountUserIcon', {timeout: 0});
+        } catch (e) {
+            console.log('login failed!');
+            console.error(e);
+        }
+    },
+
     clickSlitButton: async function(page, text) {
         return await page.evaluate((text) => {
             const btn = document.evaluate('//em[button[text()="' + text + '"]]', document).iterateNext();
