@@ -37,6 +37,7 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE019 = __CLASS__ . '::update019';
     const RELEASE015_UPDATE020 = __CLASS__ . '::update020';
     const RELEASE015_UPDATE021 = __CLASS__ . '::update021';
+    const RELEASE015_UPDATE022 = __CLASS__ . '::update022';
 
 
     static protected $_allUpdates = [
@@ -133,6 +134,10 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE018          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update018',
+            ],
+            self::RELEASE015_UPDATE022          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update022',
             ],
         ],
     ];
@@ -564,5 +569,12 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
 
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '15.21', self::RELEASE015_UPDATE021);
         unset($raii);
+    }
+
+    public function update022(): void
+    {
+        HumanResources_Setup_Initialize::addHolidayImports();
+
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '15.22', self::RELEASE015_UPDATE022);
     }
 }
