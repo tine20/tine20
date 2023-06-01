@@ -1170,6 +1170,54 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         return $this->_searchForMessageBySubject($subject, $this->_testFolderName);
     }
 
+    public function testForwardAttachmentCachePdf()
+    {
+        $pdfFile = $this->_createTestNode(
+            'newline.pdf',
+            dirname(__FILE__, 3) . '/Tinebase/files/multipage-text.pdf'
+        );
+        $subject = 'file attachment test';
+        $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain, $subject);
+        $messageToSend['attachments'] = array(
+            array(
+                // @todo use constants?
+                'type' => 'file',
+                'attachment_type' => 'attachment',
+                'path' => $pdfFile[0]['path'],
+                'name' => $pdfFile[0]['name'],
+                'id' => $pdfFile[0]['id'],
+                'size'  => $pdfFile[0]['size'],
+            )
+        );
+        $this->_json->saveMessage($messageToSend);
+        $message = $this->_searchForMessageBySubject($subject);
+        $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message['id']);
+
+        $forwardMessage = new Felamimail_Model_Message(array(
+            'account_id'    => $this->_account->getId(),
+            'subject'       => 'test forward with attachmnets',
+            'to'            => array(Tinebase_Core::getUser()->accountEmailAddress),
+            'body'          => 'aaaaaä <br>',
+            'headers'       => array('X-Tine20TestMessage' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822),
+            'original_id'   => $message['id'],
+            'attachments'   => $messageToSend['attachments']
+        ));
+        Felamimail_Controller_Message_Send::getInstance()->sendMessage($forwardMessage);
+        
+        $forwardMessage = $this->_searchForMessageBySubject('test forward with attachmnets');
+        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
+        $fullMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($forwardMessage['id']);
+        self::assertTrue(count($fullMessage->attachments) === 1, 'attachment not found: ' . print_r($fullMessage->toArray(), true));
+
+        $id = get_class($fullMessage) . ':' . $fullMessage->getId() . ':' . $fullMessage->attachments[0]['partId'];
+        $cachedAttachment = $this->_json->getAttachmentCache($id);
+
+        $this->assertCount(1, $cachedAttachment['attachments']);
+        $this->assertStringContainsString($id . '/newline.pdf', $cachedAttachment['attachments'][0]['path']);
+        $this->assertEquals($message['attachments'][0]['size'], $fullMessage['attachments'][0]['size']);
+    }
+
+
     public function testAttachmentCache()
     {
         $result = $this->_createTestNode(

@@ -338,6 +338,12 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 
         $transport = Felamimail_Transport::getNewInstance($smtpConfig['hostname'], $smtpConfig);
         $this->_logSendingConfig($smtpConfig);
+
+        if (!empty($_message['attachments']) && count($_message['attachments']) > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Attachments before send message : ' . print_r($_message['attachments'], true));
+        }
+        
         Tinebase_Smtp::getInstance()->sendMessage($_mail, $transport);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Sending successful.');
@@ -966,7 +972,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $part->decodeContent();
 
         // replace some chars from attachment name
-        $attachment['name'] = preg_replace("/[\s'\"]*/", "", $attachment['name']) . '.eml';
+        $attachment['name'] = preg_replace("/[\s'\"]*/", "", $attachment['name']);
+        
+        if (!str_ends_with($attachment['name'], '.eml')) {
+            $attachment['name'] = $attachment['name'] . '.eml';
+        }
 
         return $part;
     }
