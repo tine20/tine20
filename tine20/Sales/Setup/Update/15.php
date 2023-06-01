@@ -461,7 +461,7 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update023()
     {
-        if ($this->getTableVersion('sales_sales_invoices') < 9) {
+        if ($this->_backend->tableExists('sales_sales_invoices') && $this->getTableVersion('sales_sales_invoices') < 9) {
             $declaration = new Setup_Backend_Schema_Field_Xml('
                <field>
                     <name>costcenter_id</name>
