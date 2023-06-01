@@ -600,7 +600,7 @@ class Setup_Controller
                         try {
                             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
-                            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                            Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                                 . ' Updating ' . $className . '::' . $functionName
                             );
 
