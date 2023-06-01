@@ -450,7 +450,6 @@ Tine.Felamimail.nodeActions.RefreshFolderAction = {
     itemId: 'RefreshFolderAction',
     iconCls: 'action_update_cache',
     scope: this,
-    qtip: 'clear single folder message cache',
     handler: async function(action) {
         if (!action.node) return;
         const app = action.app;

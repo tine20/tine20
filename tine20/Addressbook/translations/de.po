@@ -255,7 +255,7 @@ msgstr "Geburtstag (privat)"
 #: Export/Pdf.php:117 Model/Contact.php:766 js/ContactEditDialog.js:204
 #: js/ContactGrid.js:220 js/Model.js:31 js/Model.js:171
 msgid "Job Title"
-msgstr "Berufs-Bezeichnung"
+msgstr "Berufsbezeichnung"
 
 #: Config.php:131
 msgid "Enabled Features"
