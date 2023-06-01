@@ -412,6 +412,48 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         static::addPeristentObserverFreeTime();
     }
 
+    protected function _initializeHolidayImports()
+    {
+        static::addHolidayImports();
+    }
+
+    public static function addHolidayImports()
+    {
+        foreach ([
+            'DE-BB' => 'Brandenburg',
+            'DE-BE' => 'Berlin',
+            'DE-BW' => 'Baden-Württemberg',
+            'DE-BY' => 'Bayern',
+            'DE-HB' => 'Bremen',
+            'DE-HE' => 'Hessen',
+            'DE-HH' => 'Hamburg',
+            'DE-MV' => 'Mecklenburg-Vorpommern',
+            'DE-NI' => 'Niedersachsen',
+            'DE-NW' => 'Nordrhein-Westfalen',
+            'DE-RP' => 'Rheinland-Pfalz',
+            'DE-SH' => 'Schleswig-Holstein',
+            'DE-SL' => 'Saarland',
+            'DE-SN' => 'Sachsen',
+            'DE-ST' => 'Sachsen-Anhalt',
+            'DE-TH' => 'Thüringen',
+                 ] as $iso => $name) {
+            Admin_Controller_SchedulerTask::getInstance()->create(
+                new Admin_Model_SchedulerTask([
+                    Admin_Model_SchedulerTask::FLD_NAME => 'HR Bank Holiday Import ' . $name,
+                    Admin_Model_SchedulerTask::FLD_CRON => '23 4 28 * *',
+                    Admin_Model_SchedulerTask::FLD_CONFIG_CLASS => Admin_Model_SchedulerTask_Import::class,
+                    Admin_Model_SchedulerTask::FLD_CONFIG => [
+                        Admin_Model_SchedulerTask_Import::FLD_PLUGIN_CLASS => HumanResources_Import_OpenHolidaysApi::class,
+                        Admin_Model_SchedulerTask_Import::FLD_OPTIONS => [
+                            HumanResources_Import_OpenHolidaysApi::OPT_SUBDIVISION => $iso,
+                            HumanResources_Import_OpenHolidaysApi::OPT_CALENDAR_NAME => 'Feiertage ' . $name,
+                        ],
+                    ],
+                ])
+            );
+        }
+    }
+
     public static function addPeristentObserverTT()
     {
         Tinebase_Record_PersistentObserver::getInstance()->addObserver(

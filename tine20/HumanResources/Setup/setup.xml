@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>HumanResources</name>
-    <version>15.21</version>
+    <version>15.22</version>
     <order>51</order>
     <depends>
         <application>CoreData</application>
