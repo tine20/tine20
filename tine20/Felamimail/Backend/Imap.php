@@ -849,11 +849,18 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             
             if (isset($_structure[$index][1]) && $_structure[$index][1] != 'NIL' && is_array($_structure[$index][1])) {
                 $parameters = array();
-                for ($i=0; $i<count($_structure[$index][1]); $i++) {
-                    $key = strtolower($_structure[$index][1][$i]);
-                    if (isset($_structure[$index][1][++$i])) {
-                        $value = $_structure[$index][1][$i];
-                        $parameters[$key] = $this->_mimeDecodeHeader($value);
+                for ($i = 0; $i < count($_structure[$index][1]); $i++) {
+                    if (is_scalar($_structure[$index][1][$i])) {
+                        $key = strtolower($_structure[$index][1][$i]);
+                        if (isset($_structure[$index][1][++$i])) {
+                            $value = $_structure[$index][1][$i];
+                            $parameters[$key] = $this->_mimeDecodeHeader($value);
+                        }
+                    } else {
+                        // TODO try to parse malformed params?
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Disposition params '
+                            . ' malformed at [' . $i . '] (scalar expected): '
+                            . print_r($_structure[$index][1], true));
                     }
                 }
                 $structure['disposition']['parameters'] = $parameters;
