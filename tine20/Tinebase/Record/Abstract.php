@@ -1357,6 +1357,10 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             return $this->has('title') ? $this->title :
                 ($this->has('name') ? $this->name : $this->{$this->_identifier});
         }
+
+        if ($c->titleProperty === null) {
+            return '';
+        }
         
         if (strpos($c->titleProperty, '{') !== false) {
             $translation = Tinebase_Translation::getTranslation($this->getApplication());
