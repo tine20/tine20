@@ -20,6 +20,7 @@
  *
  * @method modlogActive($setTo = null)
  * @method updatePluginUser($updatedUser, $newUserProperties, $skipEmailPlugins = false)
+ * @method getUserByPropertyFromSqlBackend($_property, $_value, $_accountClass = 'Tinebase_Model_User')
  */
 abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
 {
