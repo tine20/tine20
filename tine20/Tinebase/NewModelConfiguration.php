@@ -44,6 +44,8 @@ class Tinebase_NewModelConfiguration  extends Tinebase_ModelConfiguration
         } catch (Tinebase_Exception_NotFound $tenf) {
             throw $tenf;
         } catch (Exception $e) {
+            // TODO re-init db connection if "MySQL server has gone away"?
+            Tinebase_Exception::log($e);
             throw new Tinebase_Exception_Record_DefinitionFailure('exception: '
                 . $e->getMessage(), $e->getCode(), $e);
         }
