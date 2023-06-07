@@ -341,18 +341,26 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     /**
      * sets this filter group from filter data in array representation
      *
-     * @param array $_data
+     * @param array|null $_data
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
      */
-    public function setFromArray($_data)
+    public function setFromArray(?array $_data)
     {
         if (! $_data) {
             // sanitize data
-            $_data = array();
+            $_data = [];
         }
 
-        $this->_filterObjects = array();
+        $this->_filterObjects = [];
         
         foreach ($_data as $key => $filterData) {
+            if ($filterData === null) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Skipping empty filter (key: ' . $key . ')');
+                continue;
+            }
             if (! is_array($filterData)) {
                 $filterData = self::sanitizeFilterData($key, $filterData);
             }
@@ -363,7 +371,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                     . ' Adding FilterGroup: ' . static::class);
 
                 $selfClass = static::class;
-                $filtergroup = new $selfClass(array(), $filterData[self::CONDITION], $this->_options, $this);
+                $filtergroup = new $selfClass([], $filterData[self::CONDITION], $this->_options, $this);
                 if (static::class === 'Tinebase_Model_Filter_FilterGroup') {
                     // generic modelconfig filter group, need to set model
                     $filtergroup->setConfiguredModel($this->_configuredModel);
