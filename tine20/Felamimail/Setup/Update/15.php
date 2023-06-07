@@ -21,6 +21,7 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE015_UPDATE006 = __CLASS__ . '::update006';
     const RELEASE015_UPDATE007 = __CLASS__ . '::update007';
+    const RELEASE015_UPDATE008 = __CLASS__ . '::update008';
     
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -57,6 +58,10 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE007          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update007',
+            ],
+            self::RELEASE015_UPDATE008          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update008',
             ],
         ],
     ];
@@ -222,5 +227,48 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
             $this->setTableVersion('felamimail_cache_message', 14);
         }
         $this->addApplicationUpdate('Felamimail', '15.7',self::RELEASE015_UPDATE007);
+    }
+
+    public function update008()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        if (!$this->_backend->columnExists('to', 'felamimail_cache_message')) {
+            // truncate email cache to make this go faster
+            Felamimail_Controller::getInstance()->truncateEmailCache();
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>to_list</name>
+                    <type>text</type>
+                </field>');
+            $sql = $this->_backend->addAddCol('', 'felamimail_cache_message', $declaration);
+
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>cc_list</name>
+                    <type>text</type>
+                </field>');
+            $sql = $this->_backend->addAddCol($sql, 'felamimail_cache_message', $declaration);
+
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>bcc_list</name>
+                    <type>text</type>
+                </field>');
+            $sql = $this->_backend->addAddCol($sql, 'felamimail_cache_message', $declaration);
+
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>flag_list</name>
+                    <type>text</type>
+                </field>');
+            $sql = $this->_backend->addAddCol($sql, 'felamimail_cache_message', $declaration);
+            $this->getDb()->query($sql);
+        }
+
+        if ($this->getTableVersion('felamimail_cache_message') < 15) {
+            $this->setTableVersion('felamimail_cache_message', 15);
+        }
+        $this->addApplicationUpdate('Felamimail', '15.8', self::RELEASE015_UPDATE008);
     }
 }

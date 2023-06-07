@@ -508,7 +508,7 @@
         </table>
         <table>
             <name>felamimail_cache_message</name>
-            <version>14</version>
+            <version>15</version>
             <backupStructureOnly>true</backupStructureOnly>
             <declaration>
                 <field>
@@ -564,6 +564,22 @@
                 </field>
                 <field>
                     <name>sender</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>to_list</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>cc_list</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>bcc_list</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>flag_list</name>
                     <type>text</type>
                 </field>
                 <field>
