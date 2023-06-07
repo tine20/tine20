@@ -2114,6 +2114,23 @@ class Addressbook_Frontend_JsonTest extends TestCase
     }
 
     /**
+     * test search with tag filter with 'in' operator
+     */
+    public function testSearchContactsWithEmptyFilter()
+    {
+        $empty = null;
+        $filter = [[
+                'field' => 'n_fileas',
+                'operator' => 'equals',
+                'value' => Tinebase_Core::getUser()->accountDisplayName
+            ],
+            $empty
+        ];
+        $result = $this->_uit->searchContacts($filter, array());
+        $this->assertEquals(1, $result['totalcount']);
+    }
+
+    /**
      * testParseAddressData
      */
     public function testParseAddressData()
