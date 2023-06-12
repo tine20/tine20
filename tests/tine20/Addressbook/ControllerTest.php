@@ -374,12 +374,7 @@ class Addressbook_ControllerTest extends TestCase
      */
     public function testCreationTimeWeekOperator()
     {
-        if (Tinebase_DateTime::now()->get('N') == 7 // Sunday
-            && (Tinebase_DateTime::now()->get('H') == 22 || Tinebase_DateTime::now()->get('H') == 23)
-        ) {
-            self::markTestSkipped('FIXME: this fails around Sunday -> Monday midnight ' .
-                'as inweek filter uses user tz, but creation_time contains utc');
-        }
+        $this->_skipSundayNight();
 
         $contact = $this->_addContact();
         
