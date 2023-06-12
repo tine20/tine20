@@ -198,4 +198,53 @@ class Felamimail_Controller extends Tinebase_Controller_Event
 
         $db->query("SET FOREIGN_KEY_CHECKS=1");
     }
+
+    /**
+     * get application metrics
+     *
+     * @return array
+     */
+    public function metrics(): array
+    {
+        $data = [];
+        try {
+            if (Tinebase_EmailUser::isEmailSystemAccountConfigured()) {
+                $backend = new Felamimail_Backend_Account();
+                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                    ['field' => 'type', 'operator' => 'in', 'value' => [
+                        Tinebase_EmailUser_Model_Account::TYPE_SYSTEM,
+                        Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST,
+                        Tinebase_EmailUser_Model_Account::TYPE_SHARED,
+                    ]]
+                ], '', [
+                    'ignoreAcl' => true,
+                ]);
+                $totalSystemAccounts = 0;
+                $totalSharedAccounts = 0;
+                $totalMailingLists = 0;
+                foreach ($backend->search($filter) as $account) {
+                    switch ($account->type) {
+                        case Tinebase_EmailUser_Model_Account::TYPE_SYSTEM:
+                            $totalSystemAccounts++;
+                            break;
+                        case Tinebase_EmailUser_Model_Account::TYPE_SHARED:
+                            $totalSharedAccounts++;
+                            break;
+                        case Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST:
+                            $totalMailingLists++;
+                            break;
+                    }
+                }
+                $data = [
+                    'totalEmailSystemAccounts' => $totalSystemAccounts,
+                    'totalEmailSharedAccounts' => $totalSharedAccounts,
+                    'totalEmailMailingList' => $totalMailingLists,
+                ];
+            }
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
+        
+        return $data;
+    }
 }
