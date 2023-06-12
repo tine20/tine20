@@ -3307,7 +3307,6 @@ abstract class Tinebase_Controller_Record_Abstract
         $ccn = $_fieldConfig['controllerClassName'];
         /** @var Tinebase_Controller_Record_Abstract $controller */
         $controller = $ccn::getInstance();
-        $filterClassName = $_fieldConfig['filterClassName'];
 
         $ctrlAclRaii = null;
         if (isset($_fieldConfig[TMCC::IGNORE_ACL]) && $_fieldConfig[TMCC::IGNORE_ACL]) {
@@ -3320,8 +3319,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . $_property);
 
-        /** @var Tinebase_Model_Filter_FilterGroup $filter */
-        $filter = new $filterClassName(isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : [], 'AND');
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($_fieldConfig['recordClassName'], $_fieldConfig['addFilters'] ?? [], 'AND');
         //try {
         //  $filter->addFilter($filter->createFilter($_fieldConfig['refIdField'], 'equals', $_record->getId()));
 
