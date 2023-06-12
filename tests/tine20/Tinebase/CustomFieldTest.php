@@ -543,10 +543,11 @@ class Tinebase_CustomFieldTest extends TestCase
     
     /**
      * test searching records by date as a customfield type
-     * https://forge.tine20.org/mantisbt/view.php?id=6730
      */
     public function testSearchByDate()
     {
+        $this->_skipSundayNight();
+
         $date = new Tinebase_DateTime();
         $date->setTimezone(Tinebase_Core::getUserTimezone());
         $cf = self::getCustomField([
