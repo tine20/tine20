@@ -1169,7 +1169,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $node = $this->testUpdateNodeWithCustomfield();
         $node['quota'] = 0; // 0 byte
         $node = $this->_getUit()->saveNode($node);
-        static::assertSame('0', $node['quota'], 'quota should be 0');
+        $expected = PHP_VERSION_ID >= 80100 ? 0 : '0';
+        static::assertSame($expected, $node['quota'], 'quota should be 0');
 
         // test quota > 0
         $node['quota'] = 10 * 1024 * 1024 * 1024; 

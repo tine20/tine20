@@ -913,11 +913,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
      */
     protected function sanitizeMailAddress($mail)
     {
-        // Ensure encoding
-        $mail = Tinebase_Helper::mbConvertTo($mail);
-
         // Remove non printable
         $mail = \preg_replace('/[[:^print:]]/u', '', $mail);
+
+        // Ensure encoding
+        $mail = Tinebase_Helper::mbConvertTo($mail);
 
         // Remove whitespaces
         $mail = \trim($mail);
