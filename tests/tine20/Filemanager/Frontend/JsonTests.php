@@ -427,12 +427,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     public function testSearchContainersOfOtherUser()
     {
-        if (Tinebase_DateTime::now()->get('N') == 7 // Sunday
-            && (Tinebase_DateTime::now()->get('H') == 22 || Tinebase_DateTime::now()->get('H') == 23)
-        ) {
-            self::markTestSkipped('FIXME: this fails around Sunday -> Monday midnight ' .
-                'as inweek filter uses user tz, but creation_time contains utc');
-        }
+        $this->_skipSundayNight();
 
         $this->_setupTestPath(Tinebase_Model_Container::TYPE_OTHERUSERS);
         
