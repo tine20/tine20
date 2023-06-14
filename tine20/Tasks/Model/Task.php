@@ -251,8 +251,6 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
      */
     public function setFromArray(array &$_data)
     {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
-        
         if (empty($_data['geo'])) {
             $_data['geo'] = NULL;
         }
@@ -261,17 +259,24 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
             $_data['class'] = self::CLASS_PUBLIC;
         }
         
-        if (isset($_data['organizer']) && is_array($_data['organizer'])) {
-            $_data['organizer'] = isset($_data['organizer']['account_id']) ?
-                $_data['organizer']['account_id'] :
-                $_data['organizer']['accountId'];
+        if (isset($_data['organizer']) && is_array($_data['organizer'])
+        ) {
+            if (isset($_data['organizer']['account_id'])) {
+                $_data['organizer'] = $_data['organizer']['account_id'];
+            } else if (isset($_data['organizer']['accountId'])) {
+                $_data['organizer'] = $_data['organizer']['accountId'];
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Account ID missing from organizer data: '
+                    . print_r($_data['organizer'], true));
+            }
         }
         
         if (isset($_data['alarms']) && is_array($_data['alarms'])) {
-            $_data['alarms'] = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', $_data['alarms'], TRUE);
+            $_data['alarms'] = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm',
+                $_data['alarms'], TRUE);
         }
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, true));
         parent::setFromArray($_data);
     }
     
