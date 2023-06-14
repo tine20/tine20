@@ -487,4 +487,13 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         $raii->release();
     }
 
+    /**
+     * get application metrics
+     *
+     * @return array
+     */
+    public function metrics(): array
+    {
+        return [];
+    }
 }
