@@ -246,9 +246,15 @@ class Tinebase_Frontend_CliTest extends TestCase
             if ($serverTime === null) {
                 $serverTime = $task->server_time->getClone();
             }
-            $task->next_run = $task->server_time->getClone()->subDay(100);
-            $task->lock_id = null;
-            $scheduler->update($task);
+            $config = $task->config->toArray();
+            if ($config['config_class'] === Admin_Model_SchedulerTask_Import::class) {
+                // remove task: we don't want to depend on remote apis with this test
+                $scheduler->delete([$task->getId()]);
+            } else {
+                $task->next_run = $task->server_time->getClone()->subDay(100);
+                $task->lock_id = null;
+                $scheduler->update($task);
+            }
         }
         $opts = new Zend_Console_Getopt('abp:');
         $opts->setArguments(array());
