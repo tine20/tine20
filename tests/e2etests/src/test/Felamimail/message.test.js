@@ -33,8 +33,10 @@ describe('message', () => {
         const inputUploadHandle = await filePickerWindow.$('input[type=file]');
         await inputUploadHandle.uploadFile(fileToUpload);
 
+
+        await popupWindow.waitForTimeout(2000);
         await expect(popupWindow).toMatchElement('.x-grid3-cell-inner.x-grid3-col-name', {text:'attachment.txt'});
-        await popupWindow.waitForTimeout(500); //musst wait for upload complete!
+        await popupWindow.waitForTimeout(2000); //musst wait for upload complete!
         
         // send message
         await expect(popupWindow).toClick('button', {text: 'Senden'});

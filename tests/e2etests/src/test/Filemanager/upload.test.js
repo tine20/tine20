@@ -29,8 +29,7 @@ describe('filemanager', () => {
                 const folder = 'Test' + Math.round(Math.random() * 10000000);
                 await page.waitForTimeout(1000);
                 await expect(page).toClick('.t-app-filemanager button', {text: 'Ordner anlegen',visibile:true});
-                await page.waitForSelector('.x-window.x-window-plain.x-window-dlg');
-                await page.type('.ext-mb-fix-cursor input', folder);
+                await page.type('.x-layer.x-editor.x-small-editor.x-grid-editor input', folder);
                 await page.keyboard.press('Enter');
                 await page.waitForTimeout(2000);
                 await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name' ,{text:folder});
