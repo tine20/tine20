@@ -37,7 +37,9 @@ describe('Edit Lead', () => {
         await editDialog.click('#linkPanelBottom .x-panel-tbar.x-panel-tbar-noheader.x-panel-tbar-noborder');
         await editDialog.keyboard.press('ArrowDown');
         await editDialog.type('.x-form-text.x-form-field.x-form-focus', 'Getränke');
+        await editDialog.waitForTimeout(1000);
         await expect(editDialog).toMatchElement('.x-combo-list-item', {text: 'Getränke'});
+        await editDialog.waitForTimeout(1000);
         await editDialog.screenshot({path: 'screenshots/Crm/6_crm_lead_produkte_zuweisen.png'});
         await expect(editDialog).toClick('.x-combo-list-item', {text: 'Getränke'}); // need DemoDaten!
         await editDialog.waitForSelector('.x-grid3-row.x-grid3-row-first.x-grid3-row-last');

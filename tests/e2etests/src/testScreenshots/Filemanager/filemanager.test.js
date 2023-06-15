@@ -26,7 +26,7 @@ describe('Test mainpage', () => {
         await expect(page).toClick('.t-app-filemanager .tine-mainscreen-centerpanel-west-treecards span', {text: 'Gemeinsame Ordner'});
         await page.waitForTimeout(2000);
         await expect(page).toClick('.t-app-filemanager button', {text: 'Ordner anlegen'});
-        await page.type('.ext-mb-fix-cursor input', 'Test');
+        await page.type('.x-layer.x-editor.x-small-editor.x-grid-editor input', "Test");
         await page.waitForTimeout(1000);
         await page.screenshot({path: 'screenshots/Dateimanager/2_dateimanager_neuer_ordner.png'});
         await page.keyboard.press('Enter');
