@@ -112,8 +112,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             } else {
                 $messageText = $e->getMessage();
             }
-            $tesg = $this->_getErrorException($messageText);
-            throw $tesg;
+            throw $this->_getErrorException($messageText);
         }
         
         // reset max execution time to old value
@@ -320,16 +319,19 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     
     /**
      * send mail via transport (smtp)
-     * 
+     *
      * @param Zend_Mail $_mail
      * @param Felamimail_Model_Account $_account
-     * @param ?Felamimail_Model_Message $_message
-     * @param boolean $_saveInSent
+     * @param Felamimail_Model_Message|null $_message
+     * @param bool $_saveInSent
+     * @return void
+     * @throws Felamimail_Exception_IMAPInvalidCredentials
+     * @throws Zend_Mail_Transport_Exception
      */
     protected function _sendMailViaTransport(Zend_Mail                $_mail,
                                              Felamimail_Model_Account $_account,
                                              ?Felamimail_Model_Message $_message = null,
-                                             bool                     $_saveInSent = false)
+                                             bool                     $_saveInSent = false): void
     {
         $smtpConfig = $_account->getSmtpConfig();
         if (empty($smtpConfig) || ! isset($smtpConfig['hostname'])) {
@@ -371,7 +373,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             && ($_message->flags == Zend_Mail_Storage::FLAG_ANSWERED || $_message->flags == Zend_Mail_Storage::FLAG_PASSED)
             && $_message->original_id instanceof Felamimail_Model_Message
         ) {
-            Felamimail_Controller_Message_Flags::getInstance()->addFlags($_message->original_id, array($_message->flags));
+            try {
+                Felamimail_Controller_Message_Flags::getInstance()->addFlags($_message->original_id, array($_message->flags));
+            } catch (Felamimail_Exception_IMAP $fei) {
+                Tinebase_Exception::log($fei);
+            }
         }
     }
 
