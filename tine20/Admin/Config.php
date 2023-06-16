@@ -48,6 +48,13 @@ class Admin_Config extends Tinebase_Config_Abstract
     const FEATURE_EMAIL_ACCOUNTS = 'featureEmailAccounts';
 
     /**
+     * FEATURE_XPROPS_EDITOR
+     *
+     * @var string
+     */
+    const FEATURE_XPROPS_EDITOR = 'xpropsEditor';
+
+    /**
      * DEFAULT_PASSWORD_MUST_CHANGE
      * @var boolean
      */
@@ -178,6 +185,11 @@ class Admin_Config extends Tinebase_Config_Abstract
                     //_('Force retype of new password in user edit dialog')
                     'description' => 'Manage all email accounts in admin area',
                 ),
+                self::FEATURE_XPROPS_EDITOR => [
+                    //_('Enable XProps Editor in Edit-Dialogs')
+                    self::LABEL              => 'Enable XProps Editor in Edit-Dialogs',
+                    self::DESCRIPTION        => 'Enable XProps Editor in Edit-Dialogs',
+                ],
                 // maybe this can removed at some point if no one uses/misses it ... ;)
                 self::FEATURE_FORCE_REYPE_PASSWORD => array(
                     'label' => 'Force retype of new password in user edit dialog',
@@ -194,6 +206,7 @@ class Admin_Config extends Tinebase_Config_Abstract
             'default' => array(
                 self::FEATURE_PREVENT_SPECIAL_CHAR_LOGINNAME => false,
                 self::FEATURE_EMAIL_ACCOUNTS => true,
+                self::FEATURE_XPROPS_EDITOR => false,
                 self::FEATURE_FORCE_REYPE_PASSWORD => false,
                 self::FEATURE_PREVENT_APPS_DISABLE => false,
             ),

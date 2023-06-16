@@ -11,6 +11,8 @@
 
 /*global Ext, Tine, Locale*/
 
+import XPropsPanel from "widgets/dialog/XPropsPanel";
+
 Ext.ns('Tine.Admin.Roles');
 
 /**
@@ -305,8 +307,8 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 activeTab: 0,
                 items: [
                     this.accountPickerGridPanel,
-                    this.rightsTreePanel
-                ]
+                    this.rightsTreePanel,
+                ].concat(Tine.Tinebase.appMgr.get('Admin').featureEnabled('xpropsEditor') ? [new XPropsPanel({})] : [])
             }]
         };
         
