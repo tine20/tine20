@@ -267,4 +267,9 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
     {
         return $this->_node;
     }
+
+    public function getPath()
+    {
+        return $this->_path;
+    }
 }
