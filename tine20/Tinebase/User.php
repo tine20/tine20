@@ -642,7 +642,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
      */
     protected static function _syncDataAndUpdateUser($user, $options)
     {
-        $currentUser = self::_getLdapUserController()->getUserByProperty('accountId', $user, 'Tinebase_Model_FullUser');
+        $currentUser = self::_getLdapUserController()->getUserByProperty('accountId', $user, 'Tinebase_Model_FullUser', true);
 
         if (self::_checkAndUpdateCurrentUser($currentUser, $user, $options)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -729,7 +729,12 @@ class Tinebase_User implements Tinebase_Controller_Interface
             $currentUser->visibility = Tinebase_Model_FullUser::VISIBILITY_DISPLAYED;
             $currentUser->accountStatus = Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED;
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($currentUser, 'undelete');
-            self::_getLdapUserController()->updateUserInSqlBackend($currentUser);
+            $updatedUser = self::_getLdapUserController()->updateUserInSqlBackend($currentUser, true);
+            $currentUser->seq = $updatedUser->seq;
+            $currentUser->last_modified_by = $updatedUser->last_modified_by;
+            $currentUser->last_modified_time = $updatedUser->last_modified_time;
+            $currentUser->deleted_time = $updatedUser->deleted_time;
+            $currentUser->deleted_by = $updatedUser->deleted_by;
             $recordNeedsUpdate = false;
         }
 
