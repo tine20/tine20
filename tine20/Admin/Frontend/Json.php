@@ -1324,34 +1324,38 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Return a single record
      *
-     * @param   string $id
-     * @return  array record data
+     * @param string $id
+     * @return array
+     * @throws Tinebase_Exception_NotFound
      */
-    public function getEmailAccount($id)
+    public function getEmailAccount(string $id): array
     {
-        $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($id);
         try {
-            $result = $this->_get($id, Admin_Controller_EmailAccount::getInstance());
-            
-            if (isset($result['type']) && $result['type'] !== Felamimail_Model_Account::TYPE_USER) {
-                try {
-                    $sieveRecord = Felamimail_Controller_Sieve::getInstance()->getVacation($id);
-                    $result['sieve_vacation'] = $this->_recordToJson($sieveRecord);
-
-                    $records = Felamimail_Controller_Sieve::getInstance()->getRules($id);
-                    $result['sieve_rules'] = $this->_multipleRecordsToJson($records);
-                } catch (Felamimail_Exception_SieveInvalidCredentials $fesic) {
-                    Tinebase_Exception::log($fesic);
-                } catch (Zend_Mail_Protocol_Exception $zmpe) {
-                    Tinebase_Exception::log($zmpe);
-                }
-            }
-        } finally {
-            Tinebase_EmailUser::removeSieveAdminAccess();
+            $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($id);
+            $sieve = true;
+        } catch (Tinebase_Exception_Backend $teb) {
+            $sieve = false;
         }
-        //for unused variable check
-        unset($raii);
-        
+
+        $result = $this->_get($id, Admin_Controller_EmailAccount::getInstance());
+
+        if ($sieve && isset($result['type']) && $result['type'] !== Felamimail_Model_Account::TYPE_USER) {
+            try {
+                $sieveRecord = Felamimail_Controller_Sieve::getInstance()->getVacation($id);
+                $result['sieve_vacation'] = $this->_recordToJson($sieveRecord);
+
+                $records = Felamimail_Controller_Sieve::getInstance()->getRules($id);
+                $result['sieve_rules'] = $this->_multipleRecordsToJson($records);
+            } catch (Felamimail_Exception_SieveInvalidCredentials $fesic) {
+                Tinebase_Exception::log($fesic);
+            } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                Tinebase_Exception::log($zmpe);
+            } finally {
+                Tinebase_EmailUser::removeSieveAdminAccess();
+                unset($raii);
+            }
+        }
+
         return $result;
     }
 
