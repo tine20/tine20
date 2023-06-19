@@ -72,7 +72,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $node = $this->_getWebDAVTree()->getNodeForPath('');
         
         $this->assertInstanceOf('Tinebase_WebDav_Root', $node, 'wrong node class');
-        
+        $this->_assertWebDAVTreeNodeTypes('', $node->getName());
         $children = $node->getChildren();
         
         $this->expectException('Sabre\DAV\Exception\Forbidden');
@@ -82,13 +82,11 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     
     public function testGetNodeForPath_webdav()
     {
-        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav');
-        
-        $this->assertInstanceOf('\Sabre\DAV\SimpleCollection', $node, 'wrong node class');
-        $this->assertEquals('webdav', $node->getName());
+        $path = '/webdav';
+        $node = $this->_getWebDAVTree()->getNodeForPath($path);
+        $this->_assertWebDAVTreeNodeTypes($path, 'webdav');
         
         $children = $node->getChildren();
-        
         $this->assertInstanceOf('Tinebase_WebDav_Collection_AbstractContainerTree', $children[0], 'wrong child class');
         
         $this->expectException('Sabre\DAV\Exception\Forbidden');
@@ -98,15 +96,13 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     
     public function testGetNodeForPath_webdav_filemanager()
     {
+        $path = '/webdav/Filemanager';
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager');
-        
-        $this->assertInstanceOf('Filemanager_Frontend_WebDAV', $node, 'wrong node class');
-        $this->assertEquals('Filemanager', $node->getName());
-        
+        $this->_assertWebDAVTreeNodeTypes($path, 'Filemanager');
         $children = $node->getChildren();
         
         $this->assertGreaterThanOrEqual(2, count($children));
-        $this->assertInstanceOf('Filemanager_Frontend_WebDAV', $children[0], 'wrong node class');
+        //$this->_assertWebDAVTreeNodeTypes($children[0]);
         
         $this->expectException('Sabre\DAV\Exception\Forbidden');
         
@@ -122,10 +118,9 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
      */
     protected function _testGetNodeForPath_webdav_filemanagerWithOtherUsers($property)
     {
+        $path = '/webdav/Filemanager';
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager');
-
-        static::assertInstanceOf('Filemanager_Frontend_WebDAV', $node, 'wrong node class');
-        static::assertEquals('Filemanager', $node->getName());
+        $this->_assertWebDAVTreeNodeTypes($path, 'Filemanager');
 
         /** @var Tinebase_Model_FullUser $sclever */
         $sclever = $this->_personas['sclever'];
@@ -242,6 +237,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     {
         $nodeFsRootPath = '/webdav/Filemanager';
         // try to get folder /shared , should always sync and ignore grants setting
+        // it doesn't check grants in Filemanager_Frontend_WebDAV->_getPersonalChildren()
         $children = $this->_getNewWebDAVTreeNode($nodeFsRootPath)->getChildren();
         static::assertCount(2, $children, 'child root nodes should always be sync');
         
@@ -270,8 +266,13 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
      */
     public function testGetNodeForPath_webdav_filemanager_with_pin_protection_shared()
     {
+        $this->_createAreaLockConfig([
+            Tinebase_Model_AreaLockConfig::FLD_AREAS => [Tinebase_Model_AreaLockConfig::AREA_DATASAFE],
+        ]);
+        
         $nodeFsRootPath = '/webdav/Filemanager';
         // try to get folder /shared , should always sync and ignore grants setting
+        // it doesn't check grants in Filemanager_Frontend_WebDAV->_getPersonalChildren()
         $children = $this->_getNewWebDAVTreeNode($nodeFsRootPath)->getChildren();
         static::assertCount(2, $children, 'child root nodes should always be sync');
 
@@ -468,10 +469,9 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->markTestSkipped('FIXME');
         
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/personal');
-        
+
         $this->assertInstanceOf('Filemanager_Frontend_WebDAV', $node, 'wrong node class');
         $this->assertEquals('personal', $node->getName());
-        
         $children = $node->getChildren();
         
         $this->assertEquals(1, count($children));
@@ -484,10 +484,9 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     
     public function testGetNodeForPath_webdav_filemanager_currentuser()
     {
-        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountDisplayName);
-        
-        $this->assertInstanceOf('Filemanager_Frontend_WebDAV', $node, 'wrong node class');
-        $this->assertEquals(Tinebase_Core::getUser()->accountDisplayName, $node->getName());
+        $path = '/webdav/Filemanager/' . Tinebase_Core::getUser()->accountDisplayName;
+        $node = $this->_getWebDAVTree()->getNodeForPath($path);
+        $this->_assertWebDAVTreeNodeTypes($path, Tinebase_Core::getUser()->accountDisplayName);
         
         $children = $node->getChildren();
         
@@ -504,22 +503,19 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
      */
     public function testGetNodeForPath_webdav_filemanager_currentuser_unittestdirectory()
     {
-        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountDisplayName);
-        
+        $path = '/webdav/Filemanager/' . Tinebase_Core::getUser()->accountDisplayName;
+        $node = $this->_getWebDAVTree()->getNodeForPath($path);
         $node->createDirectory('unittestdirectory');
+        $node = $this->_getWebDAVTree()->getNodeForPath($path . '/unittestdirectory');
+        $this->_assertWebDAVTreeNodeTypes($path . '/unittestdirectory', 'unittestdirectory');
         
-        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountDisplayName .'/unittestdirectory');
-        
-        $this->assertInstanceOf(Filemanager_Frontend_WebDAV_Directory::class, $node, 'wrong node class');
-        $this->assertEquals('unittestdirectory', $node->getName());
-        
-        $children = $this->_getWebDAVTree()->getChildren('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountDisplayName);
+        $children = $this->_getWebDAVTree()->getChildren($path);
         foreach ($children as $node) {
             $names[] = $node->getName();
         }
         $this->assertContains('unittestdirectory', $names);
         
-        $this->_getWebDAVTree()->delete('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountDisplayName .'/unittestdirectory');
+        $this->_getWebDAVTree()->delete($path . '/unittestdirectory');
         
         $this->expectException('Sabre\DAV\Exception\NotFound');
 
@@ -530,10 +526,9 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     
     public function testGetNodeForPath_webdav_filemanager_shared()
     {
-        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared');
-        
-        $this->assertInstanceOf('Filemanager_Frontend_WebDAV', $node, 'wrong node class');
-        $this->assertEquals('shared', $node->getName());
+        $path = '/webdav/Filemanager/shared';
+        $node = $this->_getWebDAVTree()->getNodeForPath($path);
+        $this->_assertWebDAVTreeNodeTypes($path, 'shared');
         
         $children = $node->getChildren();
         
@@ -1005,20 +1000,18 @@ EOS
      */
     public function testGetNodeForPath_webdav_filemanager_shared_unittestdirectory()
     {
+        $path = '/webdav/Filemanager/shared';
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared');
-
         $node->createDirectory('unittestdirectory');
 
-        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory');
-
-        $this->assertInstanceOf(Filemanager_Frontend_WebDAV_Directory::class, $node, 'wrong node class');
-        $this->assertEquals('unittestdirectory', $node->getName());
+        $childNode = $this->_getWebDAVTree()->getNodeForPath($path . '/unittestdirectory');
+        $this->_assertWebDAVTreeNodeTypes($path . '/unittestdirectory', 'unittestdirectory');
         
         $children = $node->getChildren();
+        $properties = $childNode->getProperties(array());
+        $this->assertCount(1, $children);
         
-        $properties = $node->getProperties(array());
-        
-        return $node;
+        return $childNode;
     }
 
     public function testCreateFileInFilemanagerShared()
@@ -1191,6 +1184,39 @@ EOS
         $this->assertTrue(fread($node->get(), 10000) == file_get_contents($updateFile), 'content not updated');
     }
 
+    public function _assertWebDAVTreeNodeTypes($path, $nodeName)
+    {
+        $node = $this->_getWebDAVTree()->getNodeForPath($path);
+        $instance = null;
+
+        switch($path) {
+            case '':
+                $instance = Tinebase_WebDav_Root::class;
+                break;
+            case '/webdav':
+                $instance = '\Sabre\DAV\SimpleCollection';
+                break;
+            case '/webdav/Filemanager': 
+                // tine20_tree_node path = appid/folders
+            case '/webdav/Filemanager/personal':
+            case '/webdav/Filemanager/shared':
+            case '/webdav/Filemanager/' . Tinebase_Core::getUser()->accountLoginName:
+            case '/webdav/Filemanager/' . Tinebase_Core::getUser()->accountDisplayName:
+                $instance = Filemanager_Frontend_WebDAV::class;
+                break;
+            case '/webdav/Filemanager/shared/unittestdirectory':
+            case '/webdav/Filemanager/shared/unittestdirectory/directory':
+            case '/webdav/Filemanager/' . Tinebase_Core::getUser()->accountLoginName . '/unittestdirectory':
+            case '/webdav/Filemanager/' . Tinebase_Core::getUser()->accountDisplayName . '/unittestdirectory':
+                $instance = Filemanager_Frontend_WebDAV_Directory::class;
+                break;
+        }
+        
+        $this->assertInstanceOf($instance, $node, 'wrong node class');
+        $this->assertEquals($nodeName, $node->getName());
+    }
+    
+    
     public function testCreateFile()
     {
         $parent = $this->testgetNodeForPath_webdav_filemanager_shared_unittestdirectory();
@@ -1219,10 +1245,9 @@ EOS
     public function testgetNodeForPath_webdav_filemanager_currentuser2()
     {
         Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
-        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountLoginName);
-    
-        $this->assertInstanceOf('Filemanager_Frontend_WebDAV', $node, 'wrong node class');
-        $this->assertEquals(Tinebase_Core::getUser()->accountLoginName, $node->getName());
+        $path = '/webdav/Filemanager/' . Tinebase_Core::getUser()->accountLoginName;
+        $node = $this->_getWebDAVTree()->getNodeForPath($path);
+        $this->_assertWebDAVTreeNodeTypes($path, Tinebase_Core::getUser()->accountLoginName);
     
         $children = $node->getChildren();
     
@@ -1377,11 +1402,12 @@ EOS
         $parent = $this->testgetNodeForPath_webdav_filemanager_shared_unittestdirectory();
     
         $file = $parent->createDirectory('directory');
-    
-        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory/directory');
-    
-        $this->assertInstanceOf('Filemanager_Frontend_WebDAV_Directory', $node, 'wrong node class');
-        $this->assertEquals('directory', $node->getName());
+        $path = '/webdav/Filemanager/shared/unittestdirectory/directory';
+        $node = $this->_getWebDAVTree()->getNodeForPath($path);
+        $this->_assertWebDAVTreeNodeTypes($path, 'directory');
+
+        $children = $parent->getChildren();
+        $this->assertCount(1, $children);
             
         return $node;
     }
