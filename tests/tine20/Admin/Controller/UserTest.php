@@ -6,7 +6,7 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Admin_Controller_UserTest extends TestCase
@@ -252,6 +252,9 @@ class Admin_Controller_UserTest extends TestCase
     public function testUpdateUserWithEmailButNoPassword()
     {
         $this->_skipWithoutEmailSystemAccountConfig();
+        $this->_skipIfLDAPBackend();
+
+        // $this->_testNeedsTransaction();
         $pw = 'aw%6N64ZR2Pev';
 
         $userToCreate = TestCase::getTestUser();
@@ -263,13 +266,9 @@ class Admin_Controller_UserTest extends TestCase
         $this->_usernamesToDelete[] = $userToCreate->accountLoginName;
 
         $user->accountEmailAddress = $email;
-        try {
-            Admin_Controller_User::getInstance()->update($user);
-            self::fail('exception expected because no pw given for user email account');
-        } catch (Tinebase_Exception_SystemGeneric $tesg) {
-            $translate = Tinebase_Translation::getTranslation('Admin');
-            self::assertEquals($translate->_('Password is needed for system account creation'), $tesg->getMessage());
-        }
+        $updatedUser = Admin_Controller_User::getInstance()->update($user);
+
+        Admin_Frontend_Json_EmailAccountTest::validateImapUserPw($updatedUser->getId(), $pw);
     }
 
     public function testAddUserWithExistingMail()

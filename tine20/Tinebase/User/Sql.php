@@ -1446,12 +1446,27 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function getNtlmV2Hash($accountId)
     {
-        $select = $select = $this->_db->select()
+        $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 'ntlmv2hash')
             ->where($this->_db->quoteIdentifier('id') . ' = ?', $accountId);
 
         return Tinebase_Auth_CredentialCache::decryptData($this->_db->fetchOne($select),
             Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_NTLMV2_ENCRYPTION_KEY});
+    }
+
+    /**
+     * get user pw hash
+     *
+     * @param string $accountLoginName
+     * @return ?string
+     */
+    public function getPasswordHashByLoginname(string $accountLoginName): ?string
+    {
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'accounts', 'password')
+            ->where($this->_db->quoteIdentifier('login_name') . ' = ?', $accountLoginName);
+
+        return $this->_db->fetchOne($select);
     }
 
     /**
