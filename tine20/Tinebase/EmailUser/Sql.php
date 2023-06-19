@@ -360,9 +360,8 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             
-            // generate random password if not set
             if (isset($this->_propertyMapping['emailPassword']) && empty($emailUserData[$this->_propertyMapping['emailPassword']])) {
-                $emailUserData[$this->_propertyMapping['emailPassword']] = Hash_Password::generate($this->_config['emailScheme'], Tinebase_Record_Abstract::generateUID());
+                $emailUserData[$this->_propertyMapping['emailPassword']] = $this->_addUserSetPassword($_addedUser);
             }
             
             $insertData = $emailUserData;
@@ -382,6 +381,21 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error while creating email user: ' . $zdse);
             throw $zdse;
         }
+    }
+
+    /**
+     * set password from user or generate random password if not set
+     *
+     * @param Tinebase_Model_FullUser $user
+     * @return string
+     */
+    protected function _addUserSetPassword(Tinebase_Model_FullUser $user): string
+    {
+        $pw = Tinebase_User::getInstance()->getPasswordHashByLoginname($user->accountLoginName);
+
+        return empty($pw)
+            ? Hash_Password::generate($this->_config['emailScheme'], Tinebase_Record_Abstract::generateUID())
+            : $pw;
     }
 
     /**
