@@ -468,4 +468,18 @@ class Tinebase_User_LdapTest extends TestCase
             $this->assertEquals($status, $syncedUser->accountStatus, print_r($syncedUser->toArray(), true));
         }
     }
+
+    public function testRecreateDeleted()
+    {
+        $user = $this->testAddUser();
+
+        // delete user in sql
+        Tinebase_User::getInstance()->deleteUserInSqlBackend($user->getId());
+
+        // set sync config/option + start user sync
+        Tinebase_User::syncUsers();
+
+        $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $user->getId());
+        self::assertEquals('tine20phpunituser', $user->accountLoginName);
+    }
 }
