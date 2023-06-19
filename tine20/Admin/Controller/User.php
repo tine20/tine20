@@ -211,7 +211,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $this->_checkLoginNameLength($_user);
         $this->_checkPrimaryGroupExistance($_user);
 
-        $this->_checkSystemEmailAccountCreation($_user, $oldUser, $_password);
         $this->_checkSystemEmailAccountDuplicate($_user, $oldUser);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
@@ -228,7 +227,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             // make sure primary groups is in the list of group memberships
             $currentGroups = ! isset($_user->groups)
                 ? Admin_Controller_Group::getInstance()->getGroupMemberships($user->getId())
-                : (array) $_user->groups;
+                : $_user->groups;
             $groups = array_unique(array_merge(array($user->accountPrimaryGroup), $currentGroups));
             Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
 
