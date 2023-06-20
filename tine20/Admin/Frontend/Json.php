@@ -1979,10 +1979,19 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * reveal email account password
      *
-     * @return  array
+     * @param string|null $accountId
+     * @return array
+     * @throws Felamimail_Exception
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
      */
-    public function revealEmailAccountPassword($accountId)
+    public function revealEmailAccountPassword($accountId): array
     {
+        if (! $accountId) {
+            return [];
+        }
+
         Admin_Controller_EmailAccount::getInstance()->checkRight(Admin_Acl_Rights::MANAGE_EMAILACCOUNTS);
         $fmailaccount = Felamimail_Controller_Account::getInstance()->get($accountId);
         $imapConfig = $fmailaccount->getImapConfig();
