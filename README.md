@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/tine20/tine20.svg?branch=master)](https://travis-ci.org/tine20/tine20)
-![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ftine20%2FTine-2.0-Open-Source-Groupware-and-CRM.svg?type=shield)
-
 # tine - Community Edition
 
 Welcome to the tine Community Edition, the base of our popular [tine Business Edition](https://www.tine20.com/en.html).
