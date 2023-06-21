@@ -752,6 +752,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $doc->generate();
         $doc->write($stream);
         rewind($stream);
+        $model::resetConfiguration();
 
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
 
