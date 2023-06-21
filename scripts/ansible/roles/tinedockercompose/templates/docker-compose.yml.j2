@@ -45,19 +45,28 @@ services:
     networks:
       - external_network
       - internal_network
+{% if tinedockercompose_traefik_host is not defined %}
     ports:
       - "{{ tinedockercompose_ports }}"
+{% endif %}
 {% if tinedockercompose_extra_hosts is defined %}
     extra_hosts:
       - "{{ tinedockercompose_extra_hosts }}"
 {% endif %}
+{% if tinedockercompose_traefik_host is defined %}
     ### for traefik support (see https://doc.traefik.io/traefik/providers/docker/)
-#    labels:
-#      - "traefik.enable=true"
-#      - "traefik.http.routers.web.rule=Host(`MYDOMAIN.de`)"
-#      - "traefik.http.routers.web.entrypoints=websecure"
-#      - "traefik.http.routers.web.tls.certresolver=http01"
-#      - "traefik.http.services.web.loadbalancer.server.port=80"
+    labels:
+      - "traefik.enable=true"
+      ### traefik doc: The regexp name (name in the example) is an arbitrary value, that exists only for historical reasons.
+      - "traefik.http.routers.web.rule=HostRegexp(`{name:.+}`) || Host(`{{ tinedockercompose_traefik_host }}`)"
+      - "traefik.http.routers.web.entrypoints=websecure"
+{% if tinedockercompose_traefik_cert is defined and tinedockercompose_traefik_key is defined %}
+      - "traefik.http.routers.web.tls=true"
+{% else %}
+      - "traefik.http.routers.web.tls.certresolver=http01"
+{% endif %}
+      - "traefik.http.services.web.loadbalancer.server.port=80"
+{% endif %}
 
   cache:
     image: redis:5.0.5
@@ -110,28 +119,43 @@ services:
 #    networks:
 #      - internal_network
 
-#  traefik:
-#    image: "traefik:v2.6"
-#    restart: always
-#    container_name: "traefik"
-#    command:
-#      - "--providers.docker=true"
-#      - "--providers.docker.exposedbydefault=false"
-#      - "--entrypoints.web.address=:80"
-#      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-#      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-#      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
-#      - "--entrypoints.websecure.address=:443"
-#      - "--certificatesresolvers.http01.acme.httpchallenge=true"
-#      - "--certificatesresolvers.http01.acme.httpchallenge.entrypoint=web"
-#      - "--certificatesresolvers.http01.acme.storage=/letsencrypt/acme.json"
-#    ports:
-#      - "80:80"
-#      - "443:443"
-#      - "8080:8080"
-#    volumes:
-#      - "./letsencrypt:/letsencrypt"
-#      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+{% if tinedockercompose_traefik_host is defined %}
+  traefik:
+    image: "traefik:v2.6"
+    restart: always
+    container_name: "traefik"
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.websecure.address=:443"
+{% if tinedockercompose_traefik_cert is defined and tinedockercompose_traefik_key is defined %}
+      - "--providers.file.directory=/etc/traefik/dynamic_conf"
+      - "--providers.file.watch=true"
+{% else %}
+      - "--certificatesresolvers.http01.acme.httpchallenge=true"
+      - "--certificatesresolvers.http01.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.http01.acme.storage=/letsencrypt/acme.json"
+{% endif %}
+      # - "--log.level=DEBUG"
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - internal_network
+      - external_network
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+{% if tinedockercompose_traefik_cert is defined and tinedockercompose_traefik_key is defined %}
+      - "{{ tinedockercompose_path }}/traefik/certs/:/certs/:ro"
+      - "{{ tinedockercompose_path }}/traefik/traefik.yml:/etc/traefik/dynamic_conf/conf.yml:ro"
+{% else %}
+      - "./letsencrypt:/letsencrypt"
+{% endif %}
+{% endif %}
 
 ### optional: use docker volumes instead of directory mounts
 # volumes:
