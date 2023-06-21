@@ -1298,7 +1298,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
         
         $data = [];
-        foreach (Tinebase_Core::getUser()->getApplications() as $application) {
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
             $appControllerName = $application->name . '_Controller';
             if (class_exists($appControllerName)) {
                 $appController = call_user_func($appControllerName . '::getInstance');
