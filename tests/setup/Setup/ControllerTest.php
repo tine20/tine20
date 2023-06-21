@@ -34,7 +34,7 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
     {
         $this->_uit = Setup_ControllerMock::getInstance();
 
-        if (Setup_Controller::getInstance()->isInstalled()) {
+        if (Setup_Controller::getInstance()->isInstalled('Addressbook')) {
             $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
             if (null === ($oldUser = Tinebase_Core::getUser())) {
                 Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
