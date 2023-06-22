@@ -43,6 +43,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
     
     /**
      * @var Redis
+     * @link https://phpredis.github.io/phpredis/Redis.html
      */
     protected $_redis;
     
@@ -121,14 +122,14 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
      * Delete a job from the queue
      *
      * @param  string  $jobId  the id of the job
-     * @param  boolean $deadLetter wether to push msg to dead letter queue, defaults false
+     * @param  boolean $deadLetter if to push msg to dead letter queue, defaults false
      */
     public function delete($jobId, $deadLetter = false)
     {
         if ($deadLetter) {
             $data = $this->_redis->dump($this->_dataStructName . ":" . $jobId);
             if (false !== $data) {
-                $this->_redis->restore($this->_deadLetterStructName . ":" . $jobId, 0, $data);
+                $this->_redis->restore($this->_deadLetterStructName . ":" . $jobId, 0, $data, ['REPLACE']);
             }
         }
         // remove from redis
