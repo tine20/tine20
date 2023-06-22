@@ -13,6 +13,30 @@
     - tinedockercompose_registry_username is defined
     - tinedockercompose_registry_password is defined
 
+- name: Add the user tine20 with a specific uid and a primary group of tine20
+  ansible.builtin.user:
+    name: tine20
+    comment: tine20 user of tine docker web container
+    uid: 150
+
+- name: check if db dir already exist
+  stat:
+    path: "{{ tinedockercompose_db_path }}"
+  register: dbdir
+
+- name: create db directory
+  file:
+    path: "{{ item }}"
+    owner: root
+    group: root
+    state: directory
+    mode: 0750
+  with_items:
+    - "{{ tinedockercompose_db_path }}"
+  become: true
+  when:
+    - not dbdir.stat.exists
+
 - name: create basic directories
   file:
     path: "{{ item }}"
@@ -22,7 +46,20 @@
     mode: 0750
   with_items:
     - "{{ tinedockercompose_path }}"
+    - "{{ tinedockercompose_path }}/scripts"
+  become: true
+
+- name: create basic tine directories (owned by tine20 user)
+  file:
+    path: "{{ item }}"
+    owner: tine20
+    group: root
+    state: directory
+    mode: 0750
+  with_items:
     - "{{ tinedockercompose_confd_path }}"
+    - "{{ tinedockercompose_files_path }}"
+    - "{{ tinedockercompose_backup_path }}"
   become: true
 
 - name: deploy docker-compose.yml
@@ -34,83 +71,19 @@
     mode: 0640
   become: true
 
-### TODO move conf.d stuff to separate yml
+- include_tasks: filedeploy.yml
 
-- name: set group_vars_dir
-  set_fact: "group_vars_dir='group_vars{{ inventory_file | replace(inventory_dir, \"\") }}'"
-
-- name: create customer conf.d files
-  copy:
-    src: "{{ item }}"
-    dest: "{{ tinedockercompose_confd_path }}"
-    owner: root
-    group: root
-    mode: 0640
-  with_fileglob:
-    - "{{ group_vars_dir }}/conf.d/*.php"
-  become: true
-
-### TODO more config via env-file
-
-### TODO move traefik to separate yml
-
-- name: create customer traefik dirs
-  file:
-    path: "{{ item }}"
-    owner: root
-    group: root
-    state: directory
-    mode: 0750
-  with_items:
-    - "{{ tinedockercompose_path }}/traefik"
-    - "{{ tinedockercompose_path }}/traefik/certs"
-  become: true
+- include_tasks: traefik.yml
   when:
-    - tinedockercompose_traefik_cert is defined
-    - tinedockercompose_traefik_key is defined
+    - tinedockercompose_traefik_host is defined
 
-- name: create customer traefik cert config
-  template:
-    src: traefik.yml.j2
-    dest: "{{ tinedockercompose_path }}/traefik/traefik.yml"
-    owner: root
-    group: root
-    mode: 0640
-  become: true
-  when:
-    - tinedockercompose_traefik_cert is defined
-    - tinedockercompose_traefik_key is defined
-
-- name: create customer traefik cert file
-  copy:
-    src: "{{ item }}"
-    dest: "{{ tinedockercompose_path }}/traefik/certs"
-    owner: root
-    group: root
-    mode: 0640
-  with_fileglob:
-    - "{{ group_vars_dir }}/traefik/cert/*"
-  become: true
-  when:
-    - tinedockercompose_traefik_cert is defined
-
-- name: create customer traefik key file
-  copy:
-    src: "{{ item }}"
-    dest: "{{ tinedockercompose_path }}/traefik/certs"
-    owner: root
-    group: root
-    mode: 0600
-  with_fileglob:
-    - "{{ group_vars_dir }}/traefik/key/*"
-  become: true
-  when:
-    - tinedockercompose_traefik_key is defined
-
-- name: start docker compose
+- name: re/start docker compose
   ansible.builtin.shell: docker compose up -d
   args:
     chdir: "{{ tinedockercompose_path }}"
+  when:
+    - not ansible_check_mode
+    - tinedockercompose_no_restart is not defined or tinedockercompose_no_restart|bool == false
 
 ## TODO make this work
 #- name: Create and start services

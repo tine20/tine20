@@ -74,50 +74,58 @@ services:
     networks:
       - internal_network
 
+{% if tinedockercompose_docservice_version is defined %}
   docservice:
-    image: tinegroupware/document-preview-service:2.1
+    image: tinegroupware/document-preview-service:{{ tinedockercompose_docservice_version }}
     networks:
       - internal_network
+{% endif %}
 
-#  broadcasthub:
-#    image: tinegroupware/broadcasthub:0.6
-#    networks:
-#      - external_network
-#      - internal_network
-#    ports:
-#      - "5001:80"
-#    environment:
-#      REDIS_URL: redis://cache:6379
-#      REDIS_CHANNEL: broadcasthub
-#      TINE20_JSON_API_URL: http://localhost
-#      AUTH_TIMEOUT: 5000
-#      WS_PORT: 80
-#      DEBUG: '*'
-#      DEBUG_DEFAULT_LOGGING: "on"
-#      DEBUG_LOG_TO_FILE: "off"
-#      DEBUG_LOG_FILE: ../../stdout.log
+{% if tinedockercompose_documentserver is defined %}
+  broadcasthub:
+    image: tinegroupware/broadcasthub:0.6
+    networks:
+      - external_network
+      - internal_network
+    ports:
+      - "5001:80"
+    environment:
+      REDIS_URL: redis://cache:6379
+      REDIS_CHANNEL: broadcasthub
+      TINE20_JSON_API_URL: http://localhost
+      AUTH_TIMEOUT: 5000
+      WS_PORT: 80
+      DEBUG: '*'
+      DEBUG_DEFAULT_LOGGING: "on"
+      DEBUG_LOG_TO_FILE: "off"
+      DEBUG_LOG_FILE: ../../stdout.log
+{% endif %}
 
-#  documentserver:
-#    image: onlyoffice/documentserver:latest
-#    ports:
-#      - "4020:80"
-#    environment:
-#      JWT_ENABLED: "true"
-#      JWT_SECRET: "change_me_also_define_in_tine_cfg"
-#    networks:
-#      - external_network
-#      - internal_network
+{% if tinedockercompose_documentserver is defined %}
+  documentserver:
+    image: onlyoffice/documentserver:latest
+    ports:
+      - "4020:80"
+    environment:
+      JWT_ENABLED: "true"
+      JWT_SECRET: "change_me_also_define_in_tine_cfg"
+    networks:
+      - external_network
+      - internal_network
+{% endif %}
 
-#  clamav:
-#    image: tiredofit/clamav
-#    container_name: clamav
-#    environment:
-#      - ZABBIX_HOSTNAME=clamav
-#    # need to be created on the host
-#    volumes:
-#      - "clamav_files:/data"
-#    networks:
-#      - internal_network
+{% if tinedockercompose_clamav is defined %}
+  clamav:
+    image: tiredofit/clamav
+    container_name: clamav
+    environment:
+      - ZABBIX_HOSTNAME=clamav
+    # need to be created on the host
+    volumes:
+      - "clamav_files:/data"
+    networks:
+      - internal_network
+{% endif %}
 
 {% if tinedockercompose_traefik_host is defined %}
   traefik:
