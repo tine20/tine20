@@ -1,0 +1,54 @@
+---
+
+- name: create customer traefik dirs
+  file:
+    path: "{{ item }}"
+    owner: root
+    group: root
+    state: directory
+    mode: 0750
+  with_items:
+    - "{{ tinedockercompose_path }}/traefik"
+    - "{{ tinedockercompose_path }}/traefik/certs"
+  become: true
+  when:
+    - tinedockercompose_traefik_cert is defined
+    - tinedockercompose_traefik_key is defined
+
+- name: create customer traefik cert config
+  template:
+    src: traefik.yml.j2
+    dest: "{{ tinedockercompose_path }}/traefik/traefik.yml"
+    owner: root
+    group: root
+    mode: 0640
+  become: true
+  when:
+    - tinedockercompose_traefik_cert is defined
+    - tinedockercompose_traefik_key is defined
+
+- name: create customer traefik cert file
+  copy:
+    src: "{{ item }}"
+    dest: "{{ tinedockercompose_path }}/traefik/certs"
+    owner: root
+    group: root
+    mode: 0640
+  with_fileglob:
+    - "{{ group_vars_dir }}/traefik/cert/*"
+  become: true
+  when:
+    - tinedockercompose_traefik_cert is defined
+
+- name: create customer traefik key file
+  copy:
+    src: "{{ item }}"
+    dest: "{{ tinedockercompose_path }}/traefik/certs"
+    owner: root
+    group: root
+    mode: 0600
+  with_fileglob:
+    - "{{ group_vars_dir }}/traefik/key/*"
+  become: true
+  when:
+    - tinedockercompose_traefik_key is defined

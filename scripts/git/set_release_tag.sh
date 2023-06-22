@@ -1,5 +1,5 @@
-
 #!/bin/bash
+
 # (c) copyright Metaways Infosystems GmbH 2016-2022
 # authors:  Philipp Schüle <p.schuele@metaways.de>
 #
