@@ -1,0 +1,39 @@
+---
+
+- name: set group_vars_dir
+  set_fact: "group_vars_dir='group_vars{{ inventory_file | replace(inventory_dir, \"\") }}'"
+
+- name: create conf.d files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ tinedockercompose_confd_path }}"
+    owner: tine20
+    group: root
+    mode: 0640
+  with_fileglob:
+    - "{{ group_vars_dir }}/conf.d/*.php"
+  become: true
+
+- name: create conf.d files (j2)
+  template:
+    src: "{{ item }}"
+    dest: "{{ tinedockercompose_confd_path }}/{{ item | basename | regex_replace('\\.j2$', '') }}"
+    owner: tine20
+    group: root
+    mode: 0640
+  with_fileglob:
+    - "{{ group_vars_dir }}/conf.d/*.j2"
+  become: true
+
+### TODO more config via env-file?
+
+- name: create script files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ tinedockercompose_path }}/scripts"
+    owner: root
+    group: root
+    mode: 0740
+  with_fileglob:
+    - "{{ group_vars_dir }}/scripts/*.sh"
+  become: true
