@@ -19,8 +19,11 @@ msgstr ""
 
 
 #: Setup/Initialize.php:42
+msgid "Is edited by"
+msgstr "In Bearbeitung von"
+
 msgid "Editing"
-msgstr "Bearbeitung"
+msgstr "Wird bearbeitet"
 
 msgid "Who is currently editing this document"
 msgstr "Wer bearbeitet dieses Dokument derzeit"
