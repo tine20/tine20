@@ -50,7 +50,7 @@ class Tinebase_Twig
         if (isset($_options[self::TWIG_LOADER])) {
             $twigLoader = $_options[self::TWIG_LOADER];
         } else {
-            $twigLoader = new Twig_Loader_Filesystem(['./'], dirname(__DIR__));
+            $twigLoader = new Twig\Loader\FilesystemLoader(['./'], dirname(__DIR__));
         }
 
         if (TINE20_BUILDTYPE === 'DEVELOPMENT' || (isset($_options[self::TWIG_CACHE]) && !$_options[self::TWIG_CACHE])) {
@@ -69,11 +69,11 @@ class Tinebase_Twig
         if (isset($_options[self::TWIG_AUTOESCAPE])) {
             $options['autoescape'] = $_options[self::TWIG_AUTOESCAPE];
         }
-        $this->_twigEnvironment = new Twig_Environment($twigLoader, $options);
+        $this->_twigEnvironment = new Twig\Environment($twigLoader, $options);
         
         /** @noinspection PhpUndefinedMethodInspection */
         /** @noinspection PhpUnusedParameterInspection */
-        $this->_twigEnvironment->getExtension('core')->setEscaper('json', function($twigEnv, $string, $charset) {
+        $this->_twigEnvironment->getExtension(Twig\Extension\EscaperExtension::class)->setEscaper('json', function($twigEnv, $string, $charset) {
             return json_encode($string);
         });
 
