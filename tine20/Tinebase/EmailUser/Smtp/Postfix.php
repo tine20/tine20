@@ -120,6 +120,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         'adapter' => Tinebase_Core::PDO_MYSQL,
         // use this for adding only one default destination (email address -> mailserver username)
         'onlyemaildestination' => false,
+        'allowOverwrite' => false,
     ];
     
     /**
@@ -249,7 +250,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     */
     protected function _beforeAddOrUpdate(&$emailUserData)
     {
-        $this->_deleteOldUserDataIfExists($emailUserData);
+        $this->deleteOldUserDataIfExists($emailUserData);
         unset($emailUserData[$this->_propertyMapping['emailForwards']]);
         unset($emailUserData[$this->_propertyMapping['emailAliases']]);
     }
@@ -258,15 +259,23 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
      * delete old email user data
      *
      * @param array $emailUserData
+     * @return void
      * @throws Tinebase_Exception_Backend_Database
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_Validation
      * @throws Tinebase_Exception_SystemGeneric
+     * @throws Zend_Db_Statement_Exception
      */
-    protected function _deleteOldUserDataIfExists($emailUserData)
+    public function deleteOldUserDataIfExists(array $emailUserData): void
     {
-        $select = $this->_getSelect();
-        $select
-            ->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId'])  . ' != ?',   $emailUserData['userid'])
-            ->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailAddress']) . ' = ?',   $emailUserData['email']);
+        $select = $this->_getSelect()
+            ->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailAddress'])
+                . ' = ?', $emailUserData['email']);
+
+        if (isset($emailUserData['userid']) && ! empty( $emailUserData['userid'])) {
+            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId'])
+                . ' != ?', $emailUserData['userid']);
+        }
 
         try {
             $stmt = $this->_db->query($select);
