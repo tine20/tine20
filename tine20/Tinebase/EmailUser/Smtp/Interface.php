@@ -15,7 +15,9 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  *
- * TODO reactivate extends / add methods
+ * TODO reactivate extends / add more methods
+ *
+ * @method emailAddressExists($user): bool
  */
 interface Tinebase_EmailUser_Smtp_Interface #extends Tinebase_User_Plugin_Interface
 {
