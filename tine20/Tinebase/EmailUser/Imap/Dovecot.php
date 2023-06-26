@@ -301,19 +301,28 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
     /**
      * interceptor before update
      *
-     * @param array{loginname:string, domain:string, userid:string} $emailUserData
+     * @param array|mixed $emailUserData {loginname:string, domain:string, userid:string}
+     * @return void
+     * @throws Tinebase_Exception_SystemGeneric
      */
-    protected function _beforeUpdate(&$emailUserData)
+    protected function _beforeUpdate(mixed &$emailUserData): void
     {
-        $this->_checkExistingUser($emailUserData);
+        if (! isset($this->_config['allowOverwrite']) || ! $this->_config['allowOverwrite']) {
+            $this->_checkExistingUser($emailUserData);
+        }
     }
 
-    protected function _checkExistingUser(&$emailUserData)
+    /**
+     * @param array $emailUserData
+     * @return void
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _checkExistingUser(array &$emailUserData): void
     {
         // prevent duplicate loginname
         $result = $this->_getExistingUser($emailUserData);
         if (count($result) > 0) {
-            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            $translate = Tinebase_Translation::getTranslation();
             throw new Tinebase_Exception_SystemGeneric($translate->_('Email account already exists'));
         }
     }
@@ -321,11 +330,15 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
     /**
      * interceptor before add
      *
-     * @param array{loginname:string, domain:string, userid:string} $emailUserData
+     * @param array|mixed $emailUserData {loginname:string, domain:string, userid:string}
+     * @return void
+     * @throws Tinebase_Exception_SystemGeneric
      */
-    protected function _beforeAdd(&$emailUserData)
+    protected function _beforeAdd(mixed &$emailUserData): void
     {
-        $this->_checkExistingUser($emailUserData);
+        if (! isset($this->_config['allowOverwrite']) || ! $this->_config['allowOverwrite']) {
+            $this->_checkExistingUser($emailUserData);
+        }
     }
 
     protected function _getExistingUser($emailUserData)

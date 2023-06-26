@@ -1176,6 +1176,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * user (string) ?
          * backend (string) - see Tinebase_EmailUser::$_supportedBackends
          * verifyPeer (bool)
+         * "allowOverwrite": false (bool)
          */
         self::IMAP => array(
                                    //_('System IMAP')
@@ -1202,6 +1203,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * "instanceName":"tine.test" (string)
          * "onlyemaildestination":true (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createDefaultDestinations)
          * "from":"notifications@tine.test" (string) - notification sender address
+         * "allowOverwrite": false (bool)
          */
         self::SMTP => array(
                                    //_('System SMTP')

@@ -540,9 +540,19 @@ class Tinebase_EmailUser
     public static function checkIfEmailUserExists(Tinebase_Model_FullUser $user)
     {
         $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
-        if ($emailUserBackend->emailAddressExists($user)) {
-            $translate = Tinebase_Translation::getTranslation('Tinebase');
-            throw new Tinebase_Exception_SystemGeneric($translate->_('Email account already exists'));
+        /* @var Tinebase_EmailUser_Smtp_Interface $emailUserBackend */
+        if (method_exists($emailUserBackend, 'emailAddressExists') && $emailUserBackend->emailAddressExists($user)) {
+            $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
+            if ($config->allowOverwrite && method_exists($emailUserBackend, 'deleteOldUserDataIfExists')) {
+                // delete existing smtp user
+                $emailUserBackend->deleteOldUserDataIfExists([
+                    'userid' => $user->getId(),
+                    'email' => $user->accountEmailAddress,
+                ]);
+            } else {
+                $translate = Tinebase_Translation::getTranslation();
+                throw new Tinebase_Exception_SystemGeneric($translate->_('Email account already exists'));
+            }
         }
     }
 
