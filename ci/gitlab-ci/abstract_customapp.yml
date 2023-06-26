@@ -59,8 +59,9 @@ docker_build_source_matrix:
       - PHP_VERSION:
           - "7.4"
           - "8.0"
-          - "8.1"
-          - "8.2"
+# TODO activate in 2023.11+
+#          - "8.1"
+#          - "8.2"
   script:
     - echo job is there for needs
   rules:
