@@ -838,7 +838,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             // in order to cache the templates, we need to cache $this->_twigMapping too!
             Tinebase_Twig::TWIG_CACHE       => false,
             Tinebase_Twig::TWIG_AUTOESCAPE  => 'json',
-            Tinebase_Twig::TWIG_LOADER      => new Twig_Loader_Chain(array(
+            Tinebase_Twig::TWIG_LOADER      => new Twig\Loader\ChainLoader(array(
                 new Tinebase_Twig_CallBackLoader($this->_templateFileName, $this->_getLastModifiedTimeStamp(),
                     array($this, '_getTwigSource'))))
         ];
@@ -852,7 +852,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
         try {
             $this->_twigTemplate = $this->_twig->load($this->_templateFileName);
-        } catch (Twig_Error $e) {
+        } catch (Twig\Error\Error $e) {
             throw new Tinebase_Exception_Backend('twig error: ' . $e->getMessage() . ' for twig source: ' .
                 $this->_getTwigSource());
         }
