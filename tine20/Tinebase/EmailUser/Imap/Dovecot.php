@@ -305,7 +305,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
      * @return void
      * @throws Tinebase_Exception_SystemGeneric
      */
-    protected function _beforeUpdate(mixed &$emailUserData): void
+    protected function _beforeUpdate(&$emailUserData): void
     {
         if (! isset($this->_config['allowOverwrite']) || ! $this->_config['allowOverwrite']) {
             $this->_checkExistingUser($emailUserData);
@@ -334,7 +334,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
      * @return void
      * @throws Tinebase_Exception_SystemGeneric
      */
-    protected function _beforeAdd(mixed &$emailUserData): void
+    protected function _beforeAdd(&$emailUserData): void
     {
         if (! isset($this->_config['allowOverwrite']) || ! $this->_config['allowOverwrite']) {
             $this->_checkExistingUser($emailUserData);
