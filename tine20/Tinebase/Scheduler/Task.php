@@ -192,6 +192,11 @@ class Tinebase_Scheduler_Task
                 if (isset($callable[self::CONTROLLER])) {
                     $class = Tinebase_Controller_Abstract::getController($callable[self::CONTROLLER]);
                 }
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Could not get controller for scheduler job: ' . $tead->getMessage());
+                $aggResult = false;
+                continue;
             } catch (Exception $e) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                     . ' Could not get controller for scheduler job: ' . $e->getMessage());
