@@ -2,11 +2,15 @@
 echo -n 'wait for signal_files_ready ...'; while [ ! -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_files_ready ]; do sleep 1; done; echo ' done'
 
 cp -r /usr/share/tine20/Tinebase/js/node_modules $TINE20ROOT/Tinebase/js/node_modules
+cp -r /usr/share/tine20/vendor $TINE20ROOT/tine20/vendor
+
+# delete potentially old code, to make sure it can not be used 
+if test "${TINE20ROOT}" != "/usr/share/tine20"; then rm -rf /usr/share/tine20; fi
+
 touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_node_modules_copied
 
 # install php deps
 cd $TINE20ROOT/tine20
-cp -r /usr/share/tine20/vendor $TINE20ROOT/tine20/vendor
 composer install --no-ansi --no-progress --no-suggest --no-scripts --ignore-platform-reqs
 $TINE20ROOT/ci/scripts/install_custom_app.sh
 
