@@ -531,7 +531,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 this.app.i18n._('You are about to reveal the password. This action will be logged. Proceed?'),
                                 async (button) => {
                                     if (button === 'yes') {
-                                        const result = await Tine.Admin.revealEmailAccountPassword(this.record.id);
+                                        const result = await Tine.Admin.revealEmailAccountPassword(this.record.id ?? '');
                                         fulfill(result['password']);
                                     } else {
                                         reject('canceled');
