@@ -1979,14 +1979,14 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * reveal email account password
      *
-     * @param string|null $accountId
+     * @param string $accountId
      * @return array
      * @throws Felamimail_Exception
      * @throws Tinebase_Exception
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_NotFound
      */
-    public function revealEmailAccountPassword($accountId): array
+    public function revealEmailAccountPassword(string $accountId): array
     {
         if (! $accountId) {
             return [];
