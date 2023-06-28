@@ -38,6 +38,8 @@ class SSO_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update001()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
         Setup_SchemaTool::updateSchema([
             SSO_Model_Token::class,
         ]);
