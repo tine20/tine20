@@ -352,7 +352,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     $server->setClass($class, $namespace);
                 } catch (Exception $e) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . " Failed to add JSON API for '$class' => '$namespace' Exception: \n". $e);
+                        . " Failed to add JSON API for '$class' => '$namespace' Exception: \n". $e->getMessage());
+                    Tinebase_Exception::log($e);
                 }
             }
         }
