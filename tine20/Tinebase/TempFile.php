@@ -225,6 +225,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      * 
      * @param Tinebase_Record_RecordSet $_tempFiles
      * @return Tinebase_Model_TempFile
+     * @throws Tinebase_Exception_Backend
      */
     public function joinTempFiles($_tempFiles)
     {
@@ -250,11 +251,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
 
         if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF !== Tinebase_Config::getInstance()
                 ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
-            $avResult = Tinebase_FileSystem_AVScan_Factory::getScanner()->scan($fJoin);
-            if ($avResult->result === Tinebase_FileSystem_AVScan_Result::RESULT_FOUND) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                    . 'av scan found: ' . $avResult->message);
-            }
+            $this->_avScan($fJoin, $path);
         }
         
         fclose($fJoin);
@@ -265,6 +262,30 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         }
         
         return $this->createTempFile($path, $name, $type, $size);
+    }
+
+    /**
+     * @param resource $fJoin
+     * @param string $path
+     * @return void
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    protected function _avScan($fJoin, string $path): void
+    {
+        try {
+            $avResult = Tinebase_FileSystem_AVScan_Factory::getScanner()->scan($fJoin);
+            if ($avResult->result === Tinebase_FileSystem_AVScan_Result::RESULT_FOUND) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . ' AV scan found: ' . $avResult->message);
+                unlink($path);
+                throw new Tinebase_Exception_Backend('AV scan found: ' . $avResult->message);
+            }
+        } catch (Socket\Raw\Exception $sre) {
+            // TODO put file in quarantine or is next scan good enough?
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . ' Could not av scan file: ' . $sre->getMessage());
+        }
     }
     
     /**
