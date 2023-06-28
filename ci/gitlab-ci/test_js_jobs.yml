@@ -33,8 +33,6 @@
   image:
     name: dockerregistry.metaways.net/tine20/tine20/puppeteer:1.0.4
   before_script:
-    # delete potentially old code, to make sure it can not be used 
-    - if test "${TINE20ROOT}" != "/usr/share/tine20"; then rm -rf /usr/share/tine20; fi
     # clone tine repo if test is run for a custom app. the tine repo will in any case be under $TINE20ROOT
     - if test "${CI_PROJECT_NAME}" != "tine20"; then git clone -b $TINE20_BRANCH --single-branch --depth 1 $TINE20_REPO_URL $TINE20ROOT; fi
     - cd $TINE20ROOT; git submodule init; git submodule update
