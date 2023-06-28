@@ -27,7 +27,7 @@
   when:
     - tine20_release is defined
     - tine20_packages is defined
-    - deployed.stat.isdir is not defined
+    - deployed.stat.isdir is not defined or (tine20_force_deploy is defined and tine20_force_deploy)
 
 - name: link /usr/share/tine20 to appropriate release
   file:
