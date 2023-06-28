@@ -106,8 +106,14 @@ class Tinebase_Fulltext_TextExtract
             . ' > ' . escapeshellarg("$tempFileName");
         
         @exec($cmd . " 2> $tempDir/stderr", $output, $result);
-        
-        $errMsg = file_get_contents("$tempDir/stderr");
+
+        try {
+            $errMsg = file_get_contents("$tempDir/stderr");
+        } catch (ErrorException $ee) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . ' Could not get stderr: ' . $ee->getMessage());
+            $errMsg = '';
+        }
         @exec('rm -Rf ' . escapeshellarg("$tempDir"));
         
         if ($result !== 0) {
