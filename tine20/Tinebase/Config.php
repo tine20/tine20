@@ -3438,6 +3438,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                 if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                                     . ' Type missing from definition: ' . print_r($definition, TRUE));
                             }
+                        } catch (Tinebase_Exception_AccessDenied $tead) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                                __METHOD__ . '::' . __LINE__. ' ' . $tead->getMessage() . ' for '
+                                . print_r($definition, TRUE));
                         } catch (Exception $e) {
                             Tinebase_Exception::log($e);
                         }
