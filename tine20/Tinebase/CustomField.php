@@ -134,7 +134,9 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 // clear the MC cache
                 $model::resetConfiguration();
 
-                Setup_SchemaTool::updateSchema([$model]);
+                if ((new Tinebase_Record_DoctrineMappingDriver())->isTransient($model)) {
+                    Setup_SchemaTool::updateSchema([$model]);
+                }
             }
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -172,7 +174,9 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 // clear the MC cache
                 $model::resetConfiguration();
 
-                Setup_SchemaTool::updateSchema([$model]);
+                if ((new Tinebase_Record_DoctrineMappingDriver())->isTransient($model)) {
+                    Setup_SchemaTool::updateSchema([$model]);
+                }
             }
         } finally {
             $this->_backendConfig->setNoSystemCFs();

@@ -131,8 +131,12 @@ class Setup_SchemaTool
     {
         $em = self::getEntityManager();
 
+        $mappingDriver = new Tinebase_Record_DoctrineMappingDriver();
         $classes = [];
         foreach($modelNames as $modelName) {
+            if (!$mappingDriver->isTransient($modelName)) {
+                throw new Tinebase_Exception('can\'t get metadata of non transient model '. $modelName);
+            }
             $mdInfo = $em->getClassMetadata($modelName);
             if (isset(self::$_uninstalledTables[$mdInfo->getTableName()])) {
                 continue;
