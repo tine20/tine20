@@ -30,6 +30,7 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     gridConfig: {
         autoExpandColumn: 'name'
     },
+    listenMessageBus: false,
     
     /**
      * initComponent
