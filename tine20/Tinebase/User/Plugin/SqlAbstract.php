@@ -146,6 +146,9 @@ abstract class Tinebase_User_Plugin_SqlAbstract extends Tinebase_User_Plugin_Abs
      */
     public function getDb()
     {
+        if ($this->_db === null) {
+            $this->_db = $this->getDb();
+        }
         return $this->_db;
     }
 

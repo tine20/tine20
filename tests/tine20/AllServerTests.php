@@ -25,9 +25,9 @@ class AllServerTests
         $suite->addTestSuite(ActiveSync_Server_HttpTests::class);
         $suite->addTestSuite(Tinebase_ControllerServerTest::class);
         $suite->addTestSuite(Tinebase_Server_WebDAVTests::class);
-        $suite->addTestSuite(Tinebase_Server_JsonTests::class);
         $suite->addTestSuite(Tinebase_Server_HttpTests::class);
         $suite->addTestSuite(Tinebase_Server_RoutingTests::class);
+        $suite->addTestSuite(Tinebase_Server_JsonTests::class);
 
         return $suite;
     }

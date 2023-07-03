@@ -25,6 +25,8 @@ class Tinebase_Server_JsonTests extends TestCase
     {
         if ($this->_imapConf !== null) {
             Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $this->_imapConf);
+            Tinebase_EmailUser::clearCaches();
+            Tinebase_EmailUser::destroyInstance();
         }
         parent::tearDown();
     }
