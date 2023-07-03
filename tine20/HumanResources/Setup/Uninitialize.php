@@ -39,10 +39,17 @@ class HumanResources_Setup_Uninitialize extends Setup_Uninitialize
 
     protected function _uninitializeHolidayImport()
     {
-        Admin_Controller_SchedulerTask::getInstance()->deleteByFilter(
-            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Admin_Model_SchedulerTask::class, [
-                [TMFA::FIELD => Admin_Model_SchedulerTask::FLD_NAME, TMFA::OPERATOR => 'startswith', TMFA::VALUE => 'HR Bank Holiday Import'],
-            ]));
+        try {
+            Admin_Controller_SchedulerTask::getInstance()->deleteByFilter(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Admin_Model_SchedulerTask::class, [
+                    [TMFA::FIELD => Admin_Model_SchedulerTask::FLD_NAME, TMFA::OPERATOR => 'startswith', TMFA::VALUE => 'HR Bank Holiday Import'],
+                ]));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // APP Admin already deleted
+        } catch (Throwable $t) {
+            // problem!
+            Tinebase_Exception::log($t);
+        }
     }
 
     /**
