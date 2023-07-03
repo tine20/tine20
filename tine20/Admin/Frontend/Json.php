@@ -28,9 +28,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_manageSAM = false;
     
     /**
-     * @var bool
+     * @var ?bool
      */
-    protected $_hasMasterSieveAccess;
+    protected $_hasMasterSieveAccess = null;
 
     /**
      * the models handled by this frontend
@@ -49,14 +49,21 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (isset(Tinebase_Core::getConfig()->samba)) {
             $this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false);
         }
-        try {
-            $this->_hasMasterSieveAccess = Tinebase_EmailUser::sieveBackendSupportsMasterPassword();
-        } catch (Exception $e) {
-            Tinebase_Exception::log($e);
-            $this->_hasMasterSieveAccess = false;
-        }
     }
-    
+
+    protected function _getHasMasterSieveAccess(): bool
+    {
+        if ($this->_hasMasterSieveAccess === null) {
+            try {
+                $this->_hasMasterSieveAccess = Tinebase_EmailUser::sieveBackendSupportsMasterPassword();
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+                $this->_hasMasterSieveAccess = false;
+            }
+        }
+        return $this->_hasMasterSieveAccess;
+    }
+
     /**
      * Returns registry data of admin.
      * @see Tinebase_Application_Json_Abstract
@@ -69,7 +76,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $registryData = array(
             'manageSAM'                     => $this->_manageSAM,
-            'masterSieveAccess'             => $this->_hasMasterSieveAccess,
+                'masterSieveAccess'             => $this->_getHasMasterSieveAccess(),
             'defaultPrimaryGroup'           => Tinebase_Group::getInstance()->getDefaultGroup()->toArray(),
             'defaultInternalAddressbook'    => (
                     isset($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])
