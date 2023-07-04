@@ -170,7 +170,11 @@ class Felamimail_Controller extends Tinebase_Controller_Event
         ) {
             // this is sort of a weird flag to make addSystemAccount do its actual work
             $_account->imapUser = new Tinebase_Model_EmailUser(null, true);
-            Felamimail_Controller_Account::getInstance()->createSystemAccount($_account, $pwd);
+            try {
+                Felamimail_Controller_Account::getInstance()->createSystemAccount($_account, $pwd);
+            } catch (Zend_Db_Adapter_Exception $zdae) {
+                Tinebase_Exception::log($zdae);
+            }
         }
     }
 
