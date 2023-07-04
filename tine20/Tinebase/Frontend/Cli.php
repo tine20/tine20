@@ -1566,7 +1566,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
      */
-    public function monitoringMailServers() {
+    public function monitoringMailServers()
+    {
         $result = 0;
         $servers = [
             Tinebase_Config::SMTP,
@@ -1609,6 +1610,27 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $message .= PHP_EOL . $output . PHP_EOL;
             $result = $result_code;
         }
+
+        // also check mail db connectivity
+        if ($result === 0 && Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+            try {
+                $plugin = Tinebase_EmailUser::getInstance();
+                if ($plugin instanceof Tinebase_EmailUser_Imap_Dovecot) {
+                    $db = $plugin->getDb();
+                    $table = $db->describeTable('dovecot_users');
+                    if (empty($table)) {
+                        $result = 1;
+                        // TODO add more schema checks here
+                        $message .= 'table dovecot_users has no valid schema';
+                    }
+                }
+            } catch (Exception $e) {
+                $result = 1;
+                $message .= $e->getMessage();
+            }
+        }
+
+        $this->_logMonitoringResult($result, $message);
 
         echo $message . "\n";
         return $result;

@@ -5,7 +5,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -16,6 +16,21 @@
  */
 class Tinebase_Server_JsonTests extends TestCase
 {
+    protected $_imapConf = null;
+
+    /**
+     * tear down tests
+     */
+    protected function tearDown(): void
+    {
+        if ($this->_imapConf !== null) {
+            Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $this->_imapConf);
+            Tinebase_EmailUser::clearCaches();
+            Tinebase_EmailUser::destroyInstance();
+        }
+        parent::tearDown();
+    }
+
     /**
      * @group ServerTests
      */
@@ -248,5 +263,26 @@ class Tinebase_Server_JsonTests extends TestCase
         $result = Tinebase_Helper::jsonDecode($resultString);
         self::assertArrayHasKey('success', $result['result']);
         self::assertEquals(true, $result['result']['success'], print_r($result, true));
+    }
+
+    /**
+     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Zend_Json_Exception
+     * @throws Zend_Session_Exception
+     *
+     * @group ServerTests
+     */
+    public function testLoginWithoutConnectionToMailDb()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+
+        $this->_imapConf = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+        $newConf = $this->_imapConf->toArray();
+        $newConf['dovecot']['host'] = 'somethingelse';
+        Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $newConf);
+        Tinebase_EmailUser::clearCaches();
+        Tinebase_EmailUser::destroyInstance();
+
+        $this->testLogin();
     }
 }
