@@ -105,30 +105,23 @@ Class SimpleFAQ_Controller extends Tinebase_Controller_Event implements Tinebase
     /**
      * creates the initial folder for new accounts
      *
-     * @param string|Tinebase_Model_User $_accountId the account object
-     * @return Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
+     * @param mixed $_accountId
+     * @return Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
     public function createPersonalFolder($_accountId)
     {
-        $translation = Tinebase_Translation::getTranslation('SimpleFAQ');
+        $personalContainer = Tinebase_Container::getInstance()->createDefaultContainer(
+            static::$_defaultModel,
+            'SimpleFAQ',
+            $_accountId
+        );
 
-        $account = Tinebase_User::getInstance()->getUserById($_accountId);
-        
-        $newContainer = new Tinebase_Model_Container(array(
-            'name'              => sprintf($translation->_("%s's personal FAQs"), $account->accountFullName),
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'          => $_accountId,
-            'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('SimpleFAQ')->getId(),
-            'model'             => static::$_defaultModel
-        ));
-
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new personal folder for account id ' . $_accountId);
-
-        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
         return new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
     }
-    
+
     /**
      * Returns settings for SimpleFAQ app
      * - result is cached

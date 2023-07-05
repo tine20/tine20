@@ -535,16 +535,17 @@ class Tinebase_EmailUser
 
     /**
      * @param Tinebase_Model_FullUser $user
+     * @param string $type
      * @throws Tinebase_Exception_SystemGeneric
      */
-    public static function checkIfEmailUserExists(Tinebase_Model_FullUser $user)
+    public static function checkIfEmailUserExists(Tinebase_Model_FullUser $user, string $type = Tinebase_Config::SMTP)
     {
-        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        $emailUserBackend = Tinebase_EmailUser::getInstance($type);
         /* @var Tinebase_EmailUser_Smtp_Interface $emailUserBackend */
         if (method_exists($emailUserBackend, 'emailAddressExists') && $emailUserBackend->emailAddressExists($user)) {
-            $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
+            $config = Tinebase_Config::getInstance()->get($type);
             if ($config->allowOverwrite && method_exists($emailUserBackend, 'deleteOldUserDataIfExists')) {
-                // delete existing smtp user
+                // delete existing email user
                 $emailUserBackend->deleteOldUserDataIfExists([
                     'userid' => $user->getId(),
                     'email' => $user->accountEmailAddress,
@@ -553,6 +554,9 @@ class Tinebase_EmailUser
                 $translate = Tinebase_Translation::getTranslation();
                 throw new Tinebase_Exception_SystemGeneric($translate->_('Email account already exists'));
             }
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                . __LINE__ . ' Email backend does not support existence check: ' . get_class($emailUserBackend));
         }
     }
 

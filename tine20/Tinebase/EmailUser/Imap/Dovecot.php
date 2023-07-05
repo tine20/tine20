@@ -307,24 +307,50 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
      */
     protected function _beforeUpdate(&$emailUserData): void
     {
-        if (! isset($this->_config['allowOverwrite']) || ! $this->_config['allowOverwrite']) {
-            $this->_checkExistingUser($emailUserData);
+        $this->_checkEmailUserExists($emailUserData);
+    }
+
+    protected function _checkEmailUserExists($emailUserData): void
+    {
+        $user = new Tinebase_Model_FullUser([
+            'accountEmailAddress' => $emailUserData['loginname'],
+            'accountId' => $emailUserData['userid'],
+        ], true);
+        Tinebase_EmailUser::checkIfEmailUserExists($user, Tinebase_Config::IMAP);
+    }
+
+    public function deleteOldUserDataIfExists($emailUserData): void
+    {
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.' . 'loginname') . " = ?",
+                $emailUserData['email']),
+        );
+
+        if (isset($emailUserData['userid']) && ! empty( $emailUserData['userid'])) {
+            $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.' . 'userid')
+                . " != ?", $emailUserData['userid']);
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($where, TRUE));
+
+        $this->_db->delete($this->_userTable, $where);
     }
 
     /**
-     * @param array $emailUserData
-     * @return void
-     * @throws Tinebase_Exception_SystemGeneric
+     * prevent duplicate loginname
+     *
+     * @param Tinebase_Model_FullUser $user
+     * @return bool
      */
-    protected function _checkExistingUser(array &$emailUserData): void
+    public function emailAddressExists(Tinebase_Model_FullUser $user): bool
     {
-        // prevent duplicate loginname
+        $emailUserData = [
+            'loginname' => $user->accountEmailAddress,
+            'userid' => $user->getId(),
+        ];
         $result = $this->_getExistingUser($emailUserData);
-        if (count($result) > 0) {
-            $translate = Tinebase_Translation::getTranslation();
-            throw new Tinebase_Exception_SystemGeneric($translate->_('Email account already exists'));
-        }
+        return (count($result) > 0);
     }
 
     /**
@@ -336,9 +362,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
      */
     protected function _beforeAdd(&$emailUserData): void
     {
-        if (! isset($this->_config['allowOverwrite']) || ! $this->_config['allowOverwrite']) {
-            $this->_checkExistingUser($emailUserData);
-        }
+        $this->_checkEmailUserExists($emailUserData);
     }
 
     protected function _getExistingUser($emailUserData)
