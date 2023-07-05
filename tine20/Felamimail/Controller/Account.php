@@ -1120,9 +1120,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
         $credentials = null;
         if ($_oldRecord->credentials_id) {
-            $credentials = $credentialsBackend->get($_oldRecord->credentials_id);
-            $credentials->key = Tinebase_Auth_CredentialCache_Adapter_Shared::getKey();
             try {
+                $credentials = $credentialsBackend->get($_oldRecord->credentials_id);
+                $credentials->key = Tinebase_Auth_CredentialCache_Adapter_Shared::getKey();
                 $credentialsBackend->getCachedCredentials($credentials);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
