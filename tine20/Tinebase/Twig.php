@@ -53,7 +53,9 @@ class Tinebase_Twig
             $twigLoader = new Twig\Loader\FilesystemLoader(['./'], dirname(__DIR__));
         }
 
-        if (TINE20_BUILDTYPE === 'DEVELOPMENT' || (isset($_options[self::TWIG_CACHE]) && !$_options[self::TWIG_CACHE])) {
+        if (!defined('TINE20_BUILDTYPE') || TINE20_BUILDTYPE === 'DEVELOPMENT'
+            || (isset($_options[self::TWIG_CACHE]) && !$_options[self::TWIG_CACHE])
+        ) {
             $cacheDir = false;
         } else {
             $cacheDir = rtrim(Tinebase_Core::getCacheDir(), '/') . '/tine20Twig';
