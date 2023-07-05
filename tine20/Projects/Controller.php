@@ -26,7 +26,8 @@ class Projects_Controller extends Tinebase_Controller_Event implements Tinebase_
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'Projects';
     }
     
@@ -66,28 +67,21 @@ class Projects_Controller extends Tinebase_Controller_Event implements Tinebase_
     /**
      * creates the initial folder for new accounts
      *
-     * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
-     * @return Tinebase_Record_RecordSet                            of subtype Tinebase_Model_Container
+     * @param mixed $_account
+     * @return Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
     public function createPersonalFolder($_account)
     {
-        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
-        
-        $account = Tinebase_User::getInstance()->getUserById($_account);
-        
-        $newContainer = new Tinebase_Model_Container(array(
-            'name'              => sprintf($translation->_("%s's personal Projects"), $account->accountFullName),
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'          => $account->getId(),
-            'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
-            'model'             => static::$_defaultModel
-        ));
-        
-        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
-        $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
-        
-        return $container;
+        $personalContainer = Tinebase_Container::getInstance()->createDefaultContainer(
+            static::$_defaultModel,
+            $this->_applicationName,
+            $_account
+        );
+
+        return new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
     }
 
     /**
