@@ -338,7 +338,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     protected function _createSharedEmailUser($_record)
     {
-        $userId = $_record->user_id ? $_record->user_id : Tinebase_Record_Abstract::generateUID();
+        $userId = $_record->user_id ?: Tinebase_Record_Abstract::generateUID();
         if (Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
             Tinebase_EmailUser_XpropsFacade::setXprops($_record, $userId);
         } else {
