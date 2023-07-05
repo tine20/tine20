@@ -232,22 +232,24 @@ class Felamimail_Controller_FolderTest extends \PHPUnit\Framework\TestCase
     public function testRenameFolderWithSubfolder()
     {
         $this->_controller->create($this->_account->getId(), 'test', 'INBOX');
-        $this->_controller->create($this->_account->getId(), 'testsub', 'INBOX' . $this->_account->delimiter . 'test');
+        $this->_controller->create($this->_account->getId(), 'sub01', 'INBOX' . $this->_account->delimiter . 'test');
+        $this->_controller->create($this->_account->getId(), 'sub02', 'INBOX' . $this->_account->delimiter . 'test' . $this->_account->delimiter . 'sub01');
 
         $renamedFolder = $this->_controller->rename($this->_account->getId(), 'test_renamed', 'INBOX' . $this->_account->delimiter . 'test');
 
-        $this->_createdFolders[] = 'INBOX' . $this->_account->delimiter . 'test_renamed' . $this->_account->delimiter . 'testsub';
+        $this->_createdFolders[] = 'INBOX' . $this->_account->delimiter . 'test_renamed' . $this->_account->delimiter . 'sub01' . $this->_account->delimiter . 'sub02';
+        $this->_createdFolders[] = 'INBOX' . $this->_account->delimiter . 'test_renamed' . $this->_account->delimiter . 'sub01';
         $this->_createdFolders[] = 'INBOX' . $this->_account->delimiter . 'test_renamed';
         
         $this->assertEquals('test_renamed', $renamedFolder->localname);
         
         $resultTestSub = $this->_controller->search($this->_getFolderFilter('INBOX' . $this->_account->delimiter . 'test_renamed'));
-        $this->assertGreaterThan(0, count($resultTestSub), 'No subfolders found.');
-        $testFolder = $resultTestSub->filter('localname', 'testsub')->getFirstRecord();
+        $this->assertEquals(1, count($resultTestSub), 'No subfolders found.');
+        $testFolder = $resultTestSub->filter('localname', 'sub01')->getFirstRecord();
         
         $this->assertFalse($testFolder === NULL, 'No renamed folder found.');
         $this->assertTrue(($testFolder->is_selectable == 1));
-        $this->assertEquals('INBOX' . $this->_account->delimiter . 'test_renamed' . $this->_account->delimiter . 'testsub', $testFolder->globalname);
+        $this->assertEquals('INBOX' . $this->_account->delimiter . 'test_renamed' . $this->_account->delimiter . 'sub01', $testFolder->globalname);
     }
 
     /**
