@@ -27,7 +27,9 @@ packaging_build_packages() {
 
     cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
     # create archives
-    ./ci/dockerimage/make.sh -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar" -c "${CACHE_IMAGE}" -c "${MAJOR_CACHE_IMAGE}" packages
+    if ! ./ci/dockerimage/make.sh -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar" -c "${CACHE_IMAGE}" -c "${MAJOR_CACHE_IMAGE}" packages; then
+        return 1
+    fi
 
     # add current.map
     if ! echo "$version" | grep "nightly"; then
