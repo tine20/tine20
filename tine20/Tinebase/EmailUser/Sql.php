@@ -236,8 +236,9 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
         if (!$queryResult) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__. ' ' . $this->_subconfigKey . ' config for user with '
-                . $this->_propertyMapping[$property] . ' = ' . $value . ' not found. '
-                . '(' . $select . ')');
+                . $this->_propertyMapping[$property] . ' = ' . $value . ' not found. ');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__. ' select: ' . $select);
         }
 
         return $queryResult;
