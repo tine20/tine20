@@ -574,7 +574,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
                     . ' Renaming ... ' . $subfolder->globalname . ' -> ' . $newSubfolderGlobalname);
                 
                 $subfolder->globalname = $newSubfolderGlobalname;
-                $subfolder->parent = $_newGlobalName;
+                $subfolder->parent = str_replace($_oldGlobalName, $_newGlobalName, $subfolder->parent);
                 $this->update($subfolder);
             }
         }
