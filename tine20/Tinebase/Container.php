@@ -1675,7 +1675,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * @throws Zend_Db_Select_Exception
      * @throws Zend_Db_Statement_Exception
      */
-    public function getContainerWithGrants(array $_containerIds, $_accountId)
+    public function getContainerWithGrants(array $_containerIds, $_accountId): array
     {
         if (empty($_containerIds)) {
             return [];
@@ -1684,7 +1684,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $accountId = $_accountId instanceof Tinebase_Record_Interface
             ? $_accountId->getId()
             : $_accountId;
-        
+
+        if (empty($accountId)) {
+            return [];
+        }
+
         $select = $this->_getSelect('*', TRUE)
             ->where("{$this->_db->quoteIdentifier('container.id')} IN (?)", $_containerIds)
             ->joinLeft(array(
@@ -1704,7 +1708,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-        $containers = array();
+        $containers = [];
         // add results to container ids and get grants array
         foreach ($rows as $row) {
             // NOTE id is non-ambiguous
