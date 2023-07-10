@@ -22,6 +22,8 @@ class Courses_Config extends Tinebase_Config_Abstract
      */
     const ADDITIONAL_GROUP_MEMBERSHIPS = 'additional_group_memberships';
 
+    const COURSE_DEPARTMENT_MAPPING = 'courseDepartmentMapping';
+
     /**
      * default department
      *
@@ -98,6 +100,8 @@ class Courses_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const TEACHER_PASSWORD = 'teacher_password';
+
+    const TEACHER_GROUPS = 'teacher_groups';
 
     /**
      * (non-PHPdoc)
@@ -185,6 +189,14 @@ class Courses_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => true,
             'setByAdminModule'      => false,
         ),
+        self::TEACHER_GROUPS => [
+            'label'                 => 'Teacher groups on import',
+            'description'           => 'Teacher groups on import',
+            'type'                  => 'array',
+            'clientRegistryInclude' => false,
+            'setBySetupModule'      => true,
+            'setByAdminModule'      => true,
+        ],
         self::STUDENTS_USERNAME_SCHEMA => array(
         //_('Student username schema')
             'label'                 => 'Student username schema',
@@ -215,6 +227,14 @@ class Courses_Config extends Tinebase_Config_Abstract
             'default'               => '',
             'clientRegistryInclude' => TRUE,
         ),
+        self::COURSE_DEPARTMENT_MAPPING => [
+            //_('Course -> Department Mapping')
+            self::LABEL                 => 'Course -> Department Mapping',
+            //_('Course -> Department Mapping')
+            self::DESCRIPTION           => 'Course -> Department Mapping',
+            self::TYPE                  => self::TYPE_ARRAY,
+            self::DEFAULT_STR           => [],
+        ],
     );
     
     /**

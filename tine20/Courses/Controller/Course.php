@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -18,6 +18,8 @@
  */
 class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
 {
+    use Tinebase_Controller_SingletonTrait;
+
     /**
      * application name (is needed in checkRight())
      *
@@ -75,34 +77,13 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct()
+    protected function __construct()
     {
         $this->_backend = new Courses_Backend_Course();
         $this->_config = Courses_Config::getInstance();
         $this->_groupController = Admin_Controller_Group::getInstance();
         $this->_userController = Admin_Controller_User::getInstance();
     }
-    
-    /**
-     * holds the instance of the singleton
-     *
-     * @var Courses_Controller_Course
-     */
-    private static $_instance = NULL;
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Courses_Controller_Course
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Courses_Controller_Course();
-        }
-        
-        return self::$_instance;
-    }        
 
     /****************************** overwritten functions ************************/    
     
@@ -177,7 +158,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     * @todo should be moved to inspectAfter*
     * @todo allow fileserver group management, too
     */
-    protected function _manageAccessGroups(array $members, Courses_Model_Course $course, $accessType = 'internet')
+    public function _manageAccessGroups(array $members, Courses_Model_Course $course, $accessType = 'internet')
     {
         $configField = $accessType . '_group';
         $secondConfigField = $configField;
@@ -321,10 +302,10 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     * @param   Tinebase_Record_Interface $_createdRecord
     * @param   Tinebase_Record_Interface $_record
     * @return  void
-    */
+    *
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-        $teacherAccount = $this->_addNewTeacherAccount($_createdRecord);
+        /*$teacherAccount = $this->_addNewTeacherAccount($_createdRecord);
         
         // add to teacher group if available
         if (isset($this->_config->teacher_group) && !empty($this->_config->teacher_group)) {
@@ -335,14 +316,14 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         if (isset($this->_config->students_group) && !empty($this->_config->students_group)) {
             $this->_groupController->addGroupMember($this->_config->students_group, $teacherAccount->getId());
         }
-    }
+    }*/
     
     /**
      * add new teacher account to course
      * 
      * @param Courses_Model_Course $course
      * @return Tinebase_Model_FullUser
-     */
+     *
     protected function _addNewTeacherAccount($course)
     {
         $i18n = Tinebase_Translation::getTranslation('Courses');
@@ -386,7 +367,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $this->_createDefaultFilterForTeacher($account, $course);
         
         return $account;
-    }
+    }*/
     
     /**
      * create new teacher login name from course name
@@ -394,7 +375,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
      * @param Courses_Model_Course $course
      * @param Zend_Translate $i18n
      * @return string
-     */
+     *
     protected function _getTeacherLoginName($course, $i18n = NULL)
     {
         if ($i18n === NULL) {
@@ -407,14 +388,14 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             $loginname = substr($loginname, 0, $maxLoginNameLength);
         }
         return strtolower($loginname);
-    }
+    }*/
     
     /**
      * create default favorite for teacher
      * 
      * @param Tinebase_Model_FullUser $account
      * @param Courses_Model_Course $course
-     */
+     *
     protected function _createDefaultFilterForTeacher($account, $course)
     {
         $pfe = Tinebase_PersistentFilter::getInstance();
@@ -444,7 +425,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         // set as default
         $pref = new Courses_Preference();
         $pref->setValueForUser(Courses_Preference::DEFAULTPERSISTENTFILTER, $filter->getId(), $account->getId(), TRUE);
-    }
+    }*/
     
     /**
      * Deletes a set of records.
@@ -540,7 +521,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         }
     }
 
-    protected function _addToCourseGroup(array $members, Courses_Model_Course $course)
+    public function _addToCourseGroup(array $members, Courses_Model_Course $course)
     {
         foreach ($members as $memberId) {
             $this->_groupController->addGroupMember($course->group_id, $memberId);
@@ -552,7 +533,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
      * 
      * @param array $userIds
      */
-    protected function _addToStudentGroup($userIds)
+    public function _addToStudentGroup($userIds)
     {
         if (isset($this->_config->students_group) && !empty($this->_config->students_group)) {
             
@@ -604,6 +585,13 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $this->_manageAccessGroups($memberIds, $course);
         $this->_addToStudentGroup($memberIds);
 
+        $this->createCoursePwdAttachement($createdAccounts, $createdPwds, $course);
+
+        return $result;
+    }
+
+    public function createCoursePwdAttachement(array $createdAccounts, array $createdPwds, Courses_Model_Course $course)
+    {
         // feed data into export and store it as course attachment
         $export = new Courses_Export_PwdPrintableDoc(new Tinebase_Record_RecordSet(Tinebase_Model_FullUser::class,
             $createdAccounts), $createdPwds);
@@ -625,7 +613,6 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         copy($tmpFile, 'tine20://' . $attachmentPath);
 
         unset($tmpFileRAII);
-        return $result;
     }
     
     /**
@@ -634,7 +621,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
      * @param Courses_Model_Course $course
      * @return array
      */
-    protected function _getNewUserConfig(Courses_Model_Course $course)
+    public function _getNewUserConfig(Courses_Model_Course $course)
     {
         $schoolName = strtolower(Tinebase_Department::getInstance()->get($course->type)->name);
         
@@ -645,7 +632,9 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             'accountHomeDirectoryPrefix'    => (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $course->name . '/' : '',
             'userNameSchema'                => $this->_config->get(Courses_Config::STUDENTS_USERNAME_SCHEMA, 1),
             'passwordGenerator'             => function(Tinebase_Model_FullUser $user) {
-                return Tinebase_User_PasswordPolicy::generatePolicyConformPassword();
+                $pwd = Tinebase_User_PasswordPolicy::generatePolicyConformPassword();
+                $user->xprops()['autoGenPwd'] = $pwd;
+                return $pwd;
             },
             'course'                        => $course,
             'accountLoginShell'             => '/bin/false',
