@@ -129,7 +129,13 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         if ($deadLetter) {
             $data = $this->_redis->dump($this->_dataStructName . ":" . $jobId);
             if (false !== $data) {
-                $this->_redis->restore($this->_deadLetterStructName . ":" . $jobId, 0, $data, ['REPLACE']);
+                try {
+                    $this->_redis->restore($this->_deadLetterStructName . ":" . $jobId, 0, $data);
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' Put job into deadletter queue:' . $jobId);
+                } catch (RedisException $re) {
+                    // already exists
+                }
             }
         }
         // remove from redis
