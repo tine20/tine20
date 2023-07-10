@@ -40,9 +40,10 @@ abstract class Tinebase_Group_Abstract
      * get list of groupmembers
      *
      * @param int $_groupId
+     * @param boolean $_fromCache
      * @return array
      */
-    abstract public function getGroupMembers($_groupId);
+    abstract public function getGroupMembers($_groupId, $_fromCache = true);
     
     /**
      * replace all current groupmembers with the new groupmembers list

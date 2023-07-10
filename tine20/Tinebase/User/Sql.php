@@ -302,6 +302,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 if (!empty($syncUser->sambaSAM)) {
                     $user->sambaSAM  = $syncUser->sambaSAM;
                 }
+                if (isset($syncUser->xprops()['uidnumber'])) {
+                    $user->xprops()['uidnumber'] = $syncUser->xprops()['uidnumber'];
+                }
             } catch (Tinebase_Exception_NotFound $tenf) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
                     __METHOD__ . '::' . __LINE__ . ' user not found in sync backend: ' . $user->getId());

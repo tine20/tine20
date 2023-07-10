@@ -338,7 +338,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     /**
      * gets identifier of record
      * 
-     * @return string identifier
+     * @return ?string identifier
      */
     public function getId()
     {
