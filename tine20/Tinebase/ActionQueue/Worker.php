@@ -162,7 +162,8 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
             try {
                 $job = $this->_actionQueue->receive($jobId);
             } catch (RuntimeException $re) {
-                $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . " failed to receive message: " . $re->getMessage());
+                $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . " Failed to receive job " . $jobId
+                    . " / message: " . $re->getMessage());
                 
                 // we are unable to process the job
                 // probably the retry count is exceeded
