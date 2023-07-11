@@ -483,7 +483,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     Tinebase_TempFile::getInstance()->clearTableAndTempdir($dateString);
                     break;
                 case 'timemachine_modlog':
-                    Tinebase_Tinemachine_ModificationLog::getInstance()->clear_table($date);
+                    Tinebase_Timemachine_ModificationLog::getInstance()->clearTable($date);
                     break;
                 default:
                     echo 'Table ' . $table . " not supported or argument missing.\n";
