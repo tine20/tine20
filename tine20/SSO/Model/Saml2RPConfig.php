@@ -123,15 +123,9 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract implements SSO_RP
 
     public function getSaml2Array(): array
     {
-        return [
-            'AssertionConsumerService' => [
-                'Location' => $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION},
-                'Binding' => $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_BINDING},
-            ],
-            'SingleLogoutService' => [
-                'Location' => $this->{self::FLD_SINGLE_LOGOUT_SERVICE_LOCATION},
-                'Binding' => $this->{self::FLD_SINGLE_LOGOUT_SERVICE_BINDING},
-            ],
+        $result = [
+            'AssertionConsumerService' => [],
+            'SingleLogoutService' => [],
             'IDPList' => [ /* add us, aka IDP */],
             'entityid' => $this->{self::FLD_ENTITYID},
             'attributeencodings' => [
@@ -141,6 +135,22 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract implements SSO_RP
             self::FLD_ATTRIBUTE_MAPPING => $this->{self::FLD_ATTRIBUTE_MAPPING},
             self::FLD_CUSTOM_HOOKS => $this->{self::FLD_CUSTOM_HOOKS},
         ];
+
+        if (!empty($this->{self::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION})) {
+            $result['AssertionConsumerService']['Location'] = $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION};
+        }
+        if (!empty($this->{self::FLD_ASSERTION_CONSUMER_SERVICE_BINDING})) {
+            $result['AssertionConsumerService']['Binding'] = $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_BINDING};
+        }
+
+        if (!empty($this->{self::FLD_SINGLE_LOGOUT_SERVICE_LOCATION})) {
+            $result['SingleLogoutService']['Location'] = $this->{self::FLD_SINGLE_LOGOUT_SERVICE_LOCATION};
+        }
+        if (!empty($this->{self::FLD_SINGLE_LOGOUT_SERVICE_BINDING})) {
+            $result['SingleLogoutService']['Binding'] = $this->{self::FLD_SINGLE_LOGOUT_SERVICE_BINDING};
+        }
+
+        return $result;
     }
 
     public function beforeCreateUpdateHook(): void
