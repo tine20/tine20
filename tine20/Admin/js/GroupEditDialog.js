@@ -8,6 +8,8 @@
 
 /*global Ext, Tine, Locale*/
 
+import XPropsPanel from "widgets/dialog/XPropsPanel";
+
 Ext.ns('Tine.Admin.Groups');
 
 /**
@@ -147,6 +149,10 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 editDialog: this
             });
             tabpanelItems.push(mailingListPanel);
+        }
+
+        if (this.app.featureEnabled('xpropsEditor')) {
+            tabpanelItems.push(new XPropsPanel({}));
         }
 
         return {

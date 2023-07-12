@@ -13,6 +13,7 @@
 import getTwingEnv from "twingEnv";
 // #endif
 import FieldInfoPlugin from "ux/form/FieldInfoPlugin";
+import XPropsPanel from "widgets/dialog/XPropsPanel";
 
 Ext.ns('Tine.Admin.user');
 
@@ -1154,7 +1155,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     columnWidth: 0.5
                 },
                 items: this.initSmtp()
-            }]
+            }].concat(this.app.featureEnabled('xpropsEditor') ? [new XPropsPanel({})] : [])
         };
         return config;
     },
