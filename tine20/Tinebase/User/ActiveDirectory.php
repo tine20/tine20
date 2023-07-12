@@ -465,7 +465,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         }
 
         $accountArray['accountStatus'] = (isset($_userData['useraccountcontrol']) && ($_userData['useraccountcontrol'][0] & self::ACCOUNTDISABLE)) ? 'disabled' : 'enabled';
-        if ($accountArray['accountExpires'] instanceof Tinebase_DateTime && Tinebase_DateTime::now()->compare($accountArray['accountExpires']) == -1) {
+        if ($accountArray['accountExpires'] instanceof Tinebase_DateTime && Tinebase_DateTime::now()->compare($accountArray['accountExpires']) === 1) {
             $accountArray['accountStatus'] = Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED;
         }
         
@@ -476,7 +476,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             $accountArray['accountExpires'] = clone $accountArray['accountLastPasswordChange'];
             $accountArray['accountExpires']->addSecond($maxPasswordAge);
             
-            if (Tinebase_DateTime::now()->compare($accountArray['accountExpires']) == -1) {
+            if (Tinebase_DateTime::now()->compare($accountArray['accountExpires']) === 1) {
                 $accountArray['accountStatus'] = 'disabled';
             }
         }*/
