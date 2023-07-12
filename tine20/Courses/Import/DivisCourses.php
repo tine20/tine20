@@ -710,8 +710,11 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                 if (!isset($m[0])) {
                     $m[0] = 'last imported revision: 0';
                 }
-                $this->note->note = $m[0] . PHP_EOL . join(PHP_EOL, $this->resultMsg);
+                $this->note->note = 'old: ' . $this->note->note;
                 Tinebase_Notes::getInstance()->update($this->note);
+                $this->note->note = $m[0] . PHP_EOL . join(PHP_EOL, $this->resultMsg);
+                $this->note->setId(null);
+                Tinebase_Notes::getInstance()->addNote($this->note);
             }
             return [];
         }
@@ -737,10 +740,14 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
         $this->_processStudents();
 
         $resultMsg = 'import succeeded' . PHP_EOL . join(PHP_EOL, $this->resultMsg);
+        $this->note->note = 'old: ' . $this->note->note;
+        Tinebase_Notes::getInstance()->update($this->note);
+
         $this->note->note = 'last imported revision: ' . $this->fileNode->revision . PHP_EOL .
             (Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getInstanceTimeZone())->toString()) . PHP_EOL .
             mb_substr($resultMsg, 0, 16000);
-        Tinebase_Notes::getInstance()->update($this->note);
+        $this->note->setId(null);
+        Tinebase_Notes::getInstance()->addNote($this->note);
         if (mb_strlen($resultMsg) > 16000) {
             do {
                 $resultMsg = mb_substr($resultMsg, 16000);
