@@ -169,6 +169,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
         } elseif (preg_match('/^last imported revision: (\d+)$/m', $this->note->note, $m) && (int)$m[1] === (int)$this->fileNode->revision) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' no new file revision found, nothing to import.');
+            $this->note = null;
             return false;
         }
         return true;
