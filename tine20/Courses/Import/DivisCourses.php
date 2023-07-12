@@ -107,7 +107,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
 
         $cfg['accountHomeDirectoryPrefix'] = '/storage/lehrer/';
 
-        $cfg['samba']['profilePath'] = $this->_config->samba->baseprofilepath;
+        $cfg['samba']['profilePath'] = Courses_Config::getInstance()->samba->baseprofilepath;
         $cfg['samba']['logon'] = 'lehrer.cmd';
 
         return $cfg;
