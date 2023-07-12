@@ -81,11 +81,9 @@ CSV
         $this->assertSame($node->revision, $updatedNode->revision);
 
         $notes = Tinebase_Notes::getInstance()->getNotesOfRecord(Tinebase_Model_Tree_Node::class, $node->getId());
-        $this->assertSame(1, $notes->count());
-        /** @var Tinebase_Model_Note $note */
-        $note = $notes->getFirstRecord();
-        $this->assertSame(1, preg_match('/^last imported revision: (\d+)$/m', $note->note, $m), $note->note);
-        $this->assertSame((int)$node->revision, (int)$m[1]);
+        $this->assertSame(2, $notes->count());
+        $note = $notes->find(fn(Tinebase_Model_Note $note) => strpos($note->note, 'last imported revision: ' . $node->revision) === 0, null);
+        $this->assertNotNull($note, print_r($notes->toArray(), true));
         $this->assertStringContainsString(
             'import succeeded' . PHP_EOL .
             'created course: sc11' . PHP_EOL .
@@ -155,11 +153,13 @@ CSV
         $this->assertSame($node->revision, $updatedNode->revision);
 
         $notes = Tinebase_Notes::getInstance()->getNotesOfRecord(Tinebase_Model_Tree_Node::class, $node->getId());
-        $this->assertSame(1, $notes->count());
+        $this->assertSame(3, $notes->count());
+        $note = $notes->find(fn(Tinebase_Model_Note $note) => strpos($note->note, 'old: last imported revision: ' . ($node->revision - 1)) === 0, null);
+        $this->assertNotNull($note, print_r($notes->toArray(), true));
         /** @var Tinebase_Model_Note $note */
-        $note = $notes->getFirstRecord();
-        $this->assertSame(1, preg_match('/^last imported revision: (\d+)$/m', $note->note, $m), $note->note);
-        $this->assertSame((int)$node->revision, (int)$m[1]);
+        $note = $notes->find(fn(Tinebase_Model_Note $note) => strpos($note->note, 'last imported revision: ' . $node->revision) === 0, null);
+        $this->assertNotNull($note, print_r($notes->toArray(), true));
+
         $this->assertStringContainsString(
             'import succeeded' . PHP_EOL .
             'no new courses to create' . PHP_EOL .
@@ -199,11 +199,10 @@ CSV
         $this->assertSame($node->revision, $updatedNode->revision);
 
         $notes = Tinebase_Notes::getInstance()->getNotesOfRecord(Tinebase_Model_Tree_Node::class, $node->getId());
-        $this->assertSame(1, $notes->count());
+        $this->assertSame(4, $notes->count());
         /** @var Tinebase_Model_Note $note */
-        $note = $notes->getFirstRecord();
-        $this->assertSame(1, preg_match('/^last imported revision: (\d+)$/m', $note->note, $m), $note->note);
-        $this->assertSame($node->revision, $m[1]);
+        $note = $notes->find(fn(Tinebase_Model_Note $note) => strpos($note->note, 'last imported revision: ' . $node->revision) === 0, null);
+        $this->assertNotNull($note, print_r($notes->toArray(), true));
         $this->assertStringContainsString(
             'import succeeded' . PHP_EOL .
             'no new courses to create' . PHP_EOL .
