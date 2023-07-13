@@ -436,6 +436,6 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $anybody->{Tinebase_Model_Grants::GRANT_ADMIN} = false;
         }
 
-        return Tinebase_Container::getInstance()->addContainer($container, $grants, true);
+        return Tinebase_Container::getInstance()->addContainer($container, $grants, true, true);
     }
 }
