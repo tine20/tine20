@@ -578,10 +578,10 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
 
                 $sambaCfg = Courses_Controller_Course::getInstance()->_getNewUserConfig($course)['samba'];
                 $sambaSAM = $account->sambaSAM;
-                $sambaSAM['homePath'] = stripslashes($sambaCfg['homePath'] ?: '');
-                $sambaSAM['homeDrive'] = stripslashes($sambaCfg['homeDrive'] ?: '');
+                $sambaSAM['homePath'] = $sambaCfg['homePath'] ?: '';
+                $sambaSAM['homeDrive'] = $sambaCfg['homeDrive'] ?: '';
                 $sambaSAM['logonScript'] = $sambaCfg['logonScript'] ?: '';
-                $sambaSAM['profilePath'] = stripslashes($sambaCfg['profilePath'] ?: '');
+                $sambaSAM['profilePath'] = $sambaCfg['profilePath'] ?: '';
                 $account->sambaSAM = $sambaSAM;
 
                 $msg = 'add student: ' . $account->accountLoginName . ' to course: ' . $course->name;
@@ -601,14 +601,14 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
 
                 $account->accountFirstName = $raw[2];
                 $account->accountLastName = $raw[1];
-                unset($account->accountDisplayName);
-                unset($account->accountFullName);
-                unset($account->accountLoginName);
-                unset($account->accountEmailAddress);
                 $applyTwig = true;
             }
 
             if ($applyTwig) {
+                unset($account->accountDisplayName);
+                unset($account->accountFullName);
+                unset($account->accountLoginName);
+                unset($account->accountEmailAddress);
                 // we did set the course context further up the loop, make sure not to break that
                 $account->applyTwigTemplates();
                 $updateAccount = true;
