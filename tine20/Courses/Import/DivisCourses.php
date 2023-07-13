@@ -558,6 +558,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
             }
 
             $groupMemberships = $this->groupCtrl->getGroupMemberships($account->getId());
+            $cfg = null;
             if (!in_array($course->group_id, $groupMemberships, true)) {
                 foreach ($groupMemberships as $gid) {
                     if (isset($this->coursesGroupId[$gid])) {
@@ -576,7 +577,8 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                 Courses_Controller_Course::getInstance()->_manageAccessGroups($memberIds, $course);
                 Courses_Controller_Course::getInstance()->_addToStudentGroup($memberIds);
 
-                $sambaCfg = Courses_Controller_Course::getInstance()->_getNewUserConfig($course)['samba'];
+                $cfg = Courses_Controller_Course::getInstance()->_getNewUserConfig($course);
+                $sambaCfg = $cfg['samba'];
                 $sambaSAM = $account->sambaSAM;
                 $sambaSAM['homePath'] = $sambaCfg['homePath'] ?: '';
                 $sambaSAM['homeDrive'] = $sambaCfg['homeDrive'] ?: '';
@@ -621,6 +623,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
             }
 
             if ($updateAccount) {
+
                 $count = 1;
                 $shortUsername = $account->shortenUsername(2);
                 while ($count < 100) {
@@ -653,6 +656,10 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         break;
                     }
+                }
+
+                if ($cfg) {
+                    $account->accountHomeDirectory = $cfg['accountHomeDirectoryPrefix'] . $account->accountLoginName;
                 }
 
                 $this->userCtrl->updateUser($account);
