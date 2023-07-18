@@ -2358,33 +2358,64 @@ Steuernummer 33/111/32212";
         ));
 
         // add one member / role
-        $contact = $this->_addContact();
-        $listRole = $this->_uit->saveListRole(array(
+        $contact1 = $this->_addContact();
+        $listRole1 = $this->_uit->saveListRole(array(
             'name' => 'my test name',
             'description' => 'my test description'
         ));
-        $list['members'][] = $contact['id'];
+        $list['members'][] = $contact1['id'];
         $list['memberroles'][] = array(
-            'contact_id' => $contact['id'],
-            'list_role_id' => $listRole['id'],
+            'contact_id' => $contact1['id'],
+            'list_role_id' => $listRole1['id'],
         );
 
         $list = $this->_uit->saveList($list);
 
         // add second member / role
-        $contact = $this->_addContact();
-        $listRole = $this->_uit->saveListRole(array(
+        $contact2 = $this->_addContact();
+        $listRole2 = $this->_uit->saveListRole(array(
             'name' => 'my test name 2',
             'description' => 'my test description 2'
         ));
-        $list['members'][] = $contact['id'];
+        $list['members'][] = $contact2['id'];
         $list['memberroles'][] = array(
-            'contact_id' => $contact['id'],
-            'list_role_id' => $listRole['id'],
+            'contact_id' => $contact2['id'],
+            'list_role_id' => $listRole2['id'],
         );
 
         $list = $this->_uit->saveList($list);
         self::assertCount(2, $list['memberroles']);
+
+        $result = $this->_uit->searchContacts([
+            ['field' => 'id', 'operator' => 'equals', 'value' => $contact1['id']],
+            ['field' => 'list_role_id', 'operator' => 'notDefinedBy', 'value' => [
+                ['field' => 'id', 'operator' => 'in', 'value' => [
+                    $listRole1,
+                ]]
+            ]],
+        ], []);
+
+        $this->assertSame(0, $result['totalcount']);
+
+        $result = $this->_uit->searchContacts([
+            ['field' => 'id', 'operator' => 'equals', 'value' => $contact1['id']],
+            ['field' => 'list_role_id', 'operator' => 'notDefinedBy', 'value' => [
+                ['field' => 'id', 'operator' => 'in', 'value' => [
+                    $listRole2,
+                ]]
+            ]],
+        ], []);
+
+        $this->assertSame(1, $result['totalcount']);
+        $this->assertSame($contact1['id'], $result['results'][0]['id']);
+
+        $result = $this->_uit->searchContacts([
+            ['field' => 'id', 'operator' => 'equals', 'value' => $contact1['id']],
+            ['field' => 'list_role_id', 'operator' => 'notDefinedBy', 'value' => []],
+        ], []);
+
+        $this->assertSame(1, $result['totalcount']);
+        $this->assertSame($contact1['id'], $result['results'][0]['id']);
 
         // empty member / role
         $list['members'] = [];
@@ -2399,7 +2430,6 @@ Steuernummer 33/111/32212";
         ), '');
 
         static::assertEquals(4, $notes['totalcount']);
-        $translate = Tinebase_Translation::getTranslation('Tinebase');
         foreach (array(
                      array('members ( 0: ali PHPUNIT 1: ali PHPUNIT -> )'),
                      array('members ( 0: ali PHPUNIT ->  0: ali PHPUNIT 1: ali PHPUNIT)'),
