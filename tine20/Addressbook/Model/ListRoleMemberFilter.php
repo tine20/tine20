@@ -43,12 +43,33 @@ class Addressbook_Model_ListRoleMemberFilter extends Tinebase_Model_Filter_Forei
     {
         $correlationName = $this->_options['tablename'];
         $db = $_backend->getAdapter();
-        $_select->joinLeft(
-            /* table  */ [$correlationName => $_backend->getTablePrefix() . 'adb_list_m_role'],
-            /* on     */ $db->quoteIdentifier($correlationName . '.contact_id') . ' = ' . $db->quoteIdentifier('addressbook.id'),
-            /* select */ []
-        );
 
-        parent::appendFilterSql($_select, $_backend);
+        if (strpos($this->_operator, 'not') === 0) {
+            if ($this->_valueIsNull) {
+                $_select->where($this->_getQuotedFieldName($_backend) . ' IS NOT NULL');
+            } else {
+                if (! is_array($this->_foreignIds) && null !== $this->_filterGroup) {
+                    $this->_foreignIds = $this->_getController()->search($this->_filterGroup, null, false, true);
+                }
+                if (empty($this->_foreignIds)) {
+                    return;
+                }
+                $_select->where($this->_getQuotedFieldName($_backend) . ' IS NULL');
+            }
+            $_select->joinLeft(
+                /* table  */ [$correlationName => $_backend->getTablePrefix() . 'adb_list_m_role'],
+                /* on     */ $db->quoteIdentifier($correlationName . '.contact_id') . ' = ' . $db->quoteIdentifier('addressbook.id')
+                    . ($this->_valueIsNull ? '' : ' AND ' . $this->_getQuotedFieldName($_backend) . $db->quoteInto(' IN (?)', $this->_foreignIds)),
+                /* select */ ['id']
+            );
+        } else {
+            $_select->joinLeft(
+                /* table  */ [$correlationName => $_backend->getTablePrefix() . 'adb_list_m_role'],
+                /* on     */ $db->quoteIdentifier($correlationName . '.contact_id') . ' = ' . $db->quoteIdentifier('addressbook.id'),
+                /* select */ []
+            );
+
+            parent::appendFilterSql($_select, $_backend);
+        }
     }
 }
