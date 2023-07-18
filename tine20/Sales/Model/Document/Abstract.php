@@ -550,6 +550,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             self::FLD_COST_BEARER_ID,
             self::FLD_COST_CENTER_ID,
             self::FLD_DESCRIPTION,
+            Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID,
+            Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID,
         ];
 
         $thisCFs = Tinebase_CustomField::getInstance()->searchConfig(new Tinebase_Model_CustomField_ConfigFilter([
