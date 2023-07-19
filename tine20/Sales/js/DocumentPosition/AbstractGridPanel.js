@@ -52,6 +52,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
         this.on('beforeedit', this.onBeforeEditPosition, this);
         this.on('afteredit', this.onAfterEditPosition, this);
+        this.on('update', this.onUpdatePosition, this);
         this.on('beforeaddrecord', this.onNewProduct, this);
         this.on('beforeremoverecord', this.onBeforeRemovePosition, this);
 
@@ -77,7 +78,9 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             let productData = position.get('title');
             const lang = this.editDialog.getForm().findField('document_language').getValue();
 
-            position.setFromProduct(productData, lang);
+            if (! _.isString(productData)) { // manual position
+                position.setFromProduct(productData, lang, this.editDialog.record);
+            }
             position.setId(Tine.Tinebase.data.Record.generateUID());
             if (!position.get('grouping')) {
                 position.set('grouping', this.quickaddRecord.get('grouping'));
@@ -212,7 +215,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
         if (e.record.isProductType() && ['title', 'description'].indexOf(e.field) < 0
             // @FIXME product SET detection
-            && !e.record.get('gross_price') && this.store.find('pos_number', new RegExp(e.record.get('pos_number') + '\..+')) >= 0) {
+            && !e.record.get('gross_price') && this.store.find('pos_number', new RegExp(e.record.get('pos_number') + '\\..+')) >= 0) {
             e.cancel = true;
         }
 
@@ -227,12 +230,18 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         }
     },
 
+    // inline edit
     onAfterEditPosition(e) {
         this.colModel.columns.find(c => c.dataIndex === 'position_discount_sum').editor.field.checkState(null, e.record)
 
         e.record.computePrice();
         // @TODO compute document total / fire some event?
         this.fireEvent('change', this)
+    },
+
+    // editDialog
+    onUpdatePosition(grid, position) {
+        this.onAfterEditPosition({record: position});
     },
 
     onBeforeRemovePosition(pos) {
