@@ -701,6 +701,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         if (idx >= 0) {
             this.getStore().insert(idx, [updatedRecord]);
         } else {
+            if (this.fireEvent('beforeaddrecord', updatedRecord, this) === false) return;
             this.getStore().add(updatedRecord);
         }
 

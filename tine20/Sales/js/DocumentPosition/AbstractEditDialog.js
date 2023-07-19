@@ -62,3 +62,15 @@ Tine.Sales.AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 Tine.Sales.DocumentPosition_OfferEditDialog = Ext.extend(Tine.Sales.AbstractEditDialog, {
 
 });
+
+Tine.Sales.DocumentPosition_OrderEditDialog = Ext.extend(Tine.Sales.AbstractEditDialog, {
+
+});
+
+Tine.Sales.DocumentPosition_InvoiceEditDialog = Ext.extend(Tine.Sales.AbstractEditDialog, {
+
+});
+
+Tine.Sales.DocumentPosition_DeliveryEditDialog = Ext.extend(Tine.Sales.AbstractEditDialog, {
+
+});
