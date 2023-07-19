@@ -51,16 +51,17 @@ packaging_push_packages_to_gitlab() {
 
     customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
 
-    curl \
+    curl -S -s \
         --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
         --upload-file "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar" \
         "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+
     echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
 
     cd "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/${release}/"
 
     for f in *; do
-        curl \
+        curl -S -s \
         --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
         --upload-file "$f" \
         "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/$f"
@@ -71,7 +72,7 @@ packaging_gitlab_set_ci_id_link() {
     version=$1
     customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
 
-    if ! curl \
+    if ! curl -S -s \
         --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
         -XPUT --data "${version}" \
         "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/${CI_PIPELINE_ID}"
