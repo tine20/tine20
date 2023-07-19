@@ -680,6 +680,27 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         
         Tinebase_Core::getCache()->clean($_mode);
 
+        $cacheDir = rtrim(Tinebase_Core::getCacheDir(), '/') . '/tine20Twig/';
+        if (is_dir($cacheDir)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' cleaning twig cache in ' . $cacheDir . ' ...');
+
+            $time = time() - (7 * 24 * 3600); // older than one week
+            $startTime = time();
+            /** @var DirectoryIterator $di */
+            foreach (new DirectoryIterator($cacheDir) as $di) {
+                if (strpos($di->getFilename(), '.') === false && $di->isDir()) {
+                    /** @var DirectoryIterator $fileIterator */
+                    foreach (new DirectoryIterator($cacheDir . $di->getFilename()) as $fileIterator) {
+                        if ($fileIterator->isFile() && $fileIterator->getCTime() < $time) {
+                            unlink($fileIterator->getPathname());
+                        }
+                    }
+                    if (time() - $startTime > 3600) break; // we do this for one hour max
+                }
+            }
+        }
+
         return true;
     }
     
