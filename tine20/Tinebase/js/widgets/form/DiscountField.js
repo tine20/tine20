@@ -95,8 +95,9 @@ Tine.widgets.form.DiscountField = Ext.extend(Ext.ux.form.MoneyField, {
     computeValues(record, form, config) {
         const price = (record.get(config.price_field) || 0);
         const type = record.get(config.type_field) || 'SUM';
-        const sum = type === 'SUM' ? Math.min(price, (record.get(config.sum_field) || 0)) : (config.singleField ? (record.get(config.sum_field) || 0) : (record.get(config.percentage_field) || 0)) / 100 * price;
-        const percentage = type === 'PERCENTAGE' ? (config.singleField ? (record.get(config.sum_field) || 0) : (record.get(config.percentage_field) || 0)) : ((Math.min(price, (record.get(config.sum_field) || 0)) / price) || 0) * 100;
+        // @TODO: make sure sum isn't less than price? but what about reversals?
+        const sum = type === 'SUM' ? (record.get(config.sum_field) || 0) : (config.singleField ? (record.get(config.sum_field) || 0) : (record.get(config.percentage_field) || 0)) / 100 * price;
+        const percentage = type === 'PERCENTAGE' ? (config.singleField ? (record.get(config.sum_field) || 0) : (record.get(config.percentage_field) || 0)) : (((record.get(config.sum_field) || 0) / price) || 0) * 100;
         const net = price - sum;
 
         ['price', 'type', 'sum', 'percentage', 'net'].forEach((fld) => {
