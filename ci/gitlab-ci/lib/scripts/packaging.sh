@@ -66,6 +66,10 @@ packaging_push_packages_to_gitlab() {
         --upload-file "$f" \
         "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/$f"
     done
+
+    echo ""
+    echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+    echo ""
 }
 
 packaging_gitlab_set_ci_id_link() {
