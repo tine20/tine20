@@ -608,7 +608,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $i = 0;
         while ($fs->fileExists($attachmentPath)) {
             $parts = pathinfo($export->getDownloadFilename());
-            $attachmentPath = $attachmentsDir . '/' . $parts['filename'] . '(' . (++$i) . ' )' . $parts['extension'];
+            $attachmentPath = $attachmentsDir . '/' . $parts['filename'] . '(' . (++$i) . ').' . $parts['extension'];
         }
         copy($tmpFile, 'tine20://' . $attachmentPath);
 
