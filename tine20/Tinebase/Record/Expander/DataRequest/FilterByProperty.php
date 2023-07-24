@@ -47,13 +47,13 @@ class Tinebase_Record_Expander_DataRequest_FilterByProperty extends Tinebase_Rec
     public function getKey(): string
     {
         if (null === $this->additionalFilters && null === $this->paging) {
-            return parent::getKey();
+            return parent::getKey() . $this->property;
         }
         return Tinebase_Helper::arrayHash(array_merge(
             $this->additionalFilters ?: [],
             $this->paging ? $this->paging->toArray() : [],
             $this->filterOptions ?: [],
-            [parent::getKey()]
+            [parent::getKey(), $this->property]
         ));
     }
 
@@ -66,7 +66,7 @@ class Tinebase_Record_Expander_DataRequest_FilterByProperty extends Tinebase_Rec
 
         // get instances from datacache
         $model = $this->controller->getModel();
-        $cacheKey = 'filterbyproperty' . $model;
+        $cacheKey = 'filterbyproperty' . $this->property . $model;
         $data = static::_getInstancesFromCache($model, $cacheKey, $this->ids, $this->_getDeleted);
 
         if (!empty($this->ids)) {
