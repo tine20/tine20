@@ -55,6 +55,9 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
             boilerplate.set('boilerplate', field.getValue());
         });
         record.set('boilerplates', Tine.Tinebase.common.assertComparable(_.map(this.store.data.items, 'data')));
+
+        // e.g. on lang change
+        await this.loadBoilerplatesIf(editDialog, record);
     },
 
     onBoilerplatesLoad(editDialog) {
