@@ -289,6 +289,8 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
         this.productPicker = this.productPicker || Ext.ComponentMgr.create(fieldMgr('product_id', {
             blurOnSelect: true,
+            minListWidth: 500,
+            resizable: true
         }))
         return this.productPicker
     },
