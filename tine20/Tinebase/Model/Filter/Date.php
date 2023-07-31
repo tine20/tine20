@@ -69,6 +69,8 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      * @var string
      */
     protected $_dateFormat = 'Y-m-d';
+
+    protected $_orgValue;
     
     /**
      * appends sql to given select statement
@@ -130,6 +132,8 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      */
     public function setValue($_value)
     {
+        $this->_orgValue = $_value;
+
         if ($this->_operator !== 'within' && $this->_operator !== 'inweek' && $_value) {
             if (is_array($_value)) {
                 throw new Tinebase_Exception_InvalidArgument('Operator ' . $this->_operator
@@ -489,5 +493,19 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
     public static function getEndOfYesterday()
     {
         return Tinebase_DateTime::now()->subDay(1)->setTime(23,59,59);
+    }
+
+    /**
+     * returns array with the filter settings of this filter
+     * - convert value to user timezone
+     *
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
+     */
+    public function toArray($_valueToJson = false)
+    {
+        $result = parent::toArray($_valueToJson);
+        $result['value'] = $this->_orgValue;
+        return $result;
     }
 }

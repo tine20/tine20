@@ -21,27 +21,6 @@
 class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
 {
     /**
-     * returns array with the filter settings of this filter
-     * - convert value to user timezone
-     *
-     * @param  bool $_valueToJson resolve value for json api?
-     * @return array
-     */
-    public function toArray($_valueToJson = false)
-    {
-        $result = parent::toArray($_valueToJson);
-       
-        if ($this->_operator != 'within' && $_valueToJson == true && $result['value']) {
-            $date = new Tinebase_DateTime($result['value'],
-                isset($this->_options['timezone']) ? $this->_options['timezone'] : null);
-            $date->setTimezone(Tinebase_Core::getUserTimezone());
-            $result['value'] = $date->toString(Tinebase_Record_Abstract::ISO8601LONG);
-        }
-        
-        return $result;
-    }
-    
-    /**
      * calculates the date filter values
      *
      * @param string $_operator
@@ -96,6 +75,8 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
      */
     public function setValue($_value)
     {
+        $this->_orgValue = $_value;
+
         if ($this->_operator !== 'within' && $_value) {
             $_value = $this->_convertStringToUTC($_value);
         }
@@ -141,8 +122,31 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
                 default:
                     throw new Tinebase_Exception_InvalidArgument('date string not recognized / not supported: ' . $_string);
             }
-            $_string = $string;
+            return parent::_convertStringToUTC($string);
         }
-        return parent::_convertStringToUTC($_string);
+        $this->_orgValue = parent::_convertStringToUTC($_string);
+        return $this->_orgValue;
+    }
+
+    /**
+     * returns array with the filter settings of this filter
+     * - convert value to user timezone
+     *
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
+     */
+    public function toArray($_valueToJson = false)
+    {
+        $result = parent::toArray($_valueToJson);
+
+        if ($this->_operator != 'within' && $_valueToJson == true && $result['value']
+                && preg_match('/^\d\d\d\d-\d\d-\d\d/', $result['value'])) {
+            $date = new Tinebase_DateTime($result['value'],
+                isset($this->_options['timezone']) ? $this->_options['timezone'] : null);
+            $date->setTimezone(Tinebase_Core::getUserTimezone());
+            $result['value'] = $date->toString(Tinebase_Record_Abstract::ISO8601LONG);
+        }
+
+        return $result;
     }
 }
