@@ -1,5 +1,7 @@
 <?php
 
+use Tinebase_Model_Filter_Abstract as TMFA;
+
 /**
  * Tine 2.0
  *
@@ -42,6 +44,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE026 = __CLASS__ . '::update026';
     const RELEASE015_UPDATE027 = __CLASS__ . '::update027';
     const RELEASE015_UPDATE028 = __CLASS__ . '::update028';
+    const RELEASE015_UPDATE029 = __CLASS__ . '::update029';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -165,6 +168,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE027          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update027',
+            ],
+            self::RELEASE015_UPDATE029          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update029',
             ],
         ],
     ];
@@ -791,5 +798,46 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             Tinebase_Model_BankHolidayCalendar::class,
         ]);
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.28', self::RELEASE015_UPDATE028);
+    }
+
+    public function update029()
+    {
+        $pFilterCtrl = Tinebase_PersistentFilter::getInstance();
+        $oldValue = $pFilterCtrl->doContainerACLChecks(false);
+        $raii = new Tinebase_RAII(fn () => $pFilterCtrl->doContainerACLChecks($oldValue));
+
+        /** @var Tinebase_Model_PersistentFilter $result */
+        $result = $pFilterCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_PersistentFilterFilter::class, [
+            [TMFA::FIELD => 'model', TMFA::OPERATOR => 'startswith', TMFA::VALUE => 'Sales_Model_Contract'],
+            [TMFA::FIELD => 'name', TMFA::OPERATOR => 'equals', TMFA::VALUE => 'Inactive Contracts'],
+        ]))->getFirstRecord();
+        if ($result && ($filter = $result->filters->getFilter('end_date', false, true)) && strpos($filter->toArray()['value'], '20') === 0) {
+            $filter->setValue(Tinebase_Model_Filter_Date::DAY_THIS);
+            $pFilterCtrl->update($result);
+        }
+
+        /** @var Tinebase_Model_PersistentFilter $result */
+        $result = $pFilterCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_PersistentFilterFilter::class, [
+            [TMFA::FIELD => 'model', TMFA::OPERATOR => 'startswith', TMFA::VALUE => 'Sales_Model_Contract'],
+            [TMFA::FIELD => 'name', TMFA::OPERATOR => 'equals', TMFA::VALUE => 'Active Contracts'],
+        ]))->getFirstRecord();
+        if ($result && ($filter = $result->filters->getFilter('end_date', false, true)) && strpos($filter->toArray()['value'], '20') === 0) {
+            $filter->setValue(Tinebase_Model_Filter_Date::DAY_LAST);
+            $pFilterCtrl->update($result);
+        }
+
+        /** @var Tinebase_Model_PersistentFilter $result */
+        $result = $pFilterCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_PersistentFilterFilter::class, [
+            [TMFA::FIELD => 'model', TMFA::OPERATOR => 'startswith', TMFA::VALUE => 'Crm_Model_LeadFilter'],
+            [TMFA::FIELD => 'name', TMFA::OPERATOR => 'equals', TMFA::VALUE => 'Leads with overdue tasks'],
+        ]))->getFirstRecord();
+        if ($result && ($filter = $result->filters->getFilter('end_date', false, true)) && strpos($filter->toArray()['value'], '20') === 0) {
+            $filter->setValue(Tinebase_Model_Filter_Date::DAY_THIS);
+            $pFilterCtrl->update($result);
+        }
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.29', self::RELEASE015_UPDATE029);
+
+        unset($raii);
     }
 }
