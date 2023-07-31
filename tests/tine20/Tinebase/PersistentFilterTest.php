@@ -4,10 +4,12 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2014-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * Test class for Tinebase_PersistentFilter
@@ -193,6 +195,22 @@ class Tinebase_PersistentFilterTest extends TestCase
         $grant = $updatedFilter->grants->filter('account_id', $defaultUserGroup->getId())->getFirstRecord();
         $this->assertTrue($grant !== null);
         $this->assertTrue($grant->userHasGrant(Tinebase_Model_PersistentFilterGrant::GRANT_READ));
+    }
+
+    public function testDateFilter()
+    {
+        $filterArray = [TMFA::FIELD => 'field', TMFA::OPERATOR => 'before', TMFA::VALUE => Tinebase_Model_Filter_Date::DAY_LAST];
+        $filter = new Tinebase_Model_Filter_Date($filterArray);
+        $jsonData = $filter->toArray(true);
+        $this->assertSame($filterArray, $jsonData);
+    }
+
+    public function testDateTimeFilter()
+    {
+        $filterArray = [TMFA::FIELD => 'field', TMFA::OPERATOR => 'before', TMFA::VALUE => Tinebase_Model_Filter_Date::DAY_LAST];
+        $filter = new Tinebase_Model_Filter_DateTime($filterArray);
+        $jsonData = $filter->toArray(true);
+        $this->assertSame($filterArray, $jsonData);
     }
 
     /**
