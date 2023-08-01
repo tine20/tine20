@@ -226,6 +226,18 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     public static function tearDownAfterClass(): void
     {
+        try {
+            /** @var Tinebase_EmailUser_Imap_Dovecot $emaiUserImap */
+            $emaiUserImap = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+            $emaiUserImap->getDb()->query('select now()');
+        } catch (Tinebase_Exception $e) {}
+
+        try {
+            /** @var Tinebase_EmailUser_Smtp_Postfix $emaiUserSmtp */
+            $emaiUserSmtp = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+            $emaiUserSmtp->getDb()->query('select now()');
+        } catch (Tinebase_Exception $e) {}
+
         Tinebase_Core::getDbProfiling();
     }
 
