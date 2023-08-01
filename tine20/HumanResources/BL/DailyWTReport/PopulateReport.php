@@ -98,7 +98,7 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
         } elseif ($_data->freeTimes) {
             /** @var HumanResources_Model_FreeTime $freeTime */
             foreach ($_data->freeTimes as $freeTime) {
-                if (!is_object($freeTime->type)) {
+                if (!is_object($freeTime->type) || !$freeTime->type->wage_type) {
                     continue;
                 }
                 $strategy = $freeTime->type->workingTimeCalculationStrategy;
@@ -106,7 +106,7 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
                     $strategy = new HumanResources_Model_WTCalcStrategy();
                 }
                 $result = $strategy->apply($_data->result);
-                if ($result > 0 && $freeTime->type->wage_type) {
+                if ($result > 0) {
                     $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
                         'id' => Tinebase_Record_Abstract::generateUID(),
                         HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => $freeTime->type->wage_type,
@@ -121,12 +121,15 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
 
         /** @var HumanResources_BL_DailyWTReport_TimeSlot $absenceTimeSlot */
         foreach ($_data->absenceTimeSlots as $absenceTimeSlot) {
+            if (!$absenceTimeSlot->absenceReason->wage_type) {
+                continue;
+            }
             $strategy = $absenceTimeSlot->absenceReason->workingTimeCalculationStrategy;
             if (!$strategy instanceof HumanResources_Model_WTCalcStrategy) {
                 $strategy = new HumanResources_Model_WTCalcStrategy();
             }
             $result = $strategy->apply($_data->result);
-            if ($result > 0 && $absenceTimeSlot->absenceReason->wage_type) {
+            if ($result > 0) {
                 $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
                     'id' => Tinebase_Record_Abstract::generateUID(),
                     HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => $absenceTimeSlot->absenceReason->wage_type,
