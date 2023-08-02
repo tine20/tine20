@@ -91,6 +91,18 @@
     background-image:url(../../images/icon-set/icon_ham.svg) !important;
 }
 
+.felamimail-action {
+    padding: 5px;
+    margin: 5px;
+    cursor: pointer;
+    background-color: #D8A45B;
+    border-radius: 5px;
+}
+
+.felamimail-action:hover {
+    filter: brightness(1.2);
+}
+
 /***** flag classes ******/
 
 .flag_unread td{
@@ -174,6 +186,16 @@
     font-size: 13px;
     padding-top: 5px;
     padding-left: 5px;
+}
+
+.felamimail_spam_suspicions_toolbar {
+    padding: 5px;
+    background-color: #D8A45B;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 /***** node classes ******/
