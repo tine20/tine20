@@ -22,6 +22,7 @@
     ARG_COPY_SOURCE: "true"
     ARG_IMAGE: test-source
     TINE20ROOT: ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+    WAIT_FOR_DB_TIMEOUT: '120'
   services:
     - !reference [.lib-services, db_service]
     - !reference [.lib-services, redis_service]
@@ -42,6 +43,7 @@
     # wait for service to become ready
     - echo -n 'wait for signal_tine_ready ...'; while [ ! -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_tine_ready ]; do sleep 1; done; echo ' done'
     # todo wait for 
+    - if [ -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_wait_for_database_failed ]; then echo "waiting for database failed"; exit 1; fi
     - if [ -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_demo_data_install_failed ]; then echo "demo data install failed"; exit 1; fi
   script:
     - env
