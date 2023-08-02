@@ -187,6 +187,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
     initTemplate: function() {
 
         this.tpl = new Ext.XTemplate(
+            '{[this.showSpamToolbar(values)]}',
             '<div class="preview-panel-felamimail">',
             '<div class="preview-panel-felamimail-headers">',
             '<b>' + this.i18n._('Subject') + ':</b> {[this.encode(values.subject)]}<br/>',
@@ -215,6 +216,21 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     } else {
                         return '';
                     }
+                },
+                showSpamToolbar: function(messageData) {
+                    const app = Tine.Tinebase.appMgr.get('Felamimail');
+                    const account = app.getAccountStore().getById(messageData.account_id);
+                    const folder = app.getFolderStore().getById(messageData.folder_id);
+                    if (!folder || !account || !messageData.is_spam_suspicions) return '';
+                    
+                    const html = '<span style="width: 60%; padding: 5px;">'
+                        + app.i18n._('This message is probably SPAM. Please help to train your anti-SPAM system with a decision: "Yes, it is SPAM" or "No, it is not"') + '</span>';
+                    const aboutAction = `<span id="action_about" class="felamimail-action"><span class="felamimail-location-icon action_about"></span></span>`;
+                    const actions =
+                        '<span id="spam_action_spam" class="felamimail-action"><span class="felamimail-location-icon felamimail-action-spam"></span><span>' + app.i18n._('Yes, it is SPAM') + '</span></span>' +
+                        '<span id="spam_action_ham" class="felamimail-action"><span class="felamimail-location-icon felamimail-action-ham"></span><span>' + app.i18n._('No, it is not') + '</span></span>' ;
+                    
+                    return `<div id="spam_toolbar" class="felamimail_spam_suspicions_toolbar">${html}${aboutAction}<span>${actions}</span></div>`;
                 },
                 linkifyEmail(name, email) {
                     const id = Ext.id() + ':' + email + Ext.util.Format.htmlEncode(':' + Ext.util.Format.trim(name));
@@ -335,7 +351,8 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
             'span[class^=tinebase-download-link]',
             'a[class=tinebase-email-link]',
             'span[class=tinebase-showheaders-link]',
-            'a[href^=#]'
+            'a[href^=#]',
+            'span[class=felamimail-action]',
         ];
 
         // find the correct target
@@ -487,6 +504,18 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     }
                 }
                 break;
+            case 'span[class=felamimail-action]':
+                const match = target.id.match(/^spam_action_(.*)/);
+                if (match.length > 1) {
+                    document.getElementById('spam_toolbar').remove();
+                    this.app.getMainScreen().getCenterPanel().processSpamStrategy(match[1]);
+                }
+                if (target.id === 'action_about') {
+                    Ext.Msg.alert(this.app.i18n._('Confirm SPAM Suspicion'),
+                        Tine.Tinebase.configManager.get('spamInfoDialogContent', 'Felamimail')
+                    );
+                }
+                break;
         }
     },
 
@@ -540,69 +569,6 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         }
 
         return result;
-    },
-    
-    /**
-     * process spam strategy and refresh grid panel
-     *
-     * @param option
-     */
-    processSpamStrategy: async function (option) {
-        this.spamToolbar.hide();
-        this.messageRecordPanel.doLayout();
-        await this.app.getMainScreen().getCenterPanel().processSpamStrategy(option);
-    },
-
-    /**
-     * show spam toolbar
-     *
-     * @param record
-     */
-    showSpamToolbar: function (record) {
-        
-        if (!this.spamToolbar) {
-            this.spamToolbar = new Ext.Toolbar({
-                items: [{
-                        xtype: 'tbtext',
-                        text: this.app.i18n._('This message is probably SPAM. Please help to train your anti-SPAM system with a decision: "Yes, it is SPAM" or "No, it is not"')
-                    },
-                    '->',
-                    {
-                        iconCls: 'action_about',
-                        handler: () => {
-                            Ext.Msg.alert(
-                                this.app.i18n._('Confirm SPAM Suspicion'),
-                                Tine.Tinebase.configManager.get('spamInfoDialogContent', 'Felamimail')
-                            );
-                        }
-                    }, {
-                        xtype: 'tbspacer', width: 20
-                    }, {
-                        iconCls: 'felamimail-action-spam',
-                        text: this.app.i18n._('Yes, it is SPAM'),
-                        handler: this.processSpamStrategy.bind(this, 'spam'),
-                    }, {
-                        iconCls: 'felamimail-action-ham',
-                        text: this.app.i18n._('No, it is not'),
-                        handler: this.processSpamStrategy.bind(this, 'ham'),
-                    }]
-            })
-
-            this.messageRecordPanel.add(this.spamToolbar);
-        }
-        
-        if(record.get('is_spam_suspicions')) {
-            const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(record.get('account_id'));
-            const folder = this.app.getFolderStore().getById(record.get('folder_id'));
-
-            if (folder && account) {
-                this.spamToolbar.show();
-            }
-        } else {
-            this.spamToolbar.hide();
-        }
-        
-        this.messageRecordPanel.doLayout();
     },
 });
 
