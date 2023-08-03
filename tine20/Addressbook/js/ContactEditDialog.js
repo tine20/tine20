@@ -719,17 +719,23 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
      * Enable fields we have no privateData grant for, when this is the users own contact (special case).
      */
     enableOwnPrivateFields: function() {
-        this.getForm().findField('bday').setDisabled(false);
-        this.getForm().findField('email_home').setDisabled(false);
-        this.getForm().findField('tel_cell_private').setDisabled(false);
-        this.getForm().findField('tel_home').setDisabled(false);
-        this.getForm().findField('tel_fax_home').setDisabled(false);
-        this.getForm().findField('adr_two_countryname').setDisabled(false);
-        this.getForm().findField('adr_two_locality').setDisabled(false);
-        this.getForm().findField('adr_two_postalcode').setDisabled(false);
-        this.getForm().findField('adr_two_region').setDisabled(false);
-        this.getForm().findField('adr_two_street').setDisabled(false);
-        this.getForm().findField('adr_two_street2').setDisabled(false);
+        const fields = [
+            'bday',
+            'email_home',
+            'tel_cell_private',
+            'tel_home',
+            'tel_fax_home',
+            'adr_two_countryname',
+            'adr_two_locality',
+            'adr_two_postalcode',
+            'adr_two_region',
+            'adr_two_street',
+            'adr_two_street2',
+        ]
+        fields.forEach((field) => {
+            const item = this.getForm().findField(field);
+            if (item) item.setDisabled(false);
+        })
     }
 });
 
