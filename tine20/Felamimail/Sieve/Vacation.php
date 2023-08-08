@@ -328,7 +328,7 @@ class Felamimail_Sieve_Vacation
      */
     protected function _getFormattedHTMLBody(?string $reason): string
     {
-        if ($reason === null) {
+        if (empty($reason)) {
             $reason = '';
         }
         $doc = new DOMDocument('1.0', 'UTF-8');
@@ -340,7 +340,8 @@ class Felamimail_Sieve_Vacation
         );
         $doc->saveXML();
         $xpath = new DOMXPath($doc);
-        $bodyNodes = $xpath->query('/html/body')->item(0)->childNodes;
+        $body = $xpath->query('/html/body')->item(0);
+        $bodyNodes = is_object($body) ? $body->childNodes : [];
         $outputFragments = [];
         foreach ($bodyNodes as $bodyNode) {
             $outputFragments[] = $doc->saveXML($bodyNode);
