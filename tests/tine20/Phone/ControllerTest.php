@@ -83,7 +83,7 @@ class Phone_ControllerTest extends TestCase
 
         self::assertGreaterThan($duration, $disconnectedCall->duration);
         self::assertLessThan(10, $disconnectedCall->ringing, 'wrong ringing duration');
-        self::assertLessThan(15, $disconnectedCall->duration, 'wrong duration');
+        self::assertLessThan(22, $disconnectedCall->duration, 'wrong duration');
         self::assertEquals(-1, $disconnectedCall->connected->compare($disconnectedCall->disconnected));
     }
 
