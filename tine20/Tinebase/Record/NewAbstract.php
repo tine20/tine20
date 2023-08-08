@@ -329,6 +329,9 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      */
     public function getId()
     {
+        if (null === static::$_configurationObject) {
+            static::getConfiguration();
+        }
         return $this->__get(static::$_configurationObject->getIdProperty());
     }
 
