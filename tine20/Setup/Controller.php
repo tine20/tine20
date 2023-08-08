@@ -483,7 +483,7 @@ class Setup_Controller
         foreach ($applicationController->getApplications() as $application) {
 
             $stateUpdates = json_decode($applicationController->getApplicationState($application,
-                Tinebase_Application::STATE_UPDATES, true), true);
+                Tinebase_Application::STATE_UPDATES, true) ?? '', true);
 
             for ($majorV = 0; $majorV <= $maxMajorV; ++$majorV) {
                 /** @var Setup_Update_Abstract $class */
