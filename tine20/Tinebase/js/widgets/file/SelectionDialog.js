@@ -127,7 +127,7 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
             this.saveState();
         } else {
             this.defaultLocationType = savedState?.defaultLocationType ?? this.defaultLocationType;
-            this.initialPath = savedState?.path ?? this.initialPath;
+            this.initialPath = this.initialPath ?? savedState?.path;
         }
         
         Tine.Tinebase.widgets.file.SelectionDialog.superclass.initComponent.call(this);
