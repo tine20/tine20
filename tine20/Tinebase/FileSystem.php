@@ -925,11 +925,10 @@ class Tinebase_FileSystem implements
     public function processRefLogs()
     {
         $lock = Tinebase_Core::getMultiServerLock(__METHOD__);
-        $lock->tryAcquire(30); // if acquire fails, lets run anyway to avoid unprocessed data in an edge case
-        $lockRaii = new Tinebase_RAII(function() /*use($lock)*/ {
-            // a bit bad ... for unittests...
-            //if ($lock->isLocked()) $lock->release();
-            Tinebase_Lock::clearLocks();
+        if (false === $lock->tryAcquire()) return;
+        // mainly for unittest we need to release lock
+        $lockRaii = new Tinebase_RAII(function() use($lock) {
+            if ($lock->isLocked()) $lock->release();
         });
 
         $refLogBackend = static::$_refLogBackend;
