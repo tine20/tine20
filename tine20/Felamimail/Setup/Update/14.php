@@ -56,14 +56,34 @@ class Felamimail_Setup_Update_14 extends Setup_Update_Abstract
 
     public function update003()
     {
-        Setup_SchemaTool::updateSchema([Felamimail_Model_Account::class]);
-
         $this->addApplicationUpdate('Felamimail', '14.3', self::RELEASE014_UPDATE003);
     }
 
     public function update004()
     {
-        Setup_SchemaTool::updateSchema([Felamimail_Model_Account::class]);
+        if (!$this->_backend->columnExists('visibility', 'felamimail_account')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>visibility</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <default>hidden</default>
+                    <notnull>true</notnull>
+                </field>
+               
+            ');
+            $this->_backend->addCol('felamimail_account', $declaration);
+        }
+        if (!$this->_backend->columnExists('contact_id', 'felamimail_account')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                 <field>
+                    <name>contact_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+            ');
+            $this->_backend->addCol('felamimail_account', $declaration);
+        }
 
         $this->addApplicationUpdate('Felamimail', '14.4', self::RELEASE014_UPDATE004);
     }
