@@ -270,6 +270,12 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         }
     }
 
+    /**
+     * @param HumanResources_Model_Contract $_record
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_SystemGeneric
+     */
     protected function _checkDateOverlap(HumanResources_Model_Contract $_record)
     {
         $filter = new HumanResources_Model_ContractFilter(array_merge([
@@ -281,7 +287,8 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         ]));
 
         if ($this->searchCount($filter) > 0) {
-            throw new Tinebase_Exception_Record_Validation('Contracts may not overlap');
+            $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+            throw new Tinebase_Exception_SystemGeneric($translation->_('Contracts may not overlap'));
         }
     }
 
