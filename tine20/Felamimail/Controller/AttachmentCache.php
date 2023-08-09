@@ -173,7 +173,14 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
             $stream = $msgPart->getDecodedStream();
             $fileName = $msgPart->filename;
         }
-        rewind($stream);
+
+        if ($stream) {
+            rewind($stream);
+        } else if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+            // TODO throw exception?
+            Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' No valid stream');
+        }
 
         $name = $this->_sanitizeFilename($fileName);
 
