@@ -36,8 +36,10 @@ services:
       TINE20_SETUPUSER_USERNAME: tinesetup
       TINE20_SETUPUSER_PASSWORD: {{ tinedockercompose_tinesetuppw }}
       TINE20_LOGGER_PRIORITY: "5"
+{% if tinedockercompose_auto_installupdate is defined and tinedockercompose_auto_installupdate|bool %}
       ### install+update tine automatically
-      # TINE_INSTALL: "true"
+      TINE20_INSTALL: "true"
+{% endif %}
     volumes:
       - "{{ tinedockercompose_confd_path }}:/etc/tine20/conf.d"
       - "{{ tinedockercompose_files_path }}:/var/lib/tine20/files"
