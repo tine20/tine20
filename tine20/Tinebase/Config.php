@@ -3373,24 +3373,24 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     public static function resolveRecordValue($val, $definition)
     {
         if ($val && isset($definition['type']) && Tinebase_Config::TYPE_RECORD === $definition['type']) {
-            if (isset($definition[Tinebase_Config::TYPE_RECORD_CONTROLLER])) {
-                try {
-                    $val = $definition[Tinebase_Config::TYPE_RECORD_CONTROLLER]::getInstance()->get($val);
-                } catch (Exception $e) {
-                    Tinebase_Exception::log($e);
-                }
-            } elseif (isset($definition[Tinebase_Config::OPTIONS][Tinebase_Config::APPLICATION_NAME]) &&
-                isset($definition[Tinebase_Config::OPTIONS][Tinebase_Config::MODEL_NAME])) {
-                $ctrlName = $definition[Tinebase_Config::OPTIONS][Tinebase_Config::APPLICATION_NAME] .
-                    '_Controller_' .
-                    $definition[Tinebase_Config::OPTIONS][Tinebase_Config::MODEL_NAME];
-                if (class_exists($ctrlName)) {
-                    try {
+            try {
+                if (isset($definition[Tinebase_Config::TYPE_RECORD_CONTROLLER])) {
+                        $val = $definition[Tinebase_Config::TYPE_RECORD_CONTROLLER]::getInstance()->get($val);
+                } elseif (isset($definition[Tinebase_Config::OPTIONS][Tinebase_Config::APPLICATION_NAME]) &&
+                    isset($definition[Tinebase_Config::OPTIONS][Tinebase_Config::MODEL_NAME])) {
+                    $ctrlName = $definition[Tinebase_Config::OPTIONS][Tinebase_Config::APPLICATION_NAME] .
+                        '_Controller_' .
+                        $definition[Tinebase_Config::OPTIONS][Tinebase_Config::MODEL_NAME];
+                    if (class_exists($ctrlName)) {
                         $val = $ctrlName::getInstance()->get($val);
-                    } catch (Exception $e) {
-                        Tinebase_Exception::log($e);
                     }
                 }
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__  . ' ' . $tead->getMessage() . ' for '
+                    . print_r($definition, TRUE));
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
             }
         }
 
@@ -3414,8 +3414,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 $properties = $config->getProperties();
                 foreach ((array) $properties as $name => $definition) {
                     
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                        . ' ' . print_r($definition, TRUE));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                        __METHOD__ . '::' . __LINE__  . ' ' . print_r($definition, TRUE));
                     
                     if (isset($definition['clientRegistryInclude']) && $definition['clientRegistryInclude'] === TRUE)
                     {
