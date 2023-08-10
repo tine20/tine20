@@ -1310,7 +1310,7 @@ class Setup_Frontend_Cli
             throw new Tinebase_Exception_Backend_Database('you are not using mysql');
         }
 
-        if (!Setup_Backend_Mysql::dbSupportsVersion($db, 'mysql > 8')) {
+        if (!Setup_Backend_Mysql::dbSupportsVersion($db, 'mariadb > 10.3 | mysql > 8')) {
             if (($ilp = $db->query('SELECT @@innodb_large_prefix')->fetchColumn()) !== '1') {
                 throw new Tinebase_Exception_Backend_Database('innodb_large_prefix seems not be turned on: ' . $ilp);
             }

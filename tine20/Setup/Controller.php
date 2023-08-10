@@ -1740,6 +1740,9 @@ class Setup_Controller
 
         Tinebase_Event::reFireForNewApplications();
 
+        // create eventually missing foreign key constraints (cross application constraints...)
+        Setup_SchemaTool::updateAllSchema();
+
         return $count;
     }
 
