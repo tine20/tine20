@@ -365,6 +365,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => false,
                 ],
+                self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
             ],
             Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => [
                 self::TYPE          => self::TYPE_VIRTUAL,
