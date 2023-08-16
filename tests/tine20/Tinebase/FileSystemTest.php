@@ -63,7 +63,7 @@ class Tinebase_FileSystemTest extends TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
         Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM} = $this->_oldFileSystemConfig;
         Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA} = $this->_oldQuota;
 

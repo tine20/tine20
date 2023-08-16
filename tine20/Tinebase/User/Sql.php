@@ -57,6 +57,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         'loginFailures'             => 'login_failures',
         'openid'                    => 'openid',
         'visibility'                => 'visibility',
+        'type'                      => 'type',
         'contactId'                 => 'contact_id',
         'xprops'                    => 'xprops',
         'creation_time'             => 'creation_time',
@@ -311,7 +312,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($user->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($user->toArray(), true));
         
         return $user;
     }
@@ -444,6 +446,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'contact_id',
             'openid',
             'visibility',
+            'type',
             'mfa_configs',
             'NOW()', // only needed for debugging
         );
@@ -1189,31 +1192,34 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $_user->runConvertToData();
 
         $accountData = array(
-            'id'                => $_user->accountId,
-            'login_name'        => $_user->accountLoginName,
-            'expires_at'        => ($_user->accountExpires instanceof Tinebase_DateTime ? $_user->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL),
-            'primary_group_id'  => $_user->accountPrimaryGroup,
-            'home_dir'          => $_user->accountHomeDirectory,
-            'login_shell'       => $_user->accountLoginShell,
-            'openid'            => $_user->openid,
-            'visibility'        => $_user->visibility,
-            'contact_id'        => $_user->contact_id,
-            $this->rowNameMapping['accountDisplayName']  => $_user->accountDisplayName,
-            $this->rowNameMapping['accountFullName']     => $_user->accountFullName,
-            $this->rowNameMapping['accountFirstName']    => $_user->accountFirstName,
-            $this->rowNameMapping['accountLastName']     => $_user->accountLastName,
+            'id' => $_user->accountId,
+            'login_name' => $_user->accountLoginName,
+            'expires_at' => ($_user->accountExpires instanceof Tinebase_DateTime
+                ? $_user->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG)
+                : null),
+            'primary_group_id' => $_user->accountPrimaryGroup,
+            'home_dir' => $_user->accountHomeDirectory,
+            'login_shell' => $_user->accountLoginShell,
+            'openid' => $_user->openid,
+            'visibility' => $_user->visibility,
+            'contact_id' => $_user->contact_id,
+            $this->rowNameMapping['accountDisplayName'] => $_user->accountDisplayName,
+            $this->rowNameMapping['accountFullName'] => $_user->accountFullName,
+            $this->rowNameMapping['accountFirstName'] => $_user->accountFirstName,
+            $this->rowNameMapping['accountLastName'] => $_user->accountLastName,
             $this->rowNameMapping['accountEmailAddress'] => $_user->accountEmailAddress,
             $this->rowNameMapping['password_must_change'] => $_user->password_must_change ? 1 : 0,
-            'created_by'            => $_user->created_by,
-            'creation_time'         => $_user->creation_time,
-            'last_modified_by'      => $_user->last_modified_by,
-            'last_modified_time'    => $_user->last_modified_time,
-            'is_deleted'            => $_user->is_deleted ?: 0,
-            'deleted_time'          => $_user->deleted_time,
-            'deleted_by'            => $_user->deleted_by,
-            'seq'                   => $_user->seq,
-            'xprops'                => $_user->xprops,
-            'mfa_configs'     => $_user->mfa_configs,
+            'created_by' => $_user->created_by,
+            'creation_time' => $_user->creation_time,
+            'last_modified_by' => $_user->last_modified_by,
+            'last_modified_time' => $_user->last_modified_time,
+            'is_deleted' => $_user->is_deleted ?: 0,
+            'deleted_time' => $_user->deleted_time,
+            'deleted_by' => $_user->deleted_by,
+            'seq' => $_user->seq,
+            'xprops' => $_user->xprops,
+            'mfa_configs' => $_user->mfa_configs,
+            'type' => $_user->type,
         );
         
         $unsetIfEmpty = array('seq', 'creation_time', 'created_by', 'last_modified_by', 'last_modified_time');
