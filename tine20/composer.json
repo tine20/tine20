@@ -1,6 +1,6 @@
 {
   "name": "tine20/server",
-  "description": "Tine 2.0 Server",
+  "description": "tine Groupware Server",
   "type": "project",
   "keywords": [
     "Groupware",
@@ -12,7 +12,7 @@
     "Tasks",
     "Timetracking"
   ],
-  "homepage": "http://www.tine20.org",
+  "homepage": "https://www.tine-groupware.de/",
   "license": [
     "AGPL-3.0",
     "BSD-3-Clause",
