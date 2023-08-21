@@ -18,6 +18,7 @@
       changes:
         paths:
           - "**/*.php"
+          - "tine20/composer.*"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-source/
     - if: $PIPELINE_TYPE =~ /default-tests/
     - if: $PIPELINE_TYPE =~ /mr-tests/
@@ -89,6 +90,7 @@ php-unit-all-tests-source-matrix:
       changes:
         paths:
           - "**/*.php"
+          - "tine20/composer.*"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-source-postfixmultiinstance/
     - if: $PIPELINE_TYPE =~ /default-tests/
 php-unit-all-tests-source-postfixmultiinstance-sequential:
@@ -125,6 +127,7 @@ php-unit-setup-tests-source:
       changes:
         paths:
           - "**/*.php"
+          - "tine20/composer.*"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-setup-tests-source/
     - if: $PIPELINE_TYPE =~ /default-tests/
 
@@ -144,6 +147,7 @@ php-unit-servertests-source:
       changes:
         paths:
           - "**/*.php"
+          - "tine20/composer.*"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-servertests-source/
     - if: $PIPELINE_TYPE =~ /default-tests/
     - if: $PIPELINE_TYPE =~ /mr-tests/
@@ -215,6 +219,7 @@ php-unit-all-tests-ldap-source-parallel:
       changes:
         paths:
           - "**/*.php"
+          - "tine20/composer.*"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-built/
     - if: $PIPELINE_TYPE =~ /default-tests/
 php-unit-all-tests-built-sequential:
@@ -255,6 +260,7 @@ php-unit-tinebase-tests-built:
       changes:
         paths:
           - "**/*.php"
+          - "tine20/composer.*"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-tinebase-tests-built/
     - if: $PIPELINE_TYPE =~ /default-tests/
 
@@ -274,6 +280,7 @@ php-unit-tinebase-tests-built:
       changes:
         paths:
           - "**/*.php"
+          - "tine20/composer.*"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-nogitlabci-tests-built/
     - if: $PIPELINE_TYPE =~ /default-tests/
   allow_failure: true
@@ -332,4 +339,5 @@ php-unit-update-tests:
       changes:
         paths:
           - "**/*.php"
+          - "tine20/composer.*"
     - if: $PIPELINE_TYPE =~ /update-tests/
