@@ -98,6 +98,35 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         // get group by name
         Tinebase_Group::getInstance()->getGroupByName($group['name']);
     }
+
+    public function testRecreateGroup()
+    {
+        if (!Tinebase_Group::getInstance() instanceOf Tinebase_Group_Interface_SyncAble) {
+            $this->markTestSkipped('sync groups only works with sync backends');
+        }
+
+        $group = $this->_createGroup();
+        Tinebase_Group::getInstance()->deleteGroupsInSqlBackend([$group['id']]);
+        Addressbook_Controller_List::getInstance()->delete([$group['list_id']]);
+
+        try {
+            Tinebase_Group::getInstance()->getGroupById($group['id']);
+            $this->fail('delete didn\'t work');
+        } catch (Tinebase_Exception_Record_NotDefined $ternd) {}
+        try {
+            Addressbook_Controller_List::getInstance()->get($group['list_id']);
+            $this->fail('delete didn\'t work');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+
+        Tinebase_Group::syncGroups();
+        $reCreatedGroup = Tinebase_Group::getInstance()->getGroupById($group['id']);
+        $this->assertNotSame($reCreatedGroup->list_id, $group['list_id']);
+        try {
+            Addressbook_Controller_List::getInstance()->get($group['list_id']);
+            $this->fail('list should not be undeleted');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+        Addressbook_Controller_List::getInstance()->get($reCreatedGroup->list_id);
+    }
     
     /**
      * try to get all access log entries
