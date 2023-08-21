@@ -18,28 +18,29 @@
  * @package     Tinebase
  * @subpackage  User
  *
- * @property    string                      accountStatus
- * @property    Tinebase_Model_SAMUser      sambaSAM            object holding samba settings
- * @property    string                      accountEmailAddress email address of user
- * @property    Tinebase_DateTime           accountExpires      date when account expires
- * @property    string                      accountFullName     fullname of the account
- * @property    string                      accountDisplayName  displayname of the account
- * @property    string                      accountLoginName    account login name
- * @property    string                      accountLoginShell   account login shell
- * @property    string                      accountPrimaryGroup primary group id
- * @property    string                      container_id
- * @property    string                      contact_id
- * @property    string                      configuration
- * @property    array                       groups              list of group memberships
- * @property    Tinebase_DateTime           lastLoginFailure    time of last login failure
- * @property    int                         loginFailures       number of login failures
- * @property    string                      visibility          displayed/hidden in/from addressbook
- * @property    Tinebase_Model_EmailUser    emailUser
- * @property    Tinebase_Model_EmailUser    imapUser
- * @property    Tinebase_Model_EmailUser    smtpUser
- * @property    Tinebase_DateTime           accountLastPasswordChange      date when password was last changed
- * @property    bool                         password_must_change
- * @property    Tinebase_Record_RecordSet   mfa_configs
+ * @property    string                      $accountStatus
+ * @property    Tinebase_Model_SAMUser      $sambaSAM            object holding samba settings
+ * @property    string                      $accountEmailAddress email address of user
+ * @property    Tinebase_DateTime           $accountExpires      date when account expires
+ * @property    string                      $accountFullName     fullname of the account
+ * @property    string                      $accountDisplayName  displayname of the account
+ * @property    string                      $accountLoginName    account login name
+ * @property    string                      $accountLoginShell   account login shell
+ * @property    string                      $accountPrimaryGroup primary group id
+ * @property    string                      $container_id
+ * @property    string                      $contact_id
+ * @property    string                      $configuration
+ * @property    array                       $groups              list of group memberships
+ * @property    Tinebase_DateTime           $lastLoginFailure    time of last login failure
+ * @property    int                         $loginFailures       number of login failures
+ * @property    string                      $visibility          displayed/hidden in/from addressbook
+ * @property    string                      $type
+ * @property    Tinebase_Model_EmailUser    $emailUser
+ * @property    Tinebase_Model_EmailUser    $imapUser
+ * @property    Tinebase_Model_EmailUser    $smtpUser
+ * @property    Tinebase_DateTime           $accountLastPasswordChange      date when password was last changed
+ * @property    bool                        $password_must_change
+ * @property    Tinebase_Record_RecordSet   $mfa_configs
  */
 class Tinebase_Model_FullUser extends Tinebase_Model_User
 {
@@ -53,6 +54,10 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
 
     // don't create and show users system mail account
     const XPROP_FMAIL_SKIP_MAILACCOUNT = 'emailSkipFmailAccount';
+
+    public const USER_TYPE_SYSTEM = 'system';
+    public const USER_TYPE_USER = 'user';
+    public const USER_TYPE_VOLUNTEER = 'volunteer';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -208,10 +213,14 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
                 'type'                          => 'string',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
-            // ???!?
-            'configuration'                 => [
-                'type'                          => 'string',
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            'type' => [
+                self::LABEL => 'User type', // _('User type')
+                self::TYPE => self::TYPE_KEY_FIELD,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true
+                ],
+                self::DEFAULT_VAL => self::USER_TYPE_USER,
+                self::NAME => Tinebase_Config::USER_TYPES,
             ],
             'visibility'                    => [
                 'type'                          => 'string',

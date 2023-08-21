@@ -910,7 +910,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const ACTION_LOG_TYPES = 'actionLogTypes';
-    
+
+    /**
+     * user types
+     *
+     * @var string
+     */
+    const USER_TYPES = 'userTypes';
 
     /**
      * (non-PHPdoc)
@@ -3280,6 +3286,37 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                         'icon' => 'images/icon-set/icon_preview.svg', 'icon_class' => 'notes_revealPasswordIcon', 'system' => true], // _('Reveal password')
                 ],
                 self::DEFAULT_STR           => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+            ],
+        ],
+        self::USER_TYPES => [
+            //_('User type')
+            self::LABEL              => 'User type',
+            self::DESCRIPTION        => 'User types',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                self::RECORDS => [
+                    [
+                        'id' => Tinebase_Model_FullUser::USER_TYPE_SYSTEM,
+                        'value' => 'System User', //_('System User')
+                        'icon' => null,
+                        'system' => true
+                    ],
+                    [
+                        'id' => Tinebase_Model_FullUser::USER_TYPE_USER,
+                        'value' => 'User', //_('User')
+                        'icon' => null,
+                        'system' => true
+                    ],
+                    [
+                        'id' => Tinebase_Model_FullUser::USER_TYPE_VOLUNTEER,
+                        'value' => 'Volunteer', //_('Volunteer')
+                        'icon' => null,
+                        'system' => true
+                    ],
+                ]
             ],
         ],
         self::ACTION_LOG_TYPES => [

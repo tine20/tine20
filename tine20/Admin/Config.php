@@ -75,6 +75,13 @@ class Admin_Config extends Tinebase_Config_Abstract
     const FEATURE_PREVENT_APPS_DISABLE = 'featurePreventAppsDisable';
 
     /**
+     * FEATURE_CHANGE_USER_TYPE
+     *
+     * @var string
+     */
+    const FEATURE_CHANGE_USER_TYPE = 'featureChangeUserType';
+
+    /**
      * QUOTA_APPS_TO_SHOW
      * @var array
      */
@@ -202,6 +209,12 @@ class Admin_Config extends Tinebase_Config_Abstract
                     //_('Prevent applications disable in front end')
                     self::DESCRIPTION        => 'Prevent applications disable in front end',
                 ],
+                self::FEATURE_CHANGE_USER_TYPE => [
+                    //_('Allow to change user type')
+                    self::LABEL              => 'Allow to change user type',
+                    //_('Allow to change user type')
+                    self::DESCRIPTION        => 'Allow to change user type',
+                ],
             ),
             'default' => array(
                 self::FEATURE_PREVENT_SPECIAL_CHAR_LOGINNAME => false,
@@ -209,6 +222,7 @@ class Admin_Config extends Tinebase_Config_Abstract
                 self::FEATURE_XPROPS_EDITOR => false,
                 self::FEATURE_FORCE_REYPE_PASSWORD => false,
                 self::FEATURE_PREVENT_APPS_DISABLE => false,
+                self::FEATURE_CHANGE_USER_TYPE => false,
             ),
         ),
     );

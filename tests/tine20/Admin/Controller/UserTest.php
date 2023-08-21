@@ -386,4 +386,23 @@ class Admin_Controller_UserTest extends TestCase
         $out = ob_get_clean();
         self::assertEquals('Handled event Admin_Event_AddAccount', $out);
     }
+
+    public function testChangeUserType()
+    {
+        // try to set type for new user (without feature)
+        $pw = Tinebase_Record_Abstract::generateUID(16);
+        $userToCreate = TestCase::getTestUser();
+        $userToCreate->type = 'somethin';
+        $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+        self::assertNull($user->type);
+
+        // try to set type for user (with feature)
+        $features = Admin_Config::getInstance()->{Admin_Config::ENABLED_FEATURES};
+        $features[Admin_Config::FEATURE_CHANGE_USER_TYPE] = true;
+        Admin_Config::getInstance()->set(Admin_Config::ENABLED_FEATURES, $features);
+
+        $user->type = 'somethin';
+        $updatedUser = Admin_Controller_User::getInstance()->update($user);
+        self::assertEquals($user->type, $updatedUser->type);
+    }
 }
