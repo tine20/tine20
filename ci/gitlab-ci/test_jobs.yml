@@ -64,11 +64,13 @@ phpstan-analysis:
       changes:
         paths:
           - "**/*.php"
+          - "tine20/composer.*"
       allow_failure: false
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHPSTAN_ANALYSES_MERGE_REQUEST != "false"
       changes:
         paths:
           - "**/*.php"
+          - "tine20/composer.*"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /phpstan-analysis/ && $PHPSTAN_ANALYSES_STRICT == "true"
       allow_failure: false
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /phpstan-analysis/
