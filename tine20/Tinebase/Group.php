@@ -315,7 +315,7 @@ class Tinebase_Group
 
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             try {
-                $sqlGroup = $groupBackend->getGroupById($group);
+                $sqlGroup = $groupBackend->getGroupById($group, true);
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                     ' Merge missing properties and update group.');
@@ -326,8 +326,7 @@ class Tinebase_Group
                     Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($group);
                 }
 
-                Tinebase_Timemachine_ModificationLog::setRecordMetaData($group, 'update');
-                $groupBackend->updateGroupInSqlBackend($group);
+                $groupBackend->updateGroupInSqlBackend($group, true);
 
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
                 $transactionId = null;

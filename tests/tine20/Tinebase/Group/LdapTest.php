@@ -340,7 +340,17 @@ class Tinebase_Group_LdapTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->objects['updatedGroup']->name, $group->name);
         $this->assertEquals($this->objects['updatedGroup']->description, $group->description);
     }
-    
+
+    public function testSyncDeletedGroup()
+    {
+        $group = $this->testAddGroup();
+        $this->_groupLDAP->deleteGroupsInSqlBackend([$group->getId()]);
+
+        Tinebase_Group::syncGroups();
+
+        $this->_groupLDAP->getGroupById($group->getId());
+    }
+
     /**
      * try to delete a group
      *
@@ -352,8 +362,7 @@ class Tinebase_Group_LdapTest extends \PHPUnit\Framework\TestCase
         $this->objects['groups']->removeRecord($group);
 
         $this->expectException('Exception');
-
-        $group = $this->_groupLDAP->getGroupById($group->getId());
+        $this->_groupLDAP->getGroupById($group->getId());
     }
 
     /**

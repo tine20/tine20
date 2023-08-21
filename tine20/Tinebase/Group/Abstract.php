@@ -117,19 +117,21 @@ abstract class Tinebase_Group_Abstract
      * get group by id
      *
      * @param int $_groupId
+     * @param bool $_getDeleted
      * @return Tinebase_Model_Group
      * @throws  Tinebase_Exception_Record_NotDefined
      */
-    abstract public function getGroupById($_groupId);
+    abstract public function getGroupById($_groupId, $_getDeleted = false);
     
     /**
      * get group by name
      *
      * @param string $_groupName
+     * @param bool $_getDeleted
      * @return Tinebase_Model_Group
      * @throws  Tinebase_Exception_Record_NotDefined
      */
-    abstract public function getGroupByName($_groupName);
+    abstract public function getGroupByName($_groupName, $_getDeleted = false);
 
     /**
      * get default group
