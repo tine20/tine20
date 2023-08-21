@@ -602,18 +602,19 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * NOTE: sets visibility to HIDDEN if list_id is empty
      *
      * @param  Tinebase_Model_Group  $_group
+     * @param  bool $_getDeleted
      * @return Tinebase_Model_Group
      */
-    public function updateGroupInSqlBackend(Tinebase_Model_Group $_group)
+    public function updateGroupInSqlBackend(Tinebase_Model_Group $_group, $_getDeleted = false)
     {
         // prevent changing of email if it does not match configured domains
         Tinebase_EmailUser::checkDomain($_group->email, true);
 
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_group);
 
-        $oldGroup = $this->getGroupById($groupId);
+        $oldGroup = $this->getGroupById($groupId, $_getDeleted);
 
-        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_group, 'update', $oldGroup);
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_group, !$_group->is_deleted && $oldGroup->is_deleted ? 'undelete' : 'update', $oldGroup);
 
         if (empty($_group->list_id)) {
             $_group->visibility = Tinebase_Model_Group::VISIBILITY_HIDDEN;
@@ -806,12 +807,13 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * get group by name
      *
      * @param   string $_name
+     * @param   bool $_getDeleted
      * @return  Tinebase_Model_Group
      * @throws  Tinebase_Exception_Record_NotDefined
      */
-    public function getGroupByName($_name)
+    public function getGroupByName($_name, $_getDeleted = false)
     {
-        return $this->getGroupByPropertyFromSqlBackend('name', $_name);
+        return $this->getGroupByPropertyFromSqlBackend('name', $_name, $_getDeleted);
     }
     
     /**
@@ -819,18 +821,19 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      *
      * @param   string  $_property      the key to filter
      * @param   string  $_value         the value to search for
+     * @param   bool    $_getDeleted
      *
      * @return  Tinebase_Model_Group
      * @throws  Tinebase_Exception_Record_NotDefined
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function getGroupByPropertyFromSqlBackend($_property, $_value)
+    public function getGroupByPropertyFromSqlBackend($_property, $_value, $_getDeleted = false)
     {
         if (! in_array($_property, array('id', 'name', 'description', 'list_id', 'email'))) {
             throw new Tinebase_Exception_InvalidArgument('property not allowed');
         }
         
-        $select = $this->_getSelect();
+        $select = $this->_getSelect('*', $_getDeleted);
         
         $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $_property) . ' = ?', $_value);
         
@@ -856,7 +859,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * @return  Tinebase_Model_Group
      * @throws  Tinebase_Exception_Record_NotDefined
      */
-    public function getGroupById($_groupId)
+    public function getGroupById($_groupId, $_getDeleted = false)
     {
         if (! $_groupId) {
             throw new Tinebase_Exception_InvalidArgument('$_groupId required');
@@ -864,7 +867,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
 
         $groupdId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
-        $result = $this->getGroupByPropertyFromSqlBackend('id', $groupdId);
+        $result = $this->getGroupByPropertyFromSqlBackend('id', $groupdId, $_getDeleted);
         
         return $result;
     }
