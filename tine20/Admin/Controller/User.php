@@ -25,11 +25,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     protected $_userBackend = NULL;
     
     /**
-     * @var Tinebase_SambaSAM_Ldap
-     */
-    protected $_samBackend = NULL;
-
-    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -222,6 +217,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, 'update', $oldUser);
 
             $deactivated = $this->_checkAccountStatus($_user, $oldUser);
+            $this->_inspectBeforeUpdateOrCreate($_user, $oldUser);
             $user = $this->_userBackend->updateUser($_user);
 
             // make sure primary groups is in the list of group memberships
@@ -407,11 +403,12 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $this->_checkPrimaryGroupExistance($_user);
             $this->_checkSystemEmailAccountCreation($_user, null, $_password);
             $this->_checkSystemEmailAccountDuplicate($_user);
+            $this->_inspectBeforeUpdateOrCreate($_user);
 
-        } catch (Tinebase_Exception_SystemGeneric $sytemEx) {
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
-            throw $sytemEx;
+            throw $tesg;
         }  catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Exception::log($e);
@@ -660,5 +657,16 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     protected function _handleUserDeleteConfirmation($_accountIds)
     {
         Tinebase_Controller_ActionLog::getInstance()->addActionLogUserDelete($_accountIds);
+    }
+
+    protected function _inspectBeforeUpdateOrCreate(Tinebase_Model_FullUser $user, ?Tinebase_Model_FullUser $oldUser = null)
+    {
+        if (! Admin_Config::getInstance()->featureEnabled(
+            Admin_Config::FEATURE_CHANGE_USER_TYPE)
+        ) {
+            if ($oldUser === null || $user->type !== $oldUser->type) {
+                unset($user->type);
+            }
+        }
     }
 }
