@@ -1265,20 +1265,46 @@ EOS
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/'
             . Tinebase_Core::getUser()->accountLoginName);
 
-        // it should not be possible to create a file in own /webdav/Filemanager/personal folder
-        static::expectException(\Sabre\DAV\Exception\Forbidden::class);
-
         $node->createFile('test.file');
     }
 
-    public function testCreateFileInFilemanagerForeignPersonalFolder()
+    public function testCreateFileInFilemanagerForeignPersonalFolderWithReadGrant()
     {
         Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
+
+        $node = Filemanager_Controller::getInstance()->createPersonalFolder($this->_personas['sclever'])->getFirstRecord();
+        $grants = Tinebase_FileSystem::getInstance()->getGrantsOfContainer($node, true);
+        $grants->addRecord(new Tinebase_Model_Grants([
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'account_type' => 'user',
+            'readGrant' => true,
+            'syncGrant' => true,
+        ]));
+
+        Tinebase_FileSystem::getInstance()->setGrantsForNode($node, $grants);
+
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/sclever');
 
-        // it should not be possible to create a file in foreign /webdav/Filemanager/personal folder
-        $this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+        $this->expectException(Sabre\DAV\Exception\Forbidden::class);
+        $node->createFile('test.file');
+    }
 
+    public function testCreateFileInFilemanagerForeignPersonalFolderWithAdminGrant()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
+
+        $node = Filemanager_Controller::getInstance()->createPersonalFolder($this->_personas['sclever'])->getFirstRecord();
+        $grants = Tinebase_FileSystem::getInstance()->getGrantsOfContainer($node, true);
+        $grants->addRecord(new Tinebase_Model_Grants([
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'account_type' => 'user',
+            'readGrant' => true,
+            'syncGrant' => true,
+            'adminGrant' => true,
+        ]));
+
+        Tinebase_FileSystem::getInstance()->setGrantsForNode($node, $grants);
+        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/sclever');
         $node->createFile('test.file');
     }
 
