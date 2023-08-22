@@ -96,6 +96,39 @@ class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
         }
     }
 
+    public function createFile($name, $data = null)
+    {
+        if (count($this->_getPathParts()) === 2 && $this->_pathParts[1] !== Tinebase_Model_Container::TYPE_SHARED) {
+            if ($this->_pathParts[1] === '__currentuser__') {
+                $user = Tinebase_Core::getUser();
+
+            } else {
+                try {
+                    // check if it exists only
+                    $user = $this->_getUser($this->_pathParts[1]);
+
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $message = "Directory $this->_path not found";
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $message);
+                    throw new \Sabre\DAV\Exception\NotFound($message);
+                }
+            }
+            $node = Filemanager_Controller::getInstance()->createPersonalFolder($user)->getFirstRecord();
+            if ((! Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_READ) ||
+                ! Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_SYNC))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' User ' . Tinebase_Core::getUser()->getId()
+                    . ' has either not READ or SYNC grants for container ' . $node->getId());
+                throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path not found");
+            }
+
+            return (new Filemanager_Frontend_WebDAV_Container($node, $this->_useIdAsName))->createFile($name, $data);
+        } else {
+            throw new \Sabre\DAV\Exception\Forbidden('Permission denied to create file (filename ' . $this->_path . '/' . $name . ')');
+        }
+    }
+
     /**
      * @return array
      * @throws \Sabre\DAV\Exception\NotFound
