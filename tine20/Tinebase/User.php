@@ -1228,6 +1228,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             'accountLastName' => $accountLoginName,
             'accountDisplayName' => $accountLoginName,
             'accountExpires' => NULL,
+            'type' => Tinebase_Model_FullUser::USER_TYPE_SYSTEM,
         ));
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->debug(
