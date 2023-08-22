@@ -104,8 +104,8 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      *
      * @param string $name Name of the file
      * @param resource $data Initial payload, passed as a readable stream resource.
+     * @return null|string
      * @throws Sabre\DAV\Exception\Forbidden
-     * @return void
      */
     public function createFile($name, $data = null)
     {
