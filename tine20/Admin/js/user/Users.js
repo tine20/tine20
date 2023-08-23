@@ -66,7 +66,8 @@ Tine.Admin.Model.UserArray = [
     { name: 'filesystemSize'},
     { name: 'effectiveAndLocalQuota'},
     { name: 'mfa_configs'},
-    { name: 'xprops'}
+    { name: 'xprops'},
+    { name: 'type'}
 ];
 
 Tine.Admin.Model.User = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat(Tine.Admin.Model.UserArray), {

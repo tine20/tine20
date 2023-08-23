@@ -1585,3 +1585,6 @@ msgstr "E-Mail Konten"
 
 msgid "Manage total Filesystem Quota"
 msgstr "Gesamte Dateimanager Quota verwalten"
+
+msgid "User Type"
+msgstr "Benutzer Typ"
