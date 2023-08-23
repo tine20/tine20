@@ -394,24 +394,24 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     }
 
     /**
-     * add destination
-     * 
      * @param array $destinationData
+     * @return void
+     * @throws Zend_Db_Adapter_Exception
      */
-    protected function _addDestination($destinationData)
+    protected function _addDestination(array $destinationData)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Insert into table destinations: ' . print_r($destinationData, true));
-
         $schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_destinationTable, $this->_db);
         $destinationData = array_intersect_key($destinationData, $schema);
-        if (isset($destinationData['dispatch_address'])) {
-            $destinationData['dispatch_address'] = (int)$destinationData['dispatch_address'];
-        }
+        $destinationData['dispatch_address'] = array_key_exists('dispatch_address', $destinationData)
+            ? (int)$destinationData['dispatch_address'] : 0;
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Insert into table destinations: '
+            . print_r($destinationData, true));
 
         $this->_db->insert($this->_destinationTable, $destinationData);
     }
-    
+
     /**
      * set aliases
      * 
