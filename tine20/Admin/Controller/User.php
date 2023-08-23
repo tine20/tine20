@@ -668,5 +668,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
                 unset($user->type);
             }
         }
+        $event = new Admin_Event_BeforeUpdateAccount([
+            'oldAccount' => $oldUser,
+            'newAccount' => $user,
+        ]);
+        Tinebase_Event::fireEvent($event);
     }
 }
