@@ -31,6 +31,8 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
      */
     protected $_config;
 
+    protected $_oldImapConf = null;
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -86,6 +88,11 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
         $smtpBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
         foreach ($this->_objects['emailUserIds'] as $userId) {
             $smtpBackend->deleteUserById($userId);
+        }
+
+        if ($this->_oldImapConf) {
+            Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $this->_oldImapConf);
+            Tinebase_User::destroyInstance();
         }
 
         parent::tearDown();
@@ -310,5 +317,22 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
         self::assertNotNull($rawDovecotUser, 'could not find dovecot user');
         self::assertEquals(TestServer::getPrimaryMailDomain(), $rawDovecotUser['domain'],
             'primary domain expected: ' . print_r($rawDovecotUser, true));
+
+        return $rawDovecotUser;
+    }
+
+    public function testAddUserWithSecondaryDomainWithoutInstanceName()
+    {
+        // TODO remove instanceName from config
+        Tinebase_User::destroyInstance();
+        $this->_oldImapConf = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+        $conf = clone $this->_oldImapConf;
+        $conf->instanceName = null;
+        Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $conf);
+
+        // username needs to be: phpunit-secondary-domain@DOMAIN!
+        $rawDovecotUser = $this->testAddUserWithSecondaryDomain();
+        $expectedUsername = preg_replace('/[@\.]+/', '-', $rawDovecotUser['loginname']) . '@' . $rawDovecotUser['domain'];
+        self::assertEquals($expectedUsername, $rawDovecotUser['username']);
     }
 }
