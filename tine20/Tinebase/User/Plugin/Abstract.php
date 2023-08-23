@@ -65,7 +65,12 @@ abstract class Tinebase_User_Plugin_Abstract
         } else if (isset($this->_config['instanceName']) && ! empty($this->_config['instanceName'])) {
             $emailUsername = $accountId . '@' . $this->_config['instanceName'];
         } else if (isset($this->_config[$domainConfigKey]) && $this->_config[$domainConfigKey] !== null) {
-            if (strpos($accountLoginName, '@') === false) {
+            $emailAddressDomain = substr($accountEmailAddress, strpos($accountEmailAddress, '@') + 1);
+            if ($emailAddressDomain !== $this->_config[$domainConfigKey]) {
+                // secondary domains still need the primary domain in username!
+                $emailUsername = preg_replace('/[@\.]+/', '-', $accountEmailAddress)
+                    . '@' . $this->_config[$domainConfigKey];
+            } else if (strpos($accountLoginName, '@') === false) {
                 $emailUsername = $this->_appendDomain($accountLoginName);
             } else {
                 $emailUsername = $accountLoginName;
