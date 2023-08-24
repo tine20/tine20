@@ -181,23 +181,34 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
         }
     }
 
+    protected static $_resolvedGroups = [];
+    public static function resetResolvedGroups(): void
+    {
+        static::$_resolvedGroups = [];
+    }
+
     protected function _resolveGroup(?string $groupNameOrId): ?string
     {
-        if (! $groupNameOrId || Tinebase_Helper::isHashId($groupNameOrId)) {
+        if (! $groupNameOrId) {
             return $groupNameOrId;
-        } else {
+        } elseif (!isset(static::$_resolvedGroups[$groupNameOrId])) {
             /** @var Tinebase_Group_Sql $groupController */
             $groupController = Tinebase_Group::getInstance();
             try {
-                $group = $groupController->getGroupByName($groupNameOrId);
-                return $group->getId();
+                $group = $groupController->getGroupById($groupNameOrId);
             } catch (Tinebase_Exception_Record_NotDefined $ternd) {
-                // create group on the fly
-                $group = $groupController->create(new Tinebase_Model_Group([
-                    'name' => $groupNameOrId,
-                ]));
-                return $group->getId();
+                try {
+                    $group = $groupController->getGroupByName($groupNameOrId);
+                } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                    // create group on the fly
+                    $group = $groupController->create(new Tinebase_Model_Group([
+                        'name' => $groupNameOrId,
+                    ]));
+                }
             }
+            return static::$_resolvedGroups[$groupNameOrId] = $group->getId();
         }
+
+        return static::$_resolvedGroups[$groupNameOrId];
     }
 }
