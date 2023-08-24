@@ -22,6 +22,7 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE006 = __CLASS__ . '::update006';
     const RELEASE015_UPDATE007 = __CLASS__ . '::update007';
     const RELEASE015_UPDATE008 = __CLASS__ . '::update008';
+    const RELEASE015_UPDATE009 = __CLASS__ . '::update009';
     
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -62,6 +63,10 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE008          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update008',
+            ],
+            self::RELEASE015_UPDATE009          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update009',
             ],
         ],
     ];
@@ -233,36 +238,66 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
 
-        if (!$this->_backend->columnExists('to', 'felamimail_cache_message')) {
-            // truncate email cache to make this go faster
-            Felamimail_Controller::getInstance()->truncateEmailCache();
+        $truncated = false;
+        $sql = '';
+
+        if (!$this->_backend->columnExists('to_list', 'felamimail_cache_message')) {
+            if (!$truncated) {
+                // truncate email cache to make this go faster
+                Felamimail_Controller::getInstance()->truncateEmailCache();
+                $truncated = true;
+            }
             $declaration = new Setup_Backend_Schema_Field_Xml('
                 <field>
                     <name>to_list</name>
                     <type>text</type>
                 </field>');
-            $sql = $this->_backend->addAddCol('', 'felamimail_cache_message', $declaration);
+            $sql = $this->_backend->addAddCol($sql, 'felamimail_cache_message', $declaration);
+        }
 
+        if (!$this->_backend->columnExists('cc_list', 'felamimail_cache_message')) {
+            if (!$truncated) {
+                // truncate email cache to make this go faster
+                Felamimail_Controller::getInstance()->truncateEmailCache();
+                $truncated = true;
+            }
             $declaration = new Setup_Backend_Schema_Field_Xml('
                 <field>
                     <name>cc_list</name>
                     <type>text</type>
                 </field>');
             $sql = $this->_backend->addAddCol($sql, 'felamimail_cache_message', $declaration);
+        }
 
+        if (!$this->_backend->columnExists('bcc_list', 'felamimail_cache_message')) {
+            if (!$truncated) {
+                // truncate email cache to make this go faster
+                Felamimail_Controller::getInstance()->truncateEmailCache();
+                $truncated = true;
+            }
             $declaration = new Setup_Backend_Schema_Field_Xml('
                 <field>
                     <name>bcc_list</name>
                     <type>text</type>
                 </field>');
             $sql = $this->_backend->addAddCol($sql, 'felamimail_cache_message', $declaration);
+        }
 
+        if (!$this->_backend->columnExists('flag_list', 'felamimail_cache_message')) {
+            if (!$truncated) {
+                // truncate email cache to make this go faster
+                Felamimail_Controller::getInstance()->truncateEmailCache();
+                //$truncated = true;
+            }
             $declaration = new Setup_Backend_Schema_Field_Xml('
                 <field>
                     <name>flag_list</name>
                     <type>text</type>
                 </field>');
             $sql = $this->_backend->addAddCol($sql, 'felamimail_cache_message', $declaration);
+        }
+
+        if ($sql) {
             $this->getDb()->query($sql);
         }
 
@@ -270,5 +305,11 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
             $this->setTableVersion('felamimail_cache_message', 15);
         }
         $this->addApplicationUpdate('Felamimail', '15.8', self::RELEASE015_UPDATE008);
+    }
+
+    public function update009()
+    {
+        $this->update008();
+        $this->addApplicationUpdate('Felamimail', '15.9', self::RELEASE015_UPDATE009);
     }
 }
