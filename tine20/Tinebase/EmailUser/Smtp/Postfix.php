@@ -400,10 +400,11 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
      */
     protected function _addDestination(array $destinationData)
     {
-        $schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_destinationTable, $this->_db);
-        $destinationData = array_intersect_key($destinationData, $schema);
         $destinationData['dispatch_address'] = array_key_exists('dispatch_address', $destinationData)
             ? (int)$destinationData['dispatch_address'] : 0;
+
+        $schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_destinationTable, $this->_db);
+        $destinationData = array_intersect_key($destinationData, $schema);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' Insert into table destinations: '
