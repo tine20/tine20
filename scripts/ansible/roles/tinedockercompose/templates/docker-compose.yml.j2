@@ -42,6 +42,11 @@ services:
       - "{{ tinedockercompose_confd_path }}:/etc/tine20/conf.d"
       - "{{ tinedockercompose_files_path }}:/var/lib/tine20/files"
       - "{{ tinedockercompose_backup_path }}:/var/lib/tine20/backup"
+{% if tinedockercompose_additional_mounts is defined %}
+{% for mount in tinedockercompose_additional_mounts %}
+      - "{{ mount }}"
+{% endfor %}
+{% endif %}
     networks:
       - external_network
       - internal_network
