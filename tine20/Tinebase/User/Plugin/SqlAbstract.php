@@ -136,6 +136,7 @@ abstract class Tinebase_User_Plugin_SqlAbstract extends Tinebase_User_Plugin_Abs
         /** @var Zend_Db_Adapter_Abstract $con */
         foreach (static::$_dbConnections as $con) {
             $con->closeConnection();
+            Tinebase_TransactionManager::getInstance()->removeTransactionable($con);
         }
     }
     

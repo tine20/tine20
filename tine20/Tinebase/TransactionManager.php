@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  TransactionManager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -108,7 +108,14 @@ class Tinebase_TransactionManager
         
         return self::$_instance;
     }
-    
+
+    public function removeTransactionable($_transactionable): void
+    {
+        if (false !== ($offset = array_search($_transactionable, $this->_openTransactionables, true))) {
+            unset($this->_openTransactionables[$offset]);
+        }
+    }
+
     /**
      * starts a transaction
      *
