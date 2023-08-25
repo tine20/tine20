@@ -194,6 +194,7 @@ class Tinebase_EmailUser
 
     public static function clearCaches()
     {
+        Tinebase_User_Plugin_SqlAbstract::disconnectDbConnections();
         self::$_configuredBackends = [];
         self::$_configs = [];
         self::$_backends = [];
