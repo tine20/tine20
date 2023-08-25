@@ -1407,12 +1407,66 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
     public function testQueryFilterReturnedFromSrv()
     {
-        $result = $this->_uit->searchContacts(json_decode('[{"condition":"OR","filters":[{"field":"foreignRecord","operator":"AND","value":{"appName":"Addressbook","modelName":"Contact","linkType":"relation","filters":[{"field":"foreignRecord","operator":"AND","value":{"appName":"Addressbook","modelName":"Contact","linkType":"relation","filters":[{"field":"query","operator":"contains","value":"adf","id":"ext-record-206"}]},"id":"ext-record-110"}]},"id":"ext-record-91"}],"id":"FilterPanel"},{"field":"query","operator":"contains","value":"","id":"quickFilter"}]', true), []);
+        $result = $this->_uit->searchContacts(json_decode('[
+  {
+    "condition": "OR",
+    "filters": [
+      {
+        "field": "foreignRecord",
+        "operator": "AND",
+        "value": {
+          "appName": "Addressbook",
+          "modelName": "Contact",
+          "linkType": "relation",
+          "filters": [
+            {
+              "field": "foreignRecord",
+              "operator": "AND",
+              "value": {
+                "appName": "Addressbook",
+                "modelName": "Contact",
+                "linkType": "relation",
+                "filters": [
+                  {
+                    "field": "query",
+                    "operator": "contains",
+                    "value": "adf",
+                    "id": "ext-record-206"
+                  }
+                ]
+              },
+              "id": "ext-record-110"
+            }
+          ]
+        },
+        "id": "ext-record-91"
+      }
+    ],
+    "id": "FilterPanel"
+  },
+  {
+    "field": "query",
+    "operator": "contains",
+    "value": "",
+    "id": "quickFilter"
+  }
+]
+', true), []);
 
         $this->assertArrayHasKey('filter', $result);
         $filters = $result['filter'][0]['filters'][0]['value']['filters'][0]['value']['filters'];
         // make sure the query filter is not getting expanded
         $this->assertCount(1, $filters);
+    }
+
+    public function testQueryFilterEmptyOperator()
+    {
+        $result = $this->_uit->searchContacts([[
+            'field' => 'query',
+            'operator' => null,
+            'value' => 'abcsadcasdcsace',
+        ]], []);
+        self::assertEquals(0, $result['totalcount']);
     }
 
     /**
