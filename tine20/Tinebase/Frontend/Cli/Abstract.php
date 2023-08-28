@@ -843,7 +843,9 @@ class Tinebase_Frontend_Cli_Abstract
                     echo 'Exported to Filemanager path ' . $options['fm_path'] . '/' . basename($file) ."\n";
                 }
             } else {
-                echo 'Exported into file ' . $filename . "\n";
+                foreach ($filename as $fn) {
+                    echo 'Exported into file ' . $fn . "\n";
+                }
             }
         }
     }
