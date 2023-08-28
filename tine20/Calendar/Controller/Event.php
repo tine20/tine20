@@ -1195,6 +1195,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $_ids = (array)$_ids->getId();
         }
 
+        if (empty($_ids)) {
+            return;
+        }
+
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
 
         $forUpdateRaii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_backend);
