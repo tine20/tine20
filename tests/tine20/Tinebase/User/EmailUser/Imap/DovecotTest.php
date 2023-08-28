@@ -93,6 +93,8 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
         if ($this->_oldImapConf) {
             Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $this->_oldImapConf);
             Tinebase_User::destroyInstance();
+            Tinebase_EmailUser::clearCaches();
+            Tinebase_EmailUser::destroyInstance();
         }
 
         parent::tearDown();
@@ -323,7 +325,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
 
     public function testAddUserWithSecondaryDomainWithoutInstanceName()
     {
-        // TODO remove instanceName from config
+        // remove instanceName from config
         Tinebase_User::destroyInstance();
         $this->_oldImapConf = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
         $conf = clone $this->_oldImapConf;
