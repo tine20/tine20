@@ -3316,7 +3316,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         'system' => true
                     ],
-                ]
+                ],
+                self::DEFAULT_STR => Tinebase_Model_FullUser::USER_TYPE_USER,
             ],
         ],
         self::ACTION_LOG_TYPES => [
