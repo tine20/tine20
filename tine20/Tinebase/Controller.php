@@ -1338,6 +1338,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * get application metrics
      *
      * @return array
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
      */
     public function metrics(): array
     {
@@ -1351,23 +1354,29 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $fileSystemStorage = $fileSystem->getEffectiveAndLocalQuota($fileSystem->stat($rootPath));
         $data = array_merge($data, ['fileStorage' => $fileSystemStorage['effectiveUsage']]);
 
-        $imapBackend = Tinebase_EmailUser::getInstance();
-
-        if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
-            $imapUsageQuota = $imapBackend->getTotalUsageQuota();
-            $emailStorage = $imapUsageQuota['mailQuota'];
-            $data = array_merge($data, ['emailStorage' => $emailStorage]);
-
-            // there are tine instances without felamimail that still have system mailaccounts
-            // we need to get the number of mail accounts from the users
-            $usersWithSystemAccount = 0;
-            foreach (Tinebase_User::getInstance()->getUsers() as $user) {
-                $systemEmailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user);
-                if ($imapBackend->userExists($systemEmailUser)) {
-                    $usersWithSystemAccount ++;
-                }
+        if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+            try {
+                $imapBackend = Tinebase_EmailUser::getInstance();
+            } catch (Tinebase_Exception_Backend $teb) {
+                $imapBackend = null;
             }
-            $data = array_merge($data, ['usersWithSystemAccount' => $usersWithSystemAccount]);
+
+            if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
+                $imapUsageQuota = $imapBackend->getTotalUsageQuota();
+                $emailStorage = $imapUsageQuota['mailQuota'];
+                $data = array_merge($data, ['emailStorage' => $emailStorage]);
+
+                // there are tine instances without felamimail that still have system mailaccounts
+                // we need to get the number of mail accounts from the users
+                $usersWithSystemAccount = 0;
+                foreach (Tinebase_User::getInstance()->getUsers() as $user) {
+                    $systemEmailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user);
+                    if ($imapBackend->userExists($systemEmailUser)) {
+                        $usersWithSystemAccount++;
+                    }
+                }
+                $data = array_merge($data, ['usersWithSystemAccount' => $usersWithSystemAccount]);
+            }
         }
         
         return $data;
