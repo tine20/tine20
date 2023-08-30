@@ -33,6 +33,7 @@ describe('filemanager', () => {
                 await page.keyboard.press('Enter');
                 await page.waitForTimeout(2000);
                 await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name' ,{text:folder});
+                await page.waitForTimeout(1000);
             });
             test('open editDialog', async () => {
                 editDialog = lib.getNewWindow();
