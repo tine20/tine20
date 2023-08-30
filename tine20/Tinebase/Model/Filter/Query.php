@@ -49,7 +49,9 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
                 ' Given options are not used ... put options in $_data[\'options\']');
         }
 
-        $condition = (0 === strpos($_data['operator'], 'not'))
+        $this->_operator = empty($_data['operator']) ? 'contains' : $_data['operator'] ;
+
+        $condition = (0 === strpos($this->_operator, 'not'))
             ? Tinebase_Model_Filter_FilterGroup::CONDITION_AND
             : Tinebase_Model_Filter_FilterGroup::CONDITION_OR;
 
@@ -69,7 +71,6 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
 
         $this->_field = $_data['field'];
         $this->_value = $_data['value'];
-        $this->_operator = empty($_data['operator']) ? 'contains' : $_data['operator'] ;
 
         if (!empty($this->_value)) {
             $queries = is_array($this->_value) ? $this->_value : explode(' ', $this->_value);
