@@ -516,7 +516,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                     $account = current($accounts);
                     $account->xprops()[self::DIVIS_UID_NUMBER] = $uid;
                     $account->accountExpires = $accountExpires;
-                    $account->password_must_change = true;
+                    // $account->password_must_change = true;
                     $this->userCtrl->updateUser($account);
 
                     $memberIds = [$account->getId()];
@@ -613,6 +613,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                 unset($account->accountEmailAddress);
                 // we did set the course context further up the loop, make sure not to break that
                 $account->applyTwigTemplates();
+
                 $updateAccount = true;
             }
 
@@ -659,6 +660,13 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                 }
 
                 if ($cfg) {
+                    if (isset($sambaCfg) && $sambaCfg['homePath']) {
+                        $sambaSAM['homePath'] = rtrim($sambaCfg['homePath'], '\\') . '\\' . $account->accountLoginName . '\\';
+                    }
+                    if (isset($sambaCfg) && $sambaCfg['profilePath']) {
+                        $sambaSAM['profilePath'] = rtrim($sambaCfg['profilePath'], '\\') . '\\' . $account->accountLoginName . '\\';
+                    }
+                    $account->sambaSAM = $sambaSAM;
                     $account->accountHomeDirectory = $cfg['accountHomeDirectoryPrefix'] . $account->accountLoginName;
                 }
 
