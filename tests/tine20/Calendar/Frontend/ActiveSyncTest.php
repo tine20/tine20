@@ -1622,4 +1622,41 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
             . 'Accepted. The user has accepted the meeting request.');
         self::assertEquals(0, $syncrotonEventtoCreate->responseRequested);
     }
+
+    /**
+     * @return void
+     * 1. Termin im Browser erstellt. (Mit Terminort + Teilnehmer).
+     * 2. Termin warten bis geladen im Handy.
+     * 3. Termin im Browser anpassen (Terminort + Teilnehmer ändern).
+     * 4. Termin im Handy anpassen(Summary etc.).
+     */
+    public function testConcurrentUpdateV2()
+    {
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now()->subDay(1));
+        $syncrotonFolder = $this->testCreateFolder();
+
+        $container = Tinebase_Container::getInstance()->getContainerById($syncrotonFolder->serverId);
+
+        $event = ActiveSync_TestCase::getTestEvent($container);
+        $event = Calendar_Controller_Event::getInstance()->create($event);
+
+        $serverId = $event->getId();
+
+        $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+
+        $event->location = 'Test location';
+
+        $updatedEvent = Calendar_Controller_Event::getInstance()->update($event);
+
+        self::assertEquals($event->location, $updatedEvent->location);
+        /* @var Syncroton_Model_Event $syncrotonEvent */
+        $syncrotonEvent->subject = 'update on device';
+
+        $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEvent);
+
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($event->getId());
+
+        self::assertEquals('update on device', $updatedEvent->summary);
+        self::assertEquals($event->location, $updatedEvent->location);
+    }
 }
