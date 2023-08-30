@@ -281,7 +281,7 @@ class Courses_JsonTest extends TestCase
     /**
      * try to get a Course
      */
-    public function testSearchCourses()
+    public function testSearchCourses($queryFilter = false)
     {
         // create
         $course = $this->_getCourseData();
@@ -289,14 +289,25 @@ class Courses_JsonTest extends TestCase
         $this->_groupsToDelete->addRecord(Tinebase_Group::getInstance()->getGroupById($courseData['group_id']));
         
         // search & check
-        $search = $this->_json->searchCourses($this->_getCourseFilter($courseData['name']), $this->_getPaging());
+        $filter = $queryFilter
+            ? [['field' => 'query',
+                'operator' => 'contains',
+                'value' => $courseData['name']
+            ]]
+            : $this->_getCourseFilter($courseData['name']);
+        $search = $this->_json->searchCourses($filter, $this->_getPaging());
         $this->assertEquals($course['description'], $search['results'][0]['description']);
         $this->assertEquals(1, $search['totalcount']);
         
         // cleanup
         $this->_json->deleteCourses($courseData['id']);
     }
-       
+
+    public function testSearchCoursesQueryFilter()
+    {
+        $this->testSearchCourses(true);
+    }
+
     /**
      * test for import of members (1)
      *

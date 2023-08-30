@@ -5,7 +5,7 @@
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -31,7 +31,9 @@ class Courses_Model_CourseFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_filterModel = array(
         'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
         'group_id'       => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', 'type'))),
+        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => [
+            'fields' => array('name', 'type'),
+        ]),
         'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
             'idProperty' => 'courses.id',
@@ -45,6 +47,5 @@ class Courses_Model_CourseFilter extends Tinebase_Model_Filter_FilterGroup
         ),
         'is_deleted'     => ['filter' => Tinebase_Model_Filter_Bool::class],
         'internet'       => array('filter' => 'Tinebase_Model_Filter_Text'),
-        //'group_id'       => array('filter' => 'Tinebase_Model_Filter_ForeignId', 'options' => array('filtergroup' => 'Tinebase_Model_GroupFilter', 'controller' => 'Tinebase_Group')),
     );
 }
