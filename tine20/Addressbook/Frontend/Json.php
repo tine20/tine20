@@ -419,11 +419,18 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
     * get contact information from string by parsing it using predefined rules
     *
-    * @param string $address
+    * @param string|null $address
     * @return array
     */
-    public function parseAddressData(string $address): array
+    public function parseAddressData(?string $address): array
     {
+        if ($address === null) {
+            return [
+                'contact' => [],
+                'unrecognizedTokens' => [],
+            ];
+        }
+
         if (preg_match('/^http/', $address)) {
             return $this->_parseAddressFromUrl($address);
         } else {
