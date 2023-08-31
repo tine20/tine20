@@ -310,16 +310,16 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     public function updateUserWithoutEmailPluginUpdate(Tinebase_Model_FullUser $_user)
     {
         // remove email user plugins (add again afterwards)
-        $userPlugins = Tinebase_User::getInstance()->getSqlPluginNames();
+        $userPlugins = $this->_userBackend->getSqlPluginNames();
         $emailPlugins = [];
         foreach ($userPlugins as $pluginName) {
             if (Tinebase_EmailUser::isEmailUserPlugin($pluginName)) {
-                $emailPlugins[] = Tinebase_User::getInstance()->removePlugin($pluginName);
+                $emailPlugins[] = $this->_userBackend->removePlugin($pluginName);
             }
         }
         $result = $this->update($_user);
         foreach ($emailPlugins as $plugin) {
-            Tinebase_User::getInstance()->registerPlugin($plugin);
+            $this->_userBackend->registerPlugin($plugin);
         }
         return $result;
     }
