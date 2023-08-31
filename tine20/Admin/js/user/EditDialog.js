@@ -1032,7 +1032,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }, new Tine.Tinebase.widgets.keyfield.ComboBox({
                         fieldLabel: this.app.i18n._('User Type'),
                         name: 'type',
-                        readOnly: !Tine.Tinebase.appMgr.get('Admin').featureEnabled('featureChangeUserType'),
+                        hidden: !Tine.Tinebase.appMgr.get('Admin').featureEnabled('featureChangeUserType'),
                         app: 'Tinebase',
                         keyFieldName: 'userTypes',
                     }), {
