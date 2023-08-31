@@ -666,7 +666,9 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                     if (isset($sambaCfg) && $sambaCfg['profilePath']) {
                         $sambaSAM['profilePath'] = rtrim($sambaCfg['profilePath'], '\\') . '\\' . $account->accountLoginName . '\\';
                     }
-                    $account->sambaSAM = $sambaSAM;
+                    if (isset($sambaSAM)) {
+                        $account->sambaSAM = $sambaSAM;
+                    }
                     $account->accountHomeDirectory = $cfg['accountHomeDirectoryPrefix'] . $account->accountLoginName;
                 }
 
