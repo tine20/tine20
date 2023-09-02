@@ -284,6 +284,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const FEATURE_FULLTEXT_INDEX = 'featureFullTextIndex';
 
+    const CACHED_CONFIG_PATH = 'cachedConfigPath';
+
     /**
      * FEATURE_PATH
      *
@@ -1284,6 +1286,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => false,
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+        ],
+        self::CACHED_CONFIG_PATH => [
+            self::LABEL                 => 'Path for cached config file',
+            self::DESCRIPTION           => 'Path for cached config file (defaults to tmpdir if empty)', // _('Path for cached config file (defaults to tmpdir if empty)')
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => null,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => true,
         ],
         self::USERBACKENDTYPE => array(
@@ -3316,7 +3327,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         'system' => true
                     ],
-                ]
+                ],
+                self::DEFAULT_STR => Tinebase_Model_FullUser::USER_TYPE_USER,
             ],
         ],
         self::ACTION_LOG_TYPES => [

@@ -13,16 +13,17 @@ describe('mainScreen', () => {
     test('all apps', async () => {
         for (let i = 0; i < Apps.length; i++) {
             try {
-                await page.waitForTimeout(500);
+                await page.waitForTimeout(1000);
                 await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
-                await page.waitForTimeout(500);
+                await page.waitForTimeout(1000);
                 await expect(page).toClick('span', {text: Apps[i]});
             } catch (e) {
                 //console.log('Application ' + Apps[i] + ' don´t install');
             }
         }
+        await page.waitForTimeout(1000);
         await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
-        await page.waitForTimeout(500);
+        await page.waitForTimeout(1000);
         await expect(page).toClick('span', {text: 'Adressbuch'});
         await page.waitForTimeout(5000);
         await page.screenshot({path: 'screenshots/StandardBedienhinweise/1_standardbedienhinweise_alle_reiter.png'});
@@ -43,8 +44,9 @@ describe('usersettings', () => {
         });
     });
     test('usersettings', async () => {
+        newPage = lib.getNewWindow();
         await settings[1].click();
-        newPage = await lib.getNewWindow();
+        newPage = await newPage;
         await newPage.waitForTimeout(2000);
         await newPage.screenshot({path: 'screenshots/Benutzereinstellungen/2_benutzereinstellungen_generelle_einstellungen.png'});
     });

@@ -15,9 +15,10 @@ class Admin_Import_UserTest extends ImportTestCase
      */
     protected $_importContainer = null;
 
-    protected function tearDown(): void
+    protected function setUp(): void
     {
-        parent::tearDown();
+        parent::setUp();
+        Admin_Import_User_Csv::resetResolvedGroups();
     }
 
     /**

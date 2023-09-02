@@ -5,7 +5,7 @@
  * @package     tests
  * @subpackage  test root
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  * @todo invent common bootstrap for ServerTests and normal Tests to avoid code duplication
@@ -182,15 +182,15 @@ class TestServer
             '/--colors{0,1} /',
             '/--verbose /',
             '/--stop-on-failure /',
-            '/[\S]+\.php$/',
-            '/ \S+Tests{0,1}/',
+            '/\S+\.php$/',
             '/--debug\s*/',
-            '/--filter [\S]+\D/',
-            '/--configuration [\S]+\D/',
-            '/--exclude-group [\S]+\D/',
-            '/--coverage-[\S]+ [\S]+\D/',
-            '/-c [\S]+\D/',
-            '/--log-junit [\S]+\D/'
+            '/--filter(\s+|=)\S+/',
+            '/ \S+Tests{0,1}/',
+            '/--configuration \S+/',
+            '/--exclude-group \S+/',
+            '/--coverage-\S+ \S+/',
+            '/-c \S+/',
+            '/--log-junit \S+/'
         ), array(
             'php',
             '',

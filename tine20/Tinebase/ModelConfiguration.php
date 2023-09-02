@@ -845,7 +845,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         self::TYPE_BIGINT       => Tinebase_Model_Filter_Int::class,
         'float'                 => Tinebase_Model_Filter_Float::class,
         'money'                 => Tinebase_Model_Filter_Float::class,
-        'record'                => Tinebase_Model_Filter_ForeignId::class,
+        self::TYPE_RECORD                => Tinebase_Model_Filter_ForeignId::class,
         'records'               => Tinebase_Model_Filter_ForeignRecords::class,
         'relation'              => Tinebase_Model_Filter_Relation::class,
         'relations'             => Tinebase_Model_Filter_Relation::class,
@@ -879,7 +879,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * @var array
     */
     protected $_validatorMapping = array(
-        'record'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        self::TYPE_RECORD    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'relation'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'hexcolor'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => '#969696', Zend_Filter_Input::VALIDATE => array('Regex' => '/^#[0-9a-fA-F]{6}$/'))
     );
@@ -1315,7 +1315,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             
             // don't handle field if app is not available or feature disabled
             if (isset($fieldDef['config'])
-                && in_array($fieldDef[self::TYPE], ['record', 'records', 'virtual'])
+                && in_array($fieldDef[self::TYPE], [self::TYPE_RECORD, self::TYPE_RECORDS, 'virtual'])
                 && ! $this->_isAvailable($fieldDef['config']))
             {
                 $fieldDef['doctrineIgnore'] = true;
@@ -1548,7 +1548,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             }
 
             if ((isset($fieldDef['config']) || array_key_exists('config', $fieldDef))
-                && in_array($fieldDef[self::TYPE], ['record', 'records', 'virtual'])
+                && in_array($fieldDef[self::TYPE], [self::TYPE_RECORD, self::TYPE_RECORDS, 'virtual'])
                 && ! $this->_isAvailable($fieldDef['config']))
             {
                 return;
@@ -1582,7 +1582,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     $this->_filterModel[$fieldKey]['options'] = $config;
 
                     // set id filter controller
-                    if ($type === 'record' || $type === 'records') {
+                    if ($type === self::TYPE_RECORD || $type === self::TYPE_RECORDS) {
                         $this->_filterModel[$fieldKey]['options']['filtergroup'] =
                             ($config['recordClassName'] ?? ($config['appName'] . '_Model_' . $config['modelName'])) . 'Filter';
                         $this->_filterModel[$fieldKey]['options']['controller']  =
@@ -1764,9 +1764,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     return Tinebase_Model_Note::class;
                 case 'container':
                     return Tinebase_Model_Container::class;
-                case 'record':
+                case self::TYPE_RECORD:
                     return $this->_recordFields[$field][self::CONFIG][self::RECORD_CLASS_NAME];
-                case 'records':
+                case self::TYPE_RECORDS:
                     return $this->_recordsFields[$field][self::CONFIG][self::RECORD_CLASS_NAME];
                 case self::TYPE_DYNAMIC_RECORD:
                     return self::TYPE_DYNAMIC_RECORD;
@@ -1837,7 +1837,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     'length'                  => 40,
                     'appName'                 => 'Tinebase',
                     'modelName'               => 'User',
-                    'type'                    => 'record',
+                    'type'                    => self::TYPE_RECORD,
                     'recordClassName'         => Tinebase_Model_User::class,
                     'controllerClassName'     => Tinebase_User::class,
                     'filterClassName'         => Tinebase_Model_FullUserFilter::class,
@@ -1845,12 +1845,12 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 $this->_recordFields[$fieldKey] = $fieldDef;
                 break;
             /** @noinspection PhpMissingBreakStatementInspection */
-            case 'record':
+            case self::TYPE_RECORD:
                 if (isset($this->_filterModel[$fieldKey]['options'])) {
                     $this->_filterModel[$fieldKey]['options']['controller'] = $this->_getPhpClassName($this->_filterModel[$fieldKey]['options'], 'Controller');
                     $this->_filterModel[$fieldKey]['options']['filtergroup'] = $this->_getPhpClassName($this->_filterModel[$fieldKey]['options'], 'Model') . 'Filter';
                 }
-            case 'records':
+            case self::TYPE_RECORDS:
                 if (!isset($fieldDef[self::CONFIG])) {
                     break;
                 }
@@ -1907,7 +1907,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     }
                 }
                 $fieldDef['config']['dependentRecords'] = isset($fieldDef['config']['dependentRecords']) ? $fieldDef['config']['dependentRecords'] : false;
-                if ($fieldDef[self::TYPE] == 'record') {
+                if ($fieldDef[self::TYPE] == self::TYPE_RECORD) {
                     $fieldDef['config']['length'] = 40;
                     $this->_recordFields[$fieldKey] = $fieldDef;
                     if (!isset($fieldDef[self::DOCTRINE_IGNORE]) || !$fieldDef[self::DOCTRINE_IGNORE]) {
