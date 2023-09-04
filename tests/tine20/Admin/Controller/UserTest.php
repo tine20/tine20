@@ -13,6 +13,7 @@ class Admin_Controller_UserTest extends TestCase
 {
     protected $_imapConf = null;
     protected $_smtpConf = null;
+    protected $_emailAddressToRemove = null;
 
     /**
      * set up tests
@@ -37,11 +38,13 @@ class Admin_Controller_UserTest extends TestCase
             //Admin_Controller_User::getInstance()->update(Tinebase_Core::getUser());
 
             // remove mailaccounts after test
-            foreach ([
-                         Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP),
-                         Tinebase_EmailUser::getInstance(),
-                     ] as $emailUserBackend) {
-                $emailUserBackend->deleteOldUserDataIfExists(['email' => 'phpunitadminjson@' . TestServer::getPrimaryMailDomain()]);
+            if ($this->_emailAddressToRemove) {
+                foreach ([
+                             Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP),
+                             Tinebase_EmailUser::getInstance(),
+                         ] as $emailUserBackend) {
+                    $emailUserBackend->deleteOldUserDataIfExists(['email' => $this->_emailAddressToRemove]);
+                }
             }
         }
     }
@@ -60,9 +63,9 @@ class Admin_Controller_UserTest extends TestCase
     {
         $this->_skipWithoutEmailSystemAccountConfig();
         $this->_skipIfLDAPBackend();
+        $this->_testNeedsTransaction();
 
         if ($overwrite) {
-            $this->_testNeedsTransaction();
             $this->_imapConf = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
             $this->_smtpConf = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
             $imapConf = $this->_imapConf->toArray();
@@ -74,10 +77,12 @@ class Admin_Controller_UserTest extends TestCase
             Tinebase_EmailUser::destroyInstance();
         }
 
+        $username = 'phpunit' . Tinebase_Record_Abstract::generateUID(10);
         $userToCreate = TestCase::getTestUser([
-            'accountLoginName'      => 'phpunitadminjson',
-            'accountEmailAddress'   => 'phpunitadminjson@' . TestServer::getPrimaryMailDomain(),
+            'accountLoginName'      => $username,
+            'accountEmailAddress'   => $username . '@' . TestServer::getPrimaryMailDomain(),
         ]);
+        $this->_emailAddressToRemove = $userToCreate->accountEmailAddress;
         $userToCreate->smtpUser = new Tinebase_Model_EmailUser(array(
             'emailAddress'     => $userToCreate->accountEmailAddress,
         ));

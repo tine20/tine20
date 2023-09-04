@@ -95,6 +95,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
             Tinebase_User::destroyInstance();
             Tinebase_EmailUser::clearCaches();
             Tinebase_EmailUser::destroyInstance();
+            $this->_oldImapConf = null;
         }
 
         parent::tearDown();
