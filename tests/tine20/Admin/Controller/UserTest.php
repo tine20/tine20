@@ -63,9 +63,9 @@ class Admin_Controller_UserTest extends TestCase
     {
         $this->_skipWithoutEmailSystemAccountConfig();
         $this->_skipIfLDAPBackend();
+        $this->_testNeedsTransaction();
 
         if ($overwrite) {
-            $this->_testNeedsTransaction();
             $this->_imapConf = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
             $this->_smtpConf = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
             $imapConf = $this->_imapConf->toArray();
