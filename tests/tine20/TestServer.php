@@ -172,12 +172,20 @@ class TestServer
         //return $backtrace[1]['class'];
  
         $cmd = implode(' ', $_SERVER['argv']);
+        $scriptName = $_SERVER['SCRIPT_NAME'];
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Original commmand: ' . $cmd);
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Script name: ' . $_SERVER['SCRIPT_NAME']);
-        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Script name: ' . $scriptName);
+
+        $scriptNameRegex = '/' . preg_quote($_SERVER['SCRIPT_NAME'], '/') . '/';
+        if (! preg_match($scriptNameRegex, $cmd)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' Somehow the script name differs from the original command, we just replace the command...');
+            $scriptNameRegex = '/^\S+/';
+        }
+
         $cmd = preg_replace(array(
-            '@' . preg_quote($_SERVER['SCRIPT_NAME'], '@') . '@',
+            $scriptNameRegex,
             '/--stderr /',
             '/--colors{0,1} /',
             '/--verbose /',
