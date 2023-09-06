@@ -524,7 +524,9 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
                 HumanResources_Model_StreamModalReport::FLD_END,
             ];
         }
-        if (Tinebase_Application::getInstance()->isInstalled('Projects')) {
+        if (Tinebase_Application::getInstance()->isInstalled('Projects')
+            && class_exists(Projects_Model_Project::class)
+        ) {
             $columns[Projects_Model_Project::TABLE_NAME] = [
                 Projects_Model_Project::FLD_START,
                 Projects_Model_Project::FLD_END,
@@ -633,7 +635,9 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             $classes[] = HumanResources_Model_StreamModality::class;
             $classes[] = HumanResources_Model_StreamModalReport::class;
         }
-        if (Tinebase_Application::getInstance()->isInstalled('Projects')) {
+        if (Tinebase_Application::getInstance()->isInstalled('Projects')
+            && class_exists(Projects_Model_Project::class)
+        ) {
             $classes[] = Projects_Model_Project::class;
         }
         if (Tinebase_Application::getInstance()->isInstalled('Sales')) {
