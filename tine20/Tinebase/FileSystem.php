@@ -187,6 +187,8 @@ class Tinebase_FileSystem implements
         $this->_fileObjectBackend = new Tinebase_Tree_FileObject(null, array(
             Tinebase_Config::FILESYSTEM_MODLOGACTIVE => $this->_modLogActive
         ));
+
+        $this->_areaLockCache = [];
     }
 
     /**
@@ -3131,12 +3133,16 @@ class Tinebase_FileSystem implements
                     if ($_path->isToplevelPath()) {
                         if (!($hasPermission = ($_path->containerOwner === Tinebase_Core::getUser()->accountLoginName || $_action === 'get')) && $_nodePath) {
                             $hasPermission = $this->_checkACLNode($_nodePath->getNode(), 'admin');
+                        } elseif($hasPermission) {
+                            // check pin protection anyway
+                            $hasPermission = $this->_checkAreaLock($this->get($_path->getNode()));
                         }
                     } else {
                         $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
                     }
-                } else {
-                    $hasPermission = ($_action === 'get');
+                } elseif ($hasPermission = ($_action === 'get')) {
+                    // check pin protection anyway
+                    $hasPermission = $this->_checkAreaLock($this->get($_path->getNode()));
                 }
                 break;
             case Tinebase_FileSystem::FOLDER_TYPE_SHARED:
@@ -3153,26 +3159,37 @@ class Tinebase_FileSystem implements
                         Tinebase_Acl_Rights::ADMIN
                     ))) {
                     // admin, go ahead
+                    // check pin protection anyway
+                    $hasPermission = $this->_checkAreaLock($this->get($_path->getNode()));
                     break;
                 }
                 if ($_path->isToplevelPath()) {
                     if ('add' === $_action) {
-                        $hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
-                            $_path->application->name,
-                            Tinebase_Core::getUser()->getId(),
-                            Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
-                        );
+                        if ($hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
+                                    $_path->application->name,
+                                    Tinebase_Core::getUser()->getId(),
+                                    Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
+                                )) {
+                            // check pin protection anyway
+                            $hasPermission = $this->_checkAreaLock($this->get($_path->getNode()));
+                        }
                         break;
                     }
                     if (!($hasPermission = 'get' === $_action) && $_nodePath) {
                         $hasPermission = $this->_checkACLNode($_nodePath->getNode(), 'admin');
+                    } else {
+                        // check pin protection anyway
+                        $hasPermission = $this->_checkAreaLock($this->get($_path->getNode()));
                     }
                 } else {
                     $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
                 }
                 break;
             case Tinebase_Model_Tree_Node_Path::TYPE_ROOT:
-                $hasPermission = ($_action === 'get');
+                if ($hasPermission = ($_action === 'get')) {
+                    // check pin protection anyway
+                    $hasPermission = $this->_checkAreaLock($this->get($_path->getNode()));
+                }
                 break;
             case self::FOLDER_TYPE_RECORDS:
                 if ($_action !== 'get') {
@@ -3264,6 +3281,18 @@ class Tinebase_FileSystem implements
     {
         // always refetch node to have current acl_node & pin_protected_node value
         $node = $this->get($_containerId);
+        if (!$this->_checkAreaLock($node)) {
+            return false;
+        }
+        /** @noinspection PhpUndefinedMethodInspection */
+        $account = $_accountId instanceof Tinebase_Model_FullUser
+            ? $_accountId
+            : Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $_accountId, 'Tinebase_Model_FullUser');
+        return $this->_nodeAclController->hasGrant($node, $_grant, $account);
+    }
+
+    protected function _checkAreaLock(Tinebase_Model_Tree_Node $node): bool
+    {
         if (!isset($this->_areaLockCache[$node->getId()])
             && null !== $node->pin_protected_node
             && Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
@@ -3272,11 +3301,7 @@ class Tinebase_FileSystem implements
             return false;
         }
         $this->_areaLockCache[$node->getId()] = true;
-        /** @noinspection PhpUndefinedMethodInspection */
-        $account = $_accountId instanceof Tinebase_Model_FullUser
-            ? $_accountId
-            : Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $_accountId, 'Tinebase_Model_FullUser');
-        return $this->_nodeAclController->hasGrant($node, $_grant, $account);
+        return true;
     }
 
     /**

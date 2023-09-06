@@ -162,6 +162,36 @@ class Filemanager_ControllerTests extends TestCase
         $fileManager->moveNodes(array($personalFolderPath . '/test'), array($personalFolderPath . '/Test'));
     }
 
+    public function testSearchPinProtectedNode()
+    {
+        $fileManager = Filemanager_Controller_Node::getInstance();
+        $nodes = $fileManager->createNodes('/shared/test', Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+        $this->assertSame(1, $nodes->count());
+
+        $node = $nodes->getFirstRecord();
+        $this->assertNull($node->pin_protected_node);
+
+        $this->_createAreaLockConfig([
+            Tinebase_Model_AreaLockConfig::FLD_AREA_NAME => 'datasafe',
+            Tinebase_Model_AreaLockConfig::FLD_AREAS => [Tinebase_Model_AreaLockConfig::AREA_DATASAFE],
+            Tinebase_Model_AreaLockConfig::FLD_MFAS => ['pin'],
+            Tinebase_Model_AreaLockConfig::FLD_VALIDITY => Tinebase_Model_AreaLockConfig::VALIDITY_SESSION,
+        ]);
+
+        $node->pin_protected_node = $node->getId();
+        $node = $fileManager->update($node);
+
+        $this->assertSame($node->getId(), $node->pin_protected_node);
+
+        Filemanager_Controller_Node::destroyInstance();
+        Tinebase_Filesystem::getInstance()->resetBackends();
+
+        $this->expectException(Tinebase_Exception_AreaLocked::class);
+        (new Filemanager_Frontend_Json())->searchNodes([
+            ['field' => 'path', 'operator' => 'equals', 'value' => '/shared/test'],
+        ], []);
+    }
+
     public function testCreateSharedTopLevelFolder()
     {
         static::assertTrue(Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS),

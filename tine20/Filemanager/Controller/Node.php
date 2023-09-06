@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add transactions to move/create/delete/copy 
  */
@@ -19,6 +19,8 @@
  */
 class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 {
+    use Tinebase_Controller_SingletonTrait;
+
     /**
      * application name (is needed in checkRight())
      *
@@ -68,45 +70,16 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     protected $_moveNodesHook = [];
 
     protected $_allowedProperties = ['name', 'description', 'relations', 'customfields', 'tags', 'notes', 'acl_node', 'grants', 'quota', Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION, Tinebase_Model_Tree_Node::XPROPS_REVISION, 'pin_protected_node'];
-    
-    /**
-     * holds the instance of the singleton
-     *
-     * @var Filemanager_Controller_Node
-     */
-    private static $_instance = NULL;
-    
+
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton
      */
-    private function __construct() 
+    protected function __construct()
     {
         $this->_resolveCustomFields = true;
         $this->_backend = Tinebase_FileSystem::getInstance();
-    }
-    
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() 
-    {
-    }
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Filemanager_Controller_Node
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Filemanager_Controller_Node();
-        }
-        
-        return self::$_instance;
     }
 
     public function addAllowedProperty($property) {
@@ -566,8 +539,24 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     protected function _checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
         $path = $this->_ensurePathFilterPresent($_filter);
-        
-        $this->_backend->checkPathACL($path, $_action);
+
+        try {
+            $this->_backend->checkPathACL($path, $_action);
+        } catch (Tinebase_Exception_AccessDenied $e) {
+            try {
+                $node = $this->_backend->stat($path->statpath);
+                if (null !== $node->pin_protected_node
+                        && Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
+                        && Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)) {
+                    $teal = new Tinebase_Exception_AreaLocked('datasafe is locked');
+                    $cfg = Tinebase_AreaLock::getInstance()->getLastAuthFailedAreaConfig();
+                    $teal->setArea($cfg->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME});
+                    $teal->setMFAUserConfigs($cfg->getUserMFAIntersection(Tinebase_Core::getUser()));
+                    throw $teal;
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {}
+            throw $e;
+        }
         
         return $path;
     }
