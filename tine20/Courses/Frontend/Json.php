@@ -224,7 +224,8 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
     /**
      * add new member to course
-     * 
+     *
+     * @apiTimeout 150
      * @param array $userData
      * @param array $courseData
      * @return array
