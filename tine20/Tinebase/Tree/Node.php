@@ -468,6 +468,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 'value'     => $childName
             )
         ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
+        $searchFilter->ignorePinProtection();
         if (true === $getDeleted) {
             $searchFilter->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals',
                 Tinebase_Model_Filter_Bool::VALUE_NOTSET));
