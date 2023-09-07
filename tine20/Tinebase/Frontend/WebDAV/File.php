@@ -107,6 +107,8 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to edit file: ' . $this->_path);
         }
 
+        Tinebase_Frontend_WebDAV_Directory::checkQuota($pathRecord->getNode());
+
         if (false === ($handle = Tinebase_FileSystem::getInstance()->fopen($this->_path, 'w'))) {
             throw new Tinebase_Exception_Backend('Tinebase_FileSystem::fopen failed for path ' . $this->_path);
         }

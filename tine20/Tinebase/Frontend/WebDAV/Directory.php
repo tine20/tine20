@@ -117,8 +117,12 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to create file: ' . $this->_path . '/' . $name);
         }
 
+        $quotaChecked = false;
         // OwnCloud chunked file upload
         if (isset($_SERVER['HTTP_OC_CHUNKED']) && is_resource($data)) {
+            static::checkQuota($pathRecord->getNode());
+            $quotaChecked = true;
+
             $completeFile = Tinebase_Frontend_WebDAV_Directory::handleOwnCloudChunkedFileUpload($name, $data);
 
             if (!$completeFile instanceof Tinebase_Model_TempFile) {
@@ -137,6 +141,10 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             } catch (Tinebase_Exception_NotFound $tenf) {
                 throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
             }
+        }
+
+        if (!$quotaChecked) {
+            static::checkQuota($pathRecord->getNode());
         }
 
         $path = $this->_path . '/' . $name;
@@ -178,6 +186,22 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
 
 
         return '"' . $etag . '"';
+    }
+
+    static public function checkQuota(Tinebase_Model_Tree_Node $node): void
+    {
+        // estimate content length and check quota
+        if (!isset($_SERVER['HTTP_CONTENT_LENGTH'])) {
+            throw new \Sabre\DAV\Exception\BadRequest('CONTENT_LENGTH header missing!');
+        }
+        $length = $_SERVER['HTTP_CONTENT_LENGTH'];
+        if (($_SERVER['HTTP_OC_CHUNKED'] ?? false) && ($ocLen = $_SERVER['HTTP_OC_TOTAL_LENGTH'] ?? 0) && $ocLen > $length) {
+            $length = $ocLen;
+        }
+        $quotas = Tinebase_FileSystem::getInstance()->getEffectiveAndLocalQuota($node);
+        if ($quotas['effectiveQuota'] > 0 && $quotas['effectiveFree'] < $length) {
+            throw new Sabre\DAV\Exception\InsufficientStorage();
+        }
     }
 
     /**

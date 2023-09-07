@@ -296,7 +296,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             self::$_server->exec();
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " >>> *DAV response:\n" .
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " >>> *DAV response: " .
+                    http_response_code() . "\n" .
                     implode("\n", headers_list()) . "\n\n" .
                     self::$_server->httpResponse->stopBodyLog());
             }
