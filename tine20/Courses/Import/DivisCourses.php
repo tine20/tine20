@@ -789,7 +789,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
         if (isset($account->xprops()[self::COURSES_EXCLUDE_SYNC_UNTIL])) {
             try {
                 if ((new Tinebase_DateTime($account->xprops()[self::COURSES_EXCLUDE_SYNC_UNTIL], 'Europe/Berlin'))
-                        ->isEarlier(Tinebase_DateTime::now())) {
+                        ->isLater(Tinebase_DateTime::now())) {
                     $msg = 'skipping sync of account: ' . $account->accountLoginName . ' until: ' .
                         $account->xprops()[self::COURSES_EXCLUDE_SYNC_UNTIL];
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' .
