@@ -566,11 +566,13 @@ class SSO_Controller extends Tinebase_Controller_Event
                 // render logout redirect page
                 $redirect = new \SAML2\HTTPRedirect();
                 $urls = [];
-                foreach ($logoutRequests as $request) {
-                    try {
-                        $redirect->send($request);
-                    } catch (SSO_Facade_SAML_RedirectException $e) {
-                        $urls[] = $e->redirectUrl;
+                foreach ($logoutRequests as $requests) {
+                    foreach ($requests as $request) {
+                        try {
+                            $redirect->send($request);
+                        } catch (SSO_Facade_SAML_RedirectException $e) {
+                            $urls[] = $e->redirectUrl;
+                        }
                     }
                 }
 
