@@ -52,6 +52,8 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
 
         $this->response = new Sabre\HTTP\ResponseMock();
         $this->server->httpResponse = $this->response;
+
+        $_SERVER['HTTP_CONTENT_LENGTH'] = '8';
     }
 
     /**
