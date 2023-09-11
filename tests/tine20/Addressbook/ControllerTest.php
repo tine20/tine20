@@ -790,15 +790,9 @@ class Addressbook_ControllerTest extends TestCase
             self::markTestSkipped('no imap config found');
         }
 
-        $pwd = Tinebase_Record_Abstract::generateUID();
+        $this->_testNeedsTransaction();
 
-        $newUser = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser([
-            'accountLoginName'      => Tinebase_Record_Abstract::generateUID(),
-            'accountDisplayName'    => Tinebase_Record_Abstract::generateUID(),
-            'accountLastName'       => Tinebase_Record_Abstract::generateUID(),
-            'accountFullName'       => Tinebase_Record_Abstract::generateUID(),
-            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
-        ]), $pwd, $pwd, true);
+        $newUser = $this->_createTestUser();
 
         $newContact = $this->_instance->get($newUser->contact_id);
 
