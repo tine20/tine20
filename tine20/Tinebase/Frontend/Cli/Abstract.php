@@ -758,7 +758,15 @@ class Tinebase_Frontend_Cli_Abstract
         }
 
         foreach ($containers as $containerId) {
-            $this->_exportContainerAsVObject($containerId, $args, $_model, $_exportClass);
+            try {
+                $this->_exportContainerAsVObject($containerId, $args, $_model, $_exportClass);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+            } catch (Tinebase_Exception $te) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $te->getMessage());
+            }
         }
 
         return 0;
