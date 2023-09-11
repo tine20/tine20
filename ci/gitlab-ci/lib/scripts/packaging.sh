@@ -164,7 +164,8 @@ packaging_push_to_vpackages() {
 }
 
 packaging() {
-    version=${CI_COMMIT_TAG:-nightly-$(date '+%Y.%m.%d.%H.%M')}
+    CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+    version=${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(git describe --tags)"}
     release=${version}
 
     if ! repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME}; then
