@@ -41,15 +41,20 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
 
     public function checkTTL(): bool
     {
-        $this->deleteByFilter(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Felamimail_Model_AttachmentCache::class, [
-                ['field' => Felamimail_Model_AttachmentCache::FLD_TTL, 'operator' => 'before', 'value' => Tinebase_DateTime::now()],
-        ]), new Tinebase_Model_Pagination([
-            'limit' => 1000,
-            'sort' => Felamimail_Model_AttachmentCache::FLD_TTL,
-            'dir' => 'ASC',
-            'start' => 0,
-        ]));
+        $oldValue = $this->doRightChecks(false);
+        try {
+            $this->deleteByFilter(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                Felamimail_Model_AttachmentCache::class, [
+                    ['field' => Felamimail_Model_AttachmentCache::FLD_TTL, 'operator' => 'before', 'value' => Tinebase_DateTime::now()],
+                ]), new Tinebase_Model_Pagination([
+                    'limit' => 1000,
+                    'sort' => Felamimail_Model_AttachmentCache::FLD_TTL,
+                    'dir' => 'ASC',
+                    'start' => 0,
+                ]));
+        } finally {
+            $this->doRightChecks($oldValue);
+        }
 
         return true;
     }
@@ -227,6 +232,9 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
      */
     protected function _checkGrant($_record, $_action, $_throw = true, $_errorMessage = 'No Permission.', $_oldRecord = null)
     {
+        if (!$this->_doRightChecks) {
+            return;
+        }
         if (self::ACTION_UPDATE === $_action) {
             throw new Tinebase_Exception_AccessDenied(Felamimail_Model_AttachmentCache::class . ' may not be updated');
         }
