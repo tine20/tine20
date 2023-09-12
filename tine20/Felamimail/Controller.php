@@ -174,6 +174,8 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                 Felamimail_Controller_Account::getInstance()->createSystemAccount($_account, $pwd);
             } catch (Zend_Db_Adapter_Exception $zdae) {
                 Tinebase_Exception::log($zdae);
+            } catch (Tinebase_Exception_Backend $teb) {
+                Tinebase_Exception::log($teb);
             }
         }
     }
