@@ -455,8 +455,10 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                 $structDump = 'mysqldump --defaults-extra-file=' . $mycnf . ' --no-data --no-tablespaces ' .
                     escapeshellarg($dbName);
                 foreach ($option['structTables'] as $table) {
-                    $structDump .= ' ' . escapeshellarg($table);
-                    $ignoreTables .= '--ignore-table=' . escapeshellarg($dbName . '.' . $table) . ' ';
+                    if ($this->tableExists(str_replace(SQL_TABLE_PREFIX, '', $table))) {
+                        $structDump .= ' ' . escapeshellarg($table);
+                        $ignoreTables .= '--ignore-table=' . escapeshellarg($dbName . '.' . $table) . ' ';
+                    }
                 }
             } else {
                 $structDump = false;
@@ -470,6 +472,9 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                 . ' ' . escapeshellarg($dbName)
                 . ($structDump !== false ? '; ' . $structDump . '; }' : '')
                 . ' | bzip2 > ' . $backupDir . '/tine20_mysql.sql.bz2';
+
+            if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' backup cmd: ' . $cmd);
 
             exec($cmd);
         } finally {

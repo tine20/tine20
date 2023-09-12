@@ -576,16 +576,24 @@ class Setup_Frontend_Cli
 
     protected function _removemailaccounts()
     {
-        if (Tinebase_EmailUser::manages(Tinebase_Config::SMTP)) {
-            echo "Deleting SMTP mailaccounts...\n";
-            $smtpBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
-            $smtpBackend->deleteAllEmailUsers();
+        try {
+            if (Tinebase_EmailUser::manages(Tinebase_Config::SMTP)) {
+                echo "Deleting SMTP mailaccounts...\n";
+                $smtpBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+                $smtpBackend->deleteAllEmailUsers();
+            }
+        } catch (Tinebase_Exception_Backend $e) {
+            Tinebase_Exception::log($e);
         }
 
-        if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
-            echo "Deleting IMAP mailaccounts...\n";
-            $imapBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-            $imapBackend->deleteAllEmailUsers();
+        try {
+            if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+                echo "Deleting IMAP mailaccounts...\n";
+                $imapBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+                $imapBackend->deleteAllEmailUsers();
+            }
+        } catch (Tinebase_Exception_Backend $e) {
+            Tinebase_Exception::log($e);
         }
     }
     
