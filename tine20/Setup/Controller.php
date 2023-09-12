@@ -2726,15 +2726,21 @@ class Setup_Controller
         if (isset($options['emailusers']) && $options['emailusers']) {
             $options['backupDir'] = $backupDir;
             
-            foreach([Tinebase_Config::SMTP, Tinebase_Config::IMAP] as $backendConfig) {
-                if (! Tinebase_EmailUser::manages($backendConfig)) {
-                    Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 'backend : ' . $backendConfig . ' is not configured');
-                    continue;
+            foreach ([Tinebase_Config::SMTP, Tinebase_Config::IMAP] as $backendConfig) {
+                try {
+                    if (!Tinebase_EmailUser::manages($backendConfig)) {
+                        Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 'backend : '
+                            . $backendConfig . ' is not configured');
+                        continue;
+                    }
+
+                    $backend = Tinebase_EmailUser::getInstance($backendConfig);
+                    $backend->backup($options);
+                    Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Backup of '
+                        . $backendConfig . ' email users successful');
+                } catch (Tinebase_Exception_Backend $teb) {
+                    Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $teb->getMessage());
                 }
-                
-                $backend = Tinebase_EmailUser::getInstance($backendConfig);
-                $backend->backup($options);
-                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Backup of ' . $backendConfig . ' email users successful');
             }
         }
 
