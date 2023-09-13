@@ -1158,7 +1158,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $contactId = $_user->contact_id;
         if (empty($contactId)) {
             $_user->visibility = Tinebase_Model_FullUser::VISIBILITY_HIDDEN;
-            $_user->contact_id = null;
+            if ($_user->has('contact_id')) {
+                $_user->contact_id = null;
+            }
         }
         $this->treatMFA($_user);
         
