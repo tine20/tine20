@@ -135,6 +135,11 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
         $newAttendees = array();
         
         foreach ($attendees as $attendee) {
+            if ($attendee->userType !== Calendar_Model_Attender::USERTYPE_GROUP && is_scalar($attendee->user_id)) {
+                // skip attender
+                continue;
+            }
+
             $newAttendees[] = array(
                 'userType'    => $attendee->user_type == 'group' ? Calendar_Model_Attender::USERTYPE_GROUP : Calendar_Model_Attender::USERTYPE_USER,
                 'partStat'    => Calendar_Model_Attender::STATUS_TENTATIVE,
