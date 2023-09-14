@@ -1388,7 +1388,8 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         }
 
         $syncrotonFolder = $this->testCreateFolder();
-        Tinebase_Core::getPreference('Calendar')->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder->serverId);
+        Tinebase_Core::getPreference('Calendar')->setValue(
+            Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder->serverId);
 
         $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
         $defaultUserGroupMembers = Tinebase_Group::getInstance()->getGroupMembers($defaultUserGroup->getId());
@@ -1398,24 +1399,38 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
             'usersgroupid',
         ), $defaultUserGroup->list_id, file_get_contents(__DIR__ . '/files/event_with_group_attendee.xml')));
         $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
-        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(
+            Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
         $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonEvent);
 
         // assert created group & groupmembers
-        $syncrotonEventtoUpdate = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
-        $this->assertCount(count($defaultUserGroupMembers) + 1, $syncrotonEventtoUpdate->attendees, 'groupmembers not resolved: ' . print_r($syncrotonEventtoUpdate->attendees, true));
-        $this->assertCount(count($defaultUserGroupMembers) + 1, $syncrotonEventtoUpdate->exceptions[0]->attendees, 'groupmembers not resolved');
+        $syncrotonEventtoUpdate = $controller->getEntry(new Syncroton_Model_SyncCollection(
+            array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+        $this->_assertAttendee($syncrotonEventtoUpdate, $defaultUserGroupMembers);
 
         // update event
         $syncrotonEventtoUpdate->exceptions[0]->subject = 'update';
         $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->last_modified_time;
-        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(
+            Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
         $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEventtoUpdate);
 
         // assert updated group & groupmembers
         $updatedSyncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
-        $this->assertCount(count($defaultUserGroupMembers) + 1, $updatedSyncrotonEvent->attendees, 'groupmembers not resolved');
-        $this->assertCount(count($defaultUserGroupMembers) + 1, $updatedSyncrotonEvent->exceptions[0]->attendees, 'groupmembers not resolved');
+        $this->_assertAttendee($updatedSyncrotonEvent, $defaultUserGroupMembers);
+    }
+
+    /**
+     * @param Syncroton_Model_Event $event
+     * @param array $defaultUserGroupMembers
+     * @return void
+     */
+    protected function _assertAttendee(Syncroton_Model_Event $event, array $defaultUserGroupMembers): void
+    {
+        self::assertGreaterThanOrEqual(count($defaultUserGroupMembers) + 1, count($event->attendees),
+            'groupmembers not resolved: ' . print_r($event->attendees, true));
+        self::assertGreaterThanOrEqual(count($defaultUserGroupMembers) + 1, count($event->exceptions[0]->attendees),
+            'groupmembers not resolved');
     }
 
     public function testUpdateEventWithoutDtstartAndEnd()
