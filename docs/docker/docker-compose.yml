@@ -78,6 +78,7 @@ services:
 ############################################################################
 #  broadcasthub:
 #    image: tinegroupware/broadcasthub:0.6
+#    restart: always
 #    networks:
 #      - external_network
 #      - internal_network
@@ -97,8 +98,22 @@ services:
 ############################################################################
 #  documentserver
 ############################################################################
+#
+# to use this in tine, you need to add the following to your config:
+#
+# return [
+#    'OnlyOfficeIntegrator' => [
+#        'onlyOfficePublicUrl' => 'http://localhost:4020/',
+#        'onlyOfficeServerUrl' => 'http://documentserver/',
+#        'tine20ServerUrl' => 'http://web/',
+#        'jwtEnabled' => true,
+#        'jwtSecret' => 'change_me_also_define_in_tine_cfg',
+#    ],
+#
+############################################################################
 #  documentserver:
 #    image: onlyoffice/documentserver:latest
+#    restart: always
 #    ports:
 #      - "4020:80"
 #    environment:
@@ -122,11 +137,13 @@ services:
 ############################################################################
 #  documentpreview:
 #    image: tinegroupware/document-preview-service:2.1
+#    restart: always
 #    networks:
 #      - internal_network
 
 #  clamav:
 #    image: tiredofit/clamav
+#    restart: always
 #    container_name: clamav
 #    environment:
 #      - ZABBIX_HOSTNAME=clamav
