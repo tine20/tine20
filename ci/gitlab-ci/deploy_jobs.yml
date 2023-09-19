@@ -217,8 +217,5 @@ trigger-release:
       when: never
     - if: $TRIGGER_RELEASE == "true"
     - if: $PIPELINE_TYPE =~ /trigger-release/
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "2023.11"
-      changes:
-        - docs/**/*
   timeout: 20m
   interruptible: false
