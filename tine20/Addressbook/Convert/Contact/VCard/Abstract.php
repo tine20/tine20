@@ -181,6 +181,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     break;
                     
                 case 'PHOTO':
+                    $jpegphoto = null;
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Photo: ' . $property['ENCODING'] . ":" . $property['TYPE'] );
                     if (    ( $property['ENCODING'] != "b" )
@@ -192,64 +193,68 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                         $jpegphoto = $property->getValue();
                         break;
                     }
-                    switch ( $property['TYPE'] ) {
-                        case 'JPG' : {}
-                        case 'jpg' : {}
-                        case 'Jpg' : {}
-                        case 'Jpeg' : {}
-                        case 'jpeg' : {}
-                        case 'PNG' : {}
-                        case 'png' : {}
-                        case 'JPEG' : {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Photo: passing on invalid ' . $property['TYPE'] . ' image as is (' . strlen((string)$property->getValue()) .')' );
+                    switch (strtolower($property['TYPE'])) {
+                        case 'jpg':
+                        case 'jpeg':
+                        case 'png':
+                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                                    . ' Photo: passing on invalid ' . print_r($property['TYPE'], true)
+                                    . ' image as is (' . strlen((string)$property->getValue()) .')' );
                             $jpegphoto = $property->getValue();
                             break;
-                        }
-                        default : {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Photo: recoding to jpeg (' . strlen($property->getValue()) . ')' );
+                        default:
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                    . ' Photo: recoding to jpeg (' . strlen($property->getValue()) . ')');
 
                             $info = @getimagesizefromstring($property->getValue());
-                            if ( info === false ) {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Photo: is of unknown type. passing on as is');
+                            if ($info === false) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                                        . ' Photo: is of unknown type. passing on as is');
                                 $jpegphoto = $property->getValue();
                                 break;
                             }
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Photo: is of type (' . $info['mime'] . ')' );
-                            if ( in_array($info['mime'], Tinebase_ImageHelper::getSupportedImageMimeTypes()) ) {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Photo: can be handled by tine20 directly, not recoded ' );
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                    . ' Photo: is of type (' . $info['mime'] . ')');
+                            if (in_array($info['mime'], Tinebase_ImageHelper::getSupportedImageMimeTypes())) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                        . ' Photo: can be handled by tine20 directly, not recoded ');
                                 $jpegphoto = $property->getValue();
                                 break;
                             }
                             $recode = imagecreatefromstring($property->getValue());
-                            if ( $recode === false ) {
+                            if ($recode === false) {
                                 // pass on for now as is if image is not binary encoding, sabre or whoever would in this case
                                 // decode any base 64 or hex string into binary blob  
-                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Photo: recoding failed, pass on as is  ' );
+                                if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                                        . ' Photo: recoding failed, pass on as is  ');
                                 $jpegphoto = $property->getValue();
                                 break;
-                            }                            
+                            }
                             ob_start();
-                            if ( imagejpeg($recode,null,90) === true ) {
+                            if (imagejpeg($recode, null, 90) === true) {
                                 $jpegphoto = ob_get_contents();
                             }
                             ob_end_clean();
                             imagedestroy($recode);
-                            $info = getimagesizefromstring($jpegphoto);
-                            if ( !in_array($info['mime'], Tinebase_ImageHelper::getSupportedImageMimeTypes()) ) {
+                            if ($jpegphoto) {
+                                $info = getimagesizefromstring($jpegphoto);
+                                if (!in_array($info['mime'], Tinebase_ImageHelper::getSupportedImageMimeTypes())) {
+                                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                                            ' Photo: failed to recode to jpeg (' . strlen($jpegphoto) . ')');
+                                    $jpegphoto = $property->getValue();
+                                    break;
+                                }
                                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Photo: failed to recode to jpeg (' .strlen($jpegphoto) .')' );
-                                $jpegphoto = $property->getValue();
-                                break;
+                                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                                        ' Photo: recoded to jpeg (' . strlen($jpegphoto) . ')');
                             }
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Photo: recoded to jpeg (' .strlen($jpegphoto) .')' );
-                        }
                     }
                     break;
                     
