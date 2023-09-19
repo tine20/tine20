@@ -8,6 +8,7 @@
 
 # checkout/push/pull
 MergeUpwards () {
+    set -e
     MYBASEPATH=$(dirname $0)
     srcBranch=$1
     dstBranch=$2
@@ -33,6 +34,7 @@ MergeUpwards () {
         return
     fi
 
+    set +e
     git merge --no-edit --rerere-autoupdate $srcBranch
     RETVAL=$?
     if [ $RETVAL -ne 0 ]; then
@@ -44,6 +46,7 @@ MergeUpwards () {
             return $RETVAL
         fi
     fi
+    set -e
 
     echo "press p to push / q to quit / s to skip"
 
@@ -75,6 +78,7 @@ MergeUpwards () {
         fi
 
         if [[ $key = q ]]; then
+            set +e
             return
         fi
 
@@ -84,11 +88,13 @@ MergeUpwards () {
         fi
     done
 
+    set +e
     echo -e ""
 }
 
 # TODO allow multiple apps
 UpdateCustomApp () {
+    set -e
     branch=$1
     app=$2
     echo -e "updating custom app $app"
@@ -100,6 +106,7 @@ UpdateCustomApp () {
     echo -e "composer update --ignore-platform-reqs ${app}"
     composer update --ignore-platform-reqs ${app} || return 1
     git commit -a -m "$(printf "updated custom app ${app}\n\nexecute composer:\ncomposer update --ignore-platform-reqs ${app}")" && git push customers ${branch}
+    set +e
 }
 
 if [ "${BASH_SOURCE[0]}" -ef "$0" ]; then
