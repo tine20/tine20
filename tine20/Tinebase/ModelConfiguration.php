@@ -1661,7 +1661,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         }
 
         if (empty($queryFilters) && in_array($this->_titleProperty, array_keys($this->_fields))) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__
                 . '::' . __LINE__ . ' Adding title prop as default query filter to ' . $this->_modelName);
             $queryFilters[] = $this->_titleProperty;
         }
