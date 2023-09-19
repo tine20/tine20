@@ -109,12 +109,20 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                 break;
             case Tinebase_Event_User_ChangePassword::class:
                 /** @var Tinebase_Event_User_ChangePassword $_eventObject */
+                if (! Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+                    return;
+                }
                 try {
-                    $internalAccounts = Admin_Controller_EmailAccount::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
-                        ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_USER_INTERNAL],
-                        ['field' => 'user_id', 'operator' => 'equals', 'value' => $_eventObject->userId]
-                    ]));
-                    $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+                    $filter =
+                        Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                            ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_USER_INTERNAL],
+                            ['field' => 'user_id', 'operator' => 'equals', 'value' => $_eventObject->userId]
+                    ]);
+                    if (Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_EMAILACCOUNTS)) {
+                        $filter->doIgnoreAcl(true);
+                    }
+                    $internalAccounts = Felamimail_Controller_Account::getInstance()->getBackend()->search($filter);
+                    $emailUserBackend = Tinebase_EmailUser::getInstance();
                     $emailUserSMTPBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
                     
                     foreach ($internalAccounts as $internalAccount) {
@@ -124,7 +132,8 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                         $emailUserSMTPBackend->inspectSetPassword($emailUserId, $_eventObject->password);
                     }
                 } catch (Exception $e) {
-                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not change internal email accounts password: ' . $e);
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                        . ' Could not change internal email accounts password: ' . $e);
                     throw new Tinebase_Exception_Backend($e->getMessage());
                 }
                 break;
