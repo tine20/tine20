@@ -284,13 +284,14 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
      * create notification message for task alarm
      *
      * @return string
+     * @throws Tinebase_Exception_NotFound
      * 
      * @todo should we get the locale pref for each single user here instead of the default?
      * @todo move lead stuff to Crm(_Model_Lead)?
      * @todo add getSummary to Addressbook_Model_Contact for linked contacts?
      * @todo what about priority translation here?
      */
-    public function getNotificationMessage()
+    public function getNotificationMessage(): string
     {
         // get locale from prefs
         $localePref = Tinebase_Core::getPreference()->getValue(Tinebase_Preference::LOCALE);
@@ -307,9 +308,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         $status = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)->records->getById($this->status);
         $organizerName = ($this->organizer) ? $this->organizer->accountDisplayName : '';
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), TRUE));
-        
-        $text = $this->summary . "\n\n" 
+        $text = $this->summary . "\n\n"
             . $translate->_('Due')          . ': ' . $dueDateString                  . "\n" 
             . $translate->_('Organizer')    . ': ' . $organizerName                  . "\n" 
             . $translate->_('Description')  . ': ' . $this->description              . "\n"
@@ -318,24 +317,40 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
             . $translate->_('Percent')      . ': ' . $this->percent                  . "%\n\n";
             
         // add relations (get with ignore acl)
-        $relations = Tinebase_Relations::getInstance()->getRelations(get_class($this), 'Sql', $this->getId(), NULL, array('TASK'), TRUE);
+        $relations = Tinebase_Relations::getInstance()->getRelations(
+            get_class($this),
+            'Sql',
+            $this->getId(),
+            null, array('TASK'),
+            true);
+
         foreach ($relations as $relation) {
+            /* @var Tinebase_Model_Relation $relation */
             if ($relation->related_model == 'Crm_Model_Lead') {
                 $lead = $relation->related_record;
+                if ($lead === null) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' Related lead not found for relation: '
+                        . print_r($relation->toArray(), true));
+                    continue;
+                }
                 $text .= $translate->_('Lead') . ': ' . $lead->lead_name . "\n";
                 $leadRelations = Tinebase_Relations::getInstance()->getRelations(get_class($lead), 'Sql', $lead->getId());
                 foreach ($leadRelations as $leadRelation) {
                     if ($leadRelation->related_model == 'Addressbook_Model_Contact') {
                         $contact = $leadRelation->related_record;
                         $text .= $leadRelation->type . ': ' . $contact->n_fn . ' (' . $contact->org_name . ')' . "\n"
-                            . ((! empty($contact->tel_work)) ?  "\t" . $translate->_('Telephone')   . ': ' . $contact->tel_work   . "\n" : '')
-                            . ((! empty($contact->email)) ?     "\t" . $translate->_('Email')       . ': ' . $contact->email      . "\n" : '');
+                            . ((! empty($contact->tel_work)) ?  "\t" . $translate->_('Telephone')
+                                . ': ' . $contact->tel_work   . "\n" : '')
+                            . ((! empty($contact->email)) ?     "\t" . $translate->_('Email')
+                                . ': ' . $contact->email      . "\n" : '');
                     }
                 }
             }
         }
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $text);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' ' . $text);
             
         return $text;
     }
