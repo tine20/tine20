@@ -390,17 +390,17 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
             throw new Syncroton_Exception_NotFound($tenf->getMessage());
         }
         
-        $updatedEmtry = $this->toTineModel($entry, $oldEntry);
-        // @FIXME: this skips concurrency handling
-        $updatedEmtry->last_modified_time = new Tinebase_DateTime($this->_syncTimeStamp);
+        $updatedEntry = $this->toTineModel($entry, $oldEntry);
+        $updatedEntry->last_modified_time = new Tinebase_DateTime($this->_syncTimeStamp);
+        $updatedEntry->seq = null;
         
         try {
-            $updatedEmtry = $this->_contentController->update($updatedEmtry);
-        } catch (Tinebase_Exception_AccessDenied $tead) {
+            $updatedEntry = $this->_contentController->update($updatedEntry);
+        } catch (Tinebase_Exception_AccessDenied | Tinebase_Exception_ConcurrencyConflict $e) {
             throw new Syncroton_Exception_AccessDenied();
         }
         
-        return $updatedEmtry->getId();
+        return $updatedEntry->getId();
     }
     
     /**

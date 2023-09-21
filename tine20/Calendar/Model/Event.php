@@ -49,6 +49,7 @@
  * @property string                         $external_seq
  * @property string                         $base_event_id
  * @property Tinebase_Record_RecordSet      $exdate
+ * @property string                         $location
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
 {
