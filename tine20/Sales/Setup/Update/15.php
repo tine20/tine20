@@ -245,22 +245,36 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             foreach (Sales_Config::getInstance()->{Sales_Config::LANGUAGES_AVAILABLE}->records as $lang) {
                 foreach ($db->query('SELECT id, name, description, is_deleted FROM ' . $prodTableName)
                              ->fetchAll(Zend_Db::FETCH_NUM) as $row) {
-                    $db->insert($locTableName, [
-                        'id' => Tinebase_Record_Abstract::generateUID(),
-                        Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
-                        Tinebase_Record_PropertyLocalization::FLD_TYPE => 'name',
-                        Tinebase_Record_PropertyLocalization::FLD_TEXT => $row[1],
-                        Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang->id,
-                        'is_deleted' => $row[3],
-                    ]);
-                    $db->insert($locTableName, [
-                        'id' => Tinebase_Record_Abstract::generateUID(),
-                        Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
-                        Tinebase_Record_PropertyLocalization::FLD_TYPE => 'description',
-                        Tinebase_Record_PropertyLocalization::FLD_TEXT => $row[2],
-                        Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang->id,
-                        'is_deleted' => $row[3],
-                    ]);
+                    try {
+                        $lang = [
+                            'id' => Tinebase_Record_Abstract::generateUID(),
+                            Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
+                            Tinebase_Record_PropertyLocalization::FLD_TYPE => 'name',
+                            Tinebase_Record_PropertyLocalization::FLD_TEXT => $row[1],
+                            Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang->id,
+                            'is_deleted' => $row[3],
+                        ];
+                        $db->insert($locTableName, $lang);
+                    } catch (Zend_Db_Statement_Exception $zdse) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                            __METHOD__ . '::' . __LINE__ . ' lang text: ' . print_r($lang, true));
+                        Tinebase_Exception::log($zdse);
+                    }
+                    try {
+                        $lang = [
+                            'id' => Tinebase_Record_Abstract::generateUID(),
+                            Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
+                            Tinebase_Record_PropertyLocalization::FLD_TYPE => 'description',
+                            Tinebase_Record_PropertyLocalization::FLD_TEXT => $row[2],
+                            Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang->id,
+                            'is_deleted' => $row[3],
+                        ];
+                        $db->insert($locTableName, $lang);
+                    } catch (Zend_Db_Statement_Exception $zdse) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                            __METHOD__ . '::' . __LINE__ . ' lang text: ' . print_r($lang, true));
+                        Tinebase_Exception::log($zdse);
+                    }
                 }
             }
         }
