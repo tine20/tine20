@@ -278,14 +278,14 @@ class Tinebase_Group
      *
      * @return bool
      */
-    public static function syncGroups()
+    public static function syncGroups(): bool
     {
         $groupBackend = Tinebase_Group::getInstance();
         $adbInstalled = Tinebase_Application::getInstance()->isInstalled('Addressbook');
 
         if (! $groupBackend instanceof Tinebase_Group_Interface_SyncAble) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
-                ' No syncable group backend found - skipping syncGroups.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' No syncable group backend found - skipping syncGroups.');
             return true;
         }
         
