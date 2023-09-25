@@ -124,8 +124,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Core::setupUserLocale($localeString);
         
         if ($saveaspreference && is_object(Tinebase_Core::getUser())) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . " Saving locale: " . $localeString);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . " Saving locale: " . $localeString);
             Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE} = $localeString;
         }
         
@@ -1585,9 +1585,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         /** @var Tinebase_Model_MFA_UserConfig $userCfg */
         $userCfg = $account->mfa_configs->getById($mfaId);
+        $configId = $userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID};
+        if (! $configId) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Account ' . $accountLoginName . ' has no valid MFA config'
+                . ' (mfa id: ' . $mfaId . ')');
+            throw new Tinebase_Exception_NotFound('User MFA config not found');
+        }
         /** @var Tinebase_Model_MFA_WebAuthnConfig $config */
-        $config = Tinebase_Auth_MFA::getInstance($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
-            ->getAdapter()->getConfig();
+        $config = Tinebase_Auth_MFA::getInstance($configId)->getAdapter()->getConfig();
 
         return Tinebase_Auth_Webauthn::getWebAuthnRequestOptions($config, $account->getId())->jsonSerialize();
     }
