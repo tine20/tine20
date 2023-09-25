@@ -106,24 +106,9 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
             $this->getBackend()->update($record);
 
             return $record;
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            $transaction->release(); // avoid deadlocks -> release here, create has its own transaction handling
+        } catch (Tinebase_Exception $te) {
             unset($selectForUpdate);
-
-            /** @var Tinebase_Lock_Mysql $lock */
-            $lock = Tinebase_Core::getMultiServerLock(__METHOD__ . $_id);
-            if (!$lock->isLocked()) {
-                while (false === $lock->tryAcquire(5)) {}
-                return $this->get($_id);
-            }
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
-                __LINE__ . ' creating cache for ' . $_id);
-            $record = new Felamimail_Model_AttachmentCache(['id' => $_id, 'attachments' => []]);
-            if (empty($record->{Felamimail_Model_AttachmentCache::FLD_SOURCE_ID})) {
-                throw new Tinebase_Exception_NotFound('Could not find source record without ID');
-            }
-            return $this->create($record);
+            return $this->_handleTbException($te, $transaction, __METHOD__ . $_id, $_id);
 
         } finally {
             if (null !== $lock && $lock->isLocked()) {
@@ -132,6 +117,52 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
             unset($selectForUpdate);
             $transaction->release();
         }
+    }
+
+    /**
+     * @param Tinebase_Exception $te
+     * @param Tinebase_RAII $transaction
+     * @param string $lockId
+     * @param string $_id
+     * @return Felamimail_Model_AttachmentCache
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _handleTbException(Tinebase_Exception $te,
+                                          Tinebase_RAII $transaction,
+                                          string $lockId,
+                                          string $id): Felamimail_Model_AttachmentCache
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' ' . $te->getMessage());
+
+        $transaction->release(); // avoid deadlocks -> release here, create has its own transaction handling
+
+        if ($te instanceof Tinebase_Exception_NotFound) {
+            /** @var Tinebase_Lock_Mysql $lock */
+            $lock = Tinebase_Core::getMultiServerLock($lockId);
+            if (!$lock->isLocked()) {
+                while (false === $lock->tryAcquire(5)) {
+                }
+                return $this->get($id);
+            }
+        } else if (! $te instanceof Tinebase_Exception_UnexpectedValue) {
+            Tinebase_Exception::log($te);
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' creating cache for ' . $id);
+        $record = new Felamimail_Model_AttachmentCache(['id' => $id, 'attachments' => []]);
+        if (empty($record->{Felamimail_Model_AttachmentCache::FLD_SOURCE_ID})) {
+            throw new Tinebase_Exception_NotFound('Could not find source record without ID');
+        }
+        /* @var Felamimail_Model_AttachmentCache $createdRecord */
+        $createdRecord = $this->create($record);
+        return $createdRecord;
     }
 
     /**
