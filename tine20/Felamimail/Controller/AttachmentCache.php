@@ -165,7 +165,14 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
                 throw new Tinebase_Exception_UnexpectedValue('attachment not found for: ' .
                     print_r($_record->toArray(), true));
             }
-            $stream = $attachment['contentstream']->detach();
+            if ($attachment['contentstream']) {
+                $stream = $attachment['contentstream']->detach();
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' No contentstream found in attachment: '
+                    . print_r($attachment, true));
+                $stream = null;
+            }
             $fileName = $attachment['filename'];
 
         } else {
