@@ -20,7 +20,9 @@ final class Tinebase_Auth_MFA
     /**
      * the singleton pattern
      *
-     * @return self
+     * @param string $mfaId
+     * @return static self
+     * @throws Tinebase_Exception_Backend
      */
     public static function getInstance(string $mfaId): self
     {

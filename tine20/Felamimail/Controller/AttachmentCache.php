@@ -123,7 +123,7 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
      * @param Tinebase_Exception $te
      * @param Tinebase_RAII $transaction
      * @param string $lockId
-     * @param string $_id
+     * @param string $id
      * @return Felamimail_Model_AttachmentCache
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_Backend
