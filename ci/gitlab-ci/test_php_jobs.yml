@@ -311,26 +311,30 @@ php-unit-update-tests:
   interruptible: true
   script:
     - apk add --repository http://nl.alpinelinux.org/alpine/v3.14/main --repository http://nl.alpinelinux.org/alpine/v3.14/community php7-sodium
-    - cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20; git fetch --unshallow; git checkout 2021.11; 
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/copy_source.sh
-    - cd ${TINE20ROOT}/tine20
-    - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
-    - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --install SSO"
-    - cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20; git checkout 2022.11; 
+    - cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20; git fetch --unshallow; git checkout 2022.11;
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/copy_source.sh
     - cd ${TINE20ROOT}/tine20
     - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
     - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --install Bookmarks,DFCom,EFile,GDPR,MatrixSynapseIntegrator,OnlyOfficeIntegrator"
+    - cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20; git checkout 2023.11;
+    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/copy_source.sh
+    - cd ${TINE20ROOT}/tine20
+    - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
+    - cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20; git checkout 2024.11;
+    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/copy_source.sh
+    - cd ${TINE20ROOT}/tine20
+    - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
     - !reference [.abstract_jobs.php_unit, script]
   rules:
     - if: $PHP_UNIT_UPDATE_TESTS == "false"
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-update-tests/
-    - if: $CI_COMMIT_BRANCH != "2020.11"
+    - if: $CI_COMMIT_BRANCH != "2021.11"
       when: never
     - if: $PHP_UNIT_UPDATE_TESTS == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_UPDATE_TESTS_MERGE_REQUEST == "true"
       changes:
         paths:
           - "**/*.php"
+          - "tine20/composer.*"
     - if: $PIPELINE_TYPE =~ /update-tests/
