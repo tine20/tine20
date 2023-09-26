@@ -205,10 +205,15 @@ class Tinebase_Scheduler_Task
                 continue;
             }
 
-            $result = call_user_func_array([$class, $callable[self::METHOD_NAME]], isset($callable[self::ARGS]) ?
-                $callable[self::ARGS] : []);
-
-            $aggResult = $aggResult && $result;
+            $classmethod = [$class, $callable[self::METHOD_NAME]];
+            if (! is_callable($classmethod)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not get callable for scheduler job');
+                $aggResult = false;
+            } else {
+                $result = call_user_func_array($classmethod, $callable[self::ARGS] ?? []);
+                $aggResult = $aggResult && $result;
+            }
         }
 
         $this->_runDuration = time() - $startTime;
