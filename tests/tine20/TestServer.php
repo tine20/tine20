@@ -65,6 +65,10 @@ class TestServer
         
         Tinebase_Core::initFramework();
 
+        if (! Tinebase_Application::getInstance()->isInstalled('Tinebase')) {
+            exit("tine is not installed\n");
+        }
+
         // set default test mailer
         Tinebase_Smtp::setDefaultTransport(new Zend_Mail_Transport_Array());
 
