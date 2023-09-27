@@ -40,6 +40,7 @@ merge:
     # TODO remove main when github.com/tine20/tine20 is obsolete
     - merge_merge_upwards 2022.11 main
     - merge_merge_upwards 2022.11 2023.11
+    - merge_merge_upwards 2023.11 2024.11
     # BE changes < 2023.11 (TODO remove that when 2022.11 is obsolete)
     - merge_merge_upwards tine20.com/2022.11-custom 2023.11
     - merge_merge_mirror origin 2023.11 github main
