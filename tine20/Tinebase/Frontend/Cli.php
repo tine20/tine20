@@ -379,10 +379,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         $userController = Tinebase_User::getInstance();
 
+        $cronuser = null;
         try {
             $cronuser = $userController->getFullUserByLoginName($_opts->username);
         } catch (Tinebase_Exception_NotFound $tenf) {
             $cronuser = $this->_getCronuserFromConfigOrCreateOnTheFly();
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' .
+                __LINE__ . ' Maybe addressbook is not ready? ' . $zdse->getMessage());
         }
         if (! $cronuser) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
