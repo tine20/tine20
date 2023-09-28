@@ -77,9 +77,19 @@ class Felamimail_Controller extends Tinebase_Controller_Event
      */
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
+        if (in_array(get_class($_eventObject), [
+                Tinebase_Event_User_CreatedAccount::class,
+                Admin_Event_UpdateAccount::class,
+                Tinebase_Event_User_ChangePassword::class,
+            ]) && ! Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}
+                ->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}) {
+            // no need to go further - this tine does not care about system accounts
+            return;
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()
             ->debug(__METHOD__ . '::' . __LINE__ . ' Handle event of type ' . get_class($_eventObject));
-        
+
         switch (get_class($_eventObject)) {
             case Tinebase_Event_User_ChangeCredentialCache::class:
                 /** @var Tinebase_Event_User_ChangeCredentialCache $_eventObject */
@@ -93,19 +103,13 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                 break;
             case Admin_Event_AddAccount::class:
                 /** @var Tinebase_Event_User_CreatedAccount $_eventObject */
-                if (Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}
-                        ->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}) {
-                    Felamimail_Controller_Account::getInstance()->createSystemAccount($_eventObject->account,
-                        $_eventObject->pwd);
-                }
+                Felamimail_Controller_Account::getInstance()->createSystemAccount($_eventObject->account,
+                    $_eventObject->pwd);
                 break;
             case Admin_Event_UpdateAccount::class:
                 /** @var Admin_Event_UpdateAccount $_eventObject */
-                if (Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}
-                    ->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}) {
-                    Felamimail_Controller_Account::getInstance()->updateSystemAccount(
-                        $_eventObject->account, $_eventObject->oldAccount, $_eventObject->pwd);
-                }
+                Felamimail_Controller_Account::getInstance()->updateSystemAccount(
+                    $_eventObject->account, $_eventObject->oldAccount, $_eventObject->pwd);
                 break;
             case Tinebase_Event_User_ChangePassword::class:
                 /** @var Tinebase_Event_User_ChangePassword $_eventObject */
