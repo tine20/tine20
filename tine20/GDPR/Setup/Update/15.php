@@ -19,12 +19,17 @@ class GDPR_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE015_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE015_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE015_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE015_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
+            ],
+            self::RELEASE015_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -78,7 +83,7 @@ class GDPR_Setup_Update_15 extends Setup_Update_Abstract
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
 
-        if (!Tinebase_Core::isReplicationSlave()) {
+        if (!Tinebase_Core::isReplica()) {
             $appId = Tinebase_Application::getInstance()->getApplicationByName(Addressbook_Config::APP_NAME)->getId();
 
             try {
@@ -106,5 +111,23 @@ class GDPR_Setup_Update_15 extends Setup_Update_Abstract
         GDPR_Scheduler_Task::addDeleteExpiredDataTask($scheduler);
 
         $this->addApplicationUpdate(GDPR_Config::APPNAME, '15.2', self::RELEASE015_UPDATE002);
+    }
+
+    public function update003()
+    {
+        if (!Tinebase_Core::isReplica()) {
+            $appId = Tinebase_Application::getInstance()->getApplicationByName(Addressbook_Config::APP_NAME)->getId();
+
+            $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($appId,
+                GDPR_Controller_DataProvenance::ADB_CONTACT_CUSTOM_FIELD_NAME, Addressbook_Model_Contact::class, true);
+            $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][TMCC::FILTER_DEFINITION] = [];
+            Tinebase_CustomField::getInstance()->updateCustomField($cfc);
+
+            $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($appId,
+                GDPR_Controller_DataProvenance::ADB_CONTACT_REASON_CUSTOM_FIELD_NAME, Addressbook_Model_Contact::class, true);
+            $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][TMCC::FILTER_DEFINITION] = [];
+            Tinebase_CustomField::getInstance()->updateCustomField($cfc);
+        }
+        $this->addApplicationUpdate(GDPR_Config::APPNAME, '15.3', self::RELEASE015_UPDATE003);
     }
 }
