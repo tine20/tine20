@@ -393,6 +393,8 @@ sortInfo: {
 
         this.lastTransactionId = 0;
 
+        this.options = {};
+
         this.addEvents(
             /**
              * @event datachanged
@@ -1268,9 +1270,10 @@ myStore.reload(lastOptions);
         }
         if (options && options.add !== true && ((options.transactionId && this.lastTransactionId !== options.transactionId) || this.fireEvent('beforeloadrecords', o, options, success, this) === false)) {
             // fire load event so loading indicator stops
-            this.fireEvent('load', this, this.data.items, options);
+            this.fireEvent('load', this, this.data.items, this.options);
             return;
         }
+        this.options = options;
         if(!o || success === false){
             if(success !== false){
                 this.fireEvent('load', this, [], options);
