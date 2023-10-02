@@ -70,6 +70,8 @@
     group: root
     mode: 0640
   become: true
+  when:
+    - tinedockercompose_custom_compose is not defined or tinedockercompose_custom_compose|bool == false
 
 - include_tasks: filedeploy.yml
 

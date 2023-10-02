@@ -62,8 +62,7 @@ services:
     ### for traefik support (see https://doc.traefik.io/traefik/providers/docker/)
     labels:
       - "traefik.enable=true"
-      ### traefik doc: The regexp name (name in the example) is an arbitrary value, that exists only for historical reasons.
-      - "traefik.http.routers.web.rule=HostRegexp(`{name:.+}`) || Host(`{{ tinedockercompose_traefik_host }}`)"
+      - "traefik.http.routers.web.rule=Host(`{{ tinedockercompose_traefik_host }}`)"
       - "traefik.http.routers.web.entrypoints=websecure"
 {% if tinedockercompose_traefik_cert is defined and tinedockercompose_traefik_key is defined %}
       - "traefik.http.routers.web.tls=true"
@@ -82,6 +81,7 @@ services:
 {% if tinedockercompose_docservice_version is defined %}
   docservice:
     image: tinegroupware/document-preview-service:{{ tinedockercompose_docservice_version }}
+    restart: always
     networks:
       - internal_network
 {% endif %}
@@ -89,6 +89,7 @@ services:
 {% if tinedockercompose_documentserver is defined %}
   broadcasthub:
     image: tinegroupware/broadcasthub:0.6
+    restart: always
     networks:
       - external_network
       - internal_network
@@ -109,6 +110,7 @@ services:
 {% if tinedockercompose_documentserver is defined %}
   documentserver:
     image: onlyoffice/documentserver:latest
+    restart: always
     ports:
       - "4020:80"
     environment:
@@ -153,10 +155,14 @@ services:
       - "--certificatesresolvers.http01.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.http01.acme.storage=/letsencrypt/acme.json"
 {% endif %}
+      # use this for debugging / web ui
+      # - "--api.insecure=true"
       # - "--log.level=DEBUG"
     ports:
       - "80:80"
       - "443:443"
+      # web ui (needs api.insecure)
+      # - "8080:8080"
     networks:
       - internal_network
       - external_network
