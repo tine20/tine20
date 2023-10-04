@@ -178,6 +178,9 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
         }
 
         if (count($calling_args) < count($func_args)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' request: ' . print_r($request, true));
+
             throw new Zend_Json_Server_Exception('Invalid Method Call to '
                 . $this->_method . '. Requires ' . count($func_args) . ' parameters, '
                 . count($calling_args) . ' given.', 400);
