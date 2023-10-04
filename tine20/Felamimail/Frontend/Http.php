@@ -307,8 +307,8 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function getResource($cid, $messageId)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Requesting resource <' . $cid . '> for message ' . $messageId);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Requesting resource <' . $cid . '> for message ' . $messageId);
 
         try {
             $resPart = Felamimail_Controller_Message::getInstance()->getResourcePartStructure($cid, $messageId);

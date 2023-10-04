@@ -25,7 +25,19 @@
     - "{{ group_vars_dir }}/conf.d/*.j2"
   become: true
 
-### TODO more config via env-file?
+- name: deploy custom docker-compose.yml
+  template:
+    src: "{{ item }}"
+    dest: "{{ tinedockercompose_path }}/docker-compose.yml"
+    owner: root
+    group: root
+    mode: 0640
+  with_fileglob:
+    - "{{ group_vars_dir }}/docker-compose.yml.j2"
+  become: true
+  when:
+    - tinedockercompose_custom_compose is defined
+    - tinedockercompose_custom_compose|bool == true
 
 - name: create script files
   copy:
