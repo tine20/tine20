@@ -2325,8 +2325,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     public function updateSystemAccount(Tinebase_Model_FullUser $user, Tinebase_Model_FullUser $oldUser, ?string $pwd = null)
     {
         $checks = Felamimail_Controller_Account::getInstance()->doContainerACLChecks(false);
-        $systemaccount = null;
         $updateSystemAccount = false;
+        $systemaccount = Felamimail_Controller_Account::getInstance()->getSystemAccount($user);
         if ($user->accountFullName !== $oldUser->accountFullName) {
             $systemaccount = Felamimail_Controller_Account::getInstance()->getSystemAccount($user);
             if ($systemaccount) {
@@ -2334,10 +2334,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 $updateSystemAccount = true;
             }
         }
+
         if ($user->accountEmailAddress !== $oldUser->accountEmailAddress) {
-            if (!$systemaccount) {
-                $systemaccount = Felamimail_Controller_Account::getInstance()->getSystemAccount($user);
-            }
             if ($systemaccount) {
                 if (empty($user->accountEmailAddress)) {
                     Felamimail_Controller_Account::getInstance()->delete([$systemaccount->getId()]);
@@ -2347,12 +2345,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                     $updateSystemAccount = true;
                 }
             }
-            if (! $systemaccount && !empty($user->accountEmailAddress)) {
-                $this->createSystemAccount($user, $pwd);
-            }
         }
 
-        if ($updateSystemAccount) {
+        if (! $systemaccount && !empty($user->accountEmailAddress)) {
+            $this->createSystemAccount($user, $pwd);
+        } else if ($updateSystemAccount) {
             Felamimail_Controller_Account::getInstance()->update($systemaccount);
         }
         Felamimail_Controller_Account::getInstance()->doContainerACLChecks($checks);
