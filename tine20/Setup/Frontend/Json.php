@@ -331,6 +331,8 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         
         // setup also need some core tinebase regdata
         $locale = Tinebase_Core::get('locale');
+        $symbols = Zend_Locale::getTranslationList('symbols', $locale);
+
         $registryData['Tinebase'] = array(
             'serviceMap'       => Setup_Frontend_Http::getServiceMap(),
             'timeZone'         => Setup_Core::getUserTimezone(),
@@ -350,6 +352,8 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
             ),
             'maxFileUploadSize' => Tinebase_Helper::convertToBytes(ini_get('upload_max_filesize')),
             'maxPostSize'       => Tinebase_Helper::convertToBytes(ini_get('post_max_size')),
+            'thousandSeparator' => $symbols['group'],
+            'decimalSeparator'  => $symbols['decimal'],
             'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
             'brandingLogo'      => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO)),
             'brandingFaviconSvg' => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON_SVG),
