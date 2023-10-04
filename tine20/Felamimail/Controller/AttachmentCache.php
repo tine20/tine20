@@ -108,7 +108,8 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
             return $record;
         } catch (Tinebase_Exception $te) {
             unset($selectForUpdate);
-            return $this->_handleTbException($te, $transaction, __METHOD__ . $_id, $_id);
+            $id = $_id instanceof Felamimail_Model_AttachmentCache ? $_id->getId() : $_id;
+            return $this->_handleTbException($te, $transaction, __METHOD__ . $id, $id);
 
         } finally {
             if (null !== $lock && $lock->isLocked()) {
