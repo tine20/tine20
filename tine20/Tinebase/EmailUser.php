@@ -639,7 +639,7 @@ class Tinebase_EmailUser
     {
         self::$_masterUser = Tinebase_Record_Abstract::generateUID(8);
         if (empty($account->user)) {
-            $account->user = self::_getAccountUsername($account);
+            $account->user = self::getAccountUsername($account, null, true);
         }
         $account->password = Tinebase_Record_Abstract::generateUID(20);
         $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
@@ -648,17 +648,44 @@ class Tinebase_EmailUser
         }
     }
 
-    protected static function _getAccountUsername($account)
+    /**
+     * @param Felamimail_Model_Account $account
+     * @param string|null $accountLoginName
+     * @param bool $masteruser
+     * @return string
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public static function getAccountUsername(Felamimail_Model_Account $account,
+                                              ?string $accountLoginName = null,
+                                              bool $masteruser = false): string
     {
+        $imapLoginname =  null;
         if ($account->type === Felamimail_Model_Account::TYPE_SYSTEM) {
+            // TODO we should handle other system accounts here, too
             $record = Tinebase_User::getInstance()->getFullUserById($account->user_id);
+            $config = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+            if (! $config->useEmailAsUsername
+                && isset($record->imapUser->emailUsername) && ! empty($record->imapUser->emailUsername)
+            ) {
+                $imapLoginname = $record->imapUser->emailUsername;
+            }
         } else {
-            $record  = $account;
+            $record = $account;
         }
-        $user = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($record);
-        $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-        $imapLoginname = $imapEmailBackend->getLoginName($user->getId(), $account->email, $account->email);
-        return $imapLoginname . '*' . self::$_masterUser;
+
+        if (! $imapLoginname) {
+            $user = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($record);
+            $imapEmailBackend = Tinebase_EmailUser::getInstance();
+            $imapLoginname = $imapEmailBackend->getLoginName($user->getId(),
+                $accountLoginName ?? $account->email,
+                $account->email);
+        }
+
+        if ($masteruser) {
+            $imapLoginname .= '*' . self::$_masterUser;
+        }
+        return $imapLoginname;
     }
 
     public static function removeSieveAdminAccess()
