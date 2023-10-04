@@ -1474,9 +1474,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         $message = 'QUEUE OK';
                     }
 
-
-                    $message .= ' | size=' . $queueSize . ';lastJobId=' . $diff . ';lastDuration=' . $lastDuration .
-                        ';lastDurationUpdate=' . ($now - $lastDurationUpdate) . ';';
+                    $message .= ' | size=' . $queueSize . ';lrsize=' . $queueSizeLR
+                        . ';lastJobId=' . $diff . ';lastDuration=' . $lastDuration
+                        . ';lastDurationUpdate=' . ($now - $lastDurationUpdate) . ';';
                 } catch (Exception $e) {
                     $message = 'QUEUE FAIL: ' . get_class($e) . ' - ' . $e->getMessage();
                     $result = 2;
