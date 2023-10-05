@@ -933,7 +933,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 }
 
                 if (!isset($imapConfig['user']) || empty($imapConfig['user'])) {
-                    $credentials->username = $this->_getUsername($credentials);
+                    $credentials->username = Tinebase_EmailUser::getAccountUsername($this, $credentials->username);
                 }
             }
 
@@ -947,23 +947,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
 
         }
         return true;
-    }
-
-    protected function _getUsername($credentials)
-    {
-        $emailUser = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-        if (Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
-            if ($this->user_id && $this->type === Felamimail_Model_Account::TYPE_SYSTEM) {
-                $user = Tinebase_User::getInstance()->getFullUserById($this->user_id);
-                $emailUserId = $user->getEmailUserId();
-            } else {
-                $emailUserId = $this->xprops()[Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_IMAP];
-            }
-        } else {
-            $emailUserId = $this->user_id;
-        }
-
-        return $emailUser->getLoginName($emailUserId, $credentials->username, $this->email);;
     }
 
     /**

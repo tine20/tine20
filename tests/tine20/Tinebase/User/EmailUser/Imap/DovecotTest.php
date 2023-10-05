@@ -326,16 +326,50 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
 
     public function testAddUserWithSecondaryDomainWithoutInstanceName()
     {
-        // remove instanceName from config
-        Tinebase_User::destroyInstance();
-        $this->_oldImapConf = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
-        $conf = clone $this->_oldImapConf;
-        $conf->instanceName = null;
-        Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $conf);
+        $this->_configRemoveInstanceName();
 
         // username needs to be: phpunit-secondary-domain@DOMAIN!
         $rawDovecotUser = $this->testAddUserWithSecondaryDomain();
         $expectedUsername = preg_replace('/[@\.]+/', '-', $rawDovecotUser['loginname']) . '@' . $rawDovecotUser['domain'];
         self::assertEquals($expectedUsername, $rawDovecotUser['username']);
+    }
+
+    public function testUpdateUserWithSecondaryDomainWithoutInstanceName()
+    {
+        $this->_testNeedsTransaction();
+
+        $rawDovecotUser = $this->testAddUserWithSecondaryDomain();
+
+        $this->_configRemoveInstanceName();
+
+        $testuser = Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress', $rawDovecotUser['loginname']);
+        $testuser = Tinebase_User::getInstance()->getFullUserById($testuser->getId());
+
+        // update user -> username must not change!
+
+        Admin_Controller_User::getInstance()->update($testuser);
+        $updatedRawDovecotUser = $this->_getRawDovecotUser($testuser);
+        self::assertEquals($rawDovecotUser['username'], $updatedRawDovecotUser['username']);
+
+        // get loginname -> username/loginname must not change!
+
+        $mailaccount = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($testuser);
+        self::assertNotNull($mailaccount, 'could not find mail account');
+        $username = Tinebase_EmailUser::getAccountUsername($mailaccount);
+        self::assertEquals($rawDovecotUser['username'], $username);
+    }
+
+    /**
+     * remove instanceName from imap config
+     *
+     * @return void
+     */
+    protected function _configRemoveInstanceName(): void
+    {
+        Tinebase_User::destroyInstance();
+        $this->_oldImapConf = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+        $conf = clone $this->_oldImapConf;
+        $conf->instanceName = null;
+        Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $conf);
     }
 }
