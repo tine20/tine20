@@ -79,6 +79,14 @@
   when:
     - tinedockercompose_traefik_host is defined
 
+- name: docker compose pull
+  ansible.builtin.shell: docker compose pull
+  args:
+    chdir: "{{ tinedockercompose_path }}"
+  when:
+    - not ansible_check_mode
+    - tinedockercompose_no_restart is not defined or tinedockercompose_no_restart|bool == false
+
 - name: re/start docker compose
   ansible.builtin.shell: docker compose up -d
   args:
