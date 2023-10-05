@@ -271,7 +271,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         // change config to standard imap backend
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
         $this->_oldConfig = clone $imapConfig;
-        $imapConfig->backend = 'Standard'; //Tinebase_EmailUser::IMAP_STANDARD;
+        $imapConfig->backend = 'Standard';
         $imapConfig->domain = '';
         $imapConfig->instanceName = '';
         $imapConfig->useEmailAsUsername = true;
@@ -284,7 +284,6 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
 
         $credentials = Tinebase_Core::getUserCredentialCache();
         $credentialsBackend->getCachedCredentials($credentials);
-        // $credentialCachePwd = substr($credentials->password, 0, 24); ?!?
 
         $this->_account = $this->_controller->createSystemAccount(Tinebase_Core::getUser(), $credentials->password);
         // make sure the user is resolved again
