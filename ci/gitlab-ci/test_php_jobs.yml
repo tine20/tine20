@@ -326,6 +326,7 @@ php-unit-update-tests:
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/copy_source.sh
     - cd ${TINE20ROOT}/tine20
     - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
+    - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --install UserManual
     - cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20; git checkout 2024.11;
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/copy_source.sh
     - cd ${TINE20ROOT}/tine20
