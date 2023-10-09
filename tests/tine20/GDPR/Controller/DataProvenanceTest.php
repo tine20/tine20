@@ -77,7 +77,7 @@ class GDPR_Controller_DataProvenanceTest extends TestCase
 
     public function testAcl()
     {
-        $this->_removeRoleRight(GDPR_Config::APPNAME, Tinebase_Acl_Rights_Abstract::ADMIN);
+        $this->_removeRoleRight(GDPR_Config::APP_NAME, Tinebase_Acl_Rights_Abstract::ADMIN);
         // we still have the MANAGE right, so everything should work
         $this->testCreateUpdateSearchDelete();
 
@@ -90,7 +90,7 @@ class GDPR_Controller_DataProvenanceTest extends TestCase
         $createdProvenance = GDPR_Controller_DataProvenance::getInstance()->create($dataProvenance);
 
         // so, no admin right, no manage right => only get/search should work
-        $this->_removeRoleRight(GDPR_Config::APPNAME, GDPR_Acl_Rights::MANAGE_CORE_DATA_DATA_PROVENANCE);
+        $this->_removeRoleRight(GDPR_Config::APP_NAME, GDPR_Acl_Rights::MANAGE_CORE_DATA_DATA_PROVENANCE);
 
         static::assertEquals($createdProvenance->getId(),
             GDPR_Controller_DataProvenance::getInstance()->get($createdProvenance->getId())->getId());

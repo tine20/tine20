@@ -55,6 +55,6 @@ class GDPR_Setup_Update_12 extends Setup_Update_Abstract
             ];
         Tinebase_CustomField::getInstance()->updateCustomField($cfCfg);
 
-        $this->addApplicationUpdate(GDPR_Config::APPNAME, '12.1', self::RELEASE012_UPDATE001);
+        $this->addApplicationUpdate(GDPR_Config::APP_NAME, '12.1', self::RELEASE012_UPDATE001);
     }
 }

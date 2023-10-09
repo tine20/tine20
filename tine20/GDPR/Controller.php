@@ -23,7 +23,7 @@ class GDPR_Controller extends Tinebase_Controller_Event
 
     private function __construct()
     {
-        $this->_applicationName = GDPR_Config::APPNAME;
+        $this->_applicationName = GDPR_Config::APP_NAME;
     }
 
     private function __clone()

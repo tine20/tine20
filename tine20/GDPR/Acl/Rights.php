@@ -101,7 +101,7 @@ class GDPR_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      */
     public static function getTranslatedRightDescriptions()
     {
-        $translate = Tinebase_Translation::getTranslation(GDPR_Config::APPNAME);
+        $translate = Tinebase_Translation::getTranslation(GDPR_Config::APP_NAME);
 
         $rightDescriptions = parent::getTranslatedRightDescriptions();
         $rightDescriptions[self::MANAGE_CORE_DATA_DATA_PROVENANCE] = [

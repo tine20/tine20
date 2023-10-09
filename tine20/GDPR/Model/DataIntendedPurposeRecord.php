@@ -60,7 +60,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
         'multipleEdit' => false,
         
         'createModule' => false,
-        'appName' => GDPR_Config::APPNAME,
+        'appName' => GDPR_Config::APP_NAME,
         'modelName' => self::MODEL_NAME_PART,
 
         self::TABLE => [
@@ -93,7 +93,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                 self::TYPE              => self::TYPE_RECORD,
                 self::LENGTH            => 40,
                 self::CONFIG            => [
-                    self::APP_NAME          => GDPR_Config::APPNAME,
+                    self::APP_NAME          => GDPR_Config::APP_NAME,
                     self::MODEL_NAME        => GDPR_Model_DataIntendedPurpose::MODEL_NAME_PART,
                 ],
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
