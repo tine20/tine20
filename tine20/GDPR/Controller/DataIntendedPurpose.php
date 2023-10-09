@@ -30,7 +30,7 @@ class GDPR_Controller_DataIntendedPurpose extends Tinebase_Controller_Record_Abs
     {
         $this->_doContainerACLChecks = false;
 
-        $this->_applicationName = GDPR_Config::APPNAME;
+        $this->_applicationName = GDPR_Config::APP_NAME;
         $this->_modelName = GDPR_Model_DataIntendedPurpose::class;
 
         $this->_backend = new Tinebase_Backend_Sql([
@@ -79,7 +79,7 @@ class GDPR_Controller_DataIntendedPurpose extends Tinebase_Controller_Record_Abs
         }
 
         // get is ok, everything else requires GDPR_Acl_Rights::MANAGE_CORE_DATA_DATA_INTENDED_PURPOSE
-        if ('get' !== $_action && !Tinebase_Core::getUser()->hasRight(GDPR_Config::APPNAME,
+        if ('get' !== $_action && !Tinebase_Core::getUser()->hasRight(GDPR_Config::APP_NAME,
                 GDPR_Acl_Rights::MANAGE_CORE_DATA_DATA_INTENDED_PURPOSE)) {
             throw new Tinebase_Exception_AccessDenied("You don't have the right to manage data intended purposes.");
         }

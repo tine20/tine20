@@ -35,7 +35,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
     {
         $this->_doContainerACLChecks = false;
 
-        $this->_applicationName = GDPR_Config::APPNAME;
+        $this->_applicationName = GDPR_Config::APP_NAME;
         $this->_modelName = GDPR_Model_DataIntendedPurposeRecord::class;
 
         $this->_backend = new Tinebase_Backend_Sql([

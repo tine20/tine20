@@ -56,7 +56,7 @@ class GDPR_Model_DataIntendedPurpose extends Tinebase_Record_Abstract
         'multipleEdit' => false,
         
         'createModule' => false,
-        'appName' => GDPR_Config::APPNAME,
+        'appName' => GDPR_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
 
         self::TABLE => [

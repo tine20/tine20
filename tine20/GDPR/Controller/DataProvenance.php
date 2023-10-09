@@ -33,7 +33,7 @@ class GDPR_Controller_DataProvenance extends Tinebase_Controller_Record_Abstract
     {
         $this->_doContainerACLChecks = false;
 
-        $this->_applicationName = GDPR_Config::APPNAME;
+        $this->_applicationName = GDPR_Config::APP_NAME;
         $this->_modelName = GDPR_Model_DataProvenance::class;
 
         $this->_backend = new Tinebase_Backend_Sql([
@@ -82,7 +82,7 @@ class GDPR_Controller_DataProvenance extends Tinebase_Controller_Record_Abstract
         }
 
         // get is ok, everything else requires GDPR_Acl_Rights::MANAGE_CORE_DATA_DATA_PROVENANCE
-        if ('get' !== $_action && !Tinebase_Core::getUser()->hasRight(GDPR_Config::APPNAME,
+        if ('get' !== $_action && !Tinebase_Core::getUser()->hasRight(GDPR_Config::APP_NAME,
                 GDPR_Acl_Rights::MANAGE_CORE_DATA_DATA_PROVENANCE)) {
             throw new Tinebase_Exception_AccessDenied("You don't have the right to manage data provenances.");
         }
