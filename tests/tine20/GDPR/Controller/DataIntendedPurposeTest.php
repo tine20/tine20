@@ -64,7 +64,7 @@ class GDPR_Controller_DataIntendedPurposeTest extends TestCase
 
     public function testAcl()
     {
-        $this->_removeRoleRight(GDPR_Config::APPNAME, Tinebase_Acl_Rights_Abstract::ADMIN);
+        $this->_removeRoleRight(GDPR_Config::APP_NAME, Tinebase_Acl_Rights_Abstract::ADMIN);
         // we still have the MANAGE right, so everything should work
         $this->testCreateUpdateSearchDelete();
 
@@ -75,7 +75,7 @@ class GDPR_Controller_DataIntendedPurposeTest extends TestCase
         $createdIntendedPurpose = GDPR_Controller_DataIntendedPurpose::getInstance()->create($dataIntendedPurpose);
 
         // so, no admin right, no manage right => only get/search should work
-        $this->_removeRoleRight(GDPR_Config::APPNAME, GDPR_Acl_Rights::MANAGE_CORE_DATA_DATA_INTENDED_PURPOSE);
+        $this->_removeRoleRight(GDPR_Config::APP_NAME, GDPR_Acl_Rights::MANAGE_CORE_DATA_DATA_INTENDED_PURPOSE);
 
         static::assertEquals($createdIntendedPurpose->getId(),
             GDPR_Controller_DataIntendedPurpose::getInstance()->get($createdIntendedPurpose->getId())->getId());

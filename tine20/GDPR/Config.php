@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -20,7 +20,7 @@ class GDPR_Config extends Tinebase_Config_Abstract
      *
      * @var string
      */
-    const APPNAME = 'GDPR';
+    const APP_NAME = 'GDPR';
 
     /**
      * Is data provenance for ADB contacts mandatory
@@ -70,7 +70,7 @@ class GDPR_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION           => 'Default data provenance for ADB contacts',
             self::TYPE                  => self::TYPE_RECORD,
             self::OPTIONS               => [
-                self::APPLICATION_NAME      => GDPR_Config::APPNAME,
+                self::APPLICATION_NAME      => GDPR_Config::APP_NAME,
                 self::MODEL_NAME            => GDPR_Model_DataProvenance::MODEL_NAME_PART,
             ],
             // @TODO: remove TYPE_RECORD_CONTROLLER and derive it from modelName!
@@ -86,7 +86,7 @@ class GDPR_Config extends Tinebase_Config_Abstract
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Abstract::$_appName
      */
-    protected $_appName = self::APPNAME;
+    protected $_appName = self::APP_NAME;
     
     /**
      * holds the instance of the singleton

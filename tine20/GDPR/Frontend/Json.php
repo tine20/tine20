@@ -46,6 +46,6 @@ class GDPR_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     public function __construct()
     {
-        $this->_applicationName = GDPR_Config::APPNAME;
+        $this->_applicationName = GDPR_Config::APP_NAME;
     }
 }

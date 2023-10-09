@@ -63,7 +63,7 @@ class GDPR_Setup_Update_15 extends Setup_Update_Abstract
                 TMCC::LABEL             => 'GDPR Intended Purpose',
                 TMCC::TYPE              => TMCC::TYPE_RECORDS,
                 TMCC::CONFIG            => [
-                    TMCC::APP_NAME          => GDPR_Config::APPNAME,
+                    TMCC::APP_NAME          => GDPR_Config::APP_NAME,
                     TMCC::MODEL_NAME        => GDPR_Model_DataIntendedPurposeRecord::MODEL_NAME_PART,
                     TMCC::REF_ID_FIELD      => 'record',
                     TMCC::DEPENDENT_RECORDS => true,
@@ -76,7 +76,7 @@ class GDPR_Setup_Update_15 extends Setup_Update_Abstract
         ];
         Tinebase_CustomField::getInstance()->updateCustomField($cfCfg);
 
-        $this->addApplicationUpdate(GDPR_Config::APPNAME, '15.1', self::RELEASE015_UPDATE001);
+        $this->addApplicationUpdate(GDPR_Config::APP_NAME, '15.1', self::RELEASE015_UPDATE001);
     }
 
     public function update002()
@@ -110,7 +110,7 @@ class GDPR_Setup_Update_15 extends Setup_Update_Abstract
         $scheduler = Tinebase_Core::getScheduler();
         GDPR_Scheduler_Task::addDeleteExpiredDataTask($scheduler);
 
-        $this->addApplicationUpdate(GDPR_Config::APPNAME, '15.2', self::RELEASE015_UPDATE002);
+        $this->addApplicationUpdate(GDPR_Config::APP_NAME, '15.2', self::RELEASE015_UPDATE002);
     }
 
     public function update003()
@@ -128,6 +128,6 @@ class GDPR_Setup_Update_15 extends Setup_Update_Abstract
             $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][TMCC::FILTER_DEFINITION] = [];
             Tinebase_CustomField::getInstance()->updateCustomField($cfc);
         }
-        $this->addApplicationUpdate(GDPR_Config::APPNAME, '15.3', self::RELEASE015_UPDATE003);
+        $this->addApplicationUpdate(GDPR_Config::APP_NAME, '15.3', self::RELEASE015_UPDATE003);
     }
 }
