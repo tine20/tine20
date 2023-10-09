@@ -193,12 +193,12 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      *
      * @param Tinebase_Record_RecordSet $records
      */
-    public function resolveRecords(Tinebase_Record_RecordSet $records, $multiple = true)
+    public function resolveRecords(Tinebase_Record_RecordSet $records)
     {
         $recordClassName = $records->getRecordClassName();
         $modelConfiguration = $recordClassName::getConfiguration();
-        $this->_resolveBeforeToArray($records, $modelConfiguration, $multiple);
-        $this->_resolveAfterToArray($records, $modelConfiguration, $multiple);
+        $this->_resolveBeforeToArray($records, $modelConfiguration, true);
+        $this->_resolveAfterToArray($records, $modelConfiguration, true);
 
         return $records;
     }
