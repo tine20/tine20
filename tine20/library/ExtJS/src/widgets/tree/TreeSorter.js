@@ -55,49 +55,43 @@ Ext.tree.TreeSorter = function(tree, config){
     tree.on("textchange", this.updateSortParent, this);
 
     const dsc = this.dir && this.dir.toLowerCase() === "desc";
-    const p = this.property || "text";
+    let p = this.property || "text";
     const sortType = this.sortType;
     const fs = this.folderSort;
     const cs = this.caseSensitive === true;
     const leafAttr = this.leafAttr || 'leaf';
-    const priorityList = this.priorityList || [];
+    let priorityList = this.priorityList || [];
     const priorityProperty = this.priorityProperty;
     const locale = Tine.Tinebase.registry.get('locale').locale || 'en';
 
     this.sortFn = function(n1, n2){
-        if(fs){
-            if(n1.attributes[leafAttr] && !n2.attributes[leafAttr]){
-                return 1;
-            }
-            if(!n1.attributes[leafAttr] && n2.attributes[leafAttr]){
-                return -1;
-            }
+        if(fs) {
+            if(n1.attributes[leafAttr] && !n2.attributes[leafAttr]) return 1;
+            if(!n1.attributes[leafAttr] && n2.attributes[leafAttr]) return -1;
         }
+        p = priorityProperty || p;
+        const n1Data = !cs && typeof n1.attributes[p] === 'string' ? n1.attributes[p].toUpperCase() : n1.attributes[p];
+        const n2Data = !cs && typeof n2.attributes[p] === 'string' ? n2.attributes[p].toUpperCase() : n2.attributes[p];
         
-        const node1Priority = priorityProperty ? priorityList.includes(n1.attributes[priorityProperty]) : false;
-        const node2Priority = priorityProperty ? priorityList.includes(n2.attributes[priorityProperty]) : false;
-
-        if(node1Priority && !node2Priority){
-            return -1;
-        }
-        if(!node1Priority && node2Priority){
-            return +1;
-        }
-        if (node1Priority && node2Priority) {
-            return priorityList.indexOf(n1.attributes[priorityProperty]) > priorityList.indexOf(n2.attributes[priorityProperty]) ? +1 : -1;
-        } else {
-            const v1 = sortType ? sortType(n1) : (cs ? n1.attributes[p] : n1.attributes[p].toUpperCase());
-            const v2 = sortType ? sortType(n2) : (cs ? n2.attributes[p] : n2.attributes[p].toUpperCase());
+        if (priorityProperty) {
+            if (!cs) priorityList = priorityList.map((item) => {return item.toUpperCase();});
+            const node1Priority = priorityList.includes(n1Data);
+            const node2Priority = priorityList.includes(n2Data);
             
-            if (Ext.isString(v1) && Ext.isString(v2)) {
-                return v1.localeCompare(v2, locale);
-            }
+            if(node1Priority && !node2Priority) return -1;
+            if(!node1Priority && node2Priority) return +1;
+            if (node1Priority && node2Priority) return priorityList.indexOf(n1Data) > priorityList.indexOf(n2Data) ? +1 : -1;
+        } else {
+            const v1 = sortType ? sortType(n1) : n1Data;
+            const v2 = sortType ? sortType(n2) : n2Data;
+            
+            if (Ext.isString(v1) && Ext.isString(v2)) return v1.localeCompare(v2, locale);
 
-            if(v1 < v2){
+            if (v1 < v2){
                 return dsc ? +1 : -1;
-            }else if(v1 > v2){
+            } else if (v1 > v2){
                 return dsc ? -1 : +1;
-            }else{
+            } else {
                 return 0;
             }
         }
