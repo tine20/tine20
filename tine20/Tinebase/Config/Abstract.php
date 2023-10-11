@@ -1081,18 +1081,29 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         $hookClass = Tinebase_Config::getInstance()->get($configKey);
         if ($hookClass) {
             $filename = $hookClass . '.php';
-            if (! class_exists($hookClass) && file_exists($filename)) {
-                @include($filename);
+            if (! class_exists($hookClass)) {
+                try {
+                    @include($filename);
+                } catch (Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage() . ')'
+                    );
+                }
             }
 
             if (class_exists($hookClass)) {
                 $hook = new $hookClass();
                 if (! method_exists($hook, $method)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                        . ' Method not found in hook class');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' Method not found in hook class');
                     return false;
                 }
                 return $hook;
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Configured hook class not found: ' . $hookClass
+                    . ' (include path: ' . ini_get('include_path') . ')'
+                );
             }
         }
         return false;
