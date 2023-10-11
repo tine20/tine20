@@ -615,6 +615,51 @@ Zeile 3</AirSyncBase:Data>
         return array($serverId, $syncrotonEvent);
     }
     
+    public function testConcurrentUpdate($syncrotonFolder = null)
+    {
+        if ($syncrotonFolder === null) {
+            $syncrotonFolder = $this->testCreateFolder();
+        }
+        
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+        
+        $xml = new SimpleXMLElement($this->_testConcurrentUpdate);
+        $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        
+        $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonEvent);
+        
+        $event = Calendar_Controller_Event::getInstance()->get($serverId);
+        
+        // change exception #2
+        $exceptions = Calendar_Controller_Event::getInstance()->getRecurExceptions($event);
+        foreach ($exceptions as $exception) {
+            if ($exception->dtstart->toString() == '2014-06-25 13:00:00') {
+                $exception->summary = 'Fruehstueck';
+                Calendar_Controller_Event::getInstance()->update($exceptions[1]);
+            }
+        }
+        
+        $xmlUpdate = new SimpleXMLElement($this->_testConcurrentUpdateUpdate);
+        $syncrotonEvent = new Syncroton_Model_Event($xmlUpdate->Collections->Collection->Commands->Change[0]->ApplicationData);
+
+        $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->creation_time;
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
+        
+        // update exception - should not throw concurrency exception
+        $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEvent);
+        
+        $event = Calendar_Controller_Event::getInstance()->get($serverId);
+        $exceptions = Calendar_Controller_Event::getInstance()->getRecurExceptions($event);
+        
+        foreach ($exceptions as $exception) {
+            if ($exception->dtstart->toString() == '2014-06-25 13:00:00') {
+                $this->assertEquals('Abendessen', $exception->summary, print_r($exceptions[1]->toArray(), true));
+            } else {
+                $this->assertEquals('Mittagspause', $exception->summary, print_r($exceptions[1]->toArray(), true));
+            }
+        }
+    }
+
     public function testCreateEntryOutlook13($syncrotonFolder = null)
     {
         if ($syncrotonFolder === null) {
@@ -1422,6 +1467,66 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         self::assertEquals('2013-10-22 16:00:00', $updatedEvent->dtstart->toString());
     }
 
+    public function testUpdateEventAddRecureException()
+    {
+        $syncrotonFolder = $this->testCreateFolder();
+        $event = $this->_createEvent();
+        $event->attendee->addRecord(new Calendar_Model_Attender([
+            'user_id' => $this->_personas['sclever']->contact_id,
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+        ]));
+        $event->rrule = new Calendar_Model_Rrule('FREQ=WEEKLY;INTERVAL=1;WKST=MO;BYDAY=TU,FR');
+        $event = Calendar_Controller_Event::getInstance()->update($event);
+        $event->attendee->find('user_id', $this->_personas['sclever']->contact_id)->status =
+            Calendar_Model_Attender::STATUS_ACCEPTED;
+        $event = Calendar_Controller_Event::getInstance()->update($event);
+
+        $controller = Syncroton_Data_Factory::factory($this->_class,
+            $this->_getDevice(ActiveSync_TestCase::TYPE_IOS_11), $event->creation_time);
+
+        $syncrotonEventtoUpdate = $controller->getEntry(new Syncroton_Model_SyncCollection(
+            ['collectionId' => $syncrotonFolder->serverId]), $event->getId());
+        self::assertNotNull($syncrotonEventtoUpdate->attendees, 'attendee should not be null');
+
+        // 20180703T160000Z is a Tuesday
+        $xml = new SimpleXMLElement('<Exception>
+                <Body xmlns="uri:AirSyncBase">
+                  <Type>1</Type>
+                  <Data/>
+                </Body>
+                <Deleted xmlns="uri:Calendar">0</Deleted>
+                <ExceptionStartTime xmlns="uri:Calendar">20180703T160000Z</ExceptionStartTime>
+                <StartTime xmlns="uri:Calendar">20180703T160000Z</StartTime>
+                <EndTime xmlns="uri:Calendar">20180703T170000Z</EndTime>
+                <Subject xmlns="uri:Calendar">TEST-EXCEPTION-FROM-IOS yeah</Subject>
+                <BusyStatus xmlns="uri:Calendar">2</BusyStatus>
+                <AllDayEvent xmlns="uri:Calendar">0</AllDayEvent>
+              </Exception>');
+        $exception = new Syncroton_Model_EventException($xml);
+        $syncrotonEventtoUpdate->exceptions = [$exception];
+        $attendees = [];
+        /** @var Syncroton_Model_EventAttendee $attendee */
+        foreach ($syncrotonEventtoUpdate->attendees as $attendee) {
+            //unset($attendee->attendeeStatus);
+            $attendees[] = clone $attendee;
+        }
+        $exception->attendees = $attendees;
+
+        $serverId = $controller->updateEntry($syncrotonFolder->serverId, $event->getId(), $syncrotonEventtoUpdate);
+
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($serverId);
+        static::assertEquals(1, count($updatedEvent->exdate), 'exdates count not right');
+        static::assertEquals('2018-07-03 16:00:00', $updatedEvent->exdate[0]);
+
+        $exceptions = Calendar_Controller_Event::getInstance()->getRecurExceptions($updatedEvent);
+        static::assertEquals(1, $exceptions->count(), 'exdates count not right');
+        /** @var Calendar_Model_Event $exception */
+        $exception = $exceptions->getFirstRecord();
+        static::assertEquals(2, $exception->attendee->count(), 'attendee count is wrong');
+        static::assertEquals(2, $exception->attendee->filter('status', Calendar_Model_Attender::STATUS_ACCEPTED)
+            ->count(), 'expected both attendees have accepted');
+    }
+
     public function testPreserveDataOnCreateRecurException()
     {
         $cfCfg = $this->_createCustomField(Tinebase_Record_Abstract::generateUID(), Calendar_Model_Event::class);
@@ -1524,7 +1629,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
      * 3. Termin im Browser anpassen (Terminort + Teilnehmer ändern).
      * 4. Termin im Handy anpassen(Summary etc.).
      */
-    public function testConcurrentUpdate()
+    public function testConcurrentUpdateV2()
     {
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now()->subDay(1));
         $syncrotonFolder = $this->testCreateFolder();
