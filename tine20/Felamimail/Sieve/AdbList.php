@@ -33,7 +33,7 @@ class Felamimail_Sieve_AdbList
         $rejectMsg = $translation->_($rejectMsg);
 
         if ($this->_allowExternal) {
-            $this->_addRecieverList($result);
+            $this->_addReceiverList($result);
             if (!$this->_keepCopy) {
                 $result .= 'discard;' . PHP_EOL;
             }
@@ -52,7 +52,7 @@ class Felamimail_Sieve_AdbList
                 }
             }
 
-            $this->_addRecieverList($result);
+            $this->_addReceiverList($result);
 
             // we keep msg by default, only if the condition was not met we discard?
             // always discard non-allowed msgs?!?
@@ -62,13 +62,24 @@ class Felamimail_Sieve_AdbList
         return $result;
     }
 
-    protected function _addRecieverList(&$result)
+    /**
+     * @param string $result
+     * @return void
+     */
+    protected function _addReceiverList(string &$result): void
     {
+        $internalDomains = [];
         if ($this->_forwardOnlySystem && empty($internalDomains = Tinebase_EmailUser::getAllowedDomains())) {
             throw new Tinebase_Exception_UnexpectedValue('allowed domains list is empty');
         }
 
         foreach ($this->_receiverList as $email) {
+            if (! preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $email)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Email address invalid: ' . $email);
+                continue;
+            }
+
             if ($this->_forwardOnlySystem) {
                 $match = false;
                 foreach ($internalDomains as $domain) {
