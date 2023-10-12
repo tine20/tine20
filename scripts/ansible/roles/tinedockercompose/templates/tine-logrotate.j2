@@ -1,0 +1,10 @@
+{{ tinedockercompose_file_log_dir }}/*.log {
+  rotate 7
+  maxage 7
+  daily
+  compress
+  delaycompress
+  missingok
+  notifempty
+  create 0640 tine20 root
+}
