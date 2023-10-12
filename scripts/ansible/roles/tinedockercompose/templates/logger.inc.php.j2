@@ -1,0 +1,28 @@
+<?php
+// logger configuration
+return [
+    'logger' => array (
+        'active' => true,
+        'filename' => 'php://stdout',
+        'priority' => 5,
+        'logruntime' => true,
+        'logdifftime' => true,
+        'traceQueryOrigins' => true,
+        'additionalWriters' => [
+            [
+{% if tinedockercompose_file_log_user is defined %}
+                'filter'   => [
+                    'user' => '{{ tinedockercompose_file_log_user }}'
+                ]
+{% endif %}
+                'active' => true,
+{% if tinedockercompose_file_log_user is defined %}
+                'filename' => '/var/log/tine20/metaways.log',
+{% else %}
+                'filename' => '/var/log/tine20/tine.log',
+{% endif %}
+                'priority' => '7',
+            ],
+        ],
+    ),
+];

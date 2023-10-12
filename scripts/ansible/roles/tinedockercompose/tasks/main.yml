@@ -79,6 +79,11 @@
   when:
     - tinedockercompose_traefik_host is defined
 
+- include_tasks: logger.yml
+  when:
+    - tinedockercompose_file_log is defined
+    - tinedockercompose_file_log|bool == true
+
 - name: docker compose pull
   ansible.builtin.shell: docker compose pull
   args:
