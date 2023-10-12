@@ -397,7 +397,7 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
         try {
             $updatedEntry = $this->_contentController->update($updatedEntry);
         } catch (Tinebase_Exception_AccessDenied | Tinebase_Exception_ConcurrencyConflict $e) {
-            throw new Syncroton_Exception_AccessDenied();
+            throw new Syncroton_Exception_AccessDenied($e->getMessage());
         }
         
         return $updatedEntry->getId();
