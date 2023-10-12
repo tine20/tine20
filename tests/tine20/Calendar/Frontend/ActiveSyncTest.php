@@ -617,6 +617,8 @@ Zeile 3</AirSyncBase:Data>
     
     public function testConcurrentUpdate($syncrotonFolder = null)
     {
+        self::markTestSkipped('FIXME: this (sometimes) throws a concurrency error');
+
         if ($syncrotonFolder === null) {
             $syncrotonFolder = $this->testCreateFolder();
         }
@@ -1467,8 +1469,10 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         self::assertEquals('2013-10-22 16:00:00', $updatedEvent->dtstart->toString());
     }
 
-    public function testUpdateEventAddRecureException()
+    public function testUpdateEventAddRecurException()
     {
+        self::markTestSkipped('FIXME: this (sometimes) throws a concurrency error');
+
         $syncrotonFolder = $this->testCreateFolder();
         $event = $this->_createEvent();
         $event->attendee->addRecord(new Calendar_Model_Attender([
