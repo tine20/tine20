@@ -1663,7 +1663,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $_value = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_value, null, null,
                         $format);
                 } elseif ($_value instanceof Tinebase_Model_CustomField_Config) {
-                    $_value = $_value->value->__toString();
+                    $_value = $this->_customfieldToString($_value);
                 } elseif ($_value instanceof Tinebase_Config_KeyFieldRecord) {
                     $_value = $_value->__toString();
                 } elseif ($_value instanceof Tinebase_Record_Interface) {
@@ -1692,7 +1692,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if (!$this->_rawData && $_type) {
             switch ($_type) {
                 case Tinebase_ModelConfiguration_Const::TYPE_MONEY:
-                    $_value = sprintf('%01.2f ' . Tinebase_Config::getInstance()->{Tinebase_Config::CURRENCY_SYMBOL}, round((float)$_value, 2));
+                    $_value = sprintf('%01.2f ' .
+                        Tinebase_Config::getInstance()->{Tinebase_Config::CURRENCY_SYMBOL}, round((float)$_value, 2));
                     break;
                 default:
                     break;
@@ -1700,6 +1701,23 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
 
         return (string)$_value;
+    }
+
+    /**
+     * @param Tinebase_Model_CustomField_Config $value
+     * @return string
+     */
+    protected function _customfieldToString(Tinebase_Model_CustomField_Config $value): string
+    {
+        try {
+            return $value->value->__toString();
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' .
+                    $tenf->getMessage());
+            }
+            return '';
+        }
     }
 
     protected function _endRow()
