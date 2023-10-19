@@ -2356,14 +2356,24 @@ class Setup_Controller
                 Tinebase_Timemachine_ModificationLog::getInstance()->removeApplication($_application);
 
                 // delete containers, config options and other data for app
-                Tinebase_Application::getInstance()->removeApplicationAuxiliaryData($_application);
+                try {
+                    Tinebase_Application::getInstance()->removeApplicationAuxiliaryData($_application);
+                } catch (Exception $e) {
+                    Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                        . ' removeApplicationAuxiliaryData of app ' . $_application->name . ' failed: ' . $e);
+                }
             }
             
             // remove application from table of installed applications
             Tinebase_Application::getInstance()->deleteApplication($_application);
         }
 
-        Setup_Uninitialize::uninitialize($_application);
+        try {
+            Setup_Uninitialize::uninitialize($_application);
+        } catch (Exception $e) {
+            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Uninitializing app '
+                . $_application->name . ' failed: ' . $e);
+        }
 
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Removed app: " . $_application->name);
     }
