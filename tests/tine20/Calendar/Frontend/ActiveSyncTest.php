@@ -617,8 +617,6 @@ Zeile 3</AirSyncBase:Data>
     
     public function testConcurrentUpdate($syncrotonFolder = null)
     {
-        self::markTestSkipped('FIXME: this (sometimes) throws a concurrency error');
-
         if ($syncrotonFolder === null) {
             $syncrotonFolder = $this->testCreateFolder();
         }
@@ -644,7 +642,7 @@ Zeile 3</AirSyncBase:Data>
         $xmlUpdate = new SimpleXMLElement($this->_testConcurrentUpdateUpdate);
         $syncrotonEvent = new Syncroton_Model_Event($xmlUpdate->Collections->Collection->Commands->Change[0]->ApplicationData);
 
-        $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->creation_time;
+        $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->last_modified_time;
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
         
         // update exception - should not throw concurrency exception
@@ -1471,8 +1469,6 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
 
     public function testUpdateEventAddRecurException()
     {
-        self::markTestSkipped('FIXME: this (sometimes) throws a concurrency error');
-
         $syncrotonFolder = $this->testCreateFolder();
         $event = $this->_createEvent();
         $event->attendee->addRecord(new Calendar_Model_Attender([
@@ -1486,7 +1482,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         $event = Calendar_Controller_Event::getInstance()->update($event);
 
         $controller = Syncroton_Data_Factory::factory($this->_class,
-            $this->_getDevice(ActiveSync_TestCase::TYPE_IOS_11), $event->creation_time);
+            $this->_getDevice(ActiveSync_TestCase::TYPE_IOS_11), $event->last_modified_time);
 
         $syncrotonEventtoUpdate = $controller->getEntry(new Syncroton_Model_SyncCollection(
             ['collectionId' => $syncrotonFolder->serverId]), $event->getId());
