@@ -279,7 +279,18 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         if (Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
-            $accountIds = $accounts->getId();
+            $this->_appendPersonalFolderSize($accounts->getId(),$results);
+        }
+
+        return array(
+            'results'     => array_values($results),
+            'totalcount'  => Admin_Controller_User::getInstance()->searchCount($filter)
+        );
+    }
+
+    protected function _appendPersonalFolderSize(array $accountIds, array &$results)
+    {
+        try {
             /** @var Tinebase_Model_Tree_Node $node */
             foreach (Tinebase_FileSystem::getInstance()->searchNodes(new Tinebase_Model_Tree_Node_Filter(array(
                 array('field' => 'path', 'operator' => 'equals', 'value' => '/Filemanager/folders/personal'),
@@ -290,12 +301,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $results[$node->name]['filesystemRevisionSize'] = $node->revision_size;
                 }
             }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
         }
-
-        return array(
-            'results'     => array_values($results),
-            'totalcount'  => Admin_Controller_User::getInstance()->searchCount($filter)
-        );
     }
 
     /**
