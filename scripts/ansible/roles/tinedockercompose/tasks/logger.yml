@@ -24,7 +24,7 @@
   template:
     src: logger.inc.php.j2
     dest: "{{ tinedockercompose_confd_path }}/logger.inc.php"
-    owner: root
+    owner: tine20
     group: root
     mode: 0640
   become: true
