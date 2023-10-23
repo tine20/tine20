@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -101,12 +101,15 @@ class OnlyOfficeIntegrator_Controller_AccessToken extends Tinebase_Controller_Re
     }
     
     /**
+     * @param bool $skipInvalidateTimeouts
      * @return Tinebase_Record_RecordSet
      */
-    public function getUnresolvedTokensCached()
+    public function getUnresolvedTokensCached(bool $skipInvalidateTimeouts = false)
     {
         if (null === $this->_cachedUnresolvedTokens) {
-            $this->invalidateTimeouts();
+            if (!$skipInvalidateTimeouts) {
+                $this->invalidateTimeouts();
+            }
             $ttl = Tinebase_DateTime::now()->subSecond((int)(OnlyOfficeIntegrator_Config::getInstance()
                 ->{OnlyOfficeIntegrator_Config::TOKEN_LIVE_TIME}));
             $this->_cachedUnresolvedTokens = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
