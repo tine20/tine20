@@ -264,12 +264,16 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
      */
     fetchBody: function(message, mimeType, callback) {
 
-        if (mimeType == 'configured') {
-            var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(message.get('account_id'));
+        if (mimeType === 'configured') {
+            const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(message.get('account_id'));
             if (account) {
                 mimeType = account.get('display_format');
                 if (!mimeType.match(/^text\//)) {
                     mimeType = 'text/' + mimeType;
+                }
+                if (account.get('preserve_format')) {
+                    // format of the received message. this is the format to preserve
+                    mimeType = message.get('body_content_type');
                 }
             } else {
                 // no account found, might happen for .eml emails
