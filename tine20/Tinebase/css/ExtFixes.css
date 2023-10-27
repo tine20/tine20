@@ -36,3 +36,7 @@
 .ext-strict .x-menu-item-icon {
     background-size: 16px 16px !important;
 }
+
+a.x-tree-node-anchor {
+    -webkit-touch-callout: none;
+}
