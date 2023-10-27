@@ -77,7 +77,7 @@ Ext.apply = function(o, c, defaults){
         isAir = check(/adobeair/),
         isLinux = check(/linux/),
         isSecure = /^https/i.test(window.location.protocol),
-        isIOS = check(/ipad/) || check(/iphone/),
+        isIOS = check(/iphone/) || /* iPadOS pre v13 */ check(/ipad/) || (isMac && navigator.maxTouchPoints && navigator.maxTouchPoints > 2),
         isAndroid = check(/android/),
         isTouchDevice =
             // @see http://www.stucox.com/blog/you-cant-detect-a-touchscreen/

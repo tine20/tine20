@@ -1112,10 +1112,15 @@ Tine.Tinebase.tineInit = {
                     domEvents: true
                 });
 
-                // convert two finger taps into contextmenu clicks
+                // convert two finger taps into contextmenu clicks (deprecated)
                 mc.add(new Hammer.Tap({
                     event: 'contextmenu',
                     pointers: 2
+                }));
+                // convert long press into contextmenu clicks
+                mc.add(new Hammer.Press({
+                    event: 'contextmenu',
+                    time: 300
                 }));
                 // convert double taps into double clicks
                 mc.add(new Hammer.Tap({
