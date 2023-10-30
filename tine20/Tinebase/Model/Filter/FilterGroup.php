@@ -277,7 +277,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         $children = new $class([], $this->_concatenationCondition);
         foreach($this->_filterObjects as $idx => $filter) {
             if ($this->_filterObjects[$idx] instanceof Tinebase_Model_Filter_Abstract) {
-                $children->addFilter($this->_filterObjects[$idx]);
+                $children->addFilter($this->_filterObjects[$idx], true);
             } else {
                 $children->addFilterGroup($this->_filterObjects[$idx]);
             }
@@ -959,7 +959,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         foreach ($this->_customData as $custom) {
             $result[] = $custom;
         }
-        
+
+        if ($this->_isImplicit && count($result) === 1) {
+            $result = $result[0];
+        }
+
         return $result;
     }
 
