@@ -3450,11 +3450,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * 
      * @return Tinebase_Config_Struct
      */
-    public function getClientRegistryConfig()
+    public function getClientRegistryConfig(): Tinebase_Config_Struct
     {
         // get all config names to be included in registry
         $clientProperties = new Tinebase_Config_Struct(array());
-        $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
+        $userApplications = Tinebase_Core::getUser()->getApplications(true);
         foreach ($userApplications as $application) {
             $config = Tinebase_Config_Abstract::factory($application->name);
             if ($config) {
@@ -3463,9 +3463,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 foreach ((array) $properties as $name => $definition) {
                     
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-                        __METHOD__ . '::' . __LINE__  . ' ' . print_r($definition, TRUE));
+                        __METHOD__ . '::' . __LINE__  . ' ' . print_r($definition, true));
                     
-                    if (isset($definition['clientRegistryInclude']) && $definition['clientRegistryInclude'] === TRUE)
+                    if (isset($definition['clientRegistryInclude']) && $definition['clientRegistryInclude'] === true)
                     {
                         // add definition here till we have a better place
                         try {
@@ -3480,16 +3480,21 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                     'definition' => array('type' => Tinebase_Config_Abstract::TYPE_ARRAY, 'class' => 'Tinebase_Config_Struct')
                                 ));
                                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                                    . ' ' . print_r($configRegistryItem->toArray(), TRUE));
+                                    . ' ' . print_r($configRegistryItem->toArray(), true));
                                 $clientProperties[$application->name][$name] = $configRegistryItem;
                             } else {
                                 if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                                    . ' Type missing from definition: ' . print_r($definition, TRUE));
+                                    . ' Type missing from definition: ' . print_r($definition, true));
                             }
                         } catch (Tinebase_Exception_AccessDenied $tead) {
                             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                                 __METHOD__ . '::' . __LINE__. ' ' . $tead->getMessage() . ' for '
-                                . print_r($definition, TRUE));
+                                . print_r($definition, true));
+                        } catch (Tinebase_Exception_NotFound $tenf) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                                __METHOD__ . '::' . __LINE__. ' ' . $tenf->getMessage() . ' for '
+                                . print_r($definition, true));
+                            Tinebase_Exception::log($tenf);
                         } catch (Exception $e) {
                             Tinebase_Exception::log($e);
                         }
