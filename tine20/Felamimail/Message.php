@@ -115,14 +115,14 @@ class Felamimail_Message extends Zend_Mail_Message
     /**
      * convert addresses into array with name/address
      *
-     * @param string $_addresses
+     * @param string|array $_addresses
      * @return array
      */
     public static function convertAddresses($_addresses)
     {
         $result = array();
-        if (!empty($_addresses)) {
-            $addresses = Tinebase_Mail::parseAdresslist($_addresses);
+        if (! empty($_addresses)) {
+            $addresses = is_string($_addresses) ? Tinebase_Mail::parseAdresslist($_addresses) : $_addresses;
             if (is_array($addresses)) {
                 foreach ($addresses as $address) {
                     if (preg_match('/@xn--/', $address['address'])) {
