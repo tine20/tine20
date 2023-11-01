@@ -427,19 +427,22 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (!this.record.get('body')) {
             const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
             // we follow the account compose_format when fetch msg failed
-            let format =  account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : 
+            const format =  account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : 
                     message.getBodyType();
 
             if (!this.msgBody) {
                 message = this.getMessageFromConfig();
                 if (message) {
+                    // fixme : how to deal with preserve_format = true && format = text/html && message.get('body_content_type') = text/plain ?
+                    // the conflict case : we want to show text/html but we also want to preserve format as text/plain
+                    let fetchType = format;
                     if (message.bodyIsFetched() && account.get('preserve_format')) {
                         // format of the received message. this is the format to preserve
-                        format = message.get('body_content_type');
+                        fetchType = message.get('body_content_type');
                     }
-                    if (!message.bodyIsFetched()) {
+                    if (!message.bodyIsFetched() || fetchType !== message.getBodyType()) {
                         // self callback when body needs to be (re) fetched
-                        return this.recordProxy.fetchBody(message, format, {
+                        return this.recordProxy.fetchBody(message, fetchType, {
                             success: this.initContent.createDelegate(this),
                             // set format to message body format if fetch fails
                             failure: message.bodyIsFetched()
@@ -539,7 +542,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             } else {
                 const blockquote = document.createElement('blockquote');
                 blockquote.className = 'felamimail-body-blockquote';
-                blockquote.innerHTML = this.msgBody;
+                if (message.getBodyType() === 'text/plain') {
+                    blockquote.innerText = this.msgBody;
+                } else {
+                    blockquote.innerHTML = this.msgBody;
+                }
                 this.msgBody = '<br/>' + blockquote.outerHTML;
             }
         }
