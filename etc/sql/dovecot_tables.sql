@@ -30,6 +30,6 @@ CREATE TABLE IF NOT EXISTS `dovecot_usage` (
 CREATE TABLE IF NOT EXISTS `dovecot_master_users` (
     `username` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
     `password` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-    `service` enum('sieve') COLLATE utf8_unicode_ci DEFAULT 'sieve',
+    `service` enum('sieve','all') COLLATE utf8_unicode_ci DEFAULT 'sieve',
     PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
