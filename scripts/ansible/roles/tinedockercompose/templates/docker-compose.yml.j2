@@ -114,7 +114,6 @@ services:
       DEBUG_LOG_TO_FILE: "off"
       DEBUG_LOG_FILE: ../../stdout.log
 {% endif %}
-
 {% if tinedockercompose_documentserver is defined %}
   documentserver:
     image: onlyoffice/documentserver:latest
@@ -128,7 +127,6 @@ services:
       - external_network
       - internal_network
 {% endif %}
-
 {% if tinedockercompose_clamav is defined %}
   clamav:
     image: tiredofit/clamav
@@ -140,7 +138,6 @@ services:
     networks:
       - internal_network
 {% endif %}
-
 {% if tinedockercompose_traefik_host is defined %}
   traefik:
     image: "traefik:v2.6"
@@ -181,6 +178,13 @@ services:
 {% else %}
       - "./letsencrypt:/letsencrypt"
 {% endif %}
+{% endif %}
+{% if tinedockercompose_volumes is defined %}
+### use docker volumes instead of directory mounts
+volumes:
+{% for volume in tinedockercompose_volumes %}
+  {{ volume }}:
+{% endfor %}
 {% endif %}
 
 networks:

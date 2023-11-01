@@ -20,3 +20,7 @@ tinedockercompose_db_name: "tine"
 tinedockercompose_db_user: "tine"
 tinedockercompose_db_password: "tine"
 tinedockercompose_db_prefix: "tine20_"
+
+# tinedockercompose_volumes:
+#  - "tine_clamav
+#  - "tine_files
