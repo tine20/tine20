@@ -26,16 +26,19 @@ services:
       TINE20_DATABASE_DBNAME: *MYSQL_DATABASE
       TINE20_DATABASE_USERNAME: *MYSQL_USER
       TINE20_DATABASE_PASSWORD: *MYSQL_PASSWORD
-      TINE20_DATABASE_TABLEPREFIX: tine20_
+      TINE20_DATABASE_TABLEPREFIX: {{ tinedockercompose_db_prefix }}
       TINE20_CACHING_BACKEND: Redis
       TINE20_CACHING_REDIS_HOST: cache
       TINE20_ACTIONQUEUE_HOST: cache
       TINE20_SESSION_BACKEND: Redis
       TINE20_SESSION_HOST: cache
-      TINE20_CREDENTIALCACHESHAREDKEY: change_me
-      TINE20_SETUPUSER_USERNAME: tinesetup
+      TINE20_CREDENTIALCACHESHAREDKEY: {{ tinedockercompose_tinesharedkey }}
+      TINE20_SETUPUSER_USERNAME: {{ tinedockercompose_tinesetupuser }}
       TINE20_SETUPUSER_PASSWORD: {{ tinedockercompose_tinesetuppw }}
       TINE20_LOGGER_PRIORITY: {{ tinedockercompose_tineloggerprio }}
+{% if tinedockercompose_tineurl is defined %}
+      TINE20_URL: {{ tinedockercompose_tineurl }}
+{% endif %}
 {% if tinedockercompose_auto_installupdate is defined and tinedockercompose_auto_installupdate|bool %}
       ### install+update tine automatically
       TINE20_INSTALL: "true"
