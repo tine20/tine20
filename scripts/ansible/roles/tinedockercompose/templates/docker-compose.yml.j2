@@ -32,10 +32,10 @@ services:
       TINE20_ACTIONQUEUE_HOST: cache
       TINE20_SESSION_BACKEND: Redis
       TINE20_SESSION_HOST: cache
-      TINE20_CREDENTIALCACHESHAREDKEY: {{ tinedockercompose_tinesharedkey }}
+      TINE20_CREDENTIALCACHESHAREDKEY: "{{ tinedockercompose_tinesharedkey }}"
       TINE20_SETUPUSER_USERNAME: {{ tinedockercompose_tinesetupuser }}
-      TINE20_SETUPUSER_PASSWORD: {{ tinedockercompose_tinesetuppw }}
-      TINE20_LOGGER_PRIORITY: {{ tinedockercompose_tineloggerprio }}
+      TINE20_SETUPUSER_PASSWORD: "{{ tinedockercompose_tinesetuppw }}"
+      TINE20_LOGGER_PRIORITY: "{{ tinedockercompose_tineloggerprio }}"
 {% if tinedockercompose_tineurl is defined %}
       TINE20_URL: {{ tinedockercompose_tineurl }}
 {% endif %}
@@ -135,7 +135,6 @@ services:
     container_name: clamav
     environment:
       - ZABBIX_HOSTNAME=clamav
-    # need to be created on the host
     volumes:
       - "clamav_files:/data"
     networks:
@@ -183,10 +182,6 @@ services:
       - "./letsencrypt:/letsencrypt"
 {% endif %}
 {% endif %}
-
-### optional: use docker volumes instead of directory mounts
-# volumes:
-#  clamav_files:
 
 networks:
   external_network:
