@@ -11,3 +11,6 @@ tinedockercompose_file_log_dir: "/var/log/tine"
 tinedockercompose_auto_installupdate: false
 tinedockercompose_tineloggerprio: "5"
 tinedockercompose_addtineuser: true
+tinedockercompose_db_name: "tine"
+tinedockercompose_db_user: "tine"
+tinedockercompose_db_password: "tine"

@@ -6,9 +6,9 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: &MYSQL_DATABASE tine
-      MYSQL_USER: &MYSQL_USER tine
-      MYSQL_PASSWORD: &MYSQL_PASSWORD tine
+      MYSQL_DATABASE: &MYSQL_DATABASE {{ tinedockercompose_db_name }}
+      MYSQL_USER: &MYSQL_USER {{ tinedockercompose_db_user }}
+      MYSQL_PASSWORD: &MYSQL_PASSWORD {{ tinedockercompose_db_password }}
     ### use volume for persistent DB
     volumes:
       - "{{ tinedockercompose_db_path }}:/var/lib/mysql"
