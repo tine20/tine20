@@ -9,3 +9,4 @@ tinedockercompose_backup_path: "/srv/tine/backup"
 tinedockercompose_ports: "80:80"
 tinedockercompose_file_log_dir: "/var/log/tine"
 tinedockercompose_auto_installupdate: false
+tinedockercompose_tineloggerprio: "5"

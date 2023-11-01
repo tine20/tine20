@@ -35,7 +35,7 @@ services:
       TINE20_CREDENTIALCACHESHAREDKEY: change_me
       TINE20_SETUPUSER_USERNAME: tinesetup
       TINE20_SETUPUSER_PASSWORD: {{ tinedockercompose_tinesetuppw }}
-      TINE20_LOGGER_PRIORITY: "5"
+      TINE20_LOGGER_PRIORITY: {{ tinedockercompose_tineloggerprio }}
 {% if tinedockercompose_auto_installupdate is defined and tinedockercompose_auto_installupdate|bool %}
       ### install+update tine automatically
       TINE20_INSTALL: "true"
