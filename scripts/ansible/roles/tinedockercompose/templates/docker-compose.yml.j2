@@ -6,9 +6,9 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: &MYSQL_DATABASE tine
-      MYSQL_USER: &MYSQL_USER tine
-      MYSQL_PASSWORD: &MYSQL_PASSWORD tine
+      MYSQL_DATABASE: &MYSQL_DATABASE {{ tinedockercompose_db_name }}
+      MYSQL_USER: &MYSQL_USER {{ tinedockercompose_db_user }}
+      MYSQL_PASSWORD: &MYSQL_PASSWORD {{ tinedockercompose_db_password }}
     ### use volume for persistent DB
     volumes:
       - "{{ tinedockercompose_db_path }}:/var/lib/mysql"
@@ -26,18 +26,23 @@ services:
       TINE20_DATABASE_DBNAME: *MYSQL_DATABASE
       TINE20_DATABASE_USERNAME: *MYSQL_USER
       TINE20_DATABASE_PASSWORD: *MYSQL_PASSWORD
-      TINE20_DATABASE_TABLEPREFIX: tine20_
+      TINE20_DATABASE_TABLEPREFIX: {{ tinedockercompose_db_prefix }}
       TINE20_CACHING_BACKEND: Redis
       TINE20_CACHING_REDIS_HOST: cache
       TINE20_ACTIONQUEUE_HOST: cache
       TINE20_SESSION_BACKEND: Redis
       TINE20_SESSION_HOST: cache
-      TINE20_CREDENTIALCACHESHAREDKEY: change_me
-      TINE20_SETUPUSER_USERNAME: tinesetup
-      TINE20_SETUPUSER_PASSWORD: {{ tinedockercompose_tinesetuppw }}
-      TINE20_LOGGER_PRIORITY: "5"
+      TINE20_CREDENTIALCACHESHAREDKEY: "{{ tinedockercompose_tinesharedkey }}"
+      TINE20_SETUPUSER_USERNAME: {{ tinedockercompose_tinesetupuser }}
+      TINE20_SETUPUSER_PASSWORD: "{{ tinedockercompose_tinesetuppw }}"
+      TINE20_LOGGER_PRIORITY: "{{ tinedockercompose_tineloggerprio }}"
+{% if tinedockercompose_tineurl is defined %}
+      TINE20_URL: {{ tinedockercompose_tineurl }}
+{% endif %}
+{% if tinedockercompose_auto_installupdate is defined and tinedockercompose_auto_installupdate|bool %}
       ### install+update tine automatically
-      # TINE_INSTALL: "true"
+      TINE20_INSTALL: "true"
+{% endif %}
     volumes:
       - "{{ tinedockercompose_confd_path }}:/etc/tine20/conf.d"
       - "{{ tinedockercompose_files_path }}:/var/lib/tine20/files"
@@ -109,7 +114,6 @@ services:
       DEBUG_LOG_TO_FILE: "off"
       DEBUG_LOG_FILE: ../../stdout.log
 {% endif %}
-
 {% if tinedockercompose_documentserver is defined %}
   documentserver:
     image: onlyoffice/documentserver:latest
@@ -123,20 +127,17 @@ services:
       - external_network
       - internal_network
 {% endif %}
-
 {% if tinedockercompose_clamav is defined %}
   clamav:
     image: tiredofit/clamav
     container_name: clamav
     environment:
       - ZABBIX_HOSTNAME=clamav
-    # need to be created on the host
     volumes:
       - "clamav_files:/data"
     networks:
       - internal_network
 {% endif %}
-
 {% if tinedockercompose_traefik_host is defined %}
   traefik:
     image: "traefik:v2.6"
@@ -178,10 +179,13 @@ services:
       - "./letsencrypt:/letsencrypt"
 {% endif %}
 {% endif %}
-
-### optional: use docker volumes instead of directory mounts
-# volumes:
-#  clamav_files:
+{% if tinedockercompose_volumes is defined %}
+### use docker volumes instead of directory mounts
+volumes:
+{% for volume in tinedockercompose_volumes %}
+  {{ volume }}:
+{% endfor %}
+{% endif %}
 
 networks:
   external_network:

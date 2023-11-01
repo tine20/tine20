@@ -1,10 +1,26 @@
 ---
 tinedockercompose_tine_image: "tinegroupware/tine:2022"
+tinedockercompose_tinesetupuser: "tinesetup"
 tinedockercompose_tinesetuppw: "movemetovault"
+tinedockercompose_tineloggerprio: "5"
+tinedockercompose_tinesharedkey: "changeme"
+
 tinedockercompose_path: "/srv/tine"
 tinedockercompose_db_path: "/srv/tine/db"
 tinedockercompose_confd_path: "/srv/tine/conf.d"
 tinedockercompose_files_path: "/srv/tine/files"
 tinedockercompose_backup_path: "/srv/tine/backup"
-tinedockercompose_ports: "80:80"
 tinedockercompose_file_log_dir: "/var/log/tine"
+
+tinedockercompose_ports: "80:80"
+tinedockercompose_auto_installupdate: false
+tinedockercompose_addtineuser: true
+
+tinedockercompose_db_name: "tine"
+tinedockercompose_db_user: "tine"
+tinedockercompose_db_password: "tine"
+tinedockercompose_db_prefix: "tine20_"
+
+# tinedockercompose_volumes:
+#  - "tine_clamav
+#  - "tine_files

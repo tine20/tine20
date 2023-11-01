@@ -18,6 +18,9 @@
     name: tine20
     comment: tine20 user of tine docker web container
     uid: 150
+  when:
+    - tinedockercompose_addtineuser is defined
+    - tinedockercompose_addtineuser|bool
 
 - name: check if db dir already exist
   stat:
@@ -61,6 +64,9 @@
     - "{{ tinedockercompose_files_path }}"
     - "{{ tinedockercompose_backup_path }}"
   become: true
+  when:
+    - tinedockercompose_addtineuser is defined
+    - tinedockercompose_addtineuser|bool
 
 - name: deploy docker-compose.yml
   template:
