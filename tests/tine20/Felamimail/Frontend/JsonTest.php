@@ -1215,14 +1215,15 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $this->assertCount(1, $cachedAttachment['attachments']);
         $this->assertStringContainsString($id . '/newline.pdf', $cachedAttachment['attachments'][0]['path']);
         $this->assertEquals($message['attachments'][0]['size'], $fullMessage['attachments'][0]['size']);
+        $this->assertEquals(0, $cachedAttachment['attachments'][0]['preview_status']);
     }
 
 
     public function testAttachmentCache()
     {
-        $result = $this->_createTestNode(
-            'test.eml',
-            dirname(__FILE__) . '/../files/multipart_related.eml'
+        $pdfFile = $this->_createTestNode(
+            'newline.pdf',
+            dirname(__FILE__, 3) . '/Tinebase/files/multipage-text.pdf'
         );
         $subject = 'file attachment test';
         $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain, $subject);
@@ -1231,9 +1232,10 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
                 // @todo use constants?
                 'type' => 'file',
                 'attachment_type' => 'attachment',
-                'path' => $result[0]['path'],
-                'name' => $result[0]['name'],
-                'id' => $result[0]['id'],
+                'path' => $pdfFile[0]['path'],
+                'name' => $pdfFile[0]['name'],
+                'id' => $pdfFile[0]['id'],
+                'size'  => $pdfFile[0]['size'],
             )
         );
         $this->_json->saveMessage($messageToSend);
@@ -1247,7 +1249,9 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $cachedAttachment = $this->_json->getAttachmentCache($id);
 
         $this->assertCount(1, $cachedAttachment['attachments']);
-        $this->assertStringContainsString($id . '/test.eml', $cachedAttachment['attachments'][0]['path']);
+        $this->assertStringContainsString($id . '/newline.pdf', $cachedAttachment['attachments'][0]['path']);
+        $this->assertEquals(17417, $cachedAttachment['attachments'][0]['size']);
+        $this->assertEquals(0, $cachedAttachment['attachments'][0]['preview_status']);
     }
 
     public function testAttachmentCacheNode()
@@ -1264,6 +1268,8 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
 
         $this->assertCount(1, $cachedAttachment['attachments']);
         $this->assertStringContainsString($id . '/moz-screenshot-83.png', $cachedAttachment['attachments'][0]['path']);
+        $this->assertEquals(25370, $cachedAttachment['attachments'][0]['size']);
+        $this->assertEquals(0, $cachedAttachment['attachments'][0]['preview_status']);
     }
 
     /**

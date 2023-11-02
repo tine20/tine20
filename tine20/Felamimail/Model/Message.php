@@ -264,6 +264,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
             /** @var GuzzleHttp\Psr7\Stream $partStream */
             $partStream = $attachment->getStream();
             $contentStream = $attachment->getContentStream();
+            $stream = $attachment->getBinaryContentResourceHandle();
             $data['attachments'][] = [
                 'content-type' => $attachment->getContentType(),
                 'filename'     => $attachment->getFilename(),
@@ -273,6 +274,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
                 'size'         => $partStream->getSize(),
                 // unset before sending to client?
                 'contentstream'=> $contentStream,
+                'stream' => $stream,
             ];
         }
         if (count($data['attachments']) > 0) {
