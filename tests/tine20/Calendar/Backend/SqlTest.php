@@ -303,6 +303,7 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
     }
 
     /**
+     * @group nodockerci
      * testIncreaseSeqForContainerId
      */
     public function testIncreaseSeqsForContainerId()
