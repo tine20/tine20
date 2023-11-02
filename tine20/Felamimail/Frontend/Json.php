@@ -453,6 +453,15 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     }
                 }
             }
+
+            if (is_array($_record->attachments)) {
+                $_record->attachments = array_map(function($attachment) {
+                    if (!empty($attachment['stream'])){
+                        unset($attachment['stream']);
+                    }
+                    return $attachment;
+                }, $_record->attachments);;
+            }
             
             if ($_record->preparedParts instanceof Tinebase_Record_RecordSet) {
                 foreach ($_record->preparedParts as $preparedPart) {
