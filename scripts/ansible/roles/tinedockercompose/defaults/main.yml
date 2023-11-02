@@ -22,5 +22,8 @@ tinedockercompose_db_password: "tine"
 tinedockercompose_db_prefix: "tine20_"
 
 # tinedockercompose_volumes:
-#  - "tine_clamav
-#  - "tine_files
+#   - "tine_clamav
+#   - "tine_files
+
+# tinedockercompose_additional_web_env:
+#   - "PHP_MEMORY_LIMIT: 0"
