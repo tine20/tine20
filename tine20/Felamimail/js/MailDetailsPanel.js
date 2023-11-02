@@ -525,7 +525,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         return resolve({
                             cache: new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]),
                             createPreviewInstantly: createPreviewInstantly,
-                            isCacheValid: cache.attachments[0].preview_count !== 0,
+                            isCacheValid: !!+cache.attachments[0].preview_count,
                         });
                     })
                     .catch((e) => {
