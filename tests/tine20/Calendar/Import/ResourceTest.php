@@ -25,6 +25,9 @@ class Calendar_Import_ResourceTest extends TestCase
         parent::tearDown();
     }
 
+    /**
+     * @group nodockerci
+     */
     public function testImportDemoData()
     {
         $importer = new Tinebase_Setup_DemoData_Import('Calendar_Model_Resource', [

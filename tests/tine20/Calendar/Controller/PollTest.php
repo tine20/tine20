@@ -70,6 +70,7 @@ class Calendar_Controller_PollTest extends TestCase
      * testPublicApiMainScreen
      *
      * @group needsbuild
+     * @group nodockerci
      */
     public function testPublicApiMainScreen()
     {
