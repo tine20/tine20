@@ -66,6 +66,9 @@ class Calendar_Controller_PollTest extends TestCase
         parent::tearDown();
     }
 
+    /**
+     * @group nodockerci
+     */
     public function testPublicApiMainScreen()
     {
         $this->markTestSkipped('needs running webpack-dev-server or build');
