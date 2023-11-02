@@ -11,6 +11,7 @@
  *
  */
 
+
 /**
  * AttachmentCache controller class for Felamimail application
  *
@@ -198,7 +199,11 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
                     print_r($_record->toArray(), true));
             }
             if ($attachment['contentstream']) {
-                $stream = $attachment['contentstream']->detach();
+                if ($attachment['stream']) {
+                    $stream = $attachment['stream'];
+                } else {
+                    $stream = $attachment['contentstream']->detach();
+                }
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                     __METHOD__ . '::' . __LINE__ . ' No contentstream found in attachment: '
@@ -206,7 +211,6 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
                 $stream = null;
             }
             $fileName = $attachment['filename'];
-
         } else {
             try {
                 $msgPart = $ctrl->getMessagePart($_record->{Felamimail_Model_AttachmentCache::FLD_SOURCE_ID},

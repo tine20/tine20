@@ -102,53 +102,64 @@ const getFileAttachmentAction = (fileFn, config) => {
         }, {
             text: app.i18n._('Attachment (of Record)'),
             disabled: config.record?.get('from_node'), // not implemented @see \Felamimail_Controller_Message_File::fileAttachments
-            listeners: {render: (cmp) => {
-                cmp.menu.add(_.reduce(Tine.Tinebase.data.RecordMgr.items, (menu, model) => {
-                    if (model.hasField('attachments') && model.getMeta('appName') !== 'Felamimail') {
-                        menu.push({
-                            text: model.getRecordName() + ' ...',
-                            iconCls: model.getIconCls(),
-                            handler: (action, e) => {
-                                var pickerDialog = Tine.WindowFactory.getWindow({
-                                    layout: 'fit',
-                                    width: 250,
-                                    height: 100,
-                                    padding: '5px',
-                                    modal: true,
-                                    title: app.i18n._('Save as Record Attachment'),
-                                    items: new Tine.Tinebase.dialog.Dialog({
-                                        listeners: {
-                                            apply: async (fileTarget) => {
-                                                const attachmentCount = await fileFn([fileTarget], action);
-                                                const msg = app.formatMessage('{attachmentCount, plural, one {Attachment was saved} other {# Attachments where saved}}',
-                                                    { attachmentCount });
-                                                Ext.ux.MessageBox.msg(app.formatMessage('Success'), msg);
-                                            }
-                                        },
-                                        getEventData: function (eventName) {
-                                            if (eventName === 'apply') {
-                                                var attachRecord = this.getForm().findField('attachRecord').selectedRecord;
-                                                return {
-                                                    type: 'attachment',
-                                                    model: model.getPhpClassName(),
-                                                    record_id: attachRecord.data,
-                                                };
-                                            }
-                                        },
-                                        items: Tine.widgets.form.RecordPickerManager.get(model.getMeta('appName'), model.getMeta('modelName'), {
-                                            fieldLabel: model.getRecordName(),
-                                            name: 'attachRecord',
-                                            plugins: [new RecordEditFieldTriggerPlugin({
-                                                editDialogMode: 'remote'
-                                            })]
+            listeners: {
+                render: (cmp) => {
+                    cmp.menu.add(_.reduce(Tine.Tinebase.data.RecordMgr.items, (menu, model) => {
+                        if (model.hasField('attachments') && model.getMeta('appName') !== 'Felamimail') {
+                            menu.push({
+                                text: model.getRecordName() + ' ...',
+                                iconCls: model.getIconCls(),
+                                handler: async (action, e) => {
+                                    let attachmentRecordsData = [];
+                                    if (config?.attachments) {
+                                        await _.reduce(config?.attachments, async (prev, attachment, id)=> {
+                                            return prev.then(async () => {
+                                                await Promise.all(attachment.promises);
+                                                return attachmentRecordsData.push(attachment.cache.data);
+                                            })
+                                        }, Promise.resolve());
+                                    }
+                                    var pickerDialog = Tine.WindowFactory.getWindow({
+                                        layout: 'fit',
+                                        width: 250,
+                                        height: 100,
+                                        padding: '5px',
+                                        modal: true,
+                                        title: app.i18n._('Save as Record Attachment'),
+                                        items: new Tine.Tinebase.dialog.Dialog({
+                                            listeners: {
+                                                apply: async (fileTarget) => {
+                                                    const attachmentCount = await fileFn([fileTarget], action);
+                                                    const msg = app.formatMessage('{attachmentCount, plural, one {Attachment was saved} other {# Attachments where saved}}',
+                                                        {attachmentCount});
+                                                    Ext.ux.MessageBox.msg(app.formatMessage('Success'), msg);
+                                                }
+                                            },
+                                            getEventData: function (eventName) {
+                                                if (eventName === 'apply') {
+                                                    var attachRecord = this.getForm().findField('attachRecord').selectedRecord;
+                                                    return {
+                                                        type: 'attachment',
+                                                        model: model.getPhpClassName(),
+                                                        record_id: attachRecord.data,
+                                                    };
+                                                }
+                                            },
+                                            items: Tine.widgets.form.RecordPickerManager.get(model.getMeta('appName'), model.getMeta('modelName'), {
+                                                fieldLabel: model.getRecordName(),
+                                                name: 'attachRecord',
+                                                plugins: [new RecordEditFieldTriggerPlugin({
+                                                    editDialogMode: 'remote',
+                                                    attachments: attachmentRecordsData,
+                                                })]
+                                            })
                                         })
                                     })
-                                });
-                            }
-                        });
-                    }
-                    return menu;
-                }, []));
+                                }
+                            });
+                        }
+                        return menu;
+                    }, []));
             }},
             menu: []
         }, {
