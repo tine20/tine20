@@ -47,12 +47,28 @@ final class Tinebase_Auth_MFA
 
     public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg): bool
     {
-        return $this->_adapter->sendOut($_userCfg);
+        try {
+            return $this->_adapter->sendOut($_userCfg);
+        } catch (Tinebase_Exception $e) {
+            $e->setLogToSentry(false);
+            $e->setLogLevelMethod('notice');
+            Tinebase_Exception::log($e);
+            throw new Tinebase_Exception_SystemGeneric(Tinebase_Translation::getTranslation()
+                ->_('MFA send out failed, please try again or check with your system administrator'));
+        }
     }
 
     public function validate($_data, Tinebase_Model_MFA_UserConfig $_userCfg): bool
     {
-        return $this->_adapter->validate($_data, $_userCfg);
+        try {
+            return $this->_adapter->validate($_data, $_userCfg);
+        } catch (Tinebase_Exception $e) {
+            $e->setLogToSentry(false);
+            $e->setLogLevelMethod('notice');
+            Tinebase_Exception::log($e);
+            throw new Tinebase_Exception_SystemGeneric(Tinebase_Translation::getTranslation()
+                ->_('MFA validation failed, please try again or check with your system administrator'));
+        }
     }
 
     public function getAdapter(): Tinebase_Auth_MFA_AdapterInterface
