@@ -100,8 +100,8 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     public function saveCourseAndGroup(Courses_Model_Course $course, Tinebase_Model_Group $group, $memberData = [])
     {
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
-
-        $i18n = Tinebase_Translation::getTranslation('Courses');
+        
+        $i18n = Tinebase_Translation::getTranslation('Courses', new Zend_Locale('de'));
         $groupNamePrefix = $i18n->_('Course');
         
         $groupNamePrefix = is_array($groupNamePrefix) ? $groupNamePrefix[0] : $groupNamePrefix;
