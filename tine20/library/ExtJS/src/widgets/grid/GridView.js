@@ -1144,79 +1144,83 @@ viewConfig: {
     getTotalWidth : function(){
         return this.cm.getTotalWidth()+'px';
     },
-
-    // private
+    
     fitColumns : function(preventRefresh, onlyExpand, omitColumn){
-        var cm = this.cm, i;
-        var tw = cm.getTotalWidth(false);
-        var aw = this.grid.getGridEl().getWidth(true)-this.getScrollOffset();
-
-        if(aw < 20 * cm.getColumnCount(true)){ // not initialized, so don't screw up the default widths
-            return;
-        }
-        var extra = aw - tw;
-
-        if(extra === 0){
-            return false;
-        }
-
-        var vc = cm.getColumnCount(true);
-        var ac = vc-(Ext.isNumber(omitColumn) ? 1 : 0);
-        if(ac === 0){
-            ac = 1;
-            omitColumn = undefined;
-        }
-        var colCount = cm.getColumnCount();
-        var cols = [];
-        var extraCol = 0;
-        var width = 0;
-        var w;
-        var c;
-        var iw=0;
-        for (i = 0; i < colCount; i++){
-            c = cm.getColumnAt(i);
-            c.initialConfig = c.initialConfig || {... c};
-            if(!cm.isHidden(i) && !cm.isFixed(i) && i > (omitColumn || -1)){
-                w = cm.getColumnWidth(i);
-                cols.push(i);
-                extraCol = i;
-                cols.push(w);
-                width += w;
-                iw += cm.getColumnAt(i).initialConfig.width;
+        const cm = this.cm;
+        const widthCurrentVisibleTotal = cm.getTotalWidth(false);
+        if (!widthCurrentVisibleTotal) return;
+        const colIdxOmitColumn = Ext.isNumber(omitColumn) ? omitColumn : -1;
+        const isOmitColumnValid = omitColumn > -1;
+        const widthResizedGrid = this.grid.getGridEl().getWidth(true) - this.getScrollOffset();
+        let widthExtra = widthCurrentVisibleTotal - widthResizedGrid;
+        // not initialized, so don't screw up the default widths
+        const colCountVisible = cm.getColumnCount(true);
+        if (widthResizedGrid < 20 * colCountVisible) return;
+        if (widthExtra === 0) return false;
+        // handle neighbours resizing first
+        if (this.resizingStrategy === 'neighbours' && isOmitColumnValid) {
+            const next = cm.config.indexOf(_.find(cm.config, (c, i) => { return i > colIdxOmitColumn && !c.hidden; }));
+            if (next) {
+                cm.setColumnWidth(next, cm.getColumnWidth(next) - widthExtra, false);
+                widthExtra = 0;
             }
         }
-        var aec = this.autoExpand && this.grid.autoExpandColumn ? cm.getIndexById(this.grid.autoExpandColumn) : -1;
-        var frac = (aw - cm.getTotalWidth())/width;
-
-        var next = omitColumn>=0 ? cm.config.indexOf(_.find(cm.config, (c, i) => { return i > omitColumn && !c.hidden; })) : undefined;
-        tw = cm.getTotalWidth(false);
-        if (this.resizingStrategy === 'neighbours' && next) {
-            cm.setColumnWidth(next, cm.getColumnWidth(next)+aw-tw);
-            return;
+        
+        const currentGridStateId = this.grid.stateId;
+        const currentGridState = Ext.state.Manager.get(currentGridStateId);
+        const isStateIdChanged = this.latestGridStateId !== currentGridStateId;
+        // collect all visible columns from existing config
+        const colsToResolve = [];
+        let colIdxLastVisible = colIdxOmitColumn;
+        cm.config.forEach((col, idx) => {
+            col.initialConfig = col.initialConfig || {... col};
+            col.index = idx;
+            // reset grid state if stateId changed, make sure column config is based on current stateId
+            if (isStateIdChanged && currentGridState?.columns?.[idx]) {
+                cm.setColumnWidth(col.index, currentGridState.columns[idx].width ?? this.grid.minColumnWidth, true);
+                cm.setHidden(idx, currentGridState.columns[idx].hidden ?? false, true);
+            }
+            if (!cm.isHidden(idx)) {
+                if (idx > colIdxOmitColumn) colsToResolve.push(col);
+                if (!cm.isFixed(col.index)) colIdxLastVisible = idx;
+            }
+        });
+        this.latestGridStateId = currentGridStateId;
+        if (!colsToResolve.length) return;
+        if (isStateIdChanged) {
+            this.fitColumns(preventRefresh, onlyExpand, omitColumn);
         }
-
-        while (cols.length){
-            w = cols.pop();
-            i = cols.pop();
-            c = cm.getColumnAt(i);
-            width = Math.max(this.grid.minColumnWidth, Math.floor(w + w*frac));
-            width = aec<0 && omitColumn<0 && c.initialConfig.width && iw<=aw ? Math.max(c.initialConfig.width, width) : width;
-            cm.setColumnWidth(i, width, true);
+        
+        // handle columns fractional resizing
+        const widthToResolve = colsToResolve.reduce((acc, col) => {return acc + col.width;}, 0);
+        const colIdxDefaultAutoExpand = this.autoExpand && this.grid.autoExpandColumn ? cm.getIndexById(this.grid.autoExpandColumn) : -1;
+        const fraction = isOmitColumnValid
+            ? (widthToResolve - widthExtra) / widthToResolve
+            : widthResizedGrid / widthToResolve;
+        
+        colsToResolve.forEach((col) => {
+            const width = cm.isFixed(col.index) ? col.width : col.width * fraction;
+            let widthResolved = Math.max(this.grid.minColumnWidth, Math.floor(width));
+            if (colIdxDefaultAutoExpand < 0 && !isOmitColumnValid && col.width && widthToResolve <= widthResizedGrid) {
+                widthResolved = Math.max(col.width, width);
+            }
+            cm.setColumnWidth(col.index, widthResolved, true);
+        });
+        
+        // resolve auto expand column index, it should not be on the left hand side
+        const widthUpdatedTotalVisibleCols = cm.getTotalWidth(false);
+        let colIdxResolvedAutoExpand = colIdxDefaultAutoExpand;
+        if (isOmitColumnValid || colIdxDefaultAutoExpand <= colIdxOmitColumn) colIdxResolvedAutoExpand = colIdxLastVisible;
+        // resized columns might not fit the total width , we should make sure they are equal
+        if (colIdxResolvedAutoExpand >= 0 && fraction !== 1) {
+            const diff = widthResizedGrid - widthUpdatedTotalVisibleCols;
+            const width = cm.getColumnWidth(colIdxResolvedAutoExpand);
+            if (!cm.isHidden(colIdxResolvedAutoExpand)) {
+                cm.setColumnWidth(colIdxResolvedAutoExpand, Math.max(this.grid.minColumnWidth,  width + diff), true);
+            }
         }
-
-        tw = cm.getTotalWidth(false);
-        if (aec>=0 && tw < aw && !omitColumn>=0 && aec !== omitColumn) {
-            cm.setColumnWidth(aec, cm.getColumnWidth(aec)+aw-tw);
-        } else if (tw > aw){
-            var adjustCol = ac != vc ? omitColumn : extraCol;
-             cm.setColumnWidth(adjustCol, Math.max(this.grid.minColumnWidth, cm.getColumnWidth(adjustCol)- (tw-aw)), true);
-        }
-
-        if(preventRefresh !== true){
-            this.updateAllColumnWidths();
-        }
-
-
+        
+        if (preventRefresh !== true) this.updateAllColumnWidths();
         return true;
     },
 

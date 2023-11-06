@@ -1474,44 +1474,60 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         // do request
         Tine.Felamimail.messageBackend[action+ 'Flags'](filter, flag);
     },
+ 
+    /**
+     * TODO: make quick filter search "to" in be , and remove all the filter switch in fe
+     * add custom filter before or after store load
+     *
+     * @param params
+     * @param isSentFolder
+     *
+     */
+    updateDefaultfilter: function (params, isSentFolder) {
+        return; // not longer needed as the query filter now contains 'to' as well
+        let targetFilters = params?.filter?.[0].filters?.[0].filters;
+        if (!targetFilters) return;
+
+        const defaultFilterField = isSentFolder ? 'to' : 'query';
+        const existingDefaultFilter =  _.find(targetFilters, {field: defaultFilterField});
+
+        if (!existingDefaultFilter) {
+            targetFilters.push({ field: defaultFilterField, operator: 'contains', value: ''});
+        }
+
+        params.filter[0].filters[0].filters = targetFilters;
+    },
     
     /**
      * called before store queries for data
      */
     onStoreBeforeload: function(store, options) {
-        this.supr().onStoreBeforeload.apply(this, arguments);
-
-        // make sure, our handler is called just before the request is sent
-        this.store.on('beforeload', _.bind(this.onStoreBeforeLoadFolderChange, this), this, {single: true});
-
+        this.supr().onStoreBeforeload.call(this, store, options);
+        
         if (! Ext.isEmpty(this.deleteQueue)) {
             options.params.filter.push({field: 'id', operator: 'notin', value: this.deleteQueue});
         }
+        
+        // make sure, our handler is called just before the request is sent
+        this.onStoreBeforeLoadFolderChange(store, options);
     },
-
+    
     onStoreBeforeLoadFolderChange: function (store, options) {
-        const isSendFolderPath = this.isSendFolderPathInFilterParams(options.params);
-        const stateId = isSendFolderPath ? this.sendFolderGridStateId : this.gridConfig.stateId;
-
+        this.updateGridState();
+        this.updateDefaultfilter(options.params, this.sentFolderSelected);
+    },
+    
+    resolveSendFolderPath: function (params) {
+        const pathFilter = _.find(this.latestFilter, { field: 'path' });
+        const operator = _.get(pathFilter, 'operator', '');
+        const value = operator.match(/equals|in/) ? _.get(pathFilter, 'value', null) : null;
+        const pathFilterValue =  value && _.isArray(value) ? value[0] : value;
+        const isSendFolderPath = this.isSendFolderPath(pathFilterValue);
         if (isSendFolderPath && ! this.sentFolderSelected) {
             this.sentFolderSelected = true;
         } else if (! isSendFolderPath && this.sentFolderSelected) {
             this.sentFolderSelected = false;
         }
-        
-        this.updateDefaultfilter(options.params, this.sentFolderSelected);
-        this.changeGridState(stateId);
-    },
-
-    isSendFolderPathInFilterParams: function (params) {
-        const pathFilter = _.find(_.get(params, 'filter[0].filters[0].filters', {}), {
-            field: 'path'
-        });
-        const operator = _.get(pathFilter, 'operator', '');
-        const value = operator.match(/equals|in/) ? _.get(pathFilter, 'value', null) : null;
-        const pathFilterValue =  value && _.isArray(value) ? value[0] : value;
-        
-        return this.isSendFolderPath(pathFilterValue);
     },
     
     isSendFolderPath: function (pathFilterValue) {
@@ -1531,28 +1547,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     /**
-     * TODO: make quick filter search "to" in be , and remove all the filter switch in fe
-     * add custom filter before or after store load
-     *
-     * @param params
-     * @param isSentFolder
-     *
-     */
-    updateDefaultfilter: function (params, isSentFolder) {
-        let targetFilters = params?.filter?.[0].filters?.[0].filters;
-        if (!targetFilters) return;
-
-        const defaultFilterField = isSentFolder ? 'to' : 'query';
-        const existingDefaultFilter =  _.find(targetFilters, {field: defaultFilterField});
-        
-        if (!existingDefaultFilter) {
-            targetFilters.push({ field: defaultFilterField, operator: 'contains', value: ''});
-        }
-
-        params.filter[0].filters[0].filters = targetFilters;
-    },
-
-    /**
      * // if send, draft, template folders are selected, do the following:
      * // - hide from email + name columns from grid
      * // - show to column in grid
@@ -1565,18 +1559,25 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      *
      * @param stateId
      */
-    changeGridState: function (stateId) {
+    updateGridState: function (stateId) {
+        this.resolveSendFolderPath();
+        stateId = this.sentFolderSelected ? this.sendFolderGridStateId : this.gridConfig.stateId;
+
+        const isStateIdChanged = this.grid.stateId !== stateId;
+        if (!Ext.state.Manager.get(stateId)) this.grid.saveState();
         this.grid.stateId = stateId;
         
-        if (!Ext.state.Manager.get(this.gridConfig.stateId)) {
-            this.grid.saveState();
-        }
-        const defaultState = Ext.state.Manager.get(this.gridConfig.stateId) ?? this.grid.getState();
-        defaultState.sort = this.store.getSortState();
+        const stateIdDefault = this.gridConfig.stateId;
+        const stateStored = Ext.state.Manager.get(stateIdDefault);
+        const stateCurrent = this.grid.getState();
+        let stateCloned = stateStored;
+        if (!isStateIdChanged || !stateStored) stateCloned = stateCurrent;
+        let stateClonedResolved = JSON.parse(JSON.stringify(stateCloned));
         
-        if (stateId === this.sendFolderGridStateId) {
-            const refState = Ext.state.Manager.get(stateId);
-            let cloneDefaultState = JSON.parse(JSON.stringify(defaultState));
+        if (stateId.includes(this.sendFolderGridStateId)) {
+            let refState = Ext.state.Manager.get(stateId);
+            if (refState) stateClonedResolved = JSON.parse(JSON.stringify(refState));
+            
             // - hide from email + name columns from grid
             // - show to column in grid
             const customHideCols = {
@@ -1586,25 +1587,26 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
             //overwrite custom states
             _.each(customHideCols, (isHidden, colId) => {
-                const idx = _.findIndex(cloneDefaultState.columns, {id: colId});
+                const idx = _.findIndex(stateClonedResolved.columns, {id: colId});
                 isHidden = !refState ? isHidden : _.get(_.find(refState.columns, {id: colId}), 'hidden', false);
                 
-                if (idx > -1 && isHidden !== _.get(cloneDefaultState.columns[idx], 'hidden', false)) {
+                if (idx > -1 && isHidden !== _.get(stateClonedResolved.columns[idx], 'hidden', false)) {
                     if (isHidden) {
-                        cloneDefaultState.columns[idx].hidden = true;
+                        stateClonedResolved.columns[idx].hidden = true;
                     } else {
-                        delete cloneDefaultState.columns[idx].hidden;
+                        delete stateClonedResolved.columns[idx].hidden;
                     }
                 }
             })
-            
-            // apply state and update grid column ui
-            this.grid.applyState(cloneDefaultState);
-            // save state
-            this.grid.saveState();
-        } else {
-            this.grid.applyState(defaultState);
         }
+        
+        if (!isStateIdChanged) {
+            stateClonedResolved.sort = this.store.getSortState();
+        }
+        this.grid.applyState(stateClonedResolved);
+        // save state
+        this.grid.saveState();
+        if (isStateIdChanged) this.getView().refresh(true);
     },
 
     /**
@@ -1628,8 +1630,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             folder.commit();
             this.app.checkMailsDelayedTask.delay(1000);
         }
+        this.latestFilter = _.get(options.params, 'filter[0].filters[0].filters', {});
         this.updateDefaultfilter(options.params, this.sentFolderSelected);
         this.updateQuotaBar();
+        this.updateGridState();
+        this.grid.view.refresh(true);
     },
     
     /**
