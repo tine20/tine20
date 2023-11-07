@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -2630,81 +2630,6 @@ fi';
     {
         $this->_checkAdminRight();
         Tinebase_FileSystem::getInstance()->repairTreeIsDeletedState();
-    }
-
-
-    /**
-     * set Maintenance Mode
-     *
-     * @param Zend_Console_Getopt $_opts
-     * @throws Tinebase_Exception_AccessDenied
-     * @throws Tinebase_Exception_InvalidArgument
-     * @throws Tinebase_Exception_NotFound
-     */
-    public function setMaintenanceMode(Zend_Console_Getopt $_opts)
-    {
-        $this->_checkAdminRight();
-        $args = $this->_parseArgs($_opts);
-        $enable = null;
-
-        if (! isset($args['other'])) {
-            echo 'option Maintenance Mode is not set';
-            return 1;
-        }
-        if (in_array('on', $args['other'])) {
-            $enable = true;
-        }
-        if (in_array('off', $args['other'])) {
-            if (true === $enable) {
-                echo 'duplicated Maintenance Mode';
-                return 2;
-            }
-
-            $enable = false;
-        }
-        if (null === $enable) {
-            echo 'option Maintenance Mode is not set';
-            return 1;
-        }
-
-        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
-
-        if (isset($args['apps'])) {
-            $apps = (array)$args['apps'];
-            $enabledApplications = $enabledApplications->filter(function(Tinebase_Model_Application $app) use($apps) {
-                return in_array($app->name, $apps);
-            });
-        }
-
-        foreach ($enabledApplications as $application) {
-            $app = Tinebase_Core::getApplicationInstance($application->name);
-
-            if (true === $enable) {
-                $app->goIntoMaintenanceMode();
-            } else {
-                $app->leaveMaintenanceMode();
-            }
-        }
-
-        echo PHP_EOL . ($enable ? 'going into' : 'leaving') . ' maintenance mode. waiting...' . PHP_EOL;
-
-        do {
-            foreach ($enabledApplications as $application) {
-                $app = Tinebase_Core::getApplicationInstance($application->name);
-
-                if ($app->isInMaintenanceMode() === $enable) {
-                    $enabledApplications->removeById($application->id);
-                }
-            }
-
-            if ($enabledApplications->count() > 0) {
-                echo '.';
-                usleep(100000);
-            }
-
-        } while ($enabledApplications->count() > 0);
-        echo 'done' . PHP_EOL;
-        return 0;
     }
 }
 
