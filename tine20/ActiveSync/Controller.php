@@ -5,7 +5,7 @@
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -143,7 +143,10 @@ class ActiveSync_Controller extends Tinebase_Controller_Event
         Syncroton_Registry::set(Syncroton_Registry::POLICYBACKEND,       new Syncroton_Backend_Policy(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         Syncroton_Registry::set(Syncroton_Registry::LOGGERBACKEND,       Tinebase_Core::getLogger());
         Syncroton_Registry::set(Syncroton_Registry::SESSION_VALIDATOR,   function() {
-            return ! Tinebase_Core::inMaintenanceMode();
+            return Tinebase_Core::inMaintenanceMode() ?
+                (Tinebase_Core::inMaintenanceModeAll() ? false :
+                    Tinebase_Core::getUser()->hasRight(ActiveSync_Config::APP_NAME, Tinebase_Acl_Rights::MAINTENANCE))
+                : true;
         });
     }
 

@@ -7,7 +7,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * @todo remove all deprecated stuff
@@ -713,8 +713,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const MAINTENANCE_MODE = 'maintenanceMode';
     const MAINTENANCE_MODE_OFF = 'off';
+    const MAINTENANCE_MODE_ON = 'on';
     const MAINTENANCE_MODE_NORMAL = 'normal';
     const MAINTENANCE_MODE_ALL = 'all';
+    const MAINTENANCE_MODE_FLAGS = 'flags';
+    const MAINTENANCE_MODE_FLAG_SKIP_APPS = 'skipApps';
+    const MAINTENANCE_MODE_FLAG_ONLY_APPS = 'onlyApps';
+    const MAINTENANCE_MODE_FLAG_ALLOW_ADMIN_LOGIN = 'allowAdminLogin';
 
     /**
      * @var string
