@@ -296,11 +296,13 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             throw new Tinebase_Exception_Backend('could not open new template file for reading');
         }
         $closeSrcStreamRaii = (new Tinebase_RAII(function() use(&$srcStream) {
-            if (null !== $srcStream) {
+            if (null !== $srcStream && is_resource($srcStream)) {
                 @fclose($srcStream);
             }
-        }))->setReleaseFunc(function() use(&$srcStream) {
-            @fclose($srcStream);
+        }))->setReleaseFunc(function() use (&$srcStream) {
+            if (is_resource($srcStream)) {
+                @fclose($srcStream);
+            }
             $srcStream = null;
         });
 
