@@ -131,7 +131,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         if($_id) {
             $listController = Addressbook_Controller_List::getInstance();
             $groups = $listController->getMemberships($_id);
-            $contact->groups = $listController->getMultiple($groups);
+            $contact->groups = $listController->getBackend()->getMultiple($groups);
+            $contact->groups->members = null;
         }
 
         Tinebase_CustomField::getInstance()->resolveRecordCustomFields($contact);
