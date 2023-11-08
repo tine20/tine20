@@ -2,7 +2,10 @@
 return [
     'filesystem' => [
         'createPreviews' => true,
-    	'previewServiceVersion' => 2,
-	    'previewServiceUrl' => 'http://docservice/v2/documentPreviewService',
+        'previewServiceVersion' => 2,
+        'previewServiceUrl' => 'http://docservice/v2/documentPreviewService',
+	    // TODO remove this when the merge config bug is fixed
+	    'modLogActive' => true,
+	    'index_content' => true,
     ],
 ];
