@@ -51,4 +51,11 @@ class Tinebase_Session extends Tinebase_Session_Abstract
     {
         Zend_Session::registerValidator(new Tinebase_Session_Validator_MaintenanceMode());
     }
+
+    public static function deleteSessions()
+    {
+        if (($sessionHandler = Zend_Session::getSaveHandler()) instanceof Zend_Session_SaveHandler_Interface) {
+            $sessionHandler->gc(0);
+        }
+    }
 }
