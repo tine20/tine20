@@ -90,6 +90,10 @@
     - tinedockercompose_file_log is defined
     - tinedockercompose_file_log|bool == true
 
+- include_tasks: docservice.yml
+  when:
+    - tinedockercompose_docservice_version is defined
+
 - name: docker compose pull
   ansible.builtin.shell: docker compose pull
   args:
