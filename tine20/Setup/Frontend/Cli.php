@@ -1201,7 +1201,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             $enable = Tinebase_Config::MAINTENANCE_MODE_ON === $options['mode'];
             foreach ($enabledApplications as $application) {
-                $app = Tinebase_Core::getApplicationInstance($application->name);
+                $app = Tinebase_Core::getApplicationInstance($application->name, '', true);
                 if (true === $enable) {
                     $app->goIntoMaintenanceMode(/*$flags*/);
                 } else {
@@ -1213,7 +1213,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             do {
                 foreach ($enabledApplications as $application) {
-                    $app = Tinebase_Core::getApplicationInstance($application->name);
+                    $app = Tinebase_Core::getApplicationInstance($application->name, '', true);
                     if ($app->isInMaintenanceMode() === $enable) {
                         $enabledApplications->removeById($application->id);
                     }
