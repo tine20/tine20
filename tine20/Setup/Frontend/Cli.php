@@ -1185,6 +1185,9 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             return 1;
         }
 
+        // needed for session cleanup
+        Tinebase_Session::setSessionBackend();
+
         $flags = (array)($options[Tinebase_Config::MAINTENANCE_MODE_FLAGS] ?? []);
 
         if (!in_array(Tinebase_Config::MAINTENANCE_MODE_FLAG_SKIP_APPS, $flags)) {
