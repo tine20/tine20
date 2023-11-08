@@ -185,14 +185,17 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
                 if (!$appNotFound) {
 
-                    if ($app instanceof Tinebase_Container)
-                    {
+                    if ($app instanceof Tinebase_Container) {
                         $backend = $app;
-
+                    } else if ($app instanceof Tinebase_User_Sql || $app instanceof Tinebase_Tree_FileObject) {
+                        // TODO make those backends work / refactor them
+                        continue;
                     } else {
                         if (!$app instanceof Tinebase_Controller_Record_Abstract) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' controller: ' . get_class($app) . ' not an instance of Tinebase_Controller_Record_Abstract');
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                    . ' model: ' . $model . ' controller: ' . get_class($app)
+                                    . ' not an instance of Tinebase_Controller_Record_Abstract');
                             continue;
                         }
 
@@ -200,8 +203,10 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                     }
 
                     if (!$backend instanceof Tinebase_Backend_Interface) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' backend: ' . get_class($backend) . ' not an instance of Tinebase_Backend_Interface');
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . ' model: ' . $model . ' backend: ' . get_class($backend)
+                                . ' not an instance of Tinebase_Backend_Interface');
                         continue;
                     }
 
