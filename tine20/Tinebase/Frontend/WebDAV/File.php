@@ -109,6 +109,19 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
 
         Tinebase_Frontend_WebDAV_Directory::checkQuota($pathRecord->getNode());
 
+        if (($_SERVER['HTTP_OC_CHUNKED'] ?? false) && is_resource($data)) {
+            $name = basename(ltrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'));
+            $completeFile = Tinebase_Frontend_WebDAV_Directory::handleOwnCloudChunkedFileUpload($name, $data);
+
+            if (!$completeFile instanceof Tinebase_Model_TempFile) {
+                return null;
+            }
+
+            if (false === ($data = fopen($completeFile->path, 'r'))) {
+                throw new Tine20\DAV\Exception('fopen on temp file path failed ' . $completeFile->path);
+            }
+        }
+
         if (false === ($handle = Tinebase_FileSystem::getInstance()->fopen($this->_path, 'w'))) {
             throw new Tinebase_Exception_Backend('Tinebase_FileSystem::fopen failed for path ' . $this->_path);
         }
