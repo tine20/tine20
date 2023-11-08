@@ -97,14 +97,17 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
     {
         if ($this->getCondition() === self::CONDITION_OR) {
             // ACL filter with OR condition is useless and delivers wrong results!
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
-                . ' No ACL filter for OR condition!');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ . ' '
+                . 'No ACL filter for OR condition!');
             return;
         }
         
-        if (Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
-                . ' No ACL filter for MANAGE_TIMEACCOUNTS right!');
+        if (Timetracker_Controller_Timesheet::getInstance()->checkRight(
+            Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, false, false)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ . ' '
+                . 'No ACL filter for MANAGE_TIMEACCOUNTS right!');
             return;
         }
         
