@@ -118,7 +118,7 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
             }
 
             if (false === ($data = fopen($completeFile->path, 'r'))) {
-                throw new Tine20\DAV\Exception('fopen on temp file path failed ' . $completeFile->path);
+                throw new Sabre\DAV\Exception('fopen on temp file path failed ' . $completeFile->path);
             }
         }
 
