@@ -194,6 +194,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchMessages($filter, $paging)
     {
+        $paging = $this->_preparePaginationParameter($paging, new Felamimail_Model_MessageFilter());
+
+        if (!($limit = $paging->{Tinebase_Model_Pagination::FLD_LIMIT}) || $limit < 1 || $limit > 500) {
+            $paging->{Tinebase_Model_Pagination::FLD_LIMIT} = 50;
+        }
+
         return $this->_search($filter, $paging, Felamimail_Controller_Message::getInstance(), 'Felamimail_Model_MessageFilter');
     }
 
