@@ -188,17 +188,7 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
      */
     onButtonApply: async function (closeWindow) {
         const result = await this.filePicker.validateSelection();
-        const attachmentCount = this.files.length;
-        const msg = this.app.formatMessage('{attachmentCount, plural, one {Do you really want to overwrite the existing file?} other {Do you really want to overwrite the existing files?}}',
-            {attachmentCount});
-        if (!result) {
-            if (await Ext.MessageBox.confirm(
-                i18n._('Overwrite?'),
-                msg,
-            ) === 'yes') {
-                Tine.Filemanager.FilePickerDialog.superclass.onButtonApply.call(this, closeWindow);
-            }
-        } else {
+        if (result) {
             Tine.Filemanager.FilePickerDialog.superclass.onButtonApply.call(this, closeWindow);
         }
     },

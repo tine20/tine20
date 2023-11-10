@@ -512,12 +512,10 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                 msg: this.app.i18n._('Checking ...'),
                 removeMask: true
             });
-            
             loadMask.show();
             
             try {
                 const path = _.get(this.selection, '[0].type') === 'file' ? Tine.Filemanager.Model.Node.dirname(_.get(this.selection, '[0].path')) : _.get(this.selection, '[0].path');
-                
                 const filter = [
                     {field: 'path', operator: 'equals', value: path},
                 ];
@@ -525,14 +523,21 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                 this.fileName = field.getValue();
 
                 const filenames = this.files.length > 1 ? _.map(files, 'filename') : [this.fileName];
-                
-                if (filenames.length > 0) {
-                    filter.push({field: 'name', operator: 'in', value: filenames});
-                }
+                if (filenames.length > 0) filter.push({field: 'name', operator: 'in', value: filenames});
                 
                 const result = await Tine.Filemanager.searchNodes(filter);
-                
-                resolve(result.results.length === 0);
+                const fileCount = this.files.length;
+
+                if (result.results.length > 0) {
+                    const editDialog = this.findParentBy((c) => {return c instanceof Tine.Tinebase.dialog.Dialog});
+                    const msg = this.app.formatMessage('{attachmentCount, plural, one {Do you really want to overwrite the existing file?} other {Do you really want to overwrite the existing files?}}',
+                        {fileCount});
+                    Ext.MessageBox.confirm(i18n._('Overwrite?'), msg, function (btn) {
+                        resolve(btn === 'yes');
+                    }, editDialog);
+                } else {
+                    resolve(true);
+                }
             } catch (e) {
                 // NOTE: path filter throws an error in not existent
                 resolve(true);
