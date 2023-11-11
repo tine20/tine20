@@ -42,14 +42,18 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
             throw new Tinebase_Exception_UnexpectedValue('no matched route found');
         }
 
+        Tinebase_Core::startCoreSession();
+
         if (!$routeHandler->ignoreMaintenanceMode()) {
             if (Tinebase_Core::inMaintenanceMode() ||
-                    Tinebase_Core::getApplicationInstance($routeHandler->getApplicationName())->isInMaintenanceMode()) {
+                Tinebase_Core::getApplicationInstance($routeHandler->getApplicationName())->isInMaintenanceMode()) {
+                if (Tinebase_Core::inMaintenanceModeAll() || !is_object($user = Tinebase_Core::getUser()) ||
+                        !$user->hasRight($routeHandler->getApplicationName(), Tinebase_Acl_Rights::MAINTENANCE)) {
+                    throw new Tinebase_Exception_MaintenanceMode();
+                }
                 throw new Tinebase_Exception_MaintenanceMode();
             }
         }
-
-        Tinebase_Core::startCoreSession();
 
         if (! $routeHandler->isPublic()) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'

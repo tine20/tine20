@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -295,7 +295,8 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         $ldapData = array(
                 'cn'          => $_group->name,
                 'description' => $_group->description,
-                'objectclass' => $metaData['objectclass']
+                'objectclass' => $metaData['objectclass'],
+                'samaccountname' => $_group->name,
         );
         
         foreach ($this->_plugins as $plugin) {

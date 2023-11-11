@@ -67,6 +67,14 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path . '/' . $name);
+
+        // OwnCloud chunked file upload
+        if ($_SERVER['HTTP_OC_CHUNKED'] ?? false) {
+            $chunkInfo = [];
+            if (static::getOwnCloudChunkInfo($name, $chunkInfo)) {
+                $name = $chunkInfo['name'];
+            }
+        }
         
         Tinebase_Frontend_WebDAV_Node::checkForbiddenFile($name);
         
@@ -123,7 +131,8 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             static::checkQuota($pathRecord->getNode());
             $quotaChecked = true;
 
-            $completeFile = Tinebase_Frontend_WebDAV_Directory::handleOwnCloudChunkedFileUpload($name, $data);
+            $name = basename(ltrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'));
+            $completeFile = static::handleOwnCloudChunkedFileUpload($name, $data);
 
             if (!$completeFile instanceof Tinebase_Model_TempFile) {
                 return null;
@@ -133,6 +142,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             if (false === ($data = fopen($completeFile->path, 'r'))) {
                 throw new Sabre\DAV\Exception('fopen on temp file path failed ' . $completeFile->path);
             }
+            $_SERVER['HTTP_OC_CHUNKED'] = false;
         }
 
         if ($this->childExists($name)) {
@@ -291,7 +301,12 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
         }
     }
-    
+
+    public static function getOwnCloudChunkInfo(string $name, array &$chunkInfo): bool
+    {
+        return preg_match('/(?P<name>.*)-chunking-(?P<tempId>\d+)-(?P<totalCount>\d+)-(?P<chunkId>\d+)/', $name, $chunkInfo);
+    }
+
     /**
      * handle chunked upload
      * 
@@ -305,9 +320,9 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         if (!isset($_SERVER['CONTENT_LENGTH'])) {
             throw new \Sabre\DAV\Exception\BadRequest('CONTENT_LENGTH header missing!');
         }
-        
-        $matched = preg_match('/(?P<name>.*)-chunking-(?P<tempId>\d+)-(?P<totalCount>\d+)-(?P<chunkId>\d+)/', $name, $chunkInfo);
-        if (!$matched) {
+
+        $chunkInfo = [];
+        if (!static::getOwnCloudChunkInfo($name, $chunkInfo)) {
             throw new \Sabre\DAV\Exception\BadRequest('bad filename provided: ' . $name);
         }
         

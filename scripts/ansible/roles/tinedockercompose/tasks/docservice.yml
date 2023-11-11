@@ -1,0 +1,10 @@
+---
+
+- name: configure tine docservice
+  template:
+    src: docservice.inc.php.j2
+    dest: "{{ tinedockercompose_confd_path }}/docservice.inc.php"
+    owner: tine20
+    group: root
+    mode: 0640
+  become: true
