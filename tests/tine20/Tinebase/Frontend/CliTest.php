@@ -416,7 +416,8 @@ class Tinebase_Frontend_CliTest extends TestCase
         $result = $this->_cli->monitoringMailServers();
         $out = ob_get_clean();
 
-        self::assertStringContainsString('INVALID VALUE', $out);
+        echo $out;
+        self::assertStringContainsString('MAIL INACTIVE', $out);
         self::assertLessThanOrEqual(0, $result);
         
         foreach ($servers as $key => $server) {
@@ -427,7 +428,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $result = $this->_cli->monitoringMailServers();
         $out = ob_get_clean();
                
-        self::assertStringContainsString('succeeded', $out);
+        self::assertStringContainsString('MAIL OK', $out);
         self::assertLessThanOrEqual(0, $result);
     }
 
