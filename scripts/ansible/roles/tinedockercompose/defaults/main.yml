@@ -21,6 +21,9 @@ tinedockercompose_db_user: "tine"
 tinedockercompose_db_password: "tine"
 tinedockercompose_db_prefix: "tine20_"
 
+tinedockercompose_docservice_deploy_conf: true
+# tinedockercompose_docservice_version: "2.1"
+
 # tinedockercompose_volumes:
 #   - "tine_clamav
 #   - "tine_files
