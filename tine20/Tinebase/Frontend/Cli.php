@@ -501,10 +501,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     
     /**
      * purge deleted records
-     * 
+     *
      * if param date is given (for example: date=2010-09-17), all records before this date are deleted (if the table has a date field)
      * if table names are given, purge only records from this tables
-     * 
+     *
      * @param $_opts
      * @return boolean success
      *
@@ -522,9 +522,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $args['tables'] = $this->_getAllApplicationTables();
             $doEverything = true;
         }
-        
+
         $db = Tinebase_Core::getDb();
-        
+
         if ((isset($args['date']) || array_key_exists('date', $args))) {
             echo "\nRemoving all deleted entries before {$args['date']} ...";
             $where = array(
@@ -560,7 +560,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         echo "\n\n";
-        
+
         return TRUE;
     }
 
@@ -797,21 +797,21 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         echo "\ndeleted " . $deleteCount . " customfield values\n";
     }
-    
+
     /**
      * get all app tables
-     * 
+     *
      * @return array
      */
     protected function _getAllApplicationTables()
     {
         $result = array();
-        
+
         $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
         foreach ($enabledApplications as $application) {
             $result = array_merge($result, Tinebase_Application::getInstance()->getApplicationTables($application));
         }
-        
+
         return $result;
     }
 
@@ -1563,39 +1563,39 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * nagios monitoring for mail servers
+     * monitoring for mail servers
      * imap/smtp/sieve
      *
      * @return integer
-     *
-     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
      */
     public function monitoringMailServers()
     {
         $result = 0;
-        $servers = [
-            Tinebase_Config::SMTP,
-            Tinebase_Config::IMAP,
-            Tinebase_Config::SIEVE
-        ];
+        $skipcount = 0;
+        $error = '';
 
-        $message = "\n";
-
-        foreach ($servers as $server) {
+        foreach ([
+                     Tinebase_Config::SMTP,
+                     Tinebase_Config::IMAP,
+                     Tinebase_Config::SIEVE
+                 ] as $server) {
             $serverConfig = Tinebase_Config::getInstance()->{$server};
             
             if (empty($serverConfig)) {
-                $message .= 'CONFIG : ' . $server . ' IS NOT SET, SKIP' .  PHP_EOL;
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' CONFIG : ' . $server . ' IS NOT SET, SKIP');
+                $skipcount++;
                 continue;
             }
             
-            $host = isset($serverConfig->{'hostname'}) ? $serverConfig->{'hostname'} : $serverConfig->{'host'};
+            $host = $serverConfig->{'hostname'} ?? $serverConfig->{'host'};
             $port = $serverConfig->{'port'};
 
-            $message .= $server . ' | host: '. $host . ' | port: ' . $port;
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' ' .$server . ' | host: '. $host . ' | port: ' . $port);
 
             if (empty($host) || empty($port)) {
-                $message .= ' -> INVALID VALUE' . PHP_EOL;
+                $skipcount++;
                 continue;
             }
             
@@ -1611,8 +1611,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 );
             };
 
-            $message .= PHP_EOL . $output . PHP_EOL;
             $result = $result_code;
+            if ($result > 0) {
+                $error .= '| ' . $server . ' on ' . $host . ' failed';
+            }
         }
 
         // also check mail db connectivity
@@ -1624,19 +1626,29 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     $table = $db->describeTable('dovecot_users');
                     if (empty($table)) {
                         $result = 1;
-                        // TODO add more schema checks here
-                        $message .= 'table dovecot_users has no valid schema';
+                        // TODO add more schema checks here?
+                        $error .= '| dovecot_users table not found';
                     }
                 }
             } catch (Exception $e) {
                 $result = 1;
-                $message .= $e->getMessage();
+                $error .= '| ' . $e->getMessage();
             }
+        }
+
+        if ($result === 0) {
+            if ($skipcount > 2) {
+                $message = 'MAIL INACTIVE';
+            } else {
+                $message = 'MAIL OK';
+            }
+        } else {
+            $message = 'MAIL FAIL: ' . $error;
         }
 
         $this->_logMonitoringResult($result, $message);
 
-        echo $message . "\n";
+        echo $message . PHP_EOL;
         return $result;
     }
 
