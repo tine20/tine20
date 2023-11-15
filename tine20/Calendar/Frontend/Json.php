@@ -552,20 +552,32 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $iMIPMessage->setTimezone(Tinebase_Core::getUserTimezone());
         return $iMIPMessage->toArray();
     }
-    
+
     /**
      * process an iMIP (RFC 6047) Message
-     * 
+     *
      * @param array  $iMIP
      * @param string $status
      * @return array prepared iMIP part
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Db_Statement_Exception
      */
-    public function iMIPProcess($iMIP, $status=null)
+    public function iMIPProcess($iMIP, $status = null): array
     {
         $iMIPMessage = new Calendar_Model_iMIP($iMIP);
         $iMIPFrontend = new Calendar_Frontend_iMIP();
-        
-        $iMIPFrontend->process($iMIPMessage, $status);
+
+        try {
+            $iMIPFrontend->process($iMIPMessage, $status);
+        } catch (Felamimail_Exception_IMAPMessageNotFound $feimmnf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' ' . print_r($iMIPMessage->toArray(), true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $feimmnf->getMessage());
+            throw new Tinebase_Exception_NotFound('Could not find message on IMAP server.');
+        }
         
         return $this->iMIPPrepare($iMIPMessage);
     }
