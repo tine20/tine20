@@ -2603,7 +2603,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Custom url for help.')
             'description'           => 'Custom url for help.',
             'type'                  => 'string',
-            'default'               => 'https://github.com/tine20/tine20/wiki',
+            'default'               => 'https://tine-docu.s3web.rz1.metaways.net/',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE
