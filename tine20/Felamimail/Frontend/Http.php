@@ -128,10 +128,13 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * download node attachment
      *
-     * @param  string  $nodeId
-     * @param  string  $partId
+     * @param string $nodeId
+     * @param string $partId
+     * @return void
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_SystemGeneric
      */
-    protected function _downloadNodeAttachment($nodeId, $partId)
+    protected function _downloadNodeAttachment($nodeId, $partId): void
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Downloading Attachment ' . $partId . ' of node with id ' . $nodeId
@@ -150,6 +153,12 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $filename = $attachment['filename'];
         /** @var GuzzleHttp\Psr7\Stream $stream */
         $stream = $attachment['contentstream'];
+
+        if ($stream === null) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Invalid stream');
+            return;
+        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
             . ' filename: '    . $filename
