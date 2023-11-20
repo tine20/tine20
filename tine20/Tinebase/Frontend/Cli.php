@@ -377,16 +377,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Triggering async events from CLI.');
 
-        $userController = Tinebase_User::getInstance();
-
         $cronuser = null;
         try {
+            $userController = Tinebase_User::getInstance();
             $cronuser = $userController->getFullUserByLoginName($_opts->username);
         } catch (Tinebase_Exception_NotFound $tenf) {
             $cronuser = $this->_getCronuserFromConfigOrCreateOnTheFly();
         } catch (Zend_Db_Statement_Exception $zdse) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' .
-                __LINE__ . ' Maybe addressbook is not ready? ' . $zdse->getMessage());
+                __LINE__ . ' Maybe Addressbook is not ready or tine not installed yet: ' . $zdse->getMessage());
         }
         if (! $cronuser) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
