@@ -209,7 +209,43 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         echo 'deleted account ' . $args['accountName'] . PHP_EOL;
     }
+    /**
+     * Delete containers with no users
+     *
+     * @return void
+     */
+    public function deleteUserlessContainers(Zend_Console_Getopt $opts)
+    {
+        if ($opts->d) {
+            echo "--DRY RUN--\n";
+        }
+        // Get an instance of Admin_Frontend_Json
+        $jsonFrontend = new Admin_Frontend_Json();
 
+        // Get all containers
+        $containers = $jsonFrontend->searchContainers([], null);
+
+        foreach ($containers['results'] as $container) {
+          // Check if the container has no users
+          $user_search = $jsonFrontend->searchUsers([
+              [
+                'field' => 'container_id',
+                'operator' => 'equals',
+                'value' => $container['id'],
+              ],
+            ], null);
+            if (empty($user_search['totalcount'])) {
+                // Delete the container
+                $container = $jsonFrontend->getContainer($user_search['filter']['value']);
+                if ($opts->d) {
+                         echo "--DRY RUN-- Found " . $container['name'] . PHP_EOL;
+                } else {
+                        $jsonFrontend->deleteContainers([$container['id']]);
+                        echo 'Deleted container ' . $container['name'] . ' with no users.' . PHP_EOL;
+                }
+            }
+        }
+    }
     /**
      * shorten loginnmes to fit ad samaccountname
      *
