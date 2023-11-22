@@ -167,6 +167,7 @@ Tine.Filemanager.nodeActions.CreateFolder = {
         if (! currentPath) return;
         const grid = _.get(this, 'initialConfig.selectionModel.grid');
         if (grid) {
+            this.editing = true;
             const gridWdgt = grid.ownerCt.ownerCt;
             const defaultFolderName = app.i18n._('New Folder');
             const newRecord = new Tine.Filemanager.Model.Node(Tine.Filemanager.Model.Node.getDefaultData({
@@ -187,7 +188,7 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                     Ext.Msg.alert(String.format(app.i18n._('Not renamed {0}'), nodeName), app.i18n._('Illegal characters: ') + forbidden);
                     return;
                 }
-
+                
                 return await Tine.Filemanager.nodeBackend.createFolder(`${currentPath}${localRecord.get('name')}/`)
                     .then((result) => {
                         if (result.data.path === `/shared/${text}/`) {
@@ -207,6 +208,8 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                         if (e.message === "file exists") {
                             Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), app.i18n._('Folder with this name already exists!'));
                         }
+                    }).finally(() => {
+                        this.editing = false;
                     });
             });
         }
@@ -224,8 +227,7 @@ Tine.Filemanager.nodeActions.CreateFolder = {
         
             enabled = Tine.Filemanager.nodeActionsMgr.checkConstraints('create', action.initialConfig.filteredContainer, [{type: 'folder'}]) && enabled;
         }
-        
-        action.setDisabled(!enabled);
+        action.setDisabled(!enabled || this.editing);
     }
 };
 
