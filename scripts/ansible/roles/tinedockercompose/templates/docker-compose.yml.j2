@@ -43,7 +43,7 @@ services:
       ### install+update tine automatically
       TINE20_INSTALL: "true"
 {% endif %}
-{% if tinedockercompose_additional_mounts is defined %}
+{% if tinedockercompose_additional_web_env is defined %}
 {% for envvar in tinedockercompose_additional_web_env %}
       {{ envvar }}
 {% endfor %}
