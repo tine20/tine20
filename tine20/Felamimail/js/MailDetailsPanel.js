@@ -509,14 +509,14 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
 
         _.each(attachments, (attachment) => {
             if (!attachment.promises) attachment.promises = [];
-            if (attachment?.isCacheValid) return;
+            if (attachment?.isPreviewReady) return;
             const promise = new Promise(async (resolve) => {
                 let validCache = null;
                 await Promise.all(attachment.promises).then((responses) => {
-                    validCache = responses.find((r) => {return r.isCacheValid});
+                    validCache = responses.find((r) => {return r.isPreviewReady});
                 });
                 if (validCache) {
-                    attachment.isCacheValid = true;
+                    attachment.isPreviewReady = true;
                     return resolve(validCache);
                 }
                 const attachmentId = [sourceModel, record.id, attachment.partId].join(':');
@@ -525,7 +525,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         return resolve({
                             cache: new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]),
                             createPreviewInstantly: createPreviewInstantly,
-                            isCacheValid: !!+cache.attachments[0].preview_count,
+                            isPreviewReady: !!+cache.attachments[0].preview_count,
                         });
                     })
                     .catch((e) => {
@@ -562,7 +562,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
             if (!attachments[initialAttachmentIdx].promises) return;
             await Promise.all(attachments[initialAttachmentIdx].promises).then((cachePromises) => {
                 let resolvedAttachmentData = {};
-                const validResponse = cachePromises.find((cachePromise) => {return cachePromise.isCacheValid});
+                const validResponse = cachePromises.find((cachePromise) => {return cachePromise.isPreviewReady});
                 if (validResponse) {
                     resolvedAttachmentData = validResponse.cache.data;
                 } else {

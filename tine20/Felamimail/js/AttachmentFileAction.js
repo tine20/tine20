@@ -115,8 +115,10 @@ const getFileAttachmentAction = (fileFn, config) => {
                                         await _.reduce(config?.attachments, async (prev, attachment, id)=> {
                                             return prev.then(async () => {
                                                 const cachePromises = await Promise.all(attachment.promises);
-                                                const validResponse = cachePromises.find((cachePromise) => { return cachePromise.isCacheValid; });
-                                                if (validResponse) return attachmentRecordsData.push(validResponse.data);
+                                                const validResponse = cachePromises.find((cachePromise) => {
+                                                    return cachePromise.cache !== null; 
+                                                });
+                                                if (validResponse) return attachmentRecordsData.push(validResponse.cache.data);
                                             })
                                         }, Promise.resolve());
                                     }
