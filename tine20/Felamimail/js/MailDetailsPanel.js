@@ -569,7 +569,6 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     const invalidResponse = cachePromises.find((cachePromise) => {return cachePromise?.cache});
                     if (invalidResponse) resolvedAttachmentData = invalidResponse.cache.data;
                 }
-                resolvedAttachmentData.id = `${this.record.id}:${attachments[initialAttachmentIdx].partId}`;
                 resolvedAttachmentData.messageId = this.record.id;
                 this.record = Tine.Tinebase.data.Record.setFromJson(resolvedAttachmentData, Tine.Tinebase.Model.Tree_Node);
                 this.record.isAttachmentCache = true;
