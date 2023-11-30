@@ -197,17 +197,39 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo("\n");
     }
 
-    public function deleteAccount($_opts)
+    /**
+     * examples:
+     * - Admin.deleteAccount -- accountName=obsoleteUserName
+     * - Admin.deleteAccount -- accountEmail=obsolete@tine.mail
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return int
+     * @throws Tinebase_Exception_Confirmation
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_NotAllowed
+     */
+    public function deleteAccount(Zend_Console_Getopt $_opts): int
     {
         $args = $this->_parseArgs($_opts);
-        if (!isset($args['accountName'])) exit('accountName required');
+        $accountName = isset($args['accountName']) ? $args['accountName'] : null;
+        $accountEmail = isset($args['accountEmail']) ? $args['accountEmail'] : null;
 
-        // user deletion need the confirmation header
+        if (! $accountEmail && ! $accountName) {
+            echo 'Needs accountName or accountEmail param' . PHP_EOL;
+            return 1;
+        }
+
+        // user deletion needs the confirmation header
         Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
-        Admin_Controller_User::getInstance()->delete([Tinebase_User::getInstance()
-            ->getUserByLoginName($args['accountName'])->getId()]);
+        if ($accountName) {
+            $user = Tinebase_User::getInstance()->getUserByLoginName($accountName);
+        } else {
+            $user = Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress', $accountEmail);
+        }
+        Admin_Controller_User::getInstance()->delete([$user->getId()]);
 
-        echo 'deleted account ' . $args['accountName'] . PHP_EOL;
+        echo 'Deleted account ' . $user->accountLoginName . PHP_EOL;
+        return 0;
     }
 
     /**
