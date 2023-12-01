@@ -93,8 +93,13 @@ class HumanResources_Controller_FreeDay extends Tinebase_Controller_Record_Abstr
         }
 
         $freeTime = $this->_getFreeTime($freeDay->freetime_id);
-        if (!$freeTime->employee_id->division_id->{HumanResources_Model_Division::FLD_FREE_TIME_CAL} ||
-                !$freeTime->type->allow_planning || HumanResources_Config::FREE_TIME_PROCESS_STATUS_DECLINED ===
+        $container = null;
+        if ($freeTime->employee_id->division_id->{HumanResources_Model_Division::FLD_FREE_TIME_CAL}) {
+            try {
+                $container = Tinebase_Container::getInstance()->getContainerById($freeTime->employee_id->division_id->{HumanResources_Model_Division::FLD_FREE_TIME_CAL});
+            } catch (Tinebase_Exception_NotFound $tenf) {}
+        }
+        if (!$container || !$freeTime->type->allow_planning || HumanResources_Config::FREE_TIME_PROCESS_STATUS_DECLINED ===
                     $freeTime->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS}) {
             if ($freeDay->event) {
                 $raii = new Tinebase_RAII(Calendar_Controller_Event::getInstance()->assertPublicUsage());
