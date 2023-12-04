@@ -73,11 +73,11 @@ Ext.tree.TreeSorter = function(tree, config){
         const n1Data = !cs && typeof n1.attributes[p] === 'string' ? n1.attributes[p].toUpperCase() : n1.attributes[p];
         const n2Data = !cs && typeof n2.attributes[p] === 'string' ? n2.attributes[p].toUpperCase() : n2.attributes[p];
         
-        if (priorityProperty) {
+        const node1Priority = priorityList.includes(n1Data);
+        const node2Priority = priorityList.includes(n2Data);
+        
+        if (priorityProperty && (node1Priority || node2Priority)) {
             if (!cs) priorityList = priorityList.map((item) => {return item.toUpperCase();});
-            const node1Priority = priorityList.includes(n1Data);
-            const node2Priority = priorityList.includes(n2Data);
-            
             if(node1Priority && !node2Priority) return -1;
             if(!node1Priority && node2Priority) return +1;
             if (node1Priority && node2Priority) return priorityList.indexOf(n1Data) > priorityList.indexOf(n2Data) ? +1 : -1;
