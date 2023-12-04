@@ -1127,7 +1127,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                             $model = $modlog->record_type;
                             $record = new $model($diff->oldData, true);
                             if (!$dryrun) {
-                                if ($controller->purgeRecords()) {
+                                if (method_exists($controller, 'purgeRecords') && $controller->purgeRecords()) {
                                     $controller->create($record);
                                 } else {
                                     $controller->unDelete($record);
