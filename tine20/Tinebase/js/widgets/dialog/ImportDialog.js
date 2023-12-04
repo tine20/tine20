@@ -222,7 +222,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             }
         } else {
             this.checkMask.hide();
-            Tine.Tinebase.ExceptionHandler.handleRequestException(response.data);
+            Tine.Tinebase.ExceptionHandler.handleRequestException(response?.data ?? this.lastImportResponse);
         }
     },
     
