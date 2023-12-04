@@ -110,7 +110,7 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
         Tinebase_Frontend_WebDAV_Directory::checkQuota($pathRecord->getNode());
 
         if (($_SERVER['HTTP_OC_CHUNKED'] ?? false) && is_resource($data)) {
-            $name = basename(ltrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'));
+            $name = urldecode(basename(ltrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/')));
             $completeFile = Tinebase_Frontend_WebDAV_Directory::handleOwnCloudChunkedFileUpload($name, $data);
 
             if (!$completeFile instanceof Tinebase_Model_TempFile) {
