@@ -131,7 +131,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             static::checkQuota($pathRecord->getNode());
             $quotaChecked = true;
 
-            $name = basename(ltrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'));
+            $name = urldecode(basename(ltrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/')));
             $completeFile = static::handleOwnCloudChunkedFileUpload($name, $data);
 
             if (!$completeFile instanceof Tinebase_Model_TempFile) {
