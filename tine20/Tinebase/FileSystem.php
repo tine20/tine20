@@ -3830,14 +3830,14 @@ class Tinebase_FileSystem implements
      * @return bool
      * @throws Zend_Db_Statement_Exception
      */
-    public function sanitizePreviews()
+    public function sanitizePreviews(): bool
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' starting to sanitize previews');
-
         if (! $this->isPreviewActive()) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' previews are disabled');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Previews are disabled');
             return true;
         }
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Starting to sanitize previews');
 
         $treeNodeBackend = $this->_getTreeNodeBackend();
         $previewController = Tinebase_FileSystem_Previews::getInstance();
@@ -3887,8 +3887,13 @@ class Tinebase_FileSystem implements
                     continue;
                 }
 
-                if (! $previewController->createPreviews($actualNode)) {
-                    continue;
+                try {
+                    if (!$previewController->createPreviews($actualNode)) {
+                        continue;
+                    }
+                } catch (Tinebase_Exception_QuotaExceeded $teqe) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $teqe->getMessage());
+                    break 2;
                 }
 
                 $validHashes[$actualNode->hash] = true;
@@ -3899,7 +3904,6 @@ class Tinebase_FileSystem implements
         }
 
         $treeNodeBackend->setRevision(null);
-
 
         $parents = array();
         foreach($treeNodeBackend->search(
