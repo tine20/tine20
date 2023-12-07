@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -400,7 +400,7 @@ class Calendar_Frontend_iMIP
         $organizer = $existingEvent ? $existingEvent->resolveOrganizer() : $_iMIP->getEvent()->resolveOrganizer();
         
         // internal organizer:
-        //  - event is up to date
+        //  - event is up-to-date
         //  - status change could also be done by calendar method
         //  - normal notifications
         if ($organizer->account_id) {
@@ -415,7 +415,7 @@ class Calendar_Frontend_iMIP
                 Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications);
             }
             
-            if ($_status && $_status != $ownAttender->status) {
+            if ($ownAttender && $_status && $_status != $ownAttender->status) {
                 $ownAttender->status = $_status;
                 Calendar_Controller_Event::getInstance()->attenderStatusUpdate($existingEvent, $ownAttender, $ownAttender->status_authkey);
             }
